@@ -1,0 +1,362 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+const products = [
+  {
+    title: 'AIOX Monitor',
+    description: 'Dashboard isométrico real-time de agentes autônomos. Visualize performance, tasks e métricas de todos os agentes em execução.',
+    icon: 'monitor',
+    href: '/monitor/aiox-monitor',
+    category: 'Monitor',
+    isNew: true,
+    githubUrl: 'https://github.com/SynkraAI/aiox-monitor',
+  },
+  {
+    title: 'AIOX Framework',
+    description: 'Sistema de orquestração de agentes com squads e personas. Defina workflows, delegue tasks e escale sua operação.',
+    icon: 'framework',
+    href: '/framework/aiox-framework',
+    category: 'Framework',
+    isFeatured: true,
+    githubUrl: 'https://github.com/SynkraAI/aiox-framework',
+  },
+  {
+    title: 'Maestri',
+    description: 'Comunicação inter-agentes entre terminais. Conecte múltiplos Claude Code para colaboração em tempo real.',
+    icon: 'message',
+    href: '/tools/maestri',
+    category: 'Tools',
+    isNew: true,
+    externalUrl: 'https://www.themaestri.app/pt-br',
+  },
+  {
+    title: 'AIOX Skills',
+    description: 'Biblioteca de skills para Claude Code. Expanda capacidades com skills prontas para usar.',
+    icon: 'skills',
+    href: '/skills/aiox-skills',
+    category: 'Skills',
+    githubUrl: 'https://github.com/SynkraAI/aiox-skills',
+  },
+  {
+    title: 'Setup Claude Code',
+    description: 'Guia completo de configuração avançada. Do básico ao expert em Claude Code CLI.',
+    icon: 'setup',
+    href: '/setup/claude-code',
+    category: 'Setup',
+  },
+  {
+    title: 'Meta Ads com IA',
+    description: 'Automação de campanhas Meta com agentes. Otimize criativos, copy e targeting automaticamente.',
+    icon: 'ads',
+    href: '/learn/meta-ads-ai',
+    category: 'Learn',
+  },
+  {
+    title: 'Google Ads com IA',
+    description: 'Otimização de Google Ads com IA. Performance Max, Search e Display geridos por agentes.',
+    icon: 'google',
+    href: '/learn/google-ads-ai',
+    category: 'Learn',
+  },
+  {
+    title: 'Cursos Anthropic',
+    description: 'Curadoria dos 13 cursos gratuitos da Anthropic. Aprenda a construir com Claude.',
+    icon: 'book',
+    href: '/learn/anthropic-courses',
+    category: 'Learn',
+  },
+];
+
+const getIcon = (icon: string) => {
+  const icons: Record<string, string> = {
+    monitor: `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 17.25v1.007a3 3 0 01-.879 2.122L7.5 21h9l-.621-.621A3 3 0 0115 18.257V17.25m6-12V15a2.25 2.25 0 01-2.25 2.25H5.25A2.25 2.25 0 013 15V5.25m18 0A2.25 2.25 0 0018.75 3H5.25A2.25 2.25 0 003 5.25m18 0V12a2.25 2.25 0 01-2.25 2.25H5.25A2.25 2.25 0 013 12V5.25"/>`,
+    framework: `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3.75 6A2.25 2.25 0 016 3.75h2.25A2.25 2.25 0 0110.5 6v2.25a2.25 2.25 0 01-2.25 2.25H6a2.25 2.25 0 01-2.25-2.25V6zM3.75 15.75A2.25 2.25 0 016 13.5h2.25a2.25 2.25 0 012.25 2.25V18a2.25 2.25 0 01-2.25 2.25H6A2.25 2.25 0 013.75 18v-2.25zM13.5 6a2.25 2.25 0 012.25-2.25H18A2.25 2.25 0 0120.25 6v2.25A2.25 2.25 0 0118 10.5h-2.25a2.25 2.25 0 01-2.25-2.25V6zM13.5 15.75a2.25 2.25 0 012.25-2.25H18a2.25 2.25 0 012.25 2.25V18A2.25 2.25 0 0118 20.25h-2.25A2.25 2.25 0 0113.5 18v-2.25z"/>`,
+    message: `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M20.25 8.511c.884.284 1.5 1.128 1.5 2.097v4.286c0 1.136-.847 2.1-1.98 2.193-.34.027-.68.052-1.02.072v3.091l-3-3c-1.354 0-2.694-.055-4.02-.163a2.115 2.115 0 01-.825-.242m9.345-8.334a2.126 2.126 0 00-.476-.095 48.64 48.64 0 00-8.048 0c-1.131.094-1.976 1.057-1.976 2.192v4.286c0 .837.46 1.58 1.155 1.951m9.345-8.334V6.637c0-1.621-1.152-3.026-2.76-3.235A48.455 48.455 0 0011.25 3c-2.115 0-4.198.137-6.24.402-1.608.209-2.76 1.614-2.76 3.235v6.226c0 1.621 1.152 3.026 2.76 3.235.577.075 1.157.14 1.74.194V21l4.155-4.155"/>`,
+    skills: `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09zM18.259 8.715L18 9.75l-.259-1.035a3.375 3.375 0 00-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 002.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 002.456 2.456L21.75 6l-1.035.259a3.375 3.375 0 00-2.456 2.456zM16.894 20.567L16.5 21.75l-.394-1.183a2.25 2.25 0 00-1.423-1.423L13.5 18.75l1.183-.394a2.25 2.25 0 001.423-1.423l.394-1.183.394 1.183a2.25 2.25 0 001.423 1.423l1.183.394-1.183.394a2.25 2.25 0 00-1.423 1.423z"/>`,
+    setup: `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M11.42 15.17L17.25 21A2.652 2.652 0 0021 17.25l-5.877-5.877M11.42 15.17l2.496-3.03c.317-.384.74-.626 1.208-.766M11.42 15.17l-4.655 5.653a2.548 2.548 0 11-3.586-3.586l6.837-5.63m5.108-.233c.55-.164 1.163-.188 1.743-.14a4.5 4.5 0 004.486-6.336l-3.276 3.277a3.004 3.004 0 01-2.25-2.25l3.276-3.276a4.5 4.5 0 00-6.336 4.486c.091 1.076-.071 2.264-.904 2.95l-.102.085m-1.745 1.437L5.909 7.5H4.5L2.25 3.75l1.5-1.5L7.5 4.5v1.409l4.26 4.26m-1.745 1.437l1.745-1.437m6.615 8.206L15.75 15.75M4.867 19.125h.008v.008h-.008v-.008z"/>`,
+    ads: `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M10.34 15.84c-.688-.06-1.386-.09-2.09-.09H7.5a4.5 4.5 0 110-9h.75c.704 0 1.402-.03 2.09-.09m0 9.18c.253.962.584 1.892.985 2.783.247.55.06 1.21-.463 1.511l-.657.38c-.551.318-1.26.117-1.527-.461a20.845 20.845 0 01-1.44-4.282m3.102.069a18.03 18.03 0 01-.59-4.59c0-1.586.205-3.124.59-4.59m0 9.18a23.848 23.848 0 018.835 2.535M10.34 6.66a23.847 23.847 0 008.835-2.535m0 0A23.74 23.74 0 0018.795 3m.38 1.125a23.91 23.91 0 011.014 5.395m-1.014 8.855c-.118.38-.245.754-.38 1.125m.38-1.125a23.91 23.91 0 001.014-5.395m0-3.46c.495.413.811 1.035.811 1.73 0 .695-.316 1.317-.811 1.73m0-3.46a24.347 24.347 0 010 3.46"/>`,
+    google: `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607zM10.5 7.5v6m3-3h-6"/>`,
+    book: `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 6.042A8.967 8.967 0 006 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 016 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 016-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0018 18a8.967 8.967 0 00-6 2.292m0-14.25v14.25"/>`,
+  };
+  return icons[icon] || icons.monitor;
+};
+---
+
+<BaseLayout title="Open Source Tools">
+  <!-- Hero Section -->
+  <section class="relative overflow-hidden min-h-[80vh] flex items-center">
+    <!-- Background Image -->
+    <div class="absolute inset-0">
+      <img
+        src="/images/hero-ultrawide.png"
+        alt=""
+        class="w-full h-full object-cover"
+      />
+    </div>
+
+    <!-- Overlay Gradient -->
+    <div class="absolute inset-0 bg-gradient-to-b from-[#08080C]/70 via-[#08080C]/80 to-[#08080C]"></div>
+
+    <div class="relative mx-auto max-w-7xl px-4 py-24 sm:px-6 sm:py-32 lg:px-8 w-full">
+      <div class="text-center">
+        <!-- Badge -->
+        <div class="inline-flex items-center gap-2 rounded-full border border-[#FF4500]/30 bg-[#FF4500]/10 px-4 py-1.5 mb-8 backdrop-blur-sm animate-fade-in">
+          <span class="relative flex h-2 w-2">
+            <span class="absolute inline-flex h-full w-full animate-ping rounded-full bg-[#FF4500] opacity-75"></span>
+            <span class="relative inline-flex h-2 w-2 rounded-full bg-[#FF4500]"></span>
+          </span>
+          <span class="text-sm font-medium text-[#FF4500]">100% Open Source</span>
+        </div>
+
+        <!-- Title -->
+        <h1 class="text-5xl font-extrabold tracking-tight text-white sm:text-6xl lg:text-7xl animate-fade-in">
+          <span class="text-[#FF4500]">Open Source</span> Tools
+        </h1>
+        <p class="mt-6 text-xl sm:text-2xl font-medium text-white/80 animate-fade-in">
+          by GrowthSales AI
+        </p>
+        <p class="mt-4 mx-auto max-w-2xl text-lg text-white/60 animate-slide-up">
+          Multiplicação de produtividade com agentes autônomos. Ferramentas profissionais para quem trabalha com Claude Code.
+        </p>
+
+        <!-- CTA Buttons -->
+        <div class="mt-12 flex flex-col sm:flex-row items-center justify-center gap-4 animate-slide-up">
+          <a
+            href="#products"
+            class="inline-flex items-center gap-2 rounded-xl bg-[#FF4500] px-8 py-4 text-base font-semibold text-white shadow-xl shadow-[#FF4500]/25 hover:bg-[#FF5722] hover:shadow-[#FF4500]/40 hover:scale-[1.02] transition-all duration-300"
+          >
+            Explorar Ferramentas
+            <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"/>
+            </svg>
+          </a>
+          <a
+            href="https://growthsales.ai/mentoria"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="inline-flex items-center gap-2 rounded-xl border border-white/20 bg-white/5 px-8 py-4 text-base font-semibold text-white hover:bg-white/10 hover:border-white/30 transition-all duration-300 backdrop-blur-sm"
+          >
+            Mentoria 1:1
+            <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"/>
+            </svg>
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Scroll Indicator -->
+    <div class="absolute bottom-8 left-1/2 -translate-x-1/2 animate-bounce">
+      <svg class="h-6 w-6 text-white/40" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"/>
+      </svg>
+    </div>
+  </section>
+
+  <!-- Products Grid -->
+  <section id="products" class="py-24 bg-[#0D0D12]">
+    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <!-- Section Header -->
+      <div class="text-center mb-16">
+        <p class="text-sm font-semibold uppercase tracking-wider text-[#FF4500] mb-3">Ferramentas</p>
+        <h2 class="text-3xl font-bold text-white sm:text-4xl lg:text-5xl">
+          Tudo o que precisa para escalar com IA
+        </h2>
+        <p class="mt-4 text-lg text-white/50 max-w-2xl mx-auto">
+          8 projetos open source construídos para multiplicar produtividade com agentes autônomos
+        </p>
+      </div>
+
+      <!-- Grid -->
+      <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+        {products.map((product, index) => (
+          <a
+            href={product.href}
+            class="group relative rounded-2xl border border-white/[0.06] bg-gradient-to-b from-[#121218] to-[#0D0D12] p-6 hover:border-[#FF4500]/40 hover:shadow-2xl hover:shadow-[#FF4500]/5 transition-all duration-500 hover:-translate-y-1"
+            style={`animation-delay: ${index * 75}ms`}
+          >
+            {/* Glow Effect on Hover */}
+            <div class="absolute inset-0 rounded-2xl bg-gradient-to-b from-[#FF4500]/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+
+            {/* Content */}
+            <div class="relative">
+              {/* Badge */}
+              {(product.isNew || product.isFeatured) && (
+                <div class="absolute -top-3 -right-3 z-10">
+                  <span class={`inline-flex items-center rounded-full px-2.5 py-1 text-xs font-semibold shadow-lg ${
+                    product.isNew
+                      ? 'bg-[#22C55E] text-white shadow-[#22C55E]/25'
+                      : 'bg-[#FF4500] text-white shadow-[#FF4500]/25'
+                  }`}>
+                    {product.isNew ? 'Novo' : 'Destaque'}
+                  </span>
+                </div>
+              )}
+
+              {/* Icon */}
+              <div class="mb-5 inline-flex items-center justify-center rounded-xl bg-[#FF4500]/10 p-3.5 text-[#FF4500] group-hover:bg-[#FF4500]/20 group-hover:scale-110 transition-all duration-300">
+                <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" set:html={getIcon(product.icon)} />
+              </div>
+
+              {/* Category */}
+              <p class="text-xs font-semibold uppercase tracking-wider text-[#FF4500]/60 mb-2">
+                {product.category}
+              </p>
+
+              {/* Title */}
+              <h3 class="text-lg font-bold text-white group-hover:text-[#FF4500] transition-colors duration-300">
+                {product.title}
+              </h3>
+
+              {/* Description */}
+              <p class="mt-2 text-sm text-white/50 leading-relaxed line-clamp-2 group-hover:text-white/60 transition-colors">
+                {product.description}
+              </p>
+
+              {/* Footer */}
+              <div class="mt-5 pt-4 border-t border-white/[0.06] flex items-center justify-between">
+                <span class="text-sm font-medium text-[#FF4500] opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center gap-1">
+                  Ver mais
+                  <svg class="h-4 w-4 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                  </svg>
+                </span>
+
+                {/* External Link Indicator */}
+                {(product.githubUrl || product.externalUrl) && (
+                  <span class="text-white/30 group-hover:text-white/50 transition-colors">
+                    <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
+                    </svg>
+                  </span>
+                )}
+              </div>
+            </div>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- About Section -->
+  <section class="py-24 bg-[#08080C]">
+    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <div class="grid gap-12 lg:grid-cols-2 lg:gap-16 items-center">
+        <!-- Content -->
+        <div>
+          <p class="text-sm font-semibold uppercase tracking-wider text-[#FF4500] mb-3">Sobre</p>
+          <h2 class="text-3xl font-bold text-white sm:text-4xl">
+            Construído por quem trabalha com agentes todos os dias
+          </h2>
+          <p class="mt-6 text-lg text-white/60 leading-relaxed">
+            GrowthSales AI desenvolve ferramentas open source para multiplicar produtividade com IA. Não substituímos pessoas — potenciamos equipas.
+          </p>
+          <p class="mt-4 text-lg text-white/60 leading-relaxed">
+            Cada ferramenta nasce de necessidades reais em projectos de consultoria e implementação de agentes autônomos. Claude Code, AIOX Framework, Maestri — tudo construído em produção.
+          </p>
+
+          <div class="mt-8 flex flex-wrap gap-4">
+            <div class="flex items-center gap-2 text-white/50">
+              <svg class="h-5 w-5 text-[#FF4500]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+              </svg>
+              <span class="text-sm">MIT License</span>
+            </div>
+            <div class="flex items-center gap-2 text-white/50">
+              <svg class="h-5 w-5 text-[#FF4500]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+              </svg>
+              <span class="text-sm">Produção-Ready</span>
+            </div>
+            <div class="flex items-center gap-2 text-white/50">
+              <svg class="h-5 w-5 text-[#FF4500]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+              </svg>
+              <span class="text-sm">Documentado</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Stats -->
+        <div class="grid grid-cols-2 gap-6">
+          <div class="rounded-2xl border border-white/[0.06] bg-[#0D0D12] p-6 text-center">
+            <p class="text-4xl font-bold text-[#FF4500]">8</p>
+            <p class="mt-2 text-sm text-white/50">Ferramentas</p>
+          </div>
+          <div class="rounded-2xl border border-white/[0.06] bg-[#0D0D12] p-6 text-center">
+            <p class="text-4xl font-bold text-[#FF4500]">100%</p>
+            <p class="mt-2 text-sm text-white/50">Open Source</p>
+          </div>
+          <div class="rounded-2xl border border-white/[0.06] bg-[#0D0D12] p-6 text-center">
+            <p class="text-4xl font-bold text-[#FF4500]">13</p>
+            <p class="mt-2 text-sm text-white/50">Cursos Curados</p>
+          </div>
+          <div class="rounded-2xl border border-white/[0.06] bg-[#0D0D12] p-6 text-center">
+            <p class="text-4xl font-bold text-[#FF4500]">24/7</p>
+            <p class="mt-2 text-sm text-white/50">Agentes Autônomos</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA Section -->
+  <section class="py-24 bg-[#0D0D12]">
+    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <div class="relative overflow-hidden rounded-3xl bg-gradient-to-br from-[#FF4500]/20 via-[#FF4500]/10 to-transparent border border-[#FF4500]/20 p-8 sm:p-16">
+        <div class="relative z-10 text-center max-w-2xl mx-auto">
+          <h2 class="text-3xl font-bold text-white sm:text-4xl">
+            Pronto para escalar com agentes?
+          </h2>
+          <p class="mt-4 text-lg text-white/60">
+            Mentoria 1:1 para implementar agentes autônomos no seu negócio. Estratégia, implementação e acompanhamento.
+          </p>
+          <div class="mt-8 flex flex-col sm:flex-row items-center justify-center gap-4">
+            <a
+              href="https://growthsales.ai/mentoria"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="inline-flex items-center gap-2 rounded-xl bg-[#FF4500] px-8 py-4 text-base font-semibold text-white shadow-xl shadow-[#FF4500]/25 hover:bg-[#FF5722] hover:shadow-[#FF4500]/40 hover:scale-[1.02] transition-all duration-300"
+            >
+              Agendar Mentoria
+              <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"/>
+              </svg>
+            </a>
+            <a
+              href="https://github.com/SynkraAI"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="inline-flex items-center gap-2 rounded-xl border border-white/20 bg-white/5 px-8 py-4 text-base font-semibold text-white hover:bg-white/10 transition-all duration-300"
+            >
+              <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+              </svg>
+              Ver GitHub
+            </a>
+          </div>
+        </div>
+
+        {/* Background decoration */}
+        <div class="absolute -bottom-32 -right-32 h-96 w-96 rounded-full bg-[#FF4500]/10 blur-3xl"></div>
+        <div class="absolute -top-32 -left-32 h-96 w-96 rounded-full bg-[#FF4500]/5 blur-3xl"></div>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  @keyframes fade-in {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .animate-fade-in {
+    animation: fade-in 0.6s ease-out forwards;
+  }
+
+  .animate-slide-up {
+    animation: fade-in 0.6s ease-out 0.2s forwards;
+    opacity: 0;
+  }
+</style>
