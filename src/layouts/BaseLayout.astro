@@ -75,20 +75,18 @@ const fullTitle = `${title} | GrowthSales Open Source`;
   <body class="min-h-screen bg-[#08080C] text-white antialiased">
     <!-- Header -->
     <header class="fixed top-0 left-0 right-0 z-50 border-b border-transparent backdrop-blur-xl" style="background: linear-gradient(180deg, rgba(8,8,14,0.98) 0%, rgba(4,4,8,0.95) 100%);">
-      <div class="mx-auto max-w-7xl px-6 sm:px-8 lg:px-12">
-        <div class="flex h-16 items-center justify-between">
+      <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div class="flex h-14 sm:h-16 items-center justify-between">
           <!-- Logo -->
-          <a href="/" class="flex items-center gap-3 font-semibold text-white hover:opacity-90 transition-opacity">
-            <img src="/logo.svg" alt="GrowthSales AI — Open Source Tools" class="h-9 w-9" />
-            <span class="text-lg tracking-tight">GrowthSales</span>
+          <a href="/" class="flex items-center gap-2 sm:gap-3 font-semibold text-white hover:opacity-90 transition-opacity" aria-label="Ir para página inicial do GrowthSales AI">
+            <img src="/logo.svg" alt="Logo GrowthSales AI" class="h-8 sm:h-9 w-8 sm:w-9" />
+            <span class="text-base sm:text-lg tracking-tight">GrowthSales</span>
           </a>
 
           <!-- CTA Mentoria -->
           <div class="flex items-center gap-4">
             <a
-              href="https://growthsales.ai/mentoria"
-              target="_blank"
-              rel="noopener noreferrer"
+              href="/mentoria"
               class="hidden sm:inline-flex items-center gap-2 border border-[#FF4400]/50 bg-transparent px-5 py-2.5 text-xs font-semibold uppercase tracking-widest text-[#FF4400] hover:bg-[#FF4400] hover:text-white hover:border-[#FF4400] transition-all duration-200"
               style="font-family: 'Geist Mono', monospace;"
             >
@@ -100,9 +98,7 @@ const fullTitle = `${title} | GrowthSales Open Source`;
 
             <!-- Mobile Mentoria -->
             <a
-              href="https://growthsales.ai/mentoria"
-              target="_blank"
-              rel="noopener noreferrer"
+              href="/mentoria"
               class="sm:hidden inline-flex items-center gap-1.5 border border-[#FF4400]/50 bg-transparent px-3 py-1.5 text-[#FF4400] hover:bg-[#FF4400] hover:text-white transition-all duration-200"
               style="font-family: 'Geist Mono', monospace; font-size: 0.6rem; text-transform: uppercase; letter-spacing: 0.08em; font-weight: 600;"
             >
@@ -159,7 +155,7 @@ const fullTitle = `${title} | GrowthSales Open Source`;
               <li><a href="/setup/claude-code" class="text-sm text-white/50 hover:text-white transition-colors">Setup Claude Code</a></li>
               <li><a href="/learn/anthropic-courses" class="text-sm text-white/50 hover:text-white transition-colors">Cursos Anthropic</a></li>
               <li><a href="/learn/meta-ads-ai" class="text-sm text-white/50 hover:text-white transition-colors">Meta Ads com IA</a></li>
-              <li><a href="https://growthsales.ai/mentoria" target="_blank" rel="noopener noreferrer" class="text-sm text-[#FF4400] hover:text-[#FF5C10] transition-colors">Mentoria</a></li>
+              <li><a href="/mentoria" class="text-sm text-[#FF4400] hover:text-[#FF5C10] transition-colors">Mentoria</a></li>
             </ul>
           </div>
         </div>
