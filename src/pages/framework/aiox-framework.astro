@@ -1,67 +1,87 @@
 ---
-import BaseLayout from '../../layouts/BaseLayout.astro';
+import SkillPage from '../../components/SkillPage.astro';
+
+const features = [
+  {
+    title: 'Sistema de Squads',
+    description: 'Organize agentes em squads especializadas com roles definidos, comunicação estruturada e objetivos claros.',
+    icon: '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M18 18.72a9.094 9.094 0 003.741-.479 3 3 0 00-4.682-2.72m.94 3.198l.001.031c0 .225-.012.447-.037.666A11.944 11.944 0 0112 21c-2.17 0-4.207-.576-5.963-1.584A6.062 6.062 0 016 18.719m12 0a5.971 5.971 0 00-.941-3.197m0 0A5.995 5.995 0 0012 12.75a5.995 5.995 0 00-5.058 2.772m0 0a3 3 0 00-4.681 2.72 8.986 8.986 0 003.74.477m.94-3.197a5.971 5.971 0 00-.94 3.197M15 6.75a3 3 0 11-6 0 3 3 0 016 0zm6 3a2.25 2.25 0 11-4.5 0 2.25 2.25 0 014.5 0zm-13.5 0a2.25 2.25 0 11-4.5 0 2.25 2.25 0 014.5 0z"/>',
+  },
+  {
+    title: 'Personas de Agentes',
+    description: 'Defina personalidades, especialidades e comportamentos únicos para cada agente do seu sistema.',
+    icon: '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z"/>',
+  },
+  {
+    title: 'Workflow Orchestration',
+    description: 'Crie workflows complexos com delegação automática de tasks entre agentes especializados.',
+    icon: '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3.75 6A2.25 2.25 0 016 3.75h2.25A2.25 2.25 0 0110.5 6v2.25a2.25 2.25 0 01-2.25 2.25H6a2.25 2.25 0 01-2.25-2.25V6zM3.75 15.75A2.25 2.25 0 016 13.5h2.25a2.25 2.25 0 012.25 2.25V18a2.25 2.25 0 01-2.25 2.25H6A2.25 2.25 0 013.75 18v-2.25zM13.5 6a2.25 2.25 0 012.25-2.25H18A2.25 2.25 0 0120.25 6v2.25A2.25 2.25 0 0118 10.5h-2.25a2.25 2.25 0 01-2.25-2.25V6zM13.5 15.75a2.25 2.25 0 012.25-2.25H18a2.25 2.25 0 012.25 2.25V18A2.25 2.25 0 0118 20.25h-2.25A2.25 2.25 0 0113.5 18v-2.25z"/>',
+  },
+  {
+    title: 'Story-Driven Development',
+    description: 'Metodologia ágil integrada onde agentes trabalham baseados em user stories e acceptance criteria.',
+    icon: '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z"/>',
+  },
+  {
+    title: 'QA Loop Automático',
+    description: 'Ciclo de review e correção automatizado onde @qa valida e @dev corrige até aprovação.',
+    icon: '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>',
+  },
+  {
+    title: 'CLI Completo',
+    description: 'Interface de linha de comando para gerenciar squads, executar workflows e monitorar agentes.',
+    icon: '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M6.75 7.5l3 2.25-3 2.25m4.5 0h3m-9 8.25h13.5A2.25 2.25 0 0021 18V6a2.25 2.25 0 00-2.25-2.25H5.25A2.25 2.25 0 003 6v12a2.25 2.25 0 002.25 2.25z"/>',
+  },
+];
+
+const longDescription = [
+  'O AIOX Framework é um meta-framework de orquestração de agentes de IA projetado para operações enterprise. Permite criar, configurar e gerenciar múltiplas squads de agentes autônomos trabalhando em conjunto.',
+  'Com sistema de personas, cada agente pode ter especialidade, personalidade e comportamentos únicos. @dev implementa código, @qa valida qualidade, @architect desenha soluções, @pm gerencia produto — todos trabalhando coordenados.',
+  'A metodologia Story-Driven Development garante que todo trabalho seja rastreável, mensurável e alinhado com objetivos de negócio. Ideal para empresas que querem escalar operações de IA com governança e controle.',
+];
 ---
 
-<BaseLayout title="AIOX Framework" description="Sistema de orquestração de agentes com squads e personas. Defina workflows, delegue tasks e escale sua operação.">
-  <section class="py-24">
-    <div class="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
-      <!-- Breadcrumb -->
-      <nav class="mb-8">
-        <ol class="flex items-center gap-2 text-sm text-white/50">
-          <li><a href="/" class="hover:text-white transition-colors">Home</a></li>
-          <li>/</li>
-          <li class="text-[#FF4500]">AIOX Framework</li>
-        </ol>
-      </nav>
-
-      <!-- Header -->
-      <div class="mb-12">
-        <div class="inline-flex items-center gap-2 rounded-full bg-[#FF4500]/10 px-3 py-1 text-sm font-medium text-[#FF4500] mb-4">
-          Framework
-        </div>
-        <h1 class="text-4xl font-bold text-white sm:text-5xl">
-          AIOX Framework
-        </h1>
-        <p class="mt-4 text-xl text-white/70">
-          Sistema de orquestração de agentes com squads e personas. Defina workflows, delegue tasks e escale sua operação.
-        </p>
-      </div>
-
-      <!-- Content -->
-      <div class="prose prose-invert prose-lg max-w-none">
-        <div class="rounded-xl border border-white/[0.08] bg-[#121218] p-8 text-center">
-          <div class="inline-flex items-center justify-center rounded-lg bg-[#FF4500]/10 p-4 mb-4">
-            <svg class="h-8 w-8 text-[#FF4500]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3.75 6A2.25 2.25 0 016 3.75h2.25A2.25 2.25 0 0110.5 6v2.25a2.25 2.25 0 01-2.25 2.25H6a2.25 2.25 0 01-2.25-2.25V6zM3.75 15.75A2.25 2.25 0 016 13.5h2.25a2.25 2.25 0 012.25 2.25V18a2.25 2.25 0 01-2.25 2.25H6A2.25 2.25 0 013.75 18v-2.25zM13.5 6a2.25 2.25 0 012.25-2.25H18A2.25 2.25 0 0120.25 6v2.25A2.25 2.25 0 0118 10.5h-2.25a2.25 2.25 0 01-2.25-2.25V6zM13.5 15.75a2.25 2.25 0 012.25-2.25H18a2.25 2.25 0 012.25 2.25V18A2.25 2.25 0 0118 20.25h-2.25A2.25 2.25 0 0113.5 18v-2.25z"/>
-            </svg>
+<SkillPage
+  title="AIOX Framework"
+  description="Sistema de orquestração de agentes com squads e personas. Defina workflows, delegue tasks e escale sua operação."
+  category="Squads AIOX"
+  categoryColor="squads-aiox"
+  longDescription={longDescription}
+  features={features}
+  primaryLink="https://github.com/SynkraAI/aiox-core"
+  primaryLabel="Ver no GitHub"
+  author="@SynkraAI"
+  authorUrl="https://github.com/SynkraAI/aiox-core"
+  bgImage="/images/bg-framework.png"
+>
+  <section class="py-20 bg-[#08080C]">
+    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <div class="max-w-3xl">
+        <p class="text-[#FF4400] mb-3" style="font-family: 'Geist Mono', monospace; font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.14em; font-weight: 600;">Instalação</p>
+        <h2 class="text-3xl font-bold text-white mb-8">Como instalar</h2>
+        <div class="space-y-6">
+          <div>
+            <p class="text-white/60 mb-3 text-sm">Novo projeto:</p>
+            <div class="bg-[#0D0D14] border border-white/10 p-4 font-mono text-sm text-[#FF4400]">
+              npx aiox-core init meu-projeto
+            </div>
           </div>
-          <h2 class="text-2xl font-semibold text-white mb-2">Em Breve</h2>
-          <p class="text-white/60">
-            Documentação completa e guia de instalação chegando em breve.
-          </p>
-          <a
-            href="https://github.com/joaoguirunas"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="mt-6 inline-flex items-center gap-2 rounded-lg bg-[#FF4500] px-5 py-2.5 text-sm font-semibold text-white hover:bg-[#FF5722] transition-colors"
-          >
-            <svg class="h-4 w-4" fill="currentColor" viewBox="0 0 24 24">
-              <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
-            </svg>
-            Ver no GitHub
-          </a>
+          <div>
+            <p class="text-white/60 mb-3 text-sm">Projeto existente:</p>
+            <div class="bg-[#0D0D14] border border-white/10 p-4 font-mono text-sm text-[#FF4400]">
+              cd seu-projeto<br />
+              npx aiox-core install
+            </div>
+          </div>
+          <div>
+            <p class="text-white/60 mb-3 text-sm">Ativar um agente (Claude Code):</p>
+            <div class="bg-[#0D0D14] border border-white/10 p-4 font-mono text-sm text-[#FF4400]">
+              /agent-name
+            </div>
+          </div>
+          <p class="text-white/50 text-sm">Requer Node.js 18+. Após a instalação, ative qualquer agente e confirme o greeting para validar o setup.</p>
         </div>
-      </div>
-
-      <!-- Back Link -->
-      <div class="mt-12">
-        <a href="/" class="inline-flex items-center gap-2 text-[#FF4500] hover:underline">
-          <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
-          </svg>
-          Voltar para todas as ferramentas
-        </a>
       </div>
     </div>
   </section>
-</BaseLayout>
+</SkillPage>

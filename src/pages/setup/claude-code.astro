@@ -1,67 +1,57 @@
 ---
-import BaseLayout from '../../layouts/BaseLayout.astro';
+import SkillPage from '../../components/SkillPage.astro';
+
+const features = [
+  {
+    title: 'Instalação Completa',
+    description: 'Passo a passo desde a instalação do Node.js até configuração avançada do Claude Code CLI.',
+    icon: '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3"/>',
+  },
+  {
+    title: 'Configuração de Skills',
+    description: 'Como adicionar, remover e configurar skills via settings.json e linha de comando.',
+    icon: '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09z"/>',
+  },
+  {
+    title: 'MCP Servers',
+    description: 'Integração com Model Context Protocol para expandir capacidades com ferramentas externas.',
+    icon: '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M5.25 14.25h13.5m-13.5 0a3 3 0 01-3-3m3 3a3 3 0 100 6h13.5a3 3 0 100-6m-16.5-3a3 3 0 013-3h13.5a3 3 0 013 3m-19.5 0a4.5 4.5 0 01.9-2.7L5.737 5.1a3.375 3.375 0 012.7-1.35h7.126c1.062 0 2.062.5 2.7 1.35l2.587 3.45a4.5 4.5 0 01.9 2.7m0 0a3 3 0 01-3 3m0 3h.008v.008h-.008v-.008zm0-6h.008v.008h-.008v-.008zm-3 6h.008v.008h-.008v-.008zm0-6h.008v.008h-.008v-.008z"/>',
+  },
+  {
+    title: 'Keybindings',
+    description: 'Personalização de atalhos de teclado para otimizar seu fluxo de trabalho.',
+    icon: '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3.75 9h16.5m-16.5 6.75h16.5"/>',
+  },
+  {
+    title: 'CLAUDE.md',
+    description: 'Configuração de contexto persistente para projetos com instruções e regras customizadas.',
+    icon: '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z"/>',
+  },
+  {
+    title: 'Dicas Avançadas',
+    description: 'Técnicas de power user para maximizar produtividade com Claude Code.',
+    icon: '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 18v-5.25m0 0a6.01 6.01 0 001.5-.189m-1.5.189a6.01 6.01 0 01-1.5-.189m3.75 7.478a12.06 12.06 0 01-4.5 0m3.75 2.383a14.406 14.406 0 01-3 0M14.25 18v-.192c0-.983.658-1.823 1.508-2.316a7.5 7.5 0 10-7.517 0c.85.493 1.509 1.333 1.509 2.316V18"/>',
+  },
+];
+
+const longDescription = [
+  'Este guia completo cobre tudo que você precisa saber para configurar e otimizar o Claude Code CLI. Desde a instalação básica até configurações avançadas usadas por power users.',
+  'Aprenda a configurar skills, integrar MCP servers para expandir capacidades, personalizar keybindings, e criar arquivos CLAUDE.md para manter contexto entre sessões.',
+  'O guia inclui exemplos práticos, configurações recomendadas, e dicas de troubleshooting para resolver problemas comuns.',
+];
 ---
 
-<BaseLayout title="Setup Claude Code" description="Guia completo de configuração avançada. Do básico ao expert em Claude Code CLI.">
-  <section class="py-24">
-    <div class="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
-      <!-- Breadcrumb -->
-      <nav class="mb-8">
-        <ol class="flex items-center gap-2 text-sm text-white/50">
-          <li><a href="/" class="hover:text-white transition-colors">Home</a></li>
-          <li>/</li>
-          <li class="text-[#FF4500]">Setup Claude Code</li>
-        </ol>
-      </nav>
-
-      <!-- Header -->
-      <div class="mb-12">
-        <div class="inline-flex items-center gap-2 rounded-full bg-[#FF4500]/10 px-3 py-1 text-sm font-medium text-[#FF4500] mb-4">
-          Setup
-        </div>
-        <h1 class="text-4xl font-bold text-white sm:text-5xl">
-          Setup Claude Code
-        </h1>
-        <p class="mt-4 text-xl text-white/70">
-          Guia completo de configuração avançada. Do básico ao expert em Claude Code CLI.
-        </p>
-      </div>
-
-      <!-- Content -->
-      <div class="prose prose-invert prose-lg max-w-none">
-        <div class="rounded-xl border border-white/[0.08] bg-[#121218] p-8 text-center">
-          <div class="inline-flex items-center justify-center rounded-lg bg-[#FF4500]/10 p-4 mb-4">
-            <svg class="h-8 w-8 text-[#FF4500]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M11.42 15.17L17.25 21A2.652 2.652 0 0021 17.25l-5.877-5.877M11.42 15.17l2.496-3.03c.317-.384.74-.626 1.208-.766M11.42 15.17l-4.655 5.653a2.548 2.548 0 11-3.586-3.586l6.837-5.63m5.108-.233c.55-.164 1.163-.188 1.743-.14a4.5 4.5 0 004.486-6.336l-3.276 3.277a3.004 3.004 0 01-2.25-2.25l3.276-3.276a4.5 4.5 0 00-6.336 4.486c.091 1.076-.071 2.264-.904 2.95l-.102.085m-1.745 1.437L5.909 7.5H4.5L2.25 3.75l1.5-1.5L7.5 4.5v1.409l4.26 4.26m-1.745 1.437l1.745-1.437m6.615 8.206L15.75 15.75M4.867 19.125h.008v.008h-.008v-.008z"/>
-            </svg>
-          </div>
-          <h2 class="text-2xl font-semibold text-white mb-2">Em Breve</h2>
-          <p class="text-white/60">
-            Documentação completa e guia de instalação chegando em breve.
-          </p>
-          <a
-            href="https://github.com/joaoguirunas"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="mt-6 inline-flex items-center gap-2 rounded-lg bg-[#FF4500] px-5 py-2.5 text-sm font-semibold text-white hover:bg-[#FF5722] transition-colors"
-          >
-            <svg class="h-4 w-4" fill="currentColor" viewBox="0 0 24 24">
-              <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
-            </svg>
-            Ver no GitHub
-          </a>
-        </div>
-      </div>
-
-      <!-- Back Link -->
-      <div class="mt-12">
-        <a href="/" class="inline-flex items-center gap-2 text-[#FF4500] hover:underline">
-          <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
-          </svg>
-          Voltar para todas as ferramentas
-        </a>
-      </div>
-    </div>
-  </section>
-</BaseLayout>
+<SkillPage
+  title="Setup Claude Code"
+  description="Guia completo de configuração avançada. Do básico ao expert em Claude Code CLI."
+  category="Produtividade"
+  categoryColor="produtividade"
+  longDescription={longDescription}
+  features={features}
+  primaryLink="https://docs.anthropic.com/en/docs/claude-code/overview"
+  primaryLabel="Documentação Oficial"
+  isExternal={true}
+  author="@joaoguirunas"
+  authorUrl="https://github.com/joaoguirunas"
+  bgImage="/images/bg-claude-code.png"
+/>
