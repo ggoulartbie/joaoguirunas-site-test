@@ -833,36 +833,37 @@ const ogImage = '/images/mentoria-og.png';
       </div>
 
       <!-- Facilitadores Grid -->
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8 lg:gap-10">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-12 sm:gap-16 lg:gap-20 max-w-5xl mx-auto">
 
-        <!-- Card João Guirunas -->
-        <div class="glass-card p-6 sm:p-8 border-[#FF4400]/20 hover:border-[#FF4400]/40 transition-all duration-300 group">
-          <div class="flex flex-col items-center text-center">
-            <!-- Foto -->
-            <div class="relative mb-6">
-              <div class="w-32 h-32 sm:w-40 sm:h-40 rounded-full overflow-hidden border-4 border-[#FF4400]/30 group-hover:border-[#FF4400]/50 transition-all duration-300 shadow-lg shadow-[#FF4400]/20">
-                <img
-                  src="/images/mentoria-hero.png"
-                  alt="João Guirunas"
-                  class="w-full h-full object-cover"
-                  style="object-position: center 30%;"
-                />
-              </div>
-              <!-- Badge Online -->
-              <div class="absolute bottom-2 right-2 bg-[#FF4400] w-5 h-5 rounded-full border-4 border-[#0C0C12]"></div>
+        <!-- João Guirunas -->
+        <div class="flex flex-col items-center text-center group">
+          <!-- Foto -->
+          <div class="relative mb-8">
+            <div class="w-56 h-56 sm:w-64 sm:h-64 lg:w-72 lg:h-72 rounded-full overflow-hidden ring-[3px] ring-[#FF4400]/20 group-hover:ring-[#FF4400]/50 transition-all duration-500 shadow-2xl shadow-[#FF4400]/15">
+              <img
+                src="/images/joao-guirunas-profile.jpg"
+                alt="João Guirunas - Fundador GrowthSales.ai"
+                class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-500"
+              />
+            </div>
+            <!-- Badge Online -->
+            <div class="absolute bottom-6 right-6 bg-[#FF4400] w-7 h-7 rounded-full ring-[3px] ring-[#08080C] shadow-lg shadow-[#FF4400]/60 animate-pulse"></div>
+          </div>
+
+          <!-- Info -->
+          <div class="space-y-4">
+            <div>
+              <h3 class="text-2xl sm:text-3xl lg:text-4xl font-bold text-white mb-2 group-hover:text-[#FF4400] transition-colors">
+                João Guirunas
+              </h3>
+              <p class="text-[#FF4400]/80 text-[0.65rem] sm:text-xs font-semibold tracking-[0.15em]" style="font-family: 'Geist Mono', monospace; text-transform: uppercase;">
+                Fundador GrowthSales.ai
+              </p>
             </div>
 
-            <!-- Nome e Título -->
-            <h3 class="text-xl sm:text-2xl font-bold text-white mb-2">
-              João Guirunas
-            </h3>
-            <p class="text-[#FF4400] text-sm sm:text-base font-semibold mb-4" style="font-family: 'Geist Mono', monospace; text-transform: uppercase; letter-spacing: 0.08em;">
-              Fundador GrowthSales.ai
-            </p>
-
             <!-- Bio -->
-            <p class="text-white/70 text-sm sm:text-base leading-relaxed mb-6">
-              Especialista em IA aplicada a vendas e marketing. Pioneiro em orquestração de agentes autônomos e automação de processos comerciais. Criador do framework AIOX e mentor de dezenas de empresas na transformação digital.
+            <p class="text-white/60 text-sm sm:text-base leading-relaxed max-w-sm mx-auto">
+              Especialista em IA aplicada a vendas e marketing. Pioneiro em orquestração de agentes autônomos. Criador do framework AIOX.
             </p>
 
             <!-- LinkedIn -->
@@ -870,42 +871,44 @@ const ogImage = '/images/mentoria-og.png';
               href="https://www.linkedin.com/in/joaoguirunas"
               target="_blank"
               rel="noopener noreferrer"
-              class="inline-flex items-center gap-2 text-[#FF4400] hover:text-[#FF4400]/80 transition-colors text-sm font-semibold"
+              class="inline-flex items-center gap-2.5 text-[#FF4400] hover:text-white transition-all text-xs font-semibold border border-[#FF4400]/30 hover:border-[#FF4400] px-6 py-3 hover:bg-[#FF4400]/5 group/btn"
               style="font-family: 'Geist Mono', monospace; text-transform: uppercase; letter-spacing: 0.08em;"
             >
-              <Icon name="linkedin" class="w-5 h-5" />
+              <Icon name="linkedin" class="w-4 h-4 group-hover/btn:scale-110 transition-transform" />
               LinkedIn
             </a>
           </div>
         </div>
 
-        <!-- Card Claudia Guirunas -->
-        <div class="glass-card p-6 sm:p-8 border-[#FF4400]/20 hover:border-[#FF4400]/40 transition-all duration-300 group">
-          <div class="flex flex-col items-center text-center">
-            <!-- Foto Claudia -->
-            <div class="relative mb-6">
-              <div class="w-32 h-32 sm:w-40 sm:h-40 rounded-full overflow-hidden border-4 border-[#FF4400]/30 group-hover:border-[#FF4400]/50 transition-all duration-300 shadow-lg shadow-[#FF4400]/20">
-                <img
-                  src="/images/claudia-guirunas.png"
-                  alt="Claudia Guirunas - Co-Fundadora GrowthSales.ai"
-                  class="w-full h-full object-cover"
-                />
-              </div>
-              <!-- Badge Online -->
-              <div class="absolute bottom-2 right-2 bg-[#FF4400] w-5 h-5 rounded-full border-4 border-[#0C0C12]"></div>
+        <!-- Claudia Guirunas -->
+        <div class="flex flex-col items-center text-center group">
+          <!-- Foto -->
+          <div class="relative mb-8">
+            <div class="w-56 h-56 sm:w-64 sm:h-64 lg:w-72 lg:h-72 rounded-full overflow-hidden ring-[3px] ring-[#FF4400]/20 group-hover:ring-[#FF4400]/50 transition-all duration-500 shadow-2xl shadow-[#FF4400]/15">
+              <img
+                src="/images/claudia-guirunas.png"
+                alt="Claudia Guirunas - Co-Fundadora GrowthSales.ai"
+                class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-500"
+              />
+            </div>
+            <!-- Badge Online -->
+            <div class="absolute bottom-6 right-6 bg-[#FF4400] w-7 h-7 rounded-full ring-[3px] ring-[#08080C] shadow-lg shadow-[#FF4400]/60 animate-pulse"></div>
+          </div>
+
+          <!-- Info -->
+          <div class="space-y-4">
+            <div>
+              <h3 class="text-2xl sm:text-3xl lg:text-4xl font-bold text-white mb-2 group-hover:text-[#FF4400] transition-colors">
+                Claudia Guirunas
+              </h3>
+              <p class="text-[#FF4400]/80 text-[0.65rem] sm:text-xs font-semibold tracking-[0.15em]" style="font-family: 'Geist Mono', monospace; text-transform: uppercase;">
+                Co-Fundadora GrowthSales.ai
+              </p>
             </div>
 
-            <!-- Nome e Título -->
-            <h3 class="text-xl sm:text-2xl font-bold text-white mb-2">
-              Claudia Guirunas
-            </h3>
-            <p class="text-[#FF4400] text-sm sm:text-base font-semibold mb-4" style="font-family: 'Geist Mono', monospace; text-transform: uppercase; letter-spacing: 0.08em;">
-              Co-Fundadora GrowthSales.ai
-            </p>
-
             <!-- Bio -->
-            <p class="text-white/70 text-sm sm:text-base leading-relaxed mb-6">
-              Especialista em transformação digital e implementação de IA em processos de vendas. Experiência em consultoría estratégica e mentoria de equipes comerciais de alto desempenho. Focada em resultados mensuráveis e ROI.
+            <p class="text-white/60 text-sm sm:text-base leading-relaxed max-w-sm mx-auto">
+              Especialista em transformação digital e implementação de IA em processos de vendas. Focada em resultados mensuráveis e ROI.
             </p>
 
             <!-- LinkedIn -->
@@ -913,16 +916,17 @@ const ogImage = '/images/mentoria-og.png';
               href="https://www.linkedin.com/in/claudiaguirunas"
               target="_blank"
               rel="noopener noreferrer"
-              class="inline-flex items-center gap-2 text-[#FF4400] hover:text-[#FF4400]/80 transition-colors text-sm font-semibold"
+              class="inline-flex items-center gap-2.5 text-[#FF4400] hover:text-white transition-all text-xs font-semibold border border-[#FF4400]/30 hover:border-[#FF4400] px-6 py-3 hover:bg-[#FF4400]/5 group/btn"
               style="font-family: 'Geist Mono', monospace; text-transform: uppercase; letter-spacing: 0.08em;"
             >
-              <Icon name="linkedin" class="w-5 h-5" />
+              <Icon name="linkedin" class="w-4 h-4 group-hover/btn:scale-110 transition-transform" />
               LinkedIn
             </a>
           </div>
         </div>
 
       </div>
+
 
       <!-- Call to Action -->
       <div class="mt-12 text-center">
@@ -1254,23 +1258,25 @@ const ogImage = '/images/mentoria-og.png';
   }
 </style>
 
-<script>
+<script is:inline>
   // Smooth scroll for anchor links
-  document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-    anchor.addEventListener('click', function(e) {
-      e.preventDefault();
-      const href = (this as HTMLAnchorElement).getAttribute('href');
-      if (href) {
-        const target = document.querySelector(href);
-        target?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      }
+  document.addEventListener('DOMContentLoaded', function() {
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function(e) {
+        e.preventDefault();
+        const href = this.getAttribute('href');
+        if (href) {
+          const target = document.querySelector(href);
+          if (target) {
+            target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          }
+        }
+      });
     });
-  });
 
-  // Load Revos Form
-  (function() {
+    // Load Revos Form
     const formId = 'a11d7cc4-17b8-400e-94e4-0f27ca47e9a4';
-    const formContainer = document.getElementById(`lp-form-${formId}`);
+    const formContainer = document.getElementById('lp-form-' + formId);
 
     if (!formContainer) {
       console.error('Form container not found');
@@ -1279,15 +1285,20 @@ const ogImage = '/images/mentoria-og.png';
 
     // Load the embed script
     const script = document.createElement('script');
-    script.src = `https://revos.growthsales.ai/embed.js?form_id=${formId}`;
+    script.src = 'https://revos.growthsales.ai/embed.js?form_id=' + formId;
     script.setAttribute('data-form-id', formId);
     script.async = true;
 
+    script.onload = function() {
+      console.log('✅ Revos form script loaded successfully');
+    };
+
     script.onerror = function() {
-      console.error('Failed to load Revos form script');
-      formContainer.innerHTML = '<p style="color: #FF4400; text-align: center;">Erro ao carregar formulário. Por favor, tente novamente mais tarde.</p>';
+      console.error('❌ Failed to load Revos form script');
+      formContainer.innerHTML = '<p style="color: #FF4400; text-align: center; padding: 40px;">Erro ao carregar formulário. Por favor, tente novamente mais tarde ou entre em contato diretamente.</p>';
     };
 
     document.body.appendChild(script);
-  })();
+    console.log('📝 Revos form script added to page');
+  });
 </script>
