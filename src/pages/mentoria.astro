@@ -965,11 +965,7 @@ const ogImage = '/images/mentoria-og.png';
       <!-- Form Container -->
       <div class="glass-card p-6 sm:p-8 lg:p-10 border-[#FF4400]/20">
         <div id="lp-form-a11d7cc4-17b8-400e-94e4-0f27ca47e9a4"></div>
-        <script
-          src="https://revos.growthsales.ai/embed.js?form_id=a11d7cc4-17b8-400e-94e4-0f27ca47e9a4"
-          data-form-id="a11d7cc4-17b8-400e-94e4-0f27ca47e9a4"
-          async
-        ></script>
+        <!-- Form script loaded at end of page for better performance -->
       </div>
 
       <!-- Trust Badges -->
@@ -1270,4 +1266,28 @@ const ogImage = '/images/mentoria-og.png';
       }
     });
   });
+
+  // Load Revos Form
+  (function() {
+    const formId = 'a11d7cc4-17b8-400e-94e4-0f27ca47e9a4';
+    const formContainer = document.getElementById(`lp-form-${formId}`);
+
+    if (!formContainer) {
+      console.error('Form container not found');
+      return;
+    }
+
+    // Load the embed script
+    const script = document.createElement('script');
+    script.src = `https://revos.growthsales.ai/embed.js?form_id=${formId}`;
+    script.setAttribute('data-form-id', formId);
+    script.async = true;
+
+    script.onerror = function() {
+      console.error('Failed to load Revos form script');
+      formContainer.innerHTML = '<p style="color: #FF4400; text-align: center;">Erro ao carregar formulário. Por favor, tente novamente mais tarde.</p>';
+    };
+
+    document.body.appendChild(script);
+  })();
 </script>
