@@ -1,80 +1,154 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import Icon from '../components/icons/Icon.astro';
 
 const title = 'Mentoria Claude Code + AIOX';
 const description = 'Tenha uma equipe de agentes de IA trabalhando para você. Mentoria intensiva e prática com turmas de no máximo 12 pessoas em Florianópolis.';
 const ogImage = '/images/mentoria-og.png';
 ---
 
+<style is:global>
+  /* AIOX Design System Tokens */
+  :root {
+    /* Colors - Lime Theme (Dark Cockpit Edition) */
+    --bb-lime: oklch(0.934 0.2264 121.95);
+    --bb-blue: oklch(0.669 0.1837 248.81);
+    --bb-flare: oklch(0.631 0.2116 36.21);
+    --bb-error: oklch(0.6368 0.2078 25.33);
+
+    /* Surfaces */
+    --bb-canvas: oklch(0.1149 0 0);
+    --bb-dark: oklch(0.1149 0 0);
+    --bb-surface: oklch(0.1693 0.0041 285.95);
+    --bb-surface-alt: oklch(0.231 0.0099 124.97);
+    --bb-surface-panel: oklch(0.1785 0.0041 285.98);
+    --bb-surface-console: oklch(0.184 0.0081 118.61);
+    --bb-surface-hover-strong: oklch(0.1971 0.006 285.84);
+
+    /* Text */
+    --bb-cream: oklch(0.9639 0.0158 106.69);
+    --bb-cream-alt: oklch(0.9644 0.0172 103.15);
+    --bb-warm-white: oklch(0.9952 0.0235 106.82);
+    --bb-dim: rgba(245, 244, 231, 0.4);
+    --bb-muted: oklch(0.7952 0 0);
+    --bb-meta: oklch(0.6927 0 0);
+
+    /* Borders */
+    --bb-border: rgba(156, 156, 156, 0.15);
+    --bb-border-soft: rgba(156, 156, 156, 0.10);
+    --bb-border-strong: #3D3D3D;
+    --bb-border-hover: rgba(156, 156, 156, 0.24);
+    --bb-border-input: rgba(156, 156, 156, 0.2);
+
+    /* Spacing */
+    --space-1: 0.25rem;
+    --space-2: 0.5rem;
+    --space-3: 0.75rem;
+    --space-4: 1rem;
+    --space-5: 1.25rem;
+    --space-6: 1.5rem;
+    --space-7: 2rem;
+    --space-8: 2.5rem;
+    --space-9: 3rem;
+    --space-10: 4rem;
+    --space-11: 5rem;
+    --space-12: 6rem;
+
+    /* Typography */
+    --font-bb-display: 'TASA Orbiter', system-ui, sans-serif;
+    --font-bb-sans: 'Geist', system-ui, sans-serif;
+    --font-bb-mono: 'Geist Mono', 'Roboto Mono', monospace;
+  }
+</style>
+
 <BaseLayout title={title} description={description} ogImage={ogImage}>
-  <!-- Hero Section - Ultra Wide com Clone João -->
-  <section id="hero" class="relative w-full max-h-[55vh] overflow-hidden">
-    <!-- Background Image - TODO: Adicionar imagem clone João ultra wide -->
+  <!-- Hero Section - Enterprise Clean -->
+  <section id="hero" class="relative w-full min-h-[65vh] overflow-hidden" style="background: var(--bb-dark);">
+    <!-- Background Image -->
     <img
       src="/images/mentoria-hero.png"
       alt="Mentoria Claude Code + AIOX"
-      class="w-full h-[55vh] object-cover"
-      style="object-position: center 25%;"
+      class="w-full h-[65vh] object-cover"
+      style="object-position: center 25%; transform: scaleX(-1);"
     />
 
-    <!-- Dark Overlay Gradient -->
-    <div class="absolute inset-0 bg-gradient-to-b from-[#08080C]/10 via-[#08080C]/40 to-[#08080C]/95"></div>
+    <!-- Dark Overlay Gradient + Orange Subtle Accent -->
+    <div class="absolute inset-0 bg-gradient-to-b from-[var(--bb-dark)]/50 via-[var(--bb-dark)]/75 to-[var(--bb-dark)]"></div>
+    <div class="absolute inset-0 bg-gradient-to-t from-[#FF4400]/3 via-transparent to-transparent"></div>
 
     <!-- Content -->
-    <div class="absolute inset-0 flex flex-col justify-end px-5 sm:px-6 pb-12 sm:pb-20">
+    <div class="absolute inset-0 flex flex-col justify-end" style="padding: var(--space-6) var(--space-6) var(--space-10);">
       <div class="mx-auto max-w-6xl w-full">
-        <!-- Badge -->
-        <div class="inline-flex items-center gap-2 bg-[#08080C] px-3 py-1.5 mb-3 sm:mb-4">
-          <span class="relative flex h-1.5 w-1.5 sm:h-2 sm:w-2">
-            <span class="absolute inline-flex h-full w-full animate-ping rounded-full bg-[#FF4400] opacity-75"></span>
-            <span class="relative inline-flex h-1.5 w-1.5 sm:h-2 sm:w-2 rounded-full bg-[#FF4400]"></span>
-          </span>
-          <span class="text-[#FF4400] text-[0.5rem] sm:text-[0.6rem]" style="font-family: 'Geist Mono', monospace; text-transform: uppercase; letter-spacing: 0.12em; font-weight: 600;">Turmas Limitadas</span>
+        <!-- Badge with Orange Accent (Clean) -->
+        <div class="inline-flex items-center gap-2 backdrop-blur-sm border"
+             style="background: var(--bb-surface); border-color: #FF4400; padding: var(--space-2) var(--space-4); margin-bottom: var(--space-4);">
+          <span class="relative inline-flex h-2 w-2 rounded-full" style="background: #FF4400;"></span>
+          <span style="color: #FF4400; font-family: var(--font-bb-mono); font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.12em; font-weight: 600;">Turmas Limitadas</span>
         </div>
 
-        <!-- Headline -->
-        <h1 class="text-xl sm:text-3xl lg:text-4xl font-bold tracking-tight text-white max-w-4xl leading-tight sm:leading-tight">
-          Tenha uma Equipe de Agentes de IA <span class="text-[#FF4400]">Trabalhando Para Você</span>
+        <!-- Headline com tipografia Display (Clean) -->
+        <h1 style="font-family: var(--font-bb-display); font-size: clamp(1.75rem, 5vw, 3.5rem); font-weight: 800; color: var(--bb-cream); max-width: 56rem; line-height: 1.1; letter-spacing: -0.02em; text-shadow: 0 2px 8px rgba(0, 0, 0, 0.6); margin-bottom: var(--space-5);">
+          Tenha uma Equipe de Agentes de IA <span style="color: #FF4400;">Trabalhando Para Você</span>
         </h1>
-        <p class="mt-3 sm:mt-4 text-sm sm:text-lg text-white/70 max-w-3xl leading-relaxed">
-          Aprenda a criar, configurar e orquestrar agentes autônomos que executam tarefas complexas para você — da escrita de código à criação de conteúdo. <strong>Mentoria intensiva e prática.</strong>
+
+        <p style="font-family: var(--font-bb-sans); font-size: clamp(0.95rem, 2vw, 1.15rem); color: var(--bb-cream-alt); max-width: 48rem; line-height: 1.6; text-shadow: 0 1px 4px rgba(0, 0, 0, 0.5); margin-bottom: var(--space-8); opacity: 0.92;">
+          Aprenda a criar, configurar e orquestrar agentes autônomos que executam tarefas complexas para você — da escrita de código à criação de conteúdo. <strong style="color: var(--bb-warm-white);">Mentoria intensiva e prática.</strong>
         </p>
 
-        <!-- CTAs -->
-        <div class="mt-6 sm:mt-8 flex flex-col sm:flex-row sm:flex-wrap items-stretch sm:items-center gap-3 sm:gap-4">
+        <!-- CTAs com Design System (Orange) -->
+        <div style="display: flex; flex-wrap: wrap; gap: var(--space-4); margin-bottom: var(--space-5);">
           <a
-            href="#investimento"
-            class="btn-primary inline-flex items-center justify-center gap-2 bg-[#FF4400] px-5 sm:px-6 py-3 text-xs sm:text-sm font-semibold text-white shadow-lg shadow-[#FF4400]/25 hover:bg-[#FF5722] transition-all text-center"
+            href="#inscricao"
+            class="btn-primary inline-flex items-center justify-center gap-2 transition-all"
+            style="background: #FF4400; color: white; padding: var(--space-4) var(--space-7); font-family: var(--font-bb-mono); font-size: 0.875rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; box-shadow: 0 4px 12px rgba(255, 68, 0, 0.3);"
           >
-            <span class="whitespace-nowrap">Quero Minha Vaga</span>
-            <svg class="h-4 w-4 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"/>
-            </svg>
+            <span>Fale com um Especialista</span>
+            <Icon name="arrow-right" size="16" />
           </a>
           <a
             href="#como-funciona"
-            class="inline-flex items-center justify-center gap-2 border border-white/20 bg-white/5 px-5 sm:px-6 py-3 text-xs sm:text-sm font-semibold text-white hover:bg-white/10 transition-all backdrop-blur-sm text-center"
+            class="inline-flex items-center justify-center gap-2 backdrop-blur-md transition-all"
+            style="border: 1px solid #FF4400/50; background: var(--bb-surface-panel); color: var(--bb-cream); padding: var(--space-4) var(--space-7); font-family: var(--font-bb-mono); font-size: 0.875rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em;"
           >
             Como Funciona
-            <svg class="h-4 w-4 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"/>
-            </svg>
+            <Icon name="chevron-down" size="16" />
           </a>
         </div>
 
-        <!-- Microcopy -->
-        <p class="mt-3 sm:mt-4 text-[0.7rem] sm:text-sm text-white/50">
-          ⏰ Máx. 12 pessoas | ✅ Garantia 7 dias
+        <!-- Microcopy com Geist Mono (Orange) -->
+        <p style="font-family: var(--font-bb-mono); font-size: 0.75rem; color: var(--bb-meta); text-transform: uppercase; letter-spacing: 0.1em; text-shadow: 0 1px 4px rgba(0, 0, 0, 0.6); display: flex; align-items: center; gap: 0.5rem;">
+          <Icon name="clock" size="16" class="text-[#FF4400]" /> Máx. 12 pessoas <span style="opacity: 0.5;">|</span> <Icon name="check" size="16" class="text-[#FF4400]" /> Garantia 7 dias
         </p>
       </div>
     </div>
   </section>
 
   <!-- Seção PROBLEMA -->
-  <section id="problema" class="py-16 sm:py-24 bg-[#08080C]">
-    <div class="mx-auto max-w-4xl px-5 sm:px-6 lg:px-8">
+  <section id="problema" class="relative py-16 sm:py-24 overflow-hidden" style="background: #08080C;">
+    <!-- Background com gradiente radial e padrão de pontos -->
+    <div class="absolute inset-0">
+      <!-- Gradiente radial do canto superior esquerdo -->
+      <div
+        class="absolute inset-0 opacity-30"
+        style="background: radial-gradient(100% 100% at 0% 0%, #2e2e2e 0%, #000000 100%); mask: radial-gradient(125% 100% at 0% 0%, #000000 0%, rgba(0, 0, 0, 0.224) 88%, rgba(0, 0, 0, 0) 100%);"
+      ></div>
+
+      <!-- Gradiente com tons laranja sutis -->
+      <div
+        class="absolute inset-0 opacity-10"
+        style="background: radial-gradient(125% 125% at 20% 10%, rgba(255, 68, 0, 0.15) 0%, transparent 60%);"
+      ></div>
+
+      <!-- Padrão de pontos sutil -->
+      <div
+        class="absolute inset-0 opacity-20"
+        style="background-image: radial-gradient(circle at 1px 1px, rgba(255,255,255,0.15) 1px, transparent 0); background-size: 24px 24px;"
+      ></div>
+    </div>
+
+    <div class="relative z-10 mx-auto max-w-4xl px-5 sm:px-6 lg:px-8">
       <h2 class="text-2xl font-bold text-white sm:text-4xl lg:text-5xl text-center leading-tight sm:leading-tight">
-        Você Sabe Que IA É o Futuro. Mas Ainda Não Conseguiu <span class="text-[#FF4400]">Aproveitar o Potencial Dela</span>.
+        Você sabe que IA é o futuro. Mas ainda não conseguiu <span class="text-[#FF4400]">aproveitar o potencial dela</span>.
       </h2>
 
       <div class="mt-8 sm:mt-12 text-base sm:text-lg text-white/70 leading-relaxed space-y-5 sm:space-y-6">
@@ -87,15 +161,15 @@ const ogImage = '/images/mentoria-og.png';
         <p class="text-white/80 font-medium text-sm sm:text-base">A verdade é:</p>
         <ul class="space-y-3 sm:space-y-4 ml-0 sm:ml-4">
           <li class="flex items-start gap-2 sm:gap-3">
-            <span class="text-[#FF4400] text-xl sm:text-2xl flex-shrink-0">❌</span>
+            <Icon name="close" class="flex-shrink-0 w-5 h-5 sm:w-6 sm:h-6 text-[#FF4400]" />
             <span class="text-sm sm:text-base"><strong>Tutoriais do YouTube não são suficientes</strong> — falta contexto, falta prática guiada, falta alguém para tirar suas dúvidas na hora</span>
           </li>
           <li class="flex items-start gap-2 sm:gap-3">
-            <span class="text-[#FF4400] text-xl sm:text-2xl flex-shrink-0">❌</span>
+            <Icon name="close" class="flex-shrink-0 w-5 h-5 sm:w-6 sm:h-6 text-[#FF4400]" />
             <span class="text-sm sm:text-base"><strong>Você não tem tempo para virar expert sozinho</strong> — entre trabalho, projetos e vida pessoal, explorar ferramentas novas vira "quando sobrar tempo"</span>
           </li>
           <li class="flex items-start gap-2 sm:gap-3">
-            <span class="text-[#FF4400] text-xl sm:text-2xl flex-shrink-0">❌</span>
+            <Icon name="close" class="flex-shrink-0 w-5 h-5 sm:w-6 sm:h-6 text-[#FF4400]" />
             <span class="text-sm sm:text-base"><strong>Cada erro custa caro</strong> — configurações erradas, permissões, integrações que não funcionam... você perde horas (ou dias) tentando descobrir o que deu errado</span>
           </li>
         </ul>
@@ -110,70 +184,28 @@ const ogImage = '/images/mentoria-og.png';
   <section id="solucao" class="py-16 sm:py-24 bg-[#0C0C12]">
     <div class="mx-auto max-w-5xl px-5 sm:px-6 lg:px-8">
       <h2 class="text-2xl font-bold text-white sm:text-4xl lg:text-5xl text-center leading-tight sm:leading-tight">
-        Imagine Ter Uma Equipe de Especialistas <span class="text-[#FF4400]">Trabalhando Para Você 24/7</span>
+        Imagine ter uma equipe de especialistas <span class="text-[#FF4400]">trabalhando para você 24/7</span>
       </h2>
 
       <div class="mt-8 sm:mt-12 text-base sm:text-lg text-white/70 leading-relaxed space-y-5 sm:space-y-6">
         <p>E se você pudesse:</p>
         <ul class="space-y-3 sm:space-y-4 ml-0 sm:ml-4">
           <li class="flex items-start gap-2 sm:gap-3">
-            <span class="text-[#22C55E] text-xl sm:text-2xl flex-shrink-0">✅</span>
+            <Icon name="check" class="flex-shrink-0 w-5 h-5 sm:w-6 sm:h-6 text-[#22C55E]" />
             <span class="text-sm sm:text-base"><strong>Delegar tarefas complexas para agentes</strong> que nunca dormem, nunca erram contexto e custam uma fração de um funcionário?</span>
           </li>
           <li class="flex items-start gap-2 sm:gap-3">
-            <span class="text-[#22C55E] text-xl sm:text-2xl flex-shrink-0">✅</span>
+            <Icon name="check" class="flex-shrink-0 w-5 h-5 sm:w-6 sm:h-6 text-[#22C55E]" />
             <span class="text-sm sm:text-base"><strong>Ter um dev senior, um QA, um designer, um copywriter</strong> — tudo rodando na sua máquina, integrado aos seus projetos?</span>
           </li>
           <li class="flex items-start gap-2 sm:gap-3">
-            <span class="text-[#22C55E] text-xl sm:text-2xl flex-shrink-0">✅</span>
+            <Icon name="check" class="flex-shrink-0 w-5 h-5 sm:w-6 sm:h-6 text-[#22C55E]" />
             <span class="text-sm sm:text-base"><strong>Escalar sua produção sem contratar</strong> — criar 10 posts de LinkedIn, 5 apresentações e revisar 20 PRs... em uma tarde?</span>
           </li>
         </ul>
         <p class="text-white font-semibold text-base sm:text-xl mt-6 sm:mt-8 text-center">
           <strong>Isso não é ficção científica. É o que você vai construir nesta mentoria.</strong>
         </p>
-      </div>
-
-      <!-- Box Claudia Guirunas -->
-      <div class="mt-12 sm:mt-16 glass-card p-5 sm:p-8 border-[#FF4400]/30">
-        <div class="flex items-center gap-2 sm:gap-3 mb-4 sm:mb-6">
-          <div class="h-1 w-8 sm:w-12 bg-[#FF4400]"></div>
-          <h3 class="text-base sm:text-xl font-bold text-white">Como Desbloquear da Tela Preta</h3>
-        </div>
-
-        <p class="text-white/80 font-medium mb-2 text-sm sm:text-base">
-          <strong class="text-[#FF4400]">Claudia Guirunas</strong> — Psicanalista e Sócia da GrowthSales
-        </p>
-
-        <div class="text-white/70 leading-relaxed space-y-3 sm:space-y-4 text-sm sm:text-base">
-          <p>
-            A tela preta do terminal paralisa a maioria das pessoas. O medo, a sensação de "não sou técnico o suficiente", a resistência emocional... tudo isso bloqueia o aprendizado.
-          </p>
-          <p>
-            Claudia desenvolveu <strong>técnicas específicas de desbloqueio mental e respiração</strong> para ajudar profissionais não-técnicos a superarem essa barreira psicológica.
-          </p>
-          <p class="text-white/80 font-medium text-sm sm:text-base">
-            No primeiro encontro presencial, ela vai orientar você através de:
-          </p>
-          <ul class="space-y-1.5 sm:space-y-2 ml-0 sm:ml-4 text-white/70 text-xs sm:text-sm">
-            <li class="flex items-start gap-2">
-              <span class="flex-shrink-0">•</span>
-              <span>Técnicas de respiração para controlar a ansiedade da tela preta</span>
-            </li>
-            <li class="flex items-start gap-2">
-              <span class="flex-shrink-0">•</span>
-              <span>Como lidar com o medo de "quebrar algo" ou "fazer errado"</span>
-            </li>
-            <li class="flex items-start gap-2">
-              <span class="flex-shrink-0">•</span>
-              <span>Mindset para delegar e confiar em agentes autônomos</span>
-            </li>
-            <li class="flex items-start gap-2">
-              <span class="flex-shrink-0">•</span>
-              <span>Como evoluir gradualmente no trabalho com IA sem travamento mental</span>
-            </li>
-          </ul>
-        </div>
       </div>
     </div>
   </section>
@@ -200,7 +232,9 @@ const ogImage = '/images/mentoria-og.png';
         <!-- Encontro Presencial -->
         <div class="glass-card p-5 sm:p-6">
           <div class="flex items-start justify-between mb-3 sm:mb-4">
-            <div class="text-3xl sm:text-4xl">🎯</div>
+            <div class="flex items-center justify-center w-12 h-12 sm:w-14 sm:h-14 rounded-lg border-2 border-[#FF4400] bg-[#FF4400]/10">
+              <span class="text-[#FF4400] font-bold text-xl sm:text-2xl" style="font-family: var(--font-bb-mono);">01</span>
+            </div>
             <div class="inline-flex items-center border border-[#FF4400]/30 bg-[#FF4400]/20 text-[#FF4400] px-2 py-0.5">
               <span style="font-family: 'Geist Mono', monospace; font-size: 0.5rem; sm:font-size: 0.55rem; text-transform: uppercase; letter-spacing: 0.10em; font-weight: 600;">Presencial</span>
             </div>
@@ -224,15 +258,15 @@ const ogImage = '/images/mentoria-og.png';
             <p class="text-[0.6rem] sm:text-xs text-white/35 mb-1.5 sm:mb-2" style="font-family: 'Geist Mono', monospace;">Você sai com:</p>
             <ul class="space-y-1">
               <li class="text-[0.65rem] sm:text-xs text-white/50 flex items-start gap-1.5 sm:gap-2 leading-snug">
-                <span class="text-[#FF4400] mt-0.5 flex-shrink-0">✅</span>
+                <Icon name="check" size="16" class="text-[#FF4400] mt-0.5 flex-shrink-0" />
                 <span>Computador 100% configurado</span>
               </li>
               <li class="text-[0.65rem] sm:text-xs text-white/50 flex items-start gap-1.5 sm:gap-2 leading-snug">
-                <span class="text-[#FF4400] mt-0.5 flex-shrink-0">✅</span>
+                <Icon name="check" size="16" class="text-[#FF4400] mt-0.5 flex-shrink-0" />
                 <span>Mindset desbloqueado</span>
               </li>
               <li class="text-[0.65rem] sm:text-xs text-white/50 flex items-start gap-1.5 sm:gap-2 leading-snug">
-                <span class="text-[#FF4400] mt-0.5 flex-shrink-0">✅</span>
+                <Icon name="check" size="16" class="text-[#FF4400] mt-0.5 flex-shrink-0" />
                 <span>Confiança para os próximos módulos</span>
               </li>
             </ul>
@@ -242,7 +276,9 @@ const ogImage = '/images/mentoria-og.png';
         <!-- Online 1 -->
         <div class="glass-card p-5 sm:p-6">
           <div class="flex items-start justify-between mb-3 sm:mb-4">
-            <div class="text-3xl sm:text-4xl">💻</div>
+            <div class="flex items-center justify-center w-12 h-12 sm:w-14 sm:h-14 rounded-lg border-2 border-[#0EA5E9] bg-[#0EA5E9]/10">
+              <span class="text-[#0EA5E9] font-bold text-xl sm:text-2xl" style="font-family: var(--font-bb-mono);">02</span>
+            </div>
             <div class="inline-flex items-center border border-[#0EA5E9]/30 bg-[#0EA5E9]/20 text-[#0EA5E9] px-2 py-0.5">
               <span style="font-family: 'Geist Mono', monospace; font-size: 0.5rem; text-transform: uppercase; letter-spacing: 0.10em; font-weight: 600;">Online</span>
             </div>
@@ -272,7 +308,9 @@ const ogImage = '/images/mentoria-og.png';
         <!-- Online 2 -->
         <div class="glass-card p-6">
           <div class="flex items-start justify-between mb-4">
-            <div class="text-4xl">🛠️</div>
+            <div class="flex items-center justify-center w-12 h-12 sm:w-14 sm:h-14 rounded-lg border-2 border-[#0EA5E9] bg-[#0EA5E9]/10">
+              <span class="text-[#0EA5E9] font-bold text-xl sm:text-2xl" style="font-family: var(--font-bb-mono);">03</span>
+            </div>
             <div class="inline-flex items-center border border-[#0EA5E9]/30 bg-[#0EA5E9]/20 text-[#0EA5E9] px-2 py-0.5">
               <span style="font-family: 'Geist Mono', monospace; font-size: 0.55rem; text-transform: uppercase; letter-spacing: 0.10em; font-weight: 600;">Online</span>
             </div>
@@ -301,7 +339,7 @@ const ogImage = '/images/mentoria-og.png';
 
           <div class="pt-3 border-t border-white/[0.08]">
             <p class="text-xs text-white/50">
-              <span class="text-[#FF4400]">✅</span> Skills essenciais instaladas e funcionando para seu contexto
+              <Icon name="check" size="16" class="text-[#FF4400]" /> Skills essenciais instaladas e funcionando para seu contexto
             </p>
           </div>
         </div>
@@ -309,7 +347,9 @@ const ogImage = '/images/mentoria-og.png';
         <!-- Online 3 -->
         <div class="glass-card p-6">
           <div class="flex items-start justify-between mb-4">
-            <div class="text-4xl">🔌</div>
+            <div class="flex items-center justify-center w-12 h-12 sm:w-14 sm:h-14 rounded-lg border-2 border-[#0EA5E9] bg-[#0EA5E9]/10">
+              <span class="text-[#0EA5E9] font-bold text-xl sm:text-2xl" style="font-family: var(--font-bb-mono);">04</span>
+            </div>
             <div class="inline-flex items-center border border-[#0EA5E9]/30 bg-[#0EA5E9]/20 text-[#0EA5E9] px-2 py-0.5">
               <span style="font-family: 'Geist Mono', monospace; font-size: 0.55rem; text-transform: uppercase; letter-spacing: 0.10em; font-weight: 600;">Online</span>
             </div>
@@ -331,7 +371,7 @@ const ogImage = '/images/mentoria-og.png';
 
           <div class="pt-3 border-t border-white/[0.08]">
             <p class="text-xs text-white/50">
-              <span class="text-[#FF4400]">✅</span> Integrações poderosas rodando no seu ambiente
+              <Icon name="check" size="16" class="text-[#FF4400]" /> Integrações poderosas rodando no seu ambiente
             </p>
           </div>
         </div>
@@ -339,7 +379,9 @@ const ogImage = '/images/mentoria-og.png';
         <!-- Online 4 -->
         <div class="glass-card p-6">
           <div class="flex items-start justify-between mb-4">
-            <div class="text-4xl">🏗️</div>
+            <div class="flex items-center justify-center w-12 h-12 sm:w-14 sm:h-14 rounded-lg border-2 border-[#0EA5E9] bg-[#0EA5E9]/10">
+              <span class="text-[#0EA5E9] font-bold text-xl sm:text-2xl" style="font-family: var(--font-bb-mono);">05</span>
+            </div>
             <div class="inline-flex items-center border border-[#0EA5E9]/30 bg-[#0EA5E9]/20 text-[#0EA5E9] px-2 py-0.5">
               <span style="font-family: 'Geist Mono', monospace; font-size: 0.55rem; text-transform: uppercase; letter-spacing: 0.10em; font-weight: 600;">Online</span>
             </div>
@@ -361,7 +403,7 @@ const ogImage = '/images/mentoria-og.png';
 
           <div class="pt-3 border-t border-white/[0.08]">
             <p class="text-xs text-white/50">
-              <span class="text-[#FF4400]">✅</span> Compreensão completa de como orquestrar times multi-agente
+              <Icon name="check" size="16" class="text-[#FF4400]" /> Compreensão completa de como orquestrar times multi-agente
             </p>
           </div>
         </div>
@@ -369,7 +411,9 @@ const ogImage = '/images/mentoria-og.png';
         <!-- Online 5 -->
         <div class="glass-card p-6">
           <div class="flex items-start justify-between mb-4">
-            <div class="text-4xl">🎨</div>
+            <div class="flex items-center justify-center w-12 h-12 sm:w-14 sm:h-14 rounded-lg border-2 border-[#0EA5E9] bg-[#0EA5E9]/10">
+              <span class="text-[#0EA5E9] font-bold text-xl sm:text-2xl" style="font-family: var(--font-bb-mono);">06</span>
+            </div>
             <div class="inline-flex items-center border border-[#0EA5E9]/30 bg-[#0EA5E9]/20 text-[#0EA5E9] px-2 py-0.5">
               <span style="font-family: 'Geist Mono', monospace; font-size: 0.55rem; text-transform: uppercase; letter-spacing: 0.10em; font-weight: 600;">Online</span>
             </div>
@@ -391,7 +435,7 @@ const ogImage = '/images/mentoria-og.png';
 
           <div class="pt-3 border-t border-white/[0.08]">
             <p class="text-xs text-white/50">
-              <span class="text-[#FF4400]">✅</span> Primeira versão da sua squad customizada
+              <Icon name="check" size="16" class="text-[#FF4400]" /> Primeira versão da sua squad customizada
             </p>
           </div>
         </div>
@@ -399,7 +443,9 @@ const ogImage = '/images/mentoria-og.png';
         <!-- Online 6 -->
         <div class="glass-card p-6">
           <div class="flex items-start justify-between mb-4">
-            <div class="text-4xl">⚡</div>
+            <div class="flex items-center justify-center w-12 h-12 sm:w-14 sm:h-14 rounded-lg border-2 border-[#0EA5E9] bg-[#0EA5E9]/10">
+              <span class="text-[#0EA5E9] font-bold text-xl sm:text-2xl" style="font-family: var(--font-bb-mono);">07</span>
+            </div>
             <div class="inline-flex items-center border border-[#0EA5E9]/30 bg-[#0EA5E9]/20 text-[#0EA5E9] px-2 py-0.5">
               <span style="font-family: 'Geist Mono', monospace; font-size: 0.55rem; text-transform: uppercase; letter-spacing: 0.10em; font-weight: 600;">Online</span>
             </div>
@@ -421,7 +467,7 @@ const ogImage = '/images/mentoria-og.png';
 
           <div class="pt-3 border-t border-white/[0.08]">
             <p class="text-xs text-white/50">
-              <span class="text-[#FF4400]">✅</span> Sistema completo integrado ao seu workflow real
+              <Icon name="check" size="16" class="text-[#FF4400]" /> Sistema completo integrado ao seu workflow real
             </p>
           </div>
         </div>
@@ -429,7 +475,9 @@ const ogImage = '/images/mentoria-og.png';
         <!-- Encontro Final -->
         <div class="glass-card p-6">
           <div class="flex items-start justify-between mb-4">
-            <div class="text-4xl">🏆</div>
+            <div class="flex items-center justify-center w-12 h-12 sm:w-14 sm:h-14 rounded-lg border-2 border-[#FF4400] bg-[#FF4400]/10">
+              <span class="text-[#FF4400] font-bold text-xl sm:text-2xl" style="font-family: var(--font-bb-mono);">08</span>
+            </div>
             <div class="inline-flex items-center border border-[#FF4400]/30 bg-[#FF4400]/20 text-[#FF4400] px-2 py-0.5">
               <span style="font-family: 'Geist Mono', monospace; font-size: 0.55rem; text-transform: uppercase; letter-spacing: 0.10em; font-weight: 600;">Final</span>
             </div>
@@ -454,7 +502,7 @@ const ogImage = '/images/mentoria-og.png';
 
           <div class="pt-3 border-t border-white/[0.08]">
             <p class="text-xs text-white/50">
-              <span class="text-[#FF4400]">✅</span> Certificado + rede de contatos + autonomia completa
+              <Icon name="check" size="16" class="text-[#FF4400]" /> Certificado + rede de contatos + autonomia completa
             </p>
           </div>
         </div>
@@ -471,57 +519,89 @@ const ogImage = '/images/mentoria-og.png';
 
       <div class="grid gap-4 sm:gap-6 sm:grid-cols-2 lg:grid-cols-4">
         <!-- Card 1: Desbloqueio Mental -->
-        <div class="glass-card p-6">
-          <div class="text-4xl mb-4">🧠</div>
-          <h3 class="text-xl font-bold text-white mb-3">Desbloqueio Mental com Claudia Guirunas</h3>
-          <p class="text-white/60 text-sm leading-relaxed mb-3">
+        <div class="glass-card p-5 sm:p-6">
+          <div class="mb-3 sm:mb-4">
+            <svg class="w-10 h-10 sm:w-12 sm:h-12" viewBox="0 0 24 24" fill="none" stroke="var(--lime)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+              <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+            </svg>
+          </div>
+          <h3 class="text-base sm:text-xl font-bold text-white mb-2 sm:mb-3 leading-tight">Desbloqueio Mental com Claudia Guirunas</h3>
+          <p class="text-white/60 text-xs sm:text-sm leading-relaxed mb-2 sm:mb-3">
             <strong class="text-white/80">Psicanalista e Sócia da GrowthSales</strong>
           </p>
-          <p class="text-white/60 text-sm leading-relaxed">
+          <p class="text-white/60 text-xs sm:text-sm leading-relaxed">
             No primeiro encontro presencial, Claudia orienta os participantes com técnicas de desbloqueio mental e respiração para controlar a ansiedade da tela preta.
           </p>
-          <p class="text-white/50 text-xs italic mt-4">
+          <p class="text-white/50 text-[0.65rem] sm:text-xs italic mt-3 sm:mt-4 leading-snug">
             Você não vai ouvir isso em nenhum curso técnico. Esta é a parte que falta em todos os tutoriais.
           </p>
         </div>
 
         <!-- Card 2: Turmas Limitadas -->
-        <div class="glass-card p-6">
-          <div class="text-4xl mb-4">👥</div>
-          <h3 class="text-xl font-bold text-white mb-3">Turmas de No Máximo 12 Pessoas</h3>
-          <p class="text-white/60 text-sm leading-relaxed">
+        <div class="glass-card p-5 sm:p-6">
+          <div class="mb-3 sm:mb-4">
+            <svg class="w-10 h-10 sm:w-12 sm:h-12" viewBox="0 0 24 24" fill="none" stroke="var(--blue)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+              <circle cx="9" cy="7" r="4"></circle>
+              <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+              <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+            </svg>
+          </div>
+          <h3 class="text-base sm:text-xl font-bold text-white mb-2 sm:mb-3 leading-tight">Turmas de No Máximo 12 Pessoas</h3>
+          <p class="text-white/60 text-xs sm:text-sm leading-relaxed">
             Enquanto cursos online têm centenas (ou milhares) de alunos, aqui você tem:
           </p>
-          <ul class="mt-3 space-y-2 text-white/60 text-sm">
-            <li>• <strong class="text-white/80">Atenção individual</strong> em cada encontro</li>
-            <li>• <strong class="text-white/80">Troubleshooting personalizado</strong> quando algo der errado</li>
-            <li>• <strong class="text-white/80">Networking real</strong> com pessoas no mesmo nível de comprometimento</li>
+          <ul class="mt-2.5 sm:mt-3 space-y-1.5 sm:space-y-2 text-white/60 text-xs sm:text-sm leading-snug">
+            <li class="flex items-start gap-1.5"><span class="flex-shrink-0">•</span> <span><strong class="text-white/80">Atenção individual</strong> em cada encontro</span></li>
+            <li class="flex items-start gap-1.5"><span class="flex-shrink-0">•</span> <span><strong class="text-white/80">Troubleshooting personalizado</strong> quando algo der errado</span></li>
+            <li class="flex items-start gap-1.5"><span class="flex-shrink-0">•</span> <span><strong class="text-white/80">Networking real</strong> com pessoas comprometidas</span></li>
           </ul>
         </div>
 
         <!-- Card 3: Squad Personalizada -->
-        <div class="glass-card p-6">
-          <div class="text-4xl mb-4">🛠️</div>
-          <h3 class="text-xl font-bold text-white mb-3">Squad Personalizada Para Seu Contexto</h3>
-          <p class="text-white/60 text-sm leading-relaxed">
+        <div class="glass-card p-5 sm:p-6">
+          <div class="mb-3 sm:mb-4">
+            <svg class="w-10 h-10 sm:w-12 sm:h-12" viewBox="0 0 24 24" fill="none" stroke="var(--flare)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="4" y1="21" x2="4" y2="14"></line>
+              <line x1="4" y1="10" x2="4" y2="3"></line>
+              <line x1="12" y1="21" x2="12" y2="12"></line>
+              <line x1="12" y1="8" x2="12" y2="3"></line>
+              <line x1="20" y1="21" x2="20" y2="16"></line>
+              <line x1="20" y1="12" x2="20" y2="3"></line>
+              <line x1="1" y1="14" x2="7" y2="14"></line>
+              <line x1="9" y1="8" x2="15" y2="8"></line>
+              <line x1="17" y1="16" x2="23" y2="16"></line>
+            </svg>
+          </div>
+          <h3 class="text-base sm:text-xl font-bold text-white mb-2 sm:mb-3 leading-tight">Squad Personalizada Para Seu Contexto</h3>
+          <p class="text-white/60 text-xs sm:text-sm leading-relaxed">
             Não é "aprenda a ferramenta e vire-se". É:
           </p>
-          <ul class="mt-3 space-y-2 text-white/60 text-sm">
-            <li>• Entendemos seu caso de uso</li>
-            <li>• Criamos agentes específicos para sua necessidade</li>
-            <li>• Você sai com algo funcionando para <strong class="text-white/80">SEU trabalho</strong>, não exemplos genéricos</li>
+          <ul class="mt-2.5 sm:mt-3 space-y-1.5 sm:space-y-2 text-white/60 text-xs sm:text-sm leading-snug">
+            <li class="flex items-start gap-1.5"><span class="flex-shrink-0">•</span> <span>Entendemos seu caso de uso</span></li>
+            <li class="flex items-start gap-1.5"><span class="flex-shrink-0">•</span> <span>Criamos agentes específicos para sua necessidade</span></li>
+            <li class="flex items-start gap-1.5"><span class="flex-shrink-0">•</span> <span>Você sai com algo funcionando para <strong class="text-white/80">SEU trabalho</strong>, não exemplos genéricos</span></li>
           </ul>
         </div>
 
         <!-- Card 4: Suporte Contínuo -->
-        <div class="glass-card p-6">
-          <div class="text-4xl mb-4">🤝</div>
-          <h3 class="text-xl font-bold text-white mb-3">Suporte Contínuo + Comunidade Vitalícia</h3>
-          <ul class="mt-3 space-y-2 text-white/60 text-sm">
-            <li>• Grupo exclusivo de mentorados</li>
-            <li>• Acesso às gravações para sempre</li>
-            <li>• Atualizações quando o AIOX evoluir</li>
-            <li>• Rede de profissionais no mesmo caminho</li>
+        <div class="glass-card p-5 sm:p-6">
+          <div class="mb-3 sm:mb-4">
+            <svg class="w-10 h-10 sm:w-12 sm:h-12" viewBox="0 0 24 24" fill="none" stroke="var(--lime)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"></circle>
+              <circle cx="12" cy="12" r="4"></circle>
+              <line x1="21.17" y1="8" x2="12" y2="8"></line>
+              <line x1="3.95" y1="6.06" x2="8.54" y2="14"></line>
+              <line x1="10.88" y1="21.94" x2="15.46" y2="14"></line>
+            </svg>
+          </div>
+          <h3 class="text-base sm:text-xl font-bold text-white mb-2 sm:mb-3 leading-tight">Suporte Contínuo + Comunidade Vitalícia</h3>
+          <ul class="mt-2.5 sm:mt-3 space-y-1.5 sm:space-y-2 text-white/60 text-xs sm:text-sm leading-snug">
+            <li class="flex items-start gap-1.5"><span class="flex-shrink-0">•</span> <span>Grupo exclusivo de mentorados</span></li>
+            <li class="flex items-start gap-1.5"><span class="flex-shrink-0">•</span> <span>Acesso às gravações para sempre</span></li>
+            <li class="flex items-start gap-1.5"><span class="flex-shrink-0">•</span> <span>Atualizações quando o AIOX evoluir</span></li>
+            <li class="flex items-start gap-1.5"><span class="flex-shrink-0">•</span> <span>Rede de profissionais no mesmo caminho</span></li>
           </ul>
         </div>
       </div>
@@ -529,32 +609,32 @@ const ogImage = '/images/mentoria-og.png';
   </section>
 
   <!-- Seção PARA QUEM É -->
-  <section id="para-quem" class="py-24 bg-[#0C0C12]">
-    <div class="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
-      <h2 class="text-3xl font-bold text-white sm:text-4xl lg:text-5xl text-center mb-6">
+  <section id="para-quem" class="py-16 sm:py-24 bg-[#0C0C12]">
+    <div class="mx-auto max-w-6xl px-5 sm:px-6 lg:px-8">
+      <h2 class="text-2xl font-bold text-white sm:text-4xl lg:text-5xl text-center mb-5 sm:mb-6 leading-tight sm:leading-tight">
         Esta Mentoria É Para Você Se...
       </h2>
 
-      <p class="text-center text-lg text-white/80 mb-12 max-w-3xl mx-auto">
+      <p class="text-center text-sm sm:text-lg text-white/80 mb-8 sm:mb-12 max-w-3xl mx-auto leading-relaxed">
         <strong class="text-[#FF4400]">Esta mentoria NÃO é exclusiva para desenvolvedores ou profissionais de tecnologia.</strong> É para qualquer pessoa que queira aumentar sua eficiência operacional com agentes autônomos.
       </p>
 
-      <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+      <div class="grid gap-4 sm:gap-6 sm:grid-cols-2 lg:grid-cols-3">
         <!-- Persona 1 -->
-        <div class="glass-card p-6">
-          <div class="text-4xl mb-4">💼</div>
-          <h3 class="text-xl font-bold text-white mb-3">Empresários & Gestores</h3>
-          <p class="text-white/60 text-sm leading-relaxed mb-4">
+        <div class="glass-card p-5 sm:p-6">
+          <Icon name="briefcase" size="48" class="text-[#FF4400] mb-3 sm:mb-4" />
+          <h3 class="text-base sm:text-xl font-bold text-white mb-2 sm:mb-3 leading-tight">Empresários & Gestores</h3>
+          <p class="text-white/60 text-xs sm:text-sm leading-relaxed mb-3 sm:mb-4">
             Você quer aumentar eficiência sem aumentar headcount. Precisa de squads de marketing, mídia, design, conteúdo e gestão de tráfego.
           </p>
-          <p class="text-[#22C55E] text-sm font-semibold">
+          <p class="text-[#22C55E] text-xs sm:text-sm font-semibold">
             <strong>Resultado:</strong> Equipes completas de especialistas sem custo fixo de funcionários.
           </p>
         </div>
 
         <!-- Persona 2 -->
         <div class="glass-card p-6">
-          <div class="text-4xl mb-4">🚀</div>
+          <Icon name="rocket" size="48" class="text-[#FF4400] mb-4" />
           <h3 class="text-xl font-bold text-white mb-3">Empreendedores & Founders</h3>
           <p class="text-white/60 text-sm leading-relaxed mb-4">
             Você precisa fazer mais com menos. Validar ideias rápido. Competir com empresas maiores sem equipe grande.
@@ -566,7 +646,7 @@ const ogImage = '/images/mentoria-og.png';
 
         <!-- Persona 3 -->
         <div class="glass-card p-6">
-          <div class="text-4xl mb-4">📢</div>
+          <Icon name="megaphone" size="48" class="text-[#FF4400] mb-4" />
           <h3 class="text-xl font-bold text-white mb-3">Profissionais de Marketing, Design & Conteúdo</h3>
           <p class="text-white/60 text-sm leading-relaxed mb-4">
             Você precisa criar conteúdo para múltiplos canais, manter consistência visual e editorial, escalar produção sem perder qualidade.
@@ -578,7 +658,7 @@ const ogImage = '/images/mentoria-og.png';
 
         <!-- Persona 4 -->
         <div class="glass-card p-6">
-          <div class="text-4xl mb-4">📝</div>
+          <Icon name="file-text" size="48" class="text-[#FF4400] mb-4" />
           <h3 class="text-xl font-bold text-white mb-3">Consultores & Freelancers</h3>
           <p class="text-white/60 text-sm leading-relaxed mb-4">
             Você quer entregar mais valor, atender mais clientes, sem aumentar horas trabalhadas. Competir com agências maiores.
@@ -590,7 +670,7 @@ const ogImage = '/images/mentoria-og.png';
 
         <!-- Persona 5 -->
         <div class="glass-card p-6">
-          <div class="text-4xl mb-4">👨‍💻</div>
+          <Icon name="code" size="48" class="text-[#FF4400] mb-4" />
           <h3 class="text-xl font-bold text-white mb-3">Devs & Engenheiros</h3>
           <p class="text-white/60 text-sm leading-relaxed mb-4">
             Você quer automatizar code review, gerar testes, documentar código. Multiplicar sua produtividade sem burnout.
@@ -602,7 +682,7 @@ const ogImage = '/images/mentoria-og.png';
 
         <!-- Persona 6 -->
         <div class="glass-card p-6">
-          <div class="text-4xl mb-4">📊</div>
+          <Icon name="bar-chart" size="48" class="text-[#FF4400] mb-4" />
           <h3 class="text-xl font-bold text-white mb-3">PMs & Tech Leads</h3>
           <p class="text-white/60 text-sm leading-relaxed mb-4">
             Você lidera times que precisam entregar mais rápido. Quer entender o potencial de IA para otimizar processos.
@@ -614,7 +694,7 @@ const ogImage = '/images/mentoria-og.png';
 
         <!-- Persona 7 -->
         <div class="glass-card p-6">
-          <div class="text-4xl mb-4">🎯</div>
+          <Icon name="target" size="48" class="text-[#FF4400] mb-4" />
           <h3 class="text-xl font-bold text-white mb-3">Qualquer Profissional que Queira Aumentar Eficiência</h3>
           <p class="text-white/60 text-sm leading-relaxed mb-4">
             Você trabalha sozinho ou em equipe pequena. Sente que poderia produzir mais com as ferramentas certas.
@@ -646,32 +726,32 @@ const ogImage = '/images/mentoria-og.png';
         <!-- Técnico -->
         <div class="glass-card p-8">
           <div class="flex items-center gap-3 mb-6">
-            <div class="text-4xl">⚙️</div>
+            <Icon name="settings" size="48" class="text-[#22C55E]" />
             <h3 class="text-xl font-bold text-white">Técnico</h3>
           </div>
           <ul class="space-y-3">
             <li class="text-sm text-white/60 flex items-start gap-2">
-              <span class="text-[#22C55E] mt-0.5">✅</span>
+              <Icon name="check" size="16" class="text-[#22C55E] mt-0.5" />
               <span>Ambiente de desenvolvimento 100% configurado</span>
             </li>
             <li class="text-sm text-white/60 flex items-start gap-2">
-              <span class="text-[#22C55E] mt-0.5">✅</span>
+              <Icon name="check" size="16" class="text-[#22C55E] mt-0.5" />
               <span>Claude Code dominado e otimizado</span>
             </li>
             <li class="text-sm text-white/60 flex items-start gap-2">
-              <span class="text-[#22C55E] mt-0.5">✅</span>
+              <Icon name="check" size="16" class="text-[#22C55E] mt-0.5" />
               <span>Framework AIOX instalado e rodando</span>
             </li>
             <li class="text-sm text-white/60 flex items-start gap-2">
-              <span class="text-[#22C55E] mt-0.5">✅</span>
+              <Icon name="check" size="16" class="text-[#22C55E] mt-0.5" />
               <span>Squad personalizada com agentes para seu contexto</span>
             </li>
             <li class="text-sm text-white/60 flex items-start gap-2">
-              <span class="text-[#22C55E] mt-0.5">✅</span>
+              <Icon name="check" size="16" class="text-[#22C55E] mt-0.5" />
               <span>Skills e MCPs instalados e funcionando</span>
             </li>
             <li class="text-sm text-white/60 flex items-start gap-2">
-              <span class="text-[#22C55E] mt-0.5">✅</span>
+              <Icon name="check" size="16" class="text-[#22C55E] mt-0.5" />
               <span>Integrações com suas ferramentas de trabalho</span>
             </li>
           </ul>
@@ -680,28 +760,28 @@ const ogImage = '/images/mentoria-og.png';
         <!-- Conhecimento -->
         <div class="glass-card p-8">
           <div class="flex items-center gap-3 mb-6">
-            <div class="text-4xl">🧠</div>
+            <Icon name="brain" size="48" class="text-[#22C55E]" />
             <h3 class="text-xl font-bold text-white">Conhecimento</h3>
           </div>
           <ul class="space-y-3">
             <li class="text-sm text-white/60 flex items-start gap-2">
-              <span class="text-[#22C55E] mt-0.5">✅</span>
+              <Icon name="check" size="16" class="text-[#22C55E] mt-0.5" />
               <span>Domínio de engenharia de prompts</span>
             </li>
             <li class="text-sm text-white/60 flex items-start gap-2">
-              <span class="text-[#22C55E] mt-0.5">✅</span>
+              <Icon name="check" size="16" class="text-[#22C55E] mt-0.5" />
               <span>Capacidade de criar novos agentes do zero</span>
             </li>
             <li class="text-sm text-white/60 flex items-start gap-2">
-              <span class="text-[#22C55E] mt-0.5">✅</span>
+              <Icon name="check" size="16" class="text-[#22C55E] mt-0.5" />
               <span>Habilidade de debugar e otimizar agentes</span>
             </li>
             <li class="text-sm text-white/60 flex items-start gap-2">
-              <span class="text-[#22C55E] mt-0.5">✅</span>
+              <Icon name="check" size="16" class="text-[#22C55E] mt-0.5" />
               <span>Compreensão de arquiteturas multi-agente</span>
             </li>
             <li class="text-sm text-white/60 flex items-start gap-2">
-              <span class="text-[#22C55E] mt-0.5">✅</span>
+              <Icon name="check" size="16" class="text-[#22C55E] mt-0.5" />
               <span>Mindset adequado para trabalhar com IA</span>
             </li>
           </ul>
@@ -710,24 +790,24 @@ const ogImage = '/images/mentoria-og.png';
         <!-- Comunidade -->
         <div class="glass-card p-8">
           <div class="flex items-center gap-3 mb-6">
-            <div class="text-4xl">🤝</div>
+            <Icon name="handshake" size="48" class="text-[#22C55E]" />
             <h3 class="text-xl font-bold text-white">Comunidade</h3>
           </div>
           <ul class="space-y-3">
             <li class="text-sm text-white/60 flex items-start gap-2">
-              <span class="text-[#22C55E] mt-0.5">✅</span>
+              <Icon name="check" size="16" class="text-[#22C55E] mt-0.5" />
               <span>Acesso vitalício ao grupo exclusivo</span>
             </li>
             <li class="text-sm text-white/60 flex items-start gap-2">
-              <span class="text-[#22C55E] mt-0.5">✅</span>
+              <Icon name="check" size="16" class="text-[#22C55E] mt-0.5" />
               <span>Network com outros profissionais do programa</span>
             </li>
             <li class="text-sm text-white/60 flex items-start gap-2">
-              <span class="text-[#22C55E] mt-0.5">✅</span>
+              <Icon name="check" size="16" class="text-[#22C55E] mt-0.5" />
               <span>Certificado de conclusão</span>
             </li>
             <li class="text-sm text-white/60 flex items-start gap-2">
-              <span class="text-[#22C55E] mt-0.5">✅</span>
+              <Icon name="check" size="16" class="text-[#22C55E] mt-0.5" />
               <span>Atualizações futuras do framework</span>
             </li>
           </ul>
@@ -736,325 +816,323 @@ const ogImage = '/images/mentoria-og.png';
     </div>
   </section>
 
-  <!-- Seção INVESTIMENTO -->
-  <section id="investimento" class="py-24 bg-[#08080C]">
-    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+
+  <!-- Facilitadores -->
+  <section id="facilitadores" class="py-16 sm:py-24 bg-[#0C0C12]">
+    <div class="mx-auto max-w-6xl px-5 sm:px-6 lg:px-8">
       <!-- Section Header -->
-      <div class="text-center mb-16">
-        <div class="inline-flex items-center gap-2 border border-[#FF4400]/30 bg-[#FF4400]/10 px-4 py-1.5 mb-6">
-          <span class="text-[#FF4400]" style="font-family: 'Geist Mono', monospace; font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.12em; font-weight: 600;">Investimento</span>
+      <div class="text-center mb-12 sm:mb-16">
+        <div class="inline-flex items-center gap-2 border border-[#FF4400]/30 bg-[#FF4400]/10 px-3 sm:px-4 py-1.5 mb-4 sm:mb-6">
+          <span class="text-[#FF4400] text-[0.55rem] sm:text-[0.65rem]" style="font-family: 'Geist Mono', monospace; text-transform: uppercase; letter-spacing: 0.12em; font-weight: 600;">Quem Facilita</span>
         </div>
-        <h2 class="text-3xl font-bold text-white sm:text-4xl lg:text-5xl">
-          Quanto Custa Ter Sua <span class="text-[#FF4400]">Equipe de IA</span>
+        <h2 class="text-2xl font-bold text-white sm:text-4xl lg:text-5xl mb-4 sm:mb-5 leading-tight sm:leading-tight">
+          Seus <span class="text-[#FF4400]">Facilitadores</span>
         </h2>
-        <div class="mx-auto mt-6 w-24 accent-line"></div>
+        <div class="mx-auto w-12 sm:w-16 accent-line mb-4 sm:mb-6"></div>
+        <p class="text-sm sm:text-lg text-white/70 max-w-3xl mx-auto leading-relaxed">
+          Profissionais experientes que vivem e respiram IA aplicada a negócios. Fundadores da GrowthSales.ai, trazem décadas de experiência combinada em tecnologia, vendas e marketing.
+        </p>
       </div>
 
-      <!-- Box de Preço Destacado -->
-      <div class="max-w-4xl mx-auto mb-16">
-        <div class="bg-gradient-to-br from-[#FF4400]/20 to-[#FF4400]/5 border-2 border-[#FF4400]/40 p-8 sm:p-12 text-center">
-          <div class="mb-6">
-            <div class="text-5xl sm:text-6xl lg:text-7xl font-bold text-white mb-3">
-              R$ 4.990
-            </div>
-            <div class="text-xl sm:text-2xl text-white/70">
-              ou <span class="text-[#FF4400] font-semibold">10x de R$ 499</span> no cartão
-            </div>
-          </div>
+      <!-- Facilitadores Grid -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8 lg:gap-10">
 
-          <div class="border-t border-white/10 pt-6 mt-6">
-            <p class="text-sm text-white/50 mb-4" style="font-family: 'Geist Mono', monospace; text-transform: uppercase; letter-spacing: 0.08em;">O que está incluído:</p>
-            <div class="grid gap-3 sm:grid-cols-2 text-left max-w-2xl mx-auto">
-              <div class="text-sm text-white/60 flex items-start gap-2">
-                <span class="text-[#22C55E] mt-0.5">✅</span>
-                <span>4 horas presenciais em Florianópolis (encontro inicial)</span>
+        <!-- Card João Guirunas -->
+        <div class="glass-card p-6 sm:p-8 border-[#22C55E]/20 hover:border-[#22C55E]/40 transition-all duration-300 group">
+          <div class="flex flex-col items-center text-center">
+            <!-- Foto -->
+            <div class="relative mb-6">
+              <div class="w-32 h-32 sm:w-40 sm:h-40 rounded-full overflow-hidden border-4 border-[#22C55E]/30 group-hover:border-[#22C55E]/50 transition-all duration-300 shadow-lg shadow-[#22C55E]/20">
+                <img
+                  src="/images/mentoria-hero.png"
+                  alt="João Guirunas"
+                  class="w-full h-full object-cover"
+                  style="object-position: center 30%;"
+                />
               </div>
-              <div class="text-sm text-white/60 flex items-start gap-2">
-                <span class="text-[#22C55E] mt-0.5">✅</span>
-                <span>12 horas de aulas online ao vivo (6 encontros de 2h)</span>
-              </div>
-              <div class="text-sm text-white/60 flex items-start gap-2">
-                <span class="text-[#22C55E] mt-0.5">✅</span>
-                <span>2-3 horas de encontro final de apresentações</span>
-              </div>
-              <div class="text-sm text-white/60 flex items-start gap-2">
-                <span class="text-[#22C55E] mt-0.5">✅</span>
-                <span>Sessão de desbloqueio mental com Claudia Guirunas</span>
-              </div>
-              <div class="text-sm text-white/60 flex items-start gap-2">
-                <span class="text-[#22C55E] mt-0.5">✅</span>
-                <span>Materiais didáticos completos</span>
-              </div>
-              <div class="text-sm text-white/60 flex items-start gap-2">
-                <span class="text-[#22C55E] mt-0.5">✅</span>
-                <span>Gravação de todas as aulas para revisão</span>
-              </div>
-              <div class="text-sm text-white/60 flex items-start gap-2">
-                <span class="text-[#22C55E] mt-0.5">✅</span>
-                <span>Templates, códigos e configurações prontas</span>
-              </div>
-              <div class="text-sm text-white/60 flex items-start gap-2">
-                <span class="text-[#22C55E] mt-0.5">✅</span>
-                <span>Acesso vitalício ao grupo de mentorados</span>
-              </div>
-              <div class="text-sm text-white/60 flex items-start gap-2">
-                <span class="text-[#22C55E] mt-0.5">✅</span>
-                <span>Certificado de conclusão</span>
-              </div>
-              <div class="text-sm text-white/60 flex items-start gap-2">
-                <span class="text-[#22C55E] mt-0.5">✅</span>
-                <span>Suporte contínuo durante o programa</span>
-              </div>
+              <!-- Badge Online -->
+              <div class="absolute bottom-2 right-2 bg-[#22C55E] w-5 h-5 rounded-full border-4 border-[#0C0C12]"></div>
             </div>
-          </div>
 
-          <!-- CTA Button -->
-          <div class="mt-10">
+            <!-- Nome e Título -->
+            <h3 class="text-xl sm:text-2xl font-bold text-white mb-2">
+              João Guirunas
+            </h3>
+            <p class="text-[#22C55E] text-sm sm:text-base font-semibold mb-4" style="font-family: 'Geist Mono', monospace; text-transform: uppercase; letter-spacing: 0.08em;">
+              Fundador GrowthSales.ai
+            </p>
+
+            <!-- Bio -->
+            <p class="text-white/70 text-sm sm:text-base leading-relaxed mb-6">
+              Especialista em IA aplicada a vendas e marketing. Pioneiro em orquestração de agentes autônomos e automação de processos comerciais. Criador do framework AIOX e mentor de dezenas de empresas na transformação digital.
+            </p>
+
+            <!-- LinkedIn -->
             <a
-              href="#inscricao"
-              class="inline-flex items-center gap-2 bg-[#FF4400] px-8 py-4 text-base font-semibold text-white shadow-lg shadow-[#FF4400]/25 hover:bg-[#FF5722] transition-all"
-              style="font-family: 'Geist Mono', monospace; text-transform: uppercase; letter-spacing: 0.06em;"
+              href="https://www.linkedin.com/in/joaoguirunas"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="inline-flex items-center gap-2 text-[#22C55E] hover:text-[#22C55E]/80 transition-colors text-sm font-semibold"
+              style="font-family: 'Geist Mono', monospace; text-transform: uppercase; letter-spacing: 0.08em;"
             >
-              Quero Minha Vaga
-              <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"/>
-              </svg>
+              <Icon name="linkedin" class="w-5 h-5" />
+              LinkedIn
             </a>
           </div>
         </div>
 
-        <!-- Garantia de 7 Dias -->
-        <div class="mt-8 bg-[#0C0C12] border-2 border-[#22C55E]/30 p-6 text-center">
-          <div class="flex items-center justify-center gap-3 mb-3">
-            <span class="text-3xl">🔒</span>
-            <h3 class="text-xl font-bold text-white">Garantia de 7 Dias</h3>
+        <!-- Card Claudia Guirunas -->
+        <div class="glass-card p-6 sm:p-8 border-[#FF4400]/20 hover:border-[#FF4400]/40 transition-all duration-300 group">
+          <div class="flex flex-col items-center text-center">
+            <!-- Foto Claudia -->
+            <div class="relative mb-6">
+              <div class="w-32 h-32 sm:w-40 sm:h-40 rounded-full overflow-hidden border-4 border-[#FF4400]/30 group-hover:border-[#FF4400]/50 transition-all duration-300 shadow-lg shadow-[#FF4400]/20">
+                <img
+                  src="/images/claudia-guirunas.png"
+                  alt="Claudia Guirunas - Co-Fundadora GrowthSales.ai"
+                  class="w-full h-full object-cover"
+                />
+              </div>
+              <!-- Badge Online -->
+              <div class="absolute bottom-2 right-2 bg-[#FF4400] w-5 h-5 rounded-full border-4 border-[#0C0C12]"></div>
+            </div>
+
+            <!-- Nome e Título -->
+            <h3 class="text-xl sm:text-2xl font-bold text-white mb-2">
+              Claudia Guirunas
+            </h3>
+            <p class="text-[#FF4400] text-sm sm:text-base font-semibold mb-4" style="font-family: 'Geist Mono', monospace; text-transform: uppercase; letter-spacing: 0.08em;">
+              Co-Fundadora GrowthSales.ai
+            </p>
+
+            <!-- Bio -->
+            <p class="text-white/70 text-sm sm:text-base leading-relaxed mb-6">
+              Especialista em transformação digital e implementação de IA em processos de vendas. Experiência em consultoría estratégica e mentoria de equipes comerciais de alto desempenho. Focada em resultados mensuráveis e ROI.
+            </p>
+
+            <!-- LinkedIn -->
+            <a
+              href="https://www.linkedin.com/in/claudiaguirunas"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="inline-flex items-center gap-2 text-[#FF4400] hover:text-[#FF4400]/80 transition-colors text-sm font-semibold"
+              style="font-family: 'Geist Mono', monospace; text-transform: uppercase; letter-spacing: 0.08em;"
+            >
+              <Icon name="linkedin" class="w-5 h-5" />
+              LinkedIn
+            </a>
           </div>
-          <p class="text-white/70 max-w-2xl mx-auto">
-            <strong class="text-white">Se após o primeiro encontro presencial você não estiver satisfeito, devolvemos 100% do valor investido.</strong>
-          </p>
-          <p class="mt-2 text-sm text-white/50">
-            Sem perguntas, sem burocracia.
-          </p>
         </div>
+
       </div>
 
-      <!-- Tabela Comparativa -->
-      <div class="max-w-5xl mx-auto">
-        <div class="text-center mb-8">
-          <h3 class="text-2xl font-bold text-white mb-2">Compare o Investimento</h3>
-          <p class="text-white/60">Veja quanto você economiza com a mentoria AIOX</p>
-        </div>
+      <!-- Call to Action -->
+      <div class="mt-12 text-center">
+        <p class="text-white/60 text-sm sm:text-base mb-6">
+          Quer conhecer mais sobre nossa abordagem e experiência?
+        </p>
+        <a
+          href="https://www.growthsales.ai/cultura"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="inline-flex items-center gap-2 px-6 py-3 border border-[#FF4400]/30 bg-[#FF4400]/10 text-[#FF4400] hover:bg-[#FF4400]/20 hover:border-[#FF4400]/50 transition-all text-sm font-semibold"
+          style="font-family: 'Geist Mono', monospace; text-transform: uppercase; letter-spacing: 0.08em;"
+        >
+          Conheça Nossa Cultura
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
+          </svg>
+        </a>
+      </div>
+    </div>
+  </section>
 
-        <!-- Tabela -->
-        <div class="overflow-x-auto">
-          <table class="w-full border-collapse">
-            <thead>
-              <tr class="border-b-2 border-[#FF4400]/30">
-                <th class="px-6 py-4 text-left text-sm font-semibold text-white/80" style="font-family: 'Geist Mono', monospace; text-transform: uppercase; letter-spacing: 0.08em;">Opção</th>
-                <th class="px-6 py-4 text-left text-sm font-semibold text-white/80" style="font-family: 'Geist Mono', monospace; text-transform: uppercase; letter-spacing: 0.08em;">Custo Mensal</th>
-                <th class="px-6 py-4 text-left text-sm font-semibold text-white/80" style="font-family: 'Geist Mono', monospace; text-transform: uppercase; letter-spacing: 0.08em;">O Que Você Ganha</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr class="border-b border-white/[0.08] hover:bg-white/[0.02] transition-colors">
-                <td class="px-6 py-5 text-white font-medium">Contratar 1 dev júnior</td>
-                <td class="px-6 py-5 text-white">R$ 4.000/mês</td>
-                <td class="px-6 py-5 text-white/60 text-sm">1 pessoa, 8h/dia, férias, 13º</td>
-              </tr>
-              <tr class="border-b border-white/[0.08] hover:bg-white/[0.02] transition-colors">
-                <td class="px-6 py-5 text-white font-medium">Contratar 1 freelancer</td>
-                <td class="px-6 py-5 text-white">R$ 3.000-8.000/mês</td>
-                <td class="px-6 py-5 text-white/60 text-sm">Por projeto, dependência de agenda</td>
-              </tr>
-              <tr class="border-b-2 border-[#FF4400]/30 bg-[#FF4400]/5 hover:bg-[#FF4400]/10 transition-colors">
-                <td class="px-6 py-5 text-[#FF4400] font-bold">Mentoria AIOX</td>
-                <td class="px-6 py-5 text-[#FF4400] font-bold text-lg">R$ 499/mês (10x)</td>
-                <td class="px-6 py-5 text-white font-medium text-sm">Time completo de agentes, 24/7, para sempre</td>
-              </tr>
-            </tbody>
-          </table>
+  <!-- Formulário de Inscrição -->
+  <section id="inscricao" class="py-16 sm:py-24 bg-[#0C0C12]">
+    <div class="mx-auto max-w-4xl px-5 sm:px-6 lg:px-8">
+      <!-- Section Header -->
+      <div class="text-center mb-10 sm:mb-12">
+        <div class="inline-flex items-center gap-2 border border-[#FF4400]/30 bg-[#FF4400]/10 px-3 sm:px-4 py-1.5 mb-4 sm:mb-6">
+          <span class="text-[#FF4400] text-[0.55rem] sm:text-[0.65rem]" style="font-family: 'Geist Mono', monospace; text-transform: uppercase; letter-spacing: 0.12em; font-weight: 600;">Fale Conosco</span>
         </div>
+        <h2 class="text-2xl font-bold text-white sm:text-4xl lg:text-5xl mb-4 sm:mb-5 leading-tight sm:leading-tight">
+          Fale com um <span class="text-[#FF4400]">Especialista</span>
+        </h2>
+        <div class="mx-auto w-12 sm:w-16 accent-line mb-4 sm:mb-6"></div>
+        <p class="text-sm sm:text-lg text-white/70 max-w-2xl mx-auto leading-relaxed">
+          Preencha o formulário abaixo e nossa equipe entrará em contato para tirar suas dúvidas e garantir sua vaga na próxima turma.
+        </p>
+      </div>
 
-        <div class="mt-6 text-center">
-          <p class="text-white/70 text-lg">
-            Depois que você termina de pagar, os agentes continuam trabalhando. <strong class="text-[#FF4400]">Para sempre.</strong>
-          </p>
-        </div>
+      <!-- Form Container -->
+      <div class="glass-card p-6 sm:p-8 lg:p-10 border-[#FF4400]/20">
+        <div id="lp-form-a11d7cc4-17b8-400e-94e4-0f27ca47e9a4"></div>
+        <script
+          src="https://revos.growthsales.ai/embed.js?form_id=a11d7cc4-17b8-400e-94e4-0f27ca47e9a4"
+          data-form-id="a11d7cc4-17b8-400e-94e4-0f27ca47e9a4"
+          async
+        ></script>
+      </div>
+
+      <!-- Trust Badges -->
+      <div class="mt-6 sm:mt-8 text-center">
+        <p class="text-xs sm:text-sm text-white/50">
+          <Icon name="lock" size="16" class="inline" /> Seus dados estão seguros | <Icon name="zap" size="16" class="inline" /> Resposta em até 24h | <Icon name="check" size="16" class="inline" /> Sem compromisso
+        </p>
       </div>
     </div>
   </section>
 
   <!-- FAQ Section -->
-  <section id="faq" class="py-24 bg-[#08080C]">
-    <div class="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
+  <section id="faq" class="py-16 sm:py-24 bg-[#08080C]">
+    <div class="mx-auto max-w-4xl px-5 sm:px-6 lg:px-8">
       <!-- Section Header -->
-      <div class="text-center mb-16">
-        <div class="inline-flex items-center gap-2 border border-[#FF4400]/30 bg-[#FF4400]/10 px-4 py-1.5 mb-6">
-          <span class="text-[#FF4400]" style="font-family: 'Geist Mono', monospace; font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.12em; font-weight: 600;">FAQ</span>
+      <div class="text-center mb-10 sm:mb-16">
+        <div class="inline-flex items-center gap-2 border border-[#FF4400]/30 bg-[#FF4400]/10 px-3 sm:px-4 py-1.5 mb-4 sm:mb-6">
+          <span class="text-[#FF4400] text-[0.55rem] sm:text-[0.65rem]" style="font-family: 'Geist Mono', monospace; text-transform: uppercase; letter-spacing: 0.12em; font-weight: 600;">FAQ</span>
         </div>
-        <h2 class="text-3xl font-bold text-white sm:text-4xl lg:text-5xl">
+        <h2 class="text-2xl font-bold text-white sm:text-4xl lg:text-5xl">
           Dúvidas Comuns
         </h2>
-        <div class="mx-auto mt-6 w-16 accent-line"></div>
+        <div class="mx-auto mt-4 sm:mt-6 w-12 sm:w-16 accent-line"></div>
       </div>
 
       <!-- FAQ Items -->
-      <div class="space-y-4">
+      <div class="space-y-3 sm:space-y-4">
         <!-- FAQ Item 1 -->
         <details class="glass-card overflow-hidden group">
-          <summary class="flex items-center justify-between cursor-pointer p-6 text-left">
-            <h3 class="text-lg font-semibold text-white group-open:text-[#FF4400] transition-colors">
+          <summary class="flex items-center justify-between cursor-pointer p-4 sm:p-6 text-left gap-3">
+            <h3 class="text-sm sm:text-lg font-semibold text-white group-open:text-[#FF4400] transition-colors leading-tight">
               Preciso saber programar?
             </h3>
-            <svg class="h-5 w-5 text-[#FF4400] transition-transform group-open:rotate-180" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
-            </svg>
+            <Icon name="chevron-down" class="h-4 w-4 sm:h-5 sm:w-5 text-[#FF4400] transition-transform group-open:rotate-180 flex-shrink-0" />
           </summary>
-          <div class="px-6 pb-6 text-white/65 leading-relaxed">
+          <div class="px-4 sm:px-6 pb-4 sm:pb-6 text-white/65 leading-relaxed text-sm sm:text-base">
             Não é necessário ser programador nem ter conhecimento de terminal. <strong>Ensinamos tudo do zero</strong> no encontro presencial, incluindo os fundamentos de linha de comando. Você não precisa estudar nada antes.
           </div>
         </details>
 
         <!-- FAQ Item 2 -->
         <details class="glass-card overflow-hidden group">
-          <summary class="flex items-center justify-between cursor-pointer p-6 text-left">
-            <h3 class="text-lg font-semibold text-white group-open:text-[#FF4400] transition-colors">
+          <summary class="flex items-center justify-between cursor-pointer p-4 sm:p-6 text-left gap-3">
+            <h3 class="text-sm sm:text-lg font-semibold text-white group-open:text-[#FF4400] transition-colors leading-tight">
               Qual computador eu preciso?
             </h3>
-            <svg class="h-5 w-5 text-[#FF4400] transition-transform group-open:rotate-180" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
-            </svg>
+            <Icon name="chevron-down" class="h-4 w-4 sm:h-5 sm:w-5 text-[#FF4400] transition-transform group-open:rotate-180 flex-shrink-0" />
           </summary>
-          <div class="px-6 pb-6 text-white/65 leading-relaxed">
+          <div class="px-4 sm:px-6 pb-4 sm:pb-6 text-white/65 leading-relaxed text-sm sm:text-base">
             Mac, Windows ou Linux com no mínimo 8GB de RAM (recomendamos 16GB). Você vai instalar softwares, então precisa ter permissões de administrador.
           </div>
         </details>
 
         <!-- FAQ Item 3 -->
         <details class="glass-card overflow-hidden group">
-          <summary class="flex items-center justify-between cursor-pointer p-6 text-left">
-            <h3 class="text-lg font-semibold text-white group-open:text-[#FF4400] transition-colors">
+          <summary class="flex items-center justify-between cursor-pointer p-4 sm:p-6 text-left gap-3">
+            <h3 class="text-sm sm:text-lg font-semibold text-white group-open:text-[#FF4400] transition-colors leading-tight">
               Preciso de software pago?
             </h3>
-            <svg class="h-5 w-5 text-[#FF4400] transition-transform group-open:rotate-180" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
-            </svg>
+            <Icon name="chevron-down" class="h-4 w-4 sm:h-5 sm:w-5 text-[#FF4400] transition-transform group-open:rotate-180 flex-shrink-0" />
           </summary>
-          <div class="px-6 pb-6 text-white/65 leading-relaxed">
+          <div class="px-4 sm:px-6 pb-4 sm:pb-6 text-white/65 leading-relaxed text-sm sm:text-base">
             Sim, você precisa de uma assinatura ativa do <strong>Claude Pro</strong> (US$ 20/mês). As outras ferramentas são gratuitas ou têm planos gratuitos suficientes.
           </div>
         </details>
 
         <!-- FAQ Item 4 -->
         <details class="glass-card overflow-hidden group">
-          <summary class="flex items-center justify-between cursor-pointer p-6 text-left">
-            <h3 class="text-lg font-semibold text-white group-open:text-[#FF4400] transition-colors">
+          <summary class="flex items-center justify-between cursor-pointer p-4 sm:p-6 text-left gap-3">
+            <h3 class="text-sm sm:text-lg font-semibold text-white group-open:text-[#FF4400] transition-colors leading-tight">
               As aulas online são ao vivo?
             </h3>
-            <svg class="h-5 w-5 text-[#FF4400] transition-transform group-open:rotate-180" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
-            </svg>
+            <Icon name="chevron-down" class="h-4 w-4 sm:h-5 sm:w-5 text-[#FF4400] transition-transform group-open:rotate-180 flex-shrink-0" />
           </summary>
-          <div class="px-6 pb-6 text-white/65 leading-relaxed">
+          <div class="px-4 sm:px-6 pb-4 sm:pb-6 text-white/65 leading-relaxed text-sm sm:text-base">
             Sim, todas são ao vivo com interação em tempo real. E todas são gravadas — se você perder uma aula, pode assistir depois e tirar dúvidas no grupo.
           </div>
         </details>
 
         <!-- FAQ Item 5 -->
         <details class="glass-card overflow-hidden group">
-          <summary class="flex items-center justify-between cursor-pointer p-6 text-left">
-            <h3 class="text-lg font-semibold text-white group-open:text-[#FF4400] transition-colors">
+          <summary class="flex items-center justify-between cursor-pointer p-4 sm:p-6 text-left gap-3">
+            <h3 class="text-sm sm:text-lg font-semibold text-white group-open:text-[#FF4400] transition-colors leading-tight">
               E se eu não puder ir a Florianópolis?
             </h3>
-            <svg class="h-5 w-5 text-[#FF4400] transition-transform group-open:rotate-180" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
-            </svg>
+            <Icon name="chevron-down" class="h-4 w-4 sm:h-5 sm:w-5 text-[#FF4400] transition-transform group-open:rotate-180 flex-shrink-0" />
           </summary>
-          <div class="px-6 pb-6 text-white/65 leading-relaxed">
+          <div class="px-4 sm:px-6 pb-4 sm:pb-6 text-white/65 leading-relaxed text-sm sm:text-base">
             O encontro presencial é parte fundamental (setup inicial + sessão de desbloqueio mental com Claudia). Se você realmente não puder ir, recomendamos esperar uma turma futura que funcione para sua agenda.
           </div>
         </details>
 
         <!-- FAQ Item 6 -->
         <details class="glass-card overflow-hidden group">
-          <summary class="flex items-center justify-between cursor-pointer p-6 text-left">
-            <h3 class="text-lg font-semibold text-white group-open:text-[#FF4400] transition-colors">
+          <summary class="flex items-center justify-between cursor-pointer p-4 sm:p-6 text-left gap-3">
+            <h3 class="text-sm sm:text-lg font-semibold text-white group-open:text-[#FF4400] transition-colors leading-tight">
               Quanto tempo dura o programa?
             </h3>
-            <svg class="h-5 w-5 text-[#FF4400] transition-transform group-open:rotate-180" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
-            </svg>
+            <Icon name="chevron-down" class="h-4 w-4 sm:h-5 sm:w-5 text-[#FF4400] transition-transform group-open:rotate-180 flex-shrink-0" />
           </summary>
-          <div class="px-6 pb-6 text-white/65 leading-relaxed">
+          <div class="px-4 sm:px-6 pb-4 sm:pb-6 text-white/65 leading-relaxed text-sm sm:text-base">
             São 8 encontros distribuídos ao longo de 6-8 semanas (aproximadamente 2 meses).
           </div>
         </details>
 
         <!-- FAQ Item 7 -->
         <details class="glass-card overflow-hidden group">
-          <summary class="flex items-center justify-between cursor-pointer p-6 text-left">
-            <h3 class="text-lg font-semibold text-white group-open:text-[#FF4400] transition-colors">
+          <summary class="flex items-center justify-between cursor-pointer p-4 sm:p-6 text-left gap-3">
+            <h3 class="text-sm sm:text-lg font-semibold text-white group-open:text-[#FF4400] transition-colors leading-tight">
               Vou conseguir criar minha própria squad do zero?
             </h3>
-            <svg class="h-5 w-5 text-[#FF4400] transition-transform group-open:rotate-180" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
-            </svg>
+            <Icon name="chevron-down" class="h-4 w-4 sm:h-5 sm:w-5 text-[#FF4400] transition-transform group-open:rotate-180 flex-shrink-0" />
           </summary>
-          <div class="px-6 pb-6 text-white/65 leading-relaxed">
+          <div class="px-4 sm:px-6 pb-4 sm:pb-6 text-white/65 leading-relaxed text-sm sm:text-base">
             Sim! Esse é um dos principais objetivos. Ao final, você terá autonomia completa para criar, configurar e orquestrar agentes para qualquer necessidade.
           </div>
         </details>
 
         <!-- FAQ Item 8 -->
         <details class="glass-card overflow-hidden group">
-          <summary class="flex items-center justify-between cursor-pointer p-6 text-left">
-            <h3 class="text-lg font-semibold text-white group-open:text-[#FF4400] transition-colors">
+          <summary class="flex items-center justify-between cursor-pointer p-4 sm:p-6 text-left gap-3">
+            <h3 class="text-sm sm:text-lg font-semibold text-white group-open:text-[#FF4400] transition-colors leading-tight">
               Posso usar os agentes comercialmente?
             </h3>
-            <svg class="h-5 w-5 text-[#FF4400] transition-transform group-open:rotate-180" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
-            </svg>
+            <Icon name="chevron-down" class="h-4 w-4 sm:h-5 sm:w-5 text-[#FF4400] transition-transform group-open:rotate-180 flex-shrink-0" />
           </summary>
-          <div class="px-6 pb-6 text-white/65 leading-relaxed">
+          <div class="px-4 sm:px-6 pb-4 sm:pb-6 text-white/65 leading-relaxed text-sm sm:text-base">
             Sim, 100%. Tudo que você criar é seu para usar como quiser — incluindo em projetos comerciais, para clientes, ou para sua empresa.
           </div>
         </details>
 
         <!-- FAQ Item 9 -->
         <details class="glass-card overflow-hidden group">
-          <summary class="flex items-center justify-between cursor-pointer p-6 text-left">
-            <h3 class="text-lg font-semibold text-white group-open:text-[#FF4400] transition-colors">
+          <summary class="flex items-center justify-between cursor-pointer p-4 sm:p-6 text-left gap-3">
+            <h3 class="text-sm sm:text-lg font-semibold text-white group-open:text-[#FF4400] transition-colors leading-tight">
               Terei suporte depois do programa?
             </h3>
-            <svg class="h-5 w-5 text-[#FF4400] transition-transform group-open:rotate-180" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
-            </svg>
+            <Icon name="chevron-down" class="h-4 w-4 sm:h-5 sm:w-5 text-[#FF4400] transition-transform group-open:rotate-180 flex-shrink-0" />
           </summary>
-          <div class="px-6 pb-6 text-white/65 leading-relaxed">
+          <div class="px-4 sm:px-6 pb-4 sm:pb-6 text-white/65 leading-relaxed text-sm sm:text-base">
             Você terá acesso vitalício ao grupo de alunos, onde pode tirar dúvidas, trocar experiências e acompanhar as evoluções do framework.
           </div>
         </details>
 
         <!-- FAQ Item 10 -->
         <details class="glass-card overflow-hidden group">
-          <summary class="flex items-center justify-between cursor-pointer p-6 text-left">
-            <h3 class="text-lg font-semibold text-white group-open:text-[#FF4400] transition-colors">
+          <summary class="flex items-center justify-between cursor-pointer p-4 sm:p-6 text-left gap-3">
+            <h3 class="text-sm sm:text-lg font-semibold text-white group-open:text-[#FF4400] transition-colors leading-tight">
               O que acontece se eu não gostar?
             </h3>
-            <svg class="h-5 w-5 text-[#FF4400] transition-transform group-open:rotate-180" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
-            </svg>
+            <Icon name="chevron-down" class="h-4 w-4 sm:h-5 sm:w-5 text-[#FF4400] transition-transform group-open:rotate-180 flex-shrink-0" />
           </summary>
-          <div class="px-6 pb-6 text-white/65 leading-relaxed">
-            Garantia de 7 dias. Se após o primeiro encontro presencial você não estiver satisfeito, devolvemos 100% do valor. Sem perguntas.
-          </div>
-        </details>
+          <div class="px-4 sm:px-6 pb-4 sm:pb-6 text-white/65 leading-relaxed text-sm sm:text-base">
+            Entre em contato conosco para saber mais sobre as condições e garantias da mentoria.
+          </div>        </details>
       </div>
     </div>
   </section>
 
   <!-- CTA Final -->
-  <section class="relative py-32 overflow-hidden">
+  <section class="relative py-20 sm:py-32 overflow-hidden">
     <!-- Background Image -->
     <div class="absolute inset-0">
       <img
@@ -1066,90 +1144,90 @@ const ogImage = '/images/mentoria-og.png';
       <div class="absolute inset-0 bg-gradient-to-t from-[#08080C] via-black/50 to-transparent"></div>
     </div>
 
-    <div class="relative mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
+    <div class="relative mx-auto max-w-5xl px-5 sm:px-6 lg:px-8">
       <div class="text-center">
         <!-- Badge -->
-        <div class="inline-flex items-center gap-2.5 bg-[#08080C] border border-[#FF4400]/30 px-4 py-1.5 mb-6">
-          <span class="relative flex h-2 w-2">
+        <div class="inline-flex items-center gap-2 sm:gap-2.5 bg-[#08080C] border border-[#FF4400]/30 px-3 sm:px-4 py-1.5 mb-4 sm:mb-6">
+          <span class="relative flex h-1.5 w-1.5 sm:h-2 sm:w-2">
             <span class="absolute inline-flex h-full w-full animate-ping rounded-full bg-[#FF4400] opacity-75"></span>
-            <span class="relative inline-flex h-2 w-2 rounded-full bg-[#FF4400]"></span>
+            <span class="relative inline-flex h-1.5 w-1.5 sm:h-2 sm:w-2 rounded-full bg-[#FF4400]"></span>
           </span>
-          <span class="text-[#FF4400]" style="font-family: 'Geist Mono', monospace; font-size: 0.6rem; text-transform: uppercase; letter-spacing: 0.14em; font-weight: 600;">Última Chance</span>
+          <span class="text-[#FF4400] text-[0.5rem] sm:text-[0.6rem]" style="font-family: 'Geist Mono', monospace; text-transform: uppercase; letter-spacing: 0.14em; font-weight: 600;">Última Chance</span>
         </div>
 
         <!-- Headline -->
-        <h2 class="text-3xl font-bold text-white sm:text-4xl lg:text-5xl max-w-3xl mx-auto">
+        <h2 class="text-2xl font-bold text-white sm:text-4xl lg:text-5xl max-w-3xl mx-auto leading-tight sm:leading-tight">
           A Transformação Começa no <span class="text-[#FF4400]">Primeiro Encontro</span>
         </h2>
 
-        <div class="mx-auto mt-6 w-20 accent-line"></div>
+        <div class="mx-auto mt-4 sm:mt-6 w-12 sm:w-20 accent-line"></div>
 
         <!-- Copy com checkmarks -->
-        <div class="mt-10 max-w-2xl mx-auto space-y-4 text-left">
-          <div class="flex items-start gap-4">
-            <svg class="h-6 w-6 text-[#FF4400] flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <div class="mt-8 sm:mt-10 max-w-2xl mx-auto space-y-3 sm:space-y-4 text-left">
+          <div class="flex items-start gap-3 sm:gap-4">
+            <svg class="h-5 w-5 sm:h-6 sm:w-6 text-[#FF4400] flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
             </svg>
-            <p class="text-lg text-white/90">Tudo instalado e configurado</p>
+            <p class="text-sm sm:text-lg text-white/90">Tudo instalado e configurado</p>
           </div>
-          <div class="flex items-start gap-4">
-            <svg class="h-6 w-6 text-[#FF4400] flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <div class="flex items-start gap-3 sm:gap-4">
+            <svg class="h-5 w-5 sm:h-6 sm:w-6 text-[#FF4400] flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
             </svg>
-            <p class="text-lg text-white/90">Sua primeira squad funcionando</p>
+            <p class="text-sm sm:text-lg text-white/90">Sua primeira squad funcionando</p>
           </div>
-          <div class="flex items-start gap-4">
-            <svg class="h-6 w-6 text-[#FF4400] flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <div class="flex items-start gap-3 sm:gap-4">
+            <svg class="h-5 w-5 sm:h-6 sm:w-6 text-[#FF4400] flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
             </svg>
-            <p class="text-lg text-white/90">O mindset certo (depois de ouvir a Claudia)</p>
+            <p class="text-sm sm:text-lg text-white/90">O mindset certo (depois de ouvir a Claudia)</p>
           </div>
-          <div class="flex items-start gap-4">
-            <svg class="h-6 w-6 text-[#FF4400] flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <div class="flex items-start gap-3 sm:gap-4">
+            <svg class="h-5 w-5 sm:h-6 sm:w-6 text-[#FF4400] flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
             </svg>
-            <p class="text-lg text-white/90">Clareza total sobre o caminho à frente</p>
+            <p class="text-sm sm:text-lg text-white/90">Clareza total sobre o caminho à frente</p>
           </div>
         </div>
 
         <!-- Call to Action Text -->
-        <p class="mt-10 text-xl text-white/80 max-w-3xl mx-auto leading-relaxed">
+        <p class="mt-8 sm:mt-10 text-base sm:text-xl text-white/80 max-w-3xl mx-auto leading-relaxed">
           <strong>E nas próximas semanas, você vai construir algo que poucas pessoas no Brasil têm:</strong> uma equipe completa de agentes autônomos trabalhando para você.
         </p>
-        <p class="mt-4 text-lg text-white/70 max-w-2xl mx-auto">
+        <p class="mt-3 sm:mt-4 text-sm sm:text-lg text-white/70 max-w-2xl mx-auto">
           Enquanto outros ficam testando tutoriais no YouTube, você vai estar <strong class="text-white">executando</strong>.
         </p>
 
         <!-- CTA Button -->
-        <div class="mt-12">
+        <div class="mt-10 sm:mt-12">
           <a
-            href="#investimento"
-            class="btn-primary inline-flex items-center gap-2 bg-[#FF4400] px-10 py-5 text-base font-semibold text-white shadow-2xl shadow-[#FF4400]/40 hover:bg-[#FF5722] transition-all"
+            href="#inscricao"
+            class="btn-primary inline-flex items-center justify-center gap-2 bg-[#FF4400] px-8 sm:px-10 py-4 sm:py-5 text-sm sm:text-base font-semibold text-white shadow-2xl shadow-[#FF4400]/40 hover:bg-[#FF5722] transition-all w-full sm:w-auto"
           >
-            Garantir Minha Vaga Agora
-            <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <span class="whitespace-nowrap">Garantir Minha Vaga Agora</span>
+            <svg class="h-4 w-4 sm:h-5 sm:w-5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"/>
             </svg>
           </a>
         </div>
 
         <!-- Microcopy -->
-        <p class="mt-6 text-sm text-white/50">
-          🔒 Pagamento seguro | ⏰ Turmas limitadas | ✅ Garantia 7 dias
+        <p class="mt-5 sm:mt-6 text-xs sm:text-sm text-white/50">
+          <Icon name="lock" size="16" class="inline" /> Pagamento seguro | <Icon name="clock" size="16" class="inline" /> Turmas limitadas | <Icon name="check" size="16" class="inline" /> Garantia 7 dias
         </p>
 
         <!-- Urgency Box -->
-        <div class="mt-12 inline-block">
-          <div class="glass-card px-8 py-6 border border-[#FF4400]/30 bg-[#FF4400]/5">
-            <div class="flex items-center gap-6">
-              <div class="text-left">
-                <p class="text-white/60 text-sm mb-1" style="font-family: 'Geist Mono', monospace; text-transform: uppercase; letter-spacing: 0.08em;">Próxima Turma</p>
-                <p class="text-2xl font-bold text-white">Maio 2026</p>
+        <div class="mt-10 sm:mt-12 inline-block w-full sm:w-auto">
+          <div class="glass-card px-6 sm:px-8 py-5 sm:py-6 border border-[#FF4400]/30 bg-[#FF4400]/5">
+            <div class="flex items-center justify-center gap-4 sm:gap-6">
+              <div class="text-center sm:text-left">
+                <p class="text-white/60 text-xs sm:text-sm mb-0.5 sm:mb-1" style="font-family: 'Geist Mono', monospace; text-transform: uppercase; letter-spacing: 0.08em;">Próxima Turma</p>
+                <p class="text-xl sm:text-2xl font-bold text-white">Maio 2026</p>
               </div>
-              <div class="w-px h-12 bg-white/20"></div>
-              <div class="text-left">
-                <p class="text-white/60 text-sm mb-1" style="font-family: 'Geist Mono', monospace; text-transform: uppercase; letter-spacing: 0.08em;">Vagas Restantes</p>
-                <p class="text-2xl font-bold text-[#FF4400]">8 vagas</p>
+              <div class="w-px h-10 sm:h-12 bg-white/20"></div>
+              <div class="text-center sm:text-left">
+                <p class="text-white/60 text-xs sm:text-sm mb-0.5 sm:mb-1" style="font-family: 'Geist Mono', monospace; text-transform: uppercase; letter-spacing: 0.08em;">Vagas Restantes</p>
+                <p class="text-xl sm:text-2xl font-bold text-[#FF4400]">8 vagas</p>
               </div>
             </div>
           </div>

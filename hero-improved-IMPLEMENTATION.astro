@@ -1,0 +1,137 @@
+---
+/**
+ * Hero Section - VERSÃO MELHORADA
+ *
+ * Mudanças principais:
+ * - Ícones Lucide ao invés de SVG inline e emojis
+ * - Hierarquia visual mais clara
+ * - Squad Preview (avatares de agentes)
+ * - Copy mais específica e impactante
+ * - Consistência de espaçamento (escala 4px)
+ *
+ * Para usar: substituir seção <section id="hero"> inteira
+ */
+
+import { Bot, ArrowRight, PlayCircle, Clock, ShieldCheck, Zap, Code, Palette, Users } from 'lucide-astro';
+---
+
+<!-- Hero Section - Ultra Wide com Clone João -->
+<section id="hero" class="relative w-full max-h-[55vh] overflow-hidden">
+  <!-- Background Image -->
+  <img
+    src="/images/mentoria-hero.png"
+    alt="Mentoria Claude Code + AIOX"
+    class="w-full h-[55vh] object-cover"
+    style="object-position: center 25%;"
+  />
+
+  <!-- Dark Overlay Gradient - Enhanced for better readability -->
+  <div class="absolute inset-0 bg-gradient-to-b from-[#08080C]/60 via-[#08080C]/70 to-[#08080C]/95"></div>
+
+  <!-- Content -->
+  <div class="absolute inset-0 flex flex-col justify-end px-5 sm:px-6 pb-12 sm:pb-20">
+    <div class="mx-auto max-w-6xl w-full">
+
+      <!-- Badge - MELHORADO -->
+      <div class="inline-flex items-center gap-2 bg-[#08080C]/90 backdrop-blur-sm px-3 py-2 mb-4 sm:mb-6 border border-[#FF4400]/30 hover:border-[#FF4400]/50 transition-colors">
+        <Zap class="w-3.5 h-3.5 text-[#FF4400] animate-pulse" />
+        <span
+          class="text-[#FF4400] text-xs sm:text-sm font-semibold"
+          style="font-family: 'Geist Mono', monospace; text-transform: uppercase; letter-spacing: 0.12em;"
+        >
+          Apenas 8 Vagas
+        </span>
+      </div>
+
+      <!-- Headline -->
+      <h1 class="text-xl sm:text-3xl lg:text-4xl font-bold tracking-tight text-white max-w-4xl leading-tight sm:leading-tight" style="text-shadow: 0 2px 8px rgba(0, 0, 0, 0.9), 0 4px 16px rgba(0, 0, 0, 0.6);">
+        Tenha uma Equipe de Agentes de IA <span class="text-[#FF4400]">Trabalhando Para Você</span>
+      </h1>
+
+      <p class="mt-4 sm:mt-6 text-sm sm:text-lg text-white/90 max-w-3xl leading-relaxed" style="text-shadow: 0 2px 6px rgba(0, 0, 0, 0.8), 0 1px 3px rgba(0, 0, 0, 0.9);">
+        Aprenda a criar, configurar e orquestrar agentes autônomos que executam tarefas complexas para você — da escrita de código à criação de conteúdo. <strong class="text-white">Mentoria intensiva e prática.</strong>
+      </p>
+
+      <!-- Squad Preview - NOVO ELEMENTO -->
+      <div class="mt-6 sm:mt-8 flex items-center justify-start gap-3">
+        <div class="flex -space-x-2">
+          <div class="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-[#FF4400]/20 border-2 border-[#FF4400] flex items-center justify-center backdrop-blur-sm hover:scale-110 transition-transform">
+            <Bot class="w-4 h-4 sm:w-5 sm:h-5 text-[#FF4400]" />
+          </div>
+          <div class="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-[#8B5CF6]/20 border-2 border-[#8B5CF6] flex items-center justify-center backdrop-blur-sm hover:scale-110 transition-transform">
+            <Code class="w-4 h-4 sm:w-5 sm:h-5 text-[#8B5CF6]" />
+          </div>
+          <div class="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-[#22C55E]/20 border-2 border-[#22C55E] flex items-center justify-center backdrop-blur-sm hover:scale-110 transition-transform">
+            <Palette class="w-4 h-4 sm:w-5 sm:h-5 text-[#22C55E]" />
+          </div>
+          <div class="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-[#0EA5E9]/20 border-2 border-[#0EA5E9] flex items-center justify-center backdrop-blur-sm hover:scale-110 transition-transform">
+            <Users class="w-4 h-4 sm:w-5 sm:h-5 text-[#0EA5E9]" />
+          </div>
+        </div>
+        <div class="text-left">
+          <p class="text-xs sm:text-sm text-white/90 font-semibold leading-tight" style="text-shadow: 0 1px 3px rgba(0, 0, 0, 0.8);">Sua Squad de Agentes</p>
+          <p class="text-[0.65rem] sm:text-xs text-white/60 leading-tight" style="font-family: 'Geist Mono', monospace; text-shadow: 0 1px 3px rgba(0, 0, 0, 0.8);">Dev • Designer • QA • PM</p>
+        </div>
+      </div>
+
+      <!-- CTAs - MELHORADOS -->
+      <div class="mt-6 sm:mt-8 flex flex-col sm:flex-row sm:flex-wrap items-stretch sm:items-center gap-3 sm:gap-4">
+
+        <!-- CTA Primário - MELHORADO -->
+        <a
+          href="#inscricao"
+          class="btn-primary group inline-flex items-center justify-center gap-3 bg-[#FF4400] px-6 sm:px-8 py-4 text-sm sm:text-base font-bold text-white shadow-xl shadow-[#FF4400]/30 hover:bg-[#FF5722] hover:shadow-2xl hover:shadow-[#FF4400]/40 hover:scale-105 transition-all duration-300 w-full sm:w-auto"
+          style="text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);"
+        >
+          <Bot class="w-5 h-5 flex-shrink-0 group-hover:rotate-12 transition-transform" />
+          <span class="whitespace-nowrap">Monte Sua Squad de Agentes</span>
+          <ArrowRight class="w-5 h-5 flex-shrink-0 group-hover:translate-x-1 transition-transform" />
+        </a>
+
+        <!-- CTA Secundário - MELHORADO -->
+        <a
+          href="#como-funciona"
+          class="group inline-flex items-center justify-center gap-3 border-2 border-white/40 bg-white/10 px-6 sm:px-8 py-4 text-sm sm:text-base font-semibold text-white hover:bg-white/20 hover:border-white/60 transition-all backdrop-blur-md w-full sm:w-auto"
+          style="text-shadow: 0 1px 3px rgba(0, 0, 0, 0.7);"
+        >
+          <PlayCircle class="w-5 h-5 flex-shrink-0 group-hover:scale-110 transition-transform" />
+          <span>Ver Como Funciona</span>
+        </a>
+      </div>
+
+      <!-- Microcopy - MELHORADO -->
+      <div class="mt-4 sm:mt-6 flex flex-wrap items-center justify-start gap-4 text-xs sm:text-sm text-white/70" style="text-shadow: 0 1px 4px rgba(0, 0, 0, 0.9);">
+        <div class="inline-flex items-center gap-2">
+          <Clock class="w-4 h-4 text-[#FF4400] flex-shrink-0" />
+          <span>Máx. 12 pessoas</span>
+        </div>
+        <span class="text-white/30">|</span>
+        <div class="inline-flex items-center gap-2">
+          <ShieldCheck class="w-4 h-4 text-[#22C55E] flex-shrink-0" />
+          <span>Garantia 7 dias</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<style>
+  /* Animação personalizada para o Zap (já existe animate-pulse, mas pode customizar) */
+  @keyframes zap-pulse {
+    0%, 100% {
+      opacity: 1;
+      transform: scale(1);
+    }
+    50% {
+      opacity: 0.7;
+      transform: scale(1.1);
+    }
+  }
+
+  /* Garantir que ícones Lucide herdem currentColor corretamente */
+  [astro-icon] {
+    display: inline-block;
+    vertical-align: middle;
+  }
+</style>
