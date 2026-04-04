@@ -7,6 +7,12 @@ export function RevosForm() {
 
   useEffect(() => {
     if (loaded.current) return
+
+    // Verificar se script ou form ja existe no DOM
+    const existingScript = document.querySelector('script[src*="revos.growthsales.ai/embed.js"]')
+    const formDiv = document.getElementById('lp-form-a11d7cc4-17b8-400e-94e4-0f27ca47e9a4')
+    if (existingScript || (formDiv && formDiv.children.length > 0)) return
+
     loaded.current = true
 
     const script = document.createElement('script')
@@ -16,5 +22,5 @@ export function RevosForm() {
     document.body.appendChild(script)
   }, [])
 
-  return <div id="lp-form-a11d7cc4-17b8-400e-94e4-0f27ca47e9a4" className="min-h-[400px]" />
+  return <div id="lp-form-a11d7cc4-17b8-400e-94e4-0f27ca47e9a4" className="min-h-[400px] w-full max-w-full overflow-hidden" />
 }
