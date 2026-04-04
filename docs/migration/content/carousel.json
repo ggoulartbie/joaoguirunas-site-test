@@ -1,0 +1,37 @@
+{
+  "page": "/skills/carousel",
+  "file": "src/pages/skills/carousel.astro",
+  "template": "SkillPage",
+  "title": "Social Media Carousel",
+  "description": "Design de carrosséis multi-slide para Instagram, LinkedIn e Twitter/X com layout rules e hooks.",
+  "ogTitle": "Social Media Carousel | GrowthSales Open Source",
+  "ogDescription": "Design de carrosséis multi-slide para Instagram, LinkedIn e Twitter/X com layout rules e hooks.",
+  "h1": "Social Media Carousel",
+  "h2s": ["Social Media Carousel", "Principais recursos", "Como instalar", "Comece agora"],
+  "bodyTexts": {
+    "longDescription": [
+      "Social Media Carousel é uma skill para Claude Code que automatiza o design de carrosséis multi-slide para Instagram, LinkedIn e Twitter/X. Ela aplica regras de layout, tipografia e psicologia de swipe para criar conteúdo que retém atenção e gera engajamento.",
+      "A skill segue princípios rigorosos de design: zona segura de 98px para não perder conteúdo no Instagram, hierarquia tipográfica com no máximo 3 níveis, e fatiamento adjacente para imagens que fluem entre slides. Cada carousel é estruturado com hook no slide 1, conteúdo no meio e CTA no final.",
+      "Frameworks de hook engineering são aplicados automaticamente — provocação, pergunta retórica, estatística chocante ou promessa de valor. A skill também calcula o número ideal de slides baseado no conteúdo e plataforma, mantendo densidade informativa sem sobrecarregar."
+    ],
+    "ctaSubtext": "Explore o repositório, contribua com melhorias ou integre na sua operação."
+  },
+  "ctaTexts": { "primaryLabel": "Ver no GitHub", "secondaryLabel": "Voltar" },
+  "features": [
+    { "title": "Slide Structure", "description": "Estrutura otimizada de slides com capa, conteúdo e CTA. Fluxo narrativo que mantém engajamento do início ao fim." },
+    { "title": "Text Hierarchy", "description": "Hierarquia tipográfica com headlines impactantes, body text legível e labels de suporte. Contraste e peso visual calculados." },
+    { "title": "Swipe Psychology", "description": "Técnicas de retenção entre slides: open loops, pattern interrupts e curiosity gaps que forçam o swipe." },
+    { "title": "Platform Specs", "description": "Dimensões e safe zones para Instagram (1080x1350), LinkedIn (1080x1080) e Twitter/X. Zona segura de 98px top/bottom." },
+    { "title": "Hook Engineering", "description": "Frameworks de hooks testados: provocação, pergunta retórica, estatística chocante e promessa de valor. Slide 1 decide tudo." },
+    { "title": "CTA Design", "description": "Call-to-actions estratégicos no último slide. Salvar, compartilhar, seguir — cada CTA com design e copy otimizados." }
+  ],
+  "metadata": {
+    "category": "Skills",
+    "categoryColor": "skills",
+    "author": "@SynkraAI",
+    "authorUrl": "https://github.com/SynkraAI/aiox-squads",
+    "primaryLink": "https://github.com/SynkraAI/aiox-squads",
+    "bgImage": "/images/bg-carousel.png"
+  },
+  "extraContent": { "type": "installation", "methods": ["Via AIOX (*download-squad social-media)", "Clone repo"] }
+}

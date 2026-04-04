@@ -1,0 +1,37 @@
+{
+  "page": "/skills/ai-video",
+  "file": "src/pages/skills/ai-video.astro",
+  "template": "SkillPage",
+  "title": "AI Video Generation",
+  "description": "Gere vídeos com IA usando 40+ modelos. Veo 3.1, Seedance, Wan 2.5, Grok e mais via inference.sh CLI.",
+  "ogTitle": "AI Video Generation | GrowthSales Open Source",
+  "ogDescription": "Gere vídeos com IA usando 40+ modelos. Veo 3.1, Seedance, Wan 2.5, Grok e mais via inference.sh CLI.",
+  "h1": "AI Video Generation",
+  "h2s": ["AI Video Generation", "Principais recursos", "Como instalar", "Comece agora"],
+  "bodyTexts": {
+    "longDescription": [
+      "AI Video Generation é uma skill que conecta o Claude Code ao inference.sh, dando acesso a mais de 40 modelos de geração de vídeo via CLI. Com um único comando, você gera vídeos usando Veo 3.1 do Google, Seedance 1.1, Wan 2.5, Kling 2.1, Grok Video e muitos outros.",
+      "A skill suporta múltiplos modos de geração: text-to-video para criar do zero, image-to-video para animar fotos, lipsync para sincronizar fala, e avatar generation para criar apresentadores virtuais. Tudo direto do terminal, sem precisar abrir interfaces web.",
+      "Para produção de conteúdo em escala, a combinação de upscaling com foley sound permite gerar vídeos de alta qualidade com áudio sincronizado automaticamente. Ideal para social media, ads, e conteúdo educacional."
+    ],
+    "ctaSubtext": "Explore o repositório, contribua com melhorias ou integre na sua operação."
+  },
+  "ctaTexts": { "primaryLabel": "Ver no GitHub", "secondaryLabel": "Voltar" },
+  "features": [
+    { "title": "Text-to-Video", "description": "Gere vídeos a partir de prompts de texto usando modelos como Veo 3.1, Seedance 1.1, Wan 2.5 e Kling 2.1." },
+    { "title": "Image-to-Video", "description": "Anime imagens estáticas em vídeos dinâmicos. Transforme qualquer foto ou ilustração em movimento." },
+    { "title": "Lipsync", "description": "Sincronize lábios de personagens com áudio. Perfeito para criar talking heads e apresentações." },
+    { "title": "Avatar Generation", "description": "Crie avatares de IA realistas para vídeos. Ideal para conteúdo de marketing e apresentações." },
+    { "title": "Upscaling", "description": "Aumente a resolução dos seus vídeos com IA. De 480p para 4K mantendo qualidade e detalhes." },
+    { "title": "Foley Sound", "description": "Gere efeitos sonoros automaticamente para seus vídeos. Áudio sincronizado com a ação visual." }
+  ],
+  "metadata": {
+    "category": "Skills",
+    "categoryColor": "skills",
+    "author": "@inference-sh",
+    "authorUrl": "https://github.com/inference-sh/skills",
+    "primaryLink": "https://github.com/inference-sh/skills",
+    "bgImage": "/images/bg-video.png"
+  },
+  "extraContent": { "type": "installation", "methods": ["Plugin install", "Specific video skill", "CLI install"] }
+}

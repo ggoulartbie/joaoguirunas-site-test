@@ -1,0 +1,185 @@
+{
+  "page": "/",
+  "file": "src/pages/index.astro",
+  "title": "Open Source Skills",
+  "description": "Open Source Tools by GrowthSales AI — Multiplicação de produtividade com agentes autônomos e Claude Code.",
+  "ogTitle": "Open Source Skills | GrowthSales Open Source",
+  "ogDescription": "Open Source Tools by GrowthSales AI — Multiplicação de produtividade com agentes autônomos e Claude Code.",
+  "h1": "Open Source Skills",
+  "h2s": [
+    "Tudo o que você precisa para escalar com IA",
+    "Desenvolvido por quem trabalha com agentes todos os dias",
+    "Pronto para escalar com a gente?"
+  ],
+  "bodyTexts": {
+    "heroBadge": "100% Open Source",
+    "heroSubtitle": "by GrowthSales AI",
+    "skillsSectionBadge": "Skills para Claude Code",
+    "skillsSectionSubtext": "Skills, Squads, Apps e Integrações open source para multiplicar produtividade com agentes autônomos",
+    "aboutBadge": "Sobre",
+    "aboutParagraph1": "A GrowthSales atende clientes enterprise utilizando equipes de agentes de IA para entregar resultados exponenciais. Em paralelo, colaboramos com a comunidade de IA compartilhando skills open source.",
+    "aboutParagraph2": "Nossos programas de mentoria exclusivos ajudam empresas e profissionais a escalar produtividade com inteligência artificial. Cada skill nasce de necessidades reais em projetos de consultoria e implementação de agentes autônomos.",
+    "aboutBadges": ["MIT License", "Production-Ready", "Documentado"],
+    "ctaBadge": "Mentoria Exclusiva",
+    "ctaSubtext": "Turmas exclusivas de 10 alunos · 4 semanas · 10 encontros que vão transformar sua produtividade"
+  },
+  "ctaTexts": {
+    "heroMain": "Explorar Skills",
+    "heroSecondary": "Mentoria",
+    "ctaMain": "Quero escalar",
+    "ctaSecondary": "Ver GitHub"
+  },
+  "stats": [
+    { "value": "15", "label": "Recursos" },
+    { "value": "100%", "label": "Open Source" },
+    { "value": "13", "label": "Cursos Curados" },
+    { "value": "24/7", "label": "Agentes Autônomos" }
+  ],
+  "categories": [
+    { "id": "squads", "label": "Squads" },
+    { "id": "skills", "label": "Skills" },
+    { "id": "apps", "label": "Apps" },
+    { "id": "integracoes", "label": "Integrações" },
+    { "id": "aprendizado", "label": "Aprendizado" }
+  ],
+  "skills": [
+    {
+      "title": "AIOX Framework",
+      "description": "Sistema de orquestração de agentes com squads e personas. Defina workflows, delegue tasks e escale sua operação.",
+      "categoryId": "squads",
+      "categoryLabel": "Squads",
+      "isFeatured": true,
+      "author": "@SynkraAI",
+      "href": "/framework/aiox-framework"
+    },
+    {
+      "title": "Xquads Squads",
+      "description": "12 squads especializadas com 96+ agentes. A maior coleção de squads AIOX da comunidade.",
+      "categoryId": "squads",
+      "categoryLabel": "Squads",
+      "isNew": true,
+      "author": "@rafa.grandi",
+      "href": "/squads/xquads"
+    },
+    {
+      "title": "AIOX Monitor",
+      "description": "Dashboard isométrico real-time de agentes autônomos. Visualize performance, tasks e métricas.",
+      "categoryId": "apps",
+      "categoryLabel": "Apps",
+      "isNew": true,
+      "author": "@joaoguirunas",
+      "href": "/monitor/aiox-monitor"
+    },
+    {
+      "title": "Maestri",
+      "description": "Comunicação inter-agentes entre terminais. Conecte múltiplos Claude Code para colaboração em tempo real.",
+      "categoryId": "apps",
+      "categoryLabel": "Apps",
+      "isNew": true,
+      "author": "Maestri Team",
+      "href": "/tools/maestri"
+    },
+    {
+      "title": "Setup Claude Code",
+      "description": "Guia completo de configuração avançada. Do básico ao expert em Claude Code CLI.",
+      "categoryId": "skills",
+      "categoryLabel": "Skills",
+      "author": "@joaoguirunas",
+      "href": "/setup/claude-code"
+    },
+    {
+      "title": "AI Video Generation",
+      "description": "Gere vídeos com IA usando 40+ modelos. Veo 3.1, Seedance, Wan 2.5, Grok e mais.",
+      "categoryId": "skills",
+      "categoryLabel": "Skills",
+      "isNew": true,
+      "author": "@nichochar",
+      "href": "/skills/ai-video"
+    },
+    {
+      "title": "AI Image Generation",
+      "description": "Gere imagens com IA usando 50+ modelos. FLUX, Gemini, Grok, Seedream e mais.",
+      "categoryId": "skills",
+      "categoryLabel": "Skills",
+      "author": "@nichochar",
+      "href": "/skills/ai-image"
+    },
+    {
+      "title": "Social Media Carousel",
+      "description": "Design de carrosséis multi-slide para Instagram, LinkedIn e Twitter/X com hooks e swipe psychology.",
+      "categoryId": "skills",
+      "categoryLabel": "Skills",
+      "author": "@joaoguirunas",
+      "href": "/skills/carousel"
+    },
+    {
+      "title": "Graphic Designer",
+      "description": "Design de thumbnails, social media, banners e apresentações com princípios CRAP e Gestalt.",
+      "categoryId": "skills",
+      "categoryLabel": "Skills",
+      "author": "@joaoguirunas",
+      "href": "/skills/graphic-designer"
+    },
+    {
+      "title": "Meta Ads com IA",
+      "description": "Automação de campanhas Meta com agentes. Otimize criativos, copy e targeting automaticamente.",
+      "categoryId": "integracoes",
+      "categoryLabel": "Integrações",
+      "author": "@joaoguirunas",
+      "href": "/learn/meta-ads-ai"
+    },
+    {
+      "title": "Google Ads com IA",
+      "description": "Otimização de Google Ads com IA. Performance Max, Search e Display gerenciados por agentes.",
+      "categoryId": "integracoes",
+      "categoryLabel": "Integrações",
+      "author": "@joaoguirunas",
+      "href": "/learn/google-ads-ai"
+    },
+    {
+      "title": "Vercel Deploy",
+      "description": "Deploy automatizado com preview deployments, domínios custom e edge functions para projetos web.",
+      "categoryId": "integracoes",
+      "categoryLabel": "Integrações",
+      "author": "Vercel",
+      "href": "/skills/vercel"
+    },
+    {
+      "title": "GitHub",
+      "description": "Integração completa com repositórios, PRs, Issues e Actions para workflow de desenvolvimento.",
+      "categoryId": "integracoes",
+      "categoryLabel": "Integrações",
+      "author": "GitHub",
+      "href": "/skills/github"
+    },
+    {
+      "title": "Supabase",
+      "description": "Backend open source com PostgreSQL, Auth, Storage e Realtime para aplicações modernas.",
+      "categoryId": "integracoes",
+      "categoryLabel": "Integrações",
+      "author": "Supabase",
+      "href": "/skills/supabase"
+    },
+    {
+      "title": "Cursos Anthropic",
+      "description": "Curadoria dos 13 cursos gratuitos da Anthropic. Aprenda a construir com Claude.",
+      "categoryId": "aprendizado",
+      "categoryLabel": "Aprendizado",
+      "author": "Anthropic",
+      "href": "/learn/anthropic-courses"
+    }
+  ],
+  "filterLabels": {
+    "all": "Todos",
+    "cardFooter": "Ver mais"
+  },
+  "hardcodedTexts": [
+    "100% Open Source (badge)",
+    "Skills para Claude Code (badge)",
+    "Sobre (badge)",
+    "Mentoria Exclusiva (badge)",
+    "Ver mais (card footer)",
+    "Todos (filter label)",
+    "MIT License / Production-Ready / Documentado (about badges)"
+  ]
+}

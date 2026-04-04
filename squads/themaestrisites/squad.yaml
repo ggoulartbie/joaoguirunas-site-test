@@ -1,0 +1,105 @@
+name: themaestrisites
+version: 1.0.0
+description: >
+  Dev squad otimizada para criação de sites, landing pages e páginas web de alta conversão.
+  Orquestração multi-terminal via Maestri CLI. Squad enxuta sem SM/PO/PM — o Chief (Hanuman)
+  orquestra tudo. 4 UX/Dev Front que IMPLEMENTAM código (React/Tailwind), copy persuasiva,
+  SEO técnico e integração/deploy unificado. Tema: personagens do Mahabharata.
+author: João Ramos
+license: MIT
+slashPrefix: themaestrisites
+
+aiox:
+  minVersion: "2.1.0"
+  type: squad
+
+components:
+  agents:
+    - chief.md
+    - ux-alpha.md
+    - ux-beta.md
+    - ux-gamma.md
+    - ux-delta.md
+    - copywriter.md
+    - seo-analyst.md
+    - dev-devops.md
+  tasks:
+    - chief-orchestrate.md
+    - chief-assign.md
+    - chief-check-all.md
+    - chief-sync-notes.md
+    - chief-merge-plan.md
+    - seo-audit.md
+    - copy-sections.md
+    - site-dev-cycle.md
+  workflows:
+    - site-development-cycle.yaml
+    - parallel-ux-dev.yaml
+  checklists: []
+  templates:
+    - status-board-tmpl.md
+    - lp-sections-tmpl.md
+  tools: []
+  scripts: []
+
+config:
+  extends: extend
+  coding-standards: config/coding-standards.md
+  tech-stack: config/tech-stack.md
+  source-tree: config/source-tree.md
+
+dependencies:
+  node: []
+  python: []
+  squads: []
+
+maestri:
+  enabled: true
+  agents:
+    - name: Hanuman
+      agentId: chief
+      role: orchestrator
+    - name: Arjuna
+      agentId: ux-alpha
+      role: ui-components
+    - name: Nakula
+      agentId: ux-beta
+      role: ux-layout
+    - name: Draupadi
+      agentId: ux-gamma
+      role: image-visual-identity
+    - name: Kunti
+      agentId: ux-delta
+      role: ux-research-accessibility
+    - name: Yudhishthira
+      agentId: copywriter
+      role: copywriting
+    - name: Sahadeva
+      agentId: seo-analyst
+      role: seo
+    - name: Bhima
+      agentId: dev-devops
+      role: dev-and-deploy
+  notes:
+    - status-board
+    - decisions
+    - blockers
+    - seo-checklist
+    - style-guide
+    - image-library
+
+tags:
+  - maestri
+  - mahabharata
+  - sites
+  - landing-pages
+  - seo
+  - copywriting
+  - ui-design
+  - frontend
+  - react
+  - tailwind
+  - nextjs
+  - accessibility
+  - cro
+  - multi-terminal

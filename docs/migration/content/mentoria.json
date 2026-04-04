@@ -1,0 +1,237 @@
+{
+  "page": "/mentoria",
+  "file": "src/pages/mentoria.astro",
+  "title": "Mentoria Claude Code + AIOX",
+  "description": "Tenha uma equipe de agentes de IA trabalhando para você. Mentoria intensiva e prática com turmas de no máximo 12 pessoas em Florianópolis.",
+  "ogTitle": "Mentoria Claude Code + AIOX | GrowthSales Open Source",
+  "ogDescription": "Tenha uma equipe de agentes de IA trabalhando para você. Mentoria intensiva e prática com turmas de no máximo 12 pessoas em Florianópolis.",
+  "ogImage": "/images/mentoria-og.png",
+  "h1": "Tenha uma Equipe de Agentes de IA Trabalhando Para Você 24/7",
+  "h2s": [
+    "Você sabe que IA é o futuro. Mas ainda não conseguiu aproveitar o potencial dela.",
+    "Imagine ter uma equipe de especialistas trabalhando para você 24/7",
+    "Do Zero ao Time Completo em 8 Semanas",
+    "Não É Mais Um Curso Online. É Uma Transformação Guiada.",
+    "Esta Mentoria É Para Você Se...",
+    "Ao Final dos 8 Encontros, Você Terá:",
+    "Seus Facilitadores",
+    "Quanto Custa Ter Sua Equipe de Agentes IA?",
+    "Fale com um Especialista",
+    "Dúvidas Comuns",
+    "A Transformação Começa no Primeiro Encontro"
+  ],
+  "h3s": [
+    "Gostou da metodologia?",
+    "Pronto para transformar sua operação com agentes autônomos?",
+    "Se identificou? Fale conosco",
+    "Quer ter acesso a todos esses entregáveis?",
+    "Pronto para ter sua própria equipe de agentes IA?"
+  ],
+  "bodyTexts": {
+    "hero": {
+      "urgencyBadge": "Restam somente 4 vagas",
+      "headline": "Tenha uma Equipe de Agentes de IA Trabalhando Para Você 24/7",
+      "subheadline": "Aprenda a criar, configurar e orquestrar agentes autônomos que executam tarefas complexas para você — da escrita de código à criação de conteúdo. Mentoria intensiva e prática.",
+      "microcopy": "Máx. 12 pessoas | Garantia 7 dias"
+    },
+    "problema": {
+      "intro": "Você já usa ChatGPT, Claude, talvez até outros modelos. Mas no fundo, sabe que está subutilizando.",
+      "context": "Você vê pessoas falando sobre agentes autônomos, sobre times inteiros de IA trabalhando em paralelo, sobre produtividade 10x. E pensa: \"Como eles chegaram lá?\"",
+      "verdade": "A verdade é:",
+      "painPoints": [
+        "Tutoriais do YouTube não são suficientes — falta contexto, falta prática guiada, falta alguém para tirar suas dúvidas na hora",
+        "Você não tem tempo para virar expert sozinho — entre trabalho, projetos e vida pessoal, explorar ferramentas novas vira \"quando sobrar tempo\"",
+        "Cada erro custa caro — configurações erradas, permissões, integrações que não funcionam... você perde horas (ou dias) tentando descobrir o que deu errado"
+      ],
+      "closer": "E o pior: enquanto você espera, seus concorrentes já estão usando.",
+      "ctaMicrocopy": "Apenas 8 vagas disponíveis"
+    },
+    "solucao": {
+      "intro": "E se você pudesse:",
+      "benefits": [
+        "Delegar tarefas complexas para agentes que nunca dormem, nunca erram contexto e custam uma fração de um funcionário?",
+        "Ter um dev senior, um QA, um designer, um copywriter — tudo rodando na sua máquina, integrado aos seus projetos?",
+        "Escalar sua produção sem contratar — criar 10 posts de LinkedIn, 5 apresentações e revisar 20 PRs... em uma tarde?"
+      ],
+      "closer": "Isso não é ficção científica. É o que você vai construir nesta mentoria."
+    },
+    "comoFunciona": {
+      "badge": "A Jornada",
+      "subtext": "Cada encontro constrói sobre o anterior. Você não vai só assistir — vai fazer. E vai sair de cada sessão com algo funcionando."
+    },
+    "diferenciais": [
+      {
+        "title": "Desbloqueio Mental com Claudia Guirunas",
+        "subtitle": "Psicanalista e Sócia da GrowthSales",
+        "description": "No primeiro encontro presencial, Claudia orienta os participantes com técnicas de desbloqueio mental e respiração para controlar a ansiedade da tela preta.",
+        "footnote": "Você não vai ouvir isso em nenhum curso técnico. Esta é a parte que falta em todos os tutoriais."
+      },
+      {
+        "title": "Turmas de No Máximo 12 Pessoas",
+        "description": "Enquanto cursos online têm centenas (ou milhares) de alunos, aqui você tem:",
+        "bullets": [
+          "Atenção individual em cada encontro",
+          "Troubleshooting personalizado quando algo der errado",
+          "Networking real com pessoas comprometidas"
+        ]
+      },
+      {
+        "title": "Squad Personalizada Para Seu Contexto",
+        "description": "Não é \"aprenda a ferramenta e vire-se\". É:",
+        "bullets": [
+          "Entendemos seu caso de uso",
+          "Criamos agentes específicos para sua necessidade",
+          "Você sai com algo funcionando para SEU trabalho, não exemplos genéricos"
+        ]
+      },
+      {
+        "title": "Suporte Contínuo + Comunidade Vitalícia",
+        "bullets": [
+          "Grupo exclusivo de mentorados",
+          "Acesso às gravações para sempre",
+          "Atualizações quando o AIOX evoluir",
+          "Rede de profissionais no mesmo caminho"
+        ]
+      }
+    ],
+    "paraQuem": {
+      "intro": "Esta mentoria NÃO é exclusiva para desenvolvedores ou profissionais de tecnologia. É para qualquer pessoa que queira aumentar sua eficiência operacional com agentes autônomos.",
+      "personas": [
+        { "title": "Empresários & Gestores", "description": "Você quer aumentar eficiência sem aumentar headcount. Precisa de squads de marketing, mídia, design, conteúdo e gestão de tráfego.", "result": "Equipes completas de especialistas sem custo fixo de funcionários." },
+        { "title": "Empreendedores & Founders", "description": "Você precisa fazer mais com menos. Validar ideias rápido. Competir com empresas maiores sem equipe grande.", "result": "Capacidade operacional de uma empresa 10x maior." },
+        { "title": "Profissionais de Marketing, Design & Conteúdo", "description": "Você precisa criar conteúdo para múltiplos canais, manter consistência visual e editorial, escalar produção sem perder qualidade.", "result": "De 1 post por semana para 20. De 1 canal para 5 simultaneamente." },
+        { "title": "Consultores & Freelancers", "description": "Você quer entregar mais valor, atender mais clientes, sem aumentar horas trabalhadas. Competir com agências maiores.", "result": "Escale seu negócio sem escalar seu cansaço." },
+        { "title": "Devs & Engenheiros", "description": "Você quer automatizar code review, gerar testes, documentar código. Multiplicar sua produtividade sem burnout.", "result": "Trabalhe em features, não em tarefas repetitivas." },
+        { "title": "PMs & Tech Leads", "description": "Você lidera times que precisam entregar mais rápido. Quer entender o potencial de IA para otimizar processos.", "result": "Lidere a transformação de IA no seu time." },
+        { "title": "Qualquer Profissional que Queira Aumentar Eficiência", "description": "Você trabalha sozinho ou em equipe pequena. Sente que poderia produzir mais com as ferramentas certas.", "result": "Autonomia para delegar tarefas complexas para agentes que executam 24/7." }
+      ]
+    },
+    "entregaveis": {
+      "badge": "Entregáveis",
+      "tecnico": [
+        "Ambiente de desenvolvimento 100% configurado",
+        "Claude Code dominado e otimizado",
+        "Framework AIOX instalado e rodando",
+        "Squad personalizada com agentes para seu contexto",
+        "Skills e MCPs instalados e funcionando",
+        "Integrações com suas ferramentas de trabalho"
+      ],
+      "conhecimento": [
+        "Domínio de engenharia de prompts",
+        "Capacidade de criar novos agentes do zero",
+        "Habilidade de debugar e otimizar agentes",
+        "Compreensão de arquiteturas multi-agente",
+        "Mindset adequado para trabalhar com IA"
+      ],
+      "comunidade": [
+        "Acesso vitalício ao grupo exclusivo",
+        "Network com outros profissionais do programa",
+        "Certificado de conclusão",
+        "Atualizações futuras do framework"
+      ]
+    },
+    "facilitadores": {
+      "badge": "Quem Facilita",
+      "subtext": "Profissionais experientes que vivem e respiram IA aplicada a negócios. Fundadores da GrowthSales.ai, trazem décadas de experiência combinada em tecnologia, vendas e marketing.",
+      "joao": {
+        "name": "João Guirunas",
+        "role": "Fundador GrowthSales.ai",
+        "bio": "Especialista em IA aplicada a vendas e marketing. Pioneiro em orquestração de agentes autônomos. Criador do framework AIOX.",
+        "linkedin": "https://www.linkedin.com/in/joaoguirunas"
+      },
+      "claudia": {
+        "name": "Claudia Guirunas",
+        "role": "Co-Fundadora GrowthSales.ai",
+        "bio": "Especialista em transformação digital e implementação de IA em processos de vendas. Focada em resultados mensuráveis e ROI.",
+        "linkedin": "https://www.linkedin.com/in/claudiaguirunas"
+      },
+      "culturaLink": "https://www.growthsales.ai/cultura",
+      "culturaLabel": "Conheça Nossa Cultura"
+    },
+    "investimento": {
+      "badge": "Investimento",
+      "subtext": "Compare o custo de contratar equipes tradicionais vs. ter agentes IA trabalhando para você",
+      "comparativo": {
+        "semAiox": { "number": "1", "label": "Sem AIOX", "sublabel": "1 dev fazendo tudo sozinho" },
+        "comAiox": { "number": "8", "label": "Com AIOX", "sublabel": "Equipe de 8 agentes especializados" }
+      },
+      "preco": "R$ 8.700",
+      "parcelamento": "ou em até 12x no cartão",
+      "incluso": [
+        "8 encontros (1 presencial + 6 online + 1 final)",
+        "Desbloqueio mental com Claudia",
+        "Framework AIOX completo",
+        "Squad personalizada",
+        "Grupo exclusivo vitalício",
+        "Gravações das aulas",
+        "Atualizações futuras",
+        "Certificado de conclusão"
+      ],
+      "trustBadges": "Pagamento 100% seguro | Garantia 7 dias",
+      "socialProof": "Turmas limitadas a 12 pessoas | Apenas 8 vagas disponíveis"
+    },
+    "inscricao": {
+      "badge": "Fale Conosco",
+      "subtext": "Clique no botão abaixo e nossa equipe entrará em contato para tirar suas dúvidas e garantir sua vaga na próxima turma.",
+      "formNote": "Resposta em até 24h · Sem compromisso",
+      "trustBadges": "Seus dados estão seguros | Resposta em até 24h | Sem compromisso"
+    },
+    "faq": [
+      { "q": "Preciso saber programar?", "a": "Não é necessário ser programador nem ter conhecimento de terminal. Ensinamos tudo do zero no encontro presencial, incluindo os fundamentos de linha de comando. Você não precisa estudar nada antes." },
+      { "q": "Qual computador eu preciso?", "a": "Mac, Windows ou Linux com no mínimo 8GB de RAM (recomendamos 16GB). Você vai instalar softwares, então precisa ter permissões de administrador." },
+      { "q": "Preciso de software pago?", "a": "Sim, você precisa de uma assinatura ativa do Claude Pro (US$ 20/mês). As outras ferramentas são gratuitas ou têm planos gratuitos suficientes." },
+      { "q": "As aulas online são ao vivo?", "a": "Sim, todas são ao vivo com interação em tempo real. E todas são gravadas — se você perder uma aula, pode assistir depois e tirar dúvidas no grupo." },
+      { "q": "E se eu não puder ir a Florianópolis?", "a": "O encontro presencial é parte fundamental (setup inicial + sessão de desbloqueio mental com Claudia). Se você realmente não puder ir, recomendamos esperar uma turma futura que funcione para sua agenda." },
+      { "q": "Quanto tempo dura o programa?", "a": "São 8 encontros distribuídos ao longo de 6-8 semanas (aproximadamente 2 meses)." },
+      { "q": "Vou conseguir criar minha própria squad do zero?", "a": "Sim! Esse é um dos principais objetivos. Ao final, você terá autonomia completa para criar, configurar e orquestrar agentes para qualquer necessidade." },
+      { "q": "Posso usar os agentes comercialmente?", "a": "Sim, 100%. Tudo que você criar é seu para usar como quiser — incluindo em projetos comerciais, para clientes, ou para sua empresa." },
+      { "q": "Terei suporte depois do programa?", "a": "Você terá acesso vitalício ao grupo de alunos, onde pode tirar dúvidas, trocar experiências e acompanhar as evoluções do framework." },
+      { "q": "O que acontece se eu não gostar?", "a": "Entre em contato conosco para saber mais sobre as condições e garantias da mentoria." }
+    ],
+    "ctaFinal": {
+      "badge": "Última Chance",
+      "headline": "A Transformação Começa no Primeiro Encontro",
+      "checklist": [
+        "Tudo instalado e configurado",
+        "Sua primeira squad funcionando"
+      ]
+    }
+  },
+  "encontros": [
+    { "number": "01", "type": "Presencial", "title": "Encontro Presencial — Florianópolis", "date": "Sábado, 2 de Maio", "subtitle": "Fundamentos, Mindset & Setup Completo (4h)", "deliverables": ["Computador 100% configurado", "Mindset desbloqueado", "Confiança para os próximos módulos"] },
+    { "number": "02", "type": "Online", "title": "Online 1 — Dominando o Claude Code", "date": "Terça, 5 de Maio", "subtitle": "Como Extrair o Máximo dos Agentes (2h)" },
+    { "number": "03", "type": "Online", "title": "Online 2 — Skills", "date": "Quinta, 7 de Maio", "subtitle": "Expanda os Poderes dos Seus Agentes (2h)" },
+    { "number": "04", "type": "Online", "title": "Online 3 — MCP Servers", "date": "Terça, 12 de Maio", "subtitle": "Integre Seus Agentes com o Mundo (2h)" },
+    { "number": "05", "type": "Online", "title": "Online 4 — Framework AIOX", "date": "Quinta, 14 de Maio", "subtitle": "O Sistema que Orquestra Times de IA (2h)" },
+    { "number": "06", "type": "Online", "title": "Online 5 — Squads Personalizadas", "date": "Terça, 19 de Maio", "subtitle": "Crie Agentes Para o SEU Negócio (2h)" },
+    { "number": "07", "type": "Online", "title": "Online 6 — Integrações & Automações", "date": "Quinta, 21 de Maio", "subtitle": "Leve Para o Próximo Nível (2h)" },
+    { "number": "08", "type": "Presencial", "title": "Encontro Final — Apresentações", "date": "Sábado, 30 de Maio", "subtitle": "Mostre o Que Você Construiu (2-3h) · Opcional · Presencial + Transmissão ao Vivo" }
+  ],
+  "ctaTexts": {
+    "heroMain": "Fale com um Especialista",
+    "heroSecondary": "Como Funciona",
+    "afterProblema": "Quero Sair na Frente",
+    "afterComoFunciona": "Quero Participar",
+    "afterDiferenciais": "Quero Começar",
+    "afterParaQuem": "Garantir Minha Vaga",
+    "afterEntregaveis": "Falar com Time",
+    "investimento": "Garantir Minha Vaga",
+    "preInscricao": "Falar com Especialista",
+    "inscricao": "Falar com Especialista Agora"
+  },
+  "externalLinks": {
+    "formUrl": "https://revos.growthsales.ai/f/a11d7cc4-17b8-400e-94e4-0f27ca47e9a4",
+    "culturaUrl": "https://www.growthsales.ai/cultura"
+  },
+  "hardcodedTexts": [
+    "Restam somente 4 vagas (urgency badge - static)",
+    "Apenas 8 vagas disponíveis (microcopy - static)",
+    "Turmas limitadas a 12 pessoas (social proof - static)",
+    "Datas dos encontros (Maio 2025 - hardcoded)",
+    "R$ 8.700 (preço - hardcoded)",
+    "12x no cartão (parcelamento - hardcoded)",
+    "Resposta em até 24h (trust badge)",
+    "Garantia 7 dias (trust badge)",
+    "Pagamento 100% seguro (trust badge)"
+  ]
+}

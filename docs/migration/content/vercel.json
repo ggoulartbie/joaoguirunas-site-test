@@ -1,0 +1,41 @@
+{
+  "page": "/skills/vercel",
+  "file": "src/pages/skills/vercel.astro",
+  "template": "SkillPage",
+  "title": "Vercel Deploy",
+  "description": "Deploy automatizado com Vercel. CI/CD, preview deployments e domínios custom para projetos web.",
+  "ogTitle": "Vercel Deploy | GrowthSales Open Source",
+  "ogDescription": "Deploy automatizado com Vercel. CI/CD, preview deployments e domínios custom para projetos web.",
+  "h1": "Vercel Deploy",
+  "h2s": ["Vercel Deploy", "Principais recursos", "Setup no Terminal", "Comece agora"],
+  "bodyTexts": {
+    "longDescription": [
+      "Vercel Deploy é uma skill de integração que conecta o Claude Code ao ecossistema Vercel para deploy automatizado de projetos web. A cada push no repositório, o deploy acontece automaticamente com zero configuração para frameworks como Next.js, Astro, Remix e SvelteKit.",
+      "Preview deployments são gerados para cada branch e pull request, permitindo revisão visual de mudanças antes do merge. Cada preview tem sua própria URL única, facilitando QA, feedback de stakeholders e testes de aceitação em ambiente real.",
+      "Com edge functions, o código roda próximo ao usuário final com latência mínima. Analytics integrado monitora Core Web Vitals, performance e experiência do usuário em tempo real. Custom domains com SSL automático completam o stack de produção."
+    ],
+    "ctaSubtext": "Explore o repositório, contribua com melhorias ou integre na sua operação."
+  },
+  "ctaTexts": { "primaryLabel": "Ver no GitHub", "secondaryLabel": "Voltar" },
+  "features": [
+    { "title": "Auto Deploy", "description": "Deploy automático a cada push no repositório. Zero configuração para frameworks como Next.js, Astro e Nuxt." },
+    { "title": "Preview URLs", "description": "URLs de preview únicas para cada branch e PR. Revise mudanças visualmente antes de mergear." },
+    { "title": "Custom Domains", "description": "Configure domínios personalizados com SSL automático. DNS management integrado e certificados gratuitos." },
+    { "title": "Edge Functions", "description": "Execute código no edge, próximo ao usuário. Latência mínima para APIs, middleware e server-side rendering." },
+    { "title": "Analytics", "description": "Web analytics integrado com métricas de performance. Core Web Vitals, traffic e experiência do usuário em tempo real." },
+    { "title": "Zero-Config", "description": "Detecção automática de framework e configuração. Funciona com Next.js, Astro, Remix, SvelteKit e mais." }
+  ],
+  "metadata": {
+    "category": "Integrações",
+    "categoryColor": "integracoes",
+    "author": "Vercel",
+    "authorUrl": "https://github.com/vercel",
+    "primaryLink": "https://github.com/vercel/vercel",
+    "bgImage": "/images/bg-vercel.png"
+  },
+  "extraContent": {
+    "type": "tutorial",
+    "title": "Setup no Terminal",
+    "steps": 6
+  }
+}

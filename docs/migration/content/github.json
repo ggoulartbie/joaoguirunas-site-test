@@ -1,0 +1,37 @@
+{
+  "page": "/skills/github",
+  "file": "src/pages/skills/github.astro",
+  "template": "SkillPage",
+  "title": "GitHub",
+  "description": "Integração completa com GitHub. Repositórios, PRs, Issues e Actions para workflow de desenvolvimento.",
+  "ogTitle": "GitHub | GrowthSales Open Source",
+  "ogDescription": "Integração completa com GitHub. Repositórios, PRs, Issues e Actions para workflow de desenvolvimento.",
+  "h1": "GitHub",
+  "h2s": ["GitHub", "Principais recursos", "GitHub CLI no Terminal", "Comece agora"],
+  "bodyTexts": {
+    "longDescription": [
+      "GitHub é a integração central do workflow de desenvolvimento AIOX. Repositórios, pull requests, issues e actions formam a espinha dorsal de todo o ciclo de desenvolvimento, desde a criação de stories até o deploy em produção.",
+      "Com GitHub CLI (gh) integrado ao Claude Code, operações como criação de PRs, revisão de código e gerenciamento de issues acontecem diretamente do terminal. O agente @devops tem autoridade exclusiva para push e PR creation, garantindo governança e qualidade.",
+      "GitHub Actions automatizam pipelines de CI/CD com builds, testes e deploys configuráveis. Combinado com CodeRabbit para code review automatizado e branch protection rules, cada mudança passa por validação rigorosa antes de chegar à produção."
+    ],
+    "ctaSubtext": "Explore o repositório, contribua com melhorias ou integre na sua operação."
+  },
+  "ctaTexts": { "primaryLabel": "GitHub CLI no GitHub", "secondaryLabel": "Voltar" },
+  "features": [
+    { "title": "Repositórios", "description": "Gerenciamento completo de repositórios. Criação, clonagem, branches e configuração de settings diretamente do terminal." },
+    { "title": "Pull Requests", "description": "Criação e revisão de PRs com templates, labels e assignees. Merge strategies e branch protection rules." },
+    { "title": "Issues", "description": "Tracking de bugs e features com labels, milestones e projetos. Integração com stories AIOX para rastreabilidade." },
+    { "title": "Actions CI/CD", "description": "Workflows automatizados para build, test e deploy. Pipelines customizáveis com matrix builds e caching." },
+    { "title": "Code Review", "description": "Revisão de código com comentários inline, suggestions e aprovações. Integração com CodeRabbit para review automático." },
+    { "title": "Collaboration", "description": "Trabalho em equipe com teams, permissions e CODEOWNERS. Notificações, mentions e discussions integradas." }
+  ],
+  "metadata": {
+    "category": "Integrações",
+    "categoryColor": "integracoes",
+    "author": "GitHub",
+    "authorUrl": "https://github.com/github",
+    "primaryLink": "https://github.com/cli/cli",
+    "bgImage": "/images/bg-github.png"
+  },
+  "extraContent": { "type": "tutorial", "title": "GitHub CLI no Terminal", "steps": 6 }
+}

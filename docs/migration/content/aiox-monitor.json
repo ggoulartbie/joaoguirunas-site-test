@@ -1,0 +1,43 @@
+{
+  "page": "/monitor/aiox-monitor",
+  "file": "src/pages/monitor/aiox-monitor.astro",
+  "template": "SkillPage",
+  "title": "AIOX Monitor",
+  "description": "Dashboard isométrico real-time de agentes autônomos. Visualize performance, tasks e métricas de todos os agentes em execução.",
+  "ogTitle": "AIOX Monitor | GrowthSales Open Source",
+  "ogDescription": "Dashboard isométrico real-time de agentes autônomos. Visualize performance, tasks e métricas de todos os agentes em execução.",
+  "h1": "AIOX Monitor",
+  "h2s": ["AIOX Monitor", "Principais recursos", "Como instalar", "Comece agora"],
+  "bodyTexts": {
+    "longDescription": [
+      "O AIOX Monitor é um dashboard de monitoramento em tempo real para sistemas de agentes autônomos. Desenvolvido para equipes que operam múltiplos agentes de IA simultaneamente, oferece visualização isométrica 3D que torna fácil entender o estado de toda a operação.",
+      "Com suporte a múltiplas squads, histórico detalhado de execução e alertas inteligentes, você mantém controle total sobre seus agentes sem precisar monitorar terminais individuais.",
+      "Ideal para operações enterprise que precisam de observabilidade completa sobre seus workflows de IA automatizados."
+    ],
+    "ctaSubtext": "Explore o repositório, contribua com melhorias ou integre na sua operação."
+  },
+  "ctaTexts": { "primaryLabel": "Ver no GitHub", "secondaryLabel": "Voltar" },
+  "features": [
+    { "title": "Dashboard Isométrico", "description": "Visualização 3D em tempo real de todos os agentes em execução com métricas de performance." },
+    { "title": "Métricas em Tempo Real", "description": "Acompanhe tasks, tokens consumidos, tempo de execução e status de cada agente instantaneamente." },
+    { "title": "Histórico de Execução", "description": "Log completo de todas as ações, decisões e outputs de cada agente com filtros avançados." },
+    { "title": "Alertas Inteligentes", "description": "Notificações configuráveis para erros, timeouts, uso excessivo de tokens e anomalias." },
+    { "title": "Multi-Squad View", "description": "Visualize múltiplas squads simultaneamente com dashboards personalizáveis por projeto." },
+    { "title": "Export & Integração", "description": "Exporte dados para análise externa ou integre com seus sistemas via API REST." }
+  ],
+  "metadata": {
+    "category": "Squads AIOX",
+    "categoryColor": "squads-aiox",
+    "author": "@SynkraAI",
+    "authorUrl": "https://github.com/SynkraAI/aiox-dashboard",
+    "primaryLink": "https://github.com/SynkraAI/aiox-dashboard",
+    "bgImage": "/images/bg-monitor.png"
+  },
+  "extraContent": {
+    "type": "installation",
+    "steps": [
+      { "label": "Clone", "code": "git clone https://github.com/SynkraAI/aiox-dashboard && cd aiox-dashboard" },
+      { "label": "Install & Run", "code": "npm install && npm run dev" }
+    ]
+  }
+}

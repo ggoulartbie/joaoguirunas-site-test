@@ -1,0 +1,38 @@
+{
+  "page": "/tools/maestri",
+  "file": "src/pages/tools/maestri.astro",
+  "template": "SkillPage",
+  "title": "Maestri",
+  "description": "Comunicação inter-agentes entre terminais. Conecte múltiplos Claude Code para colaboração em tempo real.",
+  "ogTitle": "Maestri | GrowthSales Open Source",
+  "ogDescription": "Comunicação inter-agentes entre terminais. Conecte múltiplos Claude Code para colaboração em tempo real.",
+  "h1": "Maestri",
+  "h2s": ["Maestri", "Principais recursos", "Comece agora"],
+  "bodyTexts": {
+    "longDescription": [
+      "Maestri é uma plataforma de comunicação inter-agentes que permite conectar múltiplos terminais Claude Code para trabalho colaborativo. Quando você precisa que diferentes agentes especializados trabalhem juntos em um projeto complexo, Maestri é a cola que une tudo.",
+      "Com sticky notes compartilhadas, agentes podem deixar informações persistentes que outros agentes acessam quando necessário. Isso permite workflows assíncronos onde cada agente contribui no seu tempo.",
+      "A descoberta automática elimina configuração manual — basta estar na mesma rede e os agentes se encontram. Perfeito para equipes que precisam escalar operações de IA com múltiplos workstations."
+    ],
+    "ctaSubtext": "Explore o repositório, contribua com melhorias ou integre na sua operação."
+  },
+  "ctaTexts": { "primaryLabel": "Acessar Maestri", "secondaryLabel": "Voltar" },
+  "features": [
+    { "title": "Comunicação Inter-Agentes", "description": "Conecte múltiplos terminais Claude Code para que agentes possam trocar mensagens em tempo real." },
+    { "title": "Sticky Notes Compartilhadas", "description": "Notas persistentes que podem ser lidas e escritas por qualquer agente conectado no workspace." },
+    { "title": "Delegação de Tasks", "description": "Delegue tarefas específicas para agentes especializados e receba resultados automaticamente." },
+    { "title": "Descoberta Automática", "description": "Agentes na mesma rede são descobertos automaticamente, sem configuração manual." },
+    { "title": "Broadcast & Direct", "description": "Envie mensagens para todos os agentes ou comunique diretamente com um agente específico." },
+    { "title": "Histórico de Mensagens", "description": "Log completo de todas as comunicações para auditoria, debug e análise de workflows." }
+  ],
+  "metadata": {
+    "category": "Produtividade",
+    "categoryColor": "produtividade",
+    "author": "Maestri Team",
+    "authorUrl": "https://www.themaestri.app",
+    "primaryLink": "https://www.themaestri.app/pt-br",
+    "isExternal": true,
+    "bgImage": "/images/bg-maestri.png"
+  },
+  "extraContent": null
+}

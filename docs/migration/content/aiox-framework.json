@@ -1,0 +1,45 @@
+{
+  "page": "/framework/aiox-framework",
+  "file": "src/pages/framework/aiox-framework.astro",
+  "template": "SkillPage",
+  "title": "AIOX Framework",
+  "description": "Sistema de orquestração de agentes com squads e personas. Defina workflows, delegue tasks e escale sua operação.",
+  "ogTitle": "AIOX Framework | GrowthSales Open Source",
+  "ogDescription": "Sistema de orquestração de agentes com squads e personas. Defina workflows, delegue tasks e escale sua operação.",
+  "h1": "AIOX Framework",
+  "h2s": ["AIOX Framework", "Principais recursos", "Como instalar", "Comece agora"],
+  "bodyTexts": {
+    "longDescription": [
+      "O AIOX Framework é um meta-framework de orquestração de agentes de IA projetado para operações enterprise. Permite criar, configurar e gerenciar múltiplas squads de agentes autônomos trabalhando em conjunto.",
+      "Com sistema de personas, cada agente pode ter especialidade, personalidade e comportamentos únicos. @dev implementa código, @qa valida qualidade, @architect desenha soluções, @pm gerencia produto — todos trabalhando coordenados.",
+      "A metodologia Story-Driven Development garante que todo trabalho seja rastreável, mensurável e alinhado com objetivos de negócio. Ideal para empresas que querem escalar operações de IA com governança e controle."
+    ],
+    "ctaSubtext": "Explore o repositório, contribua com melhorias ou integre na sua operação."
+  },
+  "ctaTexts": { "primaryLabel": "Ver no GitHub", "secondaryLabel": "Voltar" },
+  "features": [
+    { "title": "Sistema de Squads", "description": "Organize agentes em squads especializadas com roles definidos, comunicação estruturada e objetivos claros." },
+    { "title": "Personas de Agentes", "description": "Defina personalidades, especialidades e comportamentos únicos para cada agente do seu sistema." },
+    { "title": "Workflow Orchestration", "description": "Crie workflows complexos com delegação automática de tasks entre agentes especializados." },
+    { "title": "Story-Driven Development", "description": "Metodologia ágil integrada onde agentes trabalham baseados em user stories e acceptance criteria." },
+    { "title": "QA Loop Automático", "description": "Ciclo de review e correção automatizado onde @qa valida e @dev corrige até aprovação." },
+    { "title": "CLI Completo", "description": "Interface de linha de comando para gerenciar squads, executar workflows e monitorar agentes." }
+  ],
+  "metadata": {
+    "category": "Squads AIOX",
+    "categoryColor": "squads-aiox",
+    "author": "@SynkraAI",
+    "authorUrl": "https://github.com/SynkraAI/aiox-core",
+    "primaryLink": "https://github.com/SynkraAI/aiox-core",
+    "bgImage": "/images/bg-framework.png"
+  },
+  "extraContent": {
+    "type": "installation",
+    "steps": [
+      { "label": "Novo projeto", "code": "npx aiox-core init meu-projeto" },
+      { "label": "Projeto existente", "code": "cd seu-projeto && npx aiox-core install" },
+      { "label": "Ativar agente", "code": "/agent-name" }
+    ],
+    "note": "Requer Node.js 18+"
+  }
+}

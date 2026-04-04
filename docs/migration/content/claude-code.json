@@ -1,0 +1,38 @@
+{
+  "page": "/setup/claude-code",
+  "file": "src/pages/setup/claude-code.astro",
+  "template": "SkillPage",
+  "title": "Setup Claude Code",
+  "description": "Guia completo de configuração avançada. Do básico ao expert em Claude Code CLI.",
+  "ogTitle": "Setup Claude Code | GrowthSales Open Source",
+  "ogDescription": "Guia completo de configuração avançada. Do básico ao expert em Claude Code CLI.",
+  "h1": "Setup Claude Code",
+  "h2s": ["Setup Claude Code", "Principais recursos", "Comece agora"],
+  "bodyTexts": {
+    "longDescription": [
+      "Este guia completo cobre tudo que você precisa saber para configurar e otimizar o Claude Code CLI. Desde a instalação básica até configurações avançadas usadas por power users.",
+      "Aprenda a configurar skills, integrar MCP servers para expandir capacidades, personalizar keybindings, e criar arquivos CLAUDE.md para manter contexto entre sessões.",
+      "O guia inclui exemplos práticos, configurações recomendadas, e dicas de troubleshooting para resolver problemas comuns."
+    ],
+    "ctaSubtext": "Explore o repositório, contribua com melhorias ou integre na sua operação."
+  },
+  "ctaTexts": { "primaryLabel": "Documentação Oficial", "secondaryLabel": "Voltar" },
+  "features": [
+    { "title": "Instalação Completa", "description": "Passo a passo desde a instalação do Node.js até configuração avançada do Claude Code CLI." },
+    { "title": "Configuração de Skills", "description": "Como adicionar, remover e configurar skills via settings.json e linha de comando." },
+    { "title": "MCP Servers", "description": "Integração com Model Context Protocol para expandir capacidades com ferramentas externas." },
+    { "title": "Keybindings", "description": "Personalização de atalhos de teclado para otimizar seu fluxo de trabalho." },
+    { "title": "CLAUDE.md", "description": "Configuração de contexto persistente para projetos com instruções e regras customizadas." },
+    { "title": "Dicas Avançadas", "description": "Técnicas de power user para maximizar produtividade com Claude Code." }
+  ],
+  "metadata": {
+    "category": "Produtividade",
+    "categoryColor": "produtividade",
+    "author": "@joaoguirunas",
+    "authorUrl": "https://github.com/joaoguirunas",
+    "primaryLink": "https://docs.anthropic.com/en/docs/claude-code/overview",
+    "isExternal": true,
+    "bgImage": "/images/bg-claude-code.png"
+  },
+  "extraContent": null
+}

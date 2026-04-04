@@ -1,0 +1,33 @@
+name: parallel-ux-dev
+version: 1.0.0
+description: >
+  Parallel UX/Dev workflow for the 4 frontend agents.
+  Each works on their specialization simultaneously.
+
+triggers:
+  - workflow: site-development-cycle.build
+  - manual: "*assign"
+
+agents:
+  - id: ux-alpha
+    name: Arjuna
+    role: UI components
+  - id: ux-beta
+    name: Nakula
+    role: Page layouts
+  - id: ux-gamma
+    name: Draupadi
+    role: Images + visual identity
+  - id: ux-delta
+    name: Kunti
+    role: Accessibility + CRO review
+
+execution:
+  mode: parallel
+  max_concurrent: 4
+
+collaboration:
+  - Arjuna creates components → Nakula uses them in layouts
+  - Draupadi creates images → Arjuna/Nakula integrate them
+  - Kunti reviews all → provides accessibility fixes
+  - All commit on separate branches → Bhima integrates

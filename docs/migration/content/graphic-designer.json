@@ -1,0 +1,37 @@
+{
+  "page": "/skills/graphic-designer",
+  "file": "src/pages/skills/graphic-designer.astro",
+  "template": "SkillPage",
+  "title": "Graphic Designer",
+  "description": "Design de thumbnails, social media, banners e apresentações com princípios CRAP e Gestalt.",
+  "ogTitle": "Graphic Designer | GrowthSales Open Source",
+  "ogDescription": "Design de thumbnails, social media, banners e apresentações com princípios CRAP e Gestalt.",
+  "h1": "Graphic Designer",
+  "h2s": ["Graphic Designer", "Principais recursos", "Como instalar", "Comece agora"],
+  "bodyTexts": {
+    "longDescription": [
+      "Graphic Designer é uma skill para Claude Code que aplica princípios profissionais de design na criação de thumbnails, social media, banners, apresentações e qualquer asset visual. Ela usa os princípios CRAP (Contraste, Repetição, Alinhamento, Proximidade) e leis de Gestalt para decisões fundamentadas.",
+      "A skill domina hierarquia visual, tipografia, teoria de cores e layout design. Cada peça criada segue regras de acessibilidade WCAG, harmonia cromática e legibilidade em diferentes tamanhos de tela. Nada é arbitrário — cada escolha de cor, fonte e espaçamento tem justificativa técnica.",
+      "Para manter brand consistency, a skill trabalha com paletas definidas, famílias tipográficas e elementos gráficos recorrentes. Ela também incorpora insights de neurociência visual e dados de engajamento para decisões que não são só bonitas, mas eficazes em reter atenção e comunicar mensagem."
+    ],
+    "ctaSubtext": "Explore o repositório, contribua com melhorias ou integre na sua operação."
+  },
+  "ctaTexts": { "primaryLabel": "Ver no GitHub", "secondaryLabel": "Voltar" },
+  "features": [
+    { "title": "Visual Hierarchy", "description": "Organização visual que guia o olho do espectador. Tamanho, cor, contraste e posição usados estrategicamente." },
+    { "title": "Typography", "description": "Seleção e combinação tipográfica com regras de peso, tamanho e espaçamento. Legibilidade em qualquer formato." },
+    { "title": "Color Theory", "description": "Paletas de cores baseadas em teoria cromática. Harmonia, contraste e acessibilidade WCAG aplicados automaticamente." },
+    { "title": "Layout Design", "description": "Layouts com grid system, alinhamento e espaçamento consistente. Princípios CRAP (Contraste, Repetição, Alinhamento, Proximidade)." },
+    { "title": "Brand Consistency", "description": "Manutenção de identidade visual com paleta, fontes e elementos gráficos consistentes entre peças." },
+    { "title": "Research-Backed", "description": "Decisões de design baseadas em pesquisa de Gestalt, neurociência visual e dados de engajamento." }
+  ],
+  "metadata": {
+    "category": "Skills",
+    "categoryColor": "skills",
+    "author": "@SynkraAI",
+    "authorUrl": "https://github.com/SynkraAI/aiox-squads",
+    "primaryLink": "https://github.com/SynkraAI/aiox-squads",
+    "bgImage": "/images/bg-designer.png"
+  },
+  "extraContent": { "type": "installation", "methods": ["Via AIOX (*download-squad social-media)", "Clone repo"] }
+}

@@ -1,0 +1,38 @@
+{
+  "page": "/learn/meta-ads-ai",
+  "file": "src/pages/learn/meta-ads-ai.astro",
+  "template": "SkillPage",
+  "title": "Meta Ads com IA",
+  "description": "Automação de campanhas Meta com agentes. Otimize criativos, copy e targeting automaticamente.",
+  "ogTitle": "Meta Ads com IA | GrowthSales Open Source",
+  "ogDescription": "Automação de campanhas Meta com agentes. Otimize criativos, copy e targeting automaticamente.",
+  "h1": "Meta Ads com IA",
+  "h2s": ["Meta Ads com IA", "Principais recursos", "Comece agora"],
+  "bodyTexts": {
+    "longDescription": [
+      "Aprenda a usar inteligência artificial para otimizar suas campanhas de Meta Ads (Facebook e Instagram). Este guia cobre desde a geração de criativos até análise avançada de métricas.",
+      "Com agentes de IA, você pode automatizar a criação de variações de anúncios, gerar copy persuasivo, e receber análises detalhadas de performance com recomendações práticas.",
+      "O conteúdo inclui frameworks testados em campanhas reais, integração com a Meta API para automação, e técnicas de targeting baseadas em dados."
+    ],
+    "ctaSubtext": "Explore o repositório, contribua com melhorias ou integre na sua operação."
+  },
+  "ctaTexts": { "primaryLabel": "Meta Marketing API", "secondaryLabel": "Voltar" },
+  "features": [
+    { "title": "Otimização de Criativos", "description": "Use IA para gerar variações de criativos, testar hooks e identificar padrões vencedores." },
+    { "title": "Copywriting Automatizado", "description": "Geração de headlines, descrições e CTAs otimizados para cada etapa do funil." },
+    { "title": "Análise de Métricas", "description": "Interpretação automática de resultados de campanhas com recomendações acionáveis." },
+    { "title": "Targeting Inteligente", "description": "Sugestões de públicos baseadas em análise de dados e padrões de comportamento." },
+    { "title": "Estrutura de Campanhas", "description": "Templates e frameworks para organizar campanhas de forma escalável e mensurável." },
+    { "title": "Integração com Meta API", "description": "Automação de tarefas repetitivas via API para escalar operações de mídia paga." }
+  ],
+  "metadata": {
+    "category": "Integrações",
+    "categoryColor": "integracoes",
+    "author": "@joaoguirunas",
+    "authorUrl": "https://github.com/joaoguirunas",
+    "primaryLink": "https://developers.facebook.com/docs/marketing-apis/",
+    "isExternal": true,
+    "bgImage": "/images/bg-meta.png"
+  },
+  "extraContent": null
+}

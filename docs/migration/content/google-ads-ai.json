@@ -1,0 +1,38 @@
+{
+  "page": "/learn/google-ads-ai",
+  "file": "src/pages/learn/google-ads-ai.astro",
+  "template": "SkillPage",
+  "title": "Google Ads com IA",
+  "description": "Otimização de Google Ads com IA. Performance Max, Search e Display gerenciados por agentes.",
+  "ogTitle": "Google Ads com IA | GrowthSales Open Source",
+  "ogDescription": "Otimização de Google Ads com IA. Performance Max, Search e Display gerenciados por agentes.",
+  "h1": "Google Ads com IA",
+  "h2s": ["Google Ads com IA", "Principais recursos", "Comece agora"],
+  "bodyTexts": {
+    "longDescription": [
+      "Domine Google Ads com inteligência artificial. Este guia ensina como usar agentes para otimizar campanhas Search, Display, Video e Performance Max.",
+      "Aprenda técnicas avançadas de geração de keywords, criação de anúncios responsivos, análise de Quality Score, e automação via Google Ads Scripts.",
+      "O conteúdo inclui estratégias de bidding, estruturação de contas, e integração com ferramentas de IA para análise de dados e tomada de decisão."
+    ],
+    "ctaSubtext": "Explore o repositório, contribua com melhorias ou integre na sua operação."
+  },
+  "ctaTexts": { "primaryLabel": "Google Ads API", "secondaryLabel": "Voltar" },
+  "features": [
+    { "title": "Performance Max", "description": "Otimização de campanhas PMax com IA para maximizar conversões em todos os canais Google." },
+    { "title": "Search Campaigns", "description": "Geração e otimização de keywords, anúncios responsivos e extensões com IA." },
+    { "title": "Display & Video", "description": "Criação de assets visuais e estratégias de remarketing otimizadas por agentes." },
+    { "title": "Análise de Quality Score", "description": "Diagnóstico e melhoria de Quality Score com recomendações baseadas em dados." },
+    { "title": "Bidding Strategies", "description": "Seleção e configuração de estratégias de lance baseadas em objetivos de negócio." },
+    { "title": "Scripts & Automação", "description": "Google Ads Scripts gerados por IA para automação de tarefas e relatórios." }
+  ],
+  "metadata": {
+    "category": "Integrações",
+    "categoryColor": "integracoes",
+    "author": "@joaoguirunas",
+    "authorUrl": "https://github.com/joaoguirunas",
+    "primaryLink": "https://developers.google.com/google-ads/api/docs/start",
+    "isExternal": true,
+    "bgImage": "/images/bg-google.png"
+  },
+  "extraContent": null
+}

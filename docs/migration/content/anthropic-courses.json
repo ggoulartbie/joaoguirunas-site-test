@@ -1,0 +1,37 @@
+{
+  "page": "/learn/anthropic-courses",
+  "file": "src/pages/learn/anthropic-courses.astro",
+  "template": "SkillPage",
+  "title": "Cursos Anthropic",
+  "description": "Curadoria dos 13 cursos gratuitos da Anthropic. Aprenda a construir com Claude.",
+  "ogTitle": "Cursos Anthropic | GrowthSales Open Source",
+  "ogDescription": "Curadoria dos 13 cursos gratuitos da Anthropic. Aprenda a construir com Claude.",
+  "h1": "Cursos Anthropic",
+  "h2s": ["Cursos Anthropic", "Principais recursos", "Comece agora"],
+  "bodyTexts": {
+    "longDescription": [
+      "Curadoria completa dos 13 cursos gratuitos da Anthropic para aprender a construir com Claude. De prompt engineering básico até sistemas de agentes complexos.",
+      "Os cursos cobrem fundamentos de LLMs, técnicas avançadas de prompting, integração de ferramentas, RAG, processamento multimodal, e boas práticas de segurança.",
+      "Todo o conteúdo é oficial da Anthropic e atualizado regularmente. Ideal para desenvolvedores e profissionais que querem dominar o ecossistema Claude."
+    ],
+    "ctaSubtext": "Explore o repositório, contribua com melhorias ou integre na sua operação."
+  },
+  "ctaTexts": { "primaryLabel": "Ver Cursos no GitHub", "secondaryLabel": "Voltar" },
+  "features": [
+    { "title": "Prompt Engineering", "description": "Fundamentos e técnicas avançadas de construção de prompts efetivos para Claude." },
+    { "title": "Tool Use", "description": "Como integrar Claude com ferramentas externas e APIs para expandir capacidades." },
+    { "title": "Agentic Workflows", "description": "Construção de sistemas de agentes autônomos que executam tarefas complexas." },
+    { "title": "RAG & Embeddings", "description": "Retrieval Augmented Generation e uso de embeddings para contexto dinâmico." },
+    { "title": "Multimodal", "description": "Processamento de imagens, PDFs e outros formatos além de texto." },
+    { "title": "Safety & Guidelines", "description": "Boas práticas de segurança, alinhamento e uso responsável de IA." }
+  ],
+  "metadata": {
+    "category": "Aprendizado",
+    "categoryColor": "aprendizado",
+    "author": "Anthropic",
+    "authorUrl": "https://github.com/anthropics",
+    "primaryLink": "https://github.com/anthropics/courses",
+    "bgImage": "/images/bg-learn.png"
+  },
+  "extraContent": null
+}

@@ -61,12 +61,12 @@ const ogImage = '/images/mentoria-og.png';
 
 <BaseLayout title={title} description={description} ogImage={ogImage}>
   <!-- Hero Section - Enterprise Clean -->
-  <section id="hero" class="relative w-full min-h-[65vh] overflow-hidden" style="background: var(--bb-dark);">
+  <section id="hero" class="relative w-full min-h-[80vh] overflow-hidden" style="background: var(--bb-dark);">
     <!-- Background Image -->
     <img
       src="/images/mentoria-hero.png"
       alt="Mentoria Claude Code + AIOX"
-      class="w-full h-[65vh] object-cover"
+      class="w-full min-h-[80vh] object-cover"
       style="object-position: center 25%; transform: scaleX(-1);"
     />
 
@@ -75,21 +75,25 @@ const ogImage = '/images/mentoria-og.png';
     <div class="absolute inset-0 bg-gradient-to-t from-[#FF4400]/3 via-transparent to-transparent"></div>
 
     <!-- Content -->
-    <div class="absolute inset-0 flex flex-col justify-end" style="padding: var(--space-6) var(--space-6) var(--space-10);">
+    <div class="absolute inset-0 flex flex-col justify-end" style="padding: var(--space-6) var(--space-6) var(--space-12);">
       <div class="mx-auto max-w-6xl w-full">
-        <!-- Badge with Orange Accent (Clean) -->
-        <div class="inline-flex items-center gap-2 backdrop-blur-sm border"
-             style="background: var(--bb-surface); border-color: #FF4400; padding: var(--space-2) var(--space-4); margin-bottom: var(--space-4);">
-          <span class="relative inline-flex h-2 w-2 rounded-full" style="background: #FF4400;"></span>
-          <span style="color: #FF4400; font-family: var(--font-bb-mono); font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.12em; font-weight: 600;">Turmas Limitadas</span>
+        <!-- Badge de Urgência com Animação -->
+        <div class="inline-flex items-center gap-2 backdrop-blur-sm border-2 animate-pulse"
+             style="background: linear-gradient(135deg, rgba(255, 68, 0, 0.15) 0%, rgba(255, 87, 34, 0.15) 100%); border-color: #FF4400; padding: var(--space-3) var(--space-5); margin-bottom: var(--space-4); box-shadow: 0 4px 20px rgba(255, 68, 0, 0.3), 0 0 40px rgba(255, 68, 0, 0.2);">
+          <span class="relative inline-flex h-3 w-3">
+            <span class="animate-ping absolute inline-flex h-full w-full rounded-full opacity-75" style="background: #FF4400;"></span>
+            <span class="relative inline-flex rounded-full h-3 w-3" style="background: #FF4400;"></span>
+          </span>
+          <span style="color: #FF4400; font-family: var(--font-bb-mono); font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.12em; font-weight: 700; text-shadow: 0 0 10px rgba(255, 68, 0, 0.5);">⚡ Restam somente 4 vagas</span>
         </div>
 
         <!-- Headline com tipografia Display (Clean) -->
-        <h1 style="font-family: var(--font-bb-display); font-size: clamp(1.75rem, 5vw, 3.5rem); font-weight: 800; color: var(--bb-cream); max-width: 56rem; line-height: 1.1; letter-spacing: -0.02em; text-shadow: 0 2px 8px rgba(0, 0, 0, 0.6); margin-bottom: var(--space-5);">
-          Tenha uma Equipe de Agentes de IA <span style="color: #FF4400;">Trabalhando Para Você</span>
+        <h1 style="font-family: var(--font-bb-display); font-size: clamp(1.5rem, 4.5vw, 2.75rem); font-weight: 800; color: var(--bb-cream); max-width: 56rem; line-height: 1.2; letter-spacing: -0.02em; text-shadow: 0 2px 8px rgba(0, 0, 0, 0.6); margin-bottom: var(--space-4);">
+          Tenha uma Equipe de Agentes de IA<br/>
+          <span style="color: #FF4400;">Trabalhando Para Você 24/7</span>
         </h1>
 
-        <p style="font-family: var(--font-bb-sans); font-size: clamp(0.95rem, 2vw, 1.15rem); color: var(--bb-cream-alt); max-width: 48rem; line-height: 1.6; text-shadow: 0 1px 4px rgba(0, 0, 0, 0.5); margin-bottom: var(--space-8); opacity: 0.92;">
+        <p style="font-family: var(--font-bb-sans); font-size: clamp(0.9rem, 1.8vw, 1.05rem); color: var(--bb-cream-alt); max-width: 48rem; line-height: 1.65; text-shadow: 0 1px 4px rgba(0, 0, 0, 0.5); margin-bottom: var(--space-6); opacity: 0.92;">
           Aprenda a criar, configurar e orquestrar agentes autônomos que executam tarefas complexas para você — da escrita de código à criação de conteúdo. <strong style="color: var(--bb-warm-white);">Mentoria intensiva e prática.</strong>
         </p>
 
@@ -116,7 +120,7 @@ const ogImage = '/images/mentoria-og.png';
         </div>
 
         <!-- Microcopy com Geist Mono (Orange) -->
-        <p style="font-family: var(--font-bb-mono); font-size: 0.75rem; color: var(--bb-meta); text-transform: uppercase; letter-spacing: 0.1em; text-shadow: 0 1px 4px rgba(0, 0, 0, 0.6); display: flex; align-items: center; gap: 0.5rem;">
+        <p style="font-family: var(--font-bb-mono); font-size: 0.7rem; color: var(--bb-meta); text-transform: uppercase; letter-spacing: 0.1em; text-shadow: 0 1px 4px rgba(0, 0, 0, 0.6); display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap;">
           <Icon name="clock" size="16" class="text-[#FF4400]" /> Máx. 12 pessoas <span style="opacity: 0.5;">|</span> <Icon name="check" size="16" class="text-[#FF4400]" /> Garantia 7 dias
         </p>
       </div>
@@ -258,6 +262,7 @@ const ogImage = '/images/mentoria-og.png';
             </div>
           </div>
           <h3 class="text-base sm:text-lg font-bold text-white mb-1.5 sm:mb-2 leading-tight">Encontro Presencial — Florianópolis</h3>
+          <p class="text-xs sm:text-sm text-[#FF4400] font-semibold mb-1.5 leading-snug" style="font-family: 'Geist Mono', monospace;">Sábado, 2 de Maio</p>
           <p class="text-xs sm:text-sm text-white/50 mb-3 leading-snug">Fundamentos, Mindset & Setup Completo (4h)</p>
 
           <div class="space-y-1.5 sm:space-y-2 mb-3 sm:mb-4">
@@ -302,6 +307,7 @@ const ogImage = '/images/mentoria-og.png';
             </div>
           </div>
           <h3 class="text-base sm:text-lg font-bold text-white mb-1.5 sm:mb-2 leading-tight">Online 1 — Dominando o Claude Code</h3>
+          <p class="text-xs sm:text-sm text-[#0EA5E9] font-semibold mb-1.5 leading-snug" style="font-family: 'Geist Mono', monospace;">Terça, 5 de Maio</p>
           <p class="text-xs sm:text-sm text-white/50 mb-3 leading-snug">Como Extrair o Máximo dos Agentes (2h)</p>
 
           <div class="space-y-1.5 sm:space-y-2 mb-3 sm:mb-4">
@@ -334,6 +340,7 @@ const ogImage = '/images/mentoria-og.png';
             </div>
           </div>
           <h3 class="text-lg font-bold text-white mb-2">Online 2 — Skills</h3>
+          <p class="text-xs sm:text-sm text-[#0EA5E9] font-semibold mb-1.5 leading-snug" style="font-family: 'Geist Mono', monospace;">Quinta, 7 de Maio</p>
           <p class="text-sm text-white/50 mb-3">Expanda os Poderes dos Seus Agentes (2h)</p>
 
           <div class="space-y-2 mb-4">
@@ -373,6 +380,7 @@ const ogImage = '/images/mentoria-og.png';
             </div>
           </div>
           <h3 class="text-lg font-bold text-white mb-2">Online 3 — MCP Servers</h3>
+          <p class="text-xs sm:text-sm text-[#0EA5E9] font-semibold mb-1.5 leading-snug" style="font-family: 'Geist Mono', monospace;">Terça, 12 de Maio</p>
           <p class="text-sm text-white/50 mb-3">Integre Seus Agentes com o Mundo (2h)</p>
 
           <div class="space-y-2 mb-4">
@@ -405,6 +413,7 @@ const ogImage = '/images/mentoria-og.png';
             </div>
           </div>
           <h3 class="text-lg font-bold text-white mb-2">Online 4 — Framework AIOX</h3>
+          <p class="text-xs sm:text-sm text-[#0EA5E9] font-semibold mb-1.5 leading-snug" style="font-family: 'Geist Mono', monospace;">Quinta, 14 de Maio</p>
           <p class="text-sm text-white/50 mb-3">O Sistema que Orquestra Times de IA (2h)</p>
 
           <div class="space-y-2 mb-4">
@@ -437,6 +446,7 @@ const ogImage = '/images/mentoria-og.png';
             </div>
           </div>
           <h3 class="text-lg font-bold text-white mb-2">Online 5 — Squads Personalizadas</h3>
+          <p class="text-xs sm:text-sm text-[#0EA5E9] font-semibold mb-1.5 leading-snug" style="font-family: 'Geist Mono', monospace;">Terça, 19 de Maio</p>
           <p class="text-sm text-white/50 mb-3">Crie Agentes Para o SEU Negócio (2h)</p>
 
           <div class="space-y-2 mb-4">
@@ -469,6 +479,7 @@ const ogImage = '/images/mentoria-og.png';
             </div>
           </div>
           <h3 class="text-lg font-bold text-white mb-2">Online 6 — Integrações & Automações</h3>
+          <p class="text-xs sm:text-sm text-[#0EA5E9] font-semibold mb-1.5 leading-snug" style="font-family: 'Geist Mono', monospace;">Quinta, 21 de Maio</p>
           <p class="text-sm text-white/50 mb-3">Leve Para o Próximo Nível (2h)</p>
 
           <div class="space-y-2 mb-4">
@@ -497,21 +508,25 @@ const ogImage = '/images/mentoria-og.png';
               <span class="text-[#FF4400] font-bold text-xl sm:text-2xl" style="font-family: var(--font-bb-mono);">08</span>
             </div>
             <div class="inline-flex items-center border border-[#FF4400]/30 bg-[#FF4400]/20 text-[#FF4400] px-2 py-0.5">
-              <span style="font-family: 'Geist Mono', monospace; font-size: 0.55rem; text-transform: uppercase; letter-spacing: 0.10em; font-weight: 600;">Final</span>
+              <span style="font-family: 'Geist Mono', monospace; font-size: 0.55rem; text-transform: uppercase; letter-spacing: 0.10em; font-weight: 600;">Presencial</span>
             </div>
           </div>
           <h3 class="text-lg font-bold text-white mb-2">Encontro Final — Apresentações</h3>
-          <p class="text-sm text-white/50 mb-3">Mostre o Que Você Construiu (2-3h)</p>
+          <p class="text-xs sm:text-sm text-[#FF4400] font-semibold mb-1.5 leading-snug" style="font-family: 'Geist Mono', monospace;">Sábado, 30 de Maio</p>
+          <p class="text-sm text-white/50 mb-3">Mostre o Que Você Construiu (2-3h) • Opcional • Presencial + Transmissão ao Vivo</p>
 
           <div class="space-y-2 mb-4">
             <div class="text-xs text-white/40">
-              Cada participante apresenta sua squad
+              5 participantes selecionados apresentam seus projetos ou o que seus squads conseguiram produzir
             </div>
             <div class="text-xs text-white/40">
-              Feedback coletivo
+              Evento opcional e presencial em Florianópolis
             </div>
             <div class="text-xs text-white/40">
-              Certificação
+              Transmissão ao vivo para quem não puder comparecer presencialmente
+            </div>
+            <div class="text-xs text-white/40">
+              Feedback coletivo e certificação
             </div>
             <div class="text-xs text-white/40">
               Próximos passos e comunidade vitalícia
@@ -970,7 +985,7 @@ const ogImage = '/images/mentoria-og.png';
               <img
                 src="/images/joao-guirunas-profile.jpg"
                 alt="João Guirunas - Fundador GrowthSales.ai"
-                class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-500"
+                class="w-full h-full object-cover object-top grayscale group-hover:grayscale-0 transition-all duration-500"
               />
             </div>
             <!-- Badge Online -->
@@ -1072,6 +1087,145 @@ const ogImage = '/images/mentoria-og.png';
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
           </svg>
         </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Seção Investimento -->
+  <section id="investimento" class="py-16 sm:py-24 bg-[#0C0C12]">
+    <div class="mx-auto max-w-7xl px-5 sm:px-6 lg:px-8">
+      <!-- Section Header -->
+      <div class="text-center mb-10 sm:mb-16">
+        <div class="inline-flex items-center gap-2 border border-[#FF4400]/30 bg-[#FF4400]/10 px-3 sm:px-4 py-1.5 mb-4 sm:mb-6">
+          <span class="text-[#FF4400] text-[0.55rem] sm:text-[0.65rem]" style="font-family: 'Geist Mono', monospace; text-transform: uppercase; letter-spacing: 0.12em; font-weight: 600;">Investimento</span>
+        </div>
+        <h2 class="text-2xl font-bold text-white sm:text-4xl lg:text-5xl mb-4 sm:mb-5 leading-tight sm:leading-tight">
+          Quanto Custa Ter Sua <span class="text-[#FF4400]">Equipe de Agentes IA</span>?
+        </h2>
+        <div class="mx-auto w-12 sm:w-16 accent-line mb-4 sm:mb-6"></div>
+        <p class="text-sm sm:text-lg text-white/70 max-w-3xl mx-auto leading-relaxed">
+          Compare o custo de contratar equipes tradicionais vs. ter agentes IA trabalhando para você
+        </p>
+      </div>
+
+      <!-- Comparativo Brutal - 2 Colunas -->
+      <div class="mb-12 sm:mb-16">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-0 max-w-6xl mx-auto overflow-hidden" style="border-radius: 12px;">
+
+          <!-- SEM AIOX (Vermelho/Escuro) -->
+          <div class="p-12 sm:p-16 lg:p-20 text-center bg-gradient-to-br from-red-950/60 via-red-900/40 to-red-950/60 border-2 border-red-500/30">
+            <div class="flex items-baseline justify-center gap-3 mb-6">
+              <span class="text-red-400 text-[10rem] sm:text-[12rem] lg:text-[16rem] font-black leading-none" style="font-family: var(--font-mono);">1</span>
+            </div>
+            <p class="text-white/70 text-sm sm:text-base uppercase tracking-wider" style="font-family: 'Geist Mono', monospace;">
+              Sem AIOX
+            </p>
+            <p class="text-white/50 text-xs sm:text-sm mt-2">
+              1 dev fazendo tudo sozinho
+            </p>
+          </div>
+
+          <!-- COM AIOX (Verde/Escuro) -->
+          <div class="p-12 sm:p-16 lg:p-20 text-center bg-gradient-to-br from-emerald-950/60 via-emerald-900/40 to-emerald-950/60 border-2 border-emerald-500/30">
+            <div class="flex items-baseline justify-center gap-3 mb-6">
+              <span class="text-emerald-400 text-[10rem] sm:text-[12rem] lg:text-[16rem] font-black leading-none" style="font-family: var(--font-mono);">8</span>
+            </div>
+            <p class="text-white/70 text-sm sm:text-base uppercase tracking-wider" style="font-family: 'Geist Mono', monospace;">
+              Com AIOX
+            </p>
+            <p class="text-white/50 text-xs sm:text-sm mt-2">
+              Equipe de 8 agentes especializados
+            </p>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Card de Investimento AIOX -->
+      <div class="glass-card p-8 sm:p-12 lg:p-16 border-[#FF4400]/30 bg-[#FF4400]/[0.02] text-center max-w-4xl mx-auto">
+        <!-- Valor Principal -->
+        <div class="mb-8 sm:mb-10">
+          <div class="flex items-baseline justify-center gap-2 mb-6">
+            <span class="text-[#FF4400]/80 text-3xl sm:text-4xl font-bold">R$</span>
+            <span class="text-[#FF4400] text-6xl sm:text-7xl lg:text-8xl font-bold" style="font-family: var(--font-mono);">8.700</span>
+          </div>
+
+          <!-- Parcelamento -->
+          <div class="inline-flex items-center gap-2 border border-[#FF4400]/20 bg-[#FF4400]/5 px-4 sm:px-6 py-2 sm:py-3">
+            <span class="text-white/80 text-sm sm:text-base">ou em até</span>
+            <span class="text-[#FF4400] text-lg sm:text-xl font-bold" style="font-family: var(--font-mono);">12x</span>
+            <span class="text-white/80 text-sm sm:text-base">no cartão</span>
+          </div>
+        </div>
+
+        <!-- O Que Está Incluso -->
+        <div class="border-t border-white/10 pt-8 sm:pt-10">
+          <h3 class="text-lg sm:text-xl font-bold text-white mb-6 text-center">O Que Está Incluso:</h3>
+          <div class="flex flex-col gap-3 text-left max-w-2xl mx-auto">
+            <div class="flex items-start gap-3">
+              <Icon name="check" size="16" class="text-[#FF4400] mt-1 flex-shrink-0" />
+              <span class="text-white/70 text-sm sm:text-base">8 encontros (1 presencial + 6 online + 1 final)</span>
+            </div>
+            <div class="flex items-start gap-3">
+              <Icon name="check" size="16" class="text-[#FF4400] mt-1 flex-shrink-0" />
+              <span class="text-white/70 text-sm sm:text-base">Desbloqueio mental com Claudia</span>
+            </div>
+            <div class="flex items-start gap-3">
+              <Icon name="check" size="16" class="text-[#FF4400] mt-1 flex-shrink-0" />
+              <span class="text-white/70 text-sm sm:text-base">Framework AIOX completo</span>
+            </div>
+            <div class="flex items-start gap-3">
+              <Icon name="check" size="16" class="text-[#FF4400] mt-1 flex-shrink-0" />
+              <span class="text-white/70 text-sm sm:text-base">Squad personalizada</span>
+            </div>
+            <div class="flex items-start gap-3">
+              <Icon name="check" size="16" class="text-[#FF4400] mt-1 flex-shrink-0" />
+              <span class="text-white/70 text-sm sm:text-base">Grupo exclusivo vitalício</span>
+            </div>
+            <div class="flex items-start gap-3">
+              <Icon name="check" size="16" class="text-[#FF4400] mt-1 flex-shrink-0" />
+              <span class="text-white/70 text-sm sm:text-base">Gravações das aulas</span>
+            </div>
+            <div class="flex items-start gap-3">
+              <Icon name="check" size="16" class="text-[#FF4400] mt-1 flex-shrink-0" />
+              <span class="text-white/70 text-sm sm:text-base">Atualizações futuras</span>
+            </div>
+            <div class="flex items-start gap-3">
+              <Icon name="check" size="16" class="text-[#FF4400] mt-1 flex-shrink-0" />
+              <span class="text-white/70 text-sm sm:text-base">Certificado de conclusão</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- CTA -->
+        <div class="mt-10 sm:mt-12">
+          <a
+            href="https://revos.growthsales.ai/f/a11d7cc4-17b8-400e-94e4-0f27ca47e9a4"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="btn-primary inline-flex items-center justify-center gap-3 bg-[#FF4400] px-10 sm:px-12 py-5 sm:py-6 text-base sm:text-lg font-bold text-white shadow-2xl shadow-[#FF4400]/40 hover:bg-[#FF5722] hover:shadow-[#FF4400]/60 transition-all transform hover:scale-105 w-full sm:w-auto"
+            style="font-family: 'Geist Mono', monospace; text-transform: uppercase; letter-spacing: 0.08em;"
+          >
+            <span>Garantir Minha Vaga</span>
+            <svg class="h-5 w-5 sm:h-6 sm:w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"/>
+            </svg>
+          </a>
+          <p class="mt-4 text-xs sm:text-sm text-white/50">
+            <Icon name="lock" size="16" class="inline" /> Pagamento 100% seguro | <Icon name="shield" size="16" class="inline" /> Garantia 7 dias
+          </p>
+        </div>
+      </div>
+
+      <!-- Social Proof / Garantia -->
+      <div class="mt-10 sm:mt-12 text-center">
+        <div class="inline-flex items-center gap-2 text-white/60 text-xs sm:text-sm flex-wrap justify-center">
+          <Icon name="users" size="16" class="text-[#FF4400]" />
+          <span>Turmas limitadas a 12 pessoas</span>
+          <span class="text-white/30">|</span>
+          <Icon name="zap" size="16" class="text-[#FF4400]" />
+          <span>Apenas 8 vagas disponíveis</span>
+        </div>
       </div>
     </div>
   </section>

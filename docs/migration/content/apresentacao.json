@@ -1,0 +1,171 @@
+{
+  "page": "/mentoria/apresentacao",
+  "file": "src/pages/mentoria/apresentacao.astro",
+  "title": "Apresentação: Mentoria Claude Code + AIOX",
+  "description": "Programa completo da Mentoria Claude Code + AIOX - Tenha uma equipe de agentes de IA trabalhando para você",
+  "ogTitle": "Apresentação: Mentoria Claude Code + AIOX | GrowthSales Open Source",
+  "ogDescription": "Programa completo da Mentoria Claude Code + AIOX - Tenha uma equipe de agentes de IA trabalhando para você",
+  "h1": "Mentoria Claude Code + AIOX",
+  "h2s": [
+    "Visão Geral",
+    "Encontro Presencial",
+    "Online 1: Dominando o Claude Code",
+    "Online 2: Skills",
+    "Online 3: MCP Servers",
+    "Online 4: Framework AIOX",
+    "Online 5: Squads Personalizadas",
+    "Online 6: Integrações & Automações",
+    "Encontro Final",
+    "Para Quem É?",
+    "O Que Você Terá ao Final"
+  ],
+  "slides": [
+    {
+      "number": 1,
+      "title": "Cover",
+      "content": {
+        "badge": "TURMAS LIMITADAS",
+        "headline": "Mentoria Claude Code + AIOX",
+        "subtitle": "Tenha uma equipe de agentes de IA trabalhando para você",
+        "stats": [
+          { "value": "8", "label": "Encontros" },
+          { "value": "~19h", "label": "Totais" },
+          { "value": "12", "label": "Max Alunos" }
+        ]
+      }
+    },
+    {
+      "number": 2,
+      "title": "Visão Geral",
+      "content": {
+        "intro": "Programa intensivo e prático que capacita profissionais e empresários a dominar agentes autônomos de IA.",
+        "deliverables": [
+          "Ambiente configurado com agentes funcionando",
+          "Squad personalizada para suas necessidades",
+          "Domínio técnico do Claude Code e AIOX",
+          "Autonomia completa para criar agentes"
+        ]
+      }
+    },
+    {
+      "number": 3,
+      "title": "Encontro Presencial",
+      "content": {
+        "badge": "Presencial · 4h",
+        "subtitle": "Fundamentos, Mindset & Setup",
+        "parts": [
+          { "duration": "1h", "title": "Fundamentos Conceituais", "items": ["O que é Claude Code e AIOX", "Terminal para não-técnicos", "Visão: de chatbot a equipe autônoma"] },
+          { "duration": "1h", "title": "Desbloqueio Mental — Claudia Guirunas", "subtitle": "Psicanalista e Sócia da GrowthSales", "items": ["Técnicas de respiração e desbloqueio", "Superar a resistência da tela preta", "Mindset para delegar a agentes"] },
+          { "duration": "2h", "title": "Workshop Prático", "items": ["Configuração completa dos computadores", "Instalação do Claude Code", "Setup de ferramentas essenciais"] }
+        ],
+        "deliverable": "Computador 100% configurado + Mindset desbloqueado"
+      }
+    },
+    {
+      "number": 4,
+      "title": "Online 1: Dominando o Claude Code",
+      "content": {
+        "badge": "Online · 2h",
+        "topics": ["Navegação em projetos complexos", "Leitura e edição de arquivos", "Execução de comandos bash", "Integração Git/GitHub", "Gestão de contexto e memória", "Modelo de segurança", "Estrutura de prompts eficientes"],
+        "deliverable": "Domínio completo do Claude Code"
+      }
+    },
+    {
+      "number": 5,
+      "title": "Online 2: Skills",
+      "content": {
+        "badge": "Online · 2h",
+        "intro": "Compreenda o sistema de skills, aprenda a descobrir, instalar e usar skills essenciais.",
+        "skills": ["/pdf", "/pptx", "/docx", "/graphic-designer", "/copywriting", "/social-media-content"],
+        "format": "1h de conteúdo + 1h de bate-papo e auxílio",
+        "deliverable": "Skills instaladas e funcionando"
+      }
+    },
+    {
+      "number": 6,
+      "title": "Online 3: MCP Servers",
+      "content": {
+        "badge": "Online · 2h",
+        "intro": "Model Context Protocol - Integração com ferramentas externas e APIs",
+        "mcps": [
+          { "name": "Playwright", "description": "Automação de browser e screenshots" },
+          { "name": "Context7", "description": "Documentação de bibliotecas" },
+          { "name": "Apify", "description": "Web scraping e extração de dados" }
+        ],
+        "deliverable": "MCPs instalados e integrados"
+      }
+    },
+    {
+      "number": 7,
+      "title": "Online 4: Framework AIOX",
+      "content": {
+        "badge": "Online · 2h",
+        "topics": ["Estrutura e conceitos fundamentais", "Constitution e princípios", "Sistema de camadas (L1-L4)"],
+        "agents": ["@dev", "@qa", "@pm", "@po", "@sm", "@architect", "@devops"],
+        "workflows": ["Story Development Cycle (SDC)", "QA Loop", "Spec Pipeline"],
+        "deliverable": "Compreensão completa do framework AIOX"
+      }
+    },
+    {
+      "number": 8,
+      "title": "Online 5: Squads Personalizadas",
+      "content": {
+        "badge": "Online · 2h",
+        "intro": "Crie agentes customizados para suas necessidades específicas",
+        "steps": [
+          { "title": "Anatomia de um Agente", "detail": "Estrutura de arquivos (YAML/Markdown), Persona, greeting, commands" },
+          { "title": "Criação de Agentes", "detail": "Definição de escopo, Escrita de prompts de sistema" },
+          { "title": "Workshop Prático", "detail": "Criar agente para seu contexto, Montar squad personalizada" }
+        ],
+        "deliverable": "Primeira versão da squad personalizada"
+      }
+    },
+    {
+      "number": 9,
+      "title": "Online 6: Integrações & Automações",
+      "content": {
+        "badge": "Online · 2h",
+        "integracoes": ["APIs externas", "Webhooks e triggers", "Bancos de dados", "Serviços cloud"],
+        "automacoes": ["Workflows complexos multi-agente", "Scheduling de tarefas", "Casos de uso avançados"],
+        "note": "Preparação do projeto final com orientações individuais",
+        "deliverable": "Integrações funcionando e projeto final"
+      }
+    },
+    {
+      "number": 10,
+      "title": "Encontro Final",
+      "content": {
+        "badge": "Presencial ou Online · 2-3h",
+        "subtitle": "Apresentações & Encerramento",
+        "items": [
+          { "title": "Apresentações", "description": "Cada participante apresenta sua squad personalizada e resultados alcançados" },
+          { "title": "Feedback", "description": "Feedback coletivo, reconhecimento das conquistas, melhores práticas" },
+          { "title": "Certificação", "description": "Certificado de conclusão e acesso vitalício à comunidade" }
+        ],
+        "deliverable": "Certificado + Comunidade vitalícia"
+      }
+    },
+    {
+      "number": 11,
+      "title": "Para Quem É?",
+      "content": {
+        "alert": "Esta mentoria NÃO é exclusiva para desenvolvedores. É para qualquer pessoa que queira aumentar eficiência com agentes autônomos.",
+        "personas": ["Empresários & Gestores", "Empreendedores", "Marketing & Design", "Consultores", "Devs & Engenheiros", "PMs & Tech Leads"],
+        "requisitos": ["Mac/Windows/Linux (8GB RAM+)", "Claude Pro (US$ 20/mês)", "Inglês técnico básico"],
+        "note": "Não é necessário conhecimento prévio de terminal. Ensinamos tudo do zero!"
+      }
+    }
+  ],
+  "ctaTexts": {},
+  "hardcodedTexts": [
+    "TURMAS LIMITADAS (slide 1 badge)",
+    "Datas e durações dos encontros",
+    "Nomes dos MCPs (Playwright, Context7, Apify)",
+    "Skills listadas (/pdf, /pptx, etc.)",
+    "Agentes listados (@dev, @qa, etc.)",
+    "Requisitos técnicos (8GB RAM, Claude Pro US$ 20/mês)"
+  ],
+  "dependencies": {
+    "revealJs": "https://cdn.jsdelivr.net/npm/reveal.js@5.0.4"
+  }
+}

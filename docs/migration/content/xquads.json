@@ -1,0 +1,42 @@
+{
+  "page": "/squads/xquads",
+  "file": "src/pages/squads/xquads.astro",
+  "template": "SkillPage",
+  "title": "Xquads Squads",
+  "description": "12 squads especializadas com 96+ agentes prontos para uso. A maior coleção de squads AIOX da comunidade.",
+  "ogTitle": "Xquads Squads | GrowthSales Open Source",
+  "ogDescription": "12 squads especializadas com 96+ agentes prontos para uso. A maior coleção de squads AIOX da comunidade.",
+  "h1": "Xquads Squads",
+  "h2s": ["Xquads Squads", "Principais recursos", "@rafa.grandi", "Comece agora"],
+  "bodyTexts": {
+    "longDescription": [
+      "Xquads é a maior coleção de squads AIOX da comunidade, criada por @rafa.grandi — desenvolvedor e creator que construiu do zero 12 squads especializadas com mais de 96 agentes prontos para uso. As squads cobrem todas as áreas: Dev, QA, DevOps, PM, Design, Data, Security, Architecture, Analytics, Marketing, Content e Support.",
+      "Cada squad vem com agentes pré-configurados com personas, tasks e workflows definidos. Basta instalar e começar a trabalhar — sem necessidade de configuração manual. É o jeito mais rápido de escalar operações com agentes AIOX. Rafa é referência na comunidade AIOX e compartilha ativamente seu conhecimento nas redes.",
+      "O projeto é totalmente open source e compatível com qualquer instalação do AIOX Framework. A comunidade contribui ativamente com melhorias, novos agentes e novas squads. Se você quer ver o poder do AIOX em ação, Xquads é o melhor ponto de partida."
+    ],
+    "ctaSubtext": "Explore o repositório, contribua com melhorias ou integre na sua operação."
+  },
+  "ctaTexts": { "primaryLabel": "Ver no GitHub", "secondaryLabel": "Voltar" },
+  "features": [
+    { "title": "12 Squads Especializadas", "description": "Dev, QA, DevOps, PM, Design, Data, Security, Architecture, Analytics, Marketing, Content e Support." },
+    { "title": "96+ Agentes", "description": "Mais de 96 agentes com personas definidas, cada um especializado em tarefas específicas do seu domínio." },
+    { "title": "Tasks Prontas", "description": "Workflows e tasks pré-configuradas para cada squad. Comece a trabalhar imediatamente sem setup." },
+    { "title": "Compatível AIOX", "description": "Totalmente compatível com o AIOX Framework. Instale e use com qualquer projeto AIOX existente." },
+    { "title": "Community-Driven", "description": "Criado pela comunidade AIOX. Contribuições abertas, evolução constante e feedback coletivo." },
+    { "title": "Open Source", "description": "Código aberto no GitHub. Clone, customize e contribua para expandir o ecossistema de squads AIOX." }
+  ],
+  "metadata": {
+    "category": "Squads",
+    "categoryColor": "squads",
+    "author": "@rafa.grandi",
+    "authorUrl": "https://www.instagram.com/rafa.grandi/",
+    "primaryLink": "https://github.com/ohmyjahh/xquads-squads",
+    "bgImage": "/images/bg-xquads.png"
+  },
+  "extraContent": {
+    "type": "authorBio",
+    "name": "@rafa.grandi",
+    "bio": "Desenvolvedor e creator que construiu do zero 12 squads especializadas com mais de 96 agentes.",
+    "links": { "instagram": "https://www.instagram.com/rafa.grandi/", "github": "https://github.com/ohmyjahh" }
+  }
+}

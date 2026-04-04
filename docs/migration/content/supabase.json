@@ -1,0 +1,37 @@
+{
+  "page": "/skills/supabase",
+  "file": "src/pages/skills/supabase.astro",
+  "template": "SkillPage",
+  "title": "Supabase",
+  "description": "Backend open source com PostgreSQL, Auth, Storage e Realtime para aplicações modernas.",
+  "ogTitle": "Supabase | GrowthSales Open Source",
+  "ogDescription": "Backend open source com PostgreSQL, Auth, Storage e Realtime para aplicações modernas.",
+  "h1": "Supabase",
+  "h2s": ["Supabase", "Principais recursos", "Supabase CLI no Terminal", "Comece agora"],
+  "bodyTexts": {
+    "longDescription": [
+      "Supabase é a alternativa open source ao Firebase, oferecendo um backend completo com PostgreSQL, autenticação, storage e realtime. Na nossa stack, é o backbone de dados para dashboards, APIs e aplicações que requerem persistência.",
+      "Row Level Security (RLS) permite controle granular de acesso: cada usuário vê apenas seus dados, sem lógica extra no backend. Auth integrado suporta 20+ providers OAuth, magic links e SSO enterprise.",
+      "Com Edge Functions rodando em Deno, é possível criar APIs serverless com latência mínima. Realtime via WebSocket entrega mudanças no banco instantaneamente ao frontend."
+    ],
+    "ctaSubtext": "Explore o repositório, contribua com melhorias ou integre na sua operação."
+  },
+  "ctaTexts": { "primaryLabel": "Ver no GitHub", "secondaryLabel": "Voltar" },
+  "features": [
+    { "title": "PostgreSQL", "description": "Database PostgreSQL completo com extensões, triggers e stored procedures. Performance enterprise." },
+    { "title": "Row Level Security", "description": "Políticas de segurança a nível de linha para controle granular de acesso." },
+    { "title": "Auth", "description": "Autenticação pronta com OAuth, magic links, email/password e SSO. 20+ providers sociais." },
+    { "title": "Storage", "description": "Armazenamento de arquivos com CDN global. Upload e transformação de imagens integrados." },
+    { "title": "Realtime", "description": "Subscriptions em tempo real via WebSocket. Mudanças no banco instantaneamente no frontend." },
+    { "title": "Edge Functions", "description": "Serverless functions com Deno runtime no edge. APIs customizadas com latência mínima." }
+  ],
+  "metadata": {
+    "category": "Integrações",
+    "categoryColor": "integracoes",
+    "author": "Supabase",
+    "authorUrl": "https://github.com/supabase",
+    "primaryLink": "https://github.com/supabase/supabase",
+    "bgImage": "/images/bg-supabase.png"
+  },
+  "extraContent": { "type": "tutorial", "title": "Supabase CLI no Terminal", "steps": 6 }
+}

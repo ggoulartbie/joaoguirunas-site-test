@@ -1,0 +1,70 @@
+name: site-development-cycle
+version: 1.0.0
+description: >
+  Complete 11-step site/LP development workflow.
+  Hanuman orchestrates via Maestri CLI.
+
+triggers:
+  - manual: "*orchestrate"
+  - agent: chief
+
+phases:
+  - name: research
+    parallel: true
+    steps:
+      - agent: seo-analyst
+        command: "*keywords"
+        output: seo_research
+      - agent: ux-delta
+        command: "*persona"
+        output: ux_research
+
+  - name: content
+    parallel: true
+    depends_on: [research]
+    steps:
+      - agent: copywriter
+        command: "*sections"
+        input: [seo_research, ux_research]
+        output: section_copy
+      - agent: ux-gamma
+        command: "*create-image"
+        output: visual_assets
+
+  - name: build
+    parallel: true
+    depends_on: [content]
+    steps:
+      - agent: ux-alpha
+        command: "*design-component"
+        input: [section_copy, visual_assets]
+        output: components
+      - agent: ux-beta
+        command: "*layout"
+        input: [components, section_copy, visual_assets]
+        output: pages
+
+  - name: review
+    depends_on: [build]
+    steps:
+      - agent: ux-delta
+        command: "*audit-a11y"
+        output: a11y_report
+
+  - name: integrate
+    agent: dev-devops
+    depends_on: [review]
+    command: "*integrate"
+    output: integrated_site
+
+  - name: final-audit
+    agent: seo-analyst
+    depends_on: [integrate]
+    command: "*audit"
+    output: seo_final
+
+  - name: deploy
+    agent: dev-devops
+    depends_on: [final-audit]
+    command: "*deploy"
+    output: production_url

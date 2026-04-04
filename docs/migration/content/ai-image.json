@@ -1,0 +1,37 @@
+{
+  "page": "/skills/ai-image",
+  "file": "src/pages/skills/ai-image.astro",
+  "template": "SkillPage",
+  "title": "AI Image Generation",
+  "description": "Gere imagens com IA usando 50+ modelos. FLUX, Gemini, Grok, Seedream e mais via inference.sh CLI.",
+  "ogTitle": "AI Image Generation | GrowthSales Open Source",
+  "ogDescription": "Gere imagens com IA usando 50+ modelos. FLUX, Gemini, Grok, Seedream e mais via inference.sh CLI.",
+  "h1": "AI Image Generation",
+  "h2s": ["AI Image Generation", "Principais recursos", "Como instalar", "Comece agora"],
+  "bodyTexts": {
+    "longDescription": [
+      "AI Image Generation é uma skill que conecta o Claude Code ao inference.sh, dando acesso a mais de 50 modelos de geração de imagem via CLI. Crie imagens com FLUX Pro, Gemini Imagen 3, Grok Vision, Seedream 3.0, Recraft V3 e muitos outros sem sair do terminal.",
+      "A skill oferece modos avançados como inpainting para edição cirúrgica de imagens, image-to-image para transformações de estilo, e suporte a LoRA para aplicar fine-tuning customizado. Cada modelo tem suas especialidades - FLUX para fotorealismo, Seedream para arte conceitual, Recraft para ilustrações vetoriais.",
+      "Para produção em escala, combine text rendering com upscaling para gerar assets de social media em alta resolução. A integração CLI permite automatizar pipelines de geração, processando dezenas de variações em batch direto do terminal."
+    ],
+    "ctaSubtext": "Explore o repositório, contribua com melhorias ou integre na sua operação."
+  },
+  "ctaTexts": { "primaryLabel": "Ver no GitHub", "secondaryLabel": "Voltar" },
+  "features": [
+    { "title": "Text-to-Image", "description": "Gere imagens a partir de prompts de texto usando FLUX, Gemini Imagen, Grok, Seedream e dezenas de outros modelos." },
+    { "title": "Image-to-Image", "description": "Transforme imagens existentes com style transfer, variações e edições guiadas por prompt." },
+    { "title": "Inpainting", "description": "Edite áreas específicas de uma imagem. Remova objetos, adicione elementos ou altere fundos com precisão." },
+    { "title": "LoRA Support", "description": "Use modelos LoRA customizados para estilos específicos. Aplique fine-tuning sem treinar do zero." },
+    { "title": "Upscaling", "description": "Aumente a resolução de imagens com IA. De baixa resolução para alta qualidade preservando detalhes." },
+    { "title": "Text Rendering", "description": "Gere imagens com texto legível e estilizado. Ideal para thumbnails, banners e social media." }
+  ],
+  "metadata": {
+    "category": "Skills",
+    "categoryColor": "skills",
+    "author": "@inference-sh",
+    "authorUrl": "https://github.com/inference-sh/skills",
+    "primaryLink": "https://github.com/inference-sh/skills",
+    "bgImage": "/images/bg-image.png"
+  },
+  "extraContent": { "type": "installation", "methods": ["Plugin install", "Skills add", "CLI install"] }
+}
