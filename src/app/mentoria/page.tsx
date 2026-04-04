@@ -43,7 +43,7 @@ function CtaButton({ label, variant = 'primary', className = '' }: { label: stri
   return (
     <a
       href={INSCRICAO_ANCHOR}
-      className={`btn-primary inline-flex items-center justify-center gap-2 bg-[#FF4400] text-white px-8 py-4 text-sm sm:text-base font-bold shadow-2xl shadow-[#FF4400]/40 hover:bg-[#FF5722] transition-all hover:scale-105 ${className}`}
+      className={`btn-primary inline-flex items-center justify-center gap-2 bg-[#FF4400] text-white px-6 sm:px-8 py-3 sm:py-4 text-sm sm:text-base font-bold shadow-2xl shadow-[#FF4400]/40 hover:bg-[#FF5722] transition-all hover:scale-105 ${className}`}
     >
       <span>{label}</span>
       <svg className="h-4 w-4 sm:h-5 sm:w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
@@ -56,7 +56,7 @@ function CtaButton({ label, variant = 'primary', className = '' }: { label: stri
 function SectionBadge({ label }: { label: string }) {
   return (
     <div className="inline-flex items-center gap-2 border border-[#FF4400]/30 bg-[#FF4400]/10 px-3 sm:px-4 py-1.5 mb-4 sm:mb-6">
-      <span className="text-[#FF4400] text-[0.55rem] sm:text-[0.65rem]" style={{ fontFamily: "'Roboto Mono', var(--font-bb-mono), monospace", textTransform: 'uppercase', letterSpacing: '0.12em', fontWeight: 600 }}>
+      <span className="text-[#FF4400] text-xs sm:text-[0.65rem]" style={{ fontFamily: "'Roboto Mono', var(--font-bb-mono), monospace", textTransform: 'uppercase', letterSpacing: '0.12em', fontWeight: 600 }}>
         {label}
       </span>
     </div>
@@ -90,7 +90,7 @@ export default function MentoriaPage() {
                   <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#FF4400] opacity-75" />
                   <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-[#FF4400]" />
                 </span>
-                <span className="text-[#FF4400] text-[0.7rem] font-semibold uppercase tracking-wider" style={{ fontFamily: "'Roboto Mono', var(--font-bb-mono), monospace" }}>
+                <span className="text-[#FF4400] text-xs font-semibold uppercase tracking-wider" style={{ fontFamily: "'Roboto Mono', var(--font-bb-mono), monospace" }}>
                   Restam somente 4 vagas
                 </span>
               </div>
@@ -109,7 +109,7 @@ export default function MentoriaPage() {
                 <CtaButton label="Como Funciona" variant="secondary" />
               </div>
 
-              <p className="text-white/40 text-[0.65rem] uppercase tracking-widest flex items-center gap-2 flex-wrap" style={{ fontFamily: "'Roboto Mono', var(--font-bb-mono), monospace" }}>
+              <p className="text-white/60 text-xs uppercase tracking-widest flex items-center gap-2 flex-wrap" style={{ fontFamily: "'Roboto Mono', var(--font-bb-mono), monospace" }}>
                 <Icon name="clock" size="16" className="text-[#FF4400]" /> Max. 12 pessoas <span className="opacity-40">|</span> <Icon name="check" size="16" className="text-[#FF4400]" /> Garantia 7 dias
               </p>
             </div>
@@ -143,17 +143,17 @@ export default function MentoriaPage() {
             ].map((f) => (
               <div key={f.name} className="flex flex-col items-center text-center group">
                 <div className="relative mb-8">
-                  <div className="w-56 h-56 sm:w-64 sm:h-64 lg:w-72 lg:h-72 rounded-full overflow-hidden ring-[3px] ring-[#FF4400]/20 group-hover:ring-[#FF4400]/50 transition-all duration-500 shadow-2xl shadow-[#FF4400]/15">
+                  <div className="w-44 h-44 sm:w-56 sm:h-56 lg:w-72 lg:h-72 rounded-full overflow-hidden ring-[3px] ring-[#FF4400]/20 group-hover:ring-[#FF4400]/50 transition-all duration-500 shadow-2xl shadow-[#FF4400]/15">
                     <Image src={f.img} alt={`${f.name} - ${f.role}`} width={288} height={288} className="w-full h-full object-cover object-top grayscale group-hover:grayscale-0 transition-all duration-500" />
                   </div>
                 </div>
                 <div className="space-y-4">
                   <div>
                     <h3 className="text-2xl sm:text-3xl font-bold text-white mb-2 group-hover:text-[#FF4400] transition-colors">{f.name}</h3>
-                    <p className="text-[#FF4400]/80 text-[0.65rem] sm:text-xs font-semibold tracking-[0.15em] uppercase" style={{ fontFamily: "'Roboto Mono', var(--font-bb-mono), monospace" }}>{f.role}</p>
+                    <p className="text-[#FF4400]/80 text-xs font-semibold tracking-[0.15em] uppercase" style={{ fontFamily: "'Roboto Mono', var(--font-bb-mono), monospace" }}>{f.role}</p>
                   </div>
                   <p className="text-white/60 text-sm sm:text-base leading-relaxed max-w-sm mx-auto">{f.bio}</p>
-                  <a href={f.linkedin} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2.5 text-[#FF4400] hover:text-white transition-all text-xs font-semibold border border-[#FF4400]/30 hover:border-[#FF4400] px-6 py-3 hover:bg-[#FF4400]/5" style={{ fontFamily: "'Roboto Mono', var(--font-bb-mono), monospace", textTransform: 'uppercase', letterSpacing: '0.08em' }}>
+                  <a href={f.linkedin} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2.5 text-[#FF4400] hover:text-white transition-all text-xs sm:text-sm font-semibold border border-[#FF4400]/30 hover:border-[#FF4400] px-6 py-3 hover:bg-[#FF4400]/5" style={{ fontFamily: "'Roboto Mono', var(--font-bb-mono), monospace", textTransform: 'uppercase', letterSpacing: '0.08em' }}>
                     <Icon name="linkedin" size="16" /> LinkedIn
                   </a>
                 </div>

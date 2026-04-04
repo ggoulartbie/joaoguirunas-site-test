@@ -145,7 +145,7 @@ function ProfessionalRow({
       type="button"
       onClick={onToggle}
       className={cn(
-        'w-full flex items-center gap-3 px-4 py-3 border transition-all duration-200 cursor-pointer select-none',
+        'w-full flex items-center gap-2 sm:gap-3 px-3 sm:px-4 py-2.5 sm:py-3 border transition-all duration-200 cursor-pointer select-none',
         checked
           ? 'border-[#FF4400]/30 bg-[#FF4400]/[0.08]'
           : 'border-white/[0.08] bg-white/[0.03] hover:bg-white/[0.06]',
@@ -178,7 +178,7 @@ function ProfessionalRow({
 
       <span
         className={cn(
-          'text-sm tabular-nums',
+          'text-xs sm:text-sm tabular-nums whitespace-nowrap',
           checked ? 'text-[#FF4400] font-bold' : 'text-white/40',
         )}
       >
@@ -256,7 +256,7 @@ export function PricingCalculator() {
         >
           <div className="inline-flex items-center gap-2 border border-[#FF4400]/30 bg-[#FF4400]/10 px-3 sm:px-4 py-1.5 mb-4 sm:mb-6">
             <span
-              className="text-[#FF4400] text-[0.55rem] sm:text-[0.65rem]"
+              className="text-[#FF4400] text-xs sm:text-[0.65rem]"
               style={{
                 fontFamily: "'Roboto Mono', var(--font-bb-mono), monospace",
                 textTransform: 'uppercase',
@@ -311,7 +311,7 @@ export function PricingCalculator() {
             <h3 className="text-lg sm:text-xl font-bold text-white mb-1">
               Equipe Tradicional
             </h3>
-            <p className="text-white/40 text-sm mb-6">
+            <p className="text-white/60 text-sm mb-6">
               Custo anual de profissionais CLT
             </p>
 
@@ -327,7 +327,7 @@ export function PricingCalculator() {
             </div>
 
             {/* Total */}
-            <div className="mt-6 border border-white/[0.08] bg-white/[0.05] px-5 py-4 flex items-center justify-between">
+            <div className="mt-6 border border-white/[0.08] bg-white/[0.05] px-3 sm:px-5 py-3 sm:py-4 flex items-center justify-between">
               <span className="text-white/60 text-sm font-medium uppercase tracking-wider">
                 Custo Anual
               </span>
@@ -354,7 +354,7 @@ export function PricingCalculator() {
                   <span className="text-lg sm:text-xl font-bold text-[#FF4400] tabular-nums">
                     <AnimatedNumber value={savings} prefix="R$ " suffix="/ano" />
                   </span>
-                  <span className="ml-2 text-xs text-[#FF4400]/70">
+                  <span className="ml-2 text-xs sm:text-sm text-[#FF4400]/70">
                     ({savingsPercent}%)
                   </span>
                 </div>
@@ -369,7 +369,7 @@ export function PricingCalculator() {
             transition={{ duration: 0.6, delay: 0.3 }}
             className="relative"
           >
-            <div className="relative h-full border border-[#FF4400]/20 bg-[#0C0C12]/80 backdrop-blur-md p-8 sm:p-12 overflow-hidden">
+            <div className="relative h-full border border-[#FF4400]/20 bg-[#0C0C12]/80 backdrop-blur-md p-5 sm:p-8 lg:p-12 overflow-hidden">
               {/* Glow */}
               <div
                 className="pointer-events-none absolute inset-0"
@@ -394,7 +394,7 @@ export function PricingCalculator() {
                     <p className="text-base sm:text-lg font-bold text-white leading-tight">
                       Claude Code Agents
                     </p>
-                    <p className="text-white/40 text-xs">
+                    <p className="text-white/60 text-xs sm:text-sm">
                       Investimento unico de setup
                     </p>
                   </div>
@@ -409,7 +409,7 @@ export function PricingCalculator() {
                   ].map((b) => (
                     <span
                       key={b}
-                      className="text-[0.6rem] sm:text-xs text-[#FF4400]/80 border border-[#FF4400]/20 bg-[#FF4400]/5 px-2 py-0.5"
+                      className="text-xs text-[#FF4400]/80 border border-[#FF4400]/20 bg-[#FF4400]/5 px-2 py-0.5"
                       style={{ fontFamily: "'Roboto Mono', var(--font-bb-mono), monospace" }}
                     >
                       {b}
@@ -423,7 +423,7 @@ export function PricingCalculator() {
                     R$ {AGENT_COST.toLocaleString('pt-BR')}
                   </span>
                 </div>
-                <p className="text-white/40 text-sm mb-8">
+                <p className="text-white/60 text-sm mb-8">
                   ou em ate {INSTALLMENTS}x de{' '}
                   <span className="text-white font-semibold">
                     R$ {INSTALLMENT_VALUE}
@@ -475,15 +475,15 @@ export function PricingCalculator() {
           transition={{ duration: 0.5, delay: 0.7 }}
           className="mt-10 sm:mt-14 flex flex-wrap items-center justify-center gap-6 sm:gap-10"
         >
-          <span className="flex items-center gap-2 text-sm text-white/40">
+          <span className="flex items-center gap-2 text-sm text-white/60">
             <Users size={16} className="text-[#FF4400]" />
             Vagas limitadas (max 12 por turma)
           </span>
-          <span className="flex items-center gap-2 text-sm text-white/40">
+          <span className="flex items-center gap-2 text-sm text-white/60">
             <HeartHandshake size={16} className="text-[#FF4400]" />
             Suporte vitalicio
           </span>
-          <span className="flex items-center gap-2 text-sm text-white/40">
+          <span className="flex items-center gap-2 text-sm text-white/60">
             <Shield size={16} className="text-[#FF4400]" />
             Satisfacao garantida
           </span>

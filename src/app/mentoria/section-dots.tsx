@@ -57,16 +57,16 @@ export function SectionDots() {
           <div key={id} className="flex flex-col items-end">
             <button
               onClick={() => scrollTo(id)}
-              className="group flex items-center gap-2.5 py-[7px] cursor-pointer"
+              className="group flex items-center gap-2.5 py-3 cursor-pointer"
               aria-label={`Ir para ${label}`}
               aria-current={isActive ? 'true' : undefined}
             >
               {/* Label — always visible */}
               <span
-                className={`text-[10px] uppercase tracking-widest transition-all duration-300 ${
+                className={`text-xs uppercase tracking-widest transition-all duration-300 ${
                   isActive
                     ? 'text-white/80 font-medium'
-                    : 'text-white/25 group-hover:text-white/50'
+                    : 'text-white/50 group-hover:text-white/70'
                 }`}
                 style={{ fontFamily: "'Roboto Mono', var(--font-bb-mono), monospace" }}
               >

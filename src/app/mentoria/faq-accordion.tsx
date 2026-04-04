@@ -29,7 +29,7 @@ export function FaqAccordion() {
         <div key={i} className="glass-card overflow-hidden">
           <button
             onClick={() => setOpenIndex(openIndex === i ? null : i)}
-            className="flex items-center justify-between w-full cursor-pointer p-6 sm:p-8 text-left gap-3"
+            className="flex items-center justify-between w-full cursor-pointer p-4 sm:p-6 lg:p-8 text-left gap-3"
             aria-expanded={openIndex === i}
           >
             <h3 className={`text-sm sm:text-lg font-semibold transition-colors leading-tight ${openIndex === i ? 'text-[#FF4400]' : 'text-white'}`}>
@@ -47,7 +47,7 @@ export function FaqAccordion() {
             </svg>
           </button>
           {openIndex === i && (
-            <div className="px-6 sm:px-8 pb-6 sm:pb-8 text-white/60 leading-relaxed text-sm sm:text-base">
+            <div className="px-4 sm:px-6 lg:px-8 pb-4 sm:pb-6 lg:pb-8 text-white/60 leading-relaxed text-sm sm:text-base">
               {item.a}
             </div>
           )}

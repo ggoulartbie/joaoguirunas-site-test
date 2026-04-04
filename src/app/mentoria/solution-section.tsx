@@ -53,11 +53,11 @@ function SolutionCard({
       initial={{ opacity: 0, y: 40 }}
       animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 40 }}
       transition={{ duration: 0.6, delay: 0.2 + index * 0.15, ease: 'easeOut' }}
-      className="group relative border border-white/[0.08] bg-white/[0.03] backdrop-blur-sm p-8 sm:p-10 transition-all duration-300 hover:border-[#FF4400]/30"
+      className="group relative border border-white/[0.08] bg-white/[0.03] backdrop-blur-sm p-6 sm:p-8 lg:p-10 transition-all duration-300 hover:border-[#FF4400]/30"
     >
       {/* Number */}
       <span
-        className="absolute top-6 right-6 text-[0.65rem] font-semibold text-white/15 uppercase tracking-widest"
+        className="absolute top-6 right-6 text-xs font-semibold text-white/30 uppercase tracking-widest"
         style={{ fontFamily: "'Roboto Mono', var(--font-bb-mono), monospace" }}
       >
         {card.number}
@@ -109,7 +109,7 @@ export function SolutionSection() {
         >
           <div className="inline-flex items-center gap-2 border border-[#FF4400]/30 bg-[#FF4400]/10 px-3 sm:px-4 py-1.5 mb-4 sm:mb-6">
             <span
-              className="text-[#FF4400] text-[0.55rem] sm:text-[0.65rem]"
+              className="text-[#FF4400] text-xs sm:text-[0.65rem]"
               style={{
                 fontFamily: "'Roboto Mono', var(--font-bb-mono), monospace",
                 textTransform: 'uppercase',

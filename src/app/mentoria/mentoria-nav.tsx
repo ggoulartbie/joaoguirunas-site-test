@@ -99,10 +99,10 @@ export function MentoriaNav() {
                   type="button"
                   data-nav-id={item.id}
                   onClick={() => scrollTo(item.id)}
-                  className={`relative flex-shrink-0 px-3 sm:px-4 py-3.5 text-xs sm:text-sm font-medium uppercase tracking-wider transition-colors cursor-pointer ${
+                  className={`relative flex-shrink-0 px-3 sm:px-4 py-4 text-xs sm:text-sm font-medium uppercase tracking-wider transition-colors cursor-pointer ${
                     isActive
                       ? 'text-[#FF4400]'
-                      : 'text-white/40 hover:text-white/80'
+                      : 'text-white/60 hover:text-white/80'
                   }`}
                 >
                   {item.label}

@@ -90,7 +90,7 @@ function TimelineCard({
           initial={{ scale: 0 }}
           animate={isInView ? { scale: 1 } : {}}
           transition={{ duration: 0.4, delay: index * 0.15 }}
-          className="relative z-10 flex h-10 w-10 sm:h-12 sm:w-12 items-center justify-center rounded-full border-2 border-[#FF4400]/60 bg-[#08080C]"
+          className="relative z-10 flex h-12 w-12 items-center justify-center rounded-full border-2 border-[#FF4400]/60 bg-[#08080C]"
           style={{
             boxShadow: '0 0 20px rgba(255,68,0,0.2)',
           }}
@@ -122,13 +122,13 @@ function TimelineCard({
           <div className="relative">
             <div className="flex items-center gap-2">
               <span
-                className="text-[#FF4400]/70 text-[0.65rem] font-semibold uppercase tracking-widest"
+                className="text-[#FF4400]/70 text-xs font-semibold uppercase tracking-widest"
                 style={{ fontFamily: "'Roboto Mono', var(--font-bb-mono), monospace" }}
               >
                 Encontro {module.num}
               </span>
               <span
-                className={`text-[0.55rem] font-semibold uppercase tracking-wider px-2 py-0.5 ${
+                className={`text-xs font-semibold uppercase tracking-wider px-2 py-1 ${
                   module.type === 'Presencial'
                     ? 'text-[#FF4400] border border-[#FF4400]/40 bg-[#FF4400]/10'
                     : 'text-white/60 border border-white/[0.12] bg-white/[0.04]'
@@ -150,7 +150,7 @@ function TimelineCard({
               {module.tags.map((tag) => (
                 <span
                   key={tag}
-                  className="inline-flex items-center border border-white/[0.08] bg-white/[0.03] px-3 py-1 text-[0.65rem] font-medium text-white/40 transition-colors hover:border-[#FF4400]/30 hover:text-[#FF4400]/70"
+                  className="inline-flex items-center border border-white/[0.08] bg-white/[0.03] px-3 py-1 text-xs font-medium text-white/60 transition-colors hover:border-[#FF4400]/30 hover:text-[#FF4400]/70"
                   style={{ fontFamily: "'Roboto Mono', var(--font-bb-mono), monospace" }}
                 >
                   {tag}
@@ -191,7 +191,7 @@ export function CourseModulesTimeline() {
         >
           <div className="inline-flex items-center gap-2 border border-[#FF4400]/30 bg-[#FF4400]/10 px-3 sm:px-4 py-1.5 mb-4 sm:mb-6">
             <span
-              className="text-[#FF4400] text-[0.55rem] sm:text-[0.65rem]"
+              className="text-[#FF4400] text-xs sm:text-[0.65rem]"
               style={{
                 fontFamily: "'Roboto Mono', var(--font-bb-mono), monospace",
                 textTransform: 'uppercase',
@@ -206,7 +206,7 @@ export function CourseModulesTimeline() {
             Do Zero ao Time Completo em{' '}
             <span className="text-[#FF4400]">4 Semanas</span>
           </h2>
-          <p className="mt-4 text-sm sm:text-base text-white/40 max-w-2xl mx-auto leading-relaxed">
+          <p className="mt-4 text-sm sm:text-base text-white/60 max-w-2xl mx-auto leading-relaxed">
             Uma jornada intensiva e pratica. Cada encontro constroi sobre o anterior para voce sair com um time de agentes de IA operando no seu negocio.
           </p>
         </motion.div>
