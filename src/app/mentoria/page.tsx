@@ -74,12 +74,13 @@ export default function MentoriaPage() {
           src="/images/mentoria-hero.png"
           alt="Mentoria Claude Code + AIOX"
           fill
-          className="object-cover"
-          style={{ objectPosition: '70% 25%', transform: 'scaleX(-1)' }}
+          className="object-cover sm:[object-position:70%_25%] [object-position:center_center]"
+          style={{ transform: 'scaleX(-1)' }}
           priority
         />
-        {/* Gradiente lateral forte — escurece a esquerda, preserva rostos na direita */}
-        <div className="absolute inset-0" style={{ background: 'linear-gradient(to right, #08080C 0%, #08080C 35%, rgba(8,8,12,0.85) 50%, rgba(8,8,12,0.4) 70%, rgba(8,8,12,0.25) 100%)' }} />
+        {/* Overlay escuro — mais forte em mobile para legibilidade */}
+        <div className="absolute inset-0 bg-[#08080C]/70 sm:bg-transparent" />
+        <div className="absolute inset-0 hidden sm:block" style={{ background: 'linear-gradient(to right, #08080C 0%, #08080C 35%, rgba(8,8,12,0.85) 50%, rgba(8,8,12,0.4) 70%, rgba(8,8,12,0.25) 100%)' }} />
         <div className="absolute inset-0 bg-gradient-to-b from-[#08080C]/40 via-transparent to-[#08080C]" />
 
         <div className="absolute inset-0 flex items-center px-6 sm:px-10 lg:px-16">

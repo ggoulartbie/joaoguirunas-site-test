@@ -279,7 +279,8 @@ export function PricingCalculator() {
           initial={{ opacity: 0, y: 20 }}
           animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
           transition={{ duration: 0.5, delay: 0.15 }}
-          className="flex flex-wrap justify-center gap-3 mb-10 sm:mb-12"
+          className="flex gap-3 mb-10 sm:mb-12 overflow-x-auto sm:overflow-visible sm:flex-wrap sm:justify-center pb-2 sm:pb-0"
+          style={{ scrollbarWidth: 'none' }}
         >
           {squads.map((squad) => (
             <button
@@ -287,7 +288,7 @@ export function PricingCalculator() {
               type="button"
               onClick={() => setActiveSquad(squad.id)}
               className={cn(
-                'px-4 sm:px-5 py-2 sm:py-2.5 text-xs sm:text-sm font-semibold uppercase tracking-wider transition-all duration-200',
+                'flex-shrink-0 px-4 sm:px-5 py-2 sm:py-2.5 text-xs sm:text-sm font-semibold uppercase tracking-wider transition-all duration-200',
                 activeSquad === squad.id
                   ? 'bg-[#FF4400] text-white'
                   : 'bg-white/[0.05] border border-white/[0.08] text-white/50 hover:bg-white/[0.08] hover:text-white/70',
@@ -361,6 +362,18 @@ export function PricingCalculator() {
               </motion.div>
             )}
           </motion.div>
+
+          {/* ---- VS Separator (mobile only) ---- */}
+          <div className="flex items-center justify-center gap-4 py-2 lg:hidden">
+            <div className="h-px flex-1 bg-white/10" />
+            <span
+              className="text-[#FF4400] font-bold text-sm uppercase tracking-widest"
+              style={{ fontFamily: "'Roboto Mono', var(--font-bb-mono), monospace" }}
+            >
+              vs
+            </span>
+            <div className="h-px flex-1 bg-white/10" />
+          </div>
 
           {/* ---- RIGHT: Investment card ---- */}
           <motion.div
