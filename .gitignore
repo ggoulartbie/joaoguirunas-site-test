@@ -1,31 +1,36 @@
+# Dependencies
 node_modules/
-dist/
-.astro/
-.env
-.DS_Store
-.vercel
 
-# Environment & Secrets (AIOX)
+# Build & Output
+dist/
+build/
+.next/
+out/
+
+# Environment & Secrets
+.env
 .env.local
 .env.*.local
 *.key
 *.pem
 
-# Dependencies (AIOX)
-node_modules
-
-# Build & Logs (AIOX)
-build/
-.next/
-*.log
-logs/
-
-# IDE & OS (AIOX)
+# IDE & OS
+.DS_Store
 Thumbs.db
 .idea/
+.vscode/
 *.swp
 
-# AIOX Local (AIOX)
+# Misc
+*.log
+logs/
+.vercel
+
+# AIOX Local
 .aiox-core/local/
 .claude/settings.local.json
 .aiox/install-log.txt
+
+# TypeScript build info
+tsconfig.tsbuildinfo
+next-env.d.ts
