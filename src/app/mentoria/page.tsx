@@ -72,7 +72,7 @@ export default function MentoriaPage() {
       <section id="hero" className="relative w-full bg-[#08080C]">
         {/* MOBILE: imagem no topo, texto abaixo */}
         <div className="sm:hidden">
-          <div className="relative w-full h-[55vw] min-h-[240px] max-h-[340px] overflow-hidden">
+          <div className="relative w-full h-[100vw] max-h-[520px] overflow-hidden">
             <Image
               src="/images/hero-mobile.png"
               alt="Joao Guirunas - Mentoria Claude Code"
@@ -80,7 +80,7 @@ export default function MentoriaPage() {
               className="object-cover object-top"
               priority
             />
-            <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-[#08080C]" />
+            <div className="absolute inset-0 bg-gradient-to-b from-transparent from-60% to-[#08080C]" />
           </div>
           <div className="px-6 pt-6 pb-12 bg-[#08080C]">
             <div className="inline-flex items-center gap-2 border border-[#FF4400]/60 px-4 py-2 mb-5" style={{ background: 'rgba(255,68,0,0.08)' }}>
