@@ -179,7 +179,7 @@ function ProfessionalRow({
       <span
         className={cn(
           'text-xs sm:text-sm tabular-nums whitespace-nowrap',
-          checked ? 'text-white/80 font-bold' : 'text-white/40',
+          checked ? 'text-white/45' : 'text-white/25',
         )}
       >
         R$ {pro.annual.toLocaleString('pt-BR')}/ano
@@ -301,7 +301,7 @@ export function PricingCalculator() {
         </motion.div>
 
         {/* Grid */}
-        <div className="grid gap-8 lg:grid-cols-2">
+        <div className="grid gap-6 lg:grid-cols-[1fr_48px_1fr] lg:gap-0 lg:items-start">
           {/* ---- LEFT: Calculator ---- */}
           <motion.div
             key={activeSquad}
@@ -363,16 +363,16 @@ export function PricingCalculator() {
             )}
           </motion.div>
 
-          {/* ---- VS Separator (mobile only) ---- */}
-          <div className="flex items-center justify-center gap-4 py-2 lg:hidden">
-            <div className="h-px flex-1 bg-white/10" />
+          {/* ---- VS Separator ---- */}
+          <div className="flex lg:flex-col items-center justify-center gap-3 py-2 lg:py-0 lg:px-0 lg:self-stretch">
+            <div className="h-px lg:h-full lg:w-px flex-1 bg-white/10" />
             <span
-              className="text-[#FF4400] font-bold text-sm uppercase tracking-widest"
+              className="text-[#FF4400] font-bold text-sm uppercase tracking-widest flex-shrink-0"
               style={{ fontFamily: "'Roboto Mono', var(--font-bb-mono), monospace" }}
             >
               vs
             </span>
-            <div className="h-px flex-1 bg-white/10" />
+            <div className="h-px lg:h-full lg:w-px flex-1 bg-white/10" />
           </div>
 
           {/* ---- RIGHT: Investment card ---- */}
