@@ -163,7 +163,7 @@ function ProfessionalRow({
       </span>
 
       <span className="flex items-center gap-2 flex-1 text-left">
-        <span className={checked ? 'text-[#FF4400]' : 'text-white/40'}>
+        <span className={checked ? 'text-white/80' : 'text-white/40'}>
           {pro.icon}
         </span>
         <span
@@ -332,7 +332,7 @@ export function PricingCalculator() {
               <span className="text-white/60 text-sm font-medium uppercase tracking-wider">
                 Custo Anual
               </span>
-              <span className="text-xl sm:text-2xl font-bold text-white tabular-nums">
+              <span className="text-xl sm:text-2xl font-bold text-[#FF4400] tabular-nums">
                 <AnimatedNumber value={totalAnnual} prefix="R$ " />
               </span>
             </div>

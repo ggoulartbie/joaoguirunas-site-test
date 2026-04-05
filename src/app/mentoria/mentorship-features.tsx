@@ -133,7 +133,7 @@ export function MentorshipFeatures() {
   const { scrollRef: carouselRef, activeIndex } = useCarouselDots(features.length);
 
   return (
-    <section id="diferenciais" className="py-16 sm:py-24 bg-[#08080C]">
+    <section id="diferenciais" className="py-16 sm:py-24 bg-[#08080C] overflow-hidden">
       <div className="mx-auto max-w-6xl px-5 sm:px-6 lg:px-8">
         <motion.div
           ref={headerRef}
@@ -155,7 +155,7 @@ export function MentorshipFeatures() {
 
         <div
           ref={carouselRef}
-          className="flex gap-4 overflow-x-auto snap-x snap-mandatory pb-4 -mx-4 px-4 sm:grid sm:grid-cols-2 sm:overflow-visible sm:snap-none sm:mx-0 sm:px-0 sm:gap-6 lg:grid-cols-3"
+          className="flex gap-4 overflow-x-auto snap-x snap-mandatory pb-4 sm:grid sm:grid-cols-2 sm:overflow-visible sm:snap-none sm:gap-6 lg:grid-cols-3"
           style={{ scrollbarWidth: 'none' }}
         >
           {features.map((feature, index) => (

@@ -179,7 +179,7 @@ export function SolutionSection() {
         {/* Cards carousel (mobile) / grid (desktop) */}
         <div
           ref={carouselRef}
-          className="flex gap-4 overflow-x-auto snap-x snap-mandatory pb-4 -mx-4 px-4 sm:grid sm:grid-cols-2 sm:overflow-visible sm:snap-none sm:mx-0 sm:px-0 sm:gap-6 lg:grid-cols-3"
+          className="flex gap-4 overflow-x-auto snap-x snap-mandatory pb-4 sm:grid sm:grid-cols-2 sm:overflow-visible sm:snap-none sm:gap-6 lg:grid-cols-3"
           style={{ scrollbarWidth: 'none' }}
         >
           {cards.map((card, i) => (
