@@ -81,7 +81,7 @@ export default function MentoriaPage() {
               priority
             />
             {/* Overlay geral + degradê subindo 20px */}
-            <div className="absolute inset-0" style={{ background: 'linear-gradient(to bottom, rgba(8,8,12,0.6) 0%, rgba(8,8,12,0.15) 18%, rgba(8,8,12,0.1) 30%, rgba(8,8,12,0.1) 45%, rgba(8,8,12,0.2) 55%, rgba(8,8,12,0.5) 68%, rgba(8,8,12,0.85) 83%, #08080C 100%)' }} />
+            <div className="absolute inset-0" style={{ background: 'linear-gradient(to bottom, rgba(8,8,12,0.6) 0%, rgba(8,8,12,0.15) 18%, rgba(8,8,12,0.1) 30%, rgba(8,8,12,0.15) 45%, rgba(8,8,12,0.4) 58%, rgba(8,8,12,0.75) 72%, #08080C 88%)' }} />
           </div>
           {/* Texto sobe 100px para dentro da imagem */}
           <div className="-mt-28 relative z-10 px-6 pb-12">
