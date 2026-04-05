@@ -81,8 +81,10 @@ export default function MentoriaPage() {
               style={{ objectPosition: 'center center' }}
               priority
             />
+            {/* Degradê sutil na base */}
+            <div className="absolute inset-0" style={{ background: 'linear-gradient(to bottom, transparent 0%, transparent 55%, rgba(8,8,12,0.4) 72%, rgba(8,8,12,0.85) 87%, #08080C 100%)' }} />
           </div>
-          <div className="-mt-8 relative z-10 px-6 pb-10">
+          <div className="-mt-48 relative z-10 px-6 pb-10">
             <div className="inline-flex items-center gap-2 border border-[#FF4400]/60 px-4 py-2 mb-5" style={{ background: 'rgba(255,68,0,0.08)' }}>
               <span className="relative inline-flex h-2.5 w-2.5">
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#FF4400] opacity-75" />
