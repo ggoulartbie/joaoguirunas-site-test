@@ -72,6 +72,7 @@ export default function MentoriaPage() {
       <section id="hero" className="relative w-full bg-[#08080C] -mt-16">
         {/* MOBILE: imagem no topo, texto abaixo com overlap */}
         <div className="sm:hidden">
+          {/* Imagem com overlay, degradê e texto dentro */}
           <div className="relative w-full overflow-hidden" style={{ height: '600px' }}>
             <Image
               src="/images/hero-mobile.png"
@@ -81,30 +82,36 @@ export default function MentoriaPage() {
               style={{ objectPosition: 'center center' }}
               priority
             />
-            {/* Degradê sutil na base */}
-            <div className="absolute inset-0" style={{ background: 'linear-gradient(to bottom, transparent 0%, transparent 55%, rgba(8,8,12,0.4) 72%, rgba(8,8,12,0.85) 87%, #08080C 100%)' }} />
+            {/* Overlay geral */}
+            <div className="absolute inset-0 bg-[#08080C]/15" />
+            {/* Degradê na base */}
+            <div className="absolute inset-0" style={{ background: 'linear-gradient(to bottom, transparent 0%, transparent 45%, rgba(8,8,12,0.5) 65%, rgba(8,8,12,0.9) 82%, #08080C 95%)' }} />
+            {/* Texto sobre a imagem */}
+            <div className="absolute bottom-0 left-0 right-0 z-10 px-6 pb-8">
+              <div className="inline-flex items-center gap-2 border border-[#FF4400]/60 px-4 py-2 mb-4" style={{ background: 'rgba(255,68,0,0.08)' }}>
+                <span className="relative inline-flex h-2.5 w-2.5">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#FF4400] opacity-75" />
+                  <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-[#FF4400]" />
+                </span>
+                <span className="text-[#FF4400] text-xs font-semibold uppercase tracking-wider" style={{ fontFamily: "'Roboto Mono', var(--font-bb-mono), monospace" }}>
+                  Restam somente 4 vagas
+                </span>
+              </div>
+              <h1 className="text-2xl font-bold text-white leading-[1.15] tracking-tight mb-3" style={DISPLAY_FONT}>
+                Tenha uma Equipe de Agentes de IA{' '}
+                <span className="text-[#FF4400]">Trabalhando Para Voce 24/7</span>
+              </h1>
+              <p className="text-sm text-white/80 leading-relaxed mb-5">
+                Aprenda a criar, configurar e orquestrar agentes autonomos que executam tarefas complexas para voce. <strong className="text-white font-medium">Mentoria intensiva e pratica.</strong>
+              </p>
+              <div className="flex flex-col gap-3">
+                <CtaButton label="Fale com um Especialista" />
+                <CtaButton label="Como Funciona" variant="secondary" />
+              </div>
+            </div>
           </div>
-          <div className="-mt-48 relative z-10 px-6 pb-10">
-            <div className="inline-flex items-center gap-2 border border-[#FF4400]/60 px-4 py-2 mb-5" style={{ background: 'rgba(255,68,0,0.08)' }}>
-              <span className="relative inline-flex h-2.5 w-2.5">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#FF4400] opacity-75" />
-                <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-[#FF4400]" />
-              </span>
-              <span className="text-[#FF4400] text-xs font-semibold uppercase tracking-wider" style={{ fontFamily: "'Roboto Mono', var(--font-bb-mono), monospace" }}>
-                Restam somente 4 vagas
-              </span>
-            </div>
-            <h1 className="text-2xl font-bold text-white leading-[1.15] tracking-tight mb-4" style={DISPLAY_FONT}>
-              Tenha uma Equipe de Agentes de IA{' '}
-              <span className="text-[#FF4400]">Trabalhando Para Voce 24/7</span>
-            </h1>
-            <p className="text-sm text-white/80 leading-relaxed mb-6">
-              Aprenda a criar, configurar e orquestrar agentes autonomos que executam tarefas complexas para voce. <strong className="text-white font-medium">Mentoria intensiva e pratica.</strong>
-            </p>
-            <div className="flex flex-col gap-3 mb-5">
-              <CtaButton label="Fale com um Especialista" />
-              <CtaButton label="Como Funciona" variant="secondary" />
-            </div>
+          {/* Linha abaixo da imagem */}
+          <div className="px-6 py-4 bg-[#08080C]">
             <p className="text-white/60 text-xs uppercase tracking-widest flex items-center gap-2 flex-wrap" style={{ fontFamily: "'Roboto Mono', var(--font-bb-mono), monospace" }}>
               <Icon name="clock" size="16" className="text-[#FF4400]" /> Max. 12 pessoas <span className="opacity-40">|</span> <Icon name="check" size="16" className="text-[#FF4400]" /> Garantia 7 dias
             </p>
