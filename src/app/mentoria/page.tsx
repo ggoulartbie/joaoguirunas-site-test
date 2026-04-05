@@ -69,60 +69,85 @@ export default function MentoriaPage() {
       <MentoriaNav />
       <SectionDots />
       {/* ===== HERO ===== */}
-      <section id="hero" className="relative w-full min-h-[85vh] overflow-hidden bg-[#08080C]">
-        {/* Mobile hero image */}
-        <Image
-          src="/images/hero-mobile.png"
-          alt="Joao Guirunas - Mentoria Claude Code"
-          fill
-          className="object-cover sm:hidden"
-          style={{ objectPosition: 'center 20%' }}
-          priority
-        />
-        {/* Desktop hero image */}
-        <Image
-          src="/images/mentoria-hero.png"
-          alt="Equipe GrowthSales AI"
-          fill
-          className="object-cover hidden sm:block"
-          style={{ objectPosition: '70% 25%', transform: 'scaleX(-1)' }}
-          priority
-        />
-        {/* Overlay — mais suave em mobile para mostrar rosto, mais forte em desktop */}
-        <div className="absolute inset-0 bg-gradient-to-b from-[#08080C]/20 via-[#08080C]/30 to-[#08080C]/95 sm:bg-none sm:bg-transparent" />
-        <div className="absolute inset-0 hidden sm:block" style={{ background: 'linear-gradient(to right, #08080C 0%, #08080C 35%, rgba(8,8,12,0.85) 50%, rgba(8,8,12,0.4) 70%, rgba(8,8,12,0.25) 100%)' }} />
-        <div className="absolute inset-0 bg-gradient-to-b from-[#08080C]/40 via-transparent to-[#08080C]" />
+      <section id="hero" className="relative w-full bg-[#08080C]">
+        {/* MOBILE: imagem no topo, texto abaixo */}
+        <div className="sm:hidden">
+          <div className="relative w-full h-[55vw] min-h-[240px] max-h-[340px] overflow-hidden">
+            <Image
+              src="/images/hero-mobile.png"
+              alt="Joao Guirunas - Mentoria Claude Code"
+              fill
+              className="object-cover object-top"
+              priority
+            />
+            <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-[#08080C]" />
+          </div>
+          <div className="px-6 pt-6 pb-12 bg-[#08080C]">
+            <div className="inline-flex items-center gap-2 border border-[#FF4400]/60 px-4 py-2 mb-5" style={{ background: 'rgba(255,68,0,0.08)' }}>
+              <span className="relative inline-flex h-2.5 w-2.5">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#FF4400] opacity-75" />
+                <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-[#FF4400]" />
+              </span>
+              <span className="text-[#FF4400] text-xs font-semibold uppercase tracking-wider" style={{ fontFamily: "'Roboto Mono', var(--font-bb-mono), monospace" }}>
+                Restam somente 4 vagas
+              </span>
+            </div>
+            <h1 className="text-2xl font-bold text-white leading-[1.15] tracking-tight mb-4" style={DISPLAY_FONT}>
+              Tenha uma Equipe de Agentes de IA{' '}
+              <span className="text-[#FF4400]">Trabalhando Para Voce 24/7</span>
+            </h1>
+            <p className="text-sm text-white/80 leading-relaxed mb-6">
+              Aprenda a criar, configurar e orquestrar agentes autonomos que executam tarefas complexas para voce. <strong className="text-white font-medium">Mentoria intensiva e pratica.</strong>
+            </p>
+            <div className="flex flex-col gap-3 mb-6">
+              <CtaButton label="Fale com um Especialista" />
+              <CtaButton label="Como Funciona" variant="secondary" />
+            </div>
+            <p className="text-white/60 text-xs uppercase tracking-widest flex items-center gap-2 flex-wrap" style={{ fontFamily: "'Roboto Mono', var(--font-bb-mono), monospace" }}>
+              <Icon name="clock" size="16" className="text-[#FF4400]" /> Max. 12 pessoas <span className="opacity-40">|</span> <Icon name="check" size="16" className="text-[#FF4400]" /> Garantia 7 dias
+            </p>
+          </div>
+        </div>
 
-        <div className="absolute inset-0 flex items-end sm:items-center pb-14 sm:pb-0 px-6 sm:px-10 lg:px-16">
-          <div className="mx-auto max-w-7xl w-full">
-            <div className="max-w-xl lg:max-w-2xl">
-              <div className="inline-flex items-center gap-2 backdrop-blur-sm border border-[#FF4400]/60 px-4 py-2 mb-6" style={{ background: 'rgba(255,68,0,0.08)' }}>
-                <span className="relative inline-flex h-2.5 w-2.5">
-                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#FF4400] opacity-75" />
-                  <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-[#FF4400]" />
-                </span>
-                <span className="text-[#FF4400] text-xs font-semibold uppercase tracking-wider" style={{ fontFamily: "'Roboto Mono', var(--font-bb-mono), monospace" }}>
-                  Restam somente 4 vagas
-                </span>
+        {/* DESKTOP: layout overlay original */}
+        <div className="relative hidden sm:block min-h-[85vh] overflow-hidden">
+          <Image
+            src="/images/mentoria-hero.png"
+            alt="Equipe GrowthSales AI"
+            fill
+            className="object-cover"
+            style={{ objectPosition: '70% 25%', transform: 'scaleX(-1)' }}
+            priority
+          />
+          <div className="absolute inset-0" style={{ background: 'linear-gradient(to right, #08080C 0%, #08080C 35%, rgba(8,8,12,0.85) 50%, rgba(8,8,12,0.4) 70%, rgba(8,8,12,0.25) 100%)' }} />
+          <div className="absolute inset-0 bg-gradient-to-b from-[#08080C]/40 via-transparent to-[#08080C]" />
+          <div className="absolute inset-0 flex items-center px-10 lg:px-16">
+            <div className="mx-auto max-w-7xl w-full">
+              <div className="max-w-xl lg:max-w-2xl">
+                <div className="inline-flex items-center gap-2 backdrop-blur-sm border border-[#FF4400]/60 px-4 py-2 mb-6" style={{ background: 'rgba(255,68,0,0.08)' }}>
+                  <span className="relative inline-flex h-2.5 w-2.5">
+                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#FF4400] opacity-75" />
+                    <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-[#FF4400]" />
+                  </span>
+                  <span className="text-[#FF4400] text-xs font-semibold uppercase tracking-wider" style={{ fontFamily: "'Roboto Mono', var(--font-bb-mono), monospace" }}>
+                    Restam somente 4 vagas
+                  </span>
+                </div>
+                <h1 className="text-3xl lg:text-4xl font-bold text-white leading-[1.15] tracking-tight mb-5" style={DISPLAY_FONT}>
+                  Tenha uma Equipe de Agentes de IA{' '}
+                  <span className="text-[#FF4400]">Trabalhando Para Voce 24/7</span>
+                </h1>
+                <p className="text-base text-white/80 max-w-lg leading-relaxed mb-8">
+                  Aprenda a criar, configurar e orquestrar agentes autonomos que executam tarefas complexas para voce — da escrita de codigo a criacao de conteudo. <strong className="text-white font-medium">Mentoria intensiva e pratica.</strong>
+                </p>
+                <div className="flex flex-row gap-4 mb-8">
+                  <CtaButton label="Fale com um Especialista" />
+                  <CtaButton label="Como Funciona" variant="secondary" />
+                </div>
+                <p className="text-white/60 text-xs uppercase tracking-widest flex items-center gap-2" style={{ fontFamily: "'Roboto Mono', var(--font-bb-mono), monospace" }}>
+                  <Icon name="clock" size="16" className="text-[#FF4400]" /> Max. 12 pessoas <span className="opacity-40">|</span> <Icon name="check" size="16" className="text-[#FF4400]" /> Garantia 7 dias
+                </p>
               </div>
-
-              <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-white leading-[1.15] tracking-tight mb-5" style={DISPLAY_FONT}>
-                Tenha uma Equipe de Agentes de IA{' '}
-                <span className="text-[#FF4400]">Trabalhando Para Voce 24/7</span>
-              </h1>
-
-              <p className="text-sm sm:text-base text-white/80 max-w-lg leading-relaxed mb-8">
-                Aprenda a criar, configurar e orquestrar agentes autonomos que executam tarefas complexas para voce — da escrita de codigo a criacao de conteudo. <strong className="text-white font-medium">Mentoria intensiva e pratica.</strong>
-              </p>
-
-              <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 mb-8">
-                <CtaButton label="Fale com um Especialista" />
-                <CtaButton label="Como Funciona" variant="secondary" />
-              </div>
-
-              <p className="text-white/60 text-xs uppercase tracking-widest flex items-center gap-2 flex-wrap" style={{ fontFamily: "'Roboto Mono', var(--font-bb-mono), monospace" }}>
-                <Icon name="clock" size="16" className="text-[#FF4400]" /> Max. 12 pessoas <span className="opacity-40">|</span> <Icon name="check" size="16" className="text-[#FF4400]" /> Garantia 7 dias
-              </p>
             </div>
           </div>
         </div>
