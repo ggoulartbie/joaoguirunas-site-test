@@ -70,20 +70,30 @@ export default function MentoriaPage() {
       <SectionDots />
       {/* ===== HERO ===== */}
       <section id="hero" className="relative w-full min-h-[85vh] overflow-hidden bg-[#08080C]">
+        {/* Mobile hero image */}
         <Image
-          src="/images/mentoria-hero.png"
-          alt="Mentoria Claude Code + AIOX"
+          src="/images/hero-mobile.jpg"
+          alt="Joao Guirunas - Mentoria Claude Code"
           fill
-          className="object-cover sm:[object-position:70%_25%] [object-position:center_center]"
-          style={{ transform: 'scaleX(-1)' }}
+          className="object-cover sm:hidden"
+          style={{ objectPosition: 'center 20%' }}
           priority
         />
-        {/* Overlay escuro — mais forte em mobile para legibilidade */}
-        <div className="absolute inset-0 bg-[#08080C]/70 sm:bg-transparent" />
+        {/* Desktop hero image */}
+        <Image
+          src="/images/mentoria-hero.png"
+          alt="Equipe GrowthSales AI"
+          fill
+          className="object-cover hidden sm:block"
+          style={{ objectPosition: '70% 25%', transform: 'scaleX(-1)' }}
+          priority
+        />
+        {/* Overlay — mais suave em mobile para mostrar rosto, mais forte em desktop */}
+        <div className="absolute inset-0 bg-gradient-to-b from-[#08080C]/30 via-[#08080C]/20 to-[#08080C]/90 sm:bg-none sm:bg-transparent" />
         <div className="absolute inset-0 hidden sm:block" style={{ background: 'linear-gradient(to right, #08080C 0%, #08080C 35%, rgba(8,8,12,0.85) 50%, rgba(8,8,12,0.4) 70%, rgba(8,8,12,0.25) 100%)' }} />
         <div className="absolute inset-0 bg-gradient-to-b from-[#08080C]/40 via-transparent to-[#08080C]" />
 
-        <div className="absolute inset-0 flex items-center px-6 sm:px-10 lg:px-16">
+        <div className="absolute inset-0 flex items-end sm:items-center pb-8 sm:pb-0 px-6 sm:px-10 lg:px-16">
           <div className="mx-auto max-w-7xl w-full">
             <div className="max-w-xl lg:max-w-2xl">
               <div className="inline-flex items-center gap-2 backdrop-blur-sm border border-[#FF4400]/60 px-4 py-2 mb-6" style={{ background: 'rgba(255,68,0,0.08)' }}>
