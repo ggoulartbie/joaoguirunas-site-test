@@ -47,7 +47,7 @@ export function SectionDots() {
 
   return (
     <nav
-      className="fixed right-6 top-1/2 -translate-y-1/2 z-50 hidden md:flex flex-col items-end gap-0"
+      className="fixed right-4 top-1/2 -translate-y-1/2 z-30 hidden md:flex flex-col items-end gap-0"
       aria-label="Navegacao por secoes"
     >
       {SECTIONS.map(({ id, label }, i) => {
@@ -57,16 +57,16 @@ export function SectionDots() {
           <div key={id} className="flex flex-col items-end">
             <button
               onClick={() => scrollTo(id)}
-              className="group flex items-center gap-2.5 py-3 cursor-pointer"
+              className="group flex items-center gap-2 py-2 cursor-pointer"
               aria-label={`Ir para ${label}`}
               aria-current={isActive ? 'true' : undefined}
             >
               {/* Label — always visible */}
               <span
-                className={`text-xs uppercase tracking-widest transition-all duration-300 ${
+                className={`uppercase tracking-widest transition-all duration-300 ${
                   isActive
-                    ? 'text-white/80 font-medium'
-                    : 'text-white/50 group-hover:text-white/70'
+                    ? 'text-[0.6rem] text-white/70 font-medium'
+                    : 'text-[0.5rem] text-white/20 group-hover:text-white/40'
                 }`}
                 style={{ fontFamily: "'Roboto Mono', var(--font-bb-mono), monospace" }}
               >
@@ -77,12 +77,12 @@ export function SectionDots() {
               <span
                 className={`rounded-full transition-all duration-300 flex-shrink-0 ${
                   isActive
-                    ? 'w-2.5 h-2.5 bg-[#FF4400]'
-                    : 'w-2 h-2 bg-white/20 group-hover:bg-white/40'
+                    ? 'w-2 h-2 bg-[#FF4400]'
+                    : 'w-1.5 h-1.5 bg-white/15 group-hover:bg-white/30'
                 }`}
                 style={{
                   boxShadow: isActive
-                    ? '0 0 8px rgba(255,68,0,0.35)'
+                    ? '0 0 6px rgba(255,68,0,0.3)'
                     : 'none',
                 }}
               />
