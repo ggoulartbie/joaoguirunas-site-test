@@ -179,11 +179,11 @@ export function SolutionSection() {
         {/* Cards carousel (mobile) / grid (desktop) */}
         <div
           ref={carouselRef}
-          className="flex gap-4 overflow-x-auto snap-x snap-mandatory pb-4 sm:grid sm:grid-cols-2 sm:overflow-visible sm:snap-none sm:gap-6 lg:grid-cols-3"
+          className="flex gap-4 overflow-x-auto snap-x snap-mandatory pb-4 md:grid md:grid-cols-3 md:overflow-visible md:snap-none md:gap-6 md:pb-0"
           style={{ scrollbarWidth: 'none' }}
         >
           {cards.map((card, i) => (
-            <div key={card.number} className="min-w-[85vw] sm:min-w-0 snap-center flex-shrink-0 sm:flex-shrink">
+            <div key={card.number} className="min-w-[85vw] md:min-w-0 snap-center flex-shrink-0 md:flex-shrink">
               <SolutionCard
                 card={card}
                 index={i}
