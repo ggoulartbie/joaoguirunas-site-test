@@ -9,7 +9,7 @@ const MODULES = [
     type: 'Presencial' as const,
     title: 'Desbloqueio Mental + Setup Inicial',
     description:
-      'Sessao presencial com Claudia para desbloqueio mental, respiracao e controle de ansiedade. Setup do ambiente Claude Code e AIOX completo.',
+      'Sessão presencial com Claudia para desbloqueio mental, respiração e controle de ansiedade. Setup do ambiente Claude Code e AIOX completo.',
     tags: ['Presencial', 'Desbloqueio Mental', 'Setup'],
   },
   {
@@ -17,7 +17,7 @@ const MODULES = [
     type: 'Online' as const,
     title: 'Fundamentos do Claude Code',
     description:
-      'Primeiro contato com Claude Code, comandos basicos, entendendo o MCP e ferramentas. Voce sai dominando a base.',
+      'Primeiro contato com Claude Code, comandos básicos, entendendo o MCP e ferramentas. Você sai dominando a base.',
     tags: ['Claude Code', 'MCP', 'Fundamentos'],
   },
   {
@@ -25,7 +25,7 @@ const MODULES = [
     type: 'Online' as const,
     title: 'Criando Seus Primeiros Agentes',
     description:
-      'Configuracao de agentes especializados, personas, workflows basicos. Seus primeiros agentes funcionando.',
+      'Configuração de agentes especializados, personas, workflows básicos. Seus primeiros agentes funcionando.',
     tags: ['Agentes IA', 'Personas', 'Workflows'],
   },
   {
@@ -33,7 +33,7 @@ const MODULES = [
     type: 'Online' as const,
     title: 'Squad de Software Engineering',
     description:
-      'Montagem de squad de desenvolvimento: dev, qa, architect, devops. Um time completo de engenharia operando para voce.',
+      'Montagem de squad de desenvolvimento: dev, qa, architect, devops. Um time completo de engenharia operando para você.',
     tags: ['Software Engineering', 'Squad', 'Dev'],
   },
   {
@@ -41,32 +41,32 @@ const MODULES = [
     type: 'Online' as const,
     title: 'Squad de Marketing e Growth',
     description:
-      'Montagem de squad de marketing: copywriter, seo, social media, analytics. Escale sua producao de conteudo.',
+      'Montagem de squad de marketing: copywriter, seo, social media, analytics. Escale sua produção de conteúdo.',
     tags: ['Growth Marketing', 'Copywriter', 'SEO'],
   },
   {
     num: 6,
     type: 'Online' as const,
-    title: 'Automacao e Integracao',
+    title: 'Automação e Integração',
     description:
-      'Integracao com ferramentas externas, automacao de processos, MCP servers. Conecte seus agentes ao mundo.',
-    tags: ['Automacao', 'Integracoes', 'MCP Servers'],
+      'Integração com ferramentas externas, automação de processos, MCP servers. Conecte seus agentes ao mundo.',
+    tags: ['Automação', 'Integrações', 'MCP Servers'],
   },
   {
     num: 7,
     type: 'Online' as const,
-    title: 'Squad Personalizada Para Seu Negocio',
+    title: 'Squad Personalizada Para Seu Negócio',
     description:
-      'Criacao de agentes especificos para o caso de uso de cada participante. Algo feito sob medida para voce.',
-    tags: ['Personalizado', 'Seu Negocio', 'Deploy'],
+      'Criação de agentes específicos para o caso de uso de cada participante. Algo feito sob medida para você.',
+    tags: ['Personalizado', 'Seu Negócio', 'Deploy'],
   },
   {
     num: 8,
     type: 'Presencial' as const,
-    title: 'Apresentacao Final + Networking',
+    title: 'Apresentação Final + Networking',
     description:
-      'Apresentacao dos projetos, feedback, certificacao e networking com a turma. Celebre o que voce construiu.',
-    tags: ['Presencial', 'Certificacao', 'Networking'],
+      'Apresentação dos projetos, feedback, certificação e networking com a turma. Celebre o que você construiu.',
+    tags: ['Presencial', 'Certificação', 'Networking'],
   },
 ];
 
@@ -207,7 +207,7 @@ export function CourseModulesTimeline() {
             <span className="text-[#FF4400]">4 Semanas</span>
           </h2>
           <p className="mt-4 text-sm sm:text-base text-white/60 max-w-2xl mx-auto leading-relaxed">
-            Uma jornada intensiva e pratica. Cada encontro constroi sobre o anterior para voce sair com um time de agentes de IA operando no seu negocio.
+            Uma jornada intensiva e prática. Cada encontro constrói sobre o anterior para você sair com um time de agentes de IA operando no seu negócio.
           </p>
         </motion.div>
 

@@ -89,11 +89,11 @@ const checklist = [
   '8 encontros (1 presencial + 6 online + 1 final)',
   'Desbloqueio mental com Claudia',
   'Framework AIOX completo',
-  'Squad personalizada para seu negocio',
-  'Grupo exclusivo vitalicio',
-  'Gravacoes de todas as aulas',
-  'Atualizacoes futuras do AIOX',
-  'Certificado de conclusao',
+  'Squad personalizada para seu negócio',
+  'Grupo exclusivo vitalício',
+  'Gravações de todas as aulas',
+  'Atualizações futuras do AIOX',
+  'Certificado de conclusão',
 ];
 
 /* ------------------------------------------------------------------ */
@@ -348,7 +348,7 @@ export function PricingCalculator() {
                 <div className="flex items-center gap-2">
                   <Sparkles size={16} className="text-[#FF4400]" />
                   <span className="text-sm font-semibold text-white/80">
-                    Voce Economiza
+                    Você Economiza
                   </span>
                 </div>
                 <div className="text-right">
@@ -395,7 +395,7 @@ export function PricingCalculator() {
               <div className="relative z-10">
                 {/* Badge */}
                 <span className="inline-block px-3 py-1 text-xs font-bold uppercase tracking-widest text-[#FF4400] border border-[#FF4400]/20 bg-[#FF4400]/[0.06] mb-6">
-                  Investimento Unico
+                  Investimento Único
                 </span>
 
                 {/* Claude Code branding */}
@@ -408,7 +408,7 @@ export function PricingCalculator() {
                       Claude Code Agents
                     </p>
                     <p className="text-white/60 text-xs sm:text-sm">
-                      Investimento unico de setup
+                      Investimento único de setup
                     </p>
                   </div>
                 </div>
@@ -416,9 +416,9 @@ export function PricingCalculator() {
                 {/* Benefits */}
                 <div className="flex flex-wrap gap-2 mb-6">
                   {[
-                    'Sem salarios mensais',
+                    'Sem salários mensais',
                     'Disponibilidade 24/7',
-                    'Escalabilidade instantanea',
+                    'Escalabilidade instantânea',
                   ].map((b) => (
                     <span
                       key={b}
@@ -437,7 +437,7 @@ export function PricingCalculator() {
                   </span>
                 </div>
                 <p className="text-white/60 text-sm mb-8">
-                  ou em ate {INSTALLMENTS}x no cartao
+                  ou em até {INSTALLMENTS}x no cartão
                 </p>
 
                 {/* Checklist */}
@@ -491,11 +491,11 @@ export function PricingCalculator() {
           </span>
           <span className="flex items-center gap-2 text-sm text-white/60">
             <HeartHandshake size={16} className="text-[#FF4400]" />
-            Suporte vitalicio
+            Suporte vitalício
           </span>
           <span className="flex items-center gap-2 text-sm text-white/60">
             <Shield size={16} className="text-[#FF4400]" />
-            Satisfacao garantida
+            Satisfação garantida
           </span>
         </motion.div>
       </div>

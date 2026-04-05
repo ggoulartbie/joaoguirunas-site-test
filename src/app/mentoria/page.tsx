@@ -16,7 +16,7 @@ const DISPLAY_FONT = { fontFamily: "'TASAOrbiter', var(--font-bb-display), sans-
 export const metadata: Metadata = {
   title: 'Mentoria Claude Code + AIOX',
   description:
-    'Tenha uma equipe de agentes de IA trabalhando para voce. Mentoria intensiva e pratica com turmas de no maximo 12 pessoas em Florianopolis.',
+    'Tenha uma equipe de agentes de IA trabalhando para você. Mentoria intensiva e prática com turmas de no máximo 12 pessoas em Florianópolis.',
   openGraph: {
     images: [{ url: '/images/mentoria-og.png', width: 1200, height: 630 }],
   },
@@ -76,7 +76,7 @@ export default function MentoriaPage() {
           <div className="relative w-full overflow-hidden" style={{ height: '600px' }}>
             <Image
               src="/images/hero-mobile.png"
-              alt="Joao Guirunas - Mentoria Claude Code"
+              alt="João Guirunas - Mentoria Claude Code"
               fill
               className="object-cover"
               style={{ objectPosition: 'center center' }}
@@ -99,10 +99,10 @@ export default function MentoriaPage() {
               </div>
               <h1 className="text-2xl font-bold text-white leading-[1.15] tracking-tight mb-3" style={DISPLAY_FONT}>
                 Tenha uma Equipe de Agentes de IA{' '}
-                <span className="text-[#FF4400]">Trabalhando Para Voce 24/7</span>
+                <span className="text-[#FF4400]">Trabalhando Para Você 24/7</span>
               </h1>
               <p className="text-sm text-white/80 leading-relaxed mb-5">
-                Aprenda a criar, configurar e orquestrar agentes autonomos que executam tarefas complexas para voce. <strong className="text-white font-medium">Mentoria intensiva e pratica.</strong>
+                Aprenda a criar, configurar e orquestrar agentes autônomos que executam tarefas complexas para você. <strong className="text-white font-medium">Mentoria intensiva e prática.</strong>
               </p>
               <div className="flex flex-col gap-3">
                 <CtaButton label="Fale com um Especialista" />
@@ -144,10 +144,10 @@ export default function MentoriaPage() {
                 </div>
                 <h1 className="text-3xl lg:text-4xl font-bold text-white leading-[1.15] tracking-tight mb-5" style={DISPLAY_FONT}>
                   Tenha uma Equipe de Agentes de IA{' '}
-                  <span className="text-[#FF4400]">Trabalhando Para Voce 24/7</span>
+                  <span className="text-[#FF4400]">Trabalhando Para Você 24/7</span>
                 </h1>
                 <p className="text-base text-white/80 max-w-lg leading-relaxed mb-8">
-                  Aprenda a criar, configurar e orquestrar agentes autonomos que executam tarefas complexas para voce — da escrita de codigo a criacao de conteudo. <strong className="text-white font-medium">Mentoria intensiva e pratica.</strong>
+                  Aprenda a criar, configurar e orquestrar agentes autônomos que executam tarefas complexas para você — da escrita de código à criação de conteúdo. <strong className="text-white font-medium">Mentoria intensiva e prática.</strong>
                 </p>
                 <div className="flex flex-row gap-4 mb-8">
                   <CtaButton label="Fale com um Especialista" />
@@ -178,13 +178,13 @@ export default function MentoriaPage() {
             <SectionBadge label="Quem Facilita" />
             <h2 className="text-2xl font-bold text-white sm:text-3xl lg:text-4xl mb-4 leading-tight tracking-tight" style={DISPLAY_FONT}>Seus <span className="text-[#FF4400]">Facilitadores</span></h2>
             <div className="mx-auto w-12 sm:w-16 accent-line mb-4 sm:mb-6" />
-            <p className="text-sm sm:text-lg text-white/60 max-w-3xl mx-auto leading-relaxed">Profissionais experientes que vivem e respiram IA aplicada a negocios. Fundadores da GrowthSales.ai.</p>
+            <p className="text-sm sm:text-lg text-white/60 max-w-3xl mx-auto leading-relaxed">Profissionais experientes que vivem e respiram IA aplicada a negócios. Fundadores da GrowthSales.ai.</p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-12 sm:gap-16 lg:gap-20 max-w-5xl mx-auto">
             {[
-              { name: 'Joao Guirunas', role: 'Fundador GrowthSales.ai', bio: 'Especialista em IA aplicada a vendas e marketing. Pioneiro em orquestracao de agentes autonomos. Criador do framework AIOX.', img: '/images/joao-guirunas-profile.jpg', linkedin: 'https://www.linkedin.com/in/joaoguirunas' },
-              { name: 'Claudia Guirunas', role: 'Co-Fundadora GrowthSales.ai', bio: 'Especialista em transformacao digital e implementacao de IA em processos de vendas. Focada em resultados mensuraveis e ROI.', img: '/images/claudia-guirunas.png', linkedin: 'https://www.linkedin.com/in/claudiaguirunas' },
+              { name: 'João Guirunas', role: 'Fundador GrowthSales.ai', bio: 'Especialista em IA aplicada a vendas e marketing. Pioneiro em orquestração de agentes autônomos. Criador do framework AIOX.', img: '/images/joao-guirunas-profile.jpg', linkedin: 'https://www.linkedin.com/in/joaoguirunas' },
+              { name: 'Claudia Guirunas', role: 'Co-Fundadora GrowthSales.ai', bio: 'Especialista em transformação digital e implementação de IA em processos de vendas. Focada em resultados mensuráveis e ROI.', img: '/images/claudia-guirunas.png', linkedin: 'https://www.linkedin.com/in/claudiaguirunas' },
             ].map((f) => (
               <div key={f.name} className="flex flex-col items-center text-center group">
                 <div className="relative mb-8">
@@ -208,7 +208,7 @@ export default function MentoriaPage() {
 
           <div className="mt-12 text-center">
             <a href="https://www.growthsales.ai/cultura" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 px-6 py-3 border border-[#FF4400]/30 bg-[#FF4400]/10 text-[#FF4400] hover:bg-[#FF4400]/20 transition-all text-sm font-semibold uppercase tracking-wider" style={{ fontFamily: "'Roboto Mono', var(--font-bb-mono), monospace" }}>
-              Conheca Nossa Cultura
+              Conheça Nossa Cultura
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" /></svg>
             </a>
           </div>
@@ -240,7 +240,7 @@ export default function MentoriaPage() {
         <div className="mx-auto max-w-4xl px-5 sm:px-6 lg:px-8">
           <div className="text-center mb-10 sm:mb-16">
             <SectionBadge label="FAQ" />
-            <h2 className="text-2xl font-bold text-white sm:text-3xl lg:text-4xl tracking-tight" style={DISPLAY_FONT}>Duvidas Comuns</h2>
+            <h2 className="text-2xl font-bold text-white sm:text-3xl lg:text-4xl tracking-tight" style={DISPLAY_FONT}>Dúvidas Comuns</h2>
             <div className="mx-auto mt-4 sm:mt-6 w-12 sm:w-16 accent-line" />
           </div>
           <FaqAccordion />
@@ -250,10 +250,10 @@ export default function MentoriaPage() {
       {/* ===== CTA FINAL ===== */}
       <section className="py-12 sm:py-16 bg-[#08080C]">
         <div className="mx-auto max-w-4xl px-5 sm:px-6 lg:px-8 text-center">
-          <h3 className="text-xl sm:text-3xl font-bold text-white mb-4 leading-tight">Pronto para ter sua propria <span className="text-[#FF4400]">equipe de agentes IA</span>?</h3>
-          <p className="text-white/60 mb-8 max-w-2xl mx-auto text-sm sm:text-base">Fale com nossa equipe e garante sua vaga na proxima turma</p>
+          <h3 className="text-xl sm:text-3xl font-bold text-white mb-4 leading-tight">Pronto para ter sua própria <span className="text-[#FF4400]">equipe de agentes IA</span>?</h3>
+          <p className="text-white/60 mb-8 max-w-2xl mx-auto text-sm sm:text-base">Fale com nossa equipe e garanta sua vaga na próxima turma</p>
           <CtaButton label="Falar com Especialista" className="text-base sm:text-lg" />
-          <p className="mt-6 text-xs sm:text-sm text-white/60"><Icon name="zap" size="16" className="inline" /> Resposta em ate 24h | <Icon name="lock" size="16" className="inline" /> Dados 100% seguros</p>
+          <p className="mt-6 text-xs sm:text-sm text-white/60"><Icon name="zap" size="16" className="inline" /> Resposta em até 24h | <Icon name="lock" size="16" className="inline" /> Dados 100% seguros</p>
         </div>
       </section>
 

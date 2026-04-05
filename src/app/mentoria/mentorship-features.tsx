@@ -64,16 +64,16 @@ const features = [
     icon: <Brain size={20} />,
     title: 'Desbloqueio Mental com Claudia Guirunas',
     highlights: [
-      'Psicanalista e Socia da GrowthSales',
-      'Tecnicas de desbloqueio mental e respiracao para controlar a ansiedade da tela preta',
-      'Voce nao vai ouvir isso em nenhum curso tecnico',
+      'Psicanalista e Sócia da GrowthSales',
+      'Técnicas de desbloqueio mental e respiração para controlar a ansiedade da tela preta',
+      'Você não vai ouvir isso em nenhum curso técnico',
     ],
   },
   {
     icon: <Users size={20} />,
-    title: 'Turmas de No Maximo 12 Pessoas',
+    title: 'Turmas de No Máximo 12 Pessoas',
     highlights: [
-      'Atencao individual em cada encontro',
+      'Atenção individual em cada encontro',
       'Troubleshooting personalizado',
       'Networking real com pessoas comprometidas',
     ],
@@ -83,8 +83,8 @@ const features = [
     title: 'Squad Personalizada Para Seu Contexto',
     highlights: [
       'Entendemos seu caso de uso',
-      'Criamos agentes especificos para sua necessidade',
-      'Voce sai com algo funcionando para SEU trabalho',
+      'Criamos agentes específicos para sua necessidade',
+      'Você sai com algo funcionando para SEU trabalho',
     ],
   },
 ];
@@ -143,13 +143,13 @@ export function MentorshipFeatures() {
           className="text-center mb-12 sm:mb-16"
         >
           <h2 className="text-2xl font-bold text-white sm:text-3xl lg:text-4xl leading-tight tracking-tight" style={{ fontFamily: "'TASAOrbiter', var(--font-bb-display), sans-serif" }}>
-            Nao E Mais Um Curso Online.
+            Não É Mais Um Curso Online.
             <br />
-            <span className="text-[#FF4400]">E Uma Transformacao Guiada.</span>
+            <span className="text-[#FF4400]">É Uma Transformação Guiada.</span>
           </h2>
           <div className="mx-auto mt-4 sm:mt-6 w-16 sm:w-24 h-[2px] bg-gradient-to-r from-transparent via-[#FF4400] to-transparent" />
           <p className="mt-4 sm:mt-6 text-sm sm:text-lg text-white/60 max-w-2xl mx-auto leading-relaxed">
-            Descubra por que nossa mentoria e diferente de tudo que voce ja viu
+            Descubra por que nossa mentoria é diferente de tudo que você já viu
           </p>
         </motion.div>
 

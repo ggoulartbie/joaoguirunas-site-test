@@ -19,23 +19,23 @@ const cards: CardData[] = [
   {
     number: '01',
     icon: <Bot size={48} strokeWidth={1.5} />,
-    title: 'Delegacao Inteligente',
+    title: 'Delegação Inteligente',
     description:
-      'Delegar tarefas complexas para agentes que nunca dormem, nunca erram contexto e custam uma fracao de um funcionario.',
+      'Delegar tarefas complexas para agentes que nunca dormem, nunca erram contexto e custam uma fração de um funcionário.',
   },
   {
     number: '02',
     icon: <Code size={48} strokeWidth={1.5} />,
     title: 'Sua Equipe Completa',
     description:
-      'Ter um dev senior, um QA, um designer, um copywriter — tudo rodando na sua maquina, integrado aos seus projetos.',
+      'Ter um dev sênior, um QA, um designer, um copywriter — tudo rodando na sua máquina, integrado aos seus projetos.',
   },
   {
     number: '03',
     icon: <TrendingUp size={48} strokeWidth={1.5} />,
     title: 'Escala Sem Contratar',
     description:
-      'Escalar sua producao sem contratar — criar 10 posts de LinkedIn, 5 apresentacoes e revisar 20 PRs... em uma tarde.',
+      'Escalar sua produção sem contratar — criar 10 posts de LinkedIn, 5 apresentações e revisar 20 PRs... em uma tarde.',
   },
 ];
 
@@ -154,7 +154,7 @@ export function SolutionSection() {
                 fontWeight: 600,
               }}
             >
-              Solucao Completa
+              Solução Completa
             </span>
           </div>
 
@@ -164,13 +164,13 @@ export function SolutionSection() {
           >
             Imagine ter uma equipe de especialistas
             <br />
-            <span className="text-[#FF4400]">trabalhando para voce 24/7</span>
+            <span className="text-[#FF4400]">trabalhando para você 24/7</span>
           </h2>
 
           <div className="mx-auto mt-4 sm:mt-6 w-16 sm:w-24 h-[2px] bg-gradient-to-r from-transparent via-[#FF4400] to-transparent" />
 
           <p className="mt-4 sm:mt-6 text-sm sm:text-lg text-white/50 max-w-2xl mx-auto leading-relaxed">
-            E se voce pudesse delegar, escalar e automatizar com agentes de IA
+            E se você pudesse delegar, escalar e automatizar com agentes de IA
             especializados?
           </p>
         </motion.div>
@@ -201,10 +201,10 @@ export function SolutionSection() {
           className="mt-14 sm:mt-20 text-center"
         >
           <p className="text-white font-semibold text-lg sm:text-2xl tracking-tight">
-            Isso nao e ficcao cientifica.
+            Isso não é ficção científica.
             <br />
             <span className="text-white/60">
-              E o que voce vai{' '}
+              É o que você vai{' '}
               <span className="text-[#FF4400]">construir nesta mentoria.</span>
             </span>
           </p>

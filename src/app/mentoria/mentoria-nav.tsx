@@ -6,11 +6,11 @@ import { motion, AnimatePresence } from 'framer-motion';
 const NAV_ITEMS = [
   { id: 'hero', label: 'Inicio' },
   { id: 'diferenciais', label: 'Diferenciais' },
-  { id: 'modulos', label: 'Modulos' },
+  { id: 'modulos', label: 'Módulos' },
   { id: 'facilitadores', label: 'Facilitadores' },
   { id: 'investimento', label: 'Investimento' },
   { id: 'faq', label: 'FAQ' },
-  { id: 'inscricao', label: 'Inscricao' },
+  { id: 'inscricao', label: 'Inscrição' },
 ] as const;
 
 export function MentoriaNav() {

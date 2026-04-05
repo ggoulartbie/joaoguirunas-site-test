@@ -5,10 +5,10 @@ import { useState, useEffect, useCallback } from 'react';
 const SECTIONS = [
   { id: 'hero', label: 'Inicio' },
   { id: 'diferenciais', label: 'Diferenciais' },
-  { id: 'modulos', label: 'Modulos' },
+  { id: 'modulos', label: 'Módulos' },
   { id: 'facilitadores', label: 'Facilitadores' },
   { id: 'investimento', label: 'Investimento' },
-  { id: 'inscricao', label: 'Inscricao' },
+  { id: 'inscricao', label: 'Inscrição' },
   { id: 'faq', label: 'FAQ' },
 ] as const;
 
@@ -48,7 +48,7 @@ export function SectionDots() {
   return (
     <nav
       className="fixed right-4 top-1/2 -translate-y-1/2 z-30 hidden md:flex flex-col items-end gap-0"
-      aria-label="Navegacao por secoes"
+      aria-label="Navegação por seções"
     >
       {SECTIONS.map(({ id, label }, i) => {
         const isActive = activeId === id;
