@@ -71,7 +71,7 @@ export default function MentoriaPage() {
       {/* ===== HERO ===== */}
       <section id="hero" className="relative w-full bg-[#08080C] -mt-16">
         {/* MOBILE: imagem é o fundo de tudo incluindo texto */}
-        <div className="sm:hidden relative min-h-[220vw]">
+        <div className="sm:hidden relative" style={{ height: '150vw' }}>
           <Image
             src="/images/hero-mobile.png"
             alt="Joao Guirunas - Mentoria Claude Code"
