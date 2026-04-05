@@ -53,7 +53,7 @@ function SolutionCard({
       initial={{ opacity: 0, y: 40 }}
       animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 40 }}
       transition={{ duration: 0.6, delay: 0.2 + index * 0.15, ease: 'easeOut' }}
-      className="group relative border border-white/[0.08] bg-white/[0.03] backdrop-blur-sm p-6 sm:p-8 lg:p-10 transition-all duration-300 hover:border-[#FF4400]/30"
+      className="group relative h-full border border-white/[0.08] bg-white/[0.03] backdrop-blur-sm p-6 sm:p-8 lg:p-10 transition-all duration-300 hover:border-[#FF4400]/30"
     >
       {/* Number */}
       <span
@@ -92,9 +92,8 @@ function useCarouselDots(count: number) {
   const onScroll = useCallback(() => {
     const el = scrollRef.current;
     if (!el) return;
-    const scrollLeft = el.scrollLeft;
     const cardWidth = el.scrollWidth / count;
-    setActiveIndex(Math.round(scrollLeft / cardWidth));
+    setActiveIndex(Math.round(el.scrollLeft / cardWidth));
   }, [count]);
 
   useEffect(() => {
@@ -109,7 +108,7 @@ function useCarouselDots(count: number) {
 
 function CarouselDots({ count, activeIndex }: { count: number; activeIndex: number }) {
   return (
-    <div className="flex items-center justify-center gap-2 mt-4 sm:hidden">
+    <div className="flex items-center justify-center gap-2 mt-4 md:hidden">
       {Array.from({ length: count }, (_, i) => (
         <span
           key={i}
@@ -183,7 +182,7 @@ export function SolutionSection() {
           style={{ scrollbarWidth: 'none' }}
         >
           {cards.map((card, i) => (
-            <div key={card.number} className="min-w-[85vw] md:min-w-0 snap-center flex-shrink-0 md:flex-shrink">
+            <div key={card.number} className="min-w-[80vw] md:min-w-0 snap-center flex-shrink-0 md:flex-shrink">
               <SolutionCard
                 card={card}
                 index={i}

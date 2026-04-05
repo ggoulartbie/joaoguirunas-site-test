@@ -114,7 +114,7 @@ function useCarouselDots(count: number) {
 
 function CarouselDots({ count, activeIndex }: { count: number; activeIndex: number }) {
   return (
-    <div className="flex items-center justify-center gap-2 mt-4 sm:hidden">
+    <div className="flex items-center justify-center gap-2 mt-4 md:hidden">
       {Array.from({ length: count }, (_, i) => (
         <span
           key={i}
@@ -159,7 +159,7 @@ export function MentorshipFeatures() {
           style={{ scrollbarWidth: 'none' }}
         >
           {features.map((feature, index) => (
-            <div key={feature.title} className="min-w-[85vw] md:min-w-0 snap-center flex-shrink-0 md:flex-shrink">
+            <div key={feature.title} className="min-w-[80vw] md:min-w-0 snap-center flex-shrink-0 md:flex-shrink">
               <FeatureCard
                 icon={feature.icon}
                 title={feature.title}
