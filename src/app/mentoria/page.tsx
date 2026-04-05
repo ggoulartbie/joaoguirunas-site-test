@@ -84,10 +84,10 @@ export default function MentoriaPage() {
             {/* Overlay geral escuro */}
             <div className="absolute inset-0 bg-[#08080C]/20" />
             {/* Degradê preto começa em 25% */}
-            <div className="absolute inset-0" style={{ background: 'linear-gradient(to bottom, transparent 0%, transparent 25%, rgba(8,8,12,0.3) 40%, rgba(8,8,12,0.65) 58%, rgba(8,8,12,0.88) 74%, #08080C 88%)' }} />
+            <div className="absolute inset-0" style={{ background: 'linear-gradient(to bottom, transparent 0%, transparent 35%, rgba(8,8,12,0.3) 50%, rgba(8,8,12,0.65) 66%, rgba(8,8,12,0.88) 80%, #08080C 93%)' }} />
           </div>
           {/* Texto sobe 100px para dentro da imagem */}
-          <div className="-mt-28 relative z-10 px-6 pb-12">
+          <div className="-mt-20 relative z-10 px-6 pb-12">
             <div className="inline-flex items-center gap-2 border border-[#FF4400]/60 px-4 py-2 mb-5" style={{ background: 'rgba(255,68,0,0.08)' }}>
               <span className="relative inline-flex h-2.5 w-2.5">
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#FF4400] opacity-75" />
