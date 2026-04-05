@@ -72,7 +72,7 @@ export default function MentoriaPage() {
       <section id="hero" className="relative w-full bg-[#08080C] -mt-16">
         {/* MOBILE: imagem com texto sobreposto na base */}
         <div className="sm:hidden">
-          <div className="relative w-full h-[100vw] max-h-[560px] overflow-hidden">
+          <div className="relative w-full h-[100vw] max-h-[560px] overflow-hidden" style={{ clipPath: 'inset(20px 0 0 0)' }}>
             <Image
               src="/images/hero-mobile.png"
               alt="Joao Guirunas - Mentoria Claude Code"
