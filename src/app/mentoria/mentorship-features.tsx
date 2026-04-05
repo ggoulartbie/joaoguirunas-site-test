@@ -25,9 +25,9 @@ const FeatureCard: React.FC<FeatureCardProps> = ({ icon, title, highlights, inde
       transition={{ duration: 0.6, delay: index * 0.15, ease: 'easeOut' }}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
-      className="relative group"
+      className="relative group h-full"
     >
-      <div className="relative h-full min-h-[280px] border border-white/[0.08] bg-white/[0.02] backdrop-blur-md p-6 sm:p-8 transition-all duration-300 hover:border-[#FF4400]/40 hover:bg-white/[0.04]">
+      <div className="relative h-full min-h-[320px] border border-white/[0.08] bg-white/[0.02] backdrop-blur-md p-6 sm:p-8 transition-all duration-300 hover:border-[#FF4400]/40 hover:bg-white/[0.04]">
         {isHovered && (
           <motion.div
             initial={{ opacity: 0 }}
@@ -155,11 +155,11 @@ export function MentorshipFeatures() {
 
         <div
           ref={carouselRef}
-          className="flex gap-4 overflow-x-auto snap-x snap-mandatory pb-4 md:grid md:grid-cols-3 md:overflow-visible md:snap-none md:gap-6 md:pb-0"
+          className="flex gap-4 overflow-x-auto snap-x snap-mandatory pb-4 md:grid md:grid-cols-3 md:items-stretch md:overflow-visible md:snap-none md:gap-6 md:pb-0"
           style={{ scrollbarWidth: 'none' }}
         >
           {features.map((feature, index) => (
-            <div key={feature.title} className="w-[280px] flex-shrink-0 snap-center md:w-auto md:flex-shrink-0">
+            <div key={feature.title} className="w-[280px] flex-shrink-0 snap-center md:w-auto md:flex-shrink-0 md:h-full">
               <FeatureCard
                 icon={feature.icon}
                 title={feature.title}
