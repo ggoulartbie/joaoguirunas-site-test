@@ -82,9 +82,9 @@ export default function MentoriaPage() {
               priority
             />
             <div className="absolute inset-0 bg-[#08080C]/10" />
-            <div className="absolute inset-0" style={{ background: 'linear-gradient(to bottom, transparent 0%, transparent 20%, rgba(8,8,12,0.3) 45%, rgba(8,8,12,0.75) 70%, #08080C 88%)' }} />
+            <div className="absolute inset-0" style={{ background: 'linear-gradient(to bottom, transparent 0%, transparent 10%, rgba(8,8,12,0.12) 35%, rgba(8,8,12,0.5) 62%, rgba(8,8,12,0.85) 80%, #08080C 92%)' }} />
           </div>
-          <div className="relative z-10 px-6 pb-10 pt-4">
+          <div className="-mt-8 relative z-10 px-6 pb-10">
             <div className="inline-flex items-center gap-2 border border-[#FF4400]/60 px-4 py-2 mb-5" style={{ background: 'rgba(255,68,0,0.08)' }}>
               <span className="relative inline-flex h-2.5 w-2.5">
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#FF4400] opacity-75" />
