@@ -147,8 +147,8 @@ function ProfessionalRow({
       className={cn(
         'w-full flex items-center gap-2 sm:gap-3 px-3 sm:px-4 py-2.5 sm:py-3 border transition-all duration-200 cursor-pointer select-none',
         checked
-          ? 'border-[#FF4400]/30 bg-[#FF4400]/[0.08]'
-          : 'border-white/[0.08] bg-white/[0.03] hover:bg-white/[0.06]',
+          ? 'border-white/[0.10] bg-white/[0.06]'
+          : 'border-white/[0.05] bg-white/[0.02] hover:bg-white/[0.05]',
       )}
     >
       <span
