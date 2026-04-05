@@ -71,7 +71,7 @@ export default function MentoriaPage() {
       {/* ===== HERO ===== */}
       <section id="hero" className="relative w-full bg-[#08080C] -mt-16">
         {/* MOBILE: imagem é o fundo de tudo incluindo texto */}
-        <div className="sm:hidden relative min-h-[145vw]">
+        <div className="sm:hidden relative min-h-[185vw]">
           <Image
             src="/images/hero-mobile.png"
             alt="Joao Guirunas - Mentoria Claude Code"
@@ -82,7 +82,7 @@ export default function MentoriaPage() {
           />
           {/* Overlay sutil + degradê na base */}
           <div className="absolute inset-0 bg-[#08080C]/10" />
-          <div className="absolute inset-0" style={{ background: 'linear-gradient(to bottom, transparent 0%, transparent 55%, rgba(8,8,12,0.5) 75%, rgba(8,8,12,0.85) 88%, #08080C 100%)' }} />
+          <div className="absolute inset-0" style={{ background: 'linear-gradient(to bottom, transparent 0%, transparent 35%, rgba(8,8,12,0.4) 55%, rgba(8,8,12,0.8) 72%, #08080C 85%)' }} />
           {/* Texto sobre a imagem no rodapé */}
           <div className="absolute bottom-0 left-0 right-0 z-10 px-6 pb-10">
             <div className="inline-flex items-center gap-2 border border-[#FF4400]/60 px-4 py-2 mb-5" style={{ background: 'rgba(255,68,0,0.08)' }}>
