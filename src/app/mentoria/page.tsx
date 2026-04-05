@@ -85,9 +85,9 @@ export default function MentoriaPage() {
             {/* Overlay geral */}
             <div className="absolute inset-0 bg-[#08080C]/15" />
             {/* Degradê na base */}
-            <div className="absolute inset-0" style={{ background: 'linear-gradient(to bottom, transparent 0%, transparent 45%, rgba(8,8,12,0.5) 65%, rgba(8,8,12,0.9) 82%, #08080C 95%)' }} />
+            <div className="absolute inset-0" style={{ background: 'linear-gradient(to bottom, transparent 0%, rgba(8,8,12,0.03) 30%, rgba(8,8,12,0.1) 55%, rgba(8,8,12,0.5) 75%, rgba(8,8,12,0.82) 88%, #08080C 98%)' }} />
             {/* Texto sobre a imagem */}
-            <div className="absolute bottom-0 left-0 right-0 z-10 px-6 pb-8">
+            <div className="absolute bottom-0 left-0 right-0 z-10 px-6 pb-12">
               <div className="inline-flex items-center gap-2 border border-[#FF4400]/60 px-4 py-2 mb-4" style={{ background: 'rgba(255,68,0,0.08)' }}>
                 <span className="relative inline-flex h-2.5 w-2.5">
                   <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#FF4400] opacity-75" />
