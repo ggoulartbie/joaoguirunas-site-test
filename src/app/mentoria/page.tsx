@@ -80,8 +80,8 @@ export default function MentoriaPage() {
               className="object-cover object-top"
               priority
             />
-            {/* Topo escuro (atrás do header) + degradê ultra-sutil embaixo */}
-            <div className="absolute inset-0" style={{ background: 'linear-gradient(to bottom, rgba(8,8,12,0.6) 0%, rgba(8,8,12,0.1) 18%, transparent 30%, transparent 50%, rgba(8,8,12,0.08) 60%, rgba(8,8,12,0.4) 75%, rgba(8,8,12,0.85) 90%, #08080C 100%)' }} />
+            {/* Overlay geral + degradê subindo 20px */}
+            <div className="absolute inset-0" style={{ background: 'linear-gradient(to bottom, rgba(8,8,12,0.6) 0%, rgba(8,8,12,0.15) 18%, rgba(8,8,12,0.1) 30%, rgba(8,8,12,0.1) 45%, rgba(8,8,12,0.2) 55%, rgba(8,8,12,0.5) 68%, rgba(8,8,12,0.85) 83%, #08080C 100%)' }} />
           </div>
           {/* Texto sobe 100px para dentro da imagem */}
           <div className="-mt-28 relative z-10 px-6 pb-12">
