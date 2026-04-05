@@ -70,21 +70,21 @@ export default function MentoriaPage() {
       <SectionDots />
       {/* ===== HERO ===== */}
       <section id="hero" className="relative w-full bg-[#08080C] -mt-16">
-        {/* MOBILE: imagem é o fundo de tudo incluindo texto */}
-        <div className="sm:hidden relative" style={{ height: '150vw' }}>
-          <Image
-            src="/images/hero-mobile.png"
-            alt="Joao Guirunas - Mentoria Claude Code"
-            fill
-            className="object-cover"
-            style={{ objectPosition: 'center 3%' }}
-            priority
-          />
-          {/* Overlay sutil + degradê na base */}
-          <div className="absolute inset-0 bg-[#08080C]/10" />
-          <div className="absolute inset-0" style={{ background: 'linear-gradient(to bottom, transparent 0%, transparent 35%, rgba(8,8,12,0.4) 55%, rgba(8,8,12,0.8) 72%, #08080C 85%)' }} />
-          {/* Texto sobre a imagem no rodapé */}
-          <div className="absolute bottom-0 left-0 right-0 z-10 px-6 pb-10">
+        {/* MOBILE: imagem no topo, texto abaixo com overlap */}
+        <div className="sm:hidden">
+          <div className="relative w-full overflow-hidden" style={{ height: '100vw' }}>
+            <Image
+              src="/images/hero-mobile.png"
+              alt="Joao Guirunas - Mentoria Claude Code"
+              fill
+              className="object-cover"
+              style={{ objectPosition: 'center 35%' }}
+              priority
+            />
+            <div className="absolute inset-0 bg-[#08080C]/10" />
+            <div className="absolute inset-0" style={{ background: 'linear-gradient(to bottom, transparent 0%, transparent 50%, rgba(8,8,12,0.5) 70%, rgba(8,8,12,0.9) 88%, #08080C 100%)' }} />
+          </div>
+          <div className="-mt-16 relative z-10 px-6 pb-10">
             <div className="inline-flex items-center gap-2 border border-[#FF4400]/60 px-4 py-2 mb-5" style={{ background: 'rgba(255,68,0,0.08)' }}>
               <span className="relative inline-flex h-2.5 w-2.5">
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#FF4400] opacity-75" />
