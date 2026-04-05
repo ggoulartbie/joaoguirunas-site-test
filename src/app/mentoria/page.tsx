@@ -81,8 +81,6 @@ export default function MentoriaPage() {
               style={{ objectPosition: 'center 35%' }}
               priority
             />
-            <div className="absolute inset-0 bg-[#08080C]/10" />
-            <div className="absolute inset-0" style={{ background: 'linear-gradient(to bottom, transparent 0%, rgba(8,8,12,0.05) 40%, rgba(8,8,12,0.15) 70%, rgba(8,8,12,0.35) 90%, rgba(8,8,12,0.5) 100%)' }} />
           </div>
           <div className="-mt-8 relative z-10 px-6 pb-10">
             <div className="inline-flex items-center gap-2 border border-[#FF4400]/60 px-4 py-2 mb-5" style={{ background: 'rgba(255,68,0,0.08)' }}>
