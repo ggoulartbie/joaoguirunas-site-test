@@ -72,7 +72,7 @@ export default function MentoriaPage() {
       <section id="hero" className="relative w-full bg-[#08080C]">
         {/* MOBILE: imagem com texto sobreposto na base */}
         <div className="sm:hidden">
-          <div className="relative w-full h-[100vw] max-h-[540px] overflow-hidden">
+          <div className="relative w-full h-[100vw] max-h-[540px] overflow-hidden mt-2 rounded-t-sm">
             <Image
               src="/images/hero-mobile.png"
               alt="Joao Guirunas - Mentoria Claude Code"
@@ -80,8 +80,8 @@ export default function MentoriaPage() {
               className="object-cover object-top"
               priority
             />
-            {/* Degradê ultra-sutil: começa a aparecer apenas nos últimos 30% */}
-            <div className="absolute inset-0" style={{ background: 'linear-gradient(to bottom, transparent 40%, rgba(8,8,12,0.15) 65%, rgba(8,8,12,0.55) 80%, #08080C 100%)' }} />
+            {/* Leve transparência no topo + degradê ultra-sutil embaixo */}
+            <div className="absolute inset-0" style={{ background: 'linear-gradient(to bottom, rgba(8,8,12,0.25) 0%, transparent 12%, transparent 35%, rgba(8,8,12,0.08) 55%, rgba(8,8,12,0.35) 72%, rgba(8,8,12,0.75) 88%, #08080C 100%)' }} />
           </div>
           {/* Texto sobe 100px para dentro da imagem */}
           <div className="-mt-28 relative z-10 px-6 pb-12">
