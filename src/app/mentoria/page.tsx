@@ -76,7 +76,7 @@ export default function MentoriaPage() {
           alt="Joao Guirunas - Mentoria Claude Code"
           fill
           className="object-cover sm:hidden"
-          style={{ objectPosition: 'center 15%' }}
+          style={{ objectPosition: 'center top' }}
           priority
         />
         {/* Desktop hero image */}

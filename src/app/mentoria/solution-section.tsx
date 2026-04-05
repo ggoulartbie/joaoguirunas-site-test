@@ -182,7 +182,7 @@ export function SolutionSection() {
           style={{ scrollbarWidth: 'none' }}
         >
           {cards.map((card, i) => (
-            <div key={card.number} className="min-w-[80vw] md:min-w-0 snap-center flex-shrink-0 md:flex-shrink">
+            <div key={card.number} className="w-[80vw] flex-shrink-0 snap-center md:w-auto md:flex-shrink">
               <SolutionCard
                 card={card}
                 index={i}
