@@ -69,10 +69,10 @@ export default function MentoriaPage() {
       <MentoriaNav />
       <SectionDots />
       {/* ===== HERO ===== */}
-      <section id="hero" className="relative w-full bg-[#08080C]">
+      <section id="hero" className="relative w-full bg-[#08080C] -mt-16">
         {/* MOBILE: imagem com texto sobreposto na base */}
         <div className="sm:hidden">
-          <div className="relative w-full h-[100vw] max-h-[540px] overflow-hidden mt-2 rounded-t-sm">
+          <div className="relative w-full h-[100vw] max-h-[560px] overflow-hidden">
             <Image
               src="/images/hero-mobile.png"
               alt="Joao Guirunas - Mentoria Claude Code"
@@ -80,8 +80,8 @@ export default function MentoriaPage() {
               className="object-cover object-top"
               priority
             />
-            {/* Leve transparência no topo + degradê ultra-sutil embaixo */}
-            <div className="absolute inset-0" style={{ background: 'linear-gradient(to bottom, rgba(8,8,12,0.25) 0%, transparent 12%, transparent 35%, rgba(8,8,12,0.08) 55%, rgba(8,8,12,0.35) 72%, rgba(8,8,12,0.75) 88%, #08080C 100%)' }} />
+            {/* Topo escuro (atrás do header) + degradê ultra-sutil embaixo */}
+            <div className="absolute inset-0" style={{ background: 'linear-gradient(to bottom, rgba(8,8,12,0.6) 0%, rgba(8,8,12,0.1) 18%, transparent 30%, transparent 50%, rgba(8,8,12,0.08) 60%, rgba(8,8,12,0.4) 75%, rgba(8,8,12,0.85) 90%, #08080C 100%)' }} />
           </div>
           {/* Texto sobe 100px para dentro da imagem */}
           <div className="-mt-28 relative z-10 px-6 pb-12">
