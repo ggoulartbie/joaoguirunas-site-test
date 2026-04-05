@@ -1,6 +1,7 @@
 'use client';
 
 import * as React from 'react';
+import { useState, useRef, useCallback, useEffect } from 'react';
 import { motion, useInView } from 'framer-motion';
 import { Brain, Users, Target } from 'lucide-react';
 
@@ -90,9 +91,46 @@ const features = [
 
 const INSCRICAO_ANCHOR = '#inscricao';
 
+function useCarouselDots(count: number) {
+  const scrollRef = useRef<HTMLDivElement>(null);
+  const [activeIndex, setActiveIndex] = useState(0);
+
+  const onScroll = useCallback(() => {
+    const el = scrollRef.current;
+    if (!el) return;
+    const cardWidth = el.scrollWidth / count;
+    setActiveIndex(Math.round(el.scrollLeft / cardWidth));
+  }, [count]);
+
+  useEffect(() => {
+    const el = scrollRef.current;
+    if (!el) return;
+    el.addEventListener('scroll', onScroll, { passive: true });
+    return () => el.removeEventListener('scroll', onScroll);
+  }, [onScroll]);
+
+  return { scrollRef, activeIndex };
+}
+
+function CarouselDots({ count, activeIndex }: { count: number; activeIndex: number }) {
+  return (
+    <div className="flex items-center justify-center gap-2 mt-4 sm:hidden">
+      {Array.from({ length: count }, (_, i) => (
+        <span
+          key={i}
+          className={`w-2 h-2 rounded-full transition-colors duration-200 ${
+            i === activeIndex ? 'bg-[#FF4400]' : 'bg-white/20'
+          }`}
+        />
+      ))}
+    </div>
+  );
+}
+
 export function MentorshipFeatures() {
   const headerRef = React.useRef<HTMLDivElement>(null);
   const isHeaderInView = useInView(headerRef, { once: true, margin: '-50px' });
+  const { scrollRef: carouselRef, activeIndex } = useCarouselDots(features.length);
 
   return (
     <section id="diferenciais" className="py-16 sm:py-24 bg-[#08080C]">
@@ -115,17 +153,23 @@ export function MentorshipFeatures() {
           </p>
         </motion.div>
 
-        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        <div
+          ref={carouselRef}
+          className="flex gap-4 overflow-x-auto snap-x snap-mandatory pb-4 -mx-4 px-4 sm:grid sm:grid-cols-2 sm:overflow-visible sm:snap-none sm:mx-0 sm:px-0 sm:gap-6 lg:grid-cols-3"
+          style={{ scrollbarWidth: 'none' }}
+        >
           {features.map((feature, index) => (
-            <FeatureCard
-              key={feature.title}
-              icon={feature.icon}
-              title={feature.title}
-              highlights={feature.highlights}
-              index={index}
-            />
+            <div key={feature.title} className="min-w-[85vw] sm:min-w-0 snap-center flex-shrink-0 sm:flex-shrink">
+              <FeatureCard
+                icon={feature.icon}
+                title={feature.title}
+                highlights={feature.highlights}
+                index={index}
+              />
+            </div>
           ))}
         </div>
+        <CarouselDots count={features.length} activeIndex={activeIndex} />
 
         <motion.div
           initial={{ opacity: 0, y: 20 }}

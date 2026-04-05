@@ -1,6 +1,6 @@
 'use client';
 
-import { useRef } from 'react';
+import { useRef, useState, useCallback, useEffect } from 'react';
 import { motion, useInView } from 'framer-motion';
 import { Bot, Code, TrendingUp } from 'lucide-react';
 
@@ -85,9 +85,47 @@ function SolutionCard({
   );
 }
 
+function useCarouselDots(count: number) {
+  const scrollRef = useRef<HTMLDivElement>(null);
+  const [activeIndex, setActiveIndex] = useState(0);
+
+  const onScroll = useCallback(() => {
+    const el = scrollRef.current;
+    if (!el) return;
+    const scrollLeft = el.scrollLeft;
+    const cardWidth = el.scrollWidth / count;
+    setActiveIndex(Math.round(scrollLeft / cardWidth));
+  }, [count]);
+
+  useEffect(() => {
+    const el = scrollRef.current;
+    if (!el) return;
+    el.addEventListener('scroll', onScroll, { passive: true });
+    return () => el.removeEventListener('scroll', onScroll);
+  }, [onScroll]);
+
+  return { scrollRef, activeIndex };
+}
+
+function CarouselDots({ count, activeIndex }: { count: number; activeIndex: number }) {
+  return (
+    <div className="flex items-center justify-center gap-2 mt-4 sm:hidden">
+      {Array.from({ length: count }, (_, i) => (
+        <span
+          key={i}
+          className={`w-2 h-2 rounded-full transition-colors duration-200 ${
+            i === activeIndex ? 'bg-[#FF4400]' : 'bg-white/20'
+          }`}
+        />
+      ))}
+    </div>
+  );
+}
+
 export function SolutionSection() {
   const sectionRef = useRef<HTMLElement>(null);
   const isInView = useInView(sectionRef, { once: true, margin: '-80px' });
+  const { scrollRef: carouselRef, activeIndex } = useCarouselDots(cards.length);
 
   return (
     <section
@@ -138,17 +176,23 @@ export function SolutionSection() {
           </p>
         </motion.div>
 
-        {/* Cards grid */}
-        <div className="grid gap-6 lg:grid-cols-3">
+        {/* Cards carousel (mobile) / grid (desktop) */}
+        <div
+          ref={carouselRef}
+          className="flex gap-4 overflow-x-auto snap-x snap-mandatory pb-4 -mx-4 px-4 sm:grid sm:grid-cols-2 sm:overflow-visible sm:snap-none sm:mx-0 sm:px-0 sm:gap-6 lg:grid-cols-3"
+          style={{ scrollbarWidth: 'none' }}
+        >
           {cards.map((card, i) => (
-            <SolutionCard
-              key={card.number}
-              card={card}
-              index={i}
-              inView={isInView}
-            />
+            <div key={card.number} className="min-w-[85vw] sm:min-w-0 snap-center flex-shrink-0 sm:flex-shrink">
+              <SolutionCard
+                card={card}
+                index={i}
+                inView={isInView}
+              />
+            </div>
           ))}
         </div>
+        <CarouselDots count={cards.length} activeIndex={activeIndex} />
 
         {/* Closing */}
         <motion.div
