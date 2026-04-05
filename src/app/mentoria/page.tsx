@@ -228,7 +228,7 @@ export default function MentoriaPage() {
             className="object-cover"
             style={{ objectPosition: 'center top' }}
           />
-          <div className="absolute inset-0 bg-[#08080C]/85" />
+          <div className="absolute inset-0 bg-[#08080C]/65" />
         </div>
         <div className="relative z-10 mx-auto max-w-3xl px-5 sm:px-6 lg:px-8">
           <RevosForm />
