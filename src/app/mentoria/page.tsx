@@ -72,7 +72,7 @@ export default function MentoriaPage() {
       <section id="hero" className="relative w-full min-h-[85vh] overflow-hidden bg-[#08080C]">
         {/* Mobile hero image */}
         <Image
-          src="/images/hero-mobile.jpg"
+          src="/images/hero-mobile.png"
           alt="Joao Guirunas - Mentoria Claude Code"
           fill
           className="object-cover sm:hidden"
