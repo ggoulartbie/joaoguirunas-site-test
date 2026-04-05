@@ -76,7 +76,7 @@ export default function MentoriaPage() {
           alt="Joao Guirunas - Mentoria Claude Code"
           fill
           className="object-cover sm:hidden"
-          style={{ objectPosition: 'center 20%' }}
+          style={{ objectPosition: 'center 38%' }}
           priority
         />
         {/* Desktop hero image */}
@@ -89,11 +89,11 @@ export default function MentoriaPage() {
           priority
         />
         {/* Overlay — mais suave em mobile para mostrar rosto, mais forte em desktop */}
-        <div className="absolute inset-0 bg-gradient-to-b from-[#08080C]/30 via-[#08080C]/20 to-[#08080C]/90 sm:bg-none sm:bg-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-b from-[#08080C]/20 via-[#08080C]/30 to-[#08080C]/95 sm:bg-none sm:bg-transparent" />
         <div className="absolute inset-0 hidden sm:block" style={{ background: 'linear-gradient(to right, #08080C 0%, #08080C 35%, rgba(8,8,12,0.85) 50%, rgba(8,8,12,0.4) 70%, rgba(8,8,12,0.25) 100%)' }} />
         <div className="absolute inset-0 bg-gradient-to-b from-[#08080C]/40 via-transparent to-[#08080C]" />
 
-        <div className="absolute inset-0 flex items-end sm:items-center pb-8 sm:pb-0 px-6 sm:px-10 lg:px-16">
+        <div className="absolute inset-0 flex items-end sm:items-center pb-14 sm:pb-0 px-6 sm:px-10 lg:px-16">
           <div className="mx-auto max-w-7xl w-full">
             <div className="max-w-xl lg:max-w-2xl">
               <div className="inline-flex items-center gap-2 backdrop-blur-sm border border-[#FF4400]/60 px-4 py-2 mb-6" style={{ background: 'rgba(255,68,0,0.08)' }}>

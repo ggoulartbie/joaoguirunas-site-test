@@ -179,7 +179,7 @@ function ProfessionalRow({
       <span
         className={cn(
           'text-xs sm:text-sm tabular-nums whitespace-nowrap',
-          checked ? 'text-[#FF4400] font-bold' : 'text-white/40',
+          checked ? 'text-white/80 font-bold' : 'text-white/40',
         )}
       >
         R$ {pro.annual.toLocaleString('pt-BR')}/ano
@@ -437,10 +437,7 @@ export function PricingCalculator() {
                   </span>
                 </div>
                 <p className="text-white/60 text-sm mb-8">
-                  ou em ate {INSTALLMENTS}x de{' '}
-                  <span className="text-white font-semibold">
-                    R$ {INSTALLMENT_VALUE}
-                  </span>
+                  ou em ate {INSTALLMENTS}x no cartao
                 </p>
 
                 {/* Checklist */}
