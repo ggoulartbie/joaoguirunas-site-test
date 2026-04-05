@@ -83,7 +83,7 @@ export default function MentoriaPage() {
               priority
             />
             {/* Overlay geral */}
-            <div className="absolute inset-0 bg-[#08080C]/35" />
+            <div className="absolute inset-0 bg-[#08080C]/20" />
             {/* Degradê na base */}
             <div className="absolute inset-0" style={{ background: 'linear-gradient(to bottom, transparent 0%, rgba(8,8,12,0.03) 30%, rgba(8,8,12,0.1) 55%, rgba(8,8,12,0.5) 75%, rgba(8,8,12,0.82) 88%, #08080C 98%)' }} />
             {/* Texto sobre a imagem */}
