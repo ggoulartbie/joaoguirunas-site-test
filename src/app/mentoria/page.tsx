@@ -70,25 +70,21 @@ export default function MentoriaPage() {
       <SectionDots />
       {/* ===== HERO ===== */}
       <section id="hero" className="relative w-full bg-[#08080C] -mt-16">
-        {/* MOBILE: imagem com texto sobreposto na base */}
-        <div className="sm:hidden">
-          <div className="relative w-full h-[100vw] max-h-[560px] overflow-hidden">
-            <Image
-              src="/images/hero-mobile.png"
-              alt="Joao Guirunas - Mentoria Claude Code"
-              fill
-              className="object-cover"
-              style={{ objectPosition: 'center 3%' }}
-              priority
-            />
-            {/* Overlay geral + degradê subindo 20px */}
-            {/* Overlay ultra-sutil */}
-            <div className="absolute inset-0 bg-[#08080C]/10" />
-            {/* Degradê só nos últimos 25% */}
-            <div className="absolute inset-0" style={{ background: 'linear-gradient(to bottom, transparent 0%, transparent 72%, rgba(8,8,12,0.25) 82%, rgba(8,8,12,0.7) 92%, #08080C 100%)' }} />
-          </div>
-          {/* Texto sobe 100px para dentro da imagem */}
-          <div className="-mt-12 relative z-10 px-6 pb-12">
+        {/* MOBILE: imagem é o fundo de tudo incluindo texto */}
+        <div className="sm:hidden relative min-h-[145vw]">
+          <Image
+            src="/images/hero-mobile.png"
+            alt="Joao Guirunas - Mentoria Claude Code"
+            fill
+            className="object-cover"
+            style={{ objectPosition: 'center 3%' }}
+            priority
+          />
+          {/* Overlay sutil + degradê na base */}
+          <div className="absolute inset-0 bg-[#08080C]/10" />
+          <div className="absolute inset-0" style={{ background: 'linear-gradient(to bottom, transparent 0%, transparent 55%, rgba(8,8,12,0.5) 75%, rgba(8,8,12,0.85) 88%, #08080C 100%)' }} />
+          {/* Texto sobre a imagem no rodapé */}
+          <div className="absolute bottom-0 left-0 right-0 z-10 px-6 pb-10">
             <div className="inline-flex items-center gap-2 border border-[#FF4400]/60 px-4 py-2 mb-5" style={{ background: 'rgba(255,68,0,0.08)' }}>
               <span className="relative inline-flex h-2.5 w-2.5">
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#FF4400] opacity-75" />
@@ -105,7 +101,7 @@ export default function MentoriaPage() {
             <p className="text-sm text-white/80 leading-relaxed mb-6">
               Aprenda a criar, configurar e orquestrar agentes autonomos que executam tarefas complexas para voce. <strong className="text-white font-medium">Mentoria intensiva e pratica.</strong>
             </p>
-            <div className="flex flex-col gap-3 mb-6">
+            <div className="flex flex-col gap-3 mb-5">
               <CtaButton label="Fale com um Especialista" />
               <CtaButton label="Como Funciona" variant="secondary" />
             </div>
