@@ -75,8 +75,8 @@ export default function DevBrowserPage() {
       categoryColor="skills"
       longDescription={longDescription}
       features={features}
-      primaryLink="https://github.com/anthropics/claude-code"
-      primaryLabel="Ver Documentação"
+      primaryLink="https://github.com/microsoft/playwright-mcp"
+      primaryLabel="Ver Playwright MCP"
       author="@joaoguirunas"
       authorUrl="https://github.com/joaoguirunas"
       canonicalPath="/skills/dev-browser"

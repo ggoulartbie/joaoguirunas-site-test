@@ -75,8 +75,8 @@ export default function AdsDashboardPage() {
       categoryColor="integracoes"
       longDescription={longDescription}
       features={features}
-      primaryLink="https://github.com/anthropics/claude-code"
-      primaryLabel="Ver Documentação"
+      primaryLink="https://github.com/AgriciDaniel/claude-ads"
+      primaryLabel="Ver no GitHub"
       author="@joaoguirunas"
       authorUrl="https://github.com/joaoguirunas"
       canonicalPath="/skills/ads-dashboard"

@@ -75,8 +75,8 @@ export default function PixelAgentsPage() {
       categoryColor="apps"
       longDescription={longDescription}
       features={features}
-      primaryLink="https://docs.anthropic.com/en/docs/claude-code/overview"
-      primaryLabel="Ver Claude Code Docs"
+      primaryLink="https://marketplace.visualstudio.com/items?itemName=pablodelucca.pixel-agents"
+      primaryLabel="Instalar no VS Code"
       author="@joaoguirunas"
       authorUrl="https://github.com/joaoguirunas"
       canonicalPath="/tools/pixel-agents"

@@ -67,8 +67,8 @@ export default function AiImagePage() {
       categoryColor="skills"
       longDescription={longDescription}
       features={features}
-      primaryLink="https://github.com/inference-sh/skills"
-      primaryLabel="Ver no GitHub"
+      primaryLink="https://inference.sh"
+      primaryLabel="Acessar inference.sh"
       author="@inference-sh"
       authorUrl="https://github.com/inference-sh/skills"
       bgImage="/images/bg-image.png"

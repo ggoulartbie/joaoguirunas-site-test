@@ -75,8 +75,8 @@ export default function CopywritingPage() {
       categoryColor="skills"
       longDescription={longDescription}
       features={features}
-      primaryLink="https://docs.anthropic.com/en/docs/claude-code/overview"
-      primaryLabel="Ver Claude Code Docs"
+      primaryLink="https://github.com/coreyhaines31/marketingskills"
+      primaryLabel="Ver Skill no GitHub"
       author="@joaoguirunas"
       authorUrl="https://github.com/joaoguirunas"
       canonicalPath="/skills/copywriting"

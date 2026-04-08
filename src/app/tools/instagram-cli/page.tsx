@@ -75,8 +75,8 @@ export default function InstagramCliPage() {
       categoryColor="apps"
       longDescription={longDescription}
       features={features}
-      primaryLink="https://docs.anthropic.com/en/docs/claude-code/overview"
-      primaryLabel="Ver Claude Code Docs"
+      primaryLink="https://github.com/supreme-gg-gg/instagram-cli"
+      primaryLabel="Ver no GitHub"
       author="@joaoguirunas"
       authorUrl="https://github.com/joaoguirunas"
       canonicalPath="/tools/instagram-cli"

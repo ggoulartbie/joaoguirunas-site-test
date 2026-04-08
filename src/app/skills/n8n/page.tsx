@@ -75,8 +75,8 @@ export default function N8nPage() {
       categoryColor="skills"
       longDescription={longDescription}
       features={features}
-      primaryLink="https://n8n.io"
-      primaryLabel="Acessar N8N"
+      primaryLink="https://github.com/czlonkowski/n8n-mcp"
+      primaryLabel="Ver N8N MCP no GitHub"
       author="@joaoguirunas"
       authorUrl="https://github.com/joaoguirunas"
       canonicalPath="/skills/n8n"

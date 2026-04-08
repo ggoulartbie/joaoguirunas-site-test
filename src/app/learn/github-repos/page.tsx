@@ -75,8 +75,8 @@ export default function GithubReposPage() {
       categoryColor="aprendizado"
       longDescription={longDescription}
       features={features}
-      primaryLink="https://github.com/anthropics/claude-code"
-      primaryLabel="Ver no GitHub"
+      primaryLink="https://github.com/hesreallyhim/awesome-claude-code"
+      primaryLabel="Ver Awesome Claude Code"
       author="@joaoguirunas"
       authorUrl="https://github.com/joaoguirunas"
       canonicalPath="/learn/github-repos"

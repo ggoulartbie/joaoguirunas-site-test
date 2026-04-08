@@ -75,8 +75,8 @@ export default function CoworkPluginsPage() {
       categoryColor="skills"
       longDescription={longDescription}
       features={features}
-      primaryLink="https://claude.ai"
-      primaryLabel="Acessar Claude.ai"
+      primaryLink="https://claude.ai/projects"
+      primaryLabel="Ver Plugins Oficiais"
       author="@joaoguirunas"
       authorUrl="https://github.com/joaoguirunas"
       canonicalPath="/skills/cowork-plugins"
