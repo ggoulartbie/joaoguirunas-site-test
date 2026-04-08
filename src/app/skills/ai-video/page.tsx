@@ -67,8 +67,8 @@ export default function AiVideoPage() {
       categoryColor="skills"
       longDescription={longDescription}
       features={features}
-      primaryLink="https://inference.sh"
-      primaryLabel="Acessar inference.sh"
+      primaryLink="https://skills.sh/inferen-sh/skills/ai-video-generation"
+      primaryLabel="Ver Skill no skills.sh"
       author="@inference-sh"
       authorUrl="https://github.com/inference-sh/skills"
       bgImage="/images/bg-video.png"

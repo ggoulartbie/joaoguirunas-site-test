@@ -67,8 +67,8 @@ export default function SupabasePage() {
       categoryColor="integracoes"
       longDescription={longDescription}
       features={features}
-      primaryLink="https://github.com/supabase/supabase"
-      primaryLabel="Ver no GitHub"
+      primaryLink="https://skills.sh/supabase/agent-skills/supabase-postgres-best-practices"
+      primaryLabel="Ver Skill no skills.sh"
       author="Supabase"
       authorUrl="https://github.com/supabase"
       bgImage="/images/bg-supabase.png"

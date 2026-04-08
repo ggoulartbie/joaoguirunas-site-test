@@ -67,9 +67,8 @@ export default function GitHubPage() {
       categoryColor="integracoes"
       longDescription={longDescription}
       features={features}
-      primaryLink="https://github.com/cli/cli"
-      primaryLabel="GitHub CLI no GitHub"
-      isExternal
+      primaryLink="https://skills.sh/github/awesome-copilot/gh-cli"
+      primaryLabel="Ver Skill no skills.sh"
       author="GitHub"
       authorUrl="https://github.com/github"
       bgImage="/images/bg-github.png"

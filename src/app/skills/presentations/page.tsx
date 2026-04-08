@@ -75,9 +75,8 @@ export default function PresentationsPage() {
       categoryColor="skills"
       longDescription={longDescription}
       features={features}
-      primaryLink="https://gamma.app"
-      primaryLabel="Ver Gamma App"
-      isExternal
+      primaryLink="https://skills.sh/anthropics/skills/pptx"
+      primaryLabel="Ver Skill no skills.sh"
       author="@joaoguirunas"
       authorUrl="https://github.com/joaoguirunas"
       canonicalPath="/skills/presentations"

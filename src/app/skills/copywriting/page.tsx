@@ -75,8 +75,8 @@ export default function CopywritingPage() {
       categoryColor="skills"
       longDescription={longDescription}
       features={features}
-      primaryLink="https://github.com/coreyhaines31/marketingskills"
-      primaryLabel="Ver Skill no GitHub"
+      primaryLink="https://skills.sh/coreyhaines31/marketingskills/copywriting"
+      primaryLabel="Ver Skill no skills.sh"
       author="@joaoguirunas"
       authorUrl="https://github.com/joaoguirunas"
       canonicalPath="/skills/copywriting"

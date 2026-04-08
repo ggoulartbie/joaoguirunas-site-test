@@ -75,8 +75,8 @@ export default function ObsidianPage() {
       categoryColor="skills"
       longDescription={longDescription}
       features={features}
-      primaryLink="https://obsidian.md"
-      primaryLabel="Acessar Obsidian"
+      primaryLink="https://skills.sh/kepano/obsidian-skills/obsidian-cli"
+      primaryLabel="Ver Skill no skills.sh"
       author="@joaoguirunas"
       authorUrl="https://github.com/joaoguirunas"
       canonicalPath="/skills/obsidian"

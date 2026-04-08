@@ -75,8 +75,8 @@ export default function RemotionPage() {
       categoryColor="skills"
       longDescription={longDescription}
       features={features}
-      primaryLink="https://www.remotion.dev"
-      primaryLabel="Acessar Remotion"
+      primaryLink="https://skills.sh/remotion-dev/skills/remotion-best-practices"
+      primaryLabel="Ver Skill no skills.sh"
       author="@joaoguirunas"
       authorUrl="https://github.com/joaoguirunas"
       canonicalPath="/skills/remotion"

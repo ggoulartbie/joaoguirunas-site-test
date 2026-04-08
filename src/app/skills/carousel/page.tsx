@@ -67,8 +67,8 @@ export default function CarouselPage() {
       categoryColor="skills"
       longDescription={longDescription}
       features={features}
-      primaryLink="https://github.com/SynkraAI/aiox-squads"
-      primaryLabel="Ver no GitHub"
+      primaryLink="https://skills.sh/coreyhaines31/marketingskills/social-content"
+      primaryLabel="Ver Skill no skills.sh"
       author="@SynkraAI"
       authorUrl="https://github.com/SynkraAI/aiox-squads"
       bgImage="/images/bg-carousel.png"

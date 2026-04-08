@@ -75,8 +75,8 @@ export default function DesignSystemPage() {
       categoryColor="skills"
       longDescription={longDescription}
       features={features}
-      primaryLink="https://github.com/anthropics/claude-code"
-      primaryLabel="Ver Documentação"
+      primaryLink="https://skills.sh/wshobson/agents/tailwind-design-system"
+      primaryLabel="Ver Skill no skills.sh"
       author="@joaoguirunas"
       authorUrl="https://github.com/joaoguirunas"
       canonicalPath="/skills/design-system"

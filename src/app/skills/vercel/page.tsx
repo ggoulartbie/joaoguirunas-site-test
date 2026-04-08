@@ -67,9 +67,8 @@ export default function VercelPage() {
       categoryColor="integracoes"
       longDescription={longDescription}
       features={features}
-      primaryLink="https://github.com/vercel/vercel"
-      primaryLabel="Ver no GitHub"
-      isExternal
+      primaryLink="https://skills.sh/vercel-labs/agent-skills/deploy-to-vercel"
+      primaryLabel="Ver Skill no skills.sh"
       author="Vercel"
       authorUrl="https://github.com/vercel"
       bgImage="/images/bg-vercel.png"

@@ -75,8 +75,8 @@ export default function DevBrowserPage() {
       categoryColor="skills"
       longDescription={longDescription}
       features={features}
-      primaryLink="https://github.com/microsoft/playwright-mcp"
-      primaryLabel="Ver Playwright MCP"
+      primaryLink="https://skills.sh/microsoft/playwright-cli/playwright-cli"
+      primaryLabel="Ver Skill no skills.sh"
       author="@joaoguirunas"
       authorUrl="https://github.com/joaoguirunas"
       canonicalPath="/skills/dev-browser"
