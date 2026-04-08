@@ -75,9 +75,8 @@ export default function CopywritingPage() {
       categoryColor="skills"
       longDescription={longDescription}
       features={features}
-      primaryLink="https://skills.sh"
-      primaryLabel="Ver em Skills.sh"
-      isExternal
+      primaryLink="https://docs.anthropic.com/en/docs/claude-code/overview"
+      primaryLabel="Ver Claude Code Docs"
       author="@joaoguirunas"
       authorUrl="https://github.com/joaoguirunas"
       canonicalPath="/skills/copywriting"

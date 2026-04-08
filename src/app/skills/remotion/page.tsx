@@ -75,8 +75,8 @@ export default function RemotionPage() {
       categoryColor="skills"
       longDescription={longDescription}
       features={features}
-      primaryLink="https://github.com/claudecodeofficial/remotion-skill"
-      primaryLabel="Ver no GitHub"
+      primaryLink="https://www.remotion.dev"
+      primaryLabel="Acessar Remotion"
       author="@joaoguirunas"
       authorUrl="https://github.com/joaoguirunas"
       canonicalPath="/skills/remotion"

@@ -75,8 +75,8 @@ export default function PixelAgentsPage() {
       categoryColor="apps"
       longDescription={longDescription}
       features={features}
-      primaryLink="https://github.com/anthropics/pixel-agents"
-      primaryLabel="Ver no GitHub"
+      primaryLink="https://docs.anthropic.com/en/docs/claude-code/overview"
+      primaryLabel="Ver Claude Code Docs"
       author="@joaoguirunas"
       authorUrl="https://github.com/joaoguirunas"
       canonicalPath="/tools/pixel-agents"

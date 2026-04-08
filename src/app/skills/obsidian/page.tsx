@@ -75,8 +75,8 @@ export default function ObsidianPage() {
       categoryColor="skills"
       longDescription={longDescription}
       features={features}
-      primaryLink="https://github.com/nicholasgasior/claude-obsidian"
-      primaryLabel="Ver no GitHub"
+      primaryLink="https://obsidian.md"
+      primaryLabel="Acessar Obsidian"
       author="@joaoguirunas"
       authorUrl="https://github.com/joaoguirunas"
       canonicalPath="/skills/obsidian"

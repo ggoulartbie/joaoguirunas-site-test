@@ -75,8 +75,8 @@ export default function NotebookLmPage() {
       categoryColor="skills"
       longDescription={longDescription}
       features={features}
-      primaryLink="https://github.com/josStorer/notebooklm-pi"
-      primaryLabel="Ver no GitHub"
+      primaryLink="https://notebooklm.google.com"
+      primaryLabel="Acessar NotebookLM"
       author="@joaoguirunas"
       authorUrl="https://github.com/joaoguirunas"
       canonicalPath="/skills/notebook-lm"

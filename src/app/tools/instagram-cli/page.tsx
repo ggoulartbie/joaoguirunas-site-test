@@ -75,8 +75,8 @@ export default function InstagramCliPage() {
       categoryColor="apps"
       longDescription={longDescription}
       features={features}
-      primaryLink="https://github.com/nine-agents/instagram-cli"
-      primaryLabel="Ver no GitHub"
+      primaryLink="https://docs.anthropic.com/en/docs/claude-code/overview"
+      primaryLabel="Ver Claude Code Docs"
       author="@joaoguirunas"
       authorUrl="https://github.com/joaoguirunas"
       canonicalPath="/tools/instagram-cli"
