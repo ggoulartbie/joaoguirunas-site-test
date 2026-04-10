@@ -90,10 +90,11 @@ const skills = [
   { title: 'Learn Your Way', description: 'IA que aprende como você aprende. Mapas mentais, áudios, quizzes personalizados para qualquer conteúdo.', icon: 'brain', href: '/learn/learn-your-way', categoryId: 'aprendizado', categoryLabel: 'Aprendizado', author: 'Google' },
   { title: 'Anime.js', description: 'Biblioteca de componentes animados profissionais. Botões, temporizadores, transições — código pronto para usar.', icon: 'animejs', href: '/tools/animejs', categoryId: 'apps', categoryLabel: 'Apps', author: '@joaoguirunas' },
   { title: 'Instagram CLI', description: 'Use o Instagram pelo terminal. Sem doom-scrolling, sem feed. Integra com LLMs para automatizar.', icon: 'instagram', href: '/tools/instagram-cli', categoryId: 'apps', categoryLabel: 'Apps', author: '@joaoguirunas' },
+  { title: 'Managed Agents', description: 'Como a Anthropic desacoplou brain/hands em agentes. Session + Harness + Sandbox com 60% menos latência.', icon: 'agents', href: '/learn/managed-agents', categoryId: 'aprendizado', categoryLabel: 'Aprendizado', author: 'Anthropic Engineering' },
 ];
 
 const stats = [
-  { value: '39', label: 'Recursos' },
+  { value: '40', label: 'Recursos' },
   { value: '100%', label: 'Open Source' },
   { value: '13', label: 'Cursos Curados' },
   { value: '24/7', label: 'Agentes Autônomos' },
