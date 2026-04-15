@@ -179,21 +179,31 @@ function AgentCard({
   name,
   agentId,
   role,
+  description,
 }: {
   name: string;
   agentId: string;
   role: string;
+  description: string;
 }) {
   return (
-    <div className="glass-card p-4 flex flex-col gap-1">
-      <span className="text-base font-bold text-white leading-tight">{name}</span>
+    <div className="glass-card p-5 flex flex-col gap-2">
+      <div className="flex items-start justify-between gap-2">
+        <span className="text-base font-bold text-white leading-tight">{name}</span>
+        <span
+          className="text-[#FF4400] text-xs flex-shrink-0"
+          style={{ fontFamily: "'Geist Mono', monospace" }}
+        >
+          {agentId}
+        </span>
+      </div>
       <span
-        className="text-[#FF4400] text-xs"
+        className="text-white/40 text-xs uppercase tracking-wide"
         style={{ fontFamily: "'Geist Mono', monospace" }}
       >
-        {agentId}
+        {role}
       </span>
-      <span className="text-white/60 text-xs mt-1">{role}</span>
+      <p className="text-white/60 text-sm leading-relaxed mt-1">{description}</p>
     </div>
   );
 }
@@ -233,16 +243,76 @@ function WorkflowCard({
 
 function TutorialSection() {
   const agents = [
-    { name: 'Dexter Morgan', agentId: '@dexter', role: 'Chief Orchestrator' },
-    { name: 'Hannibal Lecter', agentId: '@hannibal', role: 'Flow Architect & n8n Analyst' },
-    { name: 'Jason Bourne', agentId: '@bourne', role: 'Migration Strategist' },
-    { name: 'Drácula', agentId: '@dracula', role: 'Data Transformation Specialist' },
-    { name: 'Villanelle', agentId: '@villanelle', role: 'Credential & Security Specialist' },
-    { name: 'Ghostface', agentId: '@ghostface', role: 'Webhook & Event Engineer' },
-    { name: 'Lisbeth Salander', agentId: '@lisbeth', role: 'API Integration & Code Engineer' },
-    { name: 'Amy Dunne', agentId: '@amy', role: 'Error Handling & Reliability Engineer' },
-    { name: 'Anton Chigurh', agentId: '@anton', role: 'QA Validator' },
-    { name: 'V', agentId: '@v', role: 'Workflow Designer & Orchestration Architect' },
+    {
+      name: 'Dexter Morgan',
+      agentId: '@dexter',
+      role: 'Chief Orchestrator',
+      description:
+        'Recebe o briefing, avalia a complexidade e distribui o trabalho para os agentes certos na sequência correta. Não implementa nada — orquestra tudo. Consolida os outputs e fecha a operação com um handoff documentado.',
+    },
+    {
+      name: 'Hannibal Lecter',
+      agentId: '@hannibal',
+      role: 'Flow Architect & n8n Analyst',
+      description:
+        'Disseca workflows n8n com precisão cirúrgica. Lê o JSON, mapeia cada nó, identifica triggers e dependências, e produz um relatório completo de análise antes de qualquer migração começar.',
+    },
+    {
+      name: 'Jason Bourne',
+      agentId: '@bourne',
+      role: 'Migration Strategist',
+      description:
+        'Avalia a viabilidade da migração, mapeia equivalentes no sistema-alvo (Make, Zapier, Pipedream ou código custom) e define a estratégia de execução. Valida também o resultado final após a implementação.',
+    },
+    {
+      name: 'Drácula',
+      agentId: '@dracula',
+      role: 'Data Transformation Specialist',
+      description:
+        'Mapeia schemas de dados entre sistemas, implementa transformações e pipelines ETL. Garante que os dados saiam de um formato e cheguem no outro sem perda, usando jsonpath-plus, luxon e validação AJV.',
+    },
+    {
+      name: 'Villanelle',
+      agentId: '@villanelle',
+      role: 'Credential & Security Specialist',
+      description:
+        'Configura OAuth2, JWT, HMAC e variáveis de ambiente. Faz auditoria de segurança em credenciais e integrações, garantindo que nenhum token ou secret vaze em logs ou código.',
+    },
+    {
+      name: 'Ghostface',
+      agentId: '@ghostface',
+      role: 'Webhook & Event Engineer',
+      description:
+        'Implementa e migra triggers baseados em eventos — webhooks, schedules e event listeners. Garante idempotência, valida payloads e assina requisições com HMAC para prevenir chamadas não autorizadas.',
+    },
+    {
+      name: 'Lisbeth Salander',
+      agentId: '@lisbeth',
+      role: 'API Integration & Code Engineer',
+      description:
+        'Constrói as integrações HTTP, descobre endpoints via documentação ou exploração, implementa custom nodes em TypeScript e cria as automações do zero quando nenhum nó nativo cobre o caso.',
+    },
+    {
+      name: 'Amy Dunne',
+      agentId: '@amy',
+      role: 'Error Handling & Reliability Engineer',
+      description:
+        'Implementa retry automático, circuit breaker e dead letter queues. Configura monitoramento, alertas e escreve o incident playbook para que a equipe saiba exatamente o que fazer quando algo falha em produção.',
+    },
+    {
+      name: 'Anton Chigurh',
+      agentId: '@anton',
+      role: 'QA Validator',
+      description:
+        'Valida tudo antes da entrega: testes E2E, edge cases, regression check e análise de performance. Emite um verdict final — PASS, CONCERNS, FAIL ou WAIVED — sem o qual nenhuma operação é considerada concluída.',
+    },
+    {
+      name: 'V',
+      agentId: '@v',
+      role: 'Workflow Designer & Orchestration Architect',
+      description:
+        'Desenha a arquitetura do workflow do zero: define a estrutura de nodes, sub-workflows, condicionais e loops antes de qualquer linha de código. Garante que o design seja escalável e sem dependências circulares.',
+    },
   ];
 
   const migrationPhases = [
@@ -265,6 +335,29 @@ function TutorialSection() {
 
   return (
     <>
+      {/* ── Agentes ────────────────────────────────────────────────────── */}
+      <section className="py-20 bg-[#08080C]" aria-labelledby="agents-heading">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <SectionLabel>Os Agentes</SectionLabel>
+          <h2 id="agents-heading" className="text-3xl font-bold text-white sm:text-4xl mb-3">
+            Conheça os Especialistas
+          </h2>
+          <p className="text-white/60 text-lg max-w-2xl mb-10">
+            10 agentes com escopo e responsabilidades distintas. Cada um é ativado na fase certa da operação.
+          </p>
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+            {agents.slice(0, 8).map((agent) => (
+              <AgentCard key={agent.agentId} {...agent} />
+            ))}
+          </div>
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 mt-4">
+            {agents.slice(8).map((agent) => (
+              <AgentCard key={agent.agentId} {...agent} />
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* ── Pré-requisitos ─────────────────────────────────────────────── */}
       <section className="py-20 bg-[#08080C]" aria-labelledby="prereqs-heading">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -443,26 +536,6 @@ unzip n8n-killers.zip -d squads/`}
         </div>
       </section>
 
-      {/* ── Agentes ────────────────────────────────────────────────────── */}
-      <section className="py-20 bg-[#08080C]" aria-labelledby="agents-heading">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <SectionLabel>Os Agentes</SectionLabel>
-          <h2 id="agents-heading" className="text-3xl font-bold text-white sm:text-4xl mb-10">
-            Conheça os Especialistas
-          </h2>
-          <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5">
-            {agents.map((agent) => (
-              <AgentCard
-                key={agent.agentId}
-                name={agent.name}
-                agentId={agent.agentId}
-                role={agent.role}
-              />
-            ))}
-          </div>
-        </div>
-      </section>
-
       {/* ── Workflows ──────────────────────────────────────────────────── */}
       <section className="py-20 bg-[#0A0A0F]" aria-labelledby="workflows-heading">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -499,8 +572,9 @@ export default function N8nKillersPage() {
       categoryColor="squads-aiox"
       longDescription={longDescription}
       features={features}
-      primaryLink="https://github.com/SynkraAI"
-      primaryLabel="Ver no GitHub"
+      primaryLink="/n8n-killers.zip"
+      primaryLabel="Download Squad"
+      isExternal={true}
       author="@joaoguirunas"
       authorUrl="https://github.com/joaoguirunas"
       canonicalPath="/skills/n8n-killers"
