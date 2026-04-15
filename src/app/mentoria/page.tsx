@@ -90,7 +90,7 @@ export default function MentoriaPage() {
             <div className="absolute bottom-0 left-0 right-0 z-10 px-6 pb-6">
               <div className="flex flex-col items-start gap-2 mb-4">
                 <div className="inline-flex items-center gap-2 border border-white/20 px-3 py-1.5" style={{ background: 'rgba(255,255,255,0.04)', fontFamily: "'Roboto Mono', var(--font-bb-mono), monospace" }}>
-                  <Icon name="calendar" size="14" className="text-[#FF4400]" />
+                  <Icon name="clock" size="16" className="text-[#FF4400]" />
                   <span className="text-white/70 text-xs uppercase tracking-wider">Início da turma: <strong className="text-white">12 de maio</strong></span>
                 </div>
                 <div className="inline-flex items-center gap-2 border border-[#FF4400]/60 px-4 py-2" style={{ background: 'rgba(255,68,0,0.08)' }}>
@@ -122,7 +122,7 @@ export default function MentoriaPage() {
               <Icon name="clock" size="16" className="text-[#FF4400]" /> Max. 12 pessoas <span className="opacity-40">|</span> <Icon name="check" size="16" className="text-[#FF4400]" /> Garantia 7 dias
             </p>
             <p className="text-white/40 text-xs uppercase tracking-widest flex items-center gap-2 flex-wrap mt-2" style={{ fontFamily: "'Roboto Mono', var(--font-bb-mono), monospace" }}>
-              <Icon name="calendar" size="16" className="text-[#FF4400]" /> Próxima turma: <span className="text-white font-semibold">12 de maio</span> <span className="opacity-40">|</span> Restam 4 vagas
+              <Icon name="clock" size="16" className="text-[#FF4400]" /> Próxima turma: <span className="text-white font-semibold">12 de maio</span> <span className="opacity-40">|</span> Restam 4 vagas
             </p>
           </div>
         </div>
@@ -144,7 +144,7 @@ export default function MentoriaPage() {
               <div className="max-w-xl lg:max-w-2xl">
                 <div className="flex flex-col items-start gap-2 mb-6">
                   <div className="inline-flex items-center gap-2 border border-white/20 px-3 py-1.5" style={{ background: 'rgba(255,255,255,0.04)', fontFamily: "'Roboto Mono', var(--font-bb-mono), monospace" }}>
-                    <Icon name="calendar" size="14" className="text-[#FF4400]" />
+                    <Icon name="clock" size="16" className="text-[#FF4400]" />
                     <span className="text-white/70 text-xs uppercase tracking-wider">Início da turma: <strong className="text-white">12 de maio</strong></span>
                   </div>
                   <div className="inline-flex items-center gap-2 backdrop-blur-sm border border-[#FF4400]/60 px-4 py-2" style={{ background: 'rgba(255,68,0,0.08)' }}>
@@ -172,7 +172,7 @@ export default function MentoriaPage() {
                   <Icon name="clock" size="16" className="text-[#FF4400]" /> Max. 12 pessoas <span className="opacity-40">|</span> <Icon name="check" size="16" className="text-[#FF4400]" /> Garantia 7 dias
                 </p>
                 <p className="text-white/40 text-xs uppercase tracking-widest flex items-center gap-2 mt-2" style={{ fontFamily: "'Roboto Mono', var(--font-bb-mono), monospace" }}>
-                  <Icon name="calendar" size="16" className="text-[#FF4400]" /> Próxima turma: <span className="text-white font-semibold">12 de maio</span> <span className="opacity-40">|</span> Restam 4 vagas
+                  <Icon name="clock" size="16" className="text-[#FF4400]" /> Próxima turma: <span className="text-white font-semibold">12 de maio</span> <span className="opacity-40">|</span> Restam 4 vagas
                 </p>
               </div>
             </div>
