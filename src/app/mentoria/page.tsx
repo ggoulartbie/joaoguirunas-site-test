@@ -115,6 +115,9 @@ export default function MentoriaPage() {
             <p className="text-white/60 text-xs uppercase tracking-widest flex items-center gap-2 flex-wrap" style={{ fontFamily: "'Roboto Mono', var(--font-bb-mono), monospace" }}>
               <Icon name="clock" size="16" className="text-[#FF4400]" /> Max. 12 pessoas <span className="opacity-40">|</span> <Icon name="check" size="16" className="text-[#FF4400]" /> Garantia 7 dias
             </p>
+            <p className="text-white/40 text-xs uppercase tracking-widest flex items-center gap-2 flex-wrap mt-2" style={{ fontFamily: "'Roboto Mono', var(--font-bb-mono), monospace" }}>
+              <Icon name="calendar" size="16" className="text-[#FF4400]" /> Próxima turma: <span className="text-white font-semibold">12 de maio</span> <span className="opacity-40">|</span> Restam 4 vagas
+            </p>
           </div>
         </div>
 
@@ -155,6 +158,9 @@ export default function MentoriaPage() {
                 </div>
                 <p className="text-white/60 text-xs uppercase tracking-widest flex items-center gap-2" style={{ fontFamily: "'Roboto Mono', var(--font-bb-mono), monospace" }}>
                   <Icon name="clock" size="16" className="text-[#FF4400]" /> Max. 12 pessoas <span className="opacity-40">|</span> <Icon name="check" size="16" className="text-[#FF4400]" /> Garantia 7 dias
+                </p>
+                <p className="text-white/40 text-xs uppercase tracking-widest flex items-center gap-2 mt-2" style={{ fontFamily: "'Roboto Mono', var(--font-bb-mono), monospace" }}>
+                  <Icon name="calendar" size="16" className="text-[#FF4400]" /> Próxima turma: <span className="text-white font-semibold">12 de maio</span> <span className="opacity-40">|</span> Restam 4 vagas
                 </p>
               </div>
             </div>
