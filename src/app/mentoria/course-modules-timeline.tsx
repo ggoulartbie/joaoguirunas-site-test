@@ -7,6 +7,7 @@ const MODULES = [
   {
     num: 1,
     type: 'Presencial' as const,
+    date: '12 de maio · Segunda-feira · 13h–18h',
     title: 'Desbloqueio Mental + Setup Inicial',
     description:
       'Sessão presencial com Claudia para desbloqueio mental, respiração e controle de ansiedade. Setup do ambiente Claude Code e AIOX completo.',
@@ -15,6 +16,7 @@ const MODULES = [
   {
     num: 2,
     type: 'Online' as const,
+    date: '13 de maio · Terça-feira · 19h–21h',
     title: 'Fundamentos do Claude Code',
     description:
       'Primeiro contato com Claude Code, comandos básicos, entendendo o MCP e ferramentas. Você sai dominando a base.',
@@ -23,6 +25,7 @@ const MODULES = [
   {
     num: 3,
     type: 'Online' as const,
+    date: '15 de maio · Quinta-feira · 19h–21h',
     title: 'Criando Seus Primeiros Agentes',
     description:
       'Configuração de agentes especializados, personas, workflows básicos. Seus primeiros agentes funcionando.',
@@ -31,6 +34,7 @@ const MODULES = [
   {
     num: 4,
     type: 'Online' as const,
+    date: '20 de maio · Terça-feira · 19h–21h',
     title: 'Squad de Software Engineering',
     description:
       'Montagem de squad de desenvolvimento: dev, qa, architect, devops. Um time completo de engenharia operando para você.',
@@ -39,6 +43,7 @@ const MODULES = [
   {
     num: 5,
     type: 'Online' as const,
+    date: '22 de maio · Quinta-feira · 19h–21h',
     title: 'Squad de Marketing e Growth',
     description:
       'Montagem de squad de marketing: copywriter, seo, social media, analytics. Escale sua produção de conteúdo.',
@@ -47,6 +52,7 @@ const MODULES = [
   {
     num: 6,
     type: 'Online' as const,
+    date: '27 de maio · Terça-feira · 19h–21h',
     title: 'Automação e Integração',
     description:
       'Integração com ferramentas externas, automação de processos, MCP servers. Conecte seus agentes ao mundo.',
@@ -55,6 +61,7 @@ const MODULES = [
   {
     num: 7,
     type: 'Online' as const,
+    date: '29 de maio · Quinta-feira · 19h–21h',
     title: 'Squad Personalizada Para Seu Negócio',
     description:
       'Criação de agentes específicos para o caso de uso de cada participante. Algo feito sob medida para você.',
@@ -62,7 +69,26 @@ const MODULES = [
   },
   {
     num: 8,
+    type: 'Online' as const,
+    date: '03 de junho · Terça-feira · 19h–21h',
+    title: 'Escalando e Otimizando Seus Agentes',
+    description:
+      'Monitoramento, performance, custo e iteração contínua dos agentes em produção.',
+    tags: ['Otimização', 'Monitoramento', 'Produção'],
+  },
+  {
+    num: 9,
+    type: 'Online' as const,
+    date: '05 de junho · Quinta-feira · 19h–21h',
+    title: 'Automação Avançada e Casos de Uso Reais',
+    description:
+      'Casos de uso reais de participantes, troubleshooting ao vivo, melhores práticas consolidadas.',
+    tags: ['Casos Reais', 'Troubleshooting', 'Avançado'],
+  },
+  {
+    num: 10,
     type: 'Presencial' as const,
+    date: 'A definir',
     title: 'Apresentação Final + Networking',
     description:
       'Apresentação dos projetos, feedback, certificação e networking com a turma. Celebre o que você construiu.',
@@ -138,6 +164,12 @@ function TimelineCard({
                 {module.type}
               </span>
             </div>
+            <p
+              className="mt-2 text-xs text-white/40"
+              style={{ fontFamily: "'Roboto Mono', var(--font-bb-mono), monospace" }}
+            >
+              {module.date}
+            </p>
             <h3 className="mt-2 text-lg sm:text-xl font-bold text-white leading-snug">
               {module.title}
             </h3>
@@ -199,7 +231,7 @@ export function CourseModulesTimeline() {
                 fontWeight: 600,
               }}
             >
-              8 Encontros
+              10 Encontros
             </span>
           </div>
           <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-white leading-tight tracking-tight" style={{ fontFamily: "'TASAOrbiter', var(--font-bb-display), sans-serif" }}>
