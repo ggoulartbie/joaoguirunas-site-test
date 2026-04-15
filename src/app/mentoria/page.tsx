@@ -88,6 +88,10 @@ export default function MentoriaPage() {
             <div className="absolute inset-0" style={{ background: 'linear-gradient(to bottom, transparent 0%, rgba(8,8,12,0.03) 30%, rgba(8,8,12,0.1) 55%, rgba(8,8,12,0.5) 75%, rgba(8,8,12,0.82) 88%, #08080C 98%)' }} />
             {/* Texto sobre a imagem */}
             <div className="absolute bottom-0 left-0 right-0 z-10 px-6 pb-6">
+              <div className="inline-flex items-center gap-2 border border-white/20 px-3 py-1.5 mb-2" style={{ background: 'rgba(255,255,255,0.04)', fontFamily: "'Roboto Mono', var(--font-bb-mono), monospace" }}>
+                <Icon name="calendar" size="14" className="text-[#FF4400]" />
+                <span className="text-white/70 text-xs uppercase tracking-wider">Próxima turma: <strong className="text-white">12 de maio</strong></span>
+              </div>
               <div className="inline-flex items-center gap-2 border border-[#FF4400]/60 px-4 py-2 mb-4" style={{ background: 'rgba(255,68,0,0.08)' }}>
                 <span className="relative inline-flex h-2.5 w-2.5">
                   <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#FF4400] opacity-75" />
@@ -136,6 +140,10 @@ export default function MentoriaPage() {
           <div className="absolute inset-0 flex items-center px-10 lg:px-16">
             <div className="mx-auto max-w-7xl w-full">
               <div className="max-w-xl lg:max-w-2xl">
+                <div className="inline-flex items-center gap-2 border border-white/20 px-3 py-1.5 mb-3" style={{ background: 'rgba(255,255,255,0.04)', fontFamily: "'Roboto Mono', var(--font-bb-mono), monospace" }}>
+                  <Icon name="calendar" size="14" className="text-[#FF4400]" />
+                  <span className="text-white/70 text-xs uppercase tracking-wider">Próxima turma: <strong className="text-white">12 de maio</strong></span>
+                </div>
                 <div className="inline-flex items-center gap-2 backdrop-blur-sm border border-[#FF4400]/60 px-4 py-2 mb-6" style={{ background: 'rgba(255,68,0,0.08)' }}>
                   <span className="relative inline-flex h-2.5 w-2.5">
                     <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#FF4400] opacity-75" />
