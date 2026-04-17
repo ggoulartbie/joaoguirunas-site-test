@@ -17,7 +17,7 @@ const DotGrid: React.FC = () => {
       c.width = window.innerWidth;
       c.height = window.innerHeight;
       ctx.clearRect(0, 0, c.width, c.height);
-      ctx.fillStyle = "rgba(255,68,0,0.12)";
+      ctx.fillStyle = "rgba(255,255,255,0.07)";
       for (let x = 0; x < c.width; x += 26)
         for (let y = 0; y < c.height; y += 26) {
           ctx.beginPath();
@@ -56,9 +56,9 @@ interface SlideProps {
 const Slide: React.FC<SlideProps> = ({ n, total, label = "CLAUDE CODE WORKSHOP", children, center }) => (
   <div className="relative w-full h-screen overflow-hidden" style={{ backgroundColor: "#08080C" }}>
     <DotGrid />
-    {/* radial glow */}
+    {/* radial glow — subtle, top-left only */}
     <div className="absolute inset-0 z-0 pointer-events-none"
-      style={{ background: "radial-gradient(ellipse 60% 55% at 20% 20%, rgba(255,68,0,0.06) 0%, transparent 70%)" }} />
+      style={{ background: "radial-gradient(ellipse 40% 35% at 15% 15%, rgba(255,68,0,0.04) 0%, transparent 65%)" }} />
     <Corner pos="tl" /><Corner pos="br" />
     {/* hud label */}
     <div className="absolute top-7 left-20 z-20 font-mono text-[10px] tracking-[0.22em] uppercase" style={{ color: "#FF4400", fontFamily: "'Roboto Mono',monospace" }}>
@@ -87,6 +87,7 @@ const DIM = "rgba(255,255,255,0.48)";
 const BORDER = "rgba(255,255,255,0.07)";
 const MONO = "'Roboto Mono',monospace";
 const SURFACE = "rgba(255,255,255,0.025)";
+const DARK_CARD = "#0C0C10";
 
 /* small helpers */
 const Label = ({ children, dim }: { children: React.ReactNode; dim?: boolean }) => (
@@ -100,7 +101,7 @@ const H2 = ({ children }: { children: React.ReactNode }) => (
 const HR = () => <div className="my-3 h-px" style={{ background: BORDER }} />;
 const HRac = () => <div className="mt-2 mb-4 h-[2px] w-10" style={{ background: AC }} />;
 const Card = ({ children, accent, surface, className }: { children: React.ReactNode; accent?: boolean; surface?: boolean; className?: string }) => (
-  <div className={cn("p-4 border", className)} style={{ background: accent ? "rgba(255,68,0,0.06)" : surface ? "rgba(255,255,255,0.03)" : SURFACE, borderColor: accent ? "rgba(255,68,0,0.3)" : BORDER }}>
+  <div className={cn("p-4", className)} style={{ background: DARK_CARD, borderLeft: accent ? `2px solid ${AC}` : `1px solid ${BORDER}`, borderTop: accent ? `1px solid rgba(255,68,0,0.15)` : `1px solid ${BORDER}`, borderRight: accent ? `1px solid rgba(255,68,0,0.08)` : `1px solid ${BORDER}`, borderBottom: accent ? `1px solid rgba(255,68,0,0.08)` : `1px solid ${BORDER}` }}>
     {children}
   </div>
 );
