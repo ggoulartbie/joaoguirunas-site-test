@@ -126,6 +126,11 @@ const Tag = ({ children, dim, green }: { children: React.ReactNode; dim?: boolea
     {children}
   </span>
 );
+const AioxBadge = ({ n, total }: { n: number; total: number }) => (
+  <span className="inline-block font-mono text-[9px] tracking-[0.16em] uppercase px-[8px] py-[3px] ml-2 align-middle" style={{ fontFamily: MONO, border: `1px solid rgba(255,68,0,0.55)`, background: "rgba(255,68,0,0.12)", color: AC }}>
+    AIOX {n}/{total}
+  </span>
+);
 const Stat = ({ n, l, accent }: { n: string; l: string; accent?: boolean }) => (
   <div className={cn("p-4 border text-center", accent ? "border-[rgba(255,68,0,0.35)] bg-[rgba(255,68,0,0.07)]" : "border-[rgba(255,255,255,0.07)] bg-[rgba(255,255,255,0.025)]")}>
     <div className="font-black leading-none mb-1 text-[2.2rem]" style={{ fontFamily: "var(--font-bb-display),'Inter',sans-serif", color: AC }}>{n}</div>
@@ -181,16 +186,22 @@ const slides = [
     <H2>Claude Raiz vs Claude do Projeto</H2>
     <HRac />
     <div className="grid grid-cols-2 gap-4 flex-1 content-start">
-      <Card accent>
-        <Label>~/.claude/ — Global</Label>
-        <p className="text-[13px] mb-3" style={{ color: DIM }}>Vai para <strong className="text-white">todos os projetos</strong>. Sua identidade, preferências e memória pessoal.</p>
-        <Code><K>~/.claude/</K><br/><C>├─ </C>CLAUDE.md<br/><C>├─ </C>settings.json<br/><C>├─ </C>keybindings.json<br/><C>└─ </C><K>projects/memory/</K></Code>
-      </Card>
-      <Card surface>
-        <Label dim>.claude/ — Projeto</Label>
-        <p className="text-[13px] mb-3" style={{ color: DIM }}>Específico do <strong className="text-white">repositório atual</strong>. Regras, agentes e workflows do time.</p>
-        <Code dim><K>.claude/</K><br/><C>├─ </C>CLAUDE.md<br/><C>├─ </C>settings.json<br/><C>└─ </C>rules/<br/><C>   ├─ </C>agent-authority.md<br/><C>   └─ </C>workflow-execution.md</Code>
-      </Card>
+      <div className="flex flex-col gap-2">
+        <Card accent>
+          <Label>~/.claude/ — Global</Label>
+          <p className="text-[13px] mb-3" style={{ color: DIM }}>Vai para <strong className="text-white">todos os projetos</strong>. Sua identidade, preferências e memória pessoal.</p>
+          <Code><K>~/.claude/</K><br/><C>├─ </C>CLAUDE.md<br/><C>├─ </C>settings.json<br/><C>├─ </C>keybindings.json<br/><C>└─ </C><K>projects/memory/</K></Code>
+        </Card>
+        <p className="text-[12px] px-1" style={{ color: DIM }}>Configure uma vez e vale para <strong className="text-white">tudo</strong>. É aqui que ficam suas preferências de tom, atalhos e integrações como Obsidian que você usa em qualquer projeto.</p>
+      </div>
+      <div className="flex flex-col gap-2">
+        <Card surface>
+          <Label dim>.claude/ — Projeto</Label>
+          <p className="text-[13px] mb-3" style={{ color: DIM }}>Específico do <strong className="text-white">repositório atual</strong>. Regras, agentes e workflows do time.</p>
+          <Code dim><K>.claude/</K><br/><C>├─ </C>CLAUDE.md<br/><C>├─ </C>settings.json<br/><C>└─ </C>rules/<br/><C>   ├─ </C>agent-authority.md<br/><C>   └─ </C>workflow-execution.md</Code>
+        </Card>
+        <p className="text-[12px] px-1" style={{ color: DIM }}>Commitado no repositório — todo dev do time <strong className="text-white">herda automaticamente</strong> as mesmas regras ao clonar. O Claude vira parte do projeto.</p>
+      </div>
     </div>
     <Card accent className="mt-4">
       <p className="text-[13px]" style={{ color: "rgba(255,255,255,0.78)" }}>O projeto <strong className="text-white">herda</strong> o global — e pode <strong className="text-white">sobrescrever</strong> qualquer regra.</p>
@@ -205,114 +216,85 @@ const slides = [
     <div className="grid grid-cols-2 gap-4 flex-1 content-start">
       <div>
         <Label>O que fica aqui</Label>
+        <Code className="mb-3"><K>.claude/</K><br/><C>├─ </C>CLAUDE.md<br/><C>├─ </C>settings.json<br/><C>├─ </C>rules/<br/><C>└─ </C>agents/<br/><br/><K>.env</K>  <C>← variáveis de ambiente</C></Code>
         <Li><strong className="text-white">CLAUDE.md</strong> — instruções lidas a cada sessão</Li>
         <Li><strong className="text-white">settings.json</strong> — permissões e allow/deny de ferramentas</Li>
         <Li><strong className="text-white">rules/</strong> — regras contextuais carregadas por arquivo</Li>
-        <Li><strong className="text-white">agents/</strong> — definições de agentes do squad</Li>
-        <HR />
-        <Label>Por que importa</Label>
-        <p className="text-[13px]" style={{ color: DIM }}>É a diferença entre um Claude <strong className="text-white">genérico</strong> e um que conhece <strong className="text-white">seu projeto de cor</strong>.</p>
+        <Li><strong className="text-white">.env</strong> — chaves de API, tokens e segredos do projeto</Li>
       </div>
       <div>
-        <Label>O comando /init</Label>
-        <Code><C># execute dentro do projeto</C><br/><K>/init</K></Code>
+        <Label>O .env e o Claude</Label>
+        <Card accent className="mb-3">
+          <p className="text-[12px]" style={{ color: "rgba(255,255,255,0.78)" }}>O Claude lê o <code style={{ color: AC, fontFamily: MONO }}>.env</code> automaticamente — sem precisar copiar chaves na conversa. <strong className="text-white">Nunca exponha segredos no chat.</strong></p>
+        </Card>
+        <Code dim><C># .env</C><br/><K>OPENAI_API_KEY</K>=sk-...<br/><K>DATABASE_URL</K>=postgres://...<br/><K>STRIPE_SECRET</K>=sk_live_...</Code>
         <div className="mt-3">
-          <Li><strong className="text-white">Lê</strong> toda a estrutura do codebase</Li>
-          <Li><strong className="text-white">Entende</strong> stack, padrões e arquitetura</Li>
-          <Li>Gera um <strong className="text-white">CLAUDE.md documentado</strong></Li>
-          <Li>Claude passa a conhecer o projeto profundamente</Li>
+          <Li dim>Claude acessa as vars direto nas tarefas</Li>
+          <Li dim>Funciona com qualquer MCP que precise de auth</Li>
         </div>
         <Card accent className="mt-3">
-          <p className="text-[12px]" style={{ color: "rgba(255,255,255,0.78)" }}><strong className="text-white">Sempre o primeiro comando</strong> em qualquer projeto novo.</p>
+          <p className="text-[12px]" style={{ color: "rgba(255,255,255,0.78)" }}><strong className="text-white">Sempre o primeiro comando</strong> em qualquer projeto novo: <code style={{ color: AC, fontFamily: MONO }}>/init</code></p>
         </Card>
       </div>
     </div>
   </Slide>,
 
-  /* 05 — O QUE É O AIOX */
+  /* 05 — ESTRUTURA BASE DO AIOX */
   <Slide key={5} n={5} total={TOTAL}>
-    <Label>AIOX Framework</Label>
-    <H2>O que é o AIOX?</H2>
+    <div className="flex items-center justify-between mb-2"><Label>AIOX Framework</Label><AioxBadge n={1} total={4} /></div>
+    <H2>Estrutura Base do AIOX</H2>
     <HRac />
-    <p className="text-[14px] mb-4 max-w-2xl" style={{ color: DIM }}>Um <strong className="text-white">meta-framework</strong> que orquestra agentes de IA para desenvolvimento full stack. Não é um produto — é uma <span style={{ color: AC, fontWeight: 600 }}>infraestrutura de inteligência</span> para seu time operar.</p>
-    <div className="grid grid-cols-3 gap-4 flex-1 content-start">
-      <Card accent>
-        <Label>🤖 Agentes</Label>
-        <p className="text-[12px] mb-3" style={{ color: DIM }}>Personas com escopo, autoridade e memória. Especialistas que assumem funções reais.</p>
-        <div className="flex flex-wrap gap-1"><Tag>@dev</Tag><Tag>@qa</Tag><Tag>@pm</Tag><Tag>@devops</Tag></div>
-      </Card>
-      <Card surface>
-        <Label dim>⚡ Skills</Label>
-        <p className="text-[12px] mb-3" style={{ color: DIM }}>Comandos reutilizáveis acionados por slash. Capacidades plug-and-play em qualquer projeto.</p>
-        <div className="flex flex-wrap gap-1"><Tag dim>/init</Tag><Tag dim>/review</Tag><Tag dim>/loop</Tag></div>
-      </Card>
-      <Card>
-        <Label><span style={{ color: "#4ade80" }}>🔌 Integrações</span></Label>
-        <p className="text-[12px] mb-3" style={{ color: DIM }}>MCP Servers que expandem os sentidos do Claude para o mundo externo.</p>
-        <div className="flex flex-wrap gap-1"><Tag green>Playwright</Tag><Tag green>Context7</Tag><Tag green>Obsidian</Tag></div>
-      </Card>
-    </div>
-  </Slide>,
-
-  /* 06 — AS 3 CAMADAS */
-  <Slide key={6} n={6} total={TOTAL}>
-    <Label>As 3 Camadas</Label>
-    <H2>Agentes · Skills · Integrações</H2>
-    <HRac />
-    <div className="grid grid-cols-3 gap-4 flex-1 content-start">
-      <Card accent>
-        <Label>Agente = Quem faz</Label>
-        <Code className="mb-3"><K>@dev</K>, <K>@qa</K>, <K>@pm</K><br/><C># ativado com @nome</C></Code>
-        <Li>Persona + autoridade definidas</Li>
-        <Li>Escopo exclusivo de ações</Li>
-        <Li>Memória persistente no projeto</Li>
-      </Card>
-      <Card surface>
-        <Label dim>Skill = O que fazer</Label>
-        <Code dim className="mb-3"><K>/init</K>, <K>/review</K><br/><C># ativado com /slash</C></Code>
-        <Li dim>Workflow encapsulado e reutilizável</Li>
-        <Li dim>Funciona em qualquer projeto</Li>
-        <Li dim>Compartilhável com o time</Li>
-      </Card>
-      <Card>
-        <Label><span style={{ color: "#4ade80" }}>Integração = Como fazer</span></Label>
-        <Code dim className="mb-3" style={{ borderLeftColor: "#4ade80" }}><K>MCP Server</K><br/><C># nova ferramenta nativa</C></Code>
-        <Li>Claude ganha novos "sentidos"</Li>
-        <Li>Browser, DB, APIs, Obsidian</Li>
-        <Li>Configurado uma vez, global</Li>
-      </Card>
-    </div>
-    <Card accent className="mt-3">
-      <p className="text-[12px]" style={{ color: "rgba(255,255,255,0.78)" }}>Agentes usam Skills. Skills usam Integrações. Tudo orquestrado pelo AIOX.</p>
-    </Card>
-  </Slide>,
-
-  /* 07 — ESTRUTURA DO AIOX */
-  <Slide key={7} n={7} total={TOTAL}>
-    <Label>Arquitetura</Label>
-    <H2>Estrutura do AIOX</H2>
-    <HRac />
-    <div className="grid grid-cols-2 gap-4 flex-1 content-start">
-      <div>
-        <Label>Diretórios</Label>
-        <Code><K>.aiox-core/</K>  <C>← framework</C><br/><C>├─ </C>constitution.md<br/><C>├─ </C>agents/ &nbsp;tasks/ &nbsp;templates/<br/><br/><K>docs/stories/</K>  <C>← seu trabalho</C><br/><K>squads/</K>        <C>← seus times</C><br/><K>.claude/</K>       <C>← config do projeto</C></Code>
-      </div>
-      <div>
-        <Label>4 Camadas de Proteção</Label>
-        <Li><strong className="text-white">L1 Core</strong> — nunca modificável (constitution)</Li>
-        <Li><strong className="text-white">L2 Templates</strong> — só extensíveis (tasks, workflows)</Li>
-        <Li dim><strong className="text-white">L3 Config</strong> — mutável (settings, memória)</Li>
-        <Li dim><strong className="text-white">L4 Runtime</strong> — seu território (stories, squads)</Li>
-        <Card accent className="mt-3">
-          <p className="text-[12px]" style={{ color: "rgba(255,255,255,0.78)" }}><strong className="text-white">Story-Driven Development:</strong> todo trabalho começa em <code style={{ color: AC, fontFamily: MONO }}>docs/stories/</code></p>
+    <div className="grid grid-cols-2 gap-6 flex-1 content-start">
+      <Code><K>.aiox-core/</K>  <C>← o framework</C><br/><C>├─ </C><K>constitution.md</K>  <C>← lei máxima</C><br/><C>├─ </C>agents/  <C>← personas dos agentes</C><br/><C>├─ </C>tasks/   <C>← workflows executáveis</C><br/><C>├─ </C>templates/  <C>← modelos de docs</C><br/><C>├─ </C>workflows/  <C>← orquestração</C><br/><C>└─ </C>rules/  <C>← padrões e restrições</C><br/><br/><K>docs/stories/</K>  <C>← onde o trabalho vive</C><br/><K>squads/</K>        <C>← seus times de agentes</C><br/><K>.claude/</K>       <C>← config do projeto</C></Code>
+      <div className="flex flex-col gap-3">
+        <Li><strong className="text-white">.aiox-core/</strong> — nunca modificar. É o núcleo protegido do framework.</Li>
+        <Li><strong className="text-white">constitution.md</strong> — princípios inegociáveis que todos os agentes respeitam.</Li>
+        <Li><strong className="text-white">tasks/</strong> — cada task define o que deve ser feito, passo a passo.</Li>
+        <Li><strong className="text-white">squads/</strong> — seus times personalizados, criados com o Squad Creator.</Li>
+        <Li><strong className="text-white">docs/stories/</strong> — todo desenvolvimento começa aqui. Sem story, sem código.</Li>
+        <Card accent className="mt-2">
+          <p className="text-[12px]" style={{ color: "rgba(255,255,255,0.78)" }}>O AIOX separa o <strong className="text-white">framework</strong> (imutável) do <strong className="text-white">seu projeto</strong> (seu território) — você nunca quebra o núcleo.</p>
         </Card>
       </div>
     </div>
   </Slide>,
 
-  /* 08 — ANATOMIA DO AGENTE */
-  <Slide key={8} n={8} total={TOTAL}>
-    <Label>Agente Base</Label>
+  /* 06 — AGENTES BASE */
+  <Slide key={6} n={6} total={TOTAL}>
+    <div className="flex items-center justify-between mb-2"><Label>AIOX Framework</Label><AioxBadge n={2} total={4} /></div>
+    <H2>Agentes Base</H2>
+    <HRac />
+    <div className="grid grid-cols-4 gap-[8px] flex-1 content-start">
+      {[
+        { cmd: "@aiox-master", name: "Orion", icon: "👑", title: "Master Orchestrator", desc: "Governa o framework, executa qualquer task diretamente, sem restrições de autoridade. A lei máxima." },
+        { cmd: "@dev", name: "Dex", icon: "💻", title: "Full Stack Developer", desc: "Implementa código, commits locais, branches e merge. Nunca faz git push — delega ao devops." },
+        { cmd: "@qa", name: "Quinn", icon: "✅", title: "Test Architect", desc: "QA Gate e QA Loop iterativo. Testes, cobertura, regressões e CodeRabbit self-healing." },
+        { cmd: "@architect", name: "Aria", icon: "🏛️", title: "System Architect", desc: "Arquitetura de sistema, seleção de tecnologia, complexity assessment e integration patterns." },
+        { cmd: "@pm", name: "Morgan", icon: "📋", title: "Product Manager", desc: "PRDs, epics, Spec Pipeline e requirements gathering. Transforma visão em especificação executável." },
+        { cmd: "@po", name: "Pax", icon: "🎯", title: "Product Owner", desc: "Valida stories com checklist de 10 pontos. GO ou NO-GO. Dono do backlog e critérios de aceite." },
+        { cmd: "@sm", name: "River", icon: "🌊", title: "Scrum Master", desc: "Cria stories a partir de epics e PRDs. Conduz o Story Development Cycle. Draft → Ready." },
+        { cmd: "@analyst", name: "Atlas", icon: "🔍", title: "Business Analyst", desc: "Pesquisa profunda, brainstorming e análise estratégica. Deep research para embasar decisões." },
+        { cmd: "@data-engineer", name: "Dara", icon: "📊", title: "DB Architect", desc: "Schema DDL, migrations, RLS policies, query optimization e seeds. Delegado pelo architect." },
+        { cmd: "@ux-design-expert", name: "Uma", icon: "🎨", title: "UX/UI Designer", desc: "Design system, acessibilidade, CRO e componentes. Review de UX em código produzido pelo dev." },
+        { cmd: "@devops", name: "Gage", icon: "⚡", title: "DevOps Specialist", desc: "Único com autoridade para git push, gh pr, CI/CD e releases. Sem Gage, nada vai pro ar.", exclusive: true },
+        { cmd: "@squad-creator", name: "Craft", icon: "🏗️", title: "Squad Builder", desc: "Cria agentes personalizados para qualquer contexto. Valida squads e faz scaffolding completo." },
+      ].map(({ cmd, name, icon, title, desc, exclusive }: { cmd: string; name: string; icon: string; title: string; desc: string; exclusive?: boolean }) => (
+        <div key={cmd} className="p-[10px]" style={{ background: DARK_CARD, borderLeft: exclusive ? `2px solid ${AC}` : `1px solid ${BORDER}`, borderTop: `1px solid ${exclusive ? "rgba(255,68,0,0.12)" : BORDER}`, borderRight: `1px solid ${exclusive ? "rgba(255,68,0,0.06)" : BORDER}`, borderBottom: `1px solid ${exclusive ? "rgba(255,68,0,0.06)" : BORDER}` }}>
+          <div className="flex items-center gap-[6px] mb-[4px]">
+            <span className="text-[11px]">{icon}</span>
+            <span className="font-mono text-[10px] font-bold" style={{ color: AC, fontFamily: MONO }}>{cmd}</span>
+            {exclusive && <span className="font-mono text-[7px] tracking-[0.1em] uppercase px-[4px] py-[1px]" style={{ color: AC, border: `1px solid rgba(255,68,0,0.5)`, fontFamily: MONO }}>excl.</span>}
+          </div>
+          <div className="font-mono text-[9px] mb-[4px]" style={{ color: "rgba(255,255,255,0.32)", fontFamily: MONO }}>{name} · {title}</div>
+          <p className="text-[10px] leading-[1.5]" style={{ color: DIM }}>{desc}</p>
+        </div>
+      ))}
+    </div>
+  </Slide>,
+
+  /* 07 — ANATOMIA DO AGENTE */
+  <Slide key={7} n={7} total={TOTAL}>
+    <div className="flex items-center justify-between mb-2"><Label>AIOX Framework</Label><AioxBadge n={3} total={4} /></div>
     <H2>Anatomia de um Agente</H2>
     <HRac />
     <div className="grid grid-cols-2 gap-4 flex-1 content-start">
@@ -327,13 +309,19 @@ const slides = [
         <Card accent className="mt-3">
           <p className="text-[12px]" style={{ color: "rgba(255,255,255,0.78)" }}>Ativação: <code style={{ color: AC, fontFamily: MONO }}>@dev</code> ou <code style={{ color: AC, fontFamily: MONO }}>/AIOX:agents:dev</code></p>
         </Card>
+        <div className="mt-3 p-3" style={{ background: "rgba(250,204,21,0.05)", border: "1px solid rgba(250,204,21,0.2)", borderLeft: "2px solid rgba(250,204,21,0.6)" }}>
+          <span className="block font-mono text-[9px] tracking-[0.16em] uppercase mb-[6px]" style={{ color: "rgba(250,204,21,0.7)", fontFamily: MONO }}>💡 Insight</span>
+          <p className="text-[11px] leading-[1.6]" style={{ color: "rgba(255,255,255,0.65)" }}>
+            <strong className="text-white">Skills podem virar comandos.</strong> Se você usa muito uma skill como <code style={{ color: "rgba(250,204,21,0.8)", fontFamily: MONO }}>/review</code> ou <code style={{ color: "rgba(250,204,21,0.8)", fontFamily: MONO }}>/loop</code>, registre-a nos <code style={{ color: "rgba(250,204,21,0.8)", fontFamily: MONO }}>commands:</code> do agente. Ele passa a invocá-la com <code style={{ color: "rgba(250,204,21,0.8)", fontFamily: MONO }}>*nome</code> — sem você precisar lembrar o slash. Com o tempo, seu agente acumula um repertório que reflete exatamente o seu jeito de trabalhar.
+          </p>
+        </div>
       </div>
     </div>
   </Slide>,
 
-  /* 09 — SQUAD CREATOR */
-  <Slide key={9} n={9} total={TOTAL}>
-    <Label>O Libertador</Label>
+  /* 08 — SQUAD CREATOR */
+  <Slide key={8} n={8} total={TOTAL}>
+    <div className="flex items-center justify-between mb-2"><Label>AIOX Framework</Label><AioxBadge n={4} total={4} /></div>
     <H2>Squad Creator</H2>
     <HRac />
     <p className="text-[14px] mb-4 max-w-2xl" style={{ color: DIM }}>O agente que <span style={{ color: AC, fontWeight: 700 }}>cria outros agentes</span>. Com ele você sai do genérico e constrói <strong className="text-white">seu time personalizado</strong> para qualquer contexto.</p>
@@ -356,6 +344,36 @@ const slides = [
     </div>
     <Card accent className="mt-3">
       <p className="text-[12px]" style={{ color: "rgba(255,255,255,0.78)" }}>Resultado: um time completo de IA especializado no seu negócio, operando 24/7</p>
+    </Card>
+  </Slide>,
+
+  /* 09 — AS 3 CAMADAS */
+  <Slide key={9} n={9} total={TOTAL}>
+    <Label>Claude Code</Label>
+    <H2>Agentes · Skills · Integrações</H2>
+    <HRac />
+    <div className="grid grid-cols-3 gap-4 flex-1 content-start">
+      <Card accent>
+        <Label>Agente = Quem faz</Label>
+        <Code className="mb-3"><K>@dev</K>, <K>@qa</K>, <K>@pm</K><br/><C># ativado com @nome</C></Code>
+        <p className="text-[12px] mb-2" style={{ color: DIM }}>Personas com escopo, autoridade e memória própria. Cada um sabe exatamente o que pode e não pode fazer.</p>
+        <div className="flex flex-wrap gap-1 mt-1"><Tag>@dev</Tag><Tag>@qa</Tag><Tag>@pm</Tag><Tag>@devops</Tag></div>
+      </Card>
+      <Card surface>
+        <Label dim>Skill = O que fazer</Label>
+        <Code dim className="mb-3"><K>/init</K>, <K>/review</K><br/><C># ativado com /slash</C></Code>
+        <p className="text-[12px] mb-2" style={{ color: DIM }}>Workflows encapsulados e reutilizáveis. Configure uma vez, use em qualquer projeto do time.</p>
+        <div className="flex flex-wrap gap-1 mt-1"><Tag dim>/init</Tag><Tag dim>/review</Tag><Tag dim>/loop</Tag><Tag dim>/schedule</Tag></div>
+      </Card>
+      <Card>
+        <Label><span style={{ color: "#4ade80" }}>Integração = Como fazer</span></Label>
+        <Code dim className="mb-3" style={{ borderLeftColor: "#4ade80" }}><K>MCP Server</K><br/><C># nova ferramenta nativa</C></Code>
+        <p className="text-[12px] mb-2" style={{ color: DIM }}>Claude ganha novos "sentidos" — acessa o mundo externo como se fossem ferramentas nativas.</p>
+        <div className="flex flex-wrap gap-1 mt-1"><Tag green>Meta Ads</Tag><Tag green>Instagram</Tag><Tag green>21st.dev</Tag><Tag green>Playwright</Tag><Tag green>Obsidian</Tag></div>
+      </Card>
+    </div>
+    <Card accent className="mt-3">
+      <p className="text-[12px]" style={{ color: "rgba(255,255,255,0.78)" }}>Agentes usam Skills. Skills usam Integrações. Tudo orquestrado pelo AIOX.</p>
     </Card>
   </Slide>,
 
@@ -384,30 +402,45 @@ const slides = [
         <Card accent className="mt-3">
           <p className="text-[12px]" style={{ color: "rgba(255,255,255,0.78)" }}>Configurado uma vez no <code style={{ color: AC, fontFamily: MONO }}>~/.claude/</code> → ativo em todos os projetos. Claude vira um <strong className="text-white">segundo cérebro conectado ao seu</strong>.</p>
         </Card>
+        <div className="mt-3 p-3" style={{ border: `1px solid rgba(255,200,100,0.2)`, background: "rgba(255,200,100,0.04)" }}>
+          <span className="block font-mono text-[9px] tracking-[0.16em] uppercase mb-1" style={{ color: "rgba(255,200,100,0.7)", fontFamily: MONO }}>⚠ Recomendação</span>
+          <p className="text-[12px]" style={{ color: "rgba(255,255,255,0.65)" }}>Sempre abra o Claude <strong className="text-white">dentro da pasta do projeto</strong>. Memórias são isoladas por diretório — projetos diferentes não se misturam e não se atrapalham.</p>
+        </div>
       </div>
     </div>
   </Slide>,
 
-  /* 11 — 4 SEMANAS */
+  /* 11 — 6 SEMANAS */
   <Slide key={11} n={11} total={TOTAL}>
     <Label>Prova de Conceito</Label>
-    <H2>O que fiz em <span style={{ color: AC }}>4 semanas</span></H2>
+    <H2>O que fiz em <span style={{ color: AC }}>6 semanas</span></H2>
     <HRac />
-    <div className="grid grid-cols-3 gap-3 mb-4">
-      <Stat n="3" l="Squads criadas" accent />
+    <div className="grid grid-cols-4 gap-3 mb-5">
+      <Stat n="4" l="Produtos lançados" accent />
+      <Stat n="3" l="Squads criadas" />
       <Stat n="20+" l="Agentes ativos" />
       <Stat n="24/7" l="Time operando" />
     </div>
     <div className="grid grid-cols-2 gap-4 flex-1 content-start">
-      <div>
-        <Li>Site completo da mentoria Claude Code + AIOX</Li>
-        <Li>Squad <strong className="text-white">themaestrisites</strong> — 8 agentes, sites e LPs</Li>
-        <Li>Squad <strong className="text-white">n8n Killers</strong> — guia interativo publicado</Li>
+      <div className="flex flex-col gap-2">
+        <Card accent>
+          <Label>Revos</Label>
+          <p className="text-[12px]" style={{ color: DIM }}>Produto completo desenvolvido com AIOX — do briefing ao deploy com squad dedicado.</p>
+        </Card>
+        <Card accent>
+          <Label>Workos</Label>
+          <p className="text-[12px]" style={{ color: DIM }}>Plataforma construída e entregue pelo squad themaestrisites em ciclos de story-driven development.</p>
+        </Card>
       </div>
-      <div>
-        <Li dim>AIOX rodando como infra de desenvolvimento completa</Li>
-        <Li dim>Sistema de memória com Obsidian integrado</Li>
-        <Li dim>Este workshop — criado em minutos com o squad</Li>
+      <div className="flex flex-col gap-2">
+        <Card>
+          <Label><span style={{ color: "#4ade80" }}>Equipe de Social Media</span></Label>
+          <p className="text-[12px]" style={{ color: DIM }}>Squad completo de agentes para criação de conteúdo, copy, SEO e publicação — operando de forma autônoma.</p>
+        </Card>
+        <Card>
+          <Label><span style={{ color: "#4ade80" }}>AIOX Monitor</span></Label>
+          <p className="text-[12px]" style={{ color: DIM }}>Painel de monitoramento do AIOX em tempo real — status de agentes, stories ativas e métricas de execução.</p>
+        </Card>
       </div>
     </div>
   </Slide>,
