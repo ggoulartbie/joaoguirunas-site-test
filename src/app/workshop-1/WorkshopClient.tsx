@@ -598,9 +598,26 @@ export function WorkshopClient() {
               <div className="highlight-line" style={{ maxWidth: '580px', margin: '0 auto 20px', textAlign: 'center', fontSize: '0.6em' }}>
                 Turma super seleta · máximo 15 projetos · suporte individual garantido
               </div>
-              <p style={{ textAlign: 'center', color: '#FF4400', fontSize: '0.7em', fontWeight: 700, fontFamily: 'monospace', letterSpacing: '0.05em' }}>
-                opensource.growthsales.ai/mentoria
-              </p>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '16px', marginTop: '4px' }}>
+                <div style={{ padding: '8px', background: '#fff', borderRadius: '8px', display: 'inline-block' }}>
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src="https://api.qrserver.com/v1/create-qr-code/?size=100x100&data=https://opensource.growthsales.ai/mentoria&color=FF4400&bgcolor=ffffff"
+                    alt="QR Code inscrição mentoria"
+                    width={100}
+                    height={100}
+                    style={{ display: 'block' }}
+                  />
+                </div>
+                <div style={{ textAlign: 'left' }}>
+                  <p style={{ color: '#FF4400', fontSize: '0.7em', fontWeight: 700, fontFamily: 'monospace', letterSpacing: '0.05em', margin: 0 }}>
+                    opensource.growthsales.ai/mentoria
+                  </p>
+                  <p style={{ color: '#52525b', fontSize: '0.5em', fontFamily: 'monospace', margin: '4px 0 0' }}>
+                    Aponte a câmera e garanta sua vaga
+                  </p>
+                </div>
+              </div>
             </div>
           </section>
 
