@@ -568,30 +568,37 @@ export function WorkshopClient() {
             </div>
           </section>
 
-          {/* ── SLIDE 12: ENCERRAMENTO ── */}
+          {/* ── SLIDE 12: PITCH MENTORIA ── */}
           <section data-background-gradient="linear-gradient(135deg, #08080C 0%, #0D0D14 50%, #1a0a00 100%)">
             <div style={{ textAlign: 'center' }}>
-              <span className="badge">PRÓXIMOS PASSOS</span>
-              <h2 style={{ textAlign: 'center' }}>Você está a um <span style={{ color: '#FF4400' }}>/init</span> de distância</h2>
-              <p style={{ textAlign: 'center', color: '#a1a1aa', fontSize: '0.7em', maxWidth: '560px', margin: '12px auto 28px' }}>
-                Tudo que você viu hoje leva menos de uma tarde para configurar.
-                A mentoria te leva do setup ao squad completo em 4 semanas.
+              <span className="badge" style={{ background: 'rgba(255,68,0,0.2)', borderColor: 'rgba(255,68,0,0.6)' }}>
+                ⚠️ APENAS 3 VAGAS RESTANTES
+              </span>
+              <h2 style={{ textAlign: 'center', fontSize: '1.6em' }}>
+                Mentoria Claude Code <span style={{ color: '#FF4400' }}>+ AIOX</span>
+              </h2>
+              <p style={{ textAlign: 'center', color: '#a1a1aa', fontSize: '0.65em', maxWidth: '580px', margin: '8px auto 20px' }}>
+                Tudo que você viu hoje — do zero ao squad completo rodando no seu negócio —
+                em <strong style={{ color: '#fff' }}>4 semanas</strong>, com acompanhamento ao vivo.
               </p>
-              <div style={{ display: 'flex', justifyContent: 'center', gap: '16px', flexWrap: 'wrap' }}>
-                <div className="card" style={{ minWidth: '180px', textAlign: 'center' }}>
-                  <div className="card-title" style={{ color: '#FF4400', textAlign: 'center', fontSize: '0.7em' }}>Instalar Claude Code</div>
-                  <div className="code-box" style={{ textAlign: 'left', marginTop: '8px' }}>
-                    <span className="hl">npm i -g @anthropic-ai/claude-code</span>
-                  </div>
+              <div className="three-col" style={{ maxWidth: '600px', margin: '0 auto 20px' }}>
+                <div className="stat-box">
+                  <span className="big-number" style={{ fontSize: '1.8em' }}>12/05</span>
+                  <span className="label">Início · Terça</span>
                 </div>
-                <div className="card" style={{ minWidth: '180px', textAlign: 'center' }}>
-                  <div className="card-title" style={{ color: '#FF4400', textAlign: 'center', fontSize: '0.7em' }}>Iniciar no projeto</div>
-                  <div className="code-box" style={{ textAlign: 'left', marginTop: '8px' }}>
-                    <span className="hl">cd meu-projeto<br/>claude<br/>/init</span>
-                  </div>
+                <div className="stat-box">
+                  <span className="big-number" style={{ fontSize: '1.8em' }}>4</span>
+                  <span className="label">Semanas</span>
+                </div>
+                <div className="stat-box" style={{ borderColor: 'rgba(255,68,0,0.4)', background: 'rgba(255,68,0,0.06)' }}>
+                  <span className="big-number" style={{ fontSize: '1.8em' }}>3</span>
+                  <span className="label" style={{ color: '#FF4400' }}>Vagas restantes</span>
                 </div>
               </div>
-              <p style={{ textAlign: 'center', color: '#52525b', fontSize: '0.5em', marginTop: '24px', fontFamily: 'monospace' }}>
+              <div className="highlight-line" style={{ maxWidth: '580px', margin: '0 auto 20px', textAlign: 'center', fontSize: '0.6em' }}>
+                Turma super seleta · máximo 15 projetos · suporte individual garantido
+              </div>
+              <p style={{ textAlign: 'center', color: '#FF4400', fontSize: '0.7em', fontWeight: 700, fontFamily: 'monospace', letterSpacing: '0.05em' }}>
                 joaoguirunas.com/mentoria
               </p>
             </div>
