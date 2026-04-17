@@ -599,7 +599,7 @@ export function WorkshopClient() {
                 Turma super seleta · máximo 15 projetos · suporte individual garantido
               </div>
               <p style={{ textAlign: 'center', color: '#FF4400', fontSize: '0.7em', fontWeight: 700, fontFamily: 'monospace', letterSpacing: '0.05em' }}>
-                joaoguirunas.com/mentoria
+                opensource.growthsales.ai/mentoria
               </p>
             </div>
           </section>
