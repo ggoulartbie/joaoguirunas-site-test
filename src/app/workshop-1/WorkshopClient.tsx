@@ -1,647 +1,497 @@
-'use client';
+"use client";
 
-import { useEffect, useRef, useState } from 'react';
+import React, { useState, useEffect, useRef } from "react";
+import { cn } from "@/lib/utils";
 
-const REVEAL_CDN = 'https://cdn.jsdelivr.net/npm/reveal.js@5.0.4';
-
-const AC  = '#FF4400';           // accent — laranja GrowthSales
-const ACL = 'rgba(255,68,0,0.5)'; // accent light
-const ACX = 'rgba(255,68,0,0.08)'; // accent faint
-const DARK    = '#08080C';
-const SURFACE = '#0D0D12';
-const WHITE   = '#FFFFFF';
-const DIM     = 'rgba(255,255,255,0.50)';
-const DIMX    = 'rgba(255,255,255,0.28)';
-const BORDER  = 'rgba(255,255,255,0.07)';
-const MONO    = "'Roboto Mono','Geist Mono',ui-monospace,monospace";
-const SANS    = "var(--font-bb-display),'Inter',system-ui,sans-serif";
-
-export function WorkshopClient() {
-  const deckRef = useRef<HTMLDivElement>(null);
-  const [ready, setReady] = useState(false);
-
+/* ─────────────────────────────────────────
+   DOT GRID (canvas)
+───────────────────────────────────────── */
+const DotGrid: React.FC = () => {
+  const ref = useRef<HTMLCanvasElement>(null);
   useEffect(() => {
-    const lr = document.createElement('link');
-    lr.rel = 'stylesheet'; lr.href = `${REVEAL_CDN}/dist/reveal.css`;
-    const lt = document.createElement('link');
-    lt.rel = 'stylesheet'; lt.href = `${REVEAL_CDN}/dist/theme/black.css`;
-    const sc = document.createElement('script');
-    sc.src = `${REVEAL_CDN}/dist/reveal.js`;
-    sc.onload = () => setReady(true);
-    document.head.append(lr, lt, sc);
-    return () => { lr.remove(); lt.remove(); sc.remove(); };
+    const c = ref.current;
+    if (!c) return;
+    const ctx = c.getContext("2d");
+    if (!ctx) return;
+    const draw = () => {
+      c.width = window.innerWidth;
+      c.height = window.innerHeight;
+      ctx.clearRect(0, 0, c.width, c.height);
+      ctx.fillStyle = "rgba(255,68,0,0.12)";
+      for (let x = 0; x < c.width; x += 26)
+        for (let y = 0; y < c.height; y += 26) {
+          ctx.beginPath();
+          ctx.arc(x, y, 1, 0, Math.PI * 2);
+          ctx.fill();
+        }
+    };
+    draw();
+    window.addEventListener("resize", draw);
+    return () => window.removeEventListener("resize", draw);
   }, []);
+  return <canvas ref={ref} className="absolute inset-0 z-0 pointer-events-none opacity-50" />;
+};
 
-  useEffect(() => {
-    if (!ready || !deckRef.current) return;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const R = (window as any).Reveal;
-    if (!R) return;
-    const d = new R(deckRef.current, {
-      hash: true, controls: true, progress: true,
-      center: false, transition: 'fade',
-      width: 1280, height: 720, margin: 0.06,
-      minScale: 0.2, maxScale: 2.0,
-    });
-    d.initialize();
-    return () => { try { d.destroy(); } catch { /**/ } };
-  }, [ready]);
+/* ─────────────────────────────────────────
+   CORNER BRACKET
+───────────────────────────────────────── */
+const Corner: React.FC<{ pos: "tl" | "br" }> = ({ pos }) => (
+  <div className={cn("absolute z-20 pointer-events-none", pos === "tl" ? "top-6 left-6" : "bottom-6 right-6")}>
+    <svg width="52" height="52" viewBox="0 0 52 52" fill="none" className={pos === "br" ? "rotate-180" : ""}>
+      <path d="M0 18V0H18" stroke="#FF4400" strokeWidth="1.5" />
+    </svg>
+  </div>
+);
 
-  const css = `
-    /* ─ base ─ */
-    .rp { width:100vw; height:100vh; }
-    .reveal .slides section {
-      padding:0; text-align:left;
-      box-sizing:border-box; overflow:hidden;
-    }
-    .reveal .slides section h1,
-    .reveal .slides section h2 {
-      text-transform:uppercase; font-weight:800;
-      font-family:${SANS}; color:${WHITE};
-      letter-spacing:-0.025em; line-height:1.0;
-      margin:0 0 12px; padding:0;
-      text-shadow: 0 0 40px rgba(255,68,0,0.15);
-    }
-    .reveal .slides section h1 { font-size:2.8em; }
-    .reveal .slides section h2 { font-size:1.55em; }
-    .reveal .slides section p,
-    .reveal .slides section li { font-size:0.62em; line-height:1.55; color:${DIM}; margin:0; }
-    .reveal .slides section strong { color:${WHITE}; font-weight:700; }
-    .reveal .controls { color:${AC}; }
-    .reveal .progress span { background:${AC}; }
+/* ─────────────────────────────────────────
+   COCKPIT SLIDE WRAPPER
+───────────────────────────────────────── */
+interface SlideProps {
+  n: number;
+  total: number;
+  label?: string;
+  children: React.ReactNode;
+  center?: boolean;
+}
+const Slide: React.FC<SlideProps> = ({ n, total, label = "CLAUDE CODE WORKSHOP", children, center }) => (
+  <div className="relative w-full h-screen overflow-hidden" style={{ backgroundColor: "#08080C" }}>
+    <DotGrid />
+    {/* radial glow */}
+    <div className="absolute inset-0 z-0 pointer-events-none"
+      style={{ background: "radial-gradient(ellipse 60% 55% at 20% 20%, rgba(255,68,0,0.06) 0%, transparent 70%)" }} />
+    <Corner pos="tl" /><Corner pos="br" />
+    {/* hud label */}
+    <div className="absolute top-7 left-20 z-20 font-mono text-[10px] tracking-[0.22em] uppercase" style={{ color: "#FF4400", fontFamily: "'Roboto Mono',monospace" }}>
+      {label}
+    </div>
+    {/* accent line top */}
+    <div className="absolute top-[54px] left-20 w-28 h-[1.5px] z-20" style={{ background: "#FF4400" }} />
+    {/* content */}
+    <div className={cn("relative z-10 h-full px-20 pt-20 pb-16 flex flex-col", center && "items-center justify-center text-center")}>
+      {children}
+    </div>
+    {/* slide number */}
+    <div className="absolute bottom-7 right-20 z-20 font-mono text-[11px] tracking-[0.15em]" style={{ color: "rgba(255,68,0,0.55)", fontFamily: "'Roboto Mono',monospace" }}>
+      {String(n).padStart(2, "0")} / {String(total).padStart(2, "0")}
+    </div>
+    {/* accent line bottom */}
+    <div className="absolute bottom-[54px] right-20 w-20 h-[1.5px] z-20" style={{ background: "rgba(255,68,0,0.35)" }} />
+  </div>
+);
 
-    /* ─ slide wrapper ─ */
-    .si {
-      position:relative; overflow:hidden;
-      width:100%; height:100%;
-      padding:40px 52px 36px;
-      box-sizing:border-box;
-      display:flex; flex-direction:column;
-      background:${DARK};
-    }
+/* ─────────────────────────────────────────
+   DESIGN TOKENS
+───────────────────────────────────────── */
+const AC = "#FF4400";
+const DIM = "rgba(255,255,255,0.48)";
+const BORDER = "rgba(255,255,255,0.07)";
+const MONO = "'Roboto Mono',monospace";
+const SURFACE = "rgba(255,255,255,0.025)";
 
-    /* ─ backgrounds ─ */
-    .bg-dots {
-      position:absolute; inset:0; pointer-events:none;
-      background-image: radial-gradient(circle at 1px 1px, rgba(255,255,255,0.035) 1px, transparent 0);
-      background-size:30px 30px;
-    }
-    .bg-glow {
-      position:absolute; pointer-events:none;
-      border-radius:50%;
-    }
-    .bg-glow-tl {
-      top:-160px; left:-120px; width:560px; height:560px;
-      background:radial-gradient(circle, rgba(255,68,0,0.07) 0%, transparent 65%);
-    }
-    .bg-glow-br {
-      bottom:-160px; right:-120px; width:480px; height:480px;
-      background:radial-gradient(circle, rgba(255,68,0,0.05) 0%, transparent 65%);
-    }
-    .bg-glow-c {
-      top:50%; left:50%; transform:translate(-50%,-50%);
-      width:700px; height:700px;
-      background:radial-gradient(circle, rgba(255,68,0,0.06) 0%, transparent 60%);
-    }
+/* small helpers */
+const Label = ({ children, dim }: { children: React.ReactNode; dim?: boolean }) => (
+  <span className="block mb-2 font-mono text-[10px] tracking-[0.18em] uppercase" style={{ color: dim ? DIM : AC, fontFamily: MONO }}>{children}</span>
+);
+const H2 = ({ children }: { children: React.ReactNode }) => (
+  <h2 className="text-[2.1rem] font-black uppercase leading-none tracking-tight text-white mb-0" style={{ fontFamily: "var(--font-bb-display),'Inter',sans-serif", letterSpacing: "-0.02em" }}>
+    {children}
+  </h2>
+);
+const HR = () => <div className="my-3 h-px" style={{ background: BORDER }} />;
+const HRac = () => <div className="mt-2 mb-4 h-[2px] w-10" style={{ background: AC }} />;
+const Card = ({ children, accent, surface, className }: { children: React.ReactNode; accent?: boolean; surface?: boolean; className?: string }) => (
+  <div className={cn("p-4 border", className)} style={{ background: accent ? "rgba(255,68,0,0.06)" : surface ? "rgba(255,255,255,0.03)" : SURFACE, borderColor: accent ? "rgba(255,68,0,0.3)" : BORDER }}>
+    {children}
+  </div>
+);
+const Dot = ({ dim }: { dim?: boolean }) => (
+  <div className="mt-[7px] flex-shrink-0 w-[4px] h-[4px]" style={{ background: dim ? "rgba(255,255,255,0.22)" : AC }} />
+);
+const Li = ({ children, dim }: { children: React.ReactNode; dim?: boolean }) => (
+  <div className="flex items-start gap-2 my-[5px]">
+    <Dot dim={dim} />
+    <span className="text-[13px] leading-snug" style={{ color: DIM }}>{children}</span>
+  </div>
+);
+const Code = ({ children, dim, className, style }: { children: React.ReactNode; dim?: boolean; className?: string; style?: React.CSSProperties }) => (
+  <div className={cn("p-3 font-mono text-[11px] leading-[1.95]", className)} style={{ background: "#070709", borderLeft: `2px solid ${dim ? "rgba(255,255,255,0.15)" : AC}`, border: `1px solid ${dim ? BORDER : "rgba(255,68,0,0.1)"}`, borderLeftWidth: "2px", color: "rgba(255,255,255,0.42)", fontFamily: MONO, ...style }}>
+    {children}
+  </div>
+);
+const K = ({ children }: { children: React.ReactNode }) => <span style={{ color: AC }}>{children}</span>;
+const C = ({ children }: { children: React.ReactNode }) => <span style={{ color: "rgba(255,255,255,0.2)" }}>{children}</span>;
+const Tag = ({ children, dim, green }: { children: React.ReactNode; dim?: boolean; green?: boolean }) => (
+  <span className="inline-block font-mono text-[10px] tracking-[0.07em] uppercase px-[9px] py-[3px]" style={{ fontFamily: MONO, border: `1px solid ${green ? "rgba(34,197,94,0.25)" : dim ? BORDER : "rgba(255,68,0,0.25)"}`, background: green ? "rgba(34,197,94,0.05)" : dim ? "rgba(255,255,255,0.02)" : "rgba(255,68,0,0.05)", color: green ? "#4ade80" : dim ? DIM : AC }}>
+    {children}
+  </span>
+);
+const Stat = ({ n, l, accent }: { n: string; l: string; accent?: boolean }) => (
+  <div className={cn("p-4 border text-center", accent ? "border-[rgba(255,68,0,0.35)] bg-[rgba(255,68,0,0.07)]" : "border-[rgba(255,255,255,0.07)] bg-[rgba(255,255,255,0.025)]")}>
+    <div className="font-black leading-none mb-1 text-[2.2rem]" style={{ fontFamily: "var(--font-bb-display),'Inter',sans-serif", color: AC }}>{n}</div>
+    <div className="font-mono text-[10px] tracking-[0.1em] uppercase" style={{ color: DIM, fontFamily: MONO }}>{l}</div>
+  </div>
+);
+const TItem = ({ time, children }: { time: string; children: React.ReactNode }) => (
+  <div className="flex items-baseline gap-4 py-[7px] border-b" style={{ borderColor: "rgba(255,255,255,0.04)" }}>
+    <span className="font-mono text-[10px] tracking-wide min-w-[44px]" style={{ color: AC, fontFamily: MONO }}>{time}</span>
+    <span className="text-[13px]" style={{ color: DIM }}>{children}</span>
+  </div>
+);
 
-    /* ─ corners ─ */
-    .co-tl,.co-br { position:absolute; width:18px; height:18px; pointer-events:none; z-index:3; }
-    .co-tl { top:14px; left:14px; border-top:1px solid ${ACL}; border-left:1px solid ${ACL}; }
-    .co-br { bottom:14px; right:14px; border-bottom:1px solid ${ACL}; border-right:1px solid ${ACL}; }
+/* ─────────────────────────────────────────
+   SLIDES CONTENT
+───────────────────────────────────────── */
+const TOTAL = 12;
 
-    /* ─ slide number ─ */
-    .snum {
-      position:absolute; bottom:18px; right:20px; z-index:3;
-      font-family:${MONO}; font-size:0.38em;
-      color:rgba(255,255,255,0.18); letter-spacing:0.08em;
-    }
-
-    /* ─ content layer ─ */
-    .sc { position:relative; z-index:1; flex:1; display:flex; flex-direction:column; }
-    .sc.center { align-items:center; justify-content:center; text-align:center; }
-
-    /* ─ hud label ─ */
-    .hl {
-      display:block; margin-bottom:8px;
-      font-family:${MONO}; font-size:0.45em; font-weight:500;
-      letter-spacing:0.14em; text-transform:uppercase; color:${AC};
-    }
-    .hl.dim { color:${DIMX}; }
-
-    /* ─ divider ─ */
-    .hr { height:1px; background:${BORDER}; margin:10px 0 14px; }
-    .hr-ac { height:2px; width:36px; background:${AC}; margin:10px 0 14px; }
-
-    /* ─ badge ─ */
-    .bdg {
-      display:inline-flex; align-items:center;
-      border:1px solid rgba(255,68,0,0.40);
-      background:${ACX}; color:${AC};
-      padding:5px 14px; margin-bottom:14px;
-      font-family:${MONO}; font-size:0.46em; font-weight:500;
-      letter-spacing:0.1em; text-transform:uppercase;
-    }
-    .bdg.alert {
-      border-color:rgba(255,68,0,0.65);
-      background:rgba(255,68,0,0.14); color:${WHITE}; font-weight:700;
-    }
-
-    /* ─ grid ─ */
-    .g2 { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
-    .g3 { display:grid; grid-template-columns:1fr 1fr 1fr; gap:14px; }
-
-    /* ─ card ─ */
-    .cd {
-      border:1px solid ${BORDER};
-      background:rgba(255,255,255,0.02);
-      padding:16px 18px;
-    }
-    .cd.ac { border-color:rgba(255,68,0,0.28); background:${ACX}; }
-    .cd.sf { background:${SURFACE}; border-color:rgba(255,255,255,0.05); }
-    .cd.green { border-color:rgba(34,197,94,0.22); background:rgba(34,197,94,0.03); }
-    .cdl {
-      display:block; margin-bottom:9px;
-      font-family:${MONO}; font-size:0.44em; font-weight:600;
-      letter-spacing:0.11em; text-transform:uppercase; color:${AC};
-    }
-    .cdl.dim { color:${DIMX}; }
-    .cdl.green { color:#4ade80; }
-
-    /* ─ code block ─ */
-    .cb {
-      background:#070709; border:1px solid rgba(255,68,0,0.1);
-      border-left:2px solid ${AC};
-      padding:12px 16px; margin:8px 0;
-      font-family:${MONO}; font-size:0.47em; line-height:1.85;
-      color:rgba(255,255,255,0.45);
-    }
-    .cb .k { color:${AC}; }
-    .cb .c { color:rgba(255,255,255,0.18); }
-    .cb .s { color:rgba(255,200,100,0.75); }
-    .cb.dim { border-left-color:rgba(255,255,255,0.2); border-color:${BORDER}; }
-    .cb.green { border-left-color:#4ade80; border-color:rgba(34,197,94,0.12); }
-
-    /* ─ tag ─ */
-    .tr { display:flex; flex-wrap:wrap; gap:5px; margin-top:9px; }
-    .tg {
-      font-family:${MONO}; font-size:0.42em; font-weight:500;
-      letter-spacing:0.07em; text-transform:uppercase;
-      padding:3px 10px;
-      border:1px solid rgba(255,68,0,0.22);
-      background:rgba(255,68,0,0.05); color:${AC};
-    }
-    .tg.dm { border-color:${BORDER}; background:rgba(255,255,255,0.02); color:${DIM}; }
-    .tg.gn { border-color:rgba(34,197,94,0.22); background:rgba(34,197,94,0.04); color:#4ade80; }
-
-    /* ─ check item ─ */
-    .ci { display:flex; align-items:flex-start; gap:9px; margin:6px 0; }
-    .ci .dot { width:4px; height:4px; background:${AC}; flex-shrink:0; margin-top:7px; }
-    .ci .dot.dm { background:rgba(255,255,255,0.22); }
-    .ci .dot.gn { background:#4ade80; }
-    .ci span { font-size:0.59em; color:${DIM}; line-height:1.5; }
-    .ci span strong { color:${WHITE}; }
-
-    /* ─ stat ─ */
-    .st { text-align:center; padding:14px 10px; }
-    .st .n {
-      display:block; font-family:${SANS};
-      font-size:2.2em; font-weight:800; color:${AC}; line-height:1;
-    }
-    .st .l {
-      display:block; margin-top:4px;
-      font-family:${MONO}; font-size:0.42em;
-      letter-spacing:0.1em; text-transform:uppercase; color:${DIM};
-    }
-
-    /* ─ timeline item ─ */
-    .ti {
-      display:flex; align-items:baseline; gap:14px;
-      padding:7px 0; border-bottom:1px solid rgba(255,255,255,0.04);
-    }
-    .ti:last-child { border-bottom:none; }
-    .ti .t { font-family:${MONO}; font-size:0.42em; color:${AC}; min-width:44px; }
-    .ti .x { font-size:0.59em; color:${DIM}; }
-    .ti .x strong { color:${WHITE}; }
-
-    /* ─ highlight box ─ */
-    .hb {
-      border-left:2px solid ${AC};
-      background:${ACX}; padding:11px 15px; margin-top:12px;
-    }
-    .hb p { font-size:0.57em !important; color:rgba(255,255,255,0.78) !important; }
-    .hb.sm p { font-size:0.52em !important; }
-  `;
-
-  // ── shorthand slide wrapper ──
-  const S = ({ n, children, center, glowBr }: {
-    n: string; children: React.ReactNode; center?: boolean; glowBr?: boolean;
-  }) => (
-    <section>
-      <div className="si">
-        <div className="bg-dots" />
-        <div className={`bg-glow ${center ? 'bg-glow-c' : 'bg-glow-tl'}`} />
-        {glowBr && <div className="bg-glow bg-glow-br" />}
-        <div className="co-tl" /><div className="co-br" />
-        <div className={`sc${center ? ' center' : ''}`}>{children}</div>
-        <span className="snum">{n} / 12</span>
+const slides = [
+  /* 01 — COVER */
+  <Slide key={1} n={1} total={TOTAL} center>
+    <div className="flex flex-col items-center gap-4 max-w-3xl">
+      <span className="inline-block font-mono text-[10px] tracking-[0.18em] uppercase px-4 py-2" style={{ fontFamily: MONO, border: "1px solid rgba(255,68,0,0.4)", background: "rgba(255,68,0,0.08)", color: AC }}>Workshop · 1 Hora</span>
+      <h1 className="text-[5.5rem] font-black uppercase leading-none text-white text-center" style={{ fontFamily: "var(--font-bb-display),'Inter',sans-serif", letterSpacing: "-0.03em" }}>
+        Claude<br /><span style={{ color: AC }}>Code</span>
+      </h1>
+      <p className="text-[1rem] font-light" style={{ color: DIM }}>Do setup ao squad completo — construindo seu time de agentes de IA</p>
+      <div className="flex flex-wrap gap-2 justify-center mt-2">
+        <Tag>Config Global</Tag><Tag dim>/init</Tag><Tag>AIOX</Tag><Tag dim>Agentes</Tag><Tag>Squad Creator</Tag><Tag dim>Obsidian</Tag>
       </div>
-    </section>
-  );
+    </div>
+  </Slide>,
 
-  return (
-    <>
-      <style dangerouslySetInnerHTML={{ __html: css }} />
-      <div className="reveal rp" ref={deckRef}>
-        <div className="slides">
+  /* 02 — AGENDA */
+  <Slide key={2} n={2} total={TOTAL}>
+    <Label>Roteiro · 60 min</Label>
+    <H2>O que vamos ver hoje</H2>
+    <HRac />
+    <div className="flex-1 flex flex-col justify-center">
+      <TItem time="05 min"><strong className="text-white">Claude Raiz</strong> — config global vs config do projeto</TItem>
+      <TItem time="10 min"><strong className="text-white">A Pasta .claude</strong> — estrutura, CLAUDE.md e o /init</TItem>
+      <TItem time="10 min"><strong className="text-white">AIOX</strong> — Agentes, Skills e Integrações</TItem>
+      <TItem time="05 min"><strong className="text-white">Estrutura do AIOX</strong> — como está organizado</TItem>
+      <TItem time="10 min"><strong className="text-white">Agente Base + Squad Creator</strong> — o libertador</TItem>
+      <TItem time="10 min"><strong className="text-white">Claude + Obsidian</strong> — superpoder de memória</TItem>
+      <TItem time="10 min"><strong className="text-white">4 Semanas de Resultados</strong> — o que foi construído</TItem>
+    </div>
+  </Slide>,
 
-          {/* 01 COVER */}
-          <S n="01" center>
-            <span className="bdg">Workshop · 1 Hora</span>
-            <h1 style={{ fontSize:'2.6em', marginBottom:'8px' }}>
-              Claude Code<br />
-              <span style={{ color:AC }}>na Prática</span>
-            </h1>
-            <div className="hr-ac" style={{ margin:'12px auto' }} />
-            <p style={{ fontSize:'0.68em', color:DIM, maxWidth:'500px', textAlign:'center' }}>
-              Do setup ao squad completo — construindo seu time de agentes de IA
-            </p>
-            <div className="tr" style={{ justifyContent:'center', marginTop:'22px' }}>
-              <span className="tg">Config Global</span>
-              <span className="tg dm">/init</span>
-              <span className="tg">AIOX</span>
-              <span className="tg dm">Agentes</span>
-              <span className="tg">Squad Creator</span>
-              <span className="tg dm">Obsidian</span>
-            </div>
-          </S>
+  /* 03 — CLAUDE RAIZ */
+  <Slide key={3} n={3} total={TOTAL}>
+    <Label>Fundamento</Label>
+    <H2>Claude Raiz vs Claude do Projeto</H2>
+    <HRac />
+    <div className="grid grid-cols-2 gap-4 flex-1 content-start">
+      <Card accent>
+        <Label>~/.claude/ — Global</Label>
+        <p className="text-[13px] mb-3" style={{ color: DIM }}>Vai para <strong className="text-white">todos os projetos</strong>. Sua identidade, preferências e memória pessoal.</p>
+        <Code><K>~/.claude/</K><br/><C>├─ </C>CLAUDE.md<br/><C>├─ </C>settings.json<br/><C>├─ </C>keybindings.json<br/><C>└─ </C><K>projects/memory/</K></Code>
+      </Card>
+      <Card surface>
+        <Label dim>.claude/ — Projeto</Label>
+        <p className="text-[13px] mb-3" style={{ color: DIM }}>Específico do <strong className="text-white">repositório atual</strong>. Regras, agentes e workflows do time.</p>
+        <Code dim><K>.claude/</K><br/><C>├─ </C>CLAUDE.md<br/><C>├─ </C>settings.json<br/><C>└─ </C>rules/<br/><C>   ├─ </C>agent-authority.md<br/><C>   └─ </C>workflow-execution.md</Code>
+      </Card>
+    </div>
+    <Card accent className="mt-4">
+      <p className="text-[13px]" style={{ color: "rgba(255,255,255,0.78)" }}>O projeto <strong className="text-white">herda</strong> o global — e pode <strong className="text-white">sobrescrever</strong> qualquer regra.</p>
+    </Card>
+  </Slide>,
 
-          {/* 02 AGENDA */}
-          <S n="02">
-            <span className="hl">Roteiro · 60 min</span>
-            <h2>O que vamos ver hoje</h2>
-            <div className="hr" />
-            <div style={{ flex:1, display:'flex', flexDirection:'column', justifyContent:'center', gap:'0' }}>
-              <div className="ti"><span className="t">05 min</span><span className="x"><strong>Claude Raiz</strong> — config global vs config do projeto</span></div>
-              <div className="ti"><span className="t">10 min</span><span className="x"><strong>A Pasta .claude</strong> — estrutura, CLAUDE.md e o /init</span></div>
-              <div className="ti"><span className="t">10 min</span><span className="x"><strong>AIOX</strong> — Agentes, Skills e Integrações (as 3 camadas)</span></div>
-              <div className="ti"><span className="t">05 min</span><span className="x"><strong>Estrutura do AIOX</strong> — como está organizado</span></div>
-              <div className="ti"><span className="t">10 min</span><span className="x"><strong>Agente Base + Squad Creator</strong> — o libertador</span></div>
-              <div className="ti"><span className="t">10 min</span><span className="x"><strong>Claude + Obsidian</strong> — superpoder de memória</span></div>
-              <div className="ti"><span className="t">10 min</span><span className="x"><strong>4 Semanas de Resultados</strong> — o que foi construído</span></div>
-            </div>
-          </S>
+  /* 04 — .CLAUDE + /INIT */
+  <Slide key={4} n={4} total={TOTAL}>
+    <Label>Estrutura</Label>
+    <H2>A Pasta .claude/ e o /init</H2>
+    <HRac />
+    <div className="grid grid-cols-2 gap-4 flex-1 content-start">
+      <div>
+        <Label>O que fica aqui</Label>
+        <Li><strong className="text-white">CLAUDE.md</strong> — instruções lidas a cada sessão</Li>
+        <Li><strong className="text-white">settings.json</strong> — permissões e allow/deny de ferramentas</Li>
+        <Li><strong className="text-white">rules/</strong> — regras contextuais carregadas por arquivo</Li>
+        <Li><strong className="text-white">agents/</strong> — definições de agentes do squad</Li>
+        <HR />
+        <Label>Por que importa</Label>
+        <p className="text-[13px]" style={{ color: DIM }}>É a diferença entre um Claude <strong className="text-white">genérico</strong> e um que conhece <strong className="text-white">seu projeto de cor</strong>.</p>
+      </div>
+      <div>
+        <Label>O comando /init</Label>
+        <Code><C># execute dentro do projeto</C><br/><K>/init</K></Code>
+        <div className="mt-3">
+          <Li><strong className="text-white">Lê</strong> toda a estrutura do codebase</Li>
+          <Li><strong className="text-white">Entende</strong> stack, padrões e arquitetura</Li>
+          <Li>Gera um <strong className="text-white">CLAUDE.md documentado</strong></Li>
+          <Li>Claude passa a conhecer o projeto profundamente</Li>
+        </div>
+        <Card accent className="mt-3">
+          <p className="text-[12px]" style={{ color: "rgba(255,255,255,0.78)" }}><strong className="text-white">Sempre o primeiro comando</strong> em qualquer projeto novo.</p>
+        </Card>
+      </div>
+    </div>
+  </Slide>,
 
-          {/* 03 CLAUDE RAIZ */}
-          <S n="03">
-            <span className="hl">Fundamento</span>
-            <h2>Claude Raiz vs Claude do Projeto</h2>
-            <div className="hr" />
-            <div className="g2" style={{ flex:1, alignContent:'start' }}>
-              <div className="cd ac">
-                <span className="cdl">~/.claude/ — Global</span>
-                <p style={{ marginBottom:'10px' }}>Vai para <strong>todos os projetos</strong>. Sua identidade, preferências e memória pessoal.</p>
-                <div className="cb">
-                  <span className="k">~/.claude/</span><br/>
-                  <span className="c">├─ </span>CLAUDE.md<br/>
-                  <span className="c">├─ </span>settings.json<br/>
-                  <span className="c">├─ </span>keybindings.json<br/>
-                  <span className="c">└─ </span><span className="k">projects/memory/</span>
-                </div>
-              </div>
-              <div className="cd sf">
-                <span className="cdl dim">.claude/ — Projeto</span>
-                <p style={{ marginBottom:'10px' }}>Específico do <strong>repositório atual</strong>. Regras, agentes e workflows do time.</p>
-                <div className="cb dim">
-                  <span className="k">.claude/</span><br/>
-                  <span className="c">├─ </span>CLAUDE.md<br/>
-                  <span className="c">├─ </span>settings.json<br/>
-                  <span className="c">└─ </span>rules/<br/>
-                  <span className="c">   ├─ </span>agent-authority.md<br/>
-                  <span className="c">   └─ </span>workflow-execution.md
-                </div>
-              </div>
-            </div>
-            <div className="hb">
-              <p>O projeto <strong>herda</strong> o global — e pode <strong>sobrescrever</strong> qualquer regra. Do mais específico para o mais genérico.</p>
-            </div>
-          </S>
+  /* 05 — O QUE É O AIOX */
+  <Slide key={5} n={5} total={TOTAL}>
+    <Label>AIOX Framework</Label>
+    <H2>O que é o AIOX?</H2>
+    <HRac />
+    <p className="text-[14px] mb-4 max-w-2xl" style={{ color: DIM }}>Um <strong className="text-white">meta-framework</strong> que orquestra agentes de IA para desenvolvimento full stack. Não é um produto — é uma <span style={{ color: AC, fontWeight: 600 }}>infraestrutura de inteligência</span> para seu time operar.</p>
+    <div className="grid grid-cols-3 gap-4 flex-1 content-start">
+      <Card accent>
+        <Label>🤖 Agentes</Label>
+        <p className="text-[12px] mb-3" style={{ color: DIM }}>Personas com escopo, autoridade e memória. Especialistas que assumem funções reais.</p>
+        <div className="flex flex-wrap gap-1"><Tag>@dev</Tag><Tag>@qa</Tag><Tag>@pm</Tag><Tag>@devops</Tag></div>
+      </Card>
+      <Card surface>
+        <Label dim>⚡ Skills</Label>
+        <p className="text-[12px] mb-3" style={{ color: DIM }}>Comandos reutilizáveis acionados por slash. Capacidades plug-and-play em qualquer projeto.</p>
+        <div className="flex flex-wrap gap-1"><Tag dim>/init</Tag><Tag dim>/review</Tag><Tag dim>/loop</Tag></div>
+      </Card>
+      <Card>
+        <Label><span style={{ color: "#4ade80" }}>🔌 Integrações</span></Label>
+        <p className="text-[12px] mb-3" style={{ color: DIM }}>MCP Servers que expandem os sentidos do Claude para o mundo externo.</p>
+        <div className="flex flex-wrap gap-1"><Tag green>Playwright</Tag><Tag green>Context7</Tag><Tag green>Obsidian</Tag></div>
+      </Card>
+    </div>
+  </Slide>,
 
-          {/* 04 .CLAUDE + /INIT */}
-          <S n="04">
-            <span className="hl">Estrutura</span>
-            <h2>A Pasta .claude/ e o /init</h2>
-            <div className="hr" />
-            <div className="g2" style={{ flex:1, alignContent:'start' }}>
-              <div>
-                <span className="cdl">O que fica aqui</span>
-                <div className="ci"><div className="dot" /><span><strong>CLAUDE.md</strong> — instruções lidas a cada sessão</span></div>
-                <div className="ci"><div className="dot" /><span><strong>settings.json</strong> — permissões e allow/deny de ferramentas</span></div>
-                <div className="ci"><div className="dot" /><span><strong>rules/</strong> — regras contextuais carregadas por arquivo</span></div>
-                <div className="ci"><div className="dot" /><span><strong>agents/</strong> — definições de agentes do squad</span></div>
-                <div className="hr" style={{ margin:'12px 0' }} />
-                <span className="cdl">Por que importa</span>
-                <p>É a diferença entre um Claude <strong>genérico</strong> e um que conhece <strong>seu projeto de cor</strong>.</p>
-              </div>
-              <div>
-                <span className="cdl">O comando /init</span>
-                <div className="cb">
-                  <span className="c"># execute dentro do projeto</span><br/>
-                  <span className="k">/init</span>
-                </div>
-                <div style={{ marginTop:'10px' }}>
-                  <div className="ci"><div className="dot" /><span>Lê toda a estrutura do codebase</span></div>
-                  <div className="ci"><div className="dot" /><span>Entende stack, padrões e arquitetura</span></div>
-                  <div className="ci"><div className="dot" /><span>Gera um <strong>CLAUDE.md documentado</strong></span></div>
-                  <div className="ci"><div className="dot" /><span>Claude passa a conhecer o projeto profundamente</span></div>
-                </div>
-                <div className="hb" style={{ marginTop:'12px' }}>
-                  <p><strong>Sempre o primeiro comando</strong> em qualquer projeto novo.</p>
-                </div>
-              </div>
-            </div>
-          </S>
+  /* 06 — AS 3 CAMADAS */
+  <Slide key={6} n={6} total={TOTAL}>
+    <Label>As 3 Camadas</Label>
+    <H2>Agentes · Skills · Integrações</H2>
+    <HRac />
+    <div className="grid grid-cols-3 gap-4 flex-1 content-start">
+      <Card accent>
+        <Label>Agente = Quem faz</Label>
+        <Code className="mb-3"><K>@dev</K>, <K>@qa</K>, <K>@pm</K><br/><C># ativado com @nome</C></Code>
+        <Li>Persona + autoridade definidas</Li>
+        <Li>Escopo exclusivo de ações</Li>
+        <Li>Memória persistente no projeto</Li>
+      </Card>
+      <Card surface>
+        <Label dim>Skill = O que fazer</Label>
+        <Code dim className="mb-3"><K>/init</K>, <K>/review</K><br/><C># ativado com /slash</C></Code>
+        <Li dim>Workflow encapsulado e reutilizável</Li>
+        <Li dim>Funciona em qualquer projeto</Li>
+        <Li dim>Compartilhável com o time</Li>
+      </Card>
+      <Card>
+        <Label><span style={{ color: "#4ade80" }}>Integração = Como fazer</span></Label>
+        <Code dim className="mb-3" style={{ borderLeftColor: "#4ade80" }}><K>MCP Server</K><br/><C># nova ferramenta nativa</C></Code>
+        <Li>Claude ganha novos "sentidos"</Li>
+        <Li>Browser, DB, APIs, Obsidian</Li>
+        <Li>Configurado uma vez, global</Li>
+      </Card>
+    </div>
+    <Card accent className="mt-3">
+      <p className="text-[12px]" style={{ color: "rgba(255,255,255,0.78)" }}>Agentes usam Skills. Skills usam Integrações. Tudo orquestrado pelo AIOX.</p>
+    </Card>
+  </Slide>,
 
-          {/* 05 O QUE É O AIOX */}
-          <S n="05">
-            <span className="hl">AIOX Framework</span>
-            <h2>O que é o AIOX?</h2>
-            <div className="hr" />
-            <p style={{ fontSize:'0.63em', marginBottom:'16px' }}>
-              Um <strong>meta-framework</strong> que orquestra agentes de IA para desenvolvimento full stack.
-              Não é um produto — é uma <span style={{ color:AC, fontWeight:600 }}>infraestrutura de inteligência</span> para seu time operar.
-            </p>
-            <div className="g3" style={{ flex:1, alignContent:'start' }}>
-              <div className="cd ac">
-                <span className="cdl">🤖 Agentes</span>
-                <p>Personas com escopo, autoridade e memória. Especialistas que assumem funções reais.</p>
-                <div className="tr" style={{ marginTop:'10px' }}>
-                  <span className="tg">@dev</span>
-                  <span className="tg">@qa</span>
-                  <span className="tg">@pm</span>
-                  <span className="tg">@devops</span>
-                </div>
-              </div>
-              <div className="cd sf">
-                <span className="cdl dim">⚡ Skills</span>
-                <p>Comandos reutilizáveis acionados por slash. Capacidades plug-and-play em qualquer projeto.</p>
-                <div className="tr" style={{ marginTop:'10px' }}>
-                  <span className="tg dm">/init</span>
-                  <span className="tg dm">/review</span>
-                  <span className="tg dm">/loop</span>
-                </div>
-              </div>
-              <div className="cd green">
-                <span className="cdl green">🔌 Integrações</span>
-                <p>MCP Servers que expandem os sentidos do Claude para o mundo externo.</p>
-                <div className="tr" style={{ marginTop:'10px' }}>
-                  <span className="tg gn">Playwright</span>
-                  <span className="tg gn">Context7</span>
-                  <span className="tg gn">Obsidian</span>
-                </div>
-              </div>
-            </div>
-          </S>
+  /* 07 — ESTRUTURA DO AIOX */
+  <Slide key={7} n={7} total={TOTAL}>
+    <Label>Arquitetura</Label>
+    <H2>Estrutura do AIOX</H2>
+    <HRac />
+    <div className="grid grid-cols-2 gap-4 flex-1 content-start">
+      <div>
+        <Label>Diretórios</Label>
+        <Code><K>.aiox-core/</K>  <C>← framework</C><br/><C>├─ </C>constitution.md<br/><C>├─ </C>agents/ &nbsp;tasks/ &nbsp;templates/<br/><br/><K>docs/stories/</K>  <C>← seu trabalho</C><br/><K>squads/</K>        <C>← seus times</C><br/><K>.claude/</K>       <C>← config do projeto</C></Code>
+      </div>
+      <div>
+        <Label>4 Camadas de Proteção</Label>
+        <Li><strong className="text-white">L1 Core</strong> — nunca modificável (constitution)</Li>
+        <Li><strong className="text-white">L2 Templates</strong> — só extensíveis (tasks, workflows)</Li>
+        <Li dim><strong className="text-white">L3 Config</strong> — mutável (settings, memória)</Li>
+        <Li dim><strong className="text-white">L4 Runtime</strong> — seu território (stories, squads)</Li>
+        <Card accent className="mt-3">
+          <p className="text-[12px]" style={{ color: "rgba(255,255,255,0.78)" }}><strong className="text-white">Story-Driven Development:</strong> todo trabalho começa em <code style={{ color: AC, fontFamily: MONO }}>docs/stories/</code></p>
+        </Card>
+      </div>
+    </div>
+  </Slide>,
 
-          {/* 06 AS 3 CAMADAS */}
-          <S n="06">
-            <span className="hl">As 3 Camadas</span>
-            <h2>Agentes · Skills · Integrações</h2>
-            <div className="hr" />
-            <div className="g3" style={{ flex:1, alignContent:'start' }}>
-              <div className="cd ac">
-                <span className="cdl">Agente = Quem faz</span>
-                <div className="cb" style={{ marginBottom:'10px' }}>
-                  <span className="k">@dev</span>, <span className="k">@qa</span>, <span className="k">@pm</span><br/>
-                  <span className="c"># ativado com @nome</span>
-                </div>
-                <div className="ci"><div className="dot" /><span>Persona + autoridade definidas</span></div>
-                <div className="ci"><div className="dot" /><span>Escopo exclusivo de ações</span></div>
-                <div className="ci"><div className="dot" /><span>Memória persistente no projeto</span></div>
-              </div>
-              <div className="cd sf">
-                <span className="cdl dim">Skill = O que fazer</span>
-                <div className="cb dim" style={{ marginBottom:'10px' }}>
-                  <span className="k">/init</span>, <span className="k">/review</span><br/>
-                  <span className="c"># ativado com /slash</span>
-                </div>
-                <div className="ci"><div className="dot dm" /><span>Workflow encapsulado e reutilizável</span></div>
-                <div className="ci"><div className="dot dm" /><span>Funciona em qualquer projeto</span></div>
-                <div className="ci"><div className="dot dm" /><span>Compartilhável com o time</span></div>
-              </div>
-              <div className="cd green">
-                <span className="cdl green">Integração = Como fazer</span>
-                <div className="cb green" style={{ marginBottom:'10px' }}>
-                  <span className="k">MCP Server</span><br/>
-                  <span className="c"># nova ferramenta nativa</span>
-                </div>
-                <div className="ci"><div className="dot gn" /><span>Claude ganha novos "sentidos"</span></div>
-                <div className="ci"><div className="dot gn" /><span>Browser, DB, APIs, Obsidian</span></div>
-                <div className="ci"><div className="dot gn" /><span>Configurado uma vez, global</span></div>
-              </div>
-            </div>
-            <div className="hb" style={{ marginTop:'10px' }}>
-              <p>Agentes usam Skills. Skills usam Integrações. Tudo orquestrado pelo AIOX.</p>
-            </div>
-          </S>
+  /* 08 — ANATOMIA DO AGENTE */
+  <Slide key={8} n={8} total={TOTAL}>
+    <Label>Agente Base</Label>
+    <H2>Anatomia de um Agente</H2>
+    <HRac />
+    <div className="grid grid-cols-2 gap-4 flex-1 content-start">
+      <Code><K>agent:</K><br/><C>  name: </C><span style={{ color: "rgba(255,200,100,0.8)" }}>Dex</span><br/><C>  id: </C><span style={{ color: "rgba(255,200,100,0.8)" }}>dev</span><br/><C>  title: </C><span style={{ color: "rgba(255,200,100,0.8)" }}>Lead Developer</span><br/><br/><K>persona:</K><br/><C>  role: </C>Implementação de código<br/><C>  tone: </C>Técnico, direto<br/><br/><K>commands:</K><br/><C>  - *</C>develop<C>  - *</C>review<C>  - *</C>exit<br/><br/><K>memory:</K><br/><C>  file: </C>agents/dev/MEMORY.md</Code>
+      <div>
+        <Label>Os 5 Elementos</Label>
+        <Li><strong className="text-white">Identidade</strong> — nome, persona, tom de voz</Li>
+        <Li><strong className="text-white">Autoridade</strong> — o que pode e não pode fazer</Li>
+        <Li><strong className="text-white">Comandos</strong> — ações com prefixo <code style={{ color: AC, fontFamily: MONO }}>*</code></Li>
+        <Li><strong className="text-white">Dependências</strong> — tasks, templates, tools</Li>
+        <Li><strong className="text-white">Memória</strong> — aprende com o projeto</Li>
+        <Card accent className="mt-3">
+          <p className="text-[12px]" style={{ color: "rgba(255,255,255,0.78)" }}>Ativação: <code style={{ color: AC, fontFamily: MONO }}>@dev</code> ou <code style={{ color: AC, fontFamily: MONO }}>/AIOX:agents:dev</code></p>
+        </Card>
+      </div>
+    </div>
+  </Slide>,
 
-          {/* 07 ESTRUTURA DO AIOX */}
-          <S n="07">
-            <span className="hl">Arquitetura</span>
-            <h2>Estrutura do AIOX</h2>
-            <div className="hr" />
-            <div className="g2" style={{ flex:1, alignContent:'start' }}>
-              <div>
-                <span className="cdl">Diretórios</span>
-                <div className="cb">
-                  <span className="k">.aiox-core/</span>  <span className="c">← framework</span><br/>
-                  <span className="c">├─ </span>constitution.md<br/>
-                  <span className="c">├─ </span>agents/ &nbsp;<span className="c">templates/ &nbsp;tasks/</span><br/>
-                  <br/>
-                  <span className="k">docs/stories/</span>  <span className="c">← seu trabalho</span><br/>
-                  <span className="k">squads/</span>        <span className="c">← seus times</span><br/>
-                  <span className="k">.claude/</span>       <span className="c">← config do projeto</span>
-                </div>
-              </div>
-              <div>
-                <span className="cdl">4 Camadas de Proteção</span>
-                <div className="ci"><div className="dot" /><span><strong>L1 Core</strong> — nunca modificável (constitution, binários)</span></div>
-                <div className="ci"><div className="dot" /><span><strong>L2 Templates</strong> — só extensíveis (tasks, workflows)</span></div>
-                <div className="ci"><div className="dot dm" /><span><strong>L3 Config</strong> — mutável (settings, memória de agentes)</span></div>
-                <div className="ci"><div className="dot dm" /><span><strong>L4 Runtime</strong> — seu território (stories, squads, code)</span></div>
-                <div className="hb" style={{ marginTop:'14px' }}>
-                  <p><strong>Story-Driven Development:</strong> todo trabalho começa em <code style={{ fontFamily:'monospace', color:AC }}>docs/stories/</code></p>
-                </div>
-              </div>
-            </div>
-          </S>
+  /* 09 — SQUAD CREATOR */
+  <Slide key={9} n={9} total={TOTAL}>
+    <Label>O Libertador</Label>
+    <H2>Squad Creator</H2>
+    <HRac />
+    <p className="text-[14px] mb-4 max-w-2xl" style={{ color: DIM }}>O agente que <span style={{ color: AC, fontWeight: 700 }}>cria outros agentes</span>. Com ele você sai do genérico e constrói <strong className="text-white">seu time personalizado</strong> para qualquer contexto.</p>
+    <div className="grid grid-cols-2 gap-4 flex-1 content-start">
+      <Card accent>
+        <Label>Como funciona</Label>
+        <Li>1. Você descreve o papel que precisa</Li>
+        <Li>2. Squad Creator gera a definição completa</Li>
+        <Li>3. Agente criado com persona, comandos e memória</Li>
+        <Li>4. Disponível imediatamente via <code style={{ color: AC, fontFamily: MONO }}>@nome</code></Li>
+      </Card>
+      <Card surface>
+        <Label dim>Exemplos de squads</Label>
+        <Li dim>Squad de <strong className="text-white">Software Engineering</strong></Li>
+        <Li dim>Squad de <strong className="text-white">Marketing &amp; Growth</strong></Li>
+        <Li dim>Squad de <strong className="text-white">Sites &amp; Landing Pages</strong></Li>
+        <Li dim>Squad de <strong className="text-white">Conteúdo &amp; SEO</strong></Li>
+        <Li dim><strong className="text-white">Qualquer contexto do seu negócio</strong></Li>
+      </Card>
+    </div>
+    <Card accent className="mt-3">
+      <p className="text-[12px]" style={{ color: "rgba(255,255,255,0.78)" }}>Resultado: um time completo de IA especializado no seu negócio, operando 24/7</p>
+    </Card>
+  </Slide>,
 
-          {/* 08 ANATOMIA DO AGENTE */}
-          <S n="08">
-            <span className="hl">Agente Base</span>
-            <h2>Anatomia de um Agente</h2>
-            <div className="hr" />
-            <div className="g2" style={{ flex:1, alignContent:'start' }}>
-              <div className="cb" style={{ fontSize:'0.46em', lineHeight:'1.9', margin:0, height:'fit-content' }}>
-                <span className="k">agent:</span><br/>
-                <span className="c">  name: </span><span className="s">Dex</span><br/>
-                <span className="c">  id: </span><span className="s">dev</span><br/>
-                <span className="c">  title: </span><span className="s">Lead Developer</span><br/>
-                <br/>
-                <span className="k">persona:</span><br/>
-                <span className="c">  role: </span>Implementação de código<br/>
-                <span className="c">  tone: </span>Técnico, direto<br/>
-                <br/>
-                <span className="k">commands:</span><br/>
-                <span className="c">  - *</span>develop &nbsp;<span className="c">- *</span>review &nbsp;<span className="c">- *</span>exit<br/>
-                <br/>
-                <span className="k">memory:</span><br/>
-                <span className="c">  file: </span>agents/dev/MEMORY.md
-              </div>
-              <div>
-                <span className="cdl">Os 5 Elementos</span>
-                <div className="ci"><div className="dot" /><span><strong>Identidade</strong> — nome, persona, tom de voz</span></div>
-                <div className="ci"><div className="dot" /><span><strong>Autoridade</strong> — o que pode e não pode fazer</span></div>
-                <div className="ci"><div className="dot" /><span><strong>Comandos</strong> — ações com prefixo <code style={{ color:AC, fontFamily:'monospace' }}>*</code></span></div>
-                <div className="ci"><div className="dot" /><span><strong>Dependências</strong> — tasks, templates, tools</span></div>
-                <div className="ci"><div className="dot" /><span><strong>Memória</strong> — aprende com o projeto</span></div>
-                <div className="hb" style={{ marginTop:'16px' }}>
-                  <p>Ativação: <code style={{ fontFamily:'monospace', color:AC }}>@dev</code> ou <code style={{ fontFamily:'monospace', color:AC }}>/AIOX:agents:dev</code></p>
-                </div>
-              </div>
-            </div>
-          </S>
+  /* 10 — CLAUDE + OBSIDIAN */
+  <Slide key={10} n={10} total={TOTAL}>
+    <Label>Superpoder</Label>
+    <H2>Claude + Obsidian</H2>
+    <HRac />
+    <div className="grid grid-cols-2 gap-4 flex-1 content-start">
+      <div>
+        <Label dim>Sem Obsidian</Label>
+        <Li dim>Cada conversa começa do zero</Li>
+        <Li dim>Decisões não são lembradas</Li>
+        <Li dim>Contexto repassado manualmente</Li>
+        <Li dim>Conhecimento acumulado se perde</Li>
+        <HR />
+        <Label>Com a Integração MCP</Label>
+        <Li>Claude lê e escreve no seu vault</Li>
+        <Li>Decisões ficam registradas automaticamente</Li>
+        <Li>Knowledge base cresce a cada sessão</Li>
+        <Li>Busca semântica no seu conhecimento</Li>
+      </div>
+      <div>
+        <Label>Configuração</Label>
+        <Code><C># ~/.claude/settings.json</C><br/><K>"mcpServers"</K>: {"{"}<br/><C>  "</C><K>obsidian</K><C>"</C>: {"{"}<br/><C>    "command"</C>: <span style={{ color: "rgba(255,200,100,0.8)" }}>"obsidian-mcp"</span>,<br/><C>    "vault"</C>: <span style={{ color: "rgba(255,200,100,0.8)" }}>"/seu/vault"</span><br/>  {"}"}<br/>{"}"}</Code>
+        <Card accent className="mt-3">
+          <p className="text-[12px]" style={{ color: "rgba(255,255,255,0.78)" }}>Configurado uma vez no <code style={{ color: AC, fontFamily: MONO }}>~/.claude/</code> → ativo em todos os projetos. Claude vira um <strong className="text-white">segundo cérebro conectado ao seu</strong>.</p>
+        </Card>
+      </div>
+    </div>
+  </Slide>,
 
-          {/* 09 SQUAD CREATOR */}
-          <S n="09" glowBr>
-            <span className="hl">O Libertador</span>
-            <h2>Squad Creator</h2>
-            <div className="hr" />
-            <p style={{ fontSize:'0.63em', marginBottom:'14px' }}>
-              O agente que <span style={{ color:AC, fontWeight:700 }}>cria outros agentes</span>.
-              Com ele você sai do genérico e constrói <strong>seu time personalizado</strong> para qualquer contexto.
-            </p>
-            <div className="g2" style={{ flex:1, alignContent:'start' }}>
-              <div className="cd ac">
-                <span className="cdl">Como funciona</span>
-                <div className="ci"><div className="dot" /><span>1. Você descreve o papel que precisa</span></div>
-                <div className="ci"><div className="dot" /><span>2. Squad Creator gera a definição completa</span></div>
-                <div className="ci"><div className="dot" /><span>3. Agente criado com persona, comandos e memória</span></div>
-                <div className="ci"><div className="dot" /><span>4. Disponível imediatamente via <code style={{ color:AC, fontFamily:'monospace' }}>@nome</code></span></div>
-              </div>
-              <div className="cd sf">
-                <span className="cdl dim">Exemplos de squads</span>
-                <div className="ci"><div className="dot dm" /><span>Squad de Software Engineering</span></div>
-                <div className="ci"><div className="dot dm" /><span>Squad de Marketing &amp; Growth</span></div>
-                <div className="ci"><div className="dot dm" /><span>Squad de Sites &amp; Landing Pages</span></div>
-                <div className="ci"><div className="dot dm" /><span>Squad de Conteúdo &amp; SEO</span></div>
-                <div className="ci"><div className="dot dm" /><span><strong>Qualquer contexto do seu negócio</strong></span></div>
-              </div>
-            </div>
-            <div className="hb" style={{ marginTop:'10px' }}>
-              <p>Resultado: um time completo de IA especializado no seu negócio, operando 24/7</p>
-            </div>
-          </S>
+  /* 11 — 4 SEMANAS */
+  <Slide key={11} n={11} total={TOTAL}>
+    <Label>Prova de Conceito</Label>
+    <H2>O que fiz em <span style={{ color: AC }}>4 semanas</span></H2>
+    <HRac />
+    <div className="grid grid-cols-3 gap-3 mb-4">
+      <Stat n="3" l="Squads criadas" accent />
+      <Stat n="20+" l="Agentes ativos" />
+      <Stat n="24/7" l="Time operando" />
+    </div>
+    <div className="grid grid-cols-2 gap-4 flex-1 content-start">
+      <div>
+        <Li>Site completo da mentoria Claude Code + AIOX</Li>
+        <Li>Squad <strong className="text-white">themaestrisites</strong> — 8 agentes, sites e LPs</Li>
+        <Li>Squad <strong className="text-white">n8n Killers</strong> — guia interativo publicado</Li>
+      </div>
+      <div>
+        <Li dim>AIOX rodando como infra de desenvolvimento completa</Li>
+        <Li dim>Sistema de memória com Obsidian integrado</Li>
+        <Li dim>Este workshop — criado em minutos com o squad</Li>
+      </div>
+    </div>
+  </Slide>,
 
-          {/* 10 CLAUDE + OBSIDIAN */}
-          <S n="10">
-            <span className="hl">Superpoder</span>
-            <h2>Claude + Obsidian</h2>
-            <div className="hr" />
-            <div className="g2" style={{ flex:1, alignContent:'start' }}>
-              <div>
-                <span className="cdl dim">Sem Obsidian</span>
-                <div className="ci"><div className="dot dm" /><span>Cada conversa começa do zero</span></div>
-                <div className="ci"><div className="dot dm" /><span>Decisões não são lembradas</span></div>
-                <div className="ci"><div className="dot dm" /><span>Contexto repassado manualmente</span></div>
-                <div className="ci"><div className="dot dm" /><span>Conhecimento acumulado se perde</span></div>
-                <div className="hr" style={{ margin:'12px 0' }} />
-                <span className="cdl">Com a Integração MCP</span>
-                <div className="ci"><div className="dot" /><span>Claude lê e escreve no seu vault</span></div>
-                <div className="ci"><div className="dot" /><span>Decisões ficam registradas automaticamente</span></div>
-                <div className="ci"><div className="dot" /><span>Knowledge base cresce a cada sessão</span></div>
-                <div className="ci"><div className="dot" /><span>Busca semântica no seu conhecimento</span></div>
-              </div>
-              <div>
-                <span className="cdl">Configuração</span>
-                <div className="cb">
-                  <span className="c"># ~/.claude/settings.json</span><br/>
-                  <span className="k">"mcpServers"</span>: &#123;<br/>
-                  <span className="c">  "</span><span className="k">obsidian</span><span className="c">"</span>: &#123;<br/>
-                  <span className="c">    "command"</span>: <span className="s">"obsidian-mcp"</span>,<br/>
-                  <span className="c">    "vault"</span>: <span className="s">"/seu/vault"</span><br/>
-                  &nbsp;&nbsp;&#125;<br/>
-                  &#125;
-                </div>
-                <div className="hb" style={{ marginTop:'12px' }}>
-                  <p>Configurado uma vez no <code style={{ fontFamily:'monospace', color:AC }}>~/.claude/</code> → ativo em todos os projetos. Claude vira um <strong>segundo cérebro conectado ao seu</strong>.</p>
-                </div>
-              </div>
-            </div>
-          </S>
-
-          {/* 11 4 SEMANAS */}
-          <S n="11" glowBr>
-            <span className="hl">Prova de Conceito</span>
-            <h2>O que fiz em <span style={{ color:AC }}>4 semanas</span></h2>
-            <div className="hr" />
-            <div className="g3" style={{ marginBottom:'14px' }}>
-              <div className="cd ac st"><span className="n">3</span><span className="l">Squads criadas</span></div>
-              <div className="cd sf st"><span className="n">20+</span><span className="l">Agentes ativos</span></div>
-              <div className="cd sf st"><span className="n" style={{ fontSize:'1.8em' }}>24/7</span><span className="l">Time operando</span></div>
-            </div>
-            <div className="g2" style={{ flex:1, alignContent:'start' }}>
-              <div>
-                <div className="ci"><div className="dot" /><span>Site completo da mentoria Claude Code + AIOX</span></div>
-                <div className="ci"><div className="dot" /><span>Squad <strong>themaestrisites</strong> — 8 agentes, sites e LPs</span></div>
-                <div className="ci"><div className="dot" /><span><strong>n8n Killers Squad</strong> — guia interativo publicado</span></div>
-              </div>
-              <div>
-                <div className="ci"><div className="dot dm" /><span>AIOX rodando como infra de desenvolvimento completa</span></div>
-                <div className="ci"><div className="dot dm" /><span>Sistema de memória com Obsidian integrado</span></div>
-                <div className="ci"><div className="dot dm" /><span>Este workshop — criado em minutos com o squad</span></div>
-              </div>
-            </div>
-          </S>
-
-          {/* 12 PITCH MENTORIA */}
-          <S n="12" center>
-            <span className="bdg alert">⚠ Apenas 3 Vagas Restantes</span>
-            <h2 style={{ textAlign:'center', fontSize:'1.7em', marginBottom:'6px' }}>
-              Mentoria Claude Code <span style={{ color:AC }}>+ AIOX</span>
-            </h2>
-            <p style={{ textAlign:'center', fontSize:'0.62em', color:DIM, maxWidth:'500px', margin:'8px auto 18px' }}>
-              Tudo que você viu hoje — do zero ao squad completo rodando no seu negócio —
-              em <strong>4 semanas</strong>, com acompanhamento ao vivo.
-            </p>
-            <div className="g3" style={{ width:'100%', maxWidth:'540px', marginBottom:'16px' }}>
-              <div className="cd ac st"><span className="n" style={{ fontSize:'1.7em' }}>12/05</span><span className="l">Início · Terça</span></div>
-              <div className="cd sf st"><span className="n" style={{ fontSize:'1.7em' }}>4</span><span className="l">Semanas</span></div>
-              <div className="cd" style={{ borderColor:'rgba(255,68,0,0.4)', background:'rgba(255,68,0,0.08)' }}>
-                <span className="n" style={{ fontSize:'1.7em', display:'block', textAlign:'center', lineHeight:1, fontFamily:SANS, fontWeight:800, color:AC }}>3</span>
-                <span className="l" style={{ color:AC }}>Vagas restantes</span>
-              </div>
-            </div>
-            <p style={{ fontSize:'0.46em', color:DIMX, fontFamily:MONO, letterSpacing:'0.08em', textTransform:'uppercase', marginBottom:'14px' }}>
-              Turma super seleta · máximo 15 projetos · suporte individual
-            </p>
-            <div style={{ display:'flex', alignItems:'center', gap:'18px' }}>
-              <div style={{ padding:'7px', background:WHITE }}>
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src="https://api.qrserver.com/v1/create-qr-code/?size=88x88&data=https://opensource.growthsales.ai/mentoria&color=08080C&bgcolor=ffffff" alt="QR" width={88} height={88} style={{ display:'block' }} />
-              </div>
-              <div style={{ textAlign:'left' }}>
-                <p style={{ color:AC, fontFamily:MONO, fontSize:'0.62em', fontWeight:700, letterSpacing:'0.04em', margin:0 }}>
-                  opensource.growthsales.ai/mentoria
-                </p>
-                <p style={{ color:DIMX, fontFamily:MONO, fontSize:'0.44em', margin:'5px 0 0', letterSpacing:'0.07em', textTransform:'uppercase' }}>
-                  Aponte a câmera · Garanta sua vaga
-                </p>
-              </div>
-            </div>
-          </S>
-
+  /* 12 — PITCH MENTORIA */
+  <Slide key={12} n={12} total={TOTAL} center>
+    <div className="flex flex-col items-center gap-3 max-w-2xl w-full">
+      <span className="inline-block font-mono text-[10px] tracking-[0.16em] uppercase px-4 py-2 font-bold" style={{ fontFamily: MONO, border: "1px solid rgba(255,68,0,0.65)", background: "rgba(255,68,0,0.15)", color: "#fff" }}>⚠ Apenas 3 Vagas Restantes</span>
+      <h2 className="text-[2.8rem] font-black uppercase leading-none text-white text-center" style={{ fontFamily: "var(--font-bb-display),'Inter',sans-serif", letterSpacing: "-0.025em" }}>
+        Mentoria Claude Code<br /><span style={{ color: AC }}>+ AIOX</span>
+      </h2>
+      <p className="text-[14px] text-center max-w-lg" style={{ color: DIM }}>
+        Tudo que você viu hoje — do zero ao squad completo rodando no seu negócio — em <strong className="text-white">4 semanas</strong>, com acompanhamento ao vivo.
+      </p>
+      <div className="grid grid-cols-3 gap-3 w-full mt-1">
+        <Stat n="12/05" l="Início · Terça" accent />
+        <Stat n="4" l="Semanas" />
+        <div className="p-4 border border-[rgba(255,68,0,0.4)] bg-[rgba(255,68,0,0.08)] text-center">
+          <div className="font-black leading-none mb-1 text-[2.2rem]" style={{ fontFamily: "var(--font-bb-display),'Inter',sans-serif", color: AC }}>3</div>
+          <div className="font-mono text-[10px] tracking-[0.1em] uppercase" style={{ color: AC, fontFamily: MONO }}>Vagas restantes</div>
         </div>
       </div>
-    </>
+      <p className="font-mono text-[10px] tracking-[0.1em] uppercase" style={{ fontFamily: MONO, color: "rgba(255,255,255,0.25)" }}>Turma super seleta · máximo 15 projetos · suporte individual</p>
+      <div className="flex items-center gap-4 mt-1">
+        <div style={{ padding: "6px", background: "#fff" }}>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src="https://api.qrserver.com/v1/create-qr-code/?size=80x80&data=https://opensource.growthsales.ai/mentoria&color=08080C&bgcolor=ffffff" alt="QR" width={80} height={80} style={{ display: "block" }} />
+        </div>
+        <div className="text-left">
+          <p className="font-mono text-[13px] font-bold" style={{ color: AC, fontFamily: MONO }}>opensource.growthsales.ai/mentoria</p>
+          <p className="font-mono text-[10px] tracking-[0.08em] uppercase mt-1" style={{ color: "rgba(255,255,255,0.28)", fontFamily: MONO }}>Aponte a câmera · Garanta sua vaga</p>
+        </div>
+      </div>
+    </div>
+  </Slide>,
+];
+
+/* ─────────────────────────────────────────
+   MAIN COMPONENT
+───────────────────────────────────────── */
+export function WorkshopClient() {
+  const [cur, setCur] = useState(0);
+
+  const prev = () => setCur(c => Math.max(0, c - 1));
+  const next = () => setCur(c => Math.min(TOTAL - 1, c + 1));
+
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "ArrowRight" || e.key === " ") next();
+      if (e.key === "ArrowLeft") prev();
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, []);
+
+  return (
+    <div className="relative select-none">
+      {slides[cur]}
+      {/* nav arrows */}
+      {cur > 0 && (
+        <button onClick={prev} aria-label="Anterior"
+          className="fixed left-5 top-1/2 -translate-y-1/2 z-50 w-10 h-10 flex items-center justify-center border transition-colors"
+          style={{ borderColor: "rgba(255,68,0,0.4)", color: AC, background: "rgba(8,8,12,0.8)" }}
+          onMouseEnter={e => { (e.currentTarget as HTMLButtonElement).style.background = AC; (e.currentTarget as HTMLButtonElement).style.color = "#000"; }}
+          onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.background = "rgba(8,8,12,0.8)"; (e.currentTarget as HTMLButtonElement).style.color = AC; }}>
+          ←
+        </button>
+      )}
+      {cur < TOTAL - 1 && (
+        <button onClick={next} aria-label="Próximo"
+          className="fixed right-5 top-1/2 -translate-y-1/2 z-50 w-10 h-10 flex items-center justify-center border transition-colors"
+          style={{ borderColor: "rgba(255,68,0,0.4)", color: AC, background: "rgba(8,8,12,0.8)" }}
+          onMouseEnter={e => { (e.currentTarget as HTMLButtonElement).style.background = AC; (e.currentTarget as HTMLButtonElement).style.color = "#000"; }}
+          onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.background = "rgba(8,8,12,0.8)"; (e.currentTarget as HTMLButtonElement).style.color = AC; }}>
+          →
+        </button>
+      )}
+      {/* dot indicators */}
+      <div className="fixed bottom-4 left-1/2 -translate-x-1/2 z-50 flex gap-2">
+        {slides.map((_, i) => (
+          <button key={i} onClick={() => setCur(i)} aria-label={`Slide ${i + 1}`}
+            className="w-[6px] h-[6px] transition-all"
+            style={{ background: i === cur ? AC : "rgba(255,255,255,0.18)", transform: i === cur ? "scale(1.4)" : "scale(1)" }} />
+        ))}
+      </div>
+    </div>
   );
 }
