@@ -23,33 +23,53 @@ export function AnimatedHero() {
   return (
     <div className="w-full bg-black flex flex-col items-center justify-start sm:justify-center min-h-screen overflow-hidden">
 
-      {/* Conteúdo */}
-      <div className="order-2 sm:order-1 flex flex-col items-center text-center px-5 pt-6 sm:pt-28 pb-0 w-full max-w-3xl">
-
-        {/* Eyebrow — foto + nome */}
-        <motion.div
-          initial={{ opacity: 0, y: 12 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-          className="flex items-center gap-3 mb-6 sm:mb-10"
+      {/* Eyebrow — foto + nome (mobile: topo; desktop: acima do H1) */}
+      <motion.div
+        initial={{ opacity: 0, y: 12 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+        className="order-1 sm:order-1 flex items-center gap-3 pt-10 sm:pt-28"
+      >
+        <div
+          className="w-10 h-10 sm:w-14 sm:h-14 rounded-full overflow-hidden flex-shrink-0"
+          style={{ boxShadow: `0 0 0 2px ${ORANGE}` }}
         >
-          <div
-            className="w-10 h-10 sm:w-14 sm:h-14 rounded-full overflow-hidden flex-shrink-0"
-            style={{ boxShadow: `0 0 0 2px ${ORANGE}` }}
-          >
-            <Image
-              src="/images/joao-guirunas-profile.jpg"
-              alt="João Guirunas"
-              width={56}
-              height={56}
-              className="w-full h-full object-cover object-[center_20%]"
-            />
-          </div>
-          <span className="text-xs font-semibold tracking-[0.18em] uppercase">
-            <span className="text-white">JOÃO</span>
-            <span style={{ color: ORANGE }}>GUIRUNAS</span>
-          </span>
-        </motion.div>
+          <Image
+            src="/images/joao-guirunas-profile.jpg"
+            alt="João Guirunas"
+            width={56}
+            height={56}
+            className="w-full h-full object-cover object-[center_20%]"
+          />
+        </div>
+        <span className="text-xs font-semibold tracking-[0.18em] uppercase">
+          <span className="text-white">JOÃO</span>
+          <span style={{ color: ORANGE }}>GUIRUNAS</span>
+        </span>
+      </motion.div>
+
+      {/* Sparkles — mobile: order-2; desktop: order-3 */}
+      <div className="order-2 sm:order-3 w-full max-w-2xl h-32 sm:h-48 relative flex-shrink-0 mt-0 sm:mt-2">
+        {/* Linha gradiente laranja */}
+        <div className="absolute inset-x-[10%] top-0 bg-gradient-to-r from-transparent via-[#FF4400] to-transparent h-[2px] w-4/5 blur-sm" />
+        <div className="absolute inset-x-[10%] top-0 bg-gradient-to-r from-transparent via-[#FF4400] to-transparent h-px w-4/5" />
+        <div className="absolute inset-x-[35%] top-0 bg-gradient-to-r from-transparent via-orange-300 to-transparent h-[5px] w-1/4 blur-sm" />
+        <div className="absolute inset-x-[35%] top-0 bg-gradient-to-r from-transparent via-orange-300 to-transparent h-px w-1/4" />
+
+        <SparklesCore
+          background="transparent"
+          minSize={0.4}
+          maxSize={1}
+          particleDensity={1200}
+          className="w-full h-full"
+          particleColor="#FFFFFF"
+        />
+
+        <div className="absolute inset-0 w-full h-full bg-black [mask-image:radial-gradient(350px_200px_at_top,transparent_20%,white)]" />
+      </div>
+
+      {/* H1 + CTAs — mobile: order-3; desktop: order-2 */}
+      <div className="order-3 sm:order-2 flex flex-col items-center text-center px-5 pb-0 w-full max-w-3xl">
 
         {/* H1 animado */}
         <motion.h1
@@ -75,7 +95,7 @@ export function AnimatedHero() {
           </span>
         </motion.h1>
 
-        {/* CTAs — fora das sparkles, no fluxo normal */}
+        {/* CTAs */}
         <motion.div
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
@@ -111,32 +131,12 @@ export function AnimatedHero() {
         </motion.div>
       </div>
 
-      {/* Sparkles — puramente visual, abaixo do conteúdo */}
-      <div className="order-1 sm:order-2 w-full max-w-2xl h-32 sm:h-48 relative flex-shrink-0 mt-0 sm:mt-2">
-        {/* Linha gradiente laranja */}
-        <div className="absolute inset-x-[10%] top-0 bg-gradient-to-r from-transparent via-[#FF4400] to-transparent h-[2px] w-4/5 blur-sm" />
-        <div className="absolute inset-x-[10%] top-0 bg-gradient-to-r from-transparent via-[#FF4400] to-transparent h-px w-4/5" />
-        <div className="absolute inset-x-[35%] top-0 bg-gradient-to-r from-transparent via-orange-300 to-transparent h-[5px] w-1/4 blur-sm" />
-        <div className="absolute inset-x-[35%] top-0 bg-gradient-to-r from-transparent via-orange-300 to-transparent h-px w-1/4" />
-
-        <SparklesCore
-          background="transparent"
-          minSize={0.4}
-          maxSize={1}
-          particleDensity={1200}
-          className="w-full h-full"
-          particleColor="#FFFFFF"
-        />
-
-        <div className="absolute inset-0 w-full h-full bg-black [mask-image:radial-gradient(350px_200px_at_top,transparent_20%,white)]" />
-      </div>
-
       {/* Subheadline — por último */}
       <motion.p
         initial={{ opacity: 0, y: 16 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6, delay: 0.4 }}
-        className="order-3 text-sm sm:text-base lg:text-lg leading-relaxed max-w-md sm:max-w-xl text-center px-5 mt-6 mb-10"
+        className="order-4 sm:order-4 text-sm sm:text-base lg:text-lg leading-relaxed max-w-md sm:max-w-xl text-center px-5 mt-6 mb-10"
         style={{ color: 'rgba(255,255,255,0.45)' }}
       >
         CEO da GrowthSales.ai. Uso IA em negócios reais — automação, growth
