@@ -21,7 +21,7 @@ export function AnimatedHero() {
   }, [titleNumber, titles]);
 
   return (
-    <div className="w-full bg-black flex flex-col items-center justify-center min-h-screen overflow-hidden">
+    <div className="w-full bg-black flex flex-col items-center justify-start sm:justify-center min-h-screen overflow-hidden">
 
       {/* Conteúdo */}
       <div className="order-2 sm:order-1 flex flex-col items-center text-center px-5 pt-6 sm:pt-28 pb-0 w-full max-w-3xl">
