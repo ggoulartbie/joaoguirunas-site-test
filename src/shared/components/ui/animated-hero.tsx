@@ -75,24 +75,12 @@ export function AnimatedHero() {
           </span>
         </motion.h1>
 
-        {/* Subheadline */}
-        <motion.p
-          initial={{ opacity: 0, y: 16 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.2 }}
-          className="text-sm sm:text-base lg:text-lg leading-relaxed max-w-md sm:max-w-xl mt-3 sm:mt-5 mb-8 sm:mb-10"
-          style={{ color: 'rgba(255,255,255,0.45)' }}
-        >
-          CEO da GrowthSales.ai. Uso IA em negócios reais — automação, growth
-          e sistemas que escalam. O que funciona, eu compartilho e ensino.
-        </motion.p>
-
         {/* CTAs — fora das sparkles, no fluxo normal */}
         <motion.div
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.3 }}
-          className="flex flex-col sm:flex-row items-stretch sm:items-center justify-center gap-2 w-full max-w-xs sm:max-w-none sm:w-auto mb-0"
+          className="flex flex-col sm:flex-row items-stretch sm:items-center justify-center gap-2 w-full max-w-xs sm:max-w-none sm:w-auto mb-0 mt-4 sm:mt-6"
         >
           <Link
             href="/mentoria"
@@ -142,6 +130,18 @@ export function AnimatedHero() {
 
         <div className="absolute inset-0 w-full h-full bg-black [mask-image:radial-gradient(350px_200px_at_top,transparent_20%,white)]" />
       </div>
+
+      {/* Subheadline — por último */}
+      <motion.p
+        initial={{ opacity: 0, y: 16 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6, delay: 0.4 }}
+        className="text-sm sm:text-base lg:text-lg leading-relaxed max-w-md sm:max-w-xl text-center px-5 mt-6 mb-10"
+        style={{ color: 'rgba(255,255,255,0.45)' }}
+      >
+        CEO da GrowthSales.ai. Uso IA em negócios reais — automação, growth
+        e sistemas que escalam. O que funciona, eu compartilho e ensino.
+      </motion.p>
     </div>
   );
 }
