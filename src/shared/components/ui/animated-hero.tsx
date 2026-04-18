@@ -69,7 +69,7 @@ export function AnimatedHero() {
       </div>
 
       {/* H1 + CTAs — mobile: order-3 sobrepõe sparkles; desktop: order-2 */}
-      <div className="order-3 sm:order-2 flex flex-col items-center text-center px-5 pb-0 w-full max-w-3xl -mt-28 sm:mt-0">
+      <div className="order-3 sm:order-2 flex flex-col items-center text-center px-5 pb-0 w-full max-w-3xl -mt-36 sm:mt-0">
 
         {/* H1 animado */}
         <motion.h1
@@ -100,7 +100,7 @@ export function AnimatedHero() {
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.3 }}
-          className="flex flex-col sm:flex-row items-stretch sm:items-center justify-center gap-2 w-full max-w-xs sm:max-w-none sm:w-auto mb-0 mt-4 sm:mt-6"
+          className="flex flex-col sm:flex-row items-stretch sm:items-center justify-center gap-2 w-full max-w-xs sm:max-w-none sm:w-auto mb-0 mt-12 sm:mt-6"
         >
           <Link
             href="/mentoria"
