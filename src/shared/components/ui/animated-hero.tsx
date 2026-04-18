@@ -69,7 +69,7 @@ export function AnimatedHero() {
       </div>
 
       {/* H1 + CTAs — mobile: order-3 sobrepõe sparkles; desktop: order-2 */}
-      <div className="order-3 sm:order-2 flex flex-col items-center text-center px-5 pb-0 w-full max-w-3xl -mt-36 sm:mt-0">
+      <div className="order-3 sm:order-2 relative z-10 flex flex-col items-center text-center px-5 pb-0 w-full max-w-3xl -mt-36 sm:mt-0">
 
         {/* H1 animado */}
         <motion.h1
