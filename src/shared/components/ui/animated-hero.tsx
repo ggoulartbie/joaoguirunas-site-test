@@ -77,7 +77,7 @@ export function AnimatedHero() {
         </motion.h1>
 
         {/* Sparkles — logo abaixo do H1, partículas emanando da headline */}
-        <div className="w-[40rem] max-w-full h-48 relative flex-shrink-0">
+        <div className="w-[40rem] max-w-full h-48 sm:h-48 relative flex-shrink-0">
           {/* Linha gradiente laranja */}
           <div className="absolute inset-x-20 top-0 bg-gradient-to-r from-transparent via-[#E8601C] to-transparent h-[2px] w-3/4 blur-sm" />
           <div className="absolute inset-x-20 top-0 bg-gradient-to-r from-transparent via-[#E8601C] to-transparent h-px w-3/4" />
@@ -102,11 +102,11 @@ export function AnimatedHero() {
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.3 }}
-            className="absolute inset-0 flex items-center justify-center gap-3 z-10 -translate-y-4"
+            className="absolute inset-0 flex flex-col sm:flex-row items-center justify-center gap-2 z-10 -translate-y-4 px-4"
           >
             <Link
               href="/mentoria"
-              className="group inline-flex items-center gap-2 px-7 py-3.5 rounded-[2px] text-sm font-bold text-white transition-all duration-200 hover:brightness-110 hover:scale-[1.02] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#E8601C]"
+              className="group inline-flex items-center justify-center gap-2 w-52 sm:w-auto px-7 py-3 rounded-[2px] text-sm font-bold text-white transition-all duration-200 hover:brightness-110 hover:scale-[1.02] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FF4400]"
               style={{ background: ORANGE }}
             >
               Mentoria
@@ -117,7 +117,7 @@ export function AnimatedHero() {
               href="https://www.growthsales.ai"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center justify-center px-7 py-3.5 rounded-[2px] text-sm font-semibold text-white transition-all duration-200 hover:bg-white/5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/20"
+              className="inline-flex items-center justify-center w-52 sm:w-auto px-7 py-3 rounded-[2px] text-sm font-semibold text-white transition-all duration-200 hover:bg-white/5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/20"
               style={{ border: '1px solid rgba(255,255,255,0.15)' }}
             >
               Consultoria
@@ -125,7 +125,7 @@ export function AnimatedHero() {
 
             <Link
               href="/open-source"
-              className="inline-flex items-center justify-center px-7 py-3.5 rounded-[2px] text-sm font-semibold text-white transition-all duration-200 hover:bg-white/5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/20"
+              className="inline-flex items-center justify-center w-52 sm:w-auto px-7 py-3 rounded-[2px] text-sm font-semibold text-white transition-all duration-200 hover:bg-white/5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/20"
               style={{ border: '1px solid rgba(255,255,255,0.15)' }}
             >
               Open Source
