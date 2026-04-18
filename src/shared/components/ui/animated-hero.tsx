@@ -49,7 +49,7 @@ export function AnimatedHero() {
       </motion.div>
 
       {/* Sparkles — mobile: order-2; desktop: order-3 */}
-      <div className="order-2 sm:order-3 w-full max-w-2xl h-32 sm:h-48 relative flex-shrink-0 mt-0 sm:mt-2">
+      <div className="order-2 sm:order-3 w-full max-w-2xl h-52 sm:h-48 relative flex-shrink-0 mt-8 sm:mt-2">
         {/* Linha gradiente laranja */}
         <div className="absolute inset-x-[10%] top-0 bg-gradient-to-r from-transparent via-[#FF4400] to-transparent h-[2px] w-4/5 blur-sm" />
         <div className="absolute inset-x-[10%] top-0 bg-gradient-to-r from-transparent via-[#FF4400] to-transparent h-px w-4/5" />
@@ -68,15 +68,15 @@ export function AnimatedHero() {
         <div className="absolute inset-0 w-full h-full bg-black [mask-image:radial-gradient(350px_200px_at_top,transparent_20%,white)]" />
       </div>
 
-      {/* H1 + CTAs — mobile: order-3; desktop: order-2 */}
-      <div className="order-3 sm:order-2 flex flex-col items-center text-center px-5 pb-0 w-full max-w-3xl">
+      {/* H1 + CTAs — mobile: order-3 sobrepõe sparkles; desktop: order-2 */}
+      <div className="order-3 sm:order-2 flex flex-col items-center text-center px-5 pb-0 w-full max-w-3xl -mt-28 sm:mt-0">
 
         {/* H1 animado */}
         <motion.h1
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
-          className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl tracking-tighter text-center font-bold font-[family-name:var(--font-display)]"
+          className="relative z-10 text-3xl sm:text-4xl md:text-5xl lg:text-6xl tracking-tighter text-center font-bold font-[family-name:var(--font-display)]"
         >
           <span className="relative flex w-full justify-center pb-2 sm:pb-4">
             <span className="invisible" aria-hidden>aprendo usando</span>
