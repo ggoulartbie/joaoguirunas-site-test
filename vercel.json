@@ -1,0 +1,10 @@
+{
+  "redirects": [
+    {
+      "source": "/(.*)",
+      "has": [{ "type": "host", "value": "opensource.growthsales.ai" }],
+      "destination": "https://joaoguirunas.com/$1",
+      "permanent": true
+    }
+  ]
+}
