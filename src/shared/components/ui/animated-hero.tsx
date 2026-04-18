@@ -24,7 +24,7 @@ export function AnimatedHero() {
     <div className="w-full bg-black flex flex-col items-center justify-center min-h-screen overflow-hidden">
 
       {/* Conteúdo */}
-      <div className="flex flex-col items-center text-center px-5 pt-20 sm:pt-28 pb-0 w-full max-w-3xl">
+      <div className="order-2 sm:order-1 flex flex-col items-center text-center px-5 pt-6 sm:pt-28 pb-0 w-full max-w-3xl">
 
         {/* Eyebrow — foto + nome */}
         <motion.div
@@ -112,7 +112,7 @@ export function AnimatedHero() {
       </div>
 
       {/* Sparkles — puramente visual, abaixo do conteúdo */}
-      <div className="w-full max-w-2xl h-32 sm:h-48 relative flex-shrink-0 mt-2">
+      <div className="order-1 sm:order-2 w-full max-w-2xl h-32 sm:h-48 relative flex-shrink-0 mt-0 sm:mt-2">
         {/* Linha gradiente laranja */}
         <div className="absolute inset-x-[10%] top-0 bg-gradient-to-r from-transparent via-[#FF4400] to-transparent h-[2px] w-4/5 blur-sm" />
         <div className="absolute inset-x-[10%] top-0 bg-gradient-to-r from-transparent via-[#FF4400] to-transparent h-px w-4/5" />
@@ -136,7 +136,7 @@ export function AnimatedHero() {
         initial={{ opacity: 0, y: 16 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6, delay: 0.4 }}
-        className="text-sm sm:text-base lg:text-lg leading-relaxed max-w-md sm:max-w-xl text-center px-5 mt-6 mb-10"
+        className="order-3 text-sm sm:text-base lg:text-lg leading-relaxed max-w-md sm:max-w-xl text-center px-5 mt-6 mb-10"
         style={{ color: 'rgba(255,255,255,0.45)' }}
       >
         CEO da GrowthSales.ai. Uso IA em negócios reais — automação, growth
