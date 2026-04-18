@@ -8,14 +8,14 @@ export const metadata: Metadata = {
     'IA que aprende como você aprende. Mapas mentais, áudios, quizzes personalizados para qualquer conteúdo.',
   alternates: { canonical: `${siteConfig.url}/learn/learn-your-way` },
   openGraph: {
-    title: 'Learn Your Way — Google | GrowthSales Open Source',
+    title: 'Learn Your Way — Google | João Guirunas',
     description:
       'IA que aprende como você aprende. Mapas mentais, áudios, quizzes personalizados para qualquer conteúdo.',
     url: `${siteConfig.url}/learn/learn-your-way`,
     images: [{ url: `${siteConfig.url}/images/og-default.png`, width: 1200, height: 630 }],
   },
   twitter: {
-    title: 'Learn Your Way — Google | GrowthSales Open Source',
+    title: 'Learn Your Way — Google | João Guirunas',
     description:
       'IA que aprende como você aprende. Mapas mentais, áudios, quizzes personalizados para qualquer conteúdo.',
   },

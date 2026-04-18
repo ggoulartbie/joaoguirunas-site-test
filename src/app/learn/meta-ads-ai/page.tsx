@@ -8,14 +8,14 @@ export const metadata: Metadata = {
     'Automação de campanhas Meta com agentes. Otimize criativos, copy e targeting automaticamente.',
   alternates: { canonical: `${siteConfig.url}/learn/meta-ads-ai` },
   openGraph: {
-    title: 'Meta Ads com IA | GrowthSales Open Source',
+    title: 'Meta Ads com IA | João Guirunas',
     description:
       'Automação de campanhas Meta com agentes. Otimize criativos, copy e targeting automaticamente.',
     url: `${siteConfig.url}/learn/meta-ads-ai`,
     images: [{ url: `${siteConfig.url}/images/og-default.png`, width: 1200, height: 630 }],
   },
   twitter: {
-    title: 'Meta Ads com IA | GrowthSales Open Source',
+    title: 'Meta Ads com IA | João Guirunas',
     description:
       'Automação de campanhas Meta com agentes. Otimize criativos, copy e targeting automaticamente.',
   },

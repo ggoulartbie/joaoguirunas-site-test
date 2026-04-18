@@ -8,14 +8,14 @@ export const metadata: Metadata = {
     'Controle o Chrome com Claude Code via código. Mais rápido, barato e preciso que Computer Use.',
   alternates: { canonical: `${siteConfig.url}/skills/dev-browser` },
   openGraph: {
-    title: 'Dev Browser — Automação de Navegador | GrowthSales Open Source',
+    title: 'Dev Browser — Automação de Navegador | João Guirunas',
     description:
       'Controle o Chrome com Claude Code via código. Mais rápido, barato e preciso que Computer Use.',
     url: `${siteConfig.url}/skills/dev-browser`,
     images: [{ url: `${siteConfig.url}/images/og-default.png`, width: 1200, height: 630 }],
   },
   twitter: {
-    title: 'Dev Browser — Automação de Navegador | GrowthSales Open Source',
+    title: 'Dev Browser — Automação de Navegador | João Guirunas',
     description:
       'Controle o Chrome com Claude Code via código. Mais rápido, barato e preciso que Computer Use.',
   },

@@ -8,14 +8,14 @@ export const metadata: Metadata = {
     'Visualize seus agentes Claude Code trabalhando ao vivo. Personagens pixel art que espelham cada ação em tempo real.',
   alternates: { canonical: `${siteConfig.url}/tools/pixel-agents` },
   openGraph: {
-    title: 'Pixel Agents — VS Code Extension | GrowthSales Open Source',
+    title: 'Pixel Agents — VS Code Extension | João Guirunas',
     description:
       'Visualize seus agentes Claude Code trabalhando ao vivo. Personagens pixel art que espelham cada ação em tempo real.',
     url: `${siteConfig.url}/tools/pixel-agents`,
     images: [{ url: `${siteConfig.url}/images/og-default.png`, width: 1200, height: 630 }],
   },
   twitter: {
-    title: 'Pixel Agents — VS Code Extension | GrowthSales Open Source',
+    title: 'Pixel Agents — VS Code Extension | João Guirunas',
     description:
       'Visualize seus agentes Claude Code trabalhando ao vivo. Personagens pixel art que espelham cada ação em tempo real.',
   },

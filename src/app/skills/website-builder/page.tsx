@@ -8,14 +8,14 @@ export const metadata: Metadata = {
     'Crie sites profissionais com Claude Code + 21st.dev. Do zero ao deploy em minutos, sem experiência prévia.',
   alternates: { canonical: `${siteConfig.url}/skills/website-builder` },
   openGraph: {
-    title: 'Website Builder com Claude Code | GrowthSales Open Source',
+    title: 'Website Builder com Claude Code | João Guirunas',
     description:
       'Crie sites profissionais com Claude Code + 21st.dev. Do zero ao deploy em minutos, sem experiência prévia.',
     url: `${siteConfig.url}/skills/website-builder`,
     images: [{ url: `${siteConfig.url}/images/og-default.png`, width: 1200, height: 630 }],
   },
   twitter: {
-    title: 'Website Builder com Claude Code | GrowthSales Open Source',
+    title: 'Website Builder com Claude Code | João Guirunas',
     description:
       'Crie sites profissionais com Claude Code + 21st.dev. Do zero ao deploy em minutos, sem experiência prévia.',
   },

@@ -8,14 +8,14 @@ export const metadata: Metadata = {
     'Acesse seu Claude Code pelo celular. Um QR Code e seu setup local fica acessível de qualquer lugar.',
   alternates: { canonical: `${siteConfig.url}/skills/remote-control` },
   openGraph: {
-    title: 'Claude Code Remote Control | GrowthSales Open Source',
+    title: 'Claude Code Remote Control | João Guirunas',
     description:
       'Acesse seu Claude Code pelo celular. Um QR Code e seu setup local fica acessível de qualquer lugar.',
     url: `${siteConfig.url}/skills/remote-control`,
     images: [{ url: `${siteConfig.url}/images/og-default.png`, width: 1200, height: 630 }],
   },
   twitter: {
-    title: 'Claude Code Remote Control | GrowthSales Open Source',
+    title: 'Claude Code Remote Control | João Guirunas',
     description:
       'Acesse seu Claude Code pelo celular. Um QR Code e seu setup local fica acessível de qualquer lugar.',
   },

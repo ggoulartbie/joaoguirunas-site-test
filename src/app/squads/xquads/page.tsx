@@ -8,14 +8,14 @@ export const metadata: Metadata = {
     '12 squads especializadas com 96+ agentes prontos para uso. A maior coleção de squads AIOX da comunidade.',
   alternates: { canonical: `${siteConfig.url}/squads/xquads` },
   openGraph: {
-    title: 'Xquads Squads | GrowthSales Open Source',
+    title: 'Xquads Squads | João Guirunas',
     description:
       '12 squads especializadas com 96+ agentes prontos para uso. A maior coleção de squads AIOX da comunidade.',
     url: `${siteConfig.url}/squads/xquads`,
     images: [{ url: `${siteConfig.url}/images/og-default.png`, width: 1200, height: 630 }],
   },
   twitter: {
-    title: 'Xquads Squads | GrowthSales Open Source',
+    title: 'Xquads Squads | João Guirunas',
     description:
       '12 squads especializadas com 96+ agentes prontos para uso. A maior coleção de squads AIOX da comunidade.',
   },

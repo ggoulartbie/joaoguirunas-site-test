@@ -8,14 +8,14 @@ export const metadata: Metadata = {
     'Módulos prontos que transformam o Claude em especialista da sua área. Open source, gratuitos, sem programação.',
   alternates: { canonical: `${siteConfig.url}/skills/cowork-plugins` },
   openGraph: {
-    title: 'Claude Cowork & Plugins | GrowthSales Open Source',
+    title: 'Claude Cowork & Plugins | João Guirunas',
     description:
       'Módulos prontos que transformam o Claude em especialista da sua área. Open source, gratuitos, sem programação.',
     url: `${siteConfig.url}/skills/cowork-plugins`,
     images: [{ url: `${siteConfig.url}/images/og-default.png`, width: 1200, height: 630 }],
   },
   twitter: {
-    title: 'Claude Cowork & Plugins | GrowthSales Open Source',
+    title: 'Claude Cowork & Plugins | João Guirunas',
     description:
       'Módulos prontos que transformam o Claude em especialista da sua área. Open source, gratuitos, sem programação.',
   },

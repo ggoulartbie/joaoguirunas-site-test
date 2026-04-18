@@ -8,14 +8,14 @@ export const metadata: Metadata = {
     'Use o Instagram pelo terminal. Sem doom-scrolling, sem feed. Integra com LLMs para automatizar respostas e moderação.',
   alternates: { canonical: `${siteConfig.url}/tools/instagram-cli` },
   openGraph: {
-    title: 'Instagram CLI — Terminal sem Feed | GrowthSales Open Source',
+    title: 'Instagram CLI — Terminal sem Feed | João Guirunas',
     description:
       'Use o Instagram pelo terminal. Sem doom-scrolling, sem feed. Integra com LLMs para automatizar respostas e moderação.',
     url: `${siteConfig.url}/tools/instagram-cli`,
     images: [{ url: `${siteConfig.url}/images/og-default.png`, width: 1200, height: 630 }],
   },
   twitter: {
-    title: 'Instagram CLI — Terminal sem Feed | GrowthSales Open Source',
+    title: 'Instagram CLI — Terminal sem Feed | João Guirunas',
     description:
       'Use o Instagram pelo terminal. Sem doom-scrolling, sem feed. Integra com LLMs para automatizar respostas e moderação.',
   },

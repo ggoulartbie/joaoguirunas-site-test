@@ -8,14 +8,14 @@ export const metadata: Metadata = {
     'Cursos gratuitos da Anthropic na plataforma oficial. Aprenda prompt engineering, tool use, agentes e muito mais diretamente com quem criou o Claude.',
   alternates: { canonical: `${siteConfig.url}/learn/anthropic-courses` },
   openGraph: {
-    title: 'Cursos Anthropic — Plataforma Oficial | GrowthSales Open Source',
+    title: 'Cursos Anthropic — Plataforma Oficial | João Guirunas',
     description:
       'Cursos gratuitos da Anthropic na plataforma oficial. Aprenda prompt engineering, tool use, agentes e muito mais diretamente com quem criou o Claude.',
     url: `${siteConfig.url}/learn/anthropic-courses`,
     images: [{ url: `${siteConfig.url}/images/og-default.png`, width: 1200, height: 630 }],
   },
   twitter: {
-    title: 'Cursos Anthropic — Plataforma Oficial | GrowthSales Open Source',
+    title: 'Cursos Anthropic — Plataforma Oficial | João Guirunas',
     description:
       'Cursos gratuitos da Anthropic na plataforma oficial. Aprenda prompt engineering, tool use, agentes e muito mais diretamente com quem criou o Claude.',
   },

@@ -8,14 +8,14 @@ export const metadata: Metadata = {
     'Crie interfaces com design de nível profissional usando IA. Prompts exatos, variações ilimitadas, exportação imediata.',
   alternates: { canonical: `${siteConfig.url}/learn/ai-layouts` },
   openGraph: {
-    title: 'Layouts Profissionais com IA | GrowthSales Open Source',
+    title: 'Layouts Profissionais com IA | João Guirunas',
     description:
       'Crie interfaces com design de nível profissional usando IA. Prompts exatos, variações ilimitadas, exportação imediata.',
     url: `${siteConfig.url}/learn/ai-layouts`,
     images: [{ url: `${siteConfig.url}/images/og-default.png`, width: 1200, height: 630 }],
   },
   twitter: {
-    title: 'Layouts Profissionais com IA | GrowthSales Open Source',
+    title: 'Layouts Profissionais com IA | João Guirunas',
     description:
       'Crie interfaces com design de nível profissional usando IA. Prompts exatos, variações ilimitadas, exportação imediata.',
   },

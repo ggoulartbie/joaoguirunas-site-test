@@ -8,14 +8,14 @@ export const metadata: Metadata = {
     'Comunicação inter-agentes entre terminais. Conecte múltiplos Claude Code para colaboração em tempo real.',
   alternates: { canonical: `${siteConfig.url}/tools/maestri` },
   openGraph: {
-    title: 'Maestri | GrowthSales Open Source',
+    title: 'Maestri | João Guirunas',
     description:
       'Comunicação inter-agentes entre terminais. Conecte múltiplos Claude Code para colaboração em tempo real.',
     url: `${siteConfig.url}/tools/maestri`,
     images: [{ url: `${siteConfig.url}/images/og-default.png`, width: 1200, height: 630 }],
   },
   twitter: {
-    title: 'Maestri | GrowthSales Open Source',
+    title: 'Maestri | João Guirunas',
     description:
       'Comunicação inter-agentes entre terminais. Conecte múltiplos Claude Code para colaboração em tempo real.',
   },

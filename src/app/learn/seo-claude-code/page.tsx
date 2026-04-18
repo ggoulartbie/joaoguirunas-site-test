@@ -8,14 +8,14 @@ export const metadata: Metadata = {
     'Agentes de SEO que auditam, planejam e implementam melhorias no seu site. Do relatório à execução automática.',
   alternates: { canonical: `${siteConfig.url}/learn/seo-claude-code` },
   openGraph: {
-    title: 'SEO com Claude Code | GrowthSales Open Source',
+    title: 'SEO com Claude Code | João Guirunas',
     description:
       'Agentes de SEO que auditam, planejam e implementam melhorias no seu site. Do relatório à execução automática.',
     url: `${siteConfig.url}/learn/seo-claude-code`,
     images: [{ url: `${siteConfig.url}/images/og-default.png`, width: 1200, height: 630 }],
   },
   twitter: {
-    title: 'SEO com Claude Code | GrowthSales Open Source',
+    title: 'SEO com Claude Code | João Guirunas',
     description:
       'Agentes de SEO que auditam, planejam e implementam melhorias no seu site. Do relatório à execução automática.',
   },

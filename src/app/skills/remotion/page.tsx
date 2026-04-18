@@ -8,14 +8,14 @@ export const metadata: Metadata = {
     'Edite e crie vídeos com Claude Code. Cortes, legendas, split screen — tudo via prompt no terminal.',
   alternates: { canonical: `${siteConfig.url}/skills/remotion` },
   openGraph: {
-    title: 'Remotion + Claude Code | GrowthSales Open Source',
+    title: 'Remotion + Claude Code | João Guirunas',
     description:
       'Edite e crie vídeos com Claude Code. Cortes, legendas, split screen — tudo via prompt no terminal.',
     url: `${siteConfig.url}/skills/remotion`,
     images: [{ url: `${siteConfig.url}/images/og-default.png`, width: 1200, height: 630 }],
   },
   twitter: {
-    title: 'Remotion + Claude Code | GrowthSales Open Source',
+    title: 'Remotion + Claude Code | João Guirunas',
     description:
       'Edite e crie vídeos com Claude Code. Cortes, legendas, split screen — tudo via prompt no terminal.',
   },

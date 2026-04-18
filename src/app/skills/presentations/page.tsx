@@ -8,14 +8,14 @@ export const metadata: Metadata = {
     'Crie slides, e-books e infográficos diretamente no Claude. Gamma App integrado para layouts profissionais em um clique.',
   alternates: { canonical: `${siteConfig.url}/skills/presentations` },
   openGraph: {
-    title: 'Apresentações com Claude + Gamma | GrowthSales Open Source',
+    title: 'Apresentações com Claude + Gamma | João Guirunas',
     description:
       'Crie slides, e-books e infográficos diretamente no Claude. Gamma App integrado para layouts profissionais em um clique.',
     url: `${siteConfig.url}/skills/presentations`,
     images: [{ url: `${siteConfig.url}/images/og-default.png`, width: 1200, height: 630 }],
   },
   twitter: {
-    title: 'Apresentações com Claude + Gamma | GrowthSales Open Source',
+    title: 'Apresentações com Claude + Gamma | João Guirunas',
     description:
       'Crie slides, e-books e infográficos diretamente no Claude. Gamma App integrado para layouts profissionais em um clique.',
   },

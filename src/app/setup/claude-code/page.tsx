@@ -8,14 +8,14 @@ export const metadata: Metadata = {
     'Guia completo de configuração avançada. Do básico ao expert em Claude Code CLI.',
   alternates: { canonical: `${siteConfig.url}/setup/claude-code` },
   openGraph: {
-    title: 'Setup Claude Code | GrowthSales Open Source',
+    title: 'Setup Claude Code | João Guirunas',
     description:
       'Guia completo de configuração avançada. Do básico ao expert em Claude Code CLI.',
     url: `${siteConfig.url}/setup/claude-code`,
     images: [{ url: `${siteConfig.url}/images/og-default.png`, width: 1200, height: 630 }],
   },
   twitter: {
-    title: 'Setup Claude Code | GrowthSales Open Source',
+    title: 'Setup Claude Code | João Guirunas',
     description:
       'Guia completo de configuração avançada. Do básico ao expert em Claude Code CLI.',
   },

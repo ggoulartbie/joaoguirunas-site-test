@@ -8,14 +8,14 @@ export const metadata: Metadata = {
     'Biblioteca de componentes animados profissionais. Botões, temporizadores, transições — código pronto para usar.',
   alternates: { canonical: `${siteConfig.url}/tools/animejs` },
   openGraph: {
-    title: 'Anime.js — Componentes Animados | GrowthSales Open Source',
+    title: 'Anime.js — Componentes Animados | João Guirunas',
     description:
       'Biblioteca de componentes animados profissionais. Botões, temporizadores, transições — código pronto para usar.',
     url: `${siteConfig.url}/tools/animejs`,
     images: [{ url: `${siteConfig.url}/images/og-default.png`, width: 1200, height: 630 }],
   },
   twitter: {
-    title: 'Anime.js — Componentes Animados | GrowthSales Open Source',
+    title: 'Anime.js — Componentes Animados | João Guirunas',
     description:
       'Biblioteca de componentes animados profissionais. Botões, temporizadores, transições — código pronto para usar.',
   },

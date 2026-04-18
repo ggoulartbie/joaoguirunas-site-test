@@ -8,14 +8,14 @@ export const metadata: Metadata = {
     'Migre suas automações do N8N para o Claude Code. Webhooks, APIs, lógica condicional — tudo no terminal.',
   alternates: { canonical: `${siteConfig.url}/skills/n8n` },
   openGraph: {
-    title: 'Claude Code vs N8N | GrowthSales Open Source',
+    title: 'Claude Code vs N8N | João Guirunas',
     description:
       'Migre suas automações do N8N para o Claude Code. Webhooks, APIs, lógica condicional — tudo no terminal.',
     url: `${siteConfig.url}/skills/n8n`,
     images: [{ url: `${siteConfig.url}/images/og-default.png`, width: 1200, height: 630 }],
   },
   twitter: {
-    title: 'Claude Code vs N8N | GrowthSales Open Source',
+    title: 'Claude Code vs N8N | João Guirunas',
     description:
       'Migre suas automações do N8N para o Claude Code. Webhooks, APIs, lógica condicional — tudo no terminal.',
   },

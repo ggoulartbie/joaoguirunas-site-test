@@ -8,14 +8,14 @@ export const metadata: Metadata = {
     'Monte uma empresa de agentes de IA trabalhando 24/7. Do zero a uma operação completa delegada para IA.',
   alternates: { canonical: `${siteConfig.url}/learn/multi-agent` },
   openGraph: {
-    title: 'Time de Agentes com IA | GrowthSales Open Source',
+    title: 'Time de Agentes com IA | João Guirunas',
     description:
       'Monte uma empresa de agentes de IA trabalhando 24/7. Do zero a uma operação completa delegada para IA.',
     url: `${siteConfig.url}/learn/multi-agent`,
     images: [{ url: `${siteConfig.url}/images/og-default.png`, width: 1200, height: 630 }],
   },
   twitter: {
-    title: 'Time de Agentes com IA | GrowthSales Open Source',
+    title: 'Time de Agentes com IA | João Guirunas',
     description:
       'Monte uma empresa de agentes de IA trabalhando 24/7. Do zero a uma operação completa delegada para IA.',
   },

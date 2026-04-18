@@ -8,14 +8,14 @@ export const metadata: Metadata = {
     'Meta Ads, Google Ads e Analytics em um painel centralizado. Relatórios, alertas e recomendações automáticas.',
   alternates: { canonical: `${siteConfig.url}/skills/ads-dashboard` },
   openGraph: {
-    title: 'Ads Dashboard com Claude Code | GrowthSales Open Source',
+    title: 'Ads Dashboard com Claude Code | João Guirunas',
     description:
       'Meta Ads, Google Ads e Analytics em um painel centralizado. Relatórios, alertas e recomendações automáticas.',
     url: `${siteConfig.url}/skills/ads-dashboard`,
     images: [{ url: `${siteConfig.url}/images/og-default.png`, width: 1200, height: 630 }],
   },
   twitter: {
-    title: 'Ads Dashboard com Claude Code | GrowthSales Open Source',
+    title: 'Ads Dashboard com Claude Code | João Guirunas',
     description:
       'Meta Ads, Google Ads e Analytics em um painel centralizado. Relatórios, alertas e recomendações automáticas.',
   },

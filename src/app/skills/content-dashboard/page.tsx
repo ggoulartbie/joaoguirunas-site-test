@@ -8,14 +8,14 @@ export const metadata: Metadata = {
     'Claude Code constrói e opera seu dashboard de conteúdo. Publica, agenda, analisa — tudo dentro do software que ele mesmo criou.',
   alternates: { canonical: `${siteConfig.url}/skills/content-dashboard` },
   openGraph: {
-    title: 'Dashboard de Conteúdo com MCP | GrowthSales Open Source',
+    title: 'Dashboard de Conteúdo com MCP | João Guirunas',
     description:
       'Claude Code constrói e opera seu dashboard de conteúdo. Publica, agenda, analisa — tudo dentro do software que ele mesmo criou.',
     url: `${siteConfig.url}/skills/content-dashboard`,
     images: [{ url: `${siteConfig.url}/images/og-default.png`, width: 1200, height: 630 }],
   },
   twitter: {
-    title: 'Dashboard de Conteúdo com MCP | GrowthSales Open Source',
+    title: 'Dashboard de Conteúdo com MCP | João Guirunas',
     description:
       'Claude Code constrói e opera seu dashboard de conteúdo. Publica, agenda, analisa — tudo dentro do software que ele mesmo criou.',
   },

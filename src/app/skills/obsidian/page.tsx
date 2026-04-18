@@ -8,14 +8,14 @@ export const metadata: Metadata = {
     'Dê memória permanente ao Claude Code com Obsidian. Tudo que você faz numa sessão é salvo e lembrado.',
   alternates: { canonical: `${siteConfig.url}/skills/obsidian` },
   openGraph: {
-    title: 'Claude Code + Obsidian | GrowthSales Open Source',
+    title: 'Claude Code + Obsidian | João Guirunas',
     description:
       'Dê memória permanente ao Claude Code com Obsidian. Tudo que você faz numa sessão é salvo e lembrado.',
     url: `${siteConfig.url}/skills/obsidian`,
     images: [{ url: `${siteConfig.url}/images/og-default.png`, width: 1200, height: 630 }],
   },
   twitter: {
-    title: 'Claude Code + Obsidian | GrowthSales Open Source',
+    title: 'Claude Code + Obsidian | João Guirunas',
     description:
       'Dê memória permanente ao Claude Code com Obsidian. Tudo que você faz numa sessão é salvo e lembrado.',
   },

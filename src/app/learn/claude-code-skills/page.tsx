@@ -8,14 +8,14 @@ export const metadata: Metadata = {
     'As ferramentas que todo usuário de Claude Code deveria usar. Superpower, Memory, N8N MCP, UI Pro e Everything CC.',
   alternates: { canonical: `${siteConfig.url}/learn/claude-code-skills` },
   openGraph: {
-    title: '5 Ferramentas Grátis para Claude Code | GrowthSales Open Source',
+    title: '5 Ferramentas Grátis para Claude Code | João Guirunas',
     description:
       'As ferramentas que todo usuário de Claude Code deveria usar. Superpower, Memory, N8N MCP, UI Pro e Everything CC.',
     url: `${siteConfig.url}/learn/claude-code-skills`,
     images: [{ url: `${siteConfig.url}/images/og-default.png`, width: 1200, height: 630 }],
   },
   twitter: {
-    title: '5 Ferramentas Grátis para Claude Code | GrowthSales Open Source',
+    title: '5 Ferramentas Grátis para Claude Code | João Guirunas',
     description:
       'As ferramentas que todo usuário de Claude Code deveria usar. Superpower, Memory, N8N MCP, UI Pro e Everything CC.',
   },

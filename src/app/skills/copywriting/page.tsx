@@ -8,14 +8,14 @@ export const metadata: Metadata = {
     'Skill que ensina o Claude a escrever textos de venda. Frameworks profissionais para landing pages, home e preços.',
   alternates: { canonical: `${siteConfig.url}/skills/copywriting` },
   openGraph: {
-    title: 'Copywriting Skill para Claude Code | GrowthSales Open Source',
+    title: 'Copywriting Skill para Claude Code | João Guirunas',
     description:
       'Skill que ensina o Claude a escrever textos de venda. Frameworks profissionais para landing pages, home e preços.',
     url: `${siteConfig.url}/skills/copywriting`,
     images: [{ url: `${siteConfig.url}/images/og-default.png`, width: 1200, height: 630 }],
   },
   twitter: {
-    title: 'Copywriting Skill para Claude Code | GrowthSales Open Source',
+    title: 'Copywriting Skill para Claude Code | João Guirunas',
     description:
       'Skill que ensina o Claude a escrever textos de venda. Frameworks profissionais para landing pages, home e preços.',
   },

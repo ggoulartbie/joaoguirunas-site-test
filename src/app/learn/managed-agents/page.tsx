@@ -8,14 +8,14 @@ export const metadata: Metadata = {
     'Como a Anthropic desacoplou o "cérebro" das "mãos" em sistemas de agentes. Arquitetura Session/Harness/Sandbox com 60% de redução no tempo de resposta.',
   alternates: { canonical: `${siteConfig.url}/learn/managed-agents` },
   openGraph: {
-    title: 'Managed Agents — Anthropic Engineering | GrowthSales Open Source',
+    title: 'Managed Agents — Anthropic Engineering | João Guirunas',
     description:
       'Como a Anthropic desacoplou o "cérebro" das "mãos" em sistemas de agentes. Arquitetura Session/Harness/Sandbox com 60% de redução no tempo de resposta.',
     url: `${siteConfig.url}/learn/managed-agents`,
     images: [{ url: `${siteConfig.url}/images/og-default.png`, width: 1200, height: 630 }],
   },
   twitter: {
-    title: 'Managed Agents — Anthropic Engineering | GrowthSales Open Source',
+    title: 'Managed Agents — Anthropic Engineering | João Guirunas',
     description:
       'Como a Anthropic desacoplou o "cérebro" das "mãos" em sistemas de agentes. Arquitetura Session/Harness/Sandbox com 60% de redução no tempo de resposta.',
   },

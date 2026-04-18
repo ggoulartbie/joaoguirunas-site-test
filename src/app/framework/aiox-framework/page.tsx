@@ -8,14 +8,14 @@ export const metadata: Metadata = {
     'Sistema de orquestração de agentes com squads e personas. Defina workflows, delegue tasks e escale sua operação.',
   alternates: { canonical: `${siteConfig.url}/framework/aiox-framework` },
   openGraph: {
-    title: 'AIOX Framework | GrowthSales Open Source',
+    title: 'AIOX Framework | João Guirunas',
     description:
       'Sistema de orquestração de agentes com squads e personas. Defina workflows, delegue tasks e escale sua operação.',
     url: `${siteConfig.url}/framework/aiox-framework`,
     images: [{ url: `${siteConfig.url}/images/og-default.png`, width: 1200, height: 630 }],
   },
   twitter: {
-    title: 'AIOX Framework | GrowthSales Open Source',
+    title: 'AIOX Framework | João Guirunas',
     description:
       'Sistema de orquestração de agentes com squads e personas. Defina workflows, delegue tasks e escale sua operação.',
   },

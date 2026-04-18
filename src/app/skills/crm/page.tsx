@@ -8,14 +8,14 @@ export const metadata: Metadata = {
     'Crie seu CRM do zero sem programação. Pipelines customizados com automações de IA integradas.',
   alternates: { canonical: `${siteConfig.url}/skills/crm` },
   openGraph: {
-    title: 'CRM Personalizado com Claude Code | GrowthSales Open Source',
+    title: 'CRM Personalizado com Claude Code | João Guirunas',
     description:
       'Crie seu CRM do zero sem programação. Pipelines customizados com automações de IA integradas.',
     url: `${siteConfig.url}/skills/crm`,
     images: [{ url: `${siteConfig.url}/images/og-default.png`, width: 1200, height: 630 }],
   },
   twitter: {
-    title: 'CRM Personalizado com Claude Code | GrowthSales Open Source',
+    title: 'CRM Personalizado com Claude Code | João Guirunas',
     description:
       'Crie seu CRM do zero sem programação. Pipelines customizados com automações de IA integradas.',
   },

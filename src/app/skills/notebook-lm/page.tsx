@@ -8,14 +8,14 @@ export const metadata: Metadata = {
     'O maior hack de 2026. Combine Claude Code com NotebookLM como sistema RAG gratuito e potente.',
   alternates: { canonical: `${siteConfig.url}/skills/notebook-lm` },
   openGraph: {
-    title: 'Claude Code + NotebookLM | GrowthSales Open Source',
+    title: 'Claude Code + NotebookLM | João Guirunas',
     description:
       'O maior hack de 2026. Combine Claude Code com NotebookLM como sistema RAG gratuito e potente.',
     url: `${siteConfig.url}/skills/notebook-lm`,
     images: [{ url: `${siteConfig.url}/images/og-default.png`, width: 1200, height: 630 }],
   },
   twitter: {
-    title: 'Claude Code + NotebookLM | GrowthSales Open Source',
+    title: 'Claude Code + NotebookLM | João Guirunas',
     description:
       'O maior hack de 2026. Combine Claude Code com NotebookLM como sistema RAG gratuito e potente.',
   },

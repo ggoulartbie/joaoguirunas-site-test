@@ -8,14 +8,14 @@ export const metadata: Metadata = {
     'Os repositórios GitHub que fazem o Claude Code performar até 10x mais. Curadoria dos melhores da comunidade.',
   alternates: { canonical: `${siteConfig.url}/learn/github-repos` },
   openGraph: {
-    title: '8 Repositórios Essenciais do Claude Code | GrowthSales Open Source',
+    title: '8 Repositórios Essenciais do Claude Code | João Guirunas',
     description:
       'Os repositórios GitHub que fazem o Claude Code performar até 10x mais. Curadoria dos melhores da comunidade.',
     url: `${siteConfig.url}/learn/github-repos`,
     images: [{ url: `${siteConfig.url}/images/og-default.png`, width: 1200, height: 630 }],
   },
   twitter: {
-    title: '8 Repositórios Essenciais do Claude Code | GrowthSales Open Source',
+    title: '8 Repositórios Essenciais do Claude Code | João Guirunas',
     description:
       'Os repositórios GitHub que fazem o Claude Code performar até 10x mais. Curadoria dos melhores da comunidade.',
   },

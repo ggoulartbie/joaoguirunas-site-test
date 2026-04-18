@@ -8,14 +8,14 @@ export const metadata: Metadata = {
     'Dashboard isométrico real-time de agentes autônomos. Visualize performance, tasks e métricas de todos os agentes em execução.',
   alternates: { canonical: `${siteConfig.url}/monitor/aiox-monitor` },
   openGraph: {
-    title: 'AIOX Monitor | GrowthSales Open Source',
+    title: 'AIOX Monitor | João Guirunas',
     description:
       'Dashboard isométrico real-time de agentes autônomos. Visualize performance, tasks e métricas de todos os agentes em execução.',
     url: `${siteConfig.url}/monitor/aiox-monitor`,
     images: [{ url: `${siteConfig.url}/images/og-default.png`, width: 1200, height: 630 }],
   },
   twitter: {
-    title: 'AIOX Monitor | GrowthSales Open Source',
+    title: 'AIOX Monitor | João Guirunas',
     description:
       'Dashboard isométrico real-time de agentes autônomos. Visualize performance, tasks e métricas de todos os agentes em execução.',
   },

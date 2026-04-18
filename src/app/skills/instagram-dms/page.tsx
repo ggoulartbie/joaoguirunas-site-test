@@ -8,14 +8,14 @@ export const metadata: Metadata = {
     'Configure o Claude como vendedor 24/7 no Instagram. Responde directs automaticamente com sua chave de API.',
   alternates: { canonical: `${siteConfig.url}/skills/instagram-dms` },
   openGraph: {
-    title: 'Claude Respondendo DMs do Instagram | GrowthSales Open Source',
+    title: 'Claude Respondendo DMs do Instagram | João Guirunas',
     description:
       'Configure o Claude como vendedor 24/7 no Instagram. Responde directs automaticamente com sua chave de API.',
     url: `${siteConfig.url}/skills/instagram-dms`,
     images: [{ url: `${siteConfig.url}/images/og-default.png`, width: 1200, height: 630 }],
   },
   twitter: {
-    title: 'Claude Respondendo DMs do Instagram | GrowthSales Open Source',
+    title: 'Claude Respondendo DMs do Instagram | João Guirunas',
     description:
       'Configure o Claude como vendedor 24/7 no Instagram. Responde directs automaticamente com sua chave de API.',
   },
