@@ -15,19 +15,24 @@ export function Header() {
         <div className="flex h-14 sm:h-16 items-center justify-between">
           <Link
             href="/"
-            className="flex items-center gap-0.5 sm:gap-1 text-white hover:opacity-90 transition-opacity"
-            aria-label="Ir para pagina inicial do GrowthSales AI"
+            className="flex items-center gap-2 text-white hover:opacity-90 transition-opacity"
+            aria-label="Ir para página inicial de João Guirunas"
           >
-            <Image
-              src="/logo.svg"
-              alt="Logo GrowthSales AI"
-              width={28}
-              height={28}
-              className="h-6 sm:h-7 w-6 sm:w-7"
-            />
-            <span className="text-base sm:text-lg tracking-tight">
-              <span className="font-extrabold">Growth</span>
-              <span className="font-semibold text-[#FF4400]">Sales</span>
+            <div
+              className="w-7 h-7 rounded-full overflow-hidden flex-shrink-0"
+              style={{ boxShadow: '0 0 0 2px #FF4400' }}
+            >
+              <Image
+                src="/images/joao-guirunas-profile.jpg"
+                alt="João Guirunas"
+                width={28}
+                height={28}
+                className="w-full h-full object-cover object-[center_20%]"
+              />
+            </div>
+            <span className="text-xs font-semibold tracking-[0.20em] uppercase">
+              <span className="text-white">JOÃO</span>
+              <span style={{ color: '#FF4400' }}>GUIRUNAS</span>
             </span>
           </Link>
 

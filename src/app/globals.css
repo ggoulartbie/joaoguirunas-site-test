@@ -21,13 +21,14 @@
   --color-border: rgba(255, 255, 255, 0.10);
 
   /* Fonts */
-  --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+  --font-sans: var(--font-sans, 'Geist', system-ui, -apple-system, sans-serif);
   --font-mono: 'Geist Mono', 'Roboto Mono', ui-monospace, monospace;
+  --font-display: var(--font-display, 'Space Grotesk', system-ui, sans-serif);
 
   /* BrandBook Font Aliases (compatibility) */
   --font-bb-sans: var(--font-sans);
   --font-bb-mono: var(--font-mono);
-  --font-bb-display: var(--font-sans);
+  --font-bb-display: var(--font-display);
 
   /* BrandBook Color Aliases (compatibility) */
   --bb-dark: #08080C;

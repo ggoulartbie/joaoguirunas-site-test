@@ -1,15 +1,20 @@
 import type { Metadata } from 'next';
-import { Inter, Geist_Mono } from 'next/font/google';
-import { Header } from '@/shared/components/layout/Header';
-import { Footer } from '@/shared/components/layout/Footer';
+import { Geist, Geist_Mono, Space_Grotesk } from 'next/font/google';
+import { SiteChrome } from '@/shared/components/layout/SiteChrome';
 import { siteConfig, organizationJsonLd, websiteJsonLd } from '@/config/site';
 import './globals.css';
 
-const inter = Inter({
+const geist = Geist({
   subsets: ['latin'],
   variable: '--font-sans',
   display: 'swap',
-  weight: ['400', '500', '600', '700', '800'],
+});
+
+const spaceGrotesk = Space_Grotesk({
+  subsets: ['latin'],
+  variable: '--font-display',
+  display: 'swap',
+  weight: ['700'],
 });
 
 const geistMono = Geist_Mono({
@@ -70,7 +75,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang={siteConfig.lang} className={`dark ${inter.variable} ${geistMono.variable}`}>
+    <html lang={siteConfig.lang} className={`dark ${geist.variable} ${geistMono.variable} ${spaceGrotesk.variable}`}>
       <head>
         {/* Google Analytics */}
         <script async src="https://www.googletagmanager.com/gtag/js?id=G-3JD3TYNF7V" />
@@ -94,18 +99,7 @@ export default function RootLayout({
         />
       </head>
       <body className="min-h-screen bg-[#08080C] text-white antialiased">
-        {/* [FIX A11Y] Skip link para navegacao por teclado */}
-        <a href="#main-content" className="skip-link">
-          Pular para conteudo
-        </a>
-
-        <Header />
-
-        <main id="main-content" className="pt-16">
-          {children}
-        </main>
-
-        <Footer />
+        <SiteChrome>{children}</SiteChrome>
       </body>
     </html>
   );
