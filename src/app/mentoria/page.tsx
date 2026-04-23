@@ -25,6 +25,28 @@ export const metadata: Metadata = {
   },
 };
 
+const courseJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Course',
+  name: 'Mentoria Claude Code + AIOX',
+  description:
+    'Mentoria intensiva e prática para criar, configurar e orquestrar agentes de IA autônomos com Claude Code e o framework AIOX. Turmas de no máximo 12 pessoas.',
+  provider: {
+    '@type': 'Organization',
+    name: 'GrowthSales.ai',
+    url: 'https://www.growthsales.ai',
+  },
+  inLanguage: 'pt-BR',
+  url: 'https://joaoguirunas.com/mentoria',
+  offers: {
+    '@type': 'Offer',
+    price: '8700',
+    priceCurrency: 'BRL',
+    availability: 'https://schema.org/LimitedAvailability',
+    url: 'https://joaoguirunas.com/mentoria#inscricao',
+  },
+};
+
 function CtaButton({ label, variant = 'primary', className = '' }: { label: string; variant?: 'primary' | 'secondary'; className?: string }) {
   if (variant === 'secondary') {
     return (
@@ -66,6 +88,10 @@ function SectionBadge({ label }: { label: string }) {
 export default function MentoriaPage() {
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(courseJsonLd) }}
+      />
       <MentoriaNav />
       <SectionDots />
       {/* ===== HERO ===== */}
@@ -103,7 +129,7 @@ export default function MentoriaPage() {
                   </span>
                 </div>
               </div>
-              <h1 className="text-2xl font-bold text-white leading-[1.15] tracking-tight mb-3" style={DISPLAY_FONT}>
+              <h1 aria-hidden="true" className="text-2xl font-bold text-white leading-[1.15] tracking-tight mb-3" style={DISPLAY_FONT}>
                 Tenha uma Equipe de Agentes de IA{' '}
                 <span className="text-[#FF4400]">Trabalhando Para Você 24/7</span>
               </h1>

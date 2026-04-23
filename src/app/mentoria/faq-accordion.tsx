@@ -28,9 +28,12 @@ export function FaqAccordion() {
       {faqItems.map((item, i) => (
         <div key={i} className="glass-card overflow-hidden">
           <button
+            type="button"
             onClick={() => setOpenIndex(openIndex === i ? null : i)}
             className="flex items-center justify-between w-full cursor-pointer p-4 sm:p-6 lg:p-8 text-left gap-3"
+            id={`faq-btn-${i}`}
             aria-expanded={openIndex === i}
+            aria-controls={`faq-answer-${i}`}
           >
             <h3 className={`text-sm sm:text-lg font-semibold transition-colors leading-tight ${openIndex === i ? 'text-[#FF4400]' : 'text-white'}`}>
               {item.q}
@@ -47,7 +50,12 @@ export function FaqAccordion() {
             </svg>
           </button>
           {openIndex === i && (
-            <div className="px-4 sm:px-6 lg:px-8 pb-4 sm:pb-6 lg:pb-8 text-white/60 leading-relaxed text-sm sm:text-base">
+            <div
+              id={`faq-answer-${i}`}
+              role="region"
+              aria-labelledby={`faq-btn-${i}`}
+              className="px-4 sm:px-6 lg:px-8 pb-4 sm:pb-6 lg:pb-8 text-white/60 leading-relaxed text-sm sm:text-base"
+            >
               {item.a}
             </div>
           )}

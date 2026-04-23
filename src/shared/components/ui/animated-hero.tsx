@@ -40,6 +40,7 @@ export function AnimatedHero() {
             width={56}
             height={56}
             className="w-full h-full object-cover object-[center_20%]"
+            priority
           />
         </div>
         <span className="text-xs font-semibold tracking-[0.18em] uppercase">
