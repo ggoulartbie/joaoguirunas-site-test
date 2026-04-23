@@ -5,19 +5,19 @@ import { siteConfig } from '@/config/site';
 export const metadata: Metadata = {
   title: 'n8n Killers Squad | Tutorial de Instalação e Uso — AIOX',
   description:
-    '10 agentes AI especializados para migrar workflows n8n e criar automações via API. Tutorial completo: Claude Code, AIOX e ativação da squad.',
+    '10 agentes AI especializados para migrar workflows n8n e criar automações via API. Tutorial passo a passo: instalação, Claude Code, AIOX e ativação da squad.',
   alternates: { canonical: `${siteConfig.url}/skills/n8n-killers` },
   openGraph: {
     title: 'n8n Killers Squad | Tutorial de Instalação e Uso — AIOX',
     description:
-      '10 agentes AI especializados para migrar workflows n8n e criar automações via API. Tutorial completo: Claude Code, AIOX e ativação da squad.',
+      '10 agentes AI especializados para migrar workflows n8n e criar automações via API. Tutorial passo a passo: instalação, Claude Code, AIOX e ativação da squad.',
     url: `${siteConfig.url}/skills/n8n-killers`,
     images: [{ url: `${siteConfig.url}/images/og-default.png`, width: 1200, height: 630 }],
   },
   twitter: {
     title: 'n8n Killers Squad | Tutorial de Instalação e Uso — AIOX',
     description:
-      '10 agentes AI especializados para migrar workflows n8n e criar automações via API. Tutorial completo: Claude Code, AIOX e ativação da squad.',
+      '10 agentes AI especializados para migrar workflows n8n e criar automações via API. Tutorial passo a passo: instalação, Claude Code, AIOX e ativação da squad.',
   },
 };
 
