@@ -3,21 +3,21 @@ import { SkillPage } from '@/shared/components/ui/SkillPage';
 import { siteConfig } from '@/config/site';
 
 export const metadata: Metadata = {
-  title: 'Copywriting Skill para Claude Code',
+  title: 'Copywriting com IA — Textos de Venda via Claude Code',
   description:
-    'Skill que ensina o Claude a escrever textos de venda. Frameworks profissionais para landing pages, home e preços.',
+    'Skill open source para gerar copies de alta conversão com frameworks de copywriting (AIDA, PAS, BAB) via Claude Code. Para vendedores e marketeiros.',
   alternates: { canonical: `${siteConfig.url}/skills/copywriting` },
   openGraph: {
-    title: 'Copywriting Skill para Claude Code | João Guirunas',
+    title: 'Copywriting com IA — Textos de Venda via Claude Code | João Guirunas',
     description:
-      'Skill que ensina o Claude a escrever textos de venda. Frameworks profissionais para landing pages, home e preços.',
+      'Skill open source para gerar copies de alta conversão com frameworks de copywriting (AIDA, PAS, BAB) via Claude Code. Para vendedores e marketeiros.',
     url: `${siteConfig.url}/skills/copywriting`,
     images: [{ url: `${siteConfig.url}/images/og-default.png`, width: 1200, height: 630 }],
   },
   twitter: {
-    title: 'Copywriting Skill para Claude Code | João Guirunas',
+    title: 'Copywriting com IA — Textos de Venda via Claude Code | João Guirunas',
     description:
-      'Skill que ensina o Claude a escrever textos de venda. Frameworks profissionais para landing pages, home e preços.',
+      'Skill open source para gerar copies de alta conversão com frameworks de copywriting (AIDA, PAS, BAB) via Claude Code. Para vendedores e marketeiros.',
   },
 };
 

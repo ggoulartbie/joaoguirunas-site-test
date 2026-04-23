@@ -3,21 +3,21 @@ import { SkillPage } from '@/shared/components/ui/SkillPage';
 import { siteConfig } from '@/config/site';
 
 export const metadata: Metadata = {
-  title: 'Setup Claude Code',
+  title: 'Setup Claude Code — Guia Completo de Configuração CLI',
   description:
-    'Guia completo de configuração avançada. Do básico ao expert em Claude Code CLI.',
+    'Guia prático para configurar o Claude Code CLI: instalação, skills, agents e integrações. Do zero ao time de agentes em produção com exemplos reais.',
   alternates: { canonical: `${siteConfig.url}/setup/claude-code` },
   openGraph: {
-    title: 'Setup Claude Code | João Guirunas',
+    title: 'Setup Claude Code — Guia Completo de Configuração CLI | João Guirunas',
     description:
-      'Guia completo de configuração avançada. Do básico ao expert em Claude Code CLI.',
+      'Guia prático para configurar o Claude Code CLI: instalação, skills, agents e integrações. Do zero ao time de agentes em produção com exemplos reais.',
     url: `${siteConfig.url}/setup/claude-code`,
     images: [{ url: `${siteConfig.url}/images/og-default.png`, width: 1200, height: 630 }],
   },
   twitter: {
-    title: 'Setup Claude Code | João Guirunas',
+    title: 'Setup Claude Code — Guia Completo de Configuração CLI | João Guirunas',
     description:
-      'Guia completo de configuração avançada. Do básico ao expert em Claude Code CLI.',
+      'Guia prático para configurar o Claude Code CLI: instalação, skills, agents e integrações. Do zero ao time de agentes em produção com exemplos reais.',
   },
 };
 

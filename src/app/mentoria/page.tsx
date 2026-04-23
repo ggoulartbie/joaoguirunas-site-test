@@ -14,11 +14,20 @@ const INSCRICAO_ANCHOR = '#inscricao';
 const DISPLAY_FONT = { fontFamily: "'TASAOrbiter', var(--font-bb-display), sans-serif" } as const;
 
 export const metadata: Metadata = {
-  title: 'Mentoria Claude Code + AIOX',
+  title: 'Mentoria Claude Code + AIOX — Agentes IA na Prática',
   description:
-    'Tenha uma equipe de agentes de IA trabalhando para você. Mentoria intensiva e prática com turmas de no máximo 12 pessoas em Florianópolis.',
+    'Mentoria intensiva e prática em Florianópolis. Aprenda a criar e orquestrar agentes de IA com Claude Code e o framework AIOX. Turmas de até 12 pessoas.',
   openGraph: {
+    title: 'Mentoria Claude Code + AIOX — Agentes IA na Prática | João Guirunas',
+    description:
+      'Mentoria intensiva e prática em Florianópolis. Aprenda a criar e orquestrar agentes de IA com Claude Code e o framework AIOX. Turmas de até 12 pessoas.',
     images: [{ url: '/images/mentoria-hero.png', width: 1200, height: 630 }],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Mentoria Claude Code + AIOX — Agentes IA na Prática | João Guirunas',
+    description:
+      'Mentoria intensiva e prática em Florianópolis. Aprenda a criar e orquestrar agentes de IA com Claude Code e o framework AIOX. Turmas de até 12 pessoas.',
   },
   alternates: {
     canonical: '/mentoria',

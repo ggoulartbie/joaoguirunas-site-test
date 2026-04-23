@@ -3,21 +3,21 @@ import { SkillPage } from '@/shared/components/ui/SkillPage';
 import { siteConfig } from '@/config/site';
 
 export const metadata: Metadata = {
-  title: 'CRM Personalizado com Claude Code',
+  title: 'CRM com Claude Code — Gestão de Clientes sem Código',
   description:
-    'Crie seu CRM do zero sem programação. Pipelines customizados com automações de IA integradas.',
+    'CRM no-code construído com Claude Code. Automatize funil, pipeline e follow-up de vendas com agentes de IA. Skill open source, pronto para integrar.',
   alternates: { canonical: `${siteConfig.url}/skills/crm` },
   openGraph: {
-    title: 'CRM Personalizado com Claude Code | João Guirunas',
+    title: 'CRM com Claude Code — Gestão de Clientes sem Código | João Guirunas',
     description:
-      'Crie seu CRM do zero sem programação. Pipelines customizados com automações de IA integradas.',
+      'CRM no-code construído com Claude Code. Automatize funil, pipeline e follow-up de vendas com agentes de IA. Skill open source, pronto para integrar.',
     url: `${siteConfig.url}/skills/crm`,
     images: [{ url: `${siteConfig.url}/images/og-default.png`, width: 1200, height: 630 }],
   },
   twitter: {
-    title: 'CRM Personalizado com Claude Code | João Guirunas',
+    title: 'CRM com Claude Code — Gestão de Clientes sem Código | João Guirunas',
     description:
-      'Crie seu CRM do zero sem programação. Pipelines customizados com automações de IA integradas.',
+      'CRM no-code construído com Claude Code. Automatize funil, pipeline e follow-up de vendas com agentes de IA. Skill open source, pronto para integrar.',
   },
 };
 

@@ -3,21 +3,21 @@ import { SkillPage } from '@/shared/components/ui/SkillPage';
 import { siteConfig } from '@/config/site';
 
 export const metadata: Metadata = {
-  title: 'AIOX Framework',
+  title: 'AIOX Framework — Orquestração de Agentes Claude Code',
   description:
-    'Sistema de orquestração de agentes com squads e personas. Defina workflows, delegue tasks e escale sua operação.',
+    'Framework open source para orquestrar squads de agentes autônomos com Claude Code. Personas, coordenação inter-agentes e workflows produtivos para negócios.',
   alternates: { canonical: `${siteConfig.url}/framework/aiox-framework` },
   openGraph: {
-    title: 'AIOX Framework | João Guirunas',
+    title: 'AIOX Framework — Orquestração de Agentes Claude Code | João Guirunas',
     description:
-      'Sistema de orquestração de agentes com squads e personas. Defina workflows, delegue tasks e escale sua operação.',
+      'Framework open source para orquestrar squads de agentes autônomos com Claude Code. Personas, coordenação inter-agentes e workflows produtivos para negócios.',
     url: `${siteConfig.url}/framework/aiox-framework`,
     images: [{ url: `${siteConfig.url}/images/og-default.png`, width: 1200, height: 630 }],
   },
   twitter: {
-    title: 'AIOX Framework | João Guirunas',
+    title: 'AIOX Framework — Orquestração de Agentes Claude Code | João Guirunas',
     description:
-      'Sistema de orquestração de agentes com squads e personas. Defina workflows, delegue tasks e escale sua operação.',
+      'Framework open source para orquestrar squads de agentes autônomos com Claude Code. Personas, coordenação inter-agentes e workflows produtivos para negócios.',
   },
 };
 

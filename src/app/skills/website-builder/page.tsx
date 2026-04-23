@@ -3,21 +3,21 @@ import { SkillPage } from '@/shared/components/ui/SkillPage';
 import { siteConfig } from '@/config/site';
 
 export const metadata: Metadata = {
-  title: 'Website Builder com Claude Code',
+  title: 'Website Builder — Sites com Claude Code e 21st.dev',
   description:
-    'Crie sites profissionais com Claude Code + 21st.dev. Do zero ao deploy em minutos, sem experiência prévia.',
+    'Crie landing pages e sites completos usando Claude Code com componentes do 21st.dev. Skill open source para desenvolvedores e equipes de marketing.',
   alternates: { canonical: `${siteConfig.url}/skills/website-builder` },
   openGraph: {
-    title: 'Website Builder com Claude Code | João Guirunas',
+    title: 'Website Builder — Sites com Claude Code e 21st.dev | João Guirunas',
     description:
-      'Crie sites profissionais com Claude Code + 21st.dev. Do zero ao deploy em minutos, sem experiência prévia.',
+      'Crie landing pages e sites completos usando Claude Code com componentes do 21st.dev. Skill open source para desenvolvedores e equipes de marketing.',
     url: `${siteConfig.url}/skills/website-builder`,
     images: [{ url: `${siteConfig.url}/images/og-default.png`, width: 1200, height: 630 }],
   },
   twitter: {
-    title: 'Website Builder com Claude Code | João Guirunas',
+    title: 'Website Builder — Sites com Claude Code e 21st.dev | João Guirunas',
     description:
-      'Crie sites profissionais com Claude Code + 21st.dev. Do zero ao deploy em minutos, sem experiência prévia.',
+      'Crie landing pages e sites completos usando Claude Code com componentes do 21st.dev. Skill open source para desenvolvedores e equipes de marketing.',
   },
 };
 

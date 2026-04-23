@@ -2,11 +2,20 @@ import type { Metadata } from 'next';
 import { SkillPage } from '@/shared/components/ui';
 
 export const metadata: Metadata = {
-  title: 'Claude Agent Teams',
+  title: 'Claude Agent Teams — Squads de Agentes IA com Claude',
   description:
-    '27 agentes pré-configurados em 3 squads com smart-memory e orquestração via /team-os. Drop-in para qualquer projeto Claude Code.',
+    'Coordene times de agentes Claude Code para tarefas complexas. Skill open source para orquestração multi-agente com comunicação e delegação automáticas.',
   openGraph: {
-    images: ['/images/og-default.png'],
+    title: 'Claude Agent Teams — Squads de Agentes IA com Claude | João Guirunas',
+    description:
+      'Coordene times de agentes Claude Code para tarefas complexas. Skill open source para orquestração multi-agente com comunicação e delegação automáticas.',
+    images: [{ url: '/images/og-default.png', width: 1200, height: 630 }],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Claude Agent Teams — Squads de Agentes IA com Claude | João Guirunas',
+    description:
+      'Coordene times de agentes Claude Code para tarefas complexas. Skill open source para orquestração multi-agente com comunicação e delegação automáticas.',
   },
   alternates: {
     canonical: '/skills/claude-agent-teams',
