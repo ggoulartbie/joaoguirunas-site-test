@@ -138,7 +138,7 @@ export default function MentoriaPage() {
                   </span>
                 </div>
               </div>
-              <h1 aria-hidden="true" className="text-2xl font-bold text-white leading-[1.15] tracking-tight mb-3" style={DISPLAY_FONT}>
+              <h1 className="text-2xl font-bold text-white leading-[1.15] tracking-tight mb-3" style={DISPLAY_FONT}>
                 Tenha uma Equipe de Agentes de IA{' '}
                 <span className="text-[#FF4400]">Trabalhando Para Você 24/7</span>
               </h1>
