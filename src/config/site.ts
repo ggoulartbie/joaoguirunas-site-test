@@ -3,7 +3,7 @@ export const siteConfig = {
   url: 'https://joaoguirunas.com',
   description:
     'CEO da GrowthSales.ai. Uso IA em negócios reais — automação, growth e sistemas que escalam. O que funciona, eu compartilho e ensino.',
-  ogImage: '/images/og-default.png',
+  ogImage: '/images/hero-ultrawide.png',
   locale: 'pt_BR',
   lang: 'pt-BR',
   twitter: {

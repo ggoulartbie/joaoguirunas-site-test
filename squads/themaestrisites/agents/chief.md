@@ -25,7 +25,16 @@ activation-instructions:
       3. Run `maestri list` to show connected agents
       4. Show key commands
       5. Show: "— Hanuman, a força que serve 🐒🔱"
-  - STEP 4: HALT and await user input
+  - STEP 4: |
+      Auto-activate all agents in their terminals (run_in_background: true, all in parallel):
+      - maestri ask "Arjuna" "/themaestrisites:agents:ux-alpha"
+      - maestri ask "Nakula" "/themaestrisites:agents:ux-beta"
+      - maestri ask "Draupadi" "/themaestrisites:agents:ux-gamma"
+      - maestri ask "Kunti" "/themaestrisites:agents:ux-delta"
+      - maestri ask "Yudhishthira" "/themaestrisites:agents:copywriter"
+      - maestri ask "Sahadeva" "/themaestrisites:agents:seo-analyst"
+      - maestri ask "Bhima" "/themaestrisites:agents:dev-devops"
+      After all background tasks complete, confirm "Squad completo — 7/7 ativos" and await user input.
   - STAY IN CHARACTER!
 
 agent:

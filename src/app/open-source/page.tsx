@@ -54,6 +54,7 @@ const skills = [
   { title: 'AIOX Framework', description: 'Sistema de orquestração de agentes com squads e personas. Defina workflows, delegue tasks e escale sua operação.', icon: 'framework', href: '/framework/aiox-framework', categoryId: 'squads', categoryLabel: 'Squads', author: '@SynkraAI' },
   { title: 'Xquads Squads', description: '12 squads especializadas com 96+ agentes. A maior coleção de squads AIOX da comunidade.', icon: 'community', href: '/squads/xquads', categoryId: 'squads', categoryLabel: 'Squads', author: '@rafa.grandi' },
   { title: 'n8n Killers Squad', description: '10 agentes AI para migrar workflows n8n e criar automações via API. Dexter, Hannibal, Bourne, Lisbeth e mais.', icon: 'automation', href: '/skills/n8n-killers', categoryId: 'squads', categoryLabel: 'Squads', author: '@joaoguirunas' },
+  { title: 'Claude Agent Teams', description: '27 agentes pré-configurados em 3 squads + smart-memory + /team-os. Drop-in para qualquer projeto Claude Code.', icon: 'agents', href: '/skills/claude-agent-teams', categoryId: 'squads', categoryLabel: 'Squads', author: '@joaoguirunas' },
   { title: 'AIOX Monitor', description: 'Dashboard isométrico real-time de agentes autônomos. Visualize performance, tasks e métricas.', icon: 'monitor', href: '/monitor/aiox-monitor', categoryId: 'apps', categoryLabel: 'Apps', author: '@joaoguirunas' },
   { title: 'Maestri', description: 'Comunicação inter-agentes entre terminais. Conecte múltiplos Claude Code para colaboração em tempo real.', icon: 'message', href: '/tools/maestri', categoryId: 'apps', categoryLabel: 'Apps', author: 'Maestri Team' },
   { title: 'Setup Claude Code', description: 'Guia completo de configuração avançada. Do básico ao expert em Claude Code CLI.', icon: 'setup', href: '/setup/claude-code', categoryId: 'skills', categoryLabel: 'Skills', author: '@joaoguirunas' },
@@ -95,7 +96,7 @@ const skills = [
 ];
 
 const stats = [
-  { value: '40', label: 'Recursos' },
+  { value: '41', label: 'Recursos' },
   { value: '100%', label: 'Open Source' },
   { value: '13', label: 'Cursos Curados' },
   { value: '24/7', label: 'Agentes Autônomos' },
@@ -107,6 +108,7 @@ function getCategoryColor(categoryId: string): string {
 
 export default function HomePage() {
   const [activeFilter, setActiveFilter] = useState('all');
+  const [searchQuery, setSearchQuery] = useState('');
 
   const handleSmoothScroll = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
     if (href.startsWith('#')) {
@@ -201,6 +203,38 @@ export default function HomePage() {
             </p>
           </div>
 
+          {/* Search */}
+          <div className="relative max-w-md mx-auto mb-8">
+            <div className="relative">
+              <svg
+                className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-white/40 pointer-events-none"
+                fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true"
+              >
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+              </svg>
+              <input
+                type="search"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                placeholder="Buscar skills, squads, apps..."
+                className="w-full bg-white/5 border border-white/10 text-white placeholder-white/30 pl-11 pr-10 py-3 text-sm focus:outline-none focus:border-[#FF4400]/50 focus:bg-white/8 transition-all"
+                style={{ fontFamily: "'Geist Mono', monospace" }}
+                aria-label="Buscar recursos"
+              />
+              {searchQuery && (
+                <button
+                  onClick={() => setSearchQuery('')}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-white/40 hover:text-white/70 transition-colors"
+                  aria-label="Limpar busca"
+                >
+                  <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                </button>
+              )}
+            </div>
+          </div>
+
           {/* Category Filters */}
           <div className="flex flex-wrap justify-center gap-3 mb-12">
             <button
@@ -231,9 +265,40 @@ export default function HomePage() {
           </div>
 
           {/* Grid */}
-          <div className="grid gap-4 sm:gap-5 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-            {skills
-              .filter((skill) => activeFilter === 'all' || skill.categoryId === activeFilter)
+          {(() => {
+            const q = searchQuery.toLowerCase().trim();
+            const filtered = skills.filter((skill) => {
+              const matchesCategory = activeFilter === 'all' || skill.categoryId === activeFilter;
+              const matchesSearch = !q || skill.title.toLowerCase().includes(q) || skill.description.toLowerCase().includes(q) || skill.author.toLowerCase().includes(q);
+              return matchesCategory && matchesSearch;
+            });
+
+            if (filtered.length === 0) {
+              return (
+                <div className="text-center py-20">
+                  <p className="text-white/40 mb-4" style={{ fontFamily: "'Geist Mono', monospace", fontSize: '0.8rem' }}>
+                    Nenhum resultado para &ldquo;{searchQuery}&rdquo;
+                  </p>
+                  <button
+                    onClick={() => { setSearchQuery(''); setActiveFilter('all'); }}
+                    className="text-[#FF4400] hover:text-[#FF5C10] transition-colors text-sm underline underline-offset-4"
+                    style={{ fontFamily: "'Geist Mono', monospace" }}
+                  >
+                    Limpar filtros
+                  </button>
+                </div>
+              );
+            }
+
+            return (
+              <>
+                {q && (
+                  <p className="text-center text-white/40 mb-6 text-sm" style={{ fontFamily: "'Geist Mono', monospace" }}>
+                    {filtered.length} resultado{filtered.length !== 1 ? 's' : ''} para &ldquo;{searchQuery}&rdquo;
+                  </p>
+                )}
+                <div className="grid gap-4 sm:gap-5 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+                  {filtered
               .map((skill) => (
                 <Link
                   key={skill.title}
@@ -288,8 +353,11 @@ export default function HomePage() {
                     </div>
                   </div>
                 </Link>
-              ))}
-          </div>
+                  ))}
+                </div>
+              </>
+            );
+          })()}
         </div>
       </section>
 

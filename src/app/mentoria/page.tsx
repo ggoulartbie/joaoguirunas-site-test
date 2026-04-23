@@ -18,7 +18,7 @@ export const metadata: Metadata = {
   description:
     'Tenha uma equipe de agentes de IA trabalhando para você. Mentoria intensiva e prática com turmas de no máximo 12 pessoas em Florianópolis.',
   openGraph: {
-    images: [{ url: '/images/mentoria-og.png', width: 1200, height: 630 }],
+    images: [{ url: '/images/mentoria-hero.png', width: 1200, height: 630 }],
   },
   alternates: {
     canonical: '/mentoria',

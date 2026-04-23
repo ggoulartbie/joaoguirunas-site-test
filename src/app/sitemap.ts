@@ -30,6 +30,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { path: '/tools/animejs',             priority: 0.6, freq: 'monthly' },
     { path: '/tools/instagram-cli',       priority: 0.6, freq: 'monthly' },
     // Skills
+    { path: '/skills/claude-agent-teams', priority: 0.7, freq: 'monthly' },
     { path: '/skills/copywriting',        priority: 0.6, freq: 'monthly' },
     { path: '/skills/website-builder',    priority: 0.6, freq: 'monthly' },
     { path: '/skills/crm',                priority: 0.6, freq: 'monthly' },
