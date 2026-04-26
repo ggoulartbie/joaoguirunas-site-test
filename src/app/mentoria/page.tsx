@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import Image from 'next/image';
 import { Icon } from '@/shared/components/ui';
+import { GrowthWatermark } from '@/shared/components/ui/growth-watermark';
 import { FaqAccordion } from './faq-accordion';
 import { MentorshipFeatures } from './mentorship-features';
 import { CourseModulesTimeline } from './course-modules-timeline';
@@ -86,11 +87,19 @@ function CtaButton({ label, variant = 'primary', className = '' }: { label: stri
 
 function SectionBadge({ label }: { label: string }) {
   return (
-    <div className="inline-flex items-center gap-2 border border-[#FF4400]/30 bg-[#FF4400]/10 px-3 sm:px-4 py-1.5 mb-4 sm:mb-6">
-      <span className="text-[#FF4400] text-xs sm:text-[0.65rem]" style={{ fontFamily: "'Roboto Mono', var(--font-bb-mono), monospace", textTransform: 'uppercase', letterSpacing: '0.12em', fontWeight: 600 }}>
-        {label}
-      </span>
-    </div>
+    <p
+      className="mb-4 sm:mb-6"
+      style={{
+        fontFamily: 'var(--font-mono)',
+        fontSize: '11px',
+        letterSpacing: '0.16em',
+        textTransform: 'uppercase',
+        color: 'rgba(255, 58, 14, 0.85)',
+        fontWeight: 500,
+      }}
+    >
+      {label}
+    </p>
   );
 }
 
@@ -138,9 +147,11 @@ export default function MentoriaPage() {
                   </span>
                 </div>
               </div>
-              <h1 className="text-2xl font-bold text-white leading-[1.15] tracking-tight mb-3" style={DISPLAY_FONT}>
-                Tenha uma Equipe de Agentes de IA{' '}
-                <span className="text-[#FF4400]">Trabalhando Para Você 24/7</span>
+              <h1 className="text-2xl font-bold text-white leading-[1.15] tracking-tight mb-3">
+                <span style={DISPLAY_FONT}>Tenha uma Equipe de Agentes de IA </span>
+                <span style={{ fontFamily: "var(--font-display-serif)", fontStyle: 'italic', fontWeight: 300, color: '#FF3A0E' }}>
+                  Trabalhando Para Você 24/7
+                </span>
               </h1>
               <p className="text-sm text-white/80 leading-relaxed mb-5">
                 Aprenda a criar, configurar e orquestrar agentes autônomos que executam tarefas complexas para você. <strong className="text-white font-medium">Mentoria intensiva e prática.</strong>
@@ -164,6 +175,7 @@ export default function MentoriaPage() {
 
         {/* DESKTOP: layout overlay original */}
         <div className="relative hidden sm:block min-h-[85vh] overflow-hidden">
+          <GrowthWatermark size={600} className="bottom-0 right-0 translate-x-1/4" />
           <Image
             src="/images/mentoria-hero.png"
             alt="Equipe GrowthSales AI"
@@ -192,9 +204,11 @@ export default function MentoriaPage() {
                     </span>
                   </div>
                 </div>
-                <h1 className="text-3xl lg:text-4xl font-bold text-white leading-[1.15] tracking-tight mb-5" style={DISPLAY_FONT}>
-                  Tenha uma Equipe de Agentes de IA{' '}
-                  <span className="text-[#FF4400]">Trabalhando Para Você 24/7</span>
+                <h1 className="text-3xl lg:text-4xl font-bold text-white leading-[1.15] tracking-tight mb-5">
+                  <span style={DISPLAY_FONT}>Tenha uma Equipe de Agentes de IA </span>
+                  <span style={{ fontFamily: "var(--font-display-serif)", fontStyle: 'italic', fontWeight: 300, color: '#FF3A0E' }}>
+                    Trabalhando Para Você 24/7
+                  </span>
                 </h1>
                 <p className="text-base text-white/80 max-w-lg leading-relaxed mb-8">
                   Aprenda a criar, configurar e orquestrar agentes autônomos que executam tarefas complexas para você — da escrita de código à criação de conteúdo. <strong className="text-white font-medium">Mentoria intensiva e prática.</strong>
@@ -241,7 +255,10 @@ export default function MentoriaPage() {
             ].map((f) => (
               <div key={f.name} className="flex flex-col items-center text-center group">
                 <div className="relative mb-8">
-                  <div className="w-44 h-44 sm:w-56 sm:h-56 lg:w-72 lg:h-72 rounded-full overflow-hidden ring-[3px] ring-[#FF4400]/20 group-hover:ring-[#FF4400]/50 transition-all duration-500 shadow-2xl shadow-[#FF4400]/15">
+                  <div
+                    className="w-44 h-44 sm:w-56 sm:h-56 lg:w-72 lg:h-72 overflow-hidden transition-all duration-500 group-hover:[box-shadow:0_0_32px_rgba(255,58,14,0.18)] group-hover:[border-color:rgba(255,58,14,0.35)]"
+                    style={{ border: '1px solid rgba(255,255,255,0.12)' }}
+                  >
                     <Image src={f.img} alt={`${f.name} - ${f.role}`} width={288} height={288} className="w-full h-full object-cover object-top grayscale group-hover:grayscale-0 transition-all duration-500" />
                   </div>
                 </div>

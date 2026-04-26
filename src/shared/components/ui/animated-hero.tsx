@@ -6,6 +6,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { ArrowRight } from 'lucide-react';
 import { SparklesCore } from '@/shared/components/ui/sparkles';
+import { GrowthWatermark } from './growth-watermark';
 
 const ORANGE = '#FF4400';
 
@@ -21,7 +22,7 @@ export function AnimatedHero() {
   }, [titleNumber, titles]);
 
   return (
-    <div className="w-full bg-black flex flex-col items-center justify-start sm:justify-center min-h-screen overflow-hidden">
+    <div className="w-full bg-black flex flex-col items-center justify-start sm:justify-center min-h-screen overflow-hidden relative">
 
       {/* Eyebrow — foto + nome (mobile: topo; desktop: acima do H1) */}
       <motion.div
@@ -72,12 +73,23 @@ export function AnimatedHero() {
       {/* H1 + CTAs — mobile: order-3 sobrepõe sparkles; desktop: order-2 */}
       <div className="order-3 sm:order-2 relative z-10 flex flex-col items-center text-center px-5 pb-0 w-full max-w-3xl -mt-36 sm:mt-0">
 
+        {/* Eyebrow KV */}
+        <motion.p
+          initial={{ opacity: 0, y: 12 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.05 }}
+          className="text-[11px] tracking-[0.18em] uppercase mb-6"
+          style={{ fontFamily: 'var(--font-mono)', color: 'rgba(255,255,255,0.35)', letterSpacing: '0.18em' }}
+        >
+          João Guirunas · GrowthSales.ai
+        </motion.p>
+
         {/* H1 animado */}
         <motion.h1
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
-          className="relative z-10 text-3xl sm:text-4xl md:text-5xl lg:text-6xl tracking-tighter text-center font-bold font-[family-name:var(--font-display)]"
+          className="relative z-10 text-5xl sm:text-7xl lg:text-[96px] tracking-tighter text-center font-bold font-[family-name:var(--font-display)]"
         >
           <span className="relative flex w-full justify-center pb-2 sm:pb-4">
             <span className="invisible" aria-hidden>aprendo usando</span>
@@ -131,6 +143,8 @@ export function AnimatedHero() {
           </Link>
         </motion.div>
       </div>
+
+      <GrowthWatermark size={500} className="bottom-0 right-0 translate-x-1/4 translate-y-1/4" />
 
       {/* Subheadline — por último */}
       <motion.p

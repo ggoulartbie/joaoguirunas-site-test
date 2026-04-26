@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { Geist, Geist_Mono, Space_Grotesk } from 'next/font/google';
+import { Geist, Geist_Mono, Space_Grotesk, Fraunces } from 'next/font/google';
 import { SiteChrome } from '@/shared/components/layout/SiteChrome';
 import { siteConfig, organizationJsonLd, websiteJsonLd } from '@/config/site';
 import './globals.css';
@@ -22,6 +22,14 @@ const geistMono = Geist_Mono({
   variable: '--font-mono',
   display: 'swap',
   weight: ['400', '500', '600', '700'],
+});
+
+const fraunces = Fraunces({
+  subsets: ['latin'],
+  weight: ['300', '400', '700'],
+  style: ['normal', 'italic'],
+  variable: '--font-display-serif',
+  display: 'swap',
 });
 
 export const metadata: Metadata = {
@@ -75,7 +83,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang={siteConfig.lang} className={`dark ${geist.variable} ${geistMono.variable} ${spaceGrotesk.variable}`}>
+    <html lang={siteConfig.lang} className={`dark ${geist.variable} ${geistMono.variable} ${spaceGrotesk.variable} ${fraunces.variable}`}>
       <head>
         {/* Google Analytics */}
         <script async src="https://www.googletagmanager.com/gtag/js?id=G-3JD3TYNF7V" />
@@ -98,7 +106,7 @@ export default function RootLayout({
           dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteJsonLd) }}
         />
       </head>
-      <body className="min-h-screen bg-[#08080C] text-white antialiased">
+      <body className="min-h-screen bg-[#050507] text-white antialiased">
         <SiteChrome>{children}</SiteChrome>
       </body>
     </html>
