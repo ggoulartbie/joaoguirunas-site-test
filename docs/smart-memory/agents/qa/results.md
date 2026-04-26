@@ -1,13 +1,119 @@
 ---
 title: QA Results
 type: qa-log
-updated: 2026-04-23T22:00
+updated: 2026-04-26T00:00
 tags: [qa, veredictos]
 ---
 
 # QA Results — Veredictos formais
 
-Histórico de veredictos emitidos pelo sites-qa (Axis-S).
+Histórico de veredictos emitidos pelo sites-qa (Axilun).
+
+---
+
+## 2026-04-26 (revisão) — Stories 4.1–4.4 (Epic KV Growth Sales) — ⚠️ CONCERNS
+
+**Revisão:** Lead identificou header legado duplicado em `open-source-client.tsx` (linhas 204-221) com badge `bg-[#FF4400]/10 border border-[#FF4400]/30` que viola KV Rule 02. Veredicto inicial PASS revisado para **CONCERNS**.
+
+### Issue (precisa correção antes do push)
+
+**[CONCERN-A — bloqueante para PASS limpo] `open-source-client.tsx:204–221`** — bloco legado mantido logo abaixo do novo header editorial:
+- Header duplicado visualmente: novo H1 editorial "Open Source" (191-202) + H2 legado "Tudo o que você precisa para escalar com IA" (210-212).
+- Badge `bg-[#FF4400]/10 border border-[#FF4400]/30` (linha 205) — viola KV Rule 02 ("nunca duas cores saturadas adjacentes") e contraria o espírito do AC4 da Story 4.4 (`bg-transparent` + `border-{cor}/25`).
+- Span ember dentro do H2 ("escalar com IA" em `text-[#FF4400]`) também adiciona segunda referência ember adjacente.
+
+**Correção sugerida:** remover o bloco `<div className="text-center mb-12 sm:mb-16">` (linhas 204-221) inteiro — o novo header editorial (191-202) já cumpre o papel de heading + sub-headline. Alternativamente, manter apenas o H2 + sub-headline mas converter o badge para o novo padrão (`bg-transparent border border-[#FF4400]/25`) e remover o `text-[#FF4400]` do span dentro do H2 para evitar segunda saturação adjacente.
+
+### CONCERN-B (não-bloqueante, segue válido) — Coexistência de tokens
+
+`#FF4400` (legacy) e `#FF3A0E` (novo accent) coexistem em CTAs/componentes legados (`animated-hero.tsx:11`, `mentoria/page.tsx`, `course-modules-timeline.tsx`, etc.). Fora do escopo das 4 stories. Follow-up sugerido (Story 4.5 já no backlog).
+
+### Veredicto revisado
+
+```
+VEREDICTO: CONCERNS
+Stories: 4.1 + 4.2 + 4.3 + 4.4 | Data: 2026-04-26 (revisão)
+Checklist: 9/10 — issue [CONCERN-A] em open-source-client.tsx:204-221 precisa correção
+Issues:
+- [CONCERN-A] Header legado duplicado + badge bg-[#FF4400]/10 viola KV Rule 02 — pedir correção ao sites-dev-alpha
+- [CONCERN-B] Coexistência #FF4400/#FF3A0E (não-bloqueante, Story 4.5 follow-up)
+Próximo passo: @sites-dev-alpha corrigir CONCERN-A; após fix, re-revisão e PASS final
+```
+
+---
+
+## 2026-04-26 (inicial — REVISADO acima) — Stories 4.1–4.4 (Epic KV Growth Sales) — ~~✅ PASS~~
+
+**Stories:** 4.1 Tokens + watermark + dot-grid · 4.2 Tipografia Fraunces · 4.3 Mentoria facilitadores + badges · 4.4 Open-source header editorial + cores
+**Branch:** `feat/kv-global-tokens-watermark`
+**Arquivos modificados:** `src/app/globals.css`, `src/app/layout.tsx`, `src/app/mentoria/page.tsx`, `src/app/open-source/open-source-client.tsx`, `src/shared/components/ui/animated-hero.tsx`, `src/shared/components/ui/index.ts`, `src/shared/components/ui/growth-watermark.tsx` (novo)
+
+### 10-point checklist
+
+| # | Critério | Resultado |
+|---|---|---|
+| 1 | Code review — patterns, legibilidade | ✅ Padrões consistentes; sem dead code |
+| 2 | Acceptance criteria — 4.1/4.2/4.3/4.4 | ✅ Todos os ACs verificados (ver detalhamento abaixo) |
+| 3 | Sem regressões — TypeScript | ✅ `tsc --noEmit` limpo (confirmado pelo lead) |
+| 4 | Performance | ✅ Fraunces com `display: 'swap'`; watermark é SVG inline com opacidade 0.05 — impacto mínimo |
+| 5 | Acessibilidade — WCAG AA | ✅ `aria-hidden="true"` em watermark; texto branco sobre `#050507` ≈ 20.9:1 (AAA); foco visível mantido (`*:focus-visible` em globals.css:95) |
+| 6 | SEO — metadata, estrutura H1/H2 | ✅ H1 únicos por página; metadata intacta |
+| 7 | Responsivo | ✅ H1 home `text-5xl sm:text-7xl lg:text-[96px]`; mentoria mobile e desktop separados; open-source `text-5xl sm:text-7xl` |
+| 8 | Copy | ✅ Nenhuma alteração de copy |
+| 9 | Cross-browser | ✅ CSS variables + radial-gradient + SVG inline são padrões widely-supported |
+| 10 | Security | ✅ Sem inputs novos; watermark é SVG inline sem `dangerouslySetInnerHTML` |
+
+### Verificação por story
+
+**Story 4.1 — Tokens + watermark + dot-grid** ✅
+- `globals.css:12` — `--color-accent: #FF3A0E` ✅
+- `globals.css:7` — `--color-background: #050507` ✅
+- `globals.css:79–88` — `body::before` dot-grid com `position: fixed`, `z-index: 0`, `pointer-events: none`, `background-image: radial-gradient(rgba(255,255,255,0.04) 1px, transparent 1px)`, `background-size: 24px 24px` ✅
+- `src/shared/components/ui/growth-watermark.tsx` — componente criado com `aria-hidden="true"` (linha 6) ✅
+- `animated-hero.tsx:147` — `<GrowthWatermark size={500} />` instanciado ✅
+- `mentoria/page.tsx:178` — `<GrowthWatermark size={600} />` instanciado no hero desktop ✅
+
+**Story 4.2 — Tipografia** ✅
+- `layout.tsx:27–33` — `Fraunces` com `weight: ['300','400','700']`, `style: ['normal','italic']`, `variable: '--font-display-serif'`, `display: 'swap'` ✅
+- `animated-hero.tsx:92` — H1 `text-5xl sm:text-7xl lg:text-[96px]` (≥ `text-5xl` mobile) ✅
+- `animated-hero.tsx:84` — eyebrow `João Guirunas · GrowthSales.ai` em `--font-mono`, 11px, letter-spacing 0.18em, `rgba(255,255,255,0.35)` ✅
+- `mentoria/page.tsx:151–154` (mobile) e `:208–211` (desktop) — span Fraunces italic weight-300 cor `#FF3A0E` para "Trabalhando Para Você 24/7" ✅
+
+**Story 4.3 — Facilitadores + badges** ✅
+- `mentoria/page.tsx:259–262` — frame quadrado, sem `rounded-full`, sem `ring-*`; hairline `border: 1px solid rgba(255,255,255,0.12)` com hover via `group-hover:[box-shadow:0_0_32px_rgba(255,58,14,0.18)]` + `[border-color:rgba(255,58,14,0.35)]` (`duration-500`) ✅
+- Image sem `rounded-full`, com `grayscale group-hover:grayscale-0 transition-all duration-500` ✅
+- `mentoria/page.tsx:88–104` — `SectionBadge` é apenas `<p>` mono (11px, letter-spacing 0.16em, `rgba(255, 58, 14, 0.85)`, uppercase, weight 500) sem container colorido ✅
+
+**Story 4.4 — Open-source** ✅
+- `open-source-client.tsx:191–202` — header editorial com mono eyebrow ember (11px, letter-spacing 0.16em, `rgba(255,58,14,0.85)`), H1 "Open Source" em `font-[family-name:var(--font-display-serif)]` `text-5xl sm:text-7xl`, sub-headline `rgba(255,255,255,0.5)` `max-w-2xl` ✅
+- `open-source-client.tsx:192` — `<GrowthWatermark size={500} />` no header ✅
+- `open-source-client.tsx:9` — `{ id: 'all', label: 'Todos', color: 'bg-transparent text-white/70 border-white/20' }` como primeiro filtro ✅
+- `open-source-client.tsx:10–14` — todas as 5 categorias usam `bg-transparent` + `border-{cor}/25` ✅
+- `open-source-client.tsx:277` — lógica `activeFilter === 'all' || skill.categoryId === activeFilter` retorna todos os cards quando "Todos" ativo ✅
+
+### CONCERN não-bloqueante
+
+**[CONCERN-1] Coexistência de tokens `#FF4400` (legacy) e `#FF3A0E` (novo accent)**
+- `animated-hero.tsx:11` define `const ORANGE = '#FF4400'` e usa em CTAs, sparkles e linhas (linhas 36, 49, 56–59, 100, 121).
+- `mentoria/page.tsx` usa `#FF4400` em CTAs/timeline/etc; `globals.css:43` mantém `--color-cat-squads: #FF4400`.
+- O novo `#FF3A0E` aparece em `--color-accent`, no `SectionBadge`, no span Fraunces italic do mentoria, no eyebrow do open-source e nos hover/glows.
+- **Não bloqueia push** — Story 4.1 escopa apenas tokens em `globals.css` e o watermark; nenhum AC exige varredura completa do codebase. KV Rule 02 não é violada porque os usos coexistem em superfícies diferentes (accent global em `globals.css` vs. ember saturado em UI legacy).
+- **Follow-up sugerido:** abrir story dedicada para uniformizar todos os usos hardcoded de `#FF4400` para `var(--color-accent)` (`#FF3A0E`).
+
+### Observações fora de escopo (não são issues)
+
+- `mentoria/page.tsx:280` — botão "Conheça Nossa Cultura" mantém `bg-[#FF4400]/10 border border-[#FF4400]/30`. Story 4.3 escopa apenas o `SectionBadge`; este é CTA externo. Não é violação.
+- `course-modules-timeline.tsx`, `solution-section.tsx`, `pricing-calculator.tsx`, `mentorship-features.tsx`, `mentorship-pricing.tsx` — ainda usam padrão `bg-[#FF4400]/10`. Fora do escopo das 4 stories.
+
+### Veredicto
+
+```
+VEREDICTO: PASS
+Stories: 4.1 + 4.2 + 4.3 + 4.4 | Data: 2026-04-26
+Checklist: 10/10 verificados
+Issues: 1 CONCERN não-bloqueante (coexistência #FF4400/#FF3A0E — story follow-up)
+Próximo passo: @sites-devops criar PR (observação documentada)
+```
 
 ---
 

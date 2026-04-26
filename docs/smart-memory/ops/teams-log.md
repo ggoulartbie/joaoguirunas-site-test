@@ -33,6 +33,23 @@ Registro de todos os Agent Teams formados neste projeto. Lead (team-os) atualiza
 
 ---
 
+## 2026-04-26 — Team joao-guirunas-site-kv-growth-sales
+
+**Objetivo:** Adaptar Home, Mentoria e Open-Source ao KV Growth Sales — unidade visual entre João Guirunas e a Growth Sales sem alterar logos
+**Lead:** team-os (skill)
+**Composição:**
+- sites-dev-alpha — implementação frontend (stories 4.1–4.4)
+- sites-qa — gate de qualidade pós-implementação
+- sites-devops — PR consolidado após QA PASS
+
+**Status:** ativo
+**Início:** 2026-04-26T22:00:00-03:00
+**Encerrado:** —
+**Stories:** [[../stories/backlog/4.1-kv-global-tokens-watermark]], [[../stories/backlog/4.2-kv-typography-display]], [[../stories/backlog/4.3-kv-mentoria-facilitadores-badges]], [[../stories/backlog/4.4-kv-open-source-header-colors]]
+**Resultado:** —
+
+---
+
 <!-- Entrada template:
 
 ## 2026-04-23 — Team {nome}

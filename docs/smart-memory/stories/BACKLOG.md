@@ -37,3 +37,15 @@ Ponto 5 do overview (RevosForm externo) é parcialmente mitigado pela Story 2.2 
 | [[backlog/3.4-cwv-image-sizes\|3.4]] | CWV — sizes em imagens responsivas (P2) | S | backlog | — |
 
 Source: [[../agents/research/seo-audit]]. Prioridade: 3.0 e 3.3 resolvem lacunas críticas. 3.1 é a maior oportunidade de tráfego (bulk titles/descriptions). 3.2 aumenta elegibilidade de rich results na página de maior valor comercial. 3.4 melhora CWV marginal.
+
+## Epic 4 — KV Growth Sales — Unidade Visual
+
+| Story | Título | Complexidade | Status | Agente |
+|---|---|---|---|---|
+| [[backlog/4.1-kv-global-tokens-watermark\|4.1]] | KV Global — tokens de cor, dot-grid texture e watermark diamante | S | done | sites-dev-alpha |
+| [[backlog/4.2-kv-typography-display\|4.2]] | KV Tipografia — Fraunces display nos H1 principais | M | done | sites-dev-alpha |
+| [[backlog/4.3-kv-mentoria-facilitadores-badges\|4.3]] | KV Mentoria — facilitadores rect style + section badges | M | done | sites-dev-alpha |
+| [[backlog/4.4-kv-open-source-header-colors\|4.4]] | KV Open-Source — header editorial + unificação de cores | M | done | sites-dev-alpha |
+| [[backlog/4.5-kv-token-cleanup-legacy-ff4400\|4.5]] | KV Token Cleanup — uniformizar #FF4400 legados | S | backlog | — |
+
+Source: análise KV Growth Sales (2026-04-26). Epic adapta Home, Mentoria e Open-Source ao KV da Growth Sales sem alterar logos. Foco: simbologia (watermark diamante), tipografia display (Fraunces), refinamento de tokens e section badges. Stories 4.1–4.4 concluídas (QA PASS 2026-04-26). Story 4.5 é follow-up de concern não-bloqueante do QA.
