@@ -3,13 +3,15 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { useState } from 'react';
+import { GrowthWatermark } from '@/shared/components/ui/growth-watermark';
 
 const categories = [
-  { id: 'squads', label: 'Squads', color: 'bg-[#FF4400]/20 text-[#FF4400] border-[#FF4400]/30' },
-  { id: 'skills', label: 'Skills', color: 'bg-[#22C55E]/20 text-[#22C55E] border-[#22C55E]/30' },
-  { id: 'apps', label: 'Apps', color: 'bg-[#8B5CF6]/20 text-[#8B5CF6] border-[#8B5CF6]/30' },
-  { id: 'integracoes', label: 'Integrações', color: 'bg-[#0EA5E9]/20 text-[#0EA5E9] border-[#0EA5E9]/30' },
-  { id: 'aprendizado', label: 'Aprendizado', color: 'bg-[#06B6D4]/20 text-[#06B6D4] border-[#06B6D4]/30' },
+  { id: 'all', label: 'Todos', color: 'bg-transparent text-white/70 border-white/20' },
+  { id: 'squads', label: 'Squads', color: 'bg-transparent text-[#FF4400] border-[#FF4400]/25' },
+  { id: 'skills', label: 'Skills', color: 'bg-transparent text-[#22C55E] border-[#22C55E]/25' },
+  { id: 'apps', label: 'Apps', color: 'bg-transparent text-[#8B5CF6] border-[#8B5CF6]/25' },
+  { id: 'integracoes', label: 'Integrações', color: 'bg-transparent text-[#0EA5E9] border-[#0EA5E9]/25' },
+  { id: 'aprendizado', label: 'Aprendizado', color: 'bg-transparent text-[#06B6D4] border-[#06B6D4]/25' },
 ];
 
 const skillIcons: Record<string, string> = {
@@ -182,8 +184,23 @@ export function OpenSourceClient() {
       </section>
 
       {/* Skills Grid */}
-      <section id="skills" className="py-16 sm:py-20 md:py-24 bg-[#08080C]">
+      <section id="skills" className="py-0 sm:py-0 md:py-0 bg-[#08080C]">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+
+          {/* Header editorial KV */}
+          <div className="relative overflow-hidden pt-24 pb-16 mb-8">
+            <GrowthWatermark size={500} className="top-0 right-0 -translate-y-1/4 translate-x-1/4" />
+            <p style={{ fontFamily: 'var(--font-mono)', fontSize: '11px', letterSpacing: '0.16em', textTransform: 'uppercase', color: 'rgba(255,58,14,0.85)', fontWeight: 500 }} className="mb-6">
+              40+ Recursos · Gratuitos · Open Source
+            </p>
+            <h1 className="text-5xl sm:text-7xl font-bold tracking-tight text-white mb-6 font-[family-name:var(--font-display-serif)] leading-[0.95]">
+              Open Source
+            </h1>
+            <p className="text-sm sm:text-lg max-w-2xl leading-relaxed" style={{ color: 'rgba(255,255,255,0.5)' }}>
+              Ferramentas reais para Claude Code — curadas por João Guirunas e a comunidade GrowthSales.ai
+            </p>
+          </div>
+
           <div className="text-center mb-12 sm:mb-16">
             <div className="inline-flex items-center gap-2 sm:gap-3 border border-[#FF4400]/30 bg-[#FF4400]/10 px-4 sm:px-5 py-2 mb-4 sm:mb-6">
               <Image src="/images/claude-logo.png" alt="Logo Claude AI" width={20} height={20} className="h-4 sm:h-5 w-4 sm:w-5" />
@@ -237,25 +254,14 @@ export function OpenSourceClient() {
 
           {/* Category Filters */}
           <div className="flex flex-wrap justify-center gap-3 mb-12">
-            <button
-              onClick={() => setActiveFilter('all')}
-              className={`inline-flex items-center border px-4 py-2 transition-all ${
-                activeFilter === 'all'
-                  ? 'bg-[#FF4400] text-white border-[#FF4400]'
-                  : 'bg-transparent text-white/70 border-white/10 hover:border-white/20 hover:text-white'
-              }`}
-              style={{ fontFamily: "'Geist Mono', monospace", fontSize: '0.7rem', textTransform: 'uppercase', letterSpacing: '0.08em', fontWeight: 600 }}
-            >
-              Todos
-            </button>
             {categories.map((cat) => (
               <button
                 key={cat.id}
                 onClick={() => setActiveFilter(cat.id)}
                 className={`inline-flex items-center border px-4 py-2 transition-all ${
                   activeFilter === cat.id
-                    ? 'bg-[#FF4400] text-white border-[#FF4400]'
-                    : 'bg-transparent text-white/70 border-white/10 hover:border-white/20 hover:text-white'
+                    ? `${cat.color} bg-white/5`
+                    : 'bg-transparent text-white/40 border-white/10 hover:border-white/20 hover:text-white/70'
                 }`}
                 style={{ fontFamily: "'Geist Mono', monospace", fontSize: '0.7rem', textTransform: 'uppercase', letterSpacing: '0.08em', fontWeight: 600 }}
               >
