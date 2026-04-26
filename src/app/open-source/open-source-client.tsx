@@ -201,25 +201,6 @@ export function OpenSourceClient() {
             </p>
           </div>
 
-          <div className="text-center mb-12 sm:mb-16">
-            <div className="inline-flex items-center gap-2 sm:gap-3 border border-[#FF4400]/30 bg-[#FF4400]/10 px-4 sm:px-5 py-2 mb-4 sm:mb-6">
-              <Image src="/images/claude-logo.png" alt="Logo Claude AI" width={20} height={20} className="h-4 sm:h-5 w-4 sm:w-5" />
-              <span
-                className="text-[#FF4400]"
-                style={{ fontFamily: "'Geist Mono', monospace", fontSize: '0.65rem', textTransform: 'uppercase', letterSpacing: '0.12em', fontWeight: 600 }}
-              >
-                Skills para Claude Code
-              </span>
-            </div>
-            <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-white px-4">
-              Tudo o que você precisa para <span className="text-[#FF4400]">escalar com IA</span>
-            </h2>
-            <div className="mx-auto mt-4 sm:mt-6 w-24 accent-line" />
-            <p className="mt-4 sm:mt-6 text-base sm:text-lg text-white/70 max-w-2xl mx-auto px-4">
-              Skills, Squads, Apps e Integrações open source para multiplicar produtividade com agentes autônomos
-            </p>
-          </div>
-
           {/* Search */}
           <div className="relative max-w-md mx-auto mb-8">
             <div className="relative">
