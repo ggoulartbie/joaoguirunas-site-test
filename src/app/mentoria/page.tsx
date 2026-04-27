@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import React from 'react';
 import Image from 'next/image';
 import { Icon } from '@/shared/components/ui';
 import { GrowthWatermark } from '@/shared/components/ui/growth-watermark';
@@ -12,7 +13,8 @@ import { SectionDots } from './section-dots';
 import { SolutionSection } from './solution-section';
 
 const INSCRICAO_ANCHOR = '#inscricao';
-const DISPLAY_FONT = { fontFamily: "'TASAOrbiter', var(--font-bb-display), sans-serif" } as const;
+const KV_DISPLAY: React.CSSProperties = { fontFamily: 'var(--font-display-serif)', fontWeight: 400, letterSpacing: '-0.03em' };
+const KV_MONO: React.CSSProperties = { fontFamily: 'var(--font-mono)', fontSize: '0.68rem', textTransform: 'uppercase', letterSpacing: '0.14em', fontWeight: 500 };
 
 export const metadata: Metadata = {
   title: 'Mentoria Claude Code + AIOX — Agentes IA na Prática',
@@ -58,16 +60,17 @@ const courseJsonLd = {
 };
 
 function CtaButton({ label, variant = 'primary', className = '' }: { label: string; variant?: 'primary' | 'secondary'; className?: string }) {
+  const monoStyle: React.CSSProperties = { fontFamily: 'var(--font-mono)', fontSize: '0.7rem', letterSpacing: '0.1em' };
   if (variant === 'secondary') {
     return (
       <a
         href="#modulos"
-        className={`inline-flex items-center justify-center gap-2 border border-[#FF4400]/50 bg-white/5 backdrop-blur-md text-white px-6 py-3 text-sm sm:text-base font-bold uppercase tracking-widest hover:bg-white/10 transition-all ${className}`}
-        style={{ fontFamily: "'Roboto Mono', var(--font-bb-mono), monospace" }}
+        className={`inline-flex items-center justify-center gap-2 text-white/70 px-6 py-3 text-sm font-semibold uppercase transition-all hover:bg-white/[0.05] hover:text-white ${className}`}
+        style={{ ...monoStyle, border: '1px solid rgba(255,255,255,0.16)' }}
       >
         {label}
         <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19 9l-7 7-7-7" />
         </svg>
       </a>
     );
@@ -75,11 +78,12 @@ function CtaButton({ label, variant = 'primary', className = '' }: { label: stri
   return (
     <a
       href={INSCRICAO_ANCHOR}
-      className={`btn-primary inline-flex items-center justify-center gap-2 bg-[#FF4400] text-white px-6 sm:px-8 py-3 sm:py-4 text-sm sm:text-base font-bold shadow-2xl shadow-[#FF4400]/40 hover:bg-[#FF5722] transition-all hover:scale-105 ${className}`}
+      className={`inline-flex items-center justify-center gap-2 px-6 sm:px-8 py-3 sm:py-4 text-sm font-semibold uppercase transition-all hover:brightness-110 active:scale-[0.98] ${className}`}
+      style={{ ...monoStyle, background: '#FF3A0E', color: '#050507' }}
     >
       <span>{label}</span>
-      <svg className="h-4 w-4 sm:h-5 sm:w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+      <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M17 8l4 4m0 0l-4 4m4-4H3" />
       </svg>
     </a>
   );
@@ -113,7 +117,7 @@ export default function MentoriaPage() {
       <MentoriaNav />
       <SectionDots />
       {/* ===== HERO ===== */}
-      <section id="hero" className="relative w-full bg-[#08080C] -mt-16">
+      <section id="hero" className="relative w-full bg-[#050507] -mt-16">
         {/* MOBILE: imagem no topo, texto abaixo com overlap */}
         <div className="sm:hidden">
           {/* Imagem com overlay, degradê e texto dentro */}
@@ -127,29 +131,29 @@ export default function MentoriaPage() {
               priority
             />
             {/* Overlay geral */}
-            <div className="absolute inset-0 bg-[#08080C]/55" />
+            <div className="absolute inset-0 bg-[#050507]/55" />
             {/* Degradê na base */}
-            <div className="absolute inset-0" style={{ background: 'linear-gradient(to bottom, transparent 0%, rgba(8,8,12,0.03) 30%, rgba(8,8,12,0.1) 55%, rgba(8,8,12,0.5) 75%, rgba(8,8,12,0.82) 88%, #08080C 98%)' }} />
+            <div className="absolute inset-0" style={{ background: 'linear-gradient(to bottom, transparent 0%, rgba(5,5,7,0.03) 30%, rgba(5,5,7,0.1) 55%, rgba(5,5,7,0.5) 75%, rgba(5,5,7,0.82) 88%, #050507 98%)' }} />
             {/* Texto sobre a imagem */}
             <div className="absolute bottom-0 left-0 right-0 z-10 px-6 pb-6">
               <div className="flex flex-col items-start gap-2 mb-4">
-                <div className="inline-flex items-center gap-2 border border-white/20 px-3 py-1.5" style={{ background: 'rgba(255,255,255,0.04)', fontFamily: "'Roboto Mono', var(--font-bb-mono), monospace" }}>
-                  <Icon name="clock" size="16" className="text-[#FF4400]" />
+                <div className="inline-flex items-center gap-2 border border-white/20 px-3 py-1.5" style={{ background: 'rgba(255,255,255,0.04)', fontFamily: "var(--font-mono)" }}>
+                  <Icon name="clock" size="16" className="text-[#FF3A0E]" />
                   <span className="text-white/70 text-xs uppercase tracking-wider">Início da turma: <strong className="text-white">12 de maio</strong></span>
                 </div>
-                <div className="inline-flex items-center gap-2 border border-[#FF4400]/60 px-4 py-2" style={{ background: 'rgba(255,68,0,0.08)' }}>
+                <div className="inline-flex items-center gap-2 border border-[#FF3A0E]/60 px-4 py-2" style={{ background: 'rgba(255,58,14,0.08)' }}>
                   <span className="relative inline-flex h-2.5 w-2.5">
-                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#FF4400] opacity-75" />
-                    <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-[#FF4400]" />
+                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#FF3A0E] opacity-75" />
+                    <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-[#FF3A0E]" />
                   </span>
-                  <span className="text-[#FF4400] text-xs font-semibold uppercase tracking-wider" style={{ fontFamily: "'Roboto Mono', var(--font-bb-mono), monospace" }}>
+                  <span className="text-[#FF3A0E] text-xs font-semibold uppercase tracking-wider" style={{ fontFamily: "var(--font-mono)" }}>
                     Restam somente 4 vagas
                   </span>
                 </div>
               </div>
-              <h1 className="text-2xl font-bold text-white leading-[1.15] tracking-tight mb-3">
-                <span style={DISPLAY_FONT}>Tenha uma Equipe de Agentes de IA </span>
-                <span style={{ fontFamily: "var(--font-display-serif)", fontStyle: 'italic', fontWeight: 300, color: '#FF3A0E' }}>
+              <h1 className="text-3xl text-white mb-3" style={{ lineHeight: 0.95, letterSpacing: '-0.03em' }}>
+                <span style={{ fontFamily: 'var(--font-display-serif)', fontWeight: 400 }}>Tenha uma Equipe de Agentes de IA </span>
+                <span style={{ fontFamily: 'var(--font-display-serif)', fontStyle: 'italic', fontWeight: 300, color: '#FF3A0E' }}>
                   Trabalhando Para Você 24/7
                 </span>
               </h1>
@@ -163,18 +167,18 @@ export default function MentoriaPage() {
             </div>
           </div>
           {/* Linha abaixo da imagem */}
-          <div className="px-6 py-4 bg-[#08080C]">
-            <p className="text-white/60 text-xs uppercase tracking-widest flex items-center gap-2 flex-wrap" style={{ fontFamily: "'Roboto Mono', var(--font-bb-mono), monospace" }}>
-              <Icon name="clock" size="16" className="text-[#FF4400]" /> Max. 12 pessoas <span className="opacity-40">|</span> <Icon name="check" size="16" className="text-[#FF4400]" /> Garantia 7 dias
+          <div className="px-6 py-4 bg-[#050507]">
+            <p className="text-white/60 text-xs uppercase tracking-widest flex items-center gap-2 flex-wrap" style={{ fontFamily: "var(--font-mono)" }}>
+              <Icon name="clock" size="16" className="text-[#FF3A0E]" /> Max. 12 pessoas <span className="opacity-40">|</span> <Icon name="check" size="16" className="text-[#FF3A0E]" /> Garantia 7 dias
             </p>
-            <p className="text-white/40 text-xs uppercase tracking-widest flex items-center gap-2 flex-wrap mt-2" style={{ fontFamily: "'Roboto Mono', var(--font-bb-mono), monospace" }}>
-              <Icon name="clock" size="16" className="text-[#FF4400]" /> Próxima turma: <span className="text-white font-semibold">12 de maio</span> <span className="opacity-40">|</span> Restam 4 vagas
+            <p className="text-white/40 text-xs uppercase tracking-widest flex items-center gap-2 flex-wrap mt-2" style={{ fontFamily: "var(--font-mono)" }}>
+              <Icon name="clock" size="16" className="text-[#FF3A0E]" /> Próxima turma: <span className="text-white font-semibold">12 de maio</span> <span className="opacity-40">|</span> Restam 4 vagas
             </p>
           </div>
         </div>
 
         {/* DESKTOP: layout overlay original */}
-        <div className="relative hidden sm:block min-h-[58vh] overflow-hidden">
+        <div className="relative hidden sm:block min-h-[62vh] overflow-hidden">
           <GrowthWatermark size={600} className="bottom-0 right-0 translate-x-1/4" />
           <Image
             src="/images/mentoria-hero-v2.png"
@@ -184,29 +188,29 @@ export default function MentoriaPage() {
             style={{ objectPosition: '92% 30%', transform: 'scaleX(-1)' }}
             priority
           />
-          <div className="absolute inset-0" style={{ background: 'linear-gradient(to right, #08080C 0%, #08080C 35%, rgba(8,8,12,0.85) 50%, rgba(8,8,12,0.4) 70%, rgba(8,8,12,0.25) 100%)' }} />
-          <div className="absolute inset-0 bg-gradient-to-b from-[#08080C]/40 via-transparent to-[#08080C]" />
+          <div className="absolute inset-0" style={{ background: 'linear-gradient(to right, #050507 0%, #050507 28%, rgba(5,5,7,0.85) 44%, rgba(5,5,7,0.3) 68%, rgba(5,5,7,0.1) 100%)' }} />
+          <div className="absolute inset-0" style={{ background: 'linear-gradient(to bottom, rgba(5,5,7,0.4) 0%, transparent 25%, transparent 48%, rgba(5,5,7,0.6) 65%, rgba(5,5,7,0.88) 78%, #050507 88%)' }} />
           <div className="absolute inset-0 flex items-center px-10 lg:px-16">
             <div className="mx-auto max-w-7xl w-full">
               <div className="max-w-xl lg:max-w-2xl">
                 <div className="flex flex-col items-start gap-2 mb-6">
-                  <div className="inline-flex items-center gap-2 border border-white/20 px-3 py-1.5" style={{ background: 'rgba(255,255,255,0.04)', fontFamily: "'Roboto Mono', var(--font-bb-mono), monospace" }}>
-                    <Icon name="clock" size="16" className="text-[#FF4400]" />
+                  <div className="inline-flex items-center gap-2 border border-white/20 px-3 py-1.5" style={{ background: 'rgba(255,255,255,0.04)', fontFamily: "var(--font-mono)" }}>
+                    <Icon name="clock" size="16" className="text-[#FF3A0E]" />
                     <span className="text-white/70 text-xs uppercase tracking-wider">Início da turma: <strong className="text-white">12 de maio</strong></span>
                   </div>
-                  <div className="inline-flex items-center gap-2 backdrop-blur-sm border border-[#FF4400]/60 px-4 py-2" style={{ background: 'rgba(255,68,0,0.08)' }}>
+                  <div className="inline-flex items-center gap-2 backdrop-blur-sm border border-[#FF3A0E]/60 px-4 py-2" style={{ background: 'rgba(255,58,14,0.08)' }}>
                     <span className="relative inline-flex h-2.5 w-2.5">
-                      <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#FF4400] opacity-75" />
-                      <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-[#FF4400]" />
+                      <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#FF3A0E] opacity-75" />
+                      <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-[#FF3A0E]" />
                     </span>
-                    <span className="text-[#FF4400] text-xs font-semibold uppercase tracking-wider" style={{ fontFamily: "'Roboto Mono', var(--font-bb-mono), monospace" }}>
+                    <span className="text-[#FF3A0E] text-xs font-semibold uppercase tracking-wider" style={{ fontFamily: "var(--font-mono)" }}>
                       Restam somente 4 vagas
                     </span>
                   </div>
                 </div>
-                <h1 className="text-3xl lg:text-4xl font-bold text-white leading-[1.15] tracking-tight mb-5">
-                  <span style={DISPLAY_FONT}>Tenha uma Equipe de Agentes de IA </span>
-                  <span style={{ fontFamily: "var(--font-display-serif)", fontStyle: 'italic', fontWeight: 300, color: '#FF3A0E' }}>
+                <h1 className="text-4xl lg:text-5xl text-white mb-5" style={{ lineHeight: 0.95, letterSpacing: '-0.03em' }}>
+                  <span style={{ fontFamily: 'var(--font-display-serif)', fontWeight: 400 }}>Tenha uma Equipe de Agentes de IA </span>
+                  <span style={{ fontFamily: 'var(--font-display-serif)', fontStyle: 'italic', fontWeight: 300, color: '#FF3A0E' }}>
                     Trabalhando Para Você 24/7
                   </span>
                 </h1>
@@ -217,11 +221,11 @@ export default function MentoriaPage() {
                   <CtaButton label="Fale com um Especialista" />
                   <CtaButton label="Como Funciona" variant="secondary" />
                 </div>
-                <p className="text-white/60 text-xs uppercase tracking-widest flex items-center gap-2" style={{ fontFamily: "'Roboto Mono', var(--font-bb-mono), monospace" }}>
-                  <Icon name="clock" size="16" className="text-[#FF4400]" /> Max. 12 pessoas <span className="opacity-40">|</span> <Icon name="check" size="16" className="text-[#FF4400]" /> Garantia 7 dias
+                <p className="text-white/60 text-xs uppercase tracking-widest flex items-center gap-2" style={{ fontFamily: "var(--font-mono)" }}>
+                  <Icon name="clock" size="16" className="text-[#FF3A0E]" /> Max. 12 pessoas <span className="opacity-40">|</span> <Icon name="check" size="16" className="text-[#FF3A0E]" /> Garantia 7 dias
                 </p>
-                <p className="text-white/40 text-xs uppercase tracking-widest flex items-center gap-2 mt-2" style={{ fontFamily: "'Roboto Mono', var(--font-bb-mono), monospace" }}>
-                  <Icon name="clock" size="16" className="text-[#FF4400]" /> Próxima turma: <span className="text-white font-semibold">12 de maio</span> <span className="opacity-40">|</span> Restam 4 vagas
+                <p className="text-white/40 text-xs uppercase tracking-widest flex items-center gap-2 mt-2" style={{ fontFamily: "var(--font-mono)" }}>
+                  <Icon name="clock" size="16" className="text-[#FF3A0E]" /> Próxima turma: <span className="text-white font-semibold">12 de maio</span> <span className="opacity-40">|</span> Restam 4 vagas
                 </p>
               </div>
             </div>
@@ -239,11 +243,11 @@ export default function MentoriaPage() {
       <CourseModulesTimeline />
 
       {/* ===== FACILITADORES ===== */}
-      <section id="facilitadores" className="py-16 sm:py-24 bg-[#0C0C12]">
-        <div className="mx-auto max-w-6xl px-5 sm:px-6 lg:px-8">
+      <section id="facilitadores" className="py-16 sm:py-24 bg-[#0e0e11]">
+        <div className="mx-auto max-w-6xl px-5 sm:px-6 lg:px-[140px]">
           <div className="text-center mb-12 sm:mb-16">
             <SectionBadge label="Quem Facilita" />
-            <h2 className="text-2xl font-bold text-white sm:text-3xl lg:text-4xl mb-4 leading-tight tracking-tight" style={DISPLAY_FONT}>Seus <span className="text-[#FF4400]">Facilitadores</span></h2>
+            <h2 className="text-3xl sm:text-4xl lg:text-5xl text-white mb-4" style={{ ...KV_DISPLAY, lineHeight: 0.95 }}>Seus <span className="text-[#FF3A0E]">Facilitadores</span></h2>
             <div className="mx-auto w-12 sm:w-16 accent-line mb-4 sm:mb-6" />
             <p className="text-sm sm:text-lg text-white/60 max-w-3xl mx-auto leading-relaxed">Profissionais experientes que vivem e respiram IA aplicada a negócios. Fundadores da GrowthSales.ai.</p>
           </div>
@@ -264,11 +268,11 @@ export default function MentoriaPage() {
                 </div>
                 <div className="space-y-4">
                   <div>
-                    <h3 className="text-2xl sm:text-3xl font-bold text-white mb-2 group-hover:text-[#FF4400] transition-colors">{f.name}</h3>
-                    <p className="text-[#FF4400]/80 text-xs font-semibold tracking-[0.15em] uppercase" style={{ fontFamily: "'Roboto Mono', var(--font-bb-mono), monospace" }}>{f.role}</p>
+                    <h3 className="text-2xl sm:text-3xl text-white mb-2 group-hover:text-[#FF3A0E] transition-colors" style={{ fontFamily: 'var(--font-display-serif)', fontWeight: 400, letterSpacing: '-0.02em' }}>{f.name}</h3>
+                    <p className="text-[#FF3A0E]/80 text-xs font-semibold tracking-[0.15em] uppercase" style={{ fontFamily: "var(--font-mono)" }}>{f.role}</p>
                   </div>
                   <p className="text-white/60 text-sm sm:text-base leading-relaxed max-w-sm mx-auto">{f.bio}</p>
-                  <a href={f.linkedin} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2.5 text-[#FF4400] hover:text-white transition-all text-xs sm:text-sm font-semibold border border-[#FF4400]/30 hover:border-[#FF4400] px-6 py-3 hover:bg-[#FF4400]/5" style={{ fontFamily: "'Roboto Mono', var(--font-bb-mono), monospace", textTransform: 'uppercase', letterSpacing: '0.08em' }}>
+                  <a href={f.linkedin} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2.5 text-[#FF3A0E] hover:text-white transition-all text-xs sm:text-sm font-semibold border border-[#FF3A0E]/30 hover:border-[#FF3A0E] px-6 py-3 hover:bg-[#FF3A0E]/5" style={{ fontFamily: "var(--font-mono)", textTransform: 'uppercase', letterSpacing: '0.08em' }}>
                     <Icon name="linkedin" size="16" /> LinkedIn
                   </a>
                 </div>
@@ -277,7 +281,7 @@ export default function MentoriaPage() {
           </div>
 
           <div className="mt-12 text-center">
-            <a href="https://www.growthsales.ai/cultura" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 px-6 py-3 border border-[#FF4400]/30 bg-[#FF4400]/10 text-[#FF4400] hover:bg-[#FF4400]/20 transition-all text-sm font-semibold uppercase tracking-wider" style={{ fontFamily: "'Roboto Mono', var(--font-bb-mono), monospace" }}>
+            <a href="https://www.growthsales.ai/cultura" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 px-6 py-3 border border-[#FF3A0E]/30 bg-[#FF3A0E]/10 text-[#FF3A0E] hover:bg-[#FF3A0E]/20 transition-all text-sm font-semibold uppercase tracking-wider" style={{ fontFamily: "var(--font-mono)" }}>
               Conheça Nossa Cultura
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" /></svg>
             </a>
@@ -298,7 +302,7 @@ export default function MentoriaPage() {
             className="object-cover"
             style={{ objectPosition: 'center top' }}
           />
-          <div className="absolute inset-0 bg-[#08080C]/65" />
+          <div className="absolute inset-0 bg-[#050507]/65" />
         </div>
         <div className="relative z-10 mx-auto max-w-3xl px-5 sm:px-6 lg:px-8">
           <RevosForm />
@@ -306,11 +310,11 @@ export default function MentoriaPage() {
       </section>
 
       {/* ===== FAQ ===== */}
-      <section id="faq" className="py-16 sm:py-24 bg-[#08080C]">
+      <section id="faq" className="py-16 sm:py-24 bg-[#050507]">
         <div className="mx-auto max-w-4xl px-5 sm:px-6 lg:px-8">
           <div className="text-center mb-10 sm:mb-16">
             <SectionBadge label="FAQ" />
-            <h2 className="text-2xl font-bold text-white sm:text-3xl lg:text-4xl tracking-tight" style={DISPLAY_FONT}>Dúvidas Comuns</h2>
+            <h2 className="text-3xl sm:text-4xl lg:text-5xl text-white" style={{ ...KV_DISPLAY, lineHeight: 0.95 }}>Dúvidas Comuns</h2>
             <div className="mx-auto mt-4 sm:mt-6 w-12 sm:w-16 accent-line" />
           </div>
           <FaqAccordion />
@@ -318,9 +322,9 @@ export default function MentoriaPage() {
       </section>
 
       {/* ===== CTA FINAL ===== */}
-      <section className="py-12 sm:py-16 bg-[#08080C]">
+      <section className="py-12 sm:py-16 bg-[#050507]">
         <div className="mx-auto max-w-4xl px-5 sm:px-6 lg:px-8 text-center">
-          <h3 className="text-xl sm:text-3xl font-bold text-white mb-4 leading-tight">Pronto para ter sua própria <span className="text-[#FF4400]">equipe de agentes IA</span>?</h3>
+          <h3 className="text-3xl sm:text-4xl text-white mb-4" style={{ ...KV_DISPLAY, lineHeight: 0.95 }}>Pronto para ter sua própria <span className="text-[#FF3A0E] italic" style={{ fontWeight: 300 }}>equipe de agentes IA</span>?</h3>
           <p className="text-white/60 mb-8 max-w-2xl mx-auto text-sm sm:text-base">Fale com nossa equipe e garanta sua vaga na próxima turma</p>
           <CtaButton label="Falar com Especialista" className="text-base sm:text-lg" />
           <p className="mt-6 text-xs sm:text-sm text-white/60"><Icon name="zap" size="16" className="inline" /> Resposta em até 24h | <Icon name="lock" size="16" className="inline" /> Dados 100% seguros</p>
