@@ -51,6 +51,24 @@ Registro de todos os Agent Teams formados neste projeto. Lead (team-os) atualiza
 
 ---
 
+## 2026-04-27 — Team joao-guirunas-site-backlog-sprint
+
+**Objetivo:** Executar o backlog completo — a11y, CWV, KV token cleanup, H1 fixes, housekeeping de story files
+**Lead:** team-os (skill)
+**Composição:**
+- sites-dev-gamma — execução sequencial das 5 stories pendentes
+- sites-qa — gate de qualidade
+- sites-devops — commit + push para main
+
+**Status:** encerrado
+**Início:** 2026-04-27T19:15:00-03:00
+**Encerrado:** 2026-04-27T19:31:00-03:00
+**Stories:** 2.3, 3.3, 3.4, 4.5, 4.6
+**Commit:** ad64a60 (main)
+**Resultado:** QA PASS 5/5. 35 arquivos, +291/-413 linhas. 51 páginas. Vercel auto-deploy acionado. Backlog zerado (16 done, 2 active). 1 concern não-bloqueante: token órfão `--color-cat-squads` em globals.css.
+
+---
+
 <!-- Entrada template:
 
 ## 2026-04-23 — Team {nome}
