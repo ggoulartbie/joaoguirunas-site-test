@@ -117,13 +117,13 @@ export default function MentoriaPage() {
         {/* MOBILE: imagem no topo, texto abaixo com overlap */}
         <div className="sm:hidden">
           {/* Imagem com overlay, degradê e texto dentro */}
-          <div className="relative w-full overflow-hidden" style={{ height: '600px' }}>
+          <div className="relative w-full overflow-hidden" style={{ height: '380px' }}>
             <Image
               src="/images/mentoria-hero-v2.png"
               alt="João Guirunas - Mentoria Claude Code"
               fill
               className="object-cover"
-              style={{ objectPosition: '50% 30%' }}
+              style={{ objectPosition: '20% 35%' }}
               priority
             />
             {/* Overlay geral */}
@@ -174,14 +174,14 @@ export default function MentoriaPage() {
         </div>
 
         {/* DESKTOP: layout overlay original */}
-        <div className="relative hidden sm:block min-h-[85vh] overflow-hidden">
+        <div className="relative hidden sm:block min-h-[58vh] overflow-hidden">
           <GrowthWatermark size={600} className="bottom-0 right-0 translate-x-1/4" />
           <Image
             src="/images/mentoria-hero-v2.png"
             alt="Equipe GrowthSales AI"
             fill
             className="object-cover"
-            style={{ objectPosition: '50% 30%' }}
+            style={{ objectPosition: '20% 35%' }}
             priority
           />
           <div className="absolute inset-0" style={{ background: 'linear-gradient(to right, #08080C 0%, #08080C 35%, rgba(8,8,12,0.85) 50%, rgba(8,8,12,0.4) 70%, rgba(8,8,12,0.25) 100%)' }} />
