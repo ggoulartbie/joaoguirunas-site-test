@@ -130,7 +130,7 @@ export function SolutionSection() {
     <section
       ref={sectionRef}
       id="solucao"
-      className="relative py-16 sm:py-24 bg-[#0C0C12] overflow-hidden"
+      className="relative py-16 sm:py-24 bg-[#050507] overflow-hidden"
     >
       {/* Background blurs */}
       <div className="pointer-events-none absolute -top-40 -left-40 w-80 h-80 bg-[#FF4400]/[0.04] rounded-full blur-[120px]" />
