@@ -22,7 +22,7 @@ export const metadata: Metadata = {
     title: 'Mentoria Claude Code + AIOX — Agentes IA na Prática | João Guirunas',
     description:
       'Mentoria intensiva e prática em Florianópolis. Aprenda a criar e orquestrar agentes de IA com Claude Code e o framework AIOX. Turmas de até 12 pessoas.',
-    images: [{ url: '/images/mentoria-hero.png', width: 1200, height: 630 }],
+    images: [{ url: '/images/mentoria-hero-v2.png', width: 1200, height: 630 }],
   },
   twitter: {
     card: 'summary_large_image',
@@ -119,7 +119,7 @@ export default function MentoriaPage() {
           {/* Imagem com overlay, degradê e texto dentro */}
           <div className="relative w-full overflow-hidden" style={{ height: '600px' }}>
             <Image
-              src="/images/hero-mobile.png"
+              src="/images/mentoria-hero-v2.png"
               alt="João Guirunas - Mentoria Claude Code"
               fill
               className="object-cover"
@@ -177,7 +177,7 @@ export default function MentoriaPage() {
         <div className="relative hidden sm:block min-h-[85vh] overflow-hidden">
           <GrowthWatermark size={600} className="bottom-0 right-0 translate-x-1/4" />
           <Image
-            src="/images/mentoria-hero.png"
+            src="/images/mentoria-hero-v2.png"
             alt="Equipe GrowthSales AI"
             fill
             className="object-cover"
