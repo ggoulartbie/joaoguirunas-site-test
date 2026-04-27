@@ -63,14 +63,14 @@ function ComparisonColumn({
         'p-6 sm:p-8 border',
         isDim
           ? 'border-white/[0.08] bg-white/[0.02]'
-          : 'border-[#FF4400]/30 bg-[#FF4400]/[0.04]'
+          : 'border-[var(--color-accent)]/30 bg-[var(--color-accent)]/[0.04]'
       )}
     >
       <div className="text-center mb-6">
         <h3
           className={cn(
             'text-lg sm:text-xl font-bold mb-1',
-            isDim ? 'text-white/40' : 'text-[#FF4400]'
+            isDim ? 'text-white/40' : 'text-[var(--color-accent)]'
           )}
         >
           {title}
@@ -87,7 +87,7 @@ function ComparisonColumn({
             className="flex items-center gap-2.5"
           >
             {item.ok ? (
-              <Check className="h-4 w-4 flex-shrink-0 text-[#FF4400]" />
+              <Check className="h-4 w-4 flex-shrink-0 text-[var(--color-accent)]" />
             ) : (
               <X className="h-4 w-4 flex-shrink-0 text-red-400/70" />
             )}
@@ -115,9 +115,9 @@ export function MentorshipPricing() {
       <div className="mx-auto max-w-7xl px-5 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="text-center mb-10 sm:mb-16">
-          <div className="inline-flex items-center gap-2 border border-[#FF4400]/30 bg-[#FF4400]/10 px-3 sm:px-4 py-1.5 mb-4 sm:mb-6">
+          <div className="inline-flex items-center gap-2 border border-[var(--color-accent)]/30 bg-[var(--color-accent)]/10 px-3 sm:px-4 py-1.5 mb-4 sm:mb-6">
             <span
-              className="text-[#FF4400] text-[0.55rem] sm:text-[0.65rem]"
+              className="text-[var(--color-accent)] text-[0.55rem] sm:text-[0.65rem]"
               style={{
                 fontFamily: "'Geist Mono', monospace",
                 textTransform: 'uppercase',
@@ -130,9 +130,9 @@ export function MentorshipPricing() {
           </div>
           <h2 className="text-2xl font-bold text-white sm:text-4xl lg:text-5xl mb-4 leading-tight">
             Quanto Custa Ter Sua Equipe de{' '}
-            <span className="text-[#FF4400]">Agentes IA</span>?
+            <span className="text-[var(--color-accent)]">Agentes IA</span>?
           </h2>
-          <div className="mx-auto w-12 sm:w-16 h-[2px] bg-[#FF4400] mb-4" />
+          <div className="mx-auto w-12 sm:w-16 h-[2px] bg-[var(--color-accent)] mb-4" />
           <p className="text-sm sm:text-lg text-white/60 max-w-3xl mx-auto leading-relaxed">
             Compare o custo de contratar equipes tradicionais vs. ter agentes IA
             trabalhando para voce
@@ -156,7 +156,7 @@ export function MentorshipPricing() {
             initial={{ opacity: 0, scale: 0.95 }}
             animate={isCardInView ? { opacity: 1, scale: 1 } : {}}
             transition={{ duration: 0.7, delay: 0.2 }}
-            className="relative p-6 sm:p-8 border-2 border-[#FF4400]/40 bg-[#FF4400]/[0.03] z-10 md:-my-4"
+            className="relative p-6 sm:p-8 border-2 border-[var(--color-accent)]/40 bg-[var(--color-accent)]/[0.03] z-10 md:-my-4"
             style={{
               boxShadow: '0 0 60px rgba(255,68,0,0.12), 0 0 120px rgba(255,68,0,0.06)',
             }}
@@ -173,7 +173,7 @@ export function MentorshipPricing() {
             <div className="relative z-10">
               {/* Badge */}
               <div className="flex justify-center mb-6">
-                <div className="inline-flex items-center gap-1.5 bg-[#FF4400] px-3 py-1">
+                <div className="inline-flex items-center gap-1.5 bg-[var(--color-accent)] px-3 py-1">
                   <Sparkles className="h-3 w-3 text-white" />
                   <span
                     className="text-white text-[0.6rem] font-bold uppercase tracking-wider"
@@ -187,11 +187,11 @@ export function MentorshipPricing() {
               {/* Price */}
               <div className="text-center mb-2">
                 <div className="flex items-baseline justify-center gap-1.5">
-                  <span className="text-[#FF4400]/80 text-2xl sm:text-3xl font-bold">
+                  <span className="text-[var(--color-accent)]/80 text-2xl sm:text-3xl font-bold">
                     R$
                   </span>
                   <span
-                    className="text-[#FF4400] text-5xl sm:text-6xl font-bold"
+                    className="text-[var(--color-accent)] text-5xl sm:text-6xl font-bold"
                     style={{ fontFamily: "'Geist Mono', monospace" }}
                   >
                     8.700
@@ -201,7 +201,7 @@ export function MentorshipPricing() {
               <p className="text-center text-white/40 text-xs sm:text-sm mb-6">
                 ou{' '}
                 <span
-                  className="text-[#FF4400] font-bold"
+                  className="text-[var(--color-accent)] font-bold"
                   style={{ fontFamily: "'Geist Mono', monospace" }}
                 >
                   12x
@@ -228,7 +228,7 @@ export function MentorshipPricing() {
                     transition={{ duration: 0.4, delay: 0.4 + i * 0.08 }}
                     className="flex items-start gap-2"
                   >
-                    <Check className="h-4 w-4 flex-shrink-0 text-[#FF4400] mt-0.5" />
+                    <Check className="h-4 w-4 flex-shrink-0 text-[var(--color-accent)] mt-0.5" />
                     <span className="text-xs sm:text-sm text-white/60">
                       {item}
                     </span>
@@ -239,7 +239,7 @@ export function MentorshipPricing() {
               {/* CTA */}
               <a
                 href="#inscricao"
-                className="block w-full text-center bg-[#FF4400] text-white py-4 text-sm sm:text-base font-bold shadow-2xl shadow-[#FF4400]/40 hover:bg-[#FF5722] transition-all hover:scale-[1.02]"
+                className="block w-full text-center bg-[var(--color-accent)] text-white py-4 text-sm sm:text-base font-bold shadow-2xl shadow-[var(--color-accent)]/40 hover:bg-[#FF5722] transition-all hover:scale-[1.02]"
               >
                 Fale com um Especialista
               </a>
@@ -264,17 +264,17 @@ export function MentorshipPricing() {
           className="flex flex-wrap items-center justify-center gap-4 sm:gap-6 text-white/40 text-xs sm:text-sm"
         >
           <span className="flex items-center gap-1.5">
-            <span className="inline-block h-1.5 w-1.5 bg-[#FF4400]" />
+            <span className="inline-block h-1.5 w-1.5 bg-[var(--color-accent)]" />
             Vagas limitadas (max 12)
           </span>
           <span className="text-white/20">|</span>
           <span className="flex items-center gap-1.5">
-            <span className="inline-block h-1.5 w-1.5 bg-[#FF4400]" />
+            <span className="inline-block h-1.5 w-1.5 bg-[var(--color-accent)]" />
             Suporte vitalicio
           </span>
           <span className="text-white/20">|</span>
           <span className="flex items-center gap-1.5">
-            <span className="inline-block h-1.5 w-1.5 bg-[#FF4400]" />
+            <span className="inline-block h-1.5 w-1.5 bg-[var(--color-accent)]" />
             Satisfacao garantida
           </span>
         </motion.div>

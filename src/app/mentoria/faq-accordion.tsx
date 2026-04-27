@@ -31,15 +31,15 @@ export function FaqAccordion() {
             type="button"
             onClick={() => setOpenIndex(openIndex === i ? null : i)}
             className="flex items-center justify-between w-full cursor-pointer p-4 sm:p-6 lg:p-8 text-left gap-3"
-            id={`faq-btn-${i}`}
+            id={`faq-trigger-${i}`}
             aria-expanded={openIndex === i}
-            aria-controls={`faq-answer-${i}`}
+            aria-controls={`faq-panel-${i}`}
           >
-            <h3 className={`text-sm sm:text-lg font-semibold transition-colors leading-tight ${openIndex === i ? 'text-[#FF4400]' : 'text-white'}`}>
+            <h3 className={`text-sm sm:text-lg font-semibold transition-colors leading-tight ${openIndex === i ? 'text-[var(--color-accent)]' : 'text-white'}`}>
               {item.q}
             </h3>
             <svg
-              className={`h-4 w-4 sm:h-5 sm:w-5 text-[#FF4400] transition-transform flex-shrink-0 ${openIndex === i ? 'rotate-180' : ''}`}
+              className={`h-4 w-4 sm:h-5 sm:w-5 text-[var(--color-accent)] transition-transform flex-shrink-0 ${openIndex === i ? 'rotate-180' : ''}`}
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"
@@ -51,9 +51,9 @@ export function FaqAccordion() {
           </button>
           {openIndex === i && (
             <div
-              id={`faq-answer-${i}`}
+              id={`faq-panel-${i}`}
               role="region"
-              aria-labelledby={`faq-btn-${i}`}
+              aria-labelledby={`faq-trigger-${i}`}
               className="px-4 sm:px-6 lg:px-8 pb-4 sm:pb-6 lg:pb-8 text-white/60 leading-relaxed text-sm sm:text-base"
             >
               {item.a}

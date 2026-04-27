@@ -101,7 +101,7 @@ export function MentoriaNav() {
                   onClick={() => scrollTo(item.id)}
                   className={`relative flex-shrink-0 px-3 sm:px-4 py-4 text-xs sm:text-sm font-medium uppercase tracking-wider transition-colors cursor-pointer ${
                     isActive
-                      ? 'text-[#FF4400]'
+                      ? 'text-[var(--color-accent)]'
                       : 'text-white/60 hover:text-white/80'
                   }`}
                 >
@@ -109,7 +109,7 @@ export function MentoriaNav() {
                   {isActive && (
                     <motion.div
                       layoutId="nav-underline"
-                      className="absolute bottom-0 left-0 right-0 h-[2px] bg-[#FF4400]"
+                      className="absolute bottom-0 left-0 right-0 h-[2px] bg-[var(--color-accent)]"
                       transition={{ type: 'spring', stiffness: 400, damping: 30 }}
                     />
                   )}

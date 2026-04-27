@@ -20,7 +20,7 @@ export function Header() {
           >
             <div
               className="w-7 h-7 rounded-full overflow-hidden flex-shrink-0"
-              style={{ boxShadow: '0 0 0 2px #FF4400' }}
+              style={{ boxShadow: '0 0 0 2px var(--color-accent)' }}
             >
               <Image
                 src="/images/joao-guirunas-profile.jpg"
@@ -32,7 +32,7 @@ export function Header() {
             </div>
             <span className="text-xs font-semibold tracking-[0.20em] uppercase">
               <span className="text-white">JOÃO</span>
-              <span style={{ color: '#FF4400' }}>GUIRUNAS</span>
+              <span style={{ color: 'var(--color-accent)' }}>GUIRUNAS</span>
             </span>
           </Link>
 

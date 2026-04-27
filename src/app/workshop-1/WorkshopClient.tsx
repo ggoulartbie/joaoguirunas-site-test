@@ -38,7 +38,7 @@ const DotGrid: React.FC = () => {
 const Corner: React.FC<{ pos: "tl" | "br" }> = ({ pos }) => (
   <div className={cn("absolute z-20 pointer-events-none", pos === "tl" ? "top-6 left-6" : "bottom-6 right-6")}>
     <svg width="52" height="52" viewBox="0 0 52 52" fill="none" className={pos === "br" ? "rotate-180" : ""}>
-      <path d="M0 18V0H18" stroke="#FF4400" strokeWidth="1.5" />
+      <path d="M0 18V0H18" stroke="var(--color-accent)" strokeWidth="1.5" />
     </svg>
   </div>
 );
@@ -61,11 +61,11 @@ const Slide: React.FC<SlideProps> = ({ n, total, label = "CLAUDE CODE WORKSHOP",
       style={{ background: "radial-gradient(ellipse 40% 35% at 15% 15%, rgba(255,68,0,0.04) 0%, transparent 65%)" }} />
     <Corner pos="tl" /><Corner pos="br" />
     {/* hud label */}
-    <div className="absolute top-7 left-20 z-20 font-mono text-[10px] tracking-[0.22em] uppercase" style={{ color: "#FF4400", fontFamily: "'Roboto Mono',monospace" }}>
+    <div className="absolute top-7 left-20 z-20 font-mono text-[10px] tracking-[0.22em] uppercase" style={{ color: "var(--color-accent)", fontFamily: "'Roboto Mono',monospace" }}>
       {label}
     </div>
     {/* accent line top */}
-    <div className="absolute top-[54px] left-20 w-28 h-[1.5px] z-20" style={{ background: "#FF4400" }} />
+    <div className="absolute top-[54px] left-20 w-28 h-[1.5px] z-20" style={{ background: "var(--color-accent)" }} />
     {/* content */}
     <div className={cn("relative z-10 h-full px-20 pt-20 pb-16 flex flex-col", center && "items-center justify-center text-center")}>
       {children}
@@ -82,7 +82,7 @@ const Slide: React.FC<SlideProps> = ({ n, total, label = "CLAUDE CODE WORKSHOP",
 /* ─────────────────────────────────────────
    DESIGN TOKENS
 ───────────────────────────────────────── */
-const AC = "#FF4400";
+const AC = "var(--color-accent)";
 const DIM = "rgba(255,255,255,0.48)";
 const BORDER = "rgba(255,255,255,0.07)";
 const MONO = "'Roboto Mono',monospace";

@@ -128,12 +128,21 @@ function ProfessionalRow({
   checked: boolean;
   onToggle: () => void;
 }) {
+  function handleKeyDown(e: React.KeyboardEvent<HTMLButtonElement>) {
+    if (e.key === ' ' || e.key === 'Enter') {
+      e.preventDefault();
+      onToggle();
+    }
+  }
+
   return (
     <button
       type="button"
       onClick={onToggle}
-      aria-pressed={checked}
-      aria-label={`${pro.label}, R$ ${pro.annual.toLocaleString('pt-BR')}/ano, ${checked ? 'selecionado' : 'não selecionado'}`}
+      onKeyDown={handleKeyDown}
+      role="checkbox"
+      aria-checked={checked}
+      aria-label={`${pro.label}, R$ ${pro.annual.toLocaleString('pt-BR')}/ano`}
       className={cn(
         'w-full flex items-center gap-2 sm:gap-3 px-3 sm:px-4 py-2.5 sm:py-3 border transition-all duration-200 cursor-pointer select-none',
         checked
@@ -145,7 +154,7 @@ function ProfessionalRow({
         className={cn(
           'flex-shrink-0 w-4 h-4 border flex items-center justify-center transition-colors',
           checked
-            ? 'border-[#FF4400] bg-[#FF4400]'
+            ? 'border-[var(--color-accent)] bg-[var(--color-accent)]'
             : 'border-white/20 bg-transparent',
         )}
       >
@@ -238,9 +247,9 @@ export function PricingCalculator() {
           transition={{ duration: 0.6 }}
           className="text-center mb-10 sm:mb-14"
         >
-          <div className="inline-flex items-center gap-2 border border-[#FF4400]/30 bg-[#FF4400]/10 px-3 sm:px-4 py-1.5 mb-4 sm:mb-6">
+          <div className="inline-flex items-center gap-2 border border-[var(--color-accent)]/30 bg-[var(--color-accent)]/10 px-3 sm:px-4 py-1.5 mb-4 sm:mb-6">
             <span
-              className="text-[#FF4400] text-xs sm:text-[0.65rem]"
+              className="text-[var(--color-accent)] text-xs sm:text-[0.65rem]"
               style={{
                 fontFamily: "'Roboto Mono', var(--font-bb-mono), monospace",
                 textTransform: 'uppercase',
@@ -253,9 +262,9 @@ export function PricingCalculator() {
           </div>
           <h2 className="text-2xl font-bold text-white sm:text-3xl lg:text-4xl leading-tight tracking-tight" style={{ fontFamily: "'TASAOrbiter', var(--font-bb-display), sans-serif" }}>
             Compare o Custo Anual de uma Equipe Tradicional{' '}
-            <span className="text-[#FF4400]">vs Claude Code Agents</span>
+            <span className="text-[var(--color-accent)]">vs Claude Code Agents</span>
           </h2>
-          <div className="mx-auto mt-4 sm:mt-6 w-16 sm:w-24 h-[2px] bg-gradient-to-r from-transparent via-[#FF4400] to-transparent" />
+          <div className="mx-auto mt-4 sm:mt-6 w-16 sm:w-24 h-[2px] bg-gradient-to-r from-transparent via-[var(--color-accent)] to-transparent" />
         </motion.div>
 
         {/* Tabs */}
@@ -278,7 +287,7 @@ export function PricingCalculator() {
               className={cn(
                 'flex-shrink-0 px-4 sm:px-5 py-2 sm:py-2.5 text-xs sm:text-sm font-semibold uppercase tracking-wider transition-all duration-200',
                 activeSquad === squad.id
-                  ? 'bg-[#FF4400] text-white'
+                  ? 'bg-[var(--color-accent)] text-white'
                   : 'bg-white/[0.05] border border-white/[0.08] text-white/50 hover:bg-white/[0.08] hover:text-white/70',
               )}
               style={{ fontFamily: "'Roboto Mono', var(--font-bb-mono), monospace" }}
@@ -320,7 +329,7 @@ export function PricingCalculator() {
               <span className="text-white/60 text-sm font-medium uppercase tracking-wider">
                 Custo Anual
               </span>
-              <span className="text-xl sm:text-2xl font-bold text-[#FF4400] tabular-nums">
+              <span className="text-xl sm:text-2xl font-bold text-[var(--color-accent)] tabular-nums">
                 <AnimatedNumber value={totalAnnual} prefix="R$ " />
               </span>
             </div>
@@ -331,19 +340,19 @@ export function PricingCalculator() {
                 key={savings}
                 initial={{ scale: 0.95, opacity: 0 }}
                 animate={{ scale: 1, opacity: 1 }}
-                className="mt-4 border border-[#FF4400]/20 bg-[#FF4400]/[0.08] px-5 py-4 flex items-center justify-between"
+                className="mt-4 border border-[var(--color-accent)]/20 bg-[var(--color-accent)]/[0.08] px-5 py-4 flex items-center justify-between"
               >
                 <div className="flex items-center gap-2">
-                  <Sparkles size={16} className="text-[#FF4400]" />
+                  <Sparkles size={16} className="text-[var(--color-accent)]" />
                   <span className="text-sm font-semibold text-white/80">
                     Você Economiza
                   </span>
                 </div>
                 <div className="text-right">
-                  <span className="text-lg sm:text-xl font-bold text-[#FF4400] tabular-nums">
+                  <span className="text-lg sm:text-xl font-bold text-[var(--color-accent)] tabular-nums">
                     <AnimatedNumber value={savings} prefix="R$ " suffix="/ano" />
                   </span>
-                  <span className="ml-2 text-xs sm:text-sm text-[#FF4400]/70">
+                  <span className="ml-2 text-xs sm:text-sm text-[var(--color-accent)]/70">
                     ({savingsPercent}%)
                   </span>
                 </div>
@@ -355,7 +364,7 @@ export function PricingCalculator() {
           <div className="flex lg:flex-col items-center justify-center gap-3 py-2 lg:py-0 lg:px-0 lg:self-stretch">
             <div className="h-px lg:h-full lg:w-px flex-1 bg-white/10" />
             <span
-              className="text-[#FF4400] font-bold text-sm uppercase tracking-widest flex-shrink-0"
+              className="text-[var(--color-accent)] font-bold text-sm uppercase tracking-widest flex-shrink-0"
               style={{ fontFamily: "'Roboto Mono', var(--font-bb-mono), monospace" }}
             >
               vs
@@ -370,7 +379,7 @@ export function PricingCalculator() {
             transition={{ duration: 0.6, delay: 0.3 }}
             className="relative"
           >
-            <div className="relative h-full border border-[#FF4400]/20 bg-[#0C0C12]/80 backdrop-blur-md p-5 sm:p-8 lg:p-12 overflow-hidden">
+            <div className="relative h-full border border-[var(--color-accent)]/20 bg-[#0C0C12]/80 backdrop-blur-md p-5 sm:p-8 lg:p-12 overflow-hidden">
               {/* Glow */}
               <div
                 className="pointer-events-none absolute inset-0"
@@ -382,14 +391,14 @@ export function PricingCalculator() {
 
               <div className="relative z-10">
                 {/* Badge */}
-                <span className="inline-block px-3 py-1 text-xs font-bold uppercase tracking-widest text-[#FF4400] border border-[#FF4400]/20 bg-[#FF4400]/[0.06] mb-6">
+                <span className="inline-block px-3 py-1 text-xs font-bold uppercase tracking-widest text-[var(--color-accent)] border border-[var(--color-accent)]/20 bg-[var(--color-accent)]/[0.06] mb-6">
                   Investimento Único
                 </span>
 
                 {/* Claude Code branding */}
                 <div className="flex items-center gap-2 mb-4">
                   <div className="flex h-8 w-8 items-center justify-center border border-white/[0.08] bg-white/[0.05]">
-                    <Terminal size={16} className="text-[#FF4400]" />
+                    <Terminal size={16} className="text-[var(--color-accent)]" />
                   </div>
                   <div>
                     <p className="text-base sm:text-lg font-bold text-white leading-tight">
@@ -410,7 +419,7 @@ export function PricingCalculator() {
                   ].map((b) => (
                     <span
                       key={b}
-                      className="text-xs text-[#FF4400]/80 border border-[#FF4400]/20 bg-[#FF4400]/5 px-2 py-0.5"
+                      className="text-xs text-[var(--color-accent)]/80 border border-[var(--color-accent)]/20 bg-[var(--color-accent)]/5 px-2 py-0.5"
                       style={{ fontFamily: "'Roboto Mono', var(--font-bb-mono), monospace" }}
                     >
                       {b}
@@ -442,7 +451,7 @@ export function PricingCalculator() {
                       transition={{ duration: 0.4, delay: 0.5 + i * 0.07 }}
                       className="flex items-start gap-3"
                     >
-                      <span className="mt-0.5 flex-shrink-0 w-4 h-4 bg-[#FF4400] flex items-center justify-center">
+                      <span className="mt-0.5 flex-shrink-0 w-4 h-4 bg-[var(--color-accent)] flex items-center justify-center">
                         <Check size={10} className="text-white" />
                       </span>
                       <span className="text-sm text-white/60 leading-relaxed">
@@ -455,7 +464,7 @@ export function PricingCalculator() {
                 {/* CTA */}
                 <a
                   href="#inscricao"
-                  className="btn-primary inline-flex items-center justify-center gap-2 w-full bg-[#FF4400] px-8 py-4 text-sm sm:text-base font-bold text-white shadow-2xl shadow-[#FF4400]/40 hover:bg-[#FF5722] transition-all hover:scale-[1.02] uppercase tracking-wider"
+                  className="btn-primary inline-flex items-center justify-center gap-2 w-full bg-[var(--color-accent)] px-8 py-4 text-sm sm:text-base font-bold text-white shadow-2xl shadow-[var(--color-accent)]/40 hover:bg-[#FF5722] transition-all hover:scale-[1.02] uppercase tracking-wider"
                   style={{ fontFamily: "'Roboto Mono', var(--font-bb-mono), monospace" }}
                 >
                   <span>Fale com um Especialista</span>
@@ -474,15 +483,15 @@ export function PricingCalculator() {
           className="mt-10 sm:mt-14 flex flex-wrap items-center justify-center gap-6 sm:gap-10"
         >
           <span className="flex items-center gap-2 text-sm text-white/60">
-            <Users size={16} className="text-[#FF4400]" />
+            <Users size={16} className="text-[var(--color-accent)]" />
             Vagas limitadas (max 12 por turma)
           </span>
           <span className="flex items-center gap-2 text-sm text-white/60">
-            <HeartHandshake size={16} className="text-[#FF4400]" />
+            <HeartHandshake size={16} className="text-[var(--color-accent)]" />
             Suporte vitalício
           </span>
           <span className="flex items-center gap-2 text-sm text-white/60">
-            <Shield size={16} className="text-[#FF4400]" />
+            <Shield size={16} className="text-[var(--color-accent)]" />
             Satisfação garantida
           </span>
         </motion.div>

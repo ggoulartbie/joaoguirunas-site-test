@@ -27,7 +27,7 @@ export function MentoriaHeaderButton() {
       <a
         href={href}
         onClick={handleClick}
-        className="hidden sm:inline-flex items-center gap-2 border border-[#FF4400]/50 bg-transparent px-4 sm:px-5 py-2 sm:py-2.5 text-xs font-semibold uppercase tracking-widest text-[#FF4400] hover:bg-[#FF4400] hover:text-white hover:border-[#FF4400] transition-all duration-200"
+        className="hidden sm:inline-flex items-center gap-2 border border-[var(--color-accent)]/50 bg-transparent px-4 sm:px-5 py-2 sm:py-2.5 text-xs font-semibold uppercase tracking-widest text-[var(--color-accent)] hover:bg-[var(--color-accent)] hover:text-white hover:border-[var(--color-accent)] transition-all duration-200"
         style={{ fontFamily: "'Roboto Mono', var(--font-bb-mono), monospace" }}
         aria-label={isMentoria ? 'Ir para formulario de inscricao' : 'Ir para pagina de mentoria'}
       >
@@ -52,7 +52,7 @@ export function MentoriaHeaderButton() {
       <a
         href={href}
         onClick={handleClick}
-        className="sm:hidden inline-flex items-center gap-1.5 border border-[#FF4400]/50 bg-transparent px-4 py-2.5 text-xs font-semibold uppercase tracking-wider text-[#FF4400] hover:bg-[#FF4400] hover:text-white transition-all duration-200"
+        className="sm:hidden inline-flex items-center gap-1.5 border border-[var(--color-accent)]/50 bg-transparent px-4 py-2.5 text-xs font-semibold uppercase tracking-wider text-[var(--color-accent)] hover:bg-[var(--color-accent)] hover:text-white transition-all duration-200"
         style={{
           fontFamily: "'Roboto Mono', var(--font-bb-mono), monospace",
         }}

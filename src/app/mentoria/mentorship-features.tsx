@@ -27,7 +27,7 @@ const FeatureCard: React.FC<FeatureCardProps> = ({ icon, title, highlights, inde
       onMouseLeave={() => setIsHovered(false)}
       className="relative group h-full"
     >
-      <div className="relative h-full min-h-[320px] border border-white/[0.08] bg-white/[0.02] backdrop-blur-md p-6 sm:p-8 transition-all duration-300 hover:border-[#FF4400]/40 hover:bg-white/[0.04]">
+      <div className="relative h-full min-h-[320px] border border-white/[0.08] bg-white/[0.02] backdrop-blur-md p-6 sm:p-8 transition-all duration-300 hover:border-[var(--color-accent)]/40 hover:bg-white/[0.04]">
         {isHovered && (
           <motion.div
             initial={{ opacity: 0 }}
@@ -39,8 +39,8 @@ const FeatureCard: React.FC<FeatureCardProps> = ({ icon, title, highlights, inde
           />
         )}
         <div className="relative z-10">
-          <div className="mb-4 inline-flex items-center justify-center w-10 h-10 bg-[#FF4400]/10">
-            <div className="text-[#FF4400]">{icon}</div>
+          <div className="mb-4 inline-flex items-center justify-center w-10 h-10 bg-[var(--color-accent)]/10">
+            <div className="text-[var(--color-accent)]">{icon}</div>
           </div>
           <h3 className="text-lg sm:text-xl font-bold text-white mb-4 tracking-tight">
             {title}
@@ -48,7 +48,7 @@ const FeatureCard: React.FC<FeatureCardProps> = ({ icon, title, highlights, inde
           <ul className="space-y-3">
             {highlights.map((highlight, idx) => (
               <li key={idx} className="flex items-start gap-3 text-white/60">
-                <span className="mt-1.5 w-1.5 h-1.5 bg-[#FF4400] flex-shrink-0" />
+                <span className="mt-1.5 w-1.5 h-1.5 bg-[var(--color-accent)] flex-shrink-0" />
                 <span className="text-sm leading-relaxed">{highlight}</span>
               </li>
             ))}
@@ -119,7 +119,7 @@ function CarouselDots({ count, activeIndex }: { count: number; activeIndex: numb
         <span
           key={i}
           className={`w-2 h-2 rounded-full transition-colors duration-200 ${
-            i === activeIndex ? 'bg-[#FF4400]' : 'bg-white/20'
+            i === activeIndex ? 'bg-[var(--color-accent)]' : 'bg-white/20'
           }`}
         />
       ))}
@@ -145,9 +145,9 @@ export function MentorshipFeatures() {
           <h2 className="text-2xl font-bold text-white sm:text-3xl lg:text-4xl leading-tight tracking-tight" style={{ fontFamily: "'TASAOrbiter', var(--font-bb-display), sans-serif" }}>
             Não É Mais Um Curso Online.
             <br />
-            <span className="text-[#FF4400]">É Uma Transformação Guiada.</span>
+            <span className="text-[var(--color-accent)]">É Uma Transformação Guiada.</span>
           </h2>
-          <div className="mx-auto mt-4 sm:mt-6 w-16 sm:w-24 h-[2px] bg-gradient-to-r from-transparent via-[#FF4400] to-transparent" />
+          <div className="mx-auto mt-4 sm:mt-6 w-16 sm:w-24 h-[2px] bg-gradient-to-r from-transparent via-[var(--color-accent)] to-transparent" />
           <p className="mt-4 sm:mt-6 text-sm sm:text-lg text-white/60 max-w-2xl mx-auto leading-relaxed">
             Descubra por que nossa mentoria é diferente de tudo que você já viu
           </p>
@@ -180,7 +180,7 @@ export function MentorshipFeatures() {
         >
           <a
             href={INSCRICAO_ANCHOR}
-            className="btn-primary inline-flex items-center justify-center gap-2 bg-[#FF4400] px-8 py-4 text-sm sm:text-base font-bold text-white shadow-2xl shadow-[#FF4400]/40 hover:bg-[#FF5722] transition-all hover:scale-105 uppercase tracking-wider"
+            className="btn-primary inline-flex items-center justify-center gap-2 bg-[var(--color-accent)] px-8 py-4 text-sm sm:text-base font-bold text-white shadow-2xl shadow-[var(--color-accent)]/40 hover:bg-[#FF5722] transition-all hover:scale-105 uppercase tracking-wider"
             style={{ fontFamily: "'Roboto Mono', var(--font-bb-mono), monospace" }}
           >
             <span>Fale com um Especialista</span>

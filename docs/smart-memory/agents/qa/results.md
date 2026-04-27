@@ -1,13 +1,79 @@
 ---
 title: QA Results
 type: qa-log
-updated: 2026-04-26T00:00
+updated: 2026-04-27T00:00
 tags: [qa, veredictos]
 ---
 
 # QA Results — Veredictos formais
 
 Histórico de veredictos emitidos pelo sites-qa (Axilun).
+
+---
+
+## 2026-04-27 — Sprint 5 stories (2.3 + 3.3 + 3.4 + 4.5 + 4.6) — ✅ PASS (com 1 CONCERN não-bloqueante)
+
+**Stories revalidadas pelo sites-dev-gamma:** 4.6 H1 duplo /open-source · 2.3 A11y calculadora+FAQ · 3.4 CWV image sizes · 3.3 H1 único /mentoria · 4.5 Token cleanup #FF4400.
+
+**Build final:** `pnpm build` ✅ Compiled successfully in 1890ms — 51 páginas geradas.
+
+### Verificação por story
+
+**Story 4.6 — H1 duplo /open-source (`open-source-client.tsx`)** ✅
+- 1x heading principal (linha 168, `motion.h1`) + 1x `<h2>` (linha 439). `grep -c "<h1"` retorna 0 porque é `motion.h1` mas semanticamente é `<h1>` ao render.
+- AC atende propósito SEO/A11y: hierarquia única no documento.
+
+**Story 2.3 — A11y calculadora + FAQ** ✅
+- `pricing-calculator.tsx:139–145` — botões `<button type="button" role="checkbox" aria-checked={checked} aria-label="..." onKeyDown={handleKeyDown}>`. Sem `aria-pressed`. ✅
+- `handleKeyDown` (linha 131-136) intercepta Space/Enter com `preventDefault` + `onToggle`. ✅
+- `faq-accordion.tsx:30–37` — trigger button com `id="faq-trigger-${i}"`, `aria-expanded`, `aria-controls="faq-panel-${i}"`. ✅
+- `faq-accordion.tsx:53–57` — painel `<div id="faq-panel-${i}" role="region" aria-labelledby="faq-trigger-${i}">`. ✅
+
+**Story 3.4 — CWV image sizes** ✅
+- `mentoria/page.tsx:222` — `<Image ... sizes="(max-width: 640px) 176px, (max-width: 768px) 224px, 288px" />` nos facilitadores (João + Claudia). ✅
+- `SkillPage.tsx:126` — `<Image src={bgImage} fill sizes="100vw" />`. ✅
+- `SkillPage.tsx:65` — `softwareSchema.author = { '@type': 'Person', name: 'João Guirunas' }`. ✅
+
+**Story 3.3 — H1 único em /mentoria** ✅
+- `mentoria/page.tsx:158–163` — exatamente 1 `<h1>` com classes responsivas (`text-3xl sm:text-4xl lg:text-5xl`). ✅
+- `aria-hidden` aparece somente em SVGs decorativos (linhas 72, 85, 242). Nenhum no `<h1>`. ✅
+- Premissa anterior (FAIL Story 3.3 em 2026-04-23) corretamente abandonada — abordagem refatorada para H1 compartilhado entre breakpoints.
+
+**Story 4.5 — Token cleanup #FF4400 → var(--color-accent)** ✅ com 1 CONCERN
+- `grep -rn "#FF4400" src/ --include="*.tsx" --include="*.ts" --include="*.css"` retorna **1 ocorrência apenas**: `globals.css:43` `--color-cat-squads: #FF4400`.
+- 14 arquivos `.tsx` migrados para `var(--color-accent)` (#FF3A0E): pricing-calculator, faq-accordion, revos-form, mentoria-nav, course-modules-timeline, mentorship-features, section-dots, mentorship-pricing, solution-section, ApresentacaoClient, WorkshopClient, MentoriaHeaderButton, Footer, Header.
+- `growth-watermark.tsx`: zero referências a `#FF4400` (componente usa props `color`/`opacity`, não literal). Especificação original do ticket (manter `#FF4400` em growth-watermark) revisitada — está OK porque o componente não tem o literal.
+
+### CONCERN não-bloqueante
+
+**[CONCERN-1] Token órfão `--color-cat-squads: #FF4400` em `globals.css:43`** — sites-dev-gamma sinalizou. Verificação: `grep -rn "color-cat-squads\|cat-squads" src/ --include="*.tsx" --include="*.ts" --include="*.css"` retorna apenas a definição em `globals.css:43`. Token sem consumo. Não bloqueia push porque (a) não é usado em nenhum lugar, (b) é uma definição CSS que pode ser limpa em follow-up. **Sugestão:** remover do globals.css em story dedicada de housekeeping de tokens.
+
+### 10-point checklist
+
+| # | Critério | Resultado |
+|---|---|---|
+| 1 | Code review | ✅ Padrões consistentes; ARIA correto; sem dead code |
+| 2 | Acceptance criteria | ✅ 5/5 stories cumprem ACs |
+| 3 | Sem regressões — `pnpm build` | ✅ Compiled successfully, 51/51 páginas |
+| 4 | Performance — sizes em images | ✅ CWV LCP otimizado |
+| 5 | Acessibilidade — WCAG AA | ✅ role=checkbox+aria-checked; aria-controls/labelledby/region em FAQ |
+| 6 | SEO — H1 único | ✅ /mentoria 1x H1; /open-source 1x motion.h1 |
+| 7 | Responsivo | ✅ classes preservadas |
+| 8 | Copy | ✅ sem alteração |
+| 9 | Cross-browser | ✅ var(--color-accent) widely supported |
+| 10 | Security | ✅ N/A — apenas estilos/ARIA |
+
+### Veredicto
+
+```
+VEREDICTO: PASS
+Stories: 2.3 + 3.3 + 3.4 + 4.5 + 4.6 | Data: 2026-04-27
+Checklist: 10/10 verificados
+Build: ✅ pnpm build limpo (51 páginas)
+Issues:
+- [CONCERN-1] Token órfão --color-cat-squads: #FF4400 em globals.css:43 (housekeeping follow-up)
+Próximo passo: @sites-devops criar commit + push para main
+```
 
 ---
 

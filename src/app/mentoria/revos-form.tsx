@@ -47,7 +47,7 @@ export function RevosForm() {
           <div className="h-10 w-full animate-pulse rounded bg-white/[0.06]" />
           <div className="h-10 w-full animate-pulse rounded bg-white/[0.06]" />
           <div className="h-10 w-2/3 animate-pulse rounded bg-white/[0.06]" />
-          <div className="h-12 w-full animate-pulse rounded bg-[#FF4400]/[0.15] mt-4" />
+          <div className="h-12 w-full animate-pulse rounded bg-[var(--color-accent)]/[0.15] mt-4" />
         </div>
       )}
       {state === 'blocked' && (
@@ -59,7 +59,7 @@ export function RevosForm() {
             href="https://revos.growthsales.ai"
             target="_blank"
             rel="noopener noreferrer"
-            className="text-[#FF4400] text-sm underline underline-offset-4"
+            className="text-[var(--color-accent)] text-sm underline underline-offset-4"
           >
             Acessar diretamente →
           </a>

@@ -53,7 +53,7 @@ function SolutionCard({
       initial={{ opacity: 0, y: 40 }}
       animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 40 }}
       transition={{ duration: 0.6, delay: 0.2 + index * 0.15, ease: 'easeOut' }}
-      className="group relative h-full border border-white/[0.08] bg-white/[0.03] backdrop-blur-sm p-6 sm:p-8 lg:p-10 transition-all duration-300 hover:border-[#FF4400]/30"
+      className="group relative h-full border border-white/[0.08] bg-white/[0.03] backdrop-blur-sm p-6 sm:p-8 lg:p-10 transition-all duration-300 hover:border-[var(--color-accent)]/30"
     >
       {/* Number */}
       <span
@@ -64,7 +64,7 @@ function SolutionCard({
       </span>
 
       {/* Icon */}
-      <div className="mb-6 text-[#FF4400]/80 group-hover:text-[#FF4400] transition-colors duration-300">
+      <div className="mb-6 text-[var(--color-accent)]/80 group-hover:text-[var(--color-accent)] transition-colors duration-300">
         {card.icon}
       </div>
 
@@ -80,7 +80,7 @@ function SolutionCard({
       </p>
 
       {/* Bottom accent line on hover */}
-      <div className="absolute bottom-0 left-0 right-0 h-[2px] bg-[#FF4400] scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left" />
+      <div className="absolute bottom-0 left-0 right-0 h-[2px] bg-[var(--color-accent)] scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left" />
     </motion.div>
   );
 }
@@ -113,7 +113,7 @@ function CarouselDots({ count, activeIndex }: { count: number; activeIndex: numb
         <span
           key={i}
           className={`w-2 h-2 rounded-full transition-colors duration-200 ${
-            i === activeIndex ? 'bg-[#FF4400]' : 'bg-white/20'
+            i === activeIndex ? 'bg-[var(--color-accent)]' : 'bg-white/20'
           }`}
         />
       ))}
@@ -133,8 +133,8 @@ export function SolutionSection() {
       className="relative py-16 sm:py-24 bg-[#050507] overflow-hidden"
     >
       {/* Background blurs */}
-      <div className="pointer-events-none absolute -top-40 -left-40 w-80 h-80 bg-[#FF4400]/[0.04] rounded-full blur-[120px]" />
-      <div className="pointer-events-none absolute -bottom-40 -right-40 w-80 h-80 bg-[#FF4400]/[0.03] rounded-full blur-[120px]" />
+      <div className="pointer-events-none absolute -top-40 -left-40 w-80 h-80 bg-[var(--color-accent)]/[0.04] rounded-full blur-[120px]" />
+      <div className="pointer-events-none absolute -bottom-40 -right-40 w-80 h-80 bg-[var(--color-accent)]/[0.03] rounded-full blur-[120px]" />
 
       <div className="relative z-10 mx-auto max-w-6xl px-5 sm:px-6 lg:px-8">
         {/* Header */}
@@ -144,9 +144,9 @@ export function SolutionSection() {
           transition={{ duration: 0.6 }}
           className="text-center mb-12 sm:mb-16"
         >
-          <div className="inline-flex items-center gap-2 border border-[#FF4400]/30 bg-[#FF4400]/10 px-3 sm:px-4 py-1.5 mb-4 sm:mb-6">
+          <div className="inline-flex items-center gap-2 border border-[var(--color-accent)]/30 bg-[var(--color-accent)]/10 px-3 sm:px-4 py-1.5 mb-4 sm:mb-6">
             <span
-              className="text-[#FF4400] text-xs sm:text-[0.65rem]"
+              className="text-[var(--color-accent)] text-xs sm:text-[0.65rem]"
               style={{
                 fontFamily: "'Roboto Mono', var(--font-bb-mono), monospace",
                 textTransform: 'uppercase',
@@ -164,10 +164,10 @@ export function SolutionSection() {
           >
             Imagine ter uma equipe de especialistas
             <br />
-            <span className="text-[#FF4400]">trabalhando para você 24/7</span>
+            <span className="text-[var(--color-accent)]">trabalhando para você 24/7</span>
           </h2>
 
-          <div className="mx-auto mt-4 sm:mt-6 w-16 sm:w-24 h-[2px] bg-gradient-to-r from-transparent via-[#FF4400] to-transparent" />
+          <div className="mx-auto mt-4 sm:mt-6 w-16 sm:w-24 h-[2px] bg-gradient-to-r from-transparent via-[var(--color-accent)] to-transparent" />
 
           <p className="mt-4 sm:mt-6 text-sm sm:text-lg text-white/50 max-w-2xl mx-auto leading-relaxed">
             E se você pudesse delegar, escalar e automatizar com agentes de IA
@@ -205,7 +205,7 @@ export function SolutionSection() {
             <br />
             <span className="text-white/60">
               É o que você vai{' '}
-              <span className="text-[#FF4400]">construir nesta mentoria.</span>
+              <span className="text-[var(--color-accent)]">construir nesta mentoria.</span>
             </span>
           </p>
         </motion.div>

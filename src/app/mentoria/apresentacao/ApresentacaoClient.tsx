@@ -97,7 +97,7 @@ export function ApresentacaoClient() {
               display: inline-block;
               border: 1px solid rgba(255, 68, 0, 0.3);
               background: rgba(255, 68, 0, 0.1);
-              color: #FF4400;
+              color: var(--color-accent);
               padding: 4px 16px;
               border-radius: 9999px;
               font-family: var(--font-mono), ui-monospace, monospace;
@@ -121,7 +121,7 @@ export function ApresentacaoClient() {
             .stat-box .number {
               font-size: 1.4em;
               font-weight: 700;
-              color: #FF4400;
+              color: var(--color-accent);
               display: block;
             }
             .stat-box .label {
@@ -130,7 +130,7 @@ export function ApresentacaoClient() {
               font-family: var(--font-mono), ui-monospace, monospace;
             }
             .check {
-              color: #FF4400;
+              color: var(--color-accent);
               margin-right: 8px;
               font-weight: 700;
             }
@@ -148,13 +148,13 @@ export function ApresentacaoClient() {
             .deliverable {
               margin-top: 28px;
               padding: 16px 20px;
-              border-left: 3px solid #FF4400;
+              border-left: 3px solid var(--color-accent);
               background: rgba(255, 68, 0, 0.05);
               border-radius: 0 8px 8px 0;
             }
             .deliverable .label {
               font-size: 0.5em;
-              color: #FF4400;
+              color: var(--color-accent);
               font-family: var(--font-mono), ui-monospace, monospace;
               font-weight: 600;
               text-transform: uppercase;
@@ -174,7 +174,7 @@ export function ApresentacaoClient() {
             .part-item .duration {
               font-family: var(--font-mono), ui-monospace, monospace;
               font-size: 0.5em;
-              color: #FF4400;
+              color: var(--color-accent);
               white-space: nowrap;
               min-width: 40px;
             }
@@ -200,7 +200,7 @@ export function ApresentacaoClient() {
               padding: 6px 0;
             }
             .persona-item strong {
-              color: #FF4400;
+              color: var(--color-accent);
             }
             .alert-box {
               background: rgba(255, 68, 0, 0.08);
@@ -209,7 +209,7 @@ export function ApresentacaoClient() {
               padding: 12px 20px;
               margin-bottom: 20px;
               font-size: 0.65em;
-              color: #FF4400;
+              color: var(--color-accent);
               font-weight: 600;
             }
             .req-list {
@@ -228,7 +228,7 @@ export function ApresentacaoClient() {
               font-size: 0.5em;
               background: rgba(255, 68, 0, 0.1);
               border: 1px solid rgba(255, 68, 0, 0.2);
-              color: #FF4400;
+              color: var(--color-accent);
               padding: 4px 12px;
               border-radius: 6px;
             }
@@ -240,7 +240,7 @@ export function ApresentacaoClient() {
             }
             .col-title {
               font-size: 0.6em;
-              color: #FF4400;
+              color: var(--color-accent);
               font-weight: 600;
               font-family: var(--font-mono), ui-monospace, monospace;
               margin-bottom: 8px;
@@ -260,7 +260,7 @@ export function ApresentacaoClient() {
               <h1 style={{ textAlign: 'center' }}>
                 Mentoria Claude Code
                 <br />
-                <span style={{ color: '#FF4400' }}>+ AIOX</span>
+                <span style={{ color: 'var(--color-accent)' }}>+ AIOX</span>
               </h1>
               <p style={{ fontSize: '0.85em', color: '#a1a1aa', textAlign: 'center', marginTop: '8px' }}>
                 Tenha uma equipe de agentes de IA trabalhando para você

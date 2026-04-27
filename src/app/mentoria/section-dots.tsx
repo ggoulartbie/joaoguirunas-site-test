@@ -77,7 +77,7 @@ export function SectionDots() {
               <span
                 className={`rounded-full transition-all duration-300 flex-shrink-0 ${
                   isActive
-                    ? 'w-2 h-2 bg-[#FF4400]'
+                    ? 'w-2 h-2 bg-[var(--color-accent)]'
                     : 'w-1.5 h-1.5 bg-white/15 group-hover:bg-white/30'
                 }`}
                 style={{

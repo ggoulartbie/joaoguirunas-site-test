@@ -118,87 +118,34 @@ export default function MentoriaPage() {
       <SectionDots />
       {/* ===== HERO ===== */}
       <section id="hero" className="relative w-full bg-[#050507] -mt-16">
-        {/* MOBILE: imagem no topo, texto abaixo com overlap */}
-        <div className="sm:hidden">
-          {/* Imagem com overlay, degradê e texto dentro */}
-          <div className="relative w-full overflow-hidden" style={{ height: '380px' }}>
-            <Image
-              src="/images/mentoria-hero-v2.png"
-              alt="João Guirunas - Mentoria Claude Code"
-              fill
-              className="object-cover"
-              style={{ objectPosition: '92% 30%', transform: 'scaleX(-1)' }}
-              priority
-            />
-            {/* Overlay geral */}
-            <div className="absolute inset-0 bg-[#050507]/55" />
-            {/* Degradê na base */}
-            <div className="absolute inset-0" style={{ background: 'linear-gradient(to bottom, transparent 0%, rgba(5,5,7,0.03) 30%, rgba(5,5,7,0.1) 55%, rgba(5,5,7,0.5) 75%, rgba(5,5,7,0.82) 88%, #050507 98%)' }} />
-            {/* Texto sobre a imagem */}
-            <div className="absolute bottom-0 left-0 right-0 z-10 px-6 pb-6">
-              <div className="flex flex-col items-start gap-2 mb-4">
-                <div className="inline-flex items-center gap-2 border border-white/20 px-3 py-1.5" style={{ background: 'rgba(255,255,255,0.04)', fontFamily: "var(--font-mono)" }}>
-                  <Icon name="clock" size="16" className="text-[#FF3A0E]" />
-                  <span className="text-white/70 text-xs uppercase tracking-wider">Início da turma: <strong className="text-white">12 de maio</strong></span>
-                </div>
-                <div className="inline-flex items-center gap-2 border border-[#FF3A0E]/60 px-4 py-2" style={{ background: 'rgba(255,58,14,0.08)' }}>
-                  <span className="relative inline-flex h-2.5 w-2.5">
-                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#FF3A0E] opacity-75" />
-                    <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-[#FF3A0E]" />
-                  </span>
-                  <span className="text-[#FF3A0E] text-xs font-semibold uppercase tracking-wider" style={{ fontFamily: "var(--font-mono)" }}>
-                    Restam somente 4 vagas
-                  </span>
-                </div>
-              </div>
-              <h1 className="text-3xl text-white mb-3" style={{ lineHeight: 0.95, letterSpacing: '-0.03em' }}>
-                <span style={{ fontFamily: 'var(--font-display-serif)', fontWeight: 400 }}>Tenha uma Equipe de Agentes de IA </span>
-                <span style={{ fontFamily: 'var(--font-display-serif)', fontStyle: 'italic', fontWeight: 300, color: '#FF3A0E' }}>
-                  Trabalhando Para Você 24/7
-                </span>
-              </h1>
-              <p className="text-sm text-white/80 leading-relaxed mb-5">
-                Aprenda a criar, configurar e orquestrar agentes autônomos que executam tarefas complexas para você. <strong className="text-white font-medium">Mentoria intensiva e prática.</strong>
-              </p>
-              <div className="flex flex-col gap-3">
-                <CtaButton label="Fale com um Especialista" />
-                <CtaButton label="Como Funciona" variant="secondary" />
-              </div>
-            </div>
-          </div>
-          {/* Linha abaixo da imagem */}
-          <div className="px-6 py-4 bg-[#050507]">
-            <p className="text-white/60 text-xs uppercase tracking-widest flex items-center gap-2 flex-wrap" style={{ fontFamily: "var(--font-mono)" }}>
-              <Icon name="clock" size="16" className="text-[#FF3A0E]" /> Max. 12 pessoas <span className="opacity-40">|</span> <Icon name="check" size="16" className="text-[#FF3A0E]" /> Garantia 7 dias
-            </p>
-            <p className="text-white/40 text-xs uppercase tracking-widest flex items-center gap-2 flex-wrap mt-2" style={{ fontFamily: "var(--font-mono)" }}>
-              <Icon name="clock" size="16" className="text-[#FF3A0E]" /> Próxima turma: <span className="text-white font-semibold">12 de maio</span> <span className="opacity-40">|</span> Restam 4 vagas
-            </p>
-          </div>
-        </div>
-
-        {/* DESKTOP: layout overlay original */}
-        <div className="relative hidden sm:block min-h-[62vh] overflow-hidden">
-          <GrowthWatermark size={600} className="bottom-0 right-0 translate-x-1/4" />
+        {/* Unified hero — single layout with responsive classes */}
+        <div className="relative min-h-[380px] sm:min-h-[62vh] overflow-hidden">
+          <GrowthWatermark size={600} className="bottom-0 right-0 translate-x-1/4 hidden sm:block" />
           <Image
             src="/images/mentoria-hero-v2.png"
-            alt="Equipe GrowthSales AI"
+            alt="João Guirunas - Mentoria Claude Code"
             fill
             className="object-cover"
             style={{ objectPosition: '92% 30%', transform: 'scaleX(-1)' }}
             priority
           />
-          <div className="absolute inset-0" style={{ background: 'linear-gradient(to right, #050507 0%, #050507 28%, rgba(5,5,7,0.85) 44%, rgba(5,5,7,0.3) 68%, rgba(5,5,7,0.1) 100%)' }} />
-          <div className="absolute inset-0" style={{ background: 'linear-gradient(to bottom, rgba(5,5,7,0.4) 0%, transparent 25%, transparent 48%, rgba(5,5,7,0.6) 65%, rgba(5,5,7,0.88) 78%, #050507 88%)' }} />
-          <div className="absolute inset-0 flex items-center px-10 lg:px-16">
-            <div className="mx-auto max-w-7xl w-full">
-              <div className="max-w-xl lg:max-w-2xl">
-                <div className="flex flex-col items-start gap-2 mb-6">
+          {/* Mobile overlay */}
+          <div className="absolute inset-0 bg-[#050507]/55 sm:hidden" />
+          <div className="absolute inset-0 sm:hidden" style={{ background: 'linear-gradient(to bottom, transparent 0%, rgba(5,5,7,0.03) 30%, rgba(5,5,7,0.1) 55%, rgba(5,5,7,0.5) 75%, rgba(5,5,7,0.82) 88%, #050507 98%)' }} />
+          {/* Desktop overlay */}
+          <div className="absolute inset-0 hidden sm:block" style={{ background: 'linear-gradient(to right, #050507 0%, #050507 28%, rgba(5,5,7,0.85) 44%, rgba(5,5,7,0.3) 68%, rgba(5,5,7,0.1) 100%)' }} />
+          <div className="absolute inset-0 hidden sm:block" style={{ background: 'linear-gradient(to bottom, rgba(5,5,7,0.4) 0%, transparent 25%, transparent 48%, rgba(5,5,7,0.6) 65%, rgba(5,5,7,0.88) 78%, #050507 88%)' }} />
+
+          {/* Content */}
+          <div className="absolute bottom-0 left-0 right-0 sm:inset-0 z-10 sm:flex sm:items-center sm:px-10 lg:px-16">
+            <div className="sm:mx-auto sm:max-w-7xl sm:w-full px-6 pb-6 sm:px-0 sm:pb-0">
+              <div className="sm:max-w-xl lg:max-w-2xl">
+                <div className="flex flex-col items-start gap-2 mb-4 sm:mb-6">
                   <div className="inline-flex items-center gap-2 border border-white/20 px-3 py-1.5" style={{ background: 'rgba(255,255,255,0.04)', fontFamily: "var(--font-mono)" }}>
                     <Icon name="clock" size="16" className="text-[#FF3A0E]" />
                     <span className="text-white/70 text-xs uppercase tracking-wider">Início da turma: <strong className="text-white">12 de maio</strong></span>
                   </div>
-                  <div className="inline-flex items-center gap-2 backdrop-blur-sm border border-[#FF3A0E]/60 px-4 py-2" style={{ background: 'rgba(255,58,14,0.08)' }}>
+                  <div className="inline-flex items-center gap-2 sm:backdrop-blur-sm border border-[#FF3A0E]/60 px-4 py-2" style={{ background: 'rgba(255,58,14,0.08)' }}>
                     <span className="relative inline-flex h-2.5 w-2.5">
                       <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#FF3A0E] opacity-75" />
                       <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-[#FF3A0E]" />
@@ -208,28 +155,37 @@ export default function MentoriaPage() {
                     </span>
                   </div>
                 </div>
-                <h1 className="text-4xl lg:text-5xl text-white mb-5" style={{ lineHeight: 0.95, letterSpacing: '-0.03em' }}>
+                <h1 className="text-3xl sm:text-4xl lg:text-5xl text-white mb-3 sm:mb-5" style={{ lineHeight: 0.95, letterSpacing: '-0.03em' }}>
                   <span style={{ fontFamily: 'var(--font-display-serif)', fontWeight: 400 }}>Tenha uma Equipe de Agentes de IA </span>
                   <span style={{ fontFamily: 'var(--font-display-serif)', fontStyle: 'italic', fontWeight: 300, color: '#FF3A0E' }}>
                     Trabalhando Para Você 24/7
                   </span>
                 </h1>
-                <p className="text-base text-white/80 max-w-lg leading-relaxed mb-8">
-                  Aprenda a criar, configurar e orquestrar agentes autônomos que executam tarefas complexas para você — da escrita de código à criação de conteúdo. <strong className="text-white font-medium">Mentoria intensiva e prática.</strong>
+                <p className="text-sm sm:text-base text-white/80 sm:max-w-lg leading-relaxed mb-5 sm:mb-8">
+                  Aprenda a criar, configurar e orquestrar agentes autônomos que executam tarefas complexas para você <span className="hidden sm:inline">— da escrita de código à criação de conteúdo</span>. <strong className="text-white font-medium">Mentoria intensiva e prática.</strong>
                 </p>
-                <div className="flex flex-row gap-4 mb-8">
+                <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 mb-0 sm:mb-8">
                   <CtaButton label="Fale com um Especialista" />
                   <CtaButton label="Como Funciona" variant="secondary" />
                 </div>
-                <p className="text-white/60 text-xs uppercase tracking-widest flex items-center gap-2" style={{ fontFamily: "var(--font-mono)" }}>
+                <p className="hidden sm:flex text-white/60 text-xs uppercase tracking-widest items-center gap-2" style={{ fontFamily: "var(--font-mono)" }}>
                   <Icon name="clock" size="16" className="text-[#FF3A0E]" /> Max. 12 pessoas <span className="opacity-40">|</span> <Icon name="check" size="16" className="text-[#FF3A0E]" /> Garantia 7 dias
                 </p>
-                <p className="text-white/40 text-xs uppercase tracking-widest flex items-center gap-2 mt-2" style={{ fontFamily: "var(--font-mono)" }}>
+                <p className="hidden sm:flex text-white/40 text-xs uppercase tracking-widest items-center gap-2 mt-2" style={{ fontFamily: "var(--font-mono)" }}>
                   <Icon name="clock" size="16" className="text-[#FF3A0E]" /> Próxima turma: <span className="text-white font-semibold">12 de maio</span> <span className="opacity-40">|</span> Restam 4 vagas
                 </p>
               </div>
             </div>
           </div>
+        </div>
+        {/* Mobile trust strip */}
+        <div className="px-6 py-4 bg-[#050507] sm:hidden">
+          <p className="text-white/60 text-xs uppercase tracking-widest flex items-center gap-2 flex-wrap" style={{ fontFamily: "var(--font-mono)" }}>
+            <Icon name="clock" size="16" className="text-[#FF3A0E]" /> Max. 12 pessoas <span className="opacity-40">|</span> <Icon name="check" size="16" className="text-[#FF3A0E]" /> Garantia 7 dias
+          </p>
+          <p className="text-white/40 text-xs uppercase tracking-widest flex items-center gap-2 flex-wrap mt-2" style={{ fontFamily: "var(--font-mono)" }}>
+            <Icon name="clock" size="16" className="text-[#FF3A0E]" /> Próxima turma: <span className="text-white font-semibold">12 de maio</span> <span className="opacity-40">|</span> Restam 4 vagas
+          </p>
         </div>
       </section>
 
@@ -263,7 +219,7 @@ export default function MentoriaPage() {
                     className="w-44 h-44 sm:w-56 sm:h-56 lg:w-72 lg:h-72 overflow-hidden transition-all duration-500 group-hover:[box-shadow:0_0_32px_rgba(255,58,14,0.18)] group-hover:[border-color:rgba(255,58,14,0.35)]"
                     style={{ border: '1px solid rgba(255,255,255,0.12)' }}
                   >
-                    <Image src={f.img} alt={`${f.name} - ${f.role}`} width={288} height={288} className="w-full h-full object-cover object-top grayscale group-hover:grayscale-0 transition-all duration-500" />
+                    <Image src={f.img} alt={`${f.name} - ${f.role}`} width={288} height={288} sizes="(max-width: 640px) 176px, (max-width: 768px) 224px, 288px" className="w-full h-full object-cover object-top grayscale group-hover:grayscale-0 transition-all duration-500" />
                   </div>
                 </div>
                 <div className="space-y-4">

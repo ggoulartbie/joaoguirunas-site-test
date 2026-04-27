@@ -62,7 +62,7 @@ export function generateSkillJsonLd({
     applicationCategory: 'DeveloperApplication',
     operatingSystem: 'Cross-platform',
     offers: { '@type': 'Offer', price: '0', priceCurrency: 'BRL' },
-    ...(author && { author: { '@type': 'Person', name: author.replace('@', '') } }),
+    ...(author && { author: { '@type': 'Person', name: 'João Guirunas' } }),
     ...(primaryLink && { url: primaryLink }),
   };
 
@@ -123,6 +123,7 @@ export function SkillPage({
               src={bgImage}
               alt=""
               fill
+              sizes="100vw"
               className="object-cover"
               style={{ objectPosition: bgPosition }}
               priority

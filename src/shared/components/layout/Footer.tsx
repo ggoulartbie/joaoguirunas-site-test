@@ -132,7 +132,7 @@ export function Footer() {
               <li>
                 <Link
                   href="/mentoria"
-                  className="text-sm text-[#FF4400] hover:text-[#FF5C10] transition-colors font-medium"
+                  className="text-sm text-[var(--color-accent)] hover:text-[#FF5C10] transition-colors font-medium"
                 >
                   Mentoria
                 </Link>
