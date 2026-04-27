@@ -83,14 +83,14 @@ export default function XquadsPage() {
       canonicalPath="/squads/xquads"
     >
       {/* Sobre o Autor */}
-      <section className="py-20 bg-[#0A0A0F]">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <section className="py-20 bg-[#0e0e11]">
+        <div className="mx-auto max-w-6xl px-6 sm:px-10 lg:px-[140px]">
           <div className="max-w-3xl">
-            <p className="text-sm font-semibold uppercase tracking-wider text-[#FF4400] mb-3">
+            <p className="text-sm font-semibold uppercase tracking-wider text-[#FF3A0E] mb-3">
               Sobre o Autor
             </p>
-            <h2 className="text-3xl font-bold text-white sm:text-4xl mb-6">@rafa.grandi</h2>
-            <div className="glass-card rounded-2xl p-8">
+            <h2 className="text-2xl sm:text-3xl font-semibold tracking-tight text-white sm:text-3xl mb-6">@rafa.grandi</h2>
+            <div className="glass-card p-8">
               <div className="flex flex-col sm:flex-row gap-6">
                 <div className="flex-1 space-y-4">
                   <p className="text-lg text-white/60 leading-relaxed">

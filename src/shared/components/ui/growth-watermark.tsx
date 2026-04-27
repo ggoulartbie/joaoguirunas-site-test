@@ -1,23 +1,25 @@
-export function GrowthWatermark({ size = 600, className = '' }: { size?: number; className?: string }) {
+export function GrowthWatermark({
+  size = 600,
+  className = '',
+  color = 'white',
+  opacity = 0.05,
+}: {
+  size?: number;
+  className?: string;
+  color?: string;
+  opacity?: number;
+}) {
+  const height = Math.round(size * (390 / 530));
   return (
     <div
       className={`absolute pointer-events-none select-none ${className}`}
-      style={{ width: size, height: size, opacity: 0.05 }}
+      style={{ width: size, height, opacity }}
       aria-hidden="true"
     >
-      <svg viewBox="0 0 1024 1024" width="100%" height="100%" fill="none">
-        <defs>
-          <linearGradient id="gs-wm-grad" x1="22.75" y1="628.32" x2="804.51" y2="198.61" gradientUnits="userSpaceOnUse">
-            <stop offset="0.1" stopColor="#FF4400" />
-            <stop offset="1" stopColor="#FF1A00" />
-          </linearGradient>
-        </defs>
-        <path
-          fillRule="evenodd"
-          clipRule="evenodd"
-          d="M921.001 706.671L919.622 707.725L920.209 708.15L898.465 723.903L889.106 731.061L888.953 730.795L511.604 1004.19L103 708.15L126.317 691.256L104.876 706.671L512 20V412.399L843.971 652.915L512.001 78.1611V20L921.001 706.671ZM166.956 708.148L511.604 957.849L856.253 708.148L511.604 458.447L166.956 708.148Z"
-          fill="url(#gs-wm-grad)"
-        />
+      <svg viewBox="0 0 530 390" width="100%" height="100%" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M464.151 357.5H136.795L300.473 73.999L464.151 357.5Z" stroke={color} strokeWidth="9" />
+        <path d="M434.945 344H92L263.473 47L434.945 344ZM175 302H351L263 149L175 302Z" fill={color} />
+        <path d="M393.151 320.5H65.7949L229.473 36.999L393.151 320.5Z" stroke={color} strokeWidth="9" />
       </svg>
     </div>
   );

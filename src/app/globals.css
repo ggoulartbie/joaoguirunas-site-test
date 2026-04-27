@@ -141,16 +141,14 @@ body::before {
    CARDS — BRUTALIST, SHARP EDGES, GLOW HOVER
    ============================================ */
 .glass-card {
-  background: rgba(255, 255, 255, 0.02);
-  border: 1px solid rgba(255, 255, 255, 0.10);
+  background: #16161a;
+  border: 1px solid rgba(255, 255, 255, 0.07);
   border-radius: 0;
-  transition: border-color 0.2s ease, box-shadow 0.3s ease, transform 0.2s ease;
+  transition: background-color 0.15s ease;
 }
 
 .glass-card:hover {
-  border-color: rgba(255, 58, 14, 0.35);
-  box-shadow: 0 0 24px rgba(255, 58, 14, 0.12), inset 0 0 12px rgba(255, 58, 14, 0.03);
-  transform: translateY(-2px);
+  background: #1f1f24;
 }
 
 /* ============================================

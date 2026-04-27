@@ -83,13 +83,13 @@ export default function AioxMonitorPage() {
       bgPosition="center 15%"
       canonicalPath="/monitor/aiox-monitor"
     >
-      <section className="py-20 bg-[#08080C]">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <section className="py-20 bg-[#0e0e11]">
+        <div className="mx-auto max-w-6xl px-6 sm:px-10 lg:px-[140px]">
           <div className="max-w-3xl">
             <p
-              className="text-[#FF4400] mb-3"
+              className="text-[#FF3A0E] mb-3"
               style={{
-                fontFamily: "'Geist Mono', monospace",
+                fontFamily: 'var(--font-mono)',
                 fontSize: '0.65rem',
                 textTransform: 'uppercase',
                 letterSpacing: '0.14em',
@@ -98,11 +98,11 @@ export default function AioxMonitorPage() {
             >
               Instalação
             </p>
-            <h2 className="text-3xl font-bold text-white mb-8">Como instalar</h2>
+            <h2 className="text-2xl sm:text-3xl font-semibold tracking-tight text-white mb-8">Como instalar</h2>
             <div className="space-y-6">
               <div>
                 <p className="text-white/60 mb-3 text-sm">Clone o repositório:</p>
-                <div className="bg-[#0D0D14] border border-white/10 p-4 font-mono text-sm text-[#FF4400]">
+                <div className="bg-[#16161a] border border-white/10 p-4 font-mono text-sm text-[#FF3A0E]">
                   git clone https://github.com/SynkraAI/aiox-dashboard
                   <br />
                   cd aiox-dashboard
@@ -110,7 +110,7 @@ export default function AioxMonitorPage() {
               </div>
               <div>
                 <p className="text-white/60 mb-3 text-sm">Instale as dependências e inicie:</p>
-                <div className="bg-[#0D0D14] border border-white/10 p-4 font-mono text-sm text-[#FF4400]">
+                <div className="bg-[#16161a] border border-white/10 p-4 font-mono text-sm text-[#FF3A0E]">
                   npm install
                   <br />
                   npm run dev

@@ -12,6 +12,10 @@ export function RevosForm() {
   const [state, setState] = useState<LoadState>('loading')
 
   useEffect(() => {
+    // Clear any previously injected form content before re-initialising
+    const container = document.getElementById(DIV_ID)
+    if (container) container.innerHTML = ''
+
     document.querySelectorAll(`script[data-revos="${FORM_ID}"]`).forEach(el => el.remove())
 
     const script = document.createElement('script')
@@ -30,6 +34,8 @@ export function RevosForm() {
     return () => {
       script.remove()
       window.clearTimeout(timeout)
+      const el = document.getElementById(DIV_ID)
+      if (el) el.innerHTML = ''
     }
   }, [])
 

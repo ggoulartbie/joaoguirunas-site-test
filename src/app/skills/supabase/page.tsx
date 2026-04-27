@@ -74,13 +74,13 @@ export default function SupabasePage() {
       bgImage="/images/bg-supabase.png"
       canonicalPath="/skills/supabase"
     >
-      <section className="py-20 bg-[#0A0A0F]">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <section className="py-20 bg-[#0e0e11]">
+        <div className="mx-auto max-w-6xl px-6 sm:px-10 lg:px-[140px]">
           <div className="max-w-3xl">
-            <p className="text-sm font-semibold uppercase tracking-wider text-[#0EA5E9] mb-3">
+            <p className="text-sm font-semibold uppercase tracking-wider text-[#FF3A0E] mb-3">
               Tutorial
             </p>
-            <h2 className="text-3xl font-bold text-white sm:text-4xl mb-8">
+            <h2 className="text-2xl sm:text-3xl font-semibold tracking-tight text-white sm:text-3xl mb-8">
               Supabase CLI no Terminal
             </h2>
             <div className="space-y-6">
@@ -88,7 +88,7 @@ export default function SupabasePage() {
                 <h3 className="text-lg font-semibold text-white mb-3">
                   1. Instalar Supabase CLI
                 </h3>
-                <pre className="bg-black/50 p-4 text-sm text-green-400 overflow-x-auto">
+                <pre className="bg-[#050507] p-4 text-sm text-[#FF3A0E] overflow-x-auto">
                   <code>{`# macOS
 brew install supabase/tap/supabase
 
@@ -104,7 +104,7 @@ scoop install supabase`}</code>
                 <h3 className="text-lg font-semibold text-white mb-3">
                   2. Login e Init
                 </h3>
-                <pre className="bg-black/50 p-4 text-sm text-green-400 overflow-x-auto">
+                <pre className="bg-[#050507] p-4 text-sm text-[#FF3A0E] overflow-x-auto">
                   <code>{`# Login
 supabase login
 
@@ -119,7 +119,7 @@ supabase link --project-ref SEU_PROJECT_REF`}</code>
                 <h3 className="text-lg font-semibold text-white mb-3">
                   3. Desenvolvimento local
                 </h3>
-                <pre className="bg-black/50 p-4 text-sm text-green-400 overflow-x-auto">
+                <pre className="bg-[#050507] p-4 text-sm text-[#FF3A0E] overflow-x-auto">
                   <code>{`# Subir Supabase local (Docker)
 supabase start
 
@@ -134,7 +134,7 @@ supabase stop`}</code>
                 <h3 className="text-lg font-semibold text-white mb-3">
                   4. Migrations
                 </h3>
-                <pre className="bg-black/50 p-4 text-sm text-green-400 overflow-x-auto">
+                <pre className="bg-[#050507] p-4 text-sm text-[#FF3A0E] overflow-x-auto">
                   <code>{`# Criar migration
 supabase migration new create_users_table
 
@@ -155,7 +155,7 @@ supabase db diff --schema public`}</code>
                 <h3 className="text-lg font-semibold text-white mb-3">
                   5. Edge Functions
                 </h3>
-                <pre className="bg-black/50 p-4 text-sm text-green-400 overflow-x-auto">
+                <pre className="bg-[#050507] p-4 text-sm text-[#FF3A0E] overflow-x-auto">
                   <code>{`# Criar edge function
 supabase functions new minha-funcao
 
@@ -173,7 +173,7 @@ supabase functions list`}</code>
                 <h3 className="text-lg font-semibold text-white mb-3">
                   6. Gerar tipos TypeScript
                 </h3>
-                <pre className="bg-black/50 p-4 text-sm text-green-400 overflow-x-auto">
+                <pre className="bg-[#050507] p-4 text-sm text-[#FF3A0E] overflow-x-auto">
                   <code>{`# Gerar types do schema
 supabase gen types typescript --local > types/database.ts
 

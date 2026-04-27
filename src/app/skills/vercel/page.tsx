@@ -74,13 +74,13 @@ export default function VercelPage() {
       bgImage="/images/bg-vercel.png"
       canonicalPath="/skills/vercel"
     >
-      <section className="py-20 bg-[#0A0A0F]">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <section className="py-20 bg-[#0e0e11]">
+        <div className="mx-auto max-w-6xl px-6 sm:px-10 lg:px-[140px]">
           <div className="max-w-3xl">
-            <p className="text-sm font-semibold uppercase tracking-wider text-[#0EA5E9] mb-3">
+            <p className="text-sm font-semibold uppercase tracking-wider text-[#FF3A0E] mb-3">
               Tutorial
             </p>
-            <h2 className="text-3xl font-bold text-white sm:text-4xl mb-8">
+            <h2 className="text-2xl sm:text-3xl font-semibold tracking-tight text-white sm:text-3xl mb-8">
               Setup no Terminal
             </h2>
             <div className="space-y-6">
@@ -88,13 +88,13 @@ export default function VercelPage() {
                 <h3 className="text-lg font-semibold text-white mb-3">
                   1. Instalar Vercel CLI
                 </h3>
-                <pre className="bg-black/50 p-4 text-sm text-green-400 overflow-x-auto">
+                <pre className="bg-[#050507] p-4 text-sm text-[#FF3A0E] overflow-x-auto">
                   <code>npm i -g vercel</code>
                 </pre>
               </div>
               <div className="glass-card p-6">
                 <h3 className="text-lg font-semibold text-white mb-3">2. Login</h3>
-                <pre className="bg-black/50 p-4 text-sm text-green-400 overflow-x-auto">
+                <pre className="bg-[#050507] p-4 text-sm text-[#FF3A0E] overflow-x-auto">
                   <code>vercel login</code>
                 </pre>
               </div>
@@ -102,7 +102,7 @@ export default function VercelPage() {
                 <h3 className="text-lg font-semibold text-white mb-3">
                   3. Deploy do projeto
                 </h3>
-                <pre className="bg-black/50 p-4 text-sm text-green-400 overflow-x-auto">
+                <pre className="bg-[#050507] p-4 text-sm text-[#FF3A0E] overflow-x-auto">
                   <code>{`# Preview deploy
 vercel
 
@@ -114,7 +114,7 @@ vercel --prod`}</code>
                 <h3 className="text-lg font-semibold text-white mb-3">
                   4. Configurar dominio
                 </h3>
-                <pre className="bg-black/50 p-4 text-sm text-green-400 overflow-x-auto">
+                <pre className="bg-[#050507] p-4 text-sm text-[#FF3A0E] overflow-x-auto">
                   <code>{`# Adicionar dominio custom
 vercel domains add meusite.com
 
@@ -126,7 +126,7 @@ vercel domains ls`}</code>
                 <h3 className="text-lg font-semibold text-white mb-3">
                   5. Variaveis de ambiente
                 </h3>
-                <pre className="bg-black/50 p-4 text-sm text-green-400 overflow-x-auto">
+                <pre className="bg-[#050507] p-4 text-sm text-[#FF3A0E] overflow-x-auto">
                   <code>{`# Adicionar env var
 vercel env add MINHA_CHAVE
 
@@ -141,7 +141,7 @@ vercel env pull`}</code>
                 <h3 className="text-lg font-semibold text-white mb-3">
                   6. Comandos uteis
                 </h3>
-                <pre className="bg-black/50 p-4 text-sm text-green-400 overflow-x-auto">
+                <pre className="bg-[#050507] p-4 text-sm text-[#FF3A0E] overflow-x-auto">
                   <code>{`# Ver deploys recentes
 vercel ls
 

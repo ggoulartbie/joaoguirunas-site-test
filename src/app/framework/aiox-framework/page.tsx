@@ -82,13 +82,13 @@ export default function AioxFrameworkPage() {
       bgImage="/images/bg-framework.png"
       canonicalPath="/framework/aiox-framework"
     >
-      <section className="py-20 bg-[#08080C]">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <section className="py-20 bg-[#0e0e11]">
+        <div className="mx-auto max-w-6xl px-6 sm:px-10 lg:px-[140px]">
           <div className="max-w-3xl">
             <p
-              className="text-[#FF4400] mb-3"
+              className="text-[#FF3A0E] mb-3"
               style={{
-                fontFamily: "'Geist Mono', monospace",
+                fontFamily: 'var(--font-mono)',
                 fontSize: '0.65rem',
                 textTransform: 'uppercase',
                 letterSpacing: '0.14em',
@@ -97,17 +97,17 @@ export default function AioxFrameworkPage() {
             >
               Instalação
             </p>
-            <h2 className="text-3xl font-bold text-white mb-8">Como instalar</h2>
+            <h2 className="text-2xl sm:text-3xl font-semibold tracking-tight text-white mb-8">Como instalar</h2>
             <div className="space-y-6">
               <div>
                 <p className="text-white/60 mb-3 text-sm">Novo projeto:</p>
-                <div className="bg-[#0D0D14] border border-white/10 p-4 font-mono text-sm text-[#FF4400]">
+                <div className="bg-[#16161a] border border-white/10 p-4 font-mono text-sm text-[#FF3A0E]">
                   npx aiox-core init meu-projeto
                 </div>
               </div>
               <div>
                 <p className="text-white/60 mb-3 text-sm">Projeto existente:</p>
-                <div className="bg-[#0D0D14] border border-white/10 p-4 font-mono text-sm text-[#FF4400]">
+                <div className="bg-[#16161a] border border-white/10 p-4 font-mono text-sm text-[#FF3A0E]">
                   cd seu-projeto
                   <br />
                   npx aiox-core install
@@ -115,7 +115,7 @@ export default function AioxFrameworkPage() {
               </div>
               <div>
                 <p className="text-white/60 mb-3 text-sm">Ativar um agente (Claude Code):</p>
-                <div className="bg-[#0D0D14] border border-white/10 p-4 font-mono text-sm text-[#FF4400]">
+                <div className="bg-[#16161a] border border-white/10 p-4 font-mono text-sm text-[#FF3A0E]">
                   /agent-name
                 </div>
               </div>

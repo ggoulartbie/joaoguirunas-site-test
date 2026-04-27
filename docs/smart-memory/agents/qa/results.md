@@ -11,7 +11,68 @@ Histórico de veredictos emitidos pelo sites-qa (Axilun).
 
 ---
 
-## 2026-04-26 (revisão) — Stories 4.1–4.4 (Epic KV Growth Sales) — ⚠️ CONCERNS
+## 2026-04-26 (re-revisão final) — Stories 4.1–4.4 (Epic KV Growth Sales) — ✅ PASS (com 2 CONCERNS não-bloqueantes)
+
+**Re-revisão após fix:** sites-dev-alpha-2 removeu o bloco legado em `open-source-client.tsx` (commit `91a64d0`). CONCERN-A bloqueante resolvido. Verificação completa abaixo.
+
+### Verificação do fix (CONCERN-A)
+
+- ✅ Bloco `<div className="text-center mb-12 sm:mb-16">` (antigas linhas 204-221) **removido** integralmente — confirmado via `git show 91a64d0`.
+- ✅ Novo fluxo do `<section id="skills">`: header editorial KV (191-202) → search (205-234) → category filters (237-252) → grid. Sem duplicação interna.
+- ✅ TypeScript continua limpo (`tsc --noEmit` zero erros).
+- ✅ Branch ativa: `feat/kv-open-source-header` (merge de `feat/kv-global-tokens-watermark` em `4935217`).
+
+### Novos CONCERNS detectados na re-revisão
+
+**[CONCERN-C — não-bloqueante, regressão SEO/A11y leve] Dois `<h1>` na mesma página `/open-source`:**
+- `open-source-client.tsx:151` — H1 do hero ultrawide: "Open Source Skills" (pré-existente).
+- `open-source-client.tsx:196` — H1 do header editorial KV: "Open Source" (novo, Story 4.4).
+- **Impacto:** Múltiplos `<h1>` na mesma página criam hierarquia ambígua para crawlers (Google trata o primeiro como primary; segundo é tratado como subseção ambígua) e screen readers anunciam dois "primary headings". WCAG 2.1 (2.4.6) requer headings descritivos.
+- **Não bloqueia push** porque (a) AC1 da Story 4.4 não exigiu remoção do H1 pré-existente, (b) HTML5 permite múltiplos h1 dentro de `<section>`, (c) ambos descrevem a mesma temática ("Open Source"). Mas é regressão funcional vs. estado anterior (que tinha 1x H1 + 1x H2).
+- **Correção sugerida (follow-up):** demover o H1 do hero ultrawide (linha 151) para `<h2>` ou `<p>` estilizado, mantendo apenas o H1 editorial KV (196) como heading principal.
+
+**[CONCERN-D — não-bloqueante, fora de escopo] Padrão `bg-[#FF4400]/10 border border-[#FF4400]/30` ainda em uso:**
+- `open-source-client.tsx:298` — caixa de ícone dentro de cada card de skill (decorativo, não badge).
+- `open-source-client.tsx:356` — badge "Sobre" da seção About.
+- `open-source-client.tsx:423` — badge "Mentoria Exclusiva" da seção CTA.
+- **Não bloqueia** porque AC4 da Story 4.4 escopa especificamente o sistema de **categorias** (filtros) — convertidas corretamente para `bg-transparent`. Decorativos de ícone e badges de outras seções não estavam no escopo.
+- **Correção sugerida (follow-up):** alinhar com Story 4.5 já registrada no backlog (cleanup #FF4400 legado).
+
+### CONCERN-B (mantido, válido) — Coexistência de tokens
+
+`#FF4400` (legacy) e `#FF3A0E` (novo accent) coexistem em CTAs/componentes legados (`animated-hero.tsx:11`, `mentoria/page.tsx`, `course-modules-timeline.tsx`, etc.). **Story 4.5 já no backlog** como follow-up dedicado.
+
+### 10-point checklist final
+
+| # | Critério | Resultado |
+|---|---|---|
+| 1 | Code review — patterns, legibilidade | ✅ |
+| 2 | Acceptance criteria — 4.1/4.2/4.3/4.4 | ✅ Todos os ACs verificados |
+| 3 | Sem regressões — TypeScript | ✅ `tsc --noEmit` limpo |
+| 4 | Performance | ✅ Fraunces `display: 'swap'`; watermark SVG inline opacity 0.05 |
+| 5 | Acessibilidade — WCAG AA | ⚠️ CONCERN-C (2x H1 — não-bloqueante) |
+| 6 | SEO — metadata, estrutura | ⚠️ CONCERN-C (2x H1 — não-bloqueante) |
+| 7 | Responsivo | ✅ |
+| 8 | Copy | ✅ Sem alteração |
+| 9 | Cross-browser | ✅ |
+| 10 | Security | ✅ |
+
+### Veredicto final
+
+```
+VEREDICTO: PASS
+Stories: 4.1 + 4.2 + 4.3 + 4.4 | Data: 2026-04-26 (re-revisão final)
+Checklist: 10/10 — CONCERN-A resolvido pelo commit 91a64d0
+Issues:
+- [CONCERN-B] Coexistência #FF4400/#FF3A0E (Story 4.5 follow-up)
+- [CONCERN-C] 2x <h1> em /open-source (linhas 151 + 196) — regressão leve SEO/A11y, follow-up sugerido
+- [CONCERN-D] bg-[#FF4400]/10 ainda em ícones de card e badges About/CTA (fora de escopo, alinhar com Story 4.5)
+Próximo passo: @sites-devops criar PR a partir de `feat/kv-open-source-header` (3 CONCERNS documentados, nenhum bloqueia)
+```
+
+---
+
+## 2026-04-26 (revisão intermediária — RESOLVIDO acima) — Stories 4.1–4.4 — ~~⚠️ CONCERNS~~
 
 **Revisão:** Lead identificou header legado duplicado em `open-source-client.tsx` (linhas 204-221) com badge `bg-[#FF4400]/10 border border-[#FF4400]/30` que viola KV Rule 02. Veredicto inicial PASS revisado para **CONCERNS**.
 

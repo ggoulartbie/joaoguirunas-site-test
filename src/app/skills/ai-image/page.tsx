@@ -74,13 +74,13 @@ export default function AiImagePage() {
       bgImage="/images/bg-image.png"
       canonicalPath="/skills/ai-image"
     >
-      <section className="py-20 bg-[#08080C]">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <section className="py-20 bg-[#0e0e11]">
+        <div className="mx-auto max-w-6xl px-6 sm:px-10 lg:px-[140px]">
           <div className="max-w-3xl">
             <p
-              className="text-[#FF4400] mb-3"
+              className="text-[#FF3A0E] mb-3"
               style={{
-                fontFamily: "'Geist Mono', monospace",
+                fontFamily: 'var(--font-mono)',
                 fontSize: '0.65rem',
                 textTransform: 'uppercase',
                 letterSpacing: '0.14em',
@@ -89,19 +89,19 @@ export default function AiImagePage() {
             >
               Instalacao
             </p>
-            <h2 className="text-3xl font-bold text-white mb-8">Como instalar</h2>
+            <h2 className="text-2xl sm:text-3xl font-semibold tracking-tight text-white mb-8">Como instalar</h2>
             <div className="space-y-6">
               <div>
                 <p className="text-white/60 mb-3 text-sm">
                   Instalar como plugin do Claude Code:
                 </p>
-                <div className="bg-[#0D0D14] border border-white/10 p-4 font-mono text-sm text-[#FF4400]">
+                <div className="bg-[#16161a] border border-white/10 p-4 font-mono text-sm text-[#FF3A0E]">
                   /plugin install inference-sh
                 </div>
               </div>
               <div>
                 <p className="text-white/60 mb-3 text-sm">Ou instalar via skills:</p>
-                <div className="bg-[#0D0D14] border border-white/10 p-4 font-mono text-sm text-[#FF4400]">
+                <div className="bg-[#16161a] border border-white/10 p-4 font-mono text-sm text-[#FF3A0E]">
                   npx skills add inference-sh/skills
                 </div>
               </div>
@@ -109,7 +109,7 @@ export default function AiImagePage() {
                 <p className="text-white/60 mb-3 text-sm">
                   Instalar CLI do inference.sh:
                 </p>
-                <div className="bg-[#0D0D14] border border-white/10 p-4 font-mono text-sm text-[#FF4400]">
+                <div className="bg-[#16161a] border border-white/10 p-4 font-mono text-sm text-[#FF3A0E]">
                   npm install -g infsh
                   <br />
                   infsh login

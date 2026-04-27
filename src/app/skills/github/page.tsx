@@ -74,13 +74,13 @@ export default function GitHubPage() {
       bgImage="/images/bg-github.png"
       canonicalPath="/skills/github"
     >
-      <section className="py-20 bg-[#0A0A0F]">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <section className="py-20 bg-[#0e0e11]">
+        <div className="mx-auto max-w-6xl px-6 sm:px-10 lg:px-[140px]">
           <div className="max-w-3xl">
-            <p className="text-sm font-semibold uppercase tracking-wider text-[#0EA5E9] mb-3">
+            <p className="text-sm font-semibold uppercase tracking-wider text-[#FF3A0E] mb-3">
               Tutorial
             </p>
-            <h2 className="text-3xl font-bold text-white sm:text-4xl mb-8">
+            <h2 className="text-2xl sm:text-3xl font-semibold tracking-tight text-white sm:text-3xl mb-8">
               GitHub CLI no Terminal
             </h2>
             <div className="space-y-6">
@@ -88,7 +88,7 @@ export default function GitHubPage() {
                 <h3 className="text-lg font-semibold text-white mb-3">
                   1. Instalar GitHub CLI
                 </h3>
-                <pre className="bg-black/50 p-4 text-sm text-green-400 overflow-x-auto">
+                <pre className="bg-[#050507] p-4 text-sm text-[#FF3A0E] overflow-x-auto">
                   <code>{`# macOS
 brew install gh
 
@@ -103,7 +103,7 @@ sudo apt install gh`}</code>
                 <h3 className="text-lg font-semibold text-white mb-3">
                   2. Autenticacao
                 </h3>
-                <pre className="bg-black/50 p-4 text-sm text-green-400 overflow-x-auto">
+                <pre className="bg-[#050507] p-4 text-sm text-[#FF3A0E] overflow-x-auto">
                   <code>{`# Login interativo
 gh auth login
 
@@ -115,7 +115,7 @@ gh auth status`}</code>
                 <h3 className="text-lg font-semibold text-white mb-3">
                   3. Repositorios
                 </h3>
-                <pre className="bg-black/50 p-4 text-sm text-green-400 overflow-x-auto">
+                <pre className="bg-[#050507] p-4 text-sm text-[#FF3A0E] overflow-x-auto">
                   <code>{`# Criar novo repo
 gh repo create meu-projeto --public
 
@@ -130,7 +130,7 @@ gh repo view`}</code>
                 <h3 className="text-lg font-semibold text-white mb-3">
                   4. Pull Requests
                 </h3>
-                <pre className="bg-black/50 p-4 text-sm text-green-400 overflow-x-auto">
+                <pre className="bg-[#050507] p-4 text-sm text-[#FF3A0E] overflow-x-auto">
                   <code>{`# Criar PR
 gh pr create --title "feat: nova feature" --body "Descricao"
 
@@ -149,7 +149,7 @@ gh pr merge 123 --squash`}</code>
               </div>
               <div className="glass-card p-6">
                 <h3 className="text-lg font-semibold text-white mb-3">5. Issues</h3>
-                <pre className="bg-black/50 p-4 text-sm text-green-400 overflow-x-auto">
+                <pre className="bg-[#050507] p-4 text-sm text-[#FF3A0E] overflow-x-auto">
                   <code>{`# Criar issue
 gh issue create --title "Bug: ..." --label bug
 
@@ -164,7 +164,7 @@ gh issue close 42`}</code>
                 <h3 className="text-lg font-semibold text-white mb-3">
                   6. GitHub Actions
                 </h3>
-                <pre className="bg-black/50 p-4 text-sm text-green-400 overflow-x-auto">
+                <pre className="bg-[#050507] p-4 text-sm text-[#FF3A0E] overflow-x-auto">
                   <code>{`# Ver workflows
 gh workflow list
 

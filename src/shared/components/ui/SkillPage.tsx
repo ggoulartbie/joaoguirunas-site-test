@@ -1,5 +1,6 @@
 import Image from 'next/image';
 import Link from 'next/link';
+import { ArrowLeft, ArrowRight, ExternalLink } from 'lucide-react';
 import { siteConfig } from '@/config/site';
 
 export interface SkillFeature {
@@ -26,20 +27,9 @@ export interface SkillPageProps {
   children?: React.ReactNode;
 }
 
-const categoryColors: Record<string, string> = {
-  'squads-aiox': 'bg-[#FF4400]/20 text-[#FF4400] border-[#FF4400]/30',
-  produtividade: 'bg-[#22C55E]/20 text-[#22C55E] border-[#22C55E]/30',
-  marketing: 'bg-[#A78BFA]/20 text-[#A78BFA] border-[#A78BFA]/30',
-  aprendizado: 'bg-[#06B6D4]/20 text-[#06B6D4] border-[#06B6D4]/30',
-  skills: 'bg-[#22C55E]/20 text-[#22C55E] border-[#22C55E]/30',
-  apps: 'bg-[#A78BFA]/20 text-[#A78BFA] border-[#A78BFA]/30',
-  squads: 'bg-[#FF4400]/20 text-[#FF4400] border-[#FF4400]/30',
-  integracoes: 'bg-[#0EA5E9]/20 text-[#0EA5E9] border-[#0EA5E9]/30',
-};
-
 function GitHubIcon({ className }: { className?: string }) {
   return (
-    <svg className={className} fill="currentColor" viewBox="0 0 24 24">
+    <svg className={className} fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
       <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z" />
     </svg>
   );
@@ -59,7 +49,7 @@ export function generateSkillJsonLd({
     '@type': 'BreadcrumbList',
     itemListElement: [
       { '@type': 'ListItem', position: 1, name: 'Home', item: `${siteConfig.url}/` },
-      { '@type': 'ListItem', position: 2, name: 'Skills', item: `${siteConfig.url}/#skills` },
+      { '@type': 'ListItem', position: 2, name: 'Open Source', item: `${siteConfig.url}/open-source` },
       { '@type': 'ListItem', position: 3, name: title, item: canonicalURL },
     ],
   };
@@ -79,11 +69,27 @@ export function generateSkillJsonLd({
   return { breadcrumbSchema, softwareSchema };
 }
 
+const MONO: React.CSSProperties = {
+  fontFamily: 'var(--font-mono)',
+  fontSize: '0.68rem',
+  textTransform: 'uppercase',
+  letterSpacing: '0.12em',
+  fontWeight: 500,
+};
+
+const EYEBROW: React.CSSProperties = {
+  fontFamily: 'var(--font-mono)',
+  fontSize: 11,
+  textTransform: 'uppercase',
+  letterSpacing: '0.16em',
+  fontWeight: 500,
+  color: 'rgba(255,58,14,0.8)',
+};
+
 export function SkillPage({
   title,
   description,
   category,
-  categoryColor,
   longDescription,
   features,
   primaryLink,
@@ -96,7 +102,6 @@ export function SkillPage({
   canonicalPath,
   children,
 }: SkillPageProps) {
-  const colorClass = categoryColors[categoryColor] ?? categoryColors['squads-aiox']!;
   const { breadcrumbSchema, softwareSchema } = generateSkillJsonLd({
     title,
     description,
@@ -107,17 +112,11 @@ export function SkillPage({
 
   return (
     <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
-      />
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(softwareSchema) }}
-      />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(softwareSchema) }} />
 
-      {/* Hero Section */}
-      <section className="relative overflow-hidden min-h-[50vh] flex items-center">
+      {/* ── Hero ── */}
+      <section className="relative overflow-hidden flex items-end min-h-[52vh]">
         {bgImage ? (
           <>
             <Image
@@ -128,167 +127,127 @@ export function SkillPage({
               style={{ objectPosition: bgPosition }}
               priority
             />
-            <div className="absolute inset-0 bg-gradient-to-r from-[#08080C]/80 via-[#08080C]/40 to-[#08080C]/20" />
-            <div className="absolute inset-0 bg-gradient-to-t from-[#08080C]/80 via-transparent to-transparent" />
+            <div className="absolute inset-0 bg-gradient-to-r from-[#050507]/85 via-[#050507]/50 to-[#050507]/20" />
+            <div className="absolute inset-0 bg-gradient-to-t from-[#050507] via-[#050507]/30 to-transparent" />
           </>
         ) : (
-          <>
-            <div className="absolute inset-0 bg-gradient-to-br from-[#0D0D14] via-[#08080C] to-[#0A0A10]" />
-            <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-[#FF4400]/8 via-transparent to-transparent" />
-          </>
+          <div className="absolute inset-0" style={{ background: '#050507' }}>
+            <div className="absolute inset-0" style={{ background: 'radial-gradient(ellipse at 80% 20%, rgba(255,58,14,0.06) 0%, transparent 60%)' }} />
+          </div>
         )}
 
-        <div className="relative mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8 w-full">
-          {/* [FIX A11Y-003] Breadcrumb com aria-label */}
-          <nav aria-label="Breadcrumb" className="mb-8">
-            <ol
-              className="flex items-center gap-2 text-white/60"
-              style={{
-                fontFamily: "'Geist Mono', monospace",
-                fontSize: '0.75rem',
-                textTransform: 'uppercase',
-                letterSpacing: '0.08em',
-              }}
-            >
+        <div className="relative w-full mx-auto max-w-6xl px-6 sm:px-10 lg:px-[140px] py-16 sm:py-20">
+          {/* Breadcrumb */}
+          <nav aria-label="Breadcrumb" className="mb-10">
+            <ol className="flex items-center gap-2" style={{ ...MONO, color: 'rgba(255,255,255,0.35)' }}>
               <li>
-                <Link href="/" className="hover:text-white transition-colors">
-                  Home
-                </Link>
+                <Link href="/" className="transition-colors hover:text-white/70">Home</Link>
               </li>
-              <li className="text-white/30" aria-hidden="true">
-                /
-              </li>
+              <li aria-hidden="true" style={{ color: 'rgba(255,255,255,0.2)' }}>/</li>
               <li>
-                <Link href="/#skills" className="hover:text-white transition-colors">
-                  Skills
-                </Link>
+                <Link href="/open-source" className="transition-colors hover:text-white/70">Open Source</Link>
               </li>
-              <li className="text-white/30" aria-hidden="true">
-                /
-              </li>
-              <li className="text-[#FF4400]" aria-current="page">
-                {title}
-              </li>
+              <li aria-hidden="true" style={{ color: 'rgba(255,255,255,0.2)' }}>/</li>
+              <li style={{ color: '#FF3A0E' }} aria-current="page">{title}</li>
             </ol>
           </nav>
 
-          {/* Category Badge */}
-          <div
-            className={`inline-flex items-center border px-3 py-1 mb-6 ${colorClass}`}
-            style={{
-              fontFamily: "'Geist Mono', monospace",
-              fontSize: '0.65rem',
-              textTransform: 'uppercase',
-              letterSpacing: '0.12em',
-              fontWeight: 600,
-            }}
-          >
-            {category}
+          {/* Category + author row */}
+          <div className="flex flex-wrap items-center gap-3 mb-6">
+            <span
+              style={{
+                ...MONO,
+                color: '#FF3A0E',
+                border: '1px solid rgba(255,58,14,0.3)',
+                padding: '4px 10px',
+              }}
+            >
+              {category}
+            </span>
+            {author && (
+              <>
+                {authorUrl ? (
+                  <a
+                    href={authorUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1.5 transition-colors hover:text-white/70"
+                    style={{
+                      ...MONO,
+                      color: 'rgba(255,255,255,0.4)',
+                      border: '1px solid rgba(255,255,255,0.07)',
+                      padding: '4px 10px',
+                    }}
+                  >
+                    <GitHubIcon className="h-3 w-3" />
+                    {author}
+                  </a>
+                ) : (
+                  <span
+                    style={{
+                      ...MONO,
+                      color: 'rgba(255,255,255,0.35)',
+                      border: '1px solid rgba(255,255,255,0.07)',
+                      padding: '4px 10px',
+                    }}
+                  >
+                    {author}
+                  </span>
+                )}
+              </>
+            )}
           </div>
 
-          {/* Title */}
-          <h1 className="text-4xl font-bold text-white sm:text-5xl lg:text-6xl max-w-3xl glow-text">
+          {/* H1 — Fraunces Display */}
+          <h1
+            className="font-[family-name:var(--font-display-serif)] font-[400] text-white leading-[0.92] tracking-[-0.03em] mb-6 max-w-3xl"
+            style={{ fontSize: 'clamp(42px, 6vw, 80px)' }}
+          >
             {title}
           </h1>
 
-          {/* Author Badge */}
-          {author && (
-            <div className="mt-5 flex items-center gap-2">
-              {authorUrl ? (
-                <a
-                  href={authorUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 border border-white/15 bg-white/10 backdrop-blur-sm px-4 py-2 text-white hover:bg-white/20 hover:border-white/25 transition-all"
-                  style={{
-                    fontFamily: "'Geist Mono', monospace",
-                    fontSize: '0.7rem',
-                    textTransform: 'uppercase',
-                    letterSpacing: '0.08em',
-                    fontWeight: 500,
-                  }}
-                >
-                  <GitHubIcon className="h-3.5 w-3.5 text-[#FF4400]" />
-                  <span>{author}</span>
-                </a>
-              ) : (
-                <span
-                  className="inline-flex items-center gap-2 border border-white/10 bg-white/5 px-4 py-2 text-white/70"
-                  style={{
-                    fontFamily: "'Geist Mono', monospace",
-                    fontSize: '0.7rem',
-                    textTransform: 'uppercase',
-                    letterSpacing: '0.08em',
-                    fontWeight: 500,
-                  }}
-                >
-                  <svg
-                    className="h-3.5 w-3.5 text-[#FF4400]"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
-                    />
-                  </svg>
-                  <span>{author}</span>
-                </span>
-              )}
-            </div>
-          )}
-
           {/* Description */}
-          <p className="mt-4 text-xl text-white/60 max-w-2xl leading-relaxed">
+          <p
+            className="max-w-2xl leading-relaxed mb-10"
+            style={{ fontSize: '1.1rem', color: 'rgba(255,255,255,0.52)', letterSpacing: '-0.005em' }}
+          >
             {description}
           </p>
 
-          {/* CTA Buttons */}
+          {/* CTA buttons */}
           {primaryLink && (
-            <div className="mt-10 flex flex-wrap gap-4">
+            <div className="flex flex-wrap gap-3">
               <a
                 href={primaryLink}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="btn-primary inline-flex items-center gap-2 bg-[#FF4400] px-6 py-3 text-sm text-white shadow-lg shadow-[#FF4400]/25 hover:bg-[#FF5C10] hover:shadow-[#FF4400]/40 transition-all"
+                target={isExternal ? '_blank' : undefined}
+                rel={isExternal ? 'noopener noreferrer' : undefined}
+                className="inline-flex items-center gap-2 transition-all hover:brightness-110 active:scale-[0.98]"
+                style={{
+                  background: '#FF3A0E',
+                  color: '#050507',
+                  padding: '14px 24px',
+                  fontSize: 14,
+                  fontWeight: 600,
+                  letterSpacing: '-0.01em',
+                }}
               >
-                {isExternal ? (
-                  <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
-                    />
-                  </svg>
-                ) : (
-                  <GitHubIcon className="h-4 w-4" />
-                )}
+                {isExternal ? <ExternalLink className="h-4 w-4" /> : <GitHubIcon className="h-4 w-4" />}
                 {primaryLabel}
               </a>
               <Link
-                href="/#skills"
-                className="inline-flex items-center gap-2 border border-white/20 bg-white/5 px-6 py-3 text-white hover:bg-white/10 transition-all"
+                href="/open-source"
+                className="inline-flex items-center gap-2 transition-all hover:bg-white/5"
                 style={{
-                  fontFamily: "'Geist Mono', monospace",
-                  fontSize: '0.75rem',
-                  textTransform: 'uppercase',
-                  letterSpacing: '0.06em',
+                  border: '1px solid rgba(255,255,255,0.16)',
+                  color: 'rgba(255,255,255,0.65)',
+                  padding: '14px 20px',
+                  fontSize: 14,
                   fontWeight: 500,
+                  letterSpacing: '-0.01em',
                 }}
-                aria-label="Voltar para lista de skills"
+                aria-label="Voltar para Open Source"
               >
-                <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M15 19l-7-7 7-7"
-                  />
-                </svg>
+                <ArrowLeft className="h-4 w-4" />
                 Voltar
               </Link>
             </div>
@@ -296,28 +255,21 @@ export function SkillPage({
         </div>
       </section>
 
-      {/* O que e */}
-      <section className="py-20 bg-[#0A0A0F]" aria-labelledby="what-is-heading">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      {/* ── O que é ── */}
+      <section className="py-20 sm:py-24" style={{ background: '#050507' }} aria-labelledby="what-is-heading">
+        <div className="mx-auto max-w-6xl px-6 sm:px-10 lg:px-[140px]">
           <div className="max-w-3xl">
-            <p
-              className="text-[#FF4400] mb-3"
-              style={{
-                fontFamily: "'Geist Mono', monospace",
-                fontSize: '0.65rem',
-                textTransform: 'uppercase',
-                letterSpacing: '0.14em',
-                fontWeight: 600,
-              }}
+            <p className="mb-4" style={EYEBROW}>O que é</p>
+            <h2
+              id="what-is-heading"
+              className="text-2xl sm:text-3xl font-semibold text-white mb-8 tracking-tight"
+              style={{ letterSpacing: '-0.02em' }}
             >
-              O que e
-            </p>
-            <h2 id="what-is-heading" className="text-3xl font-bold text-white sm:text-4xl mb-8">
               {title}
             </h2>
-            <div className="space-y-6">
+            <div className="space-y-5">
               {longDescription.map((paragraph, i) => (
-                <p key={i} className="text-lg text-white/60 leading-relaxed">
+                <p key={i} className="text-base sm:text-lg leading-relaxed" style={{ color: 'rgba(255,255,255,0.52)' }}>
                   {paragraph}
                 </p>
               ))}
@@ -326,98 +278,95 @@ export function SkillPage({
         </div>
       </section>
 
-      {/* Como funciona */}
-      <section className="py-20 bg-[#08080C]" aria-labelledby="features-heading">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <p
-              className="text-[#FF4400] mb-3"
-              style={{
-                fontFamily: "'Geist Mono', monospace",
-                fontSize: '0.65rem',
-                textTransform: 'uppercase',
-                letterSpacing: '0.14em',
-                fontWeight: 600,
-              }}
+      {/* ── Features ── */}
+      <section
+        className="py-20 sm:py-24"
+        style={{ background: '#0e0e11', borderTop: '1px solid rgba(255,255,255,0.07)' }}
+        aria-labelledby="features-heading"
+      >
+        <div className="mx-auto max-w-6xl px-6 sm:px-10 lg:px-[140px]">
+          <div className="mb-14">
+            <p className="mb-3" style={EYEBROW}>Como funciona</p>
+            <h2
+              id="features-heading"
+              className="text-2xl sm:text-3xl font-semibold text-white tracking-tight"
+              style={{ letterSpacing: '-0.02em' }}
             >
-              Como funciona
-            </p>
-            <h2 id="features-heading" className="text-3xl font-bold text-white sm:text-4xl">
               Principais recursos
             </h2>
           </div>
 
-          <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+          <div
+            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3"
+            style={{ gap: 1, background: 'rgba(255,255,255,0.07)', border: '1px solid rgba(255,255,255,0.07)' }}
+          >
             {features.map((feature, i) => (
-              <div key={i} className="glass-card p-6">
-                <div className="mb-4 inline-flex items-center justify-center bg-[#FF4400]/10 p-3 text-[#FF4400]">
+              <div key={i} className="flex flex-col p-6" style={{ background: '#0e0e11' }}>
+                {/* Icon */}
+                <div
+                  className="mb-5 inline-flex items-center justify-center w-9 h-9 flex-shrink-0"
+                  style={{ background: '#16161a', border: '1px solid rgba(255,255,255,0.07)', color: 'rgba(255,255,255,0.45)' }}
+                >
                   <svg
-                    className="h-6 w-6"
+                    className="h-4 w-4"
                     fill="none"
                     viewBox="0 0 24 24"
                     stroke="currentColor"
-                    strokeWidth={2}
+                    strokeWidth={1.5}
                     aria-hidden="true"
                     dangerouslySetInnerHTML={{ __html: feature.icon }}
                   />
                 </div>
-                <h3 className="text-lg font-semibold text-white mb-2">{feature.title}</h3>
-                {/* [FIX A11Y-014] Aumentado de white/50 para white/60 */}
-                <p className="text-sm text-white/60 leading-relaxed">{feature.description}</p>
+                <h3 className="text-sm font-semibold text-white mb-2 tracking-tight">{feature.title}</h3>
+                <p className="text-sm leading-relaxed" style={{ color: 'rgba(255,255,255,0.45)' }}>{feature.description}</p>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Extra Content */}
+      {/* ── Extra Content ── */}
       {children}
 
-      {/* CTA Final */}
-      <section className="py-20 bg-[#0A0A0F]">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="relative overflow-hidden bg-gradient-to-br from-[#0D0D14] via-[#0A0A10] to-[#08080C] border border-white/[0.10] p-8 sm:p-12 text-center">
-            <div className="absolute -top-20 -right-20 w-60 h-60 bg-[#FF4400]/10 rounded-full blur-[80px]" />
-
-            <div className="relative z-10">
-              <h2 className="text-2xl font-bold text-white sm:text-3xl glow-text">
-                Comece agora
-              </h2>
-              {/* [FIX A11Y-014] Aumentado de white/50 para white/60 */}
-              <p className="mt-4 text-lg text-white/60 max-w-xl mx-auto">
-                Explore o repositorio, contribua com melhorias ou integre na sua operacao.
-              </p>
-
-              {primaryLink && (
-                <div className="mt-8 flex flex-wrap justify-center gap-4">
-                  <a
-                    href={primaryLink}
-                    target={isExternal ? '_blank' : undefined}
-                    rel={isExternal ? 'noopener noreferrer' : undefined}
-                    className="btn-primary inline-flex items-center gap-2 bg-[#FF4400] px-6 py-3 text-sm text-white shadow-lg shadow-[#FF4400]/25 hover:bg-[#FF5C10] transition-all"
-                  >
-                    {primaryLabel}
-                    <svg
-                      className="h-4 w-4"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                      aria-hidden="true"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M13 7l5 5m0 0l-5 5m5-5H6"
-                      />
-                    </svg>
-                  </a>
-                </div>
-              )}
+      {/* ── CTA Final — KV ctaSplit pattern ── */}
+      {primaryLink && (
+        <section
+          className="py-16 sm:py-20"
+          style={{ background: '#050507', borderTop: '1px solid rgba(255,255,255,0.07)' }}
+        >
+          <div className="mx-auto max-w-6xl px-6 sm:px-10 lg:px-[140px]">
+            <div
+              className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-8 p-8 sm:p-10"
+              style={{ background: '#16161a', border: '1px solid rgba(255,255,255,0.16)' }}
+            >
+              <div>
+                <p className="mb-2" style={EYEBROW}>Comece agora</p>
+                <p className="text-base sm:text-lg font-semibold text-white tracking-tight" style={{ letterSpacing: '-0.02em' }}>
+                  Explore o repositório, contribua ou integre na sua operação.
+                </p>
+              </div>
+              <a
+                href={primaryLink}
+                target={isExternal ? '_blank' : undefined}
+                rel={isExternal ? 'noopener noreferrer' : undefined}
+                className="inline-flex items-center gap-2 flex-shrink-0 transition-all hover:brightness-110 active:scale-[0.98]"
+                style={{
+                  background: '#FF3A0E',
+                  color: '#050507',
+                  padding: '14px 24px',
+                  fontSize: 14,
+                  fontWeight: 600,
+                  letterSpacing: '-0.01em',
+                  whiteSpace: 'nowrap',
+                }}
+              >
+                {primaryLabel}
+                <ArrowRight className="h-4 w-4" />
+              </a>
             </div>
           </div>
-        </div>
-      </section>
+        </section>
+      )}
     </>
   );
 }

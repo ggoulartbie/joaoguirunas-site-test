@@ -72,9 +72,9 @@ function CodeBlock({ label, code }: { label: string; code: string }) {
   return (
     <div className="mt-4">
       <div
-        className="px-4 py-2 bg-[#0D0D14] border border-white/10 border-b-0 inline-block"
+        className="px-4 py-2 bg-[#16161a] border border-white/10 border-b-0 inline-block"
         style={{
-          fontFamily: "'Geist Mono', monospace",
+          fontFamily: 'var(--font-mono)',
           fontSize: '0.65rem',
           textTransform: 'uppercase',
           letterSpacing: '0.12em',
@@ -84,10 +84,10 @@ function CodeBlock({ label, code }: { label: string; code: string }) {
       >
         {label}
       </div>
-      <pre className="bg-[#0D0D14] border border-white/10 p-5 overflow-x-auto">
+      <pre className="bg-[#16161a] border border-white/10 p-5 overflow-x-auto">
         <code
           className="text-sm text-white/80 leading-relaxed"
-          style={{ fontFamily: "'Geist Mono', monospace" }}
+          style={{ fontFamily: 'var(--font-mono)' }}
         >
           {code}
         </code>
@@ -101,9 +101,9 @@ function CodeBlock({ label, code }: { label: string; code: string }) {
 function SectionLabel({ children }: { children: React.ReactNode }) {
   return (
     <p
-      className="text-[#FF4400] mb-3"
+      className="text-[#FF3A0E] mb-3"
       style={{
-        fontFamily: "'Geist Mono', monospace",
+        fontFamily: 'var(--font-mono)',
         fontSize: '0.65rem',
         textTransform: 'uppercase',
         letterSpacing: '0.14em',
@@ -119,7 +119,7 @@ function SectionLabel({ children }: { children: React.ReactNode }) {
 
 function StepNumber({ n }: { n: number }) {
   return (
-    <span className="flex-shrink-0 w-7 h-7 rounded-full bg-[#FF4400] flex items-center justify-center text-white text-xs font-bold">
+    <span className="flex-shrink-0 w-7 h-7 rounded-full bg-[#FF3A0E] flex items-center justify-center text-white text-xs font-bold">
       {n}
     </span>
   );
@@ -131,7 +131,7 @@ function CheckItem({ children }: { children: React.ReactNode }) {
   return (
     <li className="flex items-start gap-3">
       <svg
-        className="h-5 w-5 text-[#FF4400] flex-shrink-0 mt-0.5"
+        className="h-5 w-5 text-[#FF3A0E] flex-shrink-0 mt-0.5"
         fill="none"
         viewBox="0 0 24 24"
         stroke="currentColor"
@@ -150,7 +150,7 @@ function Note({ children }: { children: React.ReactNode }) {
   return (
     <div className="mt-4 flex items-start gap-3 border border-white/10 bg-white/[0.03] px-4 py-3">
       <svg
-        className="h-4 w-4 text-[#FF4400] flex-shrink-0 mt-0.5"
+        className="h-4 w-4 text-[#FF3A0E] flex-shrink-0 mt-0.5"
         fill="none"
         viewBox="0 0 24 24"
         stroke="currentColor"
@@ -165,7 +165,7 @@ function Note({ children }: { children: React.ReactNode }) {
       </svg>
       <p
         className="text-white/50 text-xs leading-relaxed"
-        style={{ fontFamily: "'Geist Mono', monospace" }}
+        style={{ fontFamily: 'var(--font-mono)' }}
       >
         {children}
       </p>
@@ -191,15 +191,15 @@ function AgentCard({
       <div className="flex items-start justify-between gap-2">
         <span className="text-base font-bold text-white leading-tight">{name}</span>
         <span
-          className="text-[#FF4400] text-xs flex-shrink-0"
-          style={{ fontFamily: "'Geist Mono', monospace" }}
+          className="text-[#FF3A0E] text-xs flex-shrink-0"
+          style={{ fontFamily: 'var(--font-mono)' }}
         >
           {agentId}
         </span>
       </div>
       <span
         className="text-white/40 text-xs uppercase tracking-wide"
-        style={{ fontFamily: "'Geist Mono', monospace" }}
+        style={{ fontFamily: 'var(--font-mono)' }}
       >
         {role}
       </span>
@@ -223,7 +223,7 @@ function WorkflowCard({
     <div className="glass-card p-6 flex flex-col gap-4">
       <div>
         <h3 className="text-xl font-bold text-white">{title}</h3>
-        <p className="text-white/50 text-sm mt-1" style={{ fontFamily: "'Geist Mono', monospace" }}>
+        <p className="text-white/50 text-sm mt-1" style={{ fontFamily: 'var(--font-mono)' }}>
           {subtitle}
         </p>
       </div>
@@ -336,10 +336,10 @@ function TutorialSection() {
   return (
     <>
       {/* ── Agentes ────────────────────────────────────────────────────── */}
-      <section className="py-20 bg-[#08080C]" aria-labelledby="agents-heading">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <section className="py-20 bg-[#0e0e11]" aria-labelledby="agents-heading">
+        <div className="mx-auto max-w-6xl px-6 sm:px-10 lg:px-[140px]">
           <SectionLabel>Os Agentes</SectionLabel>
-          <h2 id="agents-heading" className="text-3xl font-bold text-white sm:text-4xl mb-3">
+          <h2 id="agents-heading" className="text-2xl sm:text-3xl font-semibold tracking-tight text-white sm:text-3xl mb-3">
             Conheça os Especialistas
           </h2>
           <p className="text-white/60 text-lg max-w-2xl mb-10">
@@ -359,10 +359,10 @@ function TutorialSection() {
       </section>
 
       {/* ── Pré-requisitos ─────────────────────────────────────────────── */}
-      <section className="py-20 bg-[#08080C]" aria-labelledby="prereqs-heading">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <section className="py-20 bg-[#0e0e11]" aria-labelledby="prereqs-heading">
+        <div className="mx-auto max-w-6xl px-6 sm:px-10 lg:px-[140px]">
           <SectionLabel>Antes de Começar</SectionLabel>
-          <h2 id="prereqs-heading" className="text-3xl font-bold text-white sm:text-4xl mb-8">
+          <h2 id="prereqs-heading" className="text-2xl sm:text-3xl font-semibold tracking-tight text-white sm:text-3xl mb-8">
             Pré-requisitos
           </h2>
           <ul className="space-y-3 max-w-lg">
@@ -375,10 +375,10 @@ function TutorialSection() {
       </section>
 
       {/* ── Passo 1 ────────────────────────────────────────────────────── */}
-      <section className="py-20 bg-[#0A0A0F]" aria-labelledby="step1-heading">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <section className="py-20 bg-[#0e0e11]" aria-labelledby="step1-heading">
+        <div className="mx-auto max-w-6xl px-6 sm:px-10 lg:px-[140px]">
           <SectionLabel>Passo 01</SectionLabel>
-          <h2 id="step1-heading" className="text-3xl font-bold text-white sm:text-4xl mb-4">
+          <h2 id="step1-heading" className="text-2xl sm:text-3xl font-semibold tracking-tight text-white sm:text-3xl mb-4">
             Instalar Claude Code
           </h2>
           <p className="text-white/60 text-lg max-w-2xl mb-2">
@@ -394,10 +394,10 @@ function TutorialSection() {
       </section>
 
       {/* ── Passo 2 ────────────────────────────────────────────────────── */}
-      <section className="py-20 bg-[#08080C]" aria-labelledby="step2-heading">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <section className="py-20 bg-[#0e0e11]" aria-labelledby="step2-heading">
+        <div className="mx-auto max-w-6xl px-6 sm:px-10 lg:px-[140px]">
           <SectionLabel>Passo 02</SectionLabel>
-          <h2 id="step2-heading" className="text-3xl font-bold text-white sm:text-4xl mb-4">
+          <h2 id="step2-heading" className="text-2xl sm:text-3xl font-semibold tracking-tight text-white sm:text-3xl mb-4">
             Instalar o AIOX Framework
           </h2>
           <p className="text-white/60 text-lg max-w-2xl mb-2">
@@ -424,10 +424,10 @@ npx aiox init`}
       </section>
 
       {/* ── Passo 3 ────────────────────────────────────────────────────── */}
-      <section className="py-20 bg-[#0A0A0F]" aria-labelledby="step3-heading">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <section className="py-20 bg-[#0e0e11]" aria-labelledby="step3-heading">
+        <div className="mx-auto max-w-6xl px-6 sm:px-10 lg:px-[140px]">
           <SectionLabel>Passo 03</SectionLabel>
-          <h2 id="step3-heading" className="text-3xl font-bold text-white sm:text-4xl mb-4">
+          <h2 id="step3-heading" className="text-2xl sm:text-3xl font-semibold tracking-tight text-white sm:text-3xl mb-4">
             Instalar a Squad n8n Killers
           </h2>
           <p className="text-white/60 text-lg max-w-2xl mb-2">
@@ -453,10 +453,10 @@ unzip n8n-killers.zip -d squads/`}
       </section>
 
       {/* ── Passo 4 ────────────────────────────────────────────────────── */}
-      <section className="py-20 bg-[#08080C]" aria-labelledby="step4-heading">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <section className="py-20 bg-[#0e0e11]" aria-labelledby="step4-heading">
+        <div className="mx-auto max-w-6xl px-6 sm:px-10 lg:px-[140px]">
           <SectionLabel>Passo 04</SectionLabel>
-          <h2 id="step4-heading" className="text-3xl font-bold text-white sm:text-4xl mb-4">
+          <h2 id="step4-heading" className="text-2xl sm:text-3xl font-semibold tracking-tight text-white sm:text-3xl mb-4">
             Ativar os Slash Commands
           </h2>
           <p className="text-white/60 text-lg max-w-2xl mb-2">
@@ -484,10 +484,10 @@ unzip n8n-killers.zip -d squads/`}
       </section>
 
       {/* ── Passo 5 ────────────────────────────────────────────────────── */}
-      <section className="py-20 bg-[#0A0A0F]" aria-labelledby="step5-heading">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <section className="py-20 bg-[#0e0e11]" aria-labelledby="step5-heading">
+        <div className="mx-auto max-w-6xl px-6 sm:px-10 lg:px-[140px]">
           <SectionLabel>Passo 05</SectionLabel>
-          <h2 id="step5-heading" className="text-3xl font-bold text-white sm:text-4xl mb-4">
+          <h2 id="step5-heading" className="text-2xl sm:text-3xl font-semibold tracking-tight text-white sm:text-3xl mb-4">
             Rodar a Primeira Operação
           </h2>
           <p className="text-white/60 text-lg max-w-2xl mb-6">
@@ -500,7 +500,7 @@ unzip n8n-killers.zip -d squads/`}
             <div>
               <p
                 className="text-white/40 text-xs uppercase tracking-widest mb-3"
-                style={{ fontFamily: "'Geist Mono', monospace" }}
+                style={{ fontFamily: 'var(--font-mono)' }}
               >
                 A — Migração de workflow n8n
               </p>
@@ -518,7 +518,7 @@ unzip n8n-killers.zip -d squads/`}
             <div>
               <p
                 className="text-white/40 text-xs uppercase tracking-widest mb-3"
-                style={{ fontFamily: "'Geist Mono', monospace" }}
+                style={{ fontFamily: 'var(--font-mono)' }}
               >
                 B — Nova automação via API
               </p>
@@ -537,10 +537,10 @@ unzip n8n-killers.zip -d squads/`}
       </section>
 
       {/* ── Workflows ──────────────────────────────────────────────────── */}
-      <section className="py-20 bg-[#0A0A0F]" aria-labelledby="workflows-heading">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <section className="py-20 bg-[#0e0e11]" aria-labelledby="workflows-heading">
+        <div className="mx-auto max-w-6xl px-6 sm:px-10 lg:px-[140px]">
           <SectionLabel>Workflows</SectionLabel>
-          <h2 id="workflows-heading" className="text-3xl font-bold text-white sm:text-4xl mb-10">
+          <h2 id="workflows-heading" className="text-2xl sm:text-3xl font-semibold tracking-tight text-white sm:text-3xl mb-10">
             Dois Ciclos de Operação
           </h2>
           <div className="grid gap-6 lg:grid-cols-2">

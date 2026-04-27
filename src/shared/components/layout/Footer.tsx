@@ -4,34 +4,42 @@ import { siteConfig } from '@/config/site';
 
 export function Footer() {
   return (
-    <footer className="border-t border-white/[0.08] bg-[#0A0A0F]">
-      <div className="mx-auto max-w-7xl px-4 py-12 sm:py-16 sm:px-6 lg:px-8">
+    <footer style={{ borderTop: '1px solid rgba(255,255,255,0.07)', background: '#0e0e11' }}>
+      <div className="mx-auto max-w-7xl px-5 py-12 sm:py-16 sm:px-10 lg:px-[140px]">
         <div className="grid gap-8 sm:gap-12 md:grid-cols-4">
-          {/* Brand */}
+          {/* Brand — João Guirunas */}
           <div className="md:col-span-2">
             <Link
               href="/"
-              className="flex items-center gap-1 sm:gap-1.5"
-              aria-label="Ir para pagina inicial do GrowthSales AI"
+              className="inline-flex items-center gap-3"
+              aria-label="Ir para página inicial de João Guirunas"
             >
-              <Image
-                src="/logo.svg"
-                alt="Logo GrowthSales AI"
-                width={40}
-                height={40}
-                className="h-8 sm:h-10 w-8 sm:w-10"
-              />
-              <span className="text-lg sm:text-xl text-white">
-                <span className="font-extrabold">Growth</span>
-                <span className="font-semibold text-[#FF4400]">Sales</span>
+              {/* Símbolo JG — triângulos em ember */}
+              <svg
+                viewBox="0 0 530 390"
+                width="38"
+                height="28"
+                fill="none"
+                aria-hidden="true"
+              >
+                <path d="M464.151 357.5H136.795L300.473 73.999L464.151 357.5Z" stroke="#FF3A0E" strokeWidth="9" />
+                <path d="M434.945 344H92L263.473 47L434.945 344ZM175 302H351L263 149L175 302Z" fill="#FF3A0E" />
+                <path d="M393.151 320.5H65.7949L229.473 36.999L393.151 320.5Z" stroke="#FF3A0E" strokeWidth="9" />
+              </svg>
+              {/* Wordmark */}
+              <span
+                className="text-lg sm:text-xl tracking-tight"
+                style={{ fontWeight: 500, letterSpacing: '-0.03em', lineHeight: 1 }}
+              >
+                <span className="text-white">joão</span>
+                <span style={{ color: '#FF3A0E' }}>guirunas</span>
               </span>
             </Link>
-            {/* [FIX A11Y-014] Aumentado de white/50 para white/60 para compliance AA */}
-            <p className="mt-3 sm:mt-4 max-w-sm text-sm text-white/60 leading-relaxed">
-              Multiplicando produtividade com agentes autonomos. Ferramentas open source
-              para quem trabalha com IA.
+
+            <p className="mt-4 max-w-sm text-sm leading-relaxed" style={{ color: 'rgba(255,255,255,0.5)' }}>
+              CEO da GrowthSales.ai. Uso IA em negócios reais — automação, growth e sistemas que escalam.
             </p>
-            <div className="mt-4 inline-flex items-center gap-2 bg-white/5 border border-white/10 px-3 py-1.5">
+            <div className="mt-5 inline-flex items-center gap-2 border px-3 py-1.5" style={{ background: 'rgba(255,255,255,0.04)', borderColor: 'rgba(255,255,255,0.07)' }}>
               <Image
                 src="/images/claude-logo.png"
                 alt="Logo Claude AI"
@@ -46,7 +54,7 @@ export function Footer() {
                 height={14}
                 className="h-3.5 w-auto"
               />
-              <span className="text-xs font-medium text-white/60">
+              <span className="text-xs font-medium" style={{ color: 'rgba(255,255,255,0.5)' }}>
                 Built for Claude Code
               </span>
             </div>
@@ -134,11 +142,9 @@ export function Footer() {
         </div>
 
         {/* Bottom */}
-        <div className="mt-8 sm:mt-12 pt-6 sm:pt-8 border-t border-white/[0.08] flex flex-col sm:flex-row items-center justify-between gap-4">
-          {/* [FIX A11Y-014] Aumentado de white/45 para white/60 */}
-          <p className="text-xs sm:text-sm text-white/60 text-center sm:text-left">
-            &copy; {new Date().getFullYear()} GrowthSales AI. Todos os direitos
-            reservados.
+        <div className="mt-8 sm:mt-12 pt-6 sm:pt-8 flex flex-col sm:flex-row items-center justify-between gap-4" style={{ borderTop: '1px solid rgba(255,255,255,0.07)' }}>
+          <p className="text-xs sm:text-sm text-center sm:text-left" style={{ color: 'rgba(255,255,255,0.35)', fontFamily: 'var(--font-mono)', letterSpacing: '0.04em' }}>
+            &copy; {new Date().getFullYear()} João Guirunas. Todos os direitos reservados.
           </p>
 
           <div className="flex items-center gap-4 sm:gap-5">
@@ -146,8 +152,9 @@ export function Footer() {
               href={siteConfig.social.github}
               target="_blank"
               rel="noopener noreferrer"
-              className="text-white/60 hover:text-white transition-colors"
-              aria-label="Visitar GitHub da GrowthSales AI"
+              className="transition-colors"
+              style={{ color: 'rgba(255,255,255,0.4)' }}
+              aria-label="GitHub de João Guirunas"
             >
               <svg
                 className="h-5 w-5"
@@ -162,8 +169,9 @@ export function Footer() {
               href={siteConfig.social.linkedin}
               target="_blank"
               rel="noopener noreferrer"
-              className="text-white/60 hover:text-white transition-colors"
-              aria-label="Visitar LinkedIn da GrowthSales AI"
+              className="transition-colors"
+              style={{ color: 'rgba(255,255,255,0.4)' }}
+              aria-label="LinkedIn de João Guirunas"
             >
               <svg
                 className="h-5 w-5"
@@ -178,8 +186,9 @@ export function Footer() {
               href={siteConfig.social.twitter}
               target="_blank"
               rel="noopener noreferrer"
-              className="text-white/60 hover:text-white transition-colors"
-              aria-label="Visitar Twitter/X da GrowthSales AI"
+              className="transition-colors"
+              style={{ color: 'rgba(255,255,255,0.4)' }}
+              aria-label="Twitter/X de João Guirunas"
             >
               <svg
                 className="h-5 w-5"
