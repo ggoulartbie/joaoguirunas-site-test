@@ -1,5 +1,6 @@
 'use client';
 
+import Image from 'next/image';
 import Link from 'next/link';
 import { useState } from 'react';
 import { motion } from 'framer-motion';
@@ -136,10 +137,22 @@ export function OpenSourceClient() {
   return (
     <>
       {/* ── 1. Editorial Header ── */}
-      <section className="relative overflow-hidden bg-[#050507] pt-32 pb-20">
+      <section className="relative overflow-hidden bg-[#050507] pt-32 pb-20 min-h-[60vh] flex items-end">
+        {/* Founder portrait */}
+        <Image
+          src="/images/bg-open-source.png"
+          alt=""
+          fill
+          className="object-cover object-[center_20%]"
+          priority
+        />
+        {/* Gradients — text legibility */}
+        <div className="absolute inset-0 bg-gradient-to-r from-[#050507]/95 via-[#050507]/70 to-[#050507]/20" />
+        <div className="absolute inset-0 bg-gradient-to-t from-[#050507] via-[#050507]/20 to-transparent" />
+
         <GrowthWatermark size={520} className="top-0 right-0 -translate-y-1/4 translate-x-1/4" />
 
-        <div className="mx-auto max-w-6xl px-6 lg:px-8">
+        <div className="relative w-full mx-auto max-w-6xl px-6 lg:px-8">
           {/* Eyebrow */}
           <motion.p
             initial={{ opacity: 0, y: 10 }}
