@@ -23,7 +23,7 @@ export function AnimatedHero() {
   }, [titleNumber, titles]);
 
   return (
-    <div className="w-full flex flex-col items-center justify-start sm:justify-center min-h-screen overflow-hidden relative" style={{ background: '#050507' }}>
+    <div className="w-full bg-black flex flex-col items-center justify-start sm:justify-center min-h-screen overflow-hidden relative">
 
       {/* Eyebrow — foto + nome (mobile: topo; desktop: acima do H1) */}
       <motion.div
@@ -70,7 +70,7 @@ export function AnimatedHero() {
           particleColor="#FFFFFF"
         />
 
-        <div className="absolute inset-0 w-full h-full [mask-image:radial-gradient(350px_200px_at_top,transparent_20%,white)]" style={{ background: '#050507' }} />
+        <div className="absolute inset-0 w-full h-full bg-black [mask-image:radial-gradient(350px_200px_at_top,transparent_20%,white)]" />
       </div>
 
       {/* H1 + CTAs — mobile: order-3 sobrepõe sparkles; desktop: order-2 */}
