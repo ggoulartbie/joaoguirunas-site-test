@@ -123,7 +123,7 @@ export default function MentoriaPage() {
               alt="João Guirunas - Mentoria Claude Code"
               fill
               className="object-cover"
-              style={{ objectPosition: 'center center' }}
+              style={{ objectPosition: '50% 30%' }}
               priority
             />
             {/* Overlay geral */}
@@ -181,7 +181,7 @@ export default function MentoriaPage() {
             alt="Equipe GrowthSales AI"
             fill
             className="object-cover"
-            style={{ objectPosition: '70% 25%', transform: 'scaleX(-1)' }}
+            style={{ objectPosition: '50% 30%' }}
             priority
           />
           <div className="absolute inset-0" style={{ background: 'linear-gradient(to right, #08080C 0%, #08080C 35%, rgba(8,8,12,0.85) 50%, rgba(8,8,12,0.4) 70%, rgba(8,8,12,0.25) 100%)' }} />
