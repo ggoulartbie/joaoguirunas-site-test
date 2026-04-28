@@ -124,7 +124,7 @@ export default function MentoriaPage() {
             alt="João Guirunas - Mentoria Claude Code"
             fill
             className="object-cover"
-            style={{ objectPosition: '0% 15%', transform: 'scaleX(-1)' }}
+            style={{ objectPosition: '0% 15%', transform: 'translateX(200px) scaleX(-1)' }}
             priority
           />
           {/* Mobile overlay */}
