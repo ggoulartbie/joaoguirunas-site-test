@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { MentoriaHeaderButton } from './MentoriaHeaderButton';
+import { Logo } from '@/shared/components/ui/Logo';
 
 export function Header() {
   return (
@@ -30,10 +31,7 @@ export function Header() {
                 className="w-full h-full object-cover object-[center_20%]"
               />
             </div>
-            <span className="text-xs font-semibold tracking-[0.20em] uppercase">
-              <span className="text-white">JOÃO</span>
-              <span style={{ color: 'var(--color-accent)' }}>GUIRUNAS</span>
-            </span>
+            <Logo variant="alltype" height={22} />
           </Link>
 
           <div className="flex items-center gap-3 sm:gap-4">

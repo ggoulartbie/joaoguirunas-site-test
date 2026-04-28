@@ -69,6 +69,20 @@ Registro de todos os Agent Teams formados neste projeto. Lead (team-os) atualiza
 
 ---
 
+## 2026-04-27 — Sessão inline (sem team formal)
+
+**Objetivo:** Fixes página de mentoria — header, hero, imagem bg
+**Lead:** team-os (skill) + usuário direto
+**Composição:** — (trabalho inline, sem Agent Team)
+
+**Status:** encerrado
+**Início:** 2026-04-27T20:00:00-03:00
+**Encerrado:** 2026-04-27T21:00:00-03:00
+**Commits:** 62b75d3, fa3f79b (main)
+**Resultado:** MentoriaNav removido (não era pretendido). Hero height aumentado. Imagem reposicionada com translateX(200px) scaleX(-1) para João visível à direita. Stories 4.1 e 4.2 arquivadas em done/. Backlog: 1 story (5.1).
+
+---
+
 <!-- Entrada template:
 
 ## 2026-04-23 — Team {nome}

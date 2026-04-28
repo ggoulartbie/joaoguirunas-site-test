@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { siteConfig } from '@/config/site';
+import { Logo } from '@/shared/components/ui/Logo';
 
 export function Footer() {
   return (
@@ -14,26 +15,7 @@ export function Footer() {
               className="inline-flex items-center gap-3"
               aria-label="Ir para página inicial de João Guirunas"
             >
-              {/* Símbolo JG — triângulos em ember */}
-              <svg
-                viewBox="0 0 530 390"
-                width="38"
-                height="28"
-                fill="none"
-                aria-hidden="true"
-              >
-                <path d="M464.151 357.5H136.795L300.473 73.999L464.151 357.5Z" stroke="#FF3A0E" strokeWidth="9" />
-                <path d="M434.945 344H92L263.473 47L434.945 344ZM175 302H351L263 149L175 302Z" fill="#FF3A0E" />
-                <path d="M393.151 320.5H65.7949L229.473 36.999L393.151 320.5Z" stroke="#FF3A0E" strokeWidth="9" />
-              </svg>
-              {/* Wordmark */}
-              <span
-                className="text-lg sm:text-xl tracking-tight"
-                style={{ fontWeight: 500, letterSpacing: '-0.03em', lineHeight: 1 }}
-              >
-                <span className="text-white">joão</span>
-                <span style={{ color: '#FF3A0E' }}>guirunas</span>
-              </span>
+              <Logo variant="nav" height={30} />
             </Link>
 
             <p className="mt-4 max-w-sm text-sm leading-relaxed" style={{ color: 'rgba(255,255,255,0.5)' }}>

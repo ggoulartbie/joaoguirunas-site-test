@@ -7,6 +7,7 @@ import Image from 'next/image';
 import { ArrowRight } from 'lucide-react';
 import { SparklesCore } from '@/shared/components/ui/sparkles';
 import { GrowthWatermark } from './growth-watermark';
+import { Logo } from '@/shared/components/ui/Logo';
 
 const EMBER = '#FF3A0E';
 const CINEMA: [number, number, number, number] = [0.7, 0, 0.2, 1];
@@ -30,27 +31,22 @@ export function AnimatedHero() {
         initial={{ opacity: 0, y: 12 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
-        className="order-1 sm:order-1 flex items-center gap-3 pt-10 sm:pt-28"
+        className="order-1 sm:order-1 relative z-20 flex items-center gap-5 pt-4 sm:pt-6 pb-2 sm:pb-8"
       >
         <div
-          className="w-10 h-10 sm:w-14 sm:h-14 rounded-full overflow-hidden flex-shrink-0"
+          className="w-7 h-7 sm:w-10 sm:h-10 rounded-full overflow-hidden flex-shrink-0"
           style={{ boxShadow: `0 0 0 2px ${EMBER}` }}
         >
           <Image
             src="/images/joao-guirunas-profile.jpg"
             alt="João Guirunas"
-            width={56}
-            height={56}
+            width={40}
+            height={40}
             className="w-full h-full object-cover object-[center_20%]"
             priority
           />
         </div>
-        <span
-          className="text-white uppercase"
-          style={{ fontFamily: 'var(--font-mono)', fontSize: '0.68rem', letterSpacing: '0.14em', fontWeight: 500 }}
-        >
-          JOÃO<span style={{ color: EMBER }}>GUIRUNAS</span>
-        </span>
+        <Logo variant="alltype" height={40} />
       </motion.div>
 
       {/* Sparkles — mobile: order-2; desktop: order-3 */}
