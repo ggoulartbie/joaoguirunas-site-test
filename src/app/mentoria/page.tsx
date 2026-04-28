@@ -8,7 +8,6 @@ import { MentorshipFeatures } from './mentorship-features';
 import { CourseModulesTimeline } from './course-modules-timeline';
 import { RevosForm } from './revos-form';
 import { PricingCalculator } from './pricing-calculator';
-import { MentoriaNav } from './mentoria-nav';
 import { SectionDots } from './section-dots';
 import { SolutionSection } from './solution-section';
 
@@ -114,19 +113,18 @@ export default function MentoriaPage() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(courseJsonLd) }}
       />
-      <MentoriaNav />
       <SectionDots />
       {/* ===== HERO ===== */}
       <section id="hero" className="relative w-full bg-[#050507] -mt-16">
         {/* Unified hero — single layout with responsive classes */}
-        <div className="relative min-h-[380px] sm:min-h-[62vh] overflow-hidden">
+        <div className="relative min-h-[520px] sm:min-h-[90vh] overflow-hidden">
           <GrowthWatermark size={600} className="bottom-0 right-0 translate-x-1/4 hidden sm:block" />
           <Image
             src="/images/mentoria-hero-v2.png"
             alt="João Guirunas - Mentoria Claude Code"
             fill
             className="object-cover"
-            style={{ objectPosition: '92% 30%', transform: 'scaleX(-1)' }}
+            style={{ objectPosition: '0% 15%', transform: 'scaleX(-1)' }}
             priority
           />
           {/* Mobile overlay */}

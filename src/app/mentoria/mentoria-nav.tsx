@@ -56,7 +56,7 @@ export function MentoriaNav() {
   const scrollTo = useCallback((id: string) => {
     const el = document.getElementById(id);
     if (!el) return;
-    const offset = 80; // account for sticky nav height
+    const offset = 80;
     const top = el.getBoundingClientRect().top + window.scrollY - offset;
     window.scrollTo({ top, behavior: 'smooth' });
   }, []);
@@ -84,7 +84,7 @@ export function MentoriaNav() {
           animate={{ y: 0, opacity: 1 }}
           exit={{ y: -60, opacity: 0 }}
           transition={{ duration: 0.25, ease: 'easeOut' }}
-          className="fixed top-0 left-0 right-0 z-40 bg-[#08080C]/95 backdrop-blur-md border-b border-white/[0.06]"
+          className="fixed top-0 left-0 right-0 z-[51] bg-[#08080C]/95 backdrop-blur-md border-b border-white/[0.06]"
         >
           <div
             ref={scrollRef}
