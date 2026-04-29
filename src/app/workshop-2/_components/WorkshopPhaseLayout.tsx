@@ -11,13 +11,16 @@ export type WorkshopPhase = {
 };
 
 export const WORKSHOP_2_PHASES: WorkshopPhase[] = [
-  { slug: 'setup',        number: 1, title: 'Setup',        duration: '10 min', href: '/workshop-2/setup' },
-  { slug: 'analista',     number: 2, title: 'Analista',     duration: '10 min', href: '/workshop-2/analista' },
-  { slug: 'arquiteto',    number: 3, title: 'Arquiteto',    duration: '10 min', href: '/workshop-2/arquiteto' },
-  { slug: 'designer',     number: 4, title: 'Designer',     duration: '10 min', href: '/workshop-2/designer' },
-  { slug: 'dev',          number: 5, title: 'Dev',          duration: '5 min',  href: '/workshop-2/dev' },
-  { slug: 'handoff',      number: 6, title: 'Handoff',      duration: '15 min', href: '/workshop-2/handoff' },
-  { slug: 'encerramento', number: 7, title: 'Encerramento', duration: '15 min', href: '/workshop-2/encerramento' },
+  { slug: 'configuracao',    number: 1,  title: 'Configuração',    duration: '10 min', href: '/workshop-2/configuracao' },
+  { slug: 'analista',        number: 2,  title: 'Analista',        duration: '10 min', href: '/workshop-2/analista' },
+  { slug: 'arquiteto',       number: 3,  title: 'Arquiteto',       duration: '15 min', href: '/workshop-2/arquiteto' },
+  { slug: 'ux-v1',           number: 4,  title: 'Designer UX',     duration: '10 min', href: '/workshop-2/ux-v1' },
+  { slug: 'devops-local',    number: 5,  title: 'Ver local',       duration: '5 min',  href: '/workshop-2/devops-local' },
+  { slug: 'handoff-design',  number: 6,  title: 'Claude Design',   duration: '10 min', href: '/workshop-2/handoff-design' },
+  { slug: 'handoff-code',    number: 7,  title: 'Handoff → Code',  duration: '5 min',  href: '/workshop-2/handoff-code' },
+  { slug: 'ux-v2',           number: 8,  title: 'UX Redesign',     duration: '10 min', href: '/workshop-2/ux-v2' },
+  { slug: 'devops-url',      number: 9,  title: 'Publicar URL',    duration: '10 min', href: '/workshop-2/devops-url' },
+  { slug: 'encerramento',    number: 10, title: 'Encerramento',    duration: '15 min', href: '/workshop-2/encerramento' },
 ];
 
 const MONO    = "'Geist Mono', 'Roboto Mono', monospace";

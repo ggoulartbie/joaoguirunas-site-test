@@ -26,13 +26,16 @@ const OUTPUT_FILES = [
   { file: 'docs/design-system/design-system.css', desc: 'CSS custom properties semânticas prontas para uso' },
   { file: 'docs/design-system/tailwind.tokens.js', desc: 'Extensão do Tailwind com a marca pessoal' },
   { file: 'KV no Claude Design', desc: 'Componentes visuais: botão, card, input, badge — consistentes com a marca' },
+  { file: 'docs/pages/page-ux-v1.html', desc: 'Landing page V1 — interpretação livre do UX agent com só os tokens' },
+  { file: 'docs/pages/page-ux-v2.html', desc: 'Landing page V2 — mesma jornada, vocabulário visual do Claude Design' },
 ];
 
 const SHOWCASE_ITEMS = [
   'O brand-brief.md — sua identidade de marca em texto estruturado',
   'O grafo do Obsidian com as conexões criadas pelo Arquiteto',
   'O tokens.md — paleta, tipografia e espaçamentos da marca',
-  'O componente ou KV gerado no Claude Design',
+  'O KV no Claude Design — botão, card, input com a personalidade da marca',
+  'As duas URLs no Surge.sh — V1 pré Claude Design e V2 pós Claude Design',
 ];
 
 export default function EncerramentoPage() {
@@ -50,7 +53,7 @@ export default function EncerramentoPage() {
         className="mb-8 inline-flex items-center gap-2 px-3 py-1.5 font-mono text-[10px] tracking-[0.18em] uppercase"
         style={{ fontFamily: MONO, border: '1px solid rgba(255,58,14,0.4)', background: 'rgba(255,58,14,0.08)', color: ACCENT }}
       >
-        15 min · Fase 07 de 07
+        15 min · Fase 10 de 10
       </div>
 
       <div className="my-8 p-6 text-center" style={{ border: '1px solid rgba(255,58,14,0.3)', background: 'rgba(255,58,14,0.04)' }}>
