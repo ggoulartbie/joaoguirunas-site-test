@@ -1,9 +1,12 @@
 import type { Metadata } from 'next';
 import { WorkshopPhaseLayout } from '../_components/WorkshopPhaseLayout';
+import { CodeBlock } from '../_components/CodeBlock';
+import { InlineCode } from '../_components/InlineCode';
+import { FacilitatorNote } from '../_components/FacilitatorNote';
 
 export const metadata: Metadata = {
   title: 'Fase 01 — Setup | Workshop 2',
-  description: 'Configure o ambiente local com AIOX e abra o vault no Obsidian.',
+  description: 'Configure o ambiente local com AIOX e conecte o Obsidian ao vault do projeto.',
   alternates: { canonical: '/workshop-2/setup' },
 };
 
@@ -12,106 +15,102 @@ const ACCENT = 'var(--color-accent)';
 
 function Step({ n, children }: { n: number; children: React.ReactNode }) {
   return (
-    <div className="flex gap-4 py-4 border-b border-white/[0.06] last:border-0">
-      <span
-        className="flex-shrink-0 mt-0.5 w-6 h-6 flex items-center justify-center text-[11px] font-bold border"
-        style={{ fontFamily: MONO, color: ACCENT, borderColor: 'rgba(255,58,14,0.4)', background: 'rgba(255,58,14,0.06)' }}
-      >
-        {n}
-      </span>
-      <div className="text-sm leading-relaxed text-white/75">{children}</div>
+    <div className="flex gap-4 py-5 border-b border-white/[0.06] last:border-0">
+      <span className="flex-shrink-0 mt-0.5 w-6 h-6 flex items-center justify-center text-[11px] font-bold border" style={{ fontFamily: MONO, color: ACCENT, borderColor: 'rgba(255,58,14,0.4)', background: 'rgba(255,58,14,0.06)' }}>{n}</span>
+      <div className="text-sm leading-relaxed text-white/75 flex-1">{children}</div>
     </div>
   );
 }
 
-function CodeBlock({ children }: { children: string }) {
+function Callout({ label = 'Dica', children }: { label?: string; children: React.ReactNode }) {
   return (
-    <pre
-      className="my-3 overflow-x-auto p-4 text-sm leading-relaxed"
-      style={{
-        fontFamily: MONO,
-        background: '#1a1a1a',
-        borderLeft: `3px solid ${ACCENT}`,
-        color: 'rgba(255,255,255,0.85)',
-      }}
-    >
-      <code>{children}</code>
-    </pre>
-  );
-}
-
-function Callout({ children }: { children: React.ReactNode }) {
-  return (
-    <div
-      className="my-8 p-5 text-sm leading-relaxed text-white/80"
-      style={{ borderLeft: `3px solid ${ACCENT}`, background: 'rgba(255,58,14,0.05)' }}
-    >
-      <span
-        className="mb-2 block font-mono text-[10px] tracking-[0.18em] uppercase"
-        style={{ fontFamily: MONO, color: ACCENT }}
-      >
-        Dica
-      </span>
+    <div className="my-8 p-5 text-sm leading-relaxed text-white/80" style={{ borderLeft: `3px solid ${ACCENT}`, background: 'rgba(255,58,14,0.05)' }}>
+      <span className="mb-2 block font-mono text-[10px] tracking-[0.18em] uppercase" style={{ fontFamily: MONO, color: ACCENT }}>{label}</span>
       {children}
     </div>
   );
 }
 
+const PREREQS = [
+  { label: 'Node.js 18+', cmd: 'node --version', note: 'v20+ recomendado' },
+  { label: 'Claude Code CLI', cmd: 'claude --version', note: 'npm install -g @anthropic-ai/claude-code' },
+  { label: 'Obsidian', cmd: null, note: 'obsidian.md · gratuito · sem plugin necessário' },
+];
+
 export default function SetupPage() {
   return (
     <WorkshopPhaseLayout slug="setup">
+      <FacilitatorNote duration="10 min">
+        Peça a todos que abram o terminal antes de começar. Verifique em voz alta se Node.js e Claude Code estão instalados — quem não tiver, pode assistir e instalar depois. O Obsidian pode ficar aberto para todo o workshop.
+      </FacilitatorNote>
+
       <p className="mb-8 text-base leading-relaxed text-white/70">
-        Nesta fase você vai criar a pasta do projeto, inicializar o AIOX, abrir o Claude Code e
-        conectar o Obsidian ao vault. Tudo em 10 minutos — e o ambiente ficará pronto para o
-        restante do workshop.
+        Crie a pasta do projeto, inicialize o AIOX e conecte o Obsidian ao vault. O Obsidian não precisa de plugin — ele abre qualquer pasta de arquivos <InlineCode>.md</InlineCode> como vault automaticamente.
       </p>
 
-      <div
-        className="mb-8 inline-flex items-center gap-2 px-3 py-1.5 font-mono text-[10px] tracking-[0.18em] uppercase"
-        style={{ fontFamily: MONO, border: '1px solid rgba(255,58,14,0.4)', background: 'rgba(255,58,14,0.08)', color: ACCENT }}
-      >
+      <div className="mb-8 inline-flex items-center gap-2 px-3 py-1.5 font-mono text-[10px] tracking-[0.18em] uppercase" style={{ fontFamily: MONO, border: '1px solid rgba(255,58,14,0.4)', background: 'rgba(255,58,14,0.08)', color: ACCENT }}>
         10 min · Fase 01 de 07
+      </div>
+
+      <h2 className="mb-4 mt-10 text-xl font-bold text-white">Pré-requisitos</h2>
+      <div className="mb-8 space-y-2">
+        {PREREQS.map((p) => (
+          <div key={p.label} className="flex items-center justify-between gap-4 p-3" style={{ border: '1px solid rgba(255,255,255,0.07)', background: 'rgba(255,255,255,0.02)' }}>
+            <div>
+              <strong className="text-sm text-white">{p.label}</strong>
+              <span className="ml-2 text-xs text-white/40">{p.note}</span>
+            </div>
+            {p.cmd && <InlineCode>{p.cmd}</InlineCode>}
+          </div>
+        ))}
       </div>
 
       <h2 className="mb-2 mt-10 text-xl font-bold text-white">Passo a passo</h2>
 
       <Step n={1}>
-        Crie a pasta do projeto e entre nela:
-        <CodeBlock>mkdir meu-design-workshop && cd meu-design-workshop</CodeBlock>
+        Abra o terminal e vá para o Desktop:
+        <CodeBlock label="terminal">cd ~/Desktop</CodeBlock>
       </Step>
 
       <Step n={2}>
-        Inicialize o AIOX — ele vai instalar a constituição, os agentes base e o scaffolding:
-        <CodeBlock>npx aiox-core init meu-design-workshop</CodeBlock>
+        Crie a pasta do projeto:
+        <CodeBlock label="terminal">mkdir meu-design-workshop</CodeBlock>
       </Step>
 
       <Step n={3}>
-        Abra o Claude Code dentro da pasta:
-        <CodeBlock>claude</CodeBlock>
+        Entre na pasta:
+        <CodeBlock label="terminal">cd meu-design-workshop</CodeBlock>
       </Step>
 
       <Step n={4}>
-        Verifique que os agentes estão disponíveis digitando no Claude Code:
-        <CodeBlock>/aiox-analyst</CodeBlock>
-        <p className="mt-2 text-white/55">Se uma resposta aparecer com a persona do Analista, está tudo certo.</p>
+        Instale o AIOX:
+        <CodeBlock label="terminal">npx aiox-core install</CodeBlock>
+        <p className="mt-2 text-white/50">O instalador vai fazer perguntas interativas. Escolha <strong className="text-white">Claude Code</strong> quando perguntar sobre o IDE.</p>
       </Step>
 
       <Step n={5}>
-        Abra o Obsidian{' '}
-        <span className="text-white font-semibold">File &gt; Open Vault</span>{' '}
-        e selecione a pasta{' '}
-        <code
-          className="rounded bg-white/[0.08] px-1.5 py-0.5 text-xs"
-          style={{ fontFamily: MONO }}
-        >
-          meu-design-workshop
-        </code>{' '}
-        que você acabou de criar.
+        Abra o Claude Code:
+        <CodeBlock label="terminal">claude</CodeBlock>
+        <p className="mt-2 text-white/50">Deixe o terminal com o Claude Code aberto durante todo o workshop.</p>
       </Step>
 
-      <Callout>
-        Mantenha o Obsidian aberto ao lado do terminal — você vai ver o grafo crescer em tempo real
-        conforme os agentes criam arquivos nas próximas fases.
+      <Step n={6}>
+        Verifique que os agentes estão disponíveis — digite no Claude Code:
+        <CodeBlock label="claude code">/aiox-analyst</CodeBlock>
+        <p className="mt-2 text-white/50">Uma mensagem de saudação do Analista confirma que o AIOX está ativo.</p>
+      </Step>
+
+      <Step n={7}>
+        Abra o Obsidian → <strong className="text-white">File › Open Vault</strong> → selecione a pasta <InlineCode>~/Desktop/meu-design-workshop</InlineCode>.
+        <p className="mt-2 text-white/50">Deixe o Obsidian aberto ao lado do Claude Code durante todo o workshop.</p>
+      </Step>
+
+      <FacilitatorNote>
+        Bom momento para pausar e confirmar que todos estão no mesmo ponto. Mostre ao vivo: o vault aberto no Obsidian com a pasta recém-criada, ainda vazia — o grafo não tem nós ainda. A próxima fase vai mudar isso.
+      </FacilitatorNote>
+
+      <Callout label="Por que o Obsidian?">
+        O Obsidian lê a pasta como um vault e exibe um <strong className="text-white">grafo visual</strong> das conexões entre arquivos. Conforme os agentes criam arquivos interligados com wikilinks <InlineCode>[[assim]]</InlineCode>, o grafo cresce em tempo real — você literalmente vê a memória do projeto sendo construída.
       </Callout>
     </WorkshopPhaseLayout>
   );
