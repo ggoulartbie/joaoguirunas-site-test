@@ -1,13 +1,85 @@
 ---
 title: QA Results
 type: qa-log
-updated: 2026-04-27T00:00
+updated: 2026-04-29T00:00
 tags: [qa, veredictos]
 ---
 
 # QA Results — Veredictos formais
 
 Histórico de veredictos emitidos pelo sites-qa (Axilun).
+
+---
+
+## 2026-04-29 — Workshop-2 (7 fases + index + layout) — ⚠️ CONCERNS (push liberado)
+
+**Escopo:** Sprint workshop-2. Implementação completa pelo sites-dev-alpha (commit `8c2d602`).
+**Branch:** `main`
+**Arquivos verificados (10/10 presentes):**
+- `src/app/workshop-2/layout.tsx`
+- `src/app/workshop-2/page.tsx`
+- `src/app/workshop-2/_components/WorkshopPhaseLayout.tsx`
+- `src/app/workshop-2/{setup,analista,arquiteto,designer,dev,handoff,encerramento}/page.tsx`
+
+### Verificação por critério
+
+**Estrutura ✅** — todos 10 arquivos no working tree (`ls -la src/app/workshop-2/`).
+
+**Metadata ✅** — 7/7 páginas de fase + index com `title` + `description` + `alternates.canonical`. `layout.tsx` tem metadata template (`'%s | Workshop 2'`) + canonical raiz `/workshop-2`.
+
+**WorkshopPhaseLayout ✅** — usado em 7/7 páginas de fase. Renderiza:
+- Header com link de volta para `/workshop-2`, eyebrow `Fase NN / 07 · {duration}`, H1 Fraunces italic
+- Slot `prose prose-invert` para conteúdo
+- Footer com nav prev/next derivado de `WORKSHOP_2_PHASES.indexOf(phase)` + link "Voltar ao índice"
+- Throw em slug inválido (defesa de tipo)
+
+**Conteúdo real (não placeholder) ✅** — cada fase tem:
+- Setup: 5 steps com comandos shell reais (`mkdir`, `npx aiox-core init`, `claude`, `/aiox-analyst`)
+- Analista: prompt completo de 5 perguntas para `/aiox-analyst`
+- Arquiteto: prompt para `/aiox-architect` gerando `docs/smart-memory/`
+- Designer: prompt para `/design-system` com missão setup
+- Dev: prompt para `/aiox-dev` gerando `design-system.css` + `tailwind.tokens.js`
+- Handoff: 6 steps com instruções para `claude.ai/design`
+- Encerramento: 7 outputs documentados, links externos (AIOX, skills.sh, Claude Design)
+
+**TypeScript ✅** — `npx tsc --noEmit` retorna 0 erros.
+
+**Build ✅** — `npm run build` retorna `Compiled successfully in 2.1s`. `Generating static pages using 10 workers (59/59)`. Todas as 8 rotas workshop-2 prerendered como `○ (Static)`. Sem regressões em rotas existentes.
+
+### 10-point checklist
+
+| # | Critério | Resultado |
+|---|---|---|
+| 1 | Code review — patterns, legibilidade | ✅ Tailwind + style inline consistentes; `cn()` utility; design tokens via CSS vars |
+| 2 | Acceptance criteria | ✅ 10/10 arquivos, metadata completa, layout reutilizado |
+| 3 | Sem regressões — build | ✅ 59/59 páginas SSG, todas rotas prévias intactas |
+| 4 | Performance — CWV | ✅ 100% Static (SSG), imports leves, zero JS client-side pesado |
+| 5 | Acessibilidade — WCAG AA | ⚠️ ver CONCERN-A (tons text-white/40-45) |
+| 6 | SEO — metadata + canonical | ✅ todas as páginas com title + description + alternates.canonical |
+| 7 | Responsivo | ✅ breakpoints `sm/md`, `max-w-3xl`, grids responsivas |
+| 8 | Copy | ✅ PT-BR consistente, tom Luminari, CTAs claros, sem typos |
+| 9 | Cross-browser | ✅ CSS modern padrão (custom properties + flex/grid) |
+| 10 | Security | ✅ sem inputs de usuário; links externos com `rel="noopener noreferrer"` |
+
+### CONCERNS (não-bloqueantes)
+
+**[CONCERN-A — a11y leve]** Tons `text-white/40` e `text-white/45` aparecem em descrições secundárias (eyebrow uppercase mono e captions de cards). Sobre `bg-black`, esses tons podem ficar abaixo do mínimo WCAG AA (4.5:1 para texto normal). Localização: todas as 7 páginas de fase + index. Não bloqueia push porque é estilístico do KV aprovado e não impede uso. **Sugestão para iteração futura:** padronizar mínimo `text-white/55` em texto informativo.
+
+**[CONCERN-B — DRY]** Componentes `CodeBlock`, `Callout` e `Step` redefinidos localmente em cada page.tsx. Aceitável agora (cada fase tem nuances de label/cor), candidato a extração futura para `_components/`.
+
+### Veredicto
+
+```
+VEREDICTO: CONCERNS
+Sprint: Workshop-2 | Data: 2026-04-29
+Checklist: 10/10 verificados
+Build: ✅ npm run build limpo (59 páginas, 8 workshop-2 prerendered)
+TypeScript: ✅ tsc --noEmit zero erros
+Issues:
+- [CONCERN-A] text-white/40-45 em descrições secundárias pode ficar abaixo de WCAG AA (a11y, follow-up)
+- [CONCERN-B] CodeBlock/Callout/Step duplicados nas 7 páginas (DRY, follow-up)
+Próximo passo: @sites-devops liberado para push (observações documentadas)
+```
 
 ---
 
