@@ -53,6 +53,40 @@ Mantenha consistência com a personalidade da marca descrita no brief.`;
 const PROMPT_REFINE = `Ajuste o botão para parecer mais [adjetivo da marca].
 Tente: menos arredondado / mais ousado / mais minimalista`;
 
+const PROMPT_REGISTRO_KV = `O KV no Claude Design está pronto. Registre na smart-memory do projeto:
+
+1. Atualize docs/smart-memory/shared-context.md:
+   - KV visual criado no Claude Design: paleta, tipografia, botão, card, input, badge
+   - Próxima ação: gerar URL de handoff → Claude Code → [[project/components]]
+
+2. Crie docs/smart-memory/project/kv-design.md:
+
+---
+title: KV Design System Visual
+tipo: referência
+status: aprovado
+ferramenta: Claude Design
+---
+
+# KV Design System — [nome]
+
+## Componentes criados
+- **Paleta:** swatches com hex e nomes semânticos
+- **Tipografia:** escala xs → 4xl com preview real
+- **Botão primário:** default · hover · disabled
+- **Card:** título + descrição + CTA
+- **Input:** label + placeholder + estados
+- **Badge:** default · success · warning · error
+
+## Decisões de refinamento
+[anote aqui os ajustes feitos ao botão/card antes do handoff]
+
+## Próximo passo
+Gerar URL de handoff via Share → Handoff to Claude Code.
+O Claude Code vai implementar esses componentes automaticamente.
+
+→ Tokens base: [[brand-tokens]] · Implementação: [[components]] · LP V2: [[lp-v2]]`;
+
 export default function HandoffDesignPage() {
   return (
     <WorkshopPhaseLayout slug="handoff-design">
@@ -91,6 +125,14 @@ export default function HandoffDesignPage() {
         Ajuste botão, card e tipografia conforme os adjetivos da marca:
         <CodeBlock label="refinamento">{PROMPT_REFINE}</CodeBlock>
         <p className="mt-2 text-white/50">Iterate até os componentes capturarem bem a personalidade descrita no brief. Esses componentes vão alimentar a Versão 2 da LP.</p>
+      </Step>
+
+      <Step n={5} label="Registrar o KV na smart-memory">
+        KV aprovado? Volte ao Claude Code e rode:
+        <CodeBlock label="claude code — smart-memory">{PROMPT_REGISTRO_KV}</CodeBlock>
+        <p className="mt-2 text-white/50">
+          Cria <InlineCode>docs/smart-memory/project/kv-design.md</InlineCode> — um novo nó no grafo do Obsidian conectado aos tokens e aos componentes que vêm a seguir.
+        </p>
       </Step>
 
       <Callout label="O que o Claude Design faz diferente">

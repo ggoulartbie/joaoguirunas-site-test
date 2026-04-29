@@ -62,8 +62,39 @@ REGRAS TÉCNICAS:
 
 SALVE EM: docs/pages/page-ux-v1.html
 
-Esta é a Versão 1 — pré Claude Design.
-Depois do handoff você vai receber os componentes visuais para criar a Versão 2.`;
+═══════════════════════════════
+AO FINAL — REGISTRE NA SMART-MEMORY:
+═══════════════════════════════
+
+1. Atualize docs/smart-memory/shared-context.md:
+   - Fase atual: UX V1 concluída — LP criada com tokens, sem componentes definidos
+   - Próxima ação: ver no browser → localhost:4321/page-ux-v1.html → ir ao Claude Design
+
+2. Crie docs/smart-memory/project/lp-v1.md:
+
+---
+title: Landing Page V1
+tipo: entregável
+status: concluído
+fase: ux-v1
+---
+
+# Landing Page V1 — Pré Claude Design
+
+## Decisões de UX
+[3-5 bullets: por que essa hierarquia, por que esse copy, por que essa ordem de seções]
+
+## Estrutura
+- **Hero:** [tagline usada + justificativa]
+- **Proposta de valor:** [como os 3 adjetivos foram traduzidos em blocos]
+- **CTA final:** [frase usada + intenção]
+
+## Limitações desta versão
+Sem sistema de componentes definido — botão, card e layout foram interpretados
+livremente pelo UX agent a partir das CSS vars disponíveis.
+A V2 vai usar os componentes reais do Claude Design.
+
+→ Brand tokens: [[brand-tokens]] · Design system: [[../design-system]] · V2: [[lp-v2]]`;
 
 export default function UxV1Page() {
   return (

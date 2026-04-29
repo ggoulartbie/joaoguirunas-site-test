@@ -57,8 +57,39 @@ INSTRUÇÕES:
 SALVE EM: docs/pages/page-ux-v2.html
 
 ═══════════════════════════════
-AO FINAL, ESCREVA NO TERMINAL:
+AO FINAL — REGISTRE NA SMART-MEMORY E EXIBA COMPARAÇÃO:
 ═══════════════════════════════
+
+1. Atualize docs/smart-memory/shared-context.md:
+   - Fase atual: UX V2 concluída — LP recriada com componentes do Claude Design
+   - Próxima ação: publicar ambas as versões em URLs públicas → devops-url
+
+2. Crie docs/smart-memory/project/lp-comparison.md:
+
+---
+title: Comparação V1 → V2
+tipo: análise
+status: concluído
+---
+
+# Comparação Landing Page V1 → V2
+
+## O que permaneceu (UX)
+- Mesma estrutura de 3 seções: Hero / Proposta de Valor / CTA Final
+- Mesmo copy (ou variação mínima)
+- Mesma ordem de convencimento e hierarquia
+
+## O que mudou (vocabulário visual)
+[2-3 bullets: botão, card, tipografia — o que ficou diferente com o sistema]
+
+## Avaliação
+**V1:** [1 linha — ponto forte e limitação]
+**V2:** [1 linha — ponto forte e limitação]
+**Conclusão:** [1 linha — o que o sistema de design adicionou]
+
+→ V1: [[lp-v1]] · Componentes: [[components]] · Deploy: [[../stories/BACKLOG]]
+
+3. Exiba no terminal:
 ## Comparação V1 → V2
 
 **O que mudou visualmente:** [máx 2 linhas]

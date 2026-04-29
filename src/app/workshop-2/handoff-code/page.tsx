@@ -38,7 +38,49 @@ function Callout({ label = 'Dica', children }: { label?: string; children: React
 const PROMPT_IMPLEMENT = `Fetch this design file, read its readme, and implement the relevant aspects of the design.
 https://api.anthropic.com/v1/design/h/[COLE-A-URL-DO-CLAUDE-DESIGN-AQUI]
 
-Implement: the designs in this project`;
+Implement: the designs in this project
+
+═══════════════════════════════
+AO FINAL — REGISTRE NA SMART-MEMORY:
+═══════════════════════════════
+
+1. Atualize docs/smart-memory/shared-context.md:
+   - Handoff Code concluído — componentes implementados a partir do Claude Design
+   - Próxima ação: UX agent recria LP com componentes reais → [[project/lp-v2]]
+
+2. Crie docs/smart-memory/project/components.md:
+
+---
+title: Componentes do Design System
+tipo: referência
+status: implementado
+origem: Claude Design handoff
+---
+
+# Componentes — [nome]
+
+## Implementados via handoff
+
+### Botão primário
+- Estados: default · hover · disabled
+- Variável base: var(--color-primary)
+
+### Card
+- Estrutura: título + descrição + CTA
+- Raio: var(--radius-md)
+
+### Input de texto
+- Com label e placeholder
+- Estado: default · focus · error
+
+### Badge / Pill
+- Variações: default · success · warning · error
+
+## Como usar
+Esses componentes usam exclusivamente as CSS vars do design-system.css.
+Não duplique valores — altere só as vars.
+
+→ Tokens: [[brand-tokens]] · CSS: [[design-system]] · LP V2: [[lp-v2]]`;
 
 export default function HandoffCodePage() {
   return (
