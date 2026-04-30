@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import { SkillPage } from '@/shared/components/ui/SkillPage';
+import { RelatedPages } from '@/shared/components/ui/RelatedPages';
 import { siteConfig } from '@/config/site';
 
 export const metadata: Metadata = {
@@ -80,6 +81,15 @@ export default function ClaudeCodeSkillsPage() {
       author="@joaoguirunas"
       authorUrl="https://github.com/joaoguirunas"
       canonicalPath="/learn/claude-code-skills"
-    />
+    >
+      <RelatedPages
+        heading="Ver também"
+        pages={[
+          { href: '/setup/claude-code',        title: 'Setup Claude Code',         description: 'Instale e configure o Claude Code primeiro para usar essas ferramentas.', tag: 'Setup', isPrereq: true },
+          { href: '/learn/github-repos',       title: '8 Repositórios Essenciais', description: 'A lista completa de repos que mais impactam a performance — com estrelas e contexto.', tag: 'Learn' },
+          { href: '/framework/aiox-framework', title: 'AIOX Framework',            description: 'O próximo nível: squads de agentes especializados orquestrados com Claude Code.', tag: 'AIOX' },
+        ]}
+      />
+    </SkillPage>
   );
 }

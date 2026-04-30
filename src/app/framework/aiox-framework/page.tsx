@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import { SkillPage } from '@/shared/components/ui/SkillPage';
+import { RelatedPages } from '@/shared/components/ui/RelatedPages';
 import { siteConfig } from '@/config/site';
 
 export const metadata: Metadata = {
@@ -127,6 +128,15 @@ export default function AioxFrameworkPage() {
           </div>
         </div>
       </section>
+      <RelatedPages
+        heading="Ver também"
+        pages={[
+          { href: '/setup/claude-code',        title: 'Setup Claude Code',         description: 'O AIOX roda dentro do Claude Code — instale e configure primeiro.', tag: 'Setup', isPrereq: true },
+          { href: '/squads/xquads',            title: 'Xquads',                    description: '96 agentes prontos em 12 squads especializadas — ative com um comando.', tag: 'Squads' },
+          { href: '/monitor/aiox-monitor',     title: 'AIOX Monitor',              description: 'Dashboard para monitorar sua operação de agentes em tempo real.', tag: 'AIOX' },
+          { href: '/workshop-2',               title: 'Workshop 2',                description: 'Veja o AIOX sendo usado ao vivo para construir uma LP completa do brief ao deploy.', tag: 'Workshop' },
+        ]}
+      />
     </SkillPage>
   );
 }

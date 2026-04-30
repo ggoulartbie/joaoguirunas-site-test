@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import { SkillPage } from '@/shared/components/ui/SkillPage';
+import { RelatedPages } from '@/shared/components/ui/RelatedPages';
 import { siteConfig } from '@/config/site';
 
 export const metadata: Metadata = {
@@ -82,6 +83,15 @@ export default function ClaudeCodePage() {
       authorUrl="https://github.com/joaoguirunas"
       bgImage="/images/bg-claude-code.png"
       canonicalPath="/setup/claude-code"
-    />
+    >
+      <RelatedPages
+        heading="Próximos passos"
+        pages={[
+          { href: '/learn/github-repos',      title: '8 Repositórios Essenciais', description: 'Os repos da comunidade que multiplicam o que o Claude Code faz — Superpower, Memory, AIOX e mais.', tag: 'Learn' },
+          { href: '/learn/claude-code-skills', title: '5 Ferramentas Grátis',      description: 'Superpower, N8N MCP, UI UX Pro Max e Self-Healing — instale com um comando.', tag: 'Learn' },
+          { href: '/framework/aiox-framework', title: 'AIOX Framework',            description: 'O próximo passo: squads de agentes autônomos orquestrados dentro do Claude Code.', tag: 'AIOX' },
+        ]}
+      />
+    </SkillPage>
   );
 }

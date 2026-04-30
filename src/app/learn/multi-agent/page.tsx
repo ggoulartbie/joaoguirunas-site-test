@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import { SkillPage } from '@/shared/components/ui/SkillPage';
+import { RelatedPages } from '@/shared/components/ui/RelatedPages';
 import { siteConfig } from '@/config/site';
 
 export const metadata: Metadata = {
@@ -80,6 +81,16 @@ export default function MultiAgentPage() {
       author="@joaoguirunas"
       authorUrl="https://github.com/joaoguirunas"
       canonicalPath="/learn/multi-agent"
-    />
+    >
+      <RelatedPages
+        heading="Ver também"
+        pages={[
+          { href: '/setup/claude-code',        title: 'Setup Claude Code',         description: 'Configure o Claude Code antes de montar o time de agentes.', tag: 'Setup', isPrereq: true },
+          { href: '/framework/aiox-framework', title: 'AIOX Framework',            description: 'O framework que estrutura e orquestra os agentes com squads, personas e QA loop.', tag: 'AIOX' },
+          { href: '/skills/claude-agent-teams', title: 'Claude Agent Teams',       description: '27 agentes em 3 squads especializadas — prontos para ativar no Claude Code.', tag: 'Skills' },
+          { href: '/learn/managed-agents',      title: 'Managed Agents',           description: 'Como a Anthropic projetou a arquitetura brain/hands dos agentes autônomos.', tag: 'Learn' },
+        ]}
+      />
+    </SkillPage>
   );
 }

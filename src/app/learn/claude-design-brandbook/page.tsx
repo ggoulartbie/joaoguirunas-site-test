@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import { SkillPage } from '@/shared/components/ui/SkillPage';
+import { RelatedPages } from '@/shared/components/ui/RelatedPages';
 import { siteConfig } from '@/config/site';
 import { CodeBlock } from './_components/CodeBlock';
 
@@ -794,6 +795,15 @@ export default function ClaudeDesignBrandbookPage() {
       canonicalPath="/learn/claude-design-brandbook"
     >
       <TutorialSection />
+      <RelatedPages
+        heading="Ver também"
+        pages={[
+          { href: '/setup/claude-code',        title: 'Setup Claude Code',         description: 'Instale o Claude Code — ele roda as fases 1, 2, 4 e 5 do tutorial.', tag: 'Setup', isPrereq: true },
+          { href: '/framework/aiox-framework', title: 'AIOX Framework',            description: 'Instale o AIOX para usar os agentes Analista e Arquiteto do tutorial.', tag: 'AIOX', isPrereq: true },
+          { href: '/workshop-2',               title: 'Workshop 2 completo',       description: 'Veja esse fluxo ao vivo — do briefing ao deploy de uma landing page.', tag: 'Workshop' },
+          { href: '/learn/ai-layouts',         title: 'Layouts Profissionais com IA', description: 'Criação de interfaces de nível profissional com prompts exatos e variações.', tag: 'Learn' },
+        ]}
+      />
     </SkillPage>
   );
 }

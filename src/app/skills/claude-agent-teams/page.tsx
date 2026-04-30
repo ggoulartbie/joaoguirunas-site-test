@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import { SkillPage } from '@/shared/components/ui';
+import { RelatedPages } from '@/shared/components/ui/RelatedPages';
 
 export const metadata: Metadata = {
   title: 'Claude Agent Teams — Squads de Agentes IA com Claude',
@@ -426,6 +427,15 @@ claude`}</code>
           </div>
         </div>
       </section>
+      <RelatedPages
+        heading="Ver também"
+        pages={[
+          { href: '/setup/claude-code',        title: 'Setup Claude Code',         description: 'Configure o Claude Code para ativar os agent teams.', tag: 'Setup', isPrereq: true },
+          { href: '/framework/aiox-framework', title: 'AIOX Framework',            description: 'O framework que estrutura os squads, personas e coordena os agentes.', tag: 'AIOX', isPrereq: true },
+          { href: '/learn/multi-agent',        title: 'Time de Agentes com IA',    description: 'Arquitetura, coordenação e casos reais de times de agentes em produção.', tag: 'Learn' },
+          { href: '/monitor/aiox-monitor',     title: 'AIOX Monitor',              description: 'Dashboard isométrico para monitorar sua operação de agentes em tempo real.', tag: 'AIOX' },
+        ]}
+      />
     </SkillPage>
   );
 }
