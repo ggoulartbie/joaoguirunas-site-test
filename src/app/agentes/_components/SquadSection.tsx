@@ -13,33 +13,43 @@ interface SquadSectionProps {
   agentes: Agente[];
 }
 
-/**
- * Each squad section is ~150vh tall so the scroll-driven content has room to:
- *   0.00 - 0.20  enter (cards slide in from right)
- *   0.20 - 0.70  stay centered (planet visible behind, cards present)
- *   0.70 - 1.00  exit (cards slide out to left, next planet entering)
- */
 export function SquadSection({ squad, agentes }: SquadSectionProps) {
   const sectionRef = useRef<HTMLElement>(null);
+
+  // Mobile: portrait viewport — simpler animations, natural height, 2-col grid
+  const isMobile = typeof window !== 'undefined' && window.innerWidth < 1024;
 
   const { scrollYProgress } = useScroll({
     target: sectionRef,
     offset: ['start end', 'end start'],
   });
 
-  // Cards: enter from x=80% at 0.05, settle at 0.30, hold until 0.65, exit to x=-60% at 0.90
-  const cardsX = useTransform(scrollYProgress, [0.05, 0.30, 0.65, 0.90], ['80%', '0%', '0%', '-60%']);
-  const cardsOpacity = useTransform(scrollYProgress, [0.05, 0.20, 0.70, 0.92], [0, 1, 1, 0]);
+  // Desktop: slide in from right → hold → slide out to left
+  // Mobile: fade + slight Y lift only (no horizontal translate)
+  const cardsX = useTransform(
+    scrollYProgress,
+    [0.05, 0.30, 0.65, 0.90],
+    isMobile ? ['0%', '0%', '0%', '0%'] : ['80%', '0%', '0%', '-60%'],
+  );
+  const cardsOpacity = useTransform(
+    scrollYProgress,
+    isMobile ? [0.04, 0.22] : [0.05, 0.20, 0.70, 0.92],
+    isMobile ? [0, 1] : [0, 1, 1, 0],
+  );
   const headerY = useTransform(scrollYProgress, [0.10, 0.32], ['40px', '0px']);
-  const headerOpacity = useTransform(scrollYProgress, [0.08, 0.30, 0.68, 0.90], [0, 1, 1, 0]);
+  const headerOpacity = useTransform(
+    scrollYProgress,
+    isMobile ? [0.04, 0.22] : [0.08, 0.30, 0.68, 0.90],
+    isMobile ? [0, 1] : [0, 1, 1, 0],
+  );
 
   return (
     <section
       ref={sectionRef}
       id={`squad-${squad.id}`}
-      className="relative min-h-[150vh] py-32 overflow-hidden"
+      className={`relative overflow-hidden ${isMobile ? 'py-14' : 'min-h-[150vh] py-32'}`}
     >
-      {/* Vertical accent line + ambient glow on the left edge — does NOT cover the planet */}
+      {/* Vertical accent line on the left edge */}
       <div
         className="pointer-events-none absolute top-0 bottom-0 left-0 w-[2px]"
         style={{
@@ -48,7 +58,7 @@ export function SquadSection({ squad, agentes }: SquadSectionProps) {
         }}
       />
 
-      <div className="sticky top-[12vh] mx-auto max-w-7xl px-5 sm:px-6 lg:px-12">
+      <div className={`${isMobile ? '' : 'sticky top-[12vh]'} mx-auto max-w-7xl px-5 sm:px-6 lg:px-12`}>
         {/* On desktop: cards live in the right half so the planet is visible on the left */}
         <div className="grid grid-cols-1 lg:grid-cols-[1fr_minmax(640px,720px)] gap-10 items-start">
           {/* LEFT — squad label hovering near the planet (desktop only) */}
@@ -84,34 +94,34 @@ export function SquadSection({ squad, agentes }: SquadSectionProps) {
             )}
           </motion.div>
 
-          {/* RIGHT — cards. Animate X (slide in from right, exit to left) + opacity */}
+          {/* RIGHT — cards */}
           <motion.div
             style={{ x: cardsX, opacity: cardsOpacity }}
             className="will-change-transform"
           >
-            {/* Mobile-only header (centered) */}
-            <div className="lg:hidden mb-8">
-              <p className="mb-3 inline-flex items-center gap-2" style={{ ...MONO, color: squad.accent, textTransform: 'uppercase' }}>
+            {/* Mobile-only header */}
+            <div className="lg:hidden mb-6">
+              <p className="mb-2 inline-flex items-center gap-2" style={{ ...MONO, color: squad.accent, textTransform: 'uppercase' }}>
                 <span className="w-1.5 h-1.5 rounded-full" style={{ background: squad.accent }} />
                 {squad.label} Squad · {squad.count}
               </p>
-              <h2 className="text-4xl text-white mb-3" style={{ ...KV_DISPLAY, lineHeight: 0.92 }}>
+              <h2 className="text-3xl text-white mb-2" style={{ ...KV_DISPLAY, lineHeight: 0.92 }}>
                 {squad.title}
               </h2>
-              <p className="text-sm text-white/70 mb-4">{squad.description}</p>
+              <p className="text-xs text-white/60 mb-3 leading-relaxed">{squad.description}</p>
 
               {squad.race && (
-                <div className="pt-4 border-t border-white/[0.08]">
-                  <p className="text-xs font-medium mb-2" style={{ color: squad.accent, fontFamily: 'var(--font-mono)', letterSpacing: '0.08em' }}>
+                <div className="pt-3 border-t border-white/[0.08]">
+                  <p className="text-xs font-medium mb-1" style={{ color: squad.accent, fontFamily: 'var(--font-mono)', letterSpacing: '0.08em' }}>
                     ◈ {squad.race}
                   </p>
-                  <p className="text-white/50 text-xs leading-relaxed">{squad.raceDescription}</p>
+                  <p className="text-white/45 text-xs leading-relaxed">{squad.raceDescription}</p>
                 </div>
               )}
             </div>
 
-            {/* Cards grid — wider gaps, no bg, transparent background lets planet show through */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            {/* Cards grid — 2-col on all sizes, transparent bg lets planet show through */}
+            <div className="grid grid-cols-2 gap-2.5 sm:gap-4">
               {agentes.map((a) => (
                 <AgentCard key={a.id} agente={a} squad={squad} />
               ))}

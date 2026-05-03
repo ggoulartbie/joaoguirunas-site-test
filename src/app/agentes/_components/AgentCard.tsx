@@ -73,33 +73,33 @@ export function AgentCard({ agente, squad }: AgentCardProps) {
       </div>
 
       {/* Body */}
-      <div className="p-5 flex flex-col gap-3 flex-1">
+      <div className="p-3 sm:p-5 flex flex-col gap-2 sm:gap-3 flex-1">
         <div>
           <h3
-            className="text-xl text-white mb-0.5 transition-colors group-hover:text-[var(--accent)]"
+            className="text-base sm:text-xl text-white mb-0.5 transition-colors group-hover:text-[var(--accent)] leading-tight"
             style={{ fontFamily: 'var(--font-display-serif)', fontWeight: 400, letterSpacing: '-0.01em' }}
           >
             {agente.codename || agente.name}
           </h3>
-          <p className="text-white/50 text-xs" style={MONO}>
+          <p className="text-white/50 text-[10px] sm:text-xs" style={MONO}>
             {agente.id}
           </p>
         </div>
 
         {agente.race && (
-          <p className="text-white/35 uppercase" style={{ fontFamily: 'var(--font-mono)', fontSize: '0.55rem', letterSpacing: '0.15em' }}>
+          <p className="text-white/35 uppercase hidden sm:block" style={{ fontFamily: 'var(--font-mono)', fontSize: '0.55rem', letterSpacing: '0.15em' }}>
             {agente.race}
           </p>
         )}
 
-        {agente.title && <p className="text-white/80 text-sm font-medium leading-snug">{agente.title}</p>}
+        {agente.title && <p className="text-white/80 text-xs sm:text-sm font-medium leading-snug">{agente.title}</p>}
 
-        <p className="text-white/55 text-sm leading-relaxed line-clamp-3 flex-1">
+        <p className="text-white/55 text-xs sm:text-sm leading-relaxed line-clamp-2 sm:line-clamp-3 flex-1">
           {agente.squadRole || agente.description}
         </p>
 
         {agente.abilities && agente.abilities.length > 0 && (
-          <div className="flex flex-wrap gap-1 pt-2 border-t border-white/[0.06]">
+          <div className="hidden sm:flex flex-wrap gap-1 pt-2 border-t border-white/[0.06]">
             {agente.abilities.slice(0, 3).map((ability) => (
               <span key={ability} className="px-1.5 py-0.5 bg-white/[0.06] text-white/60 text-[10px]" style={MONO}>
                 {ability}

@@ -166,7 +166,7 @@ export function SolarSystemScene() {
 
   return (
     <Canvas
-      gl={{ antialias: true, alpha: true, powerPreference: 'high-performance' }}
+      gl={{ antialias: !isMobile, alpha: true, powerPreference: isMobile ? 'default' : 'high-performance' }}
       camera={{ position: [0, 3, 45], fov: isMobile ? 50 : 38, near: 0.1, far: 700 }}
       dpr={isMobile ? [1, 1.5] : [1, 2]}
       style={{ position: 'fixed', inset: 0, zIndex: 0, pointerEvents: 'none' }}

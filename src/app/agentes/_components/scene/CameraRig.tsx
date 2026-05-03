@@ -34,17 +34,17 @@ export const CAMERA_PATH: Array<[number, number, number, number, number, number,
   [1.00, 150, 10, 60,  150,   0, 0],   // CTA — pull back at traffic
 ];
 
-// Mobile: portrait viewport is narrow → bring camera closer, FOV is wider (set on Canvas)
+// Mobile: portrait viewport (narrow) — z=36 keeps planet fully in frame without horizontal clipping
 const CAMERA_PATH_MOBILE: Array<[number, number, number, number, number, number, number]> = [
-  [0.00, -15,  3, 48,    0,   0, 0],
-  [0.10,  -8,  2, 36,    0,   0, 0],
-  [0.20,   0,  2, 30,    0,   0, 0],   // Dev centered — z=30 with FOV50 gives dramatic close-up
-  [0.32,  35,  2, 30,   50,   0, 0],
-  [0.42,  50,  2, 30,   50,   0, 0],
-  [0.55,  85,  2, 30,  100,   0, 0],
-  [0.65, 100,  2, 30,  100,   0, 0],
-  [0.78, 135,  2, 30,  150,   0, 0],
-  [0.88, 150,  2, 30,  150,   0, 0],
+  [0.00, -12,  3, 52,    0,   0, 0],   // Hero — planet visible, space to breathe
+  [0.10,  -5,  2, 40,    0,   0, 0],   // Stats — approaching
+  [0.20,   0,  2, 36,    0,   0, 0],   // Dev centered — z=36 fits planet in portrait frame
+  [0.32,  35,  2, 36,   50,   0, 0],
+  [0.42,  50,  2, 36,   50,   0, 0],
+  [0.55,  85,  2, 36,  100,   0, 0],
+  [0.65, 100,  2, 36,  100,   0, 0],
+  [0.78, 135,  2, 36,  150,   0, 0],
+  [0.88, 150,  2, 36,  150,   0, 0],
   [1.00, 150,  8, 75,  150,   0, 0],
 ];
 
