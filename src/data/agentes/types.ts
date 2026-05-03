@@ -25,6 +25,8 @@ export interface Agente {
   color: string | null;
   tools: string[];
   authorities: string[];
+  abilities: string[];
+  squadRole: string;
   slug: string;
 }
 
