@@ -34,10 +34,25 @@ export const CAMERA_PATH: Array<[number, number, number, number, number, number,
   [1.00, 150, 10, 60,  150,   0, 0],   // CTA — pull back at traffic
 ];
 
+// Mobile: portrait viewport is narrow → bring camera closer, FOV is wider (set on Canvas)
+const CAMERA_PATH_MOBILE: Array<[number, number, number, number, number, number, number]> = [
+  [0.00, -15,  3, 48,    0,   0, 0],
+  [0.10,  -8,  2, 36,    0,   0, 0],
+  [0.20,   0,  2, 30,    0,   0, 0],   // Dev centered — z=30 with FOV50 gives dramatic close-up
+  [0.32,  35,  2, 30,   50,   0, 0],
+  [0.42,  50,  2, 30,   50,   0, 0],
+  [0.55,  85,  2, 30,  100,   0, 0],
+  [0.65, 100,  2, 30,  100,   0, 0],
+  [0.78, 135,  2, 30,  150,   0, 0],
+  [0.88, 150,  2, 30,  150,   0, 0],
+  [1.00, 150,  8, 75,  150,   0, 0],
+];
+
 interface CameraRigProps {
   progressRef: React.RefObject<number>;
   targetRef: React.RefObject<number>;
   mouseRef: React.RefObject<{ x: number; y: number }>;
+  mobile?: boolean;
 }
 
 function lerp(a: number, b: number, t: number) {
@@ -48,25 +63,26 @@ function smoothstep(t: number) {
   return t * t * (3 - 2 * t);
 }
 
-export function CameraRig({ progressRef, targetRef, mouseRef }: CameraRigProps) {
+export function CameraRig({ progressRef, targetRef, mouseRef, mobile }: CameraRigProps) {
   const { camera } = useThree();
   const lookAt = useRef(new THREE.Vector3());
+  const path = mobile ? CAMERA_PATH_MOBILE : CAMERA_PATH;
 
   useFrame((_, delta) => {
     progressRef.current += (targetRef.current - progressRef.current) * Math.min(1, delta * 5);
     const t = progressRef.current;
 
     let i = 0;
-    for (let j = 1; j < CAMERA_PATH.length; j++) {
-      const kf = CAMERA_PATH[j]!;
+    for (let j = 1; j < path.length; j++) {
+      const kf = path[j]!;
       if (kf[0] >= t) {
         i = j - 1;
         break;
       }
-      if (j === CAMERA_PATH.length - 1) i = j - 1;
+      if (j === path.length - 1) i = j - 1;
     }
-    const a = CAMERA_PATH[i]!;
-    const b = CAMERA_PATH[Math.min(i + 1, CAMERA_PATH.length - 1)]!;
+    const a = path[i]!;
+    const b = path[Math.min(i + 1, path.length - 1)]!;
     const range = b[0] - a[0];
     const localT = range > 0 ? Math.max(0, Math.min(1, (t - a[0]) / range)) : 0;
     const e = smoothstep(localT);

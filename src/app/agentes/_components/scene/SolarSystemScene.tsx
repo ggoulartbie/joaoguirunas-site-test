@@ -136,6 +136,10 @@ export function SolarSystemScene() {
   const { progressRef, targetRef } = useScrollProgress();
   const { mouseRef, targetRef: mouseTargetRef } = useMouseRef();
 
+  // Read once at mount — canvas props can't change after mount anyway
+  const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
+  const segments = isMobile ? 64 : 96;
+
   const devDrag = useRef(0);
   const sitesDrag = useRef(0);
   const socialDrag = useRef(0);
@@ -163,8 +167,8 @@ export function SolarSystemScene() {
   return (
     <Canvas
       gl={{ antialias: true, alpha: true, powerPreference: 'high-performance' }}
-      camera={{ position: [0, 3, 45], fov: 38, near: 0.1, far: 700 }}
-      dpr={[1, 2]}
+      camera={{ position: [0, 3, 45], fov: isMobile ? 50 : 38, near: 0.1, far: 700 }}
+      dpr={isMobile ? [1, 1.5] : [1, 2]}
       style={{ position: 'fixed', inset: 0, zIndex: 0, pointerEvents: 'none' }}
     >
       <color attach="background" args={['#02020a']} />
@@ -192,6 +196,7 @@ export function SolarSystemScene() {
           mouseInfluence={0.18}
           mouseRef={mouseRef}
           dragRef={devDrag}
+          segments={segments}
         />
 
         {/* Sites — ember rocky @ x=50 */}
@@ -206,6 +211,7 @@ export function SolarSystemScene() {
           mouseInfluence={0.20}
           mouseRef={mouseRef}
           dragRef={sitesDrag}
+          segments={segments}
         />
 
         {/* Social — pink venus @ x=100 */}
@@ -220,6 +226,7 @@ export function SolarSystemScene() {
           mouseInfluence={0.16}
           mouseRef={mouseRef}
           dragRef={socialDrag}
+          segments={segments}
         />
 
         {/* Traffic — cyan neptune @ x=150 */}
@@ -235,13 +242,14 @@ export function SolarSystemScene() {
           mouseInfluence={0.22}
           mouseRef={mouseRef}
           dragRef={trafficDrag}
+          segments={segments}
         />
 
         {/* Background stars */}
-        <Starfield count={5500} radius={320} mouseRef={mouseRef} />
+        <Starfield count={isMobile ? 2500 : 5500} radius={320} mouseRef={mouseRef} />
       </Suspense>
 
-      <CameraRig progressRef={progressRef} targetRef={targetRef} mouseRef={mouseRef} />
+      <CameraRig progressRef={progressRef} targetRef={targetRef} mouseRef={mouseRef} mobile={isMobile} />
     </Canvas>
   );
 }

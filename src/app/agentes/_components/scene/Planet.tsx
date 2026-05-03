@@ -24,6 +24,8 @@ interface PlanetProps {
   mouseRef?: React.RefObject<{ x: number; y: number }>;
   /** Drag rotation delta written by DragController each frame, consumed and reset here. */
   dragRef?: React.MutableRefObject<number>;
+  /** Sphere geometry segments — reduce on mobile for performance. */
+  segments?: number;
 }
 
 export function Planet({
@@ -38,13 +40,15 @@ export function Planet({
   mouseInfluence = 0.15,
   mouseRef,
   dragRef,
+  segments = 96,
 }: PlanetProps) {
   const groupRef = useRef<THREE.Group>(null);
   const meshRef = useRef<THREE.Mesh>(null);
 
+  const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
   const texture = useLoader(THREE.TextureLoader, textureUrl);
   texture.colorSpace = THREE.SRGBColorSpace;
-  texture.anisotropy = 16;
+  texture.anisotropy = isMobile ? 4 : 16;
 
   useFrame((_, delta) => {
     if (meshRef.current) {
@@ -65,7 +69,7 @@ export function Planet({
   return (
     <group ref={groupRef} position={position} rotation={[axialTilt, 0, 0]}>
       <mesh ref={meshRef}>
-        <sphereGeometry args={[radius, 96, 96]} />
+        <sphereGeometry args={[radius, segments, segments]} />
         <meshStandardMaterial
           map={texture}
           color={tint}
