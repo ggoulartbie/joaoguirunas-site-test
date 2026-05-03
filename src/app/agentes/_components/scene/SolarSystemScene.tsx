@@ -1,12 +1,107 @@
 'use client';
 
-import { Suspense, useEffect } from 'react';
+import { Suspense, useEffect, useRef } from 'react';
 import { Canvas, useLoader, useThree } from '@react-three/fiber';
 import * as THREE from 'three';
 import { Planet } from './Planet';
 import { Starfield } from './Starfield';
 import { CameraRig } from './CameraRig';
 import { useScrollProgress, useMouseRef } from './use-scroll-progress';
+
+interface PlanetTarget {
+  x: number;
+  radius: number;
+  dragRef: React.MutableRefObject<number>;
+}
+
+function DragController({ planets }: { planets: PlanetTarget[] }) {
+  const { camera, gl } = useThree();
+
+  useEffect(() => {
+    const ray = new THREE.Raycaster();
+    let dragging = false;
+    let lastX = 0;
+    let activeRef: React.MutableRefObject<number> | null = null;
+
+    const getActiveRef = (clientX: number, clientY: number) => {
+      const rect = gl.domElement.getBoundingClientRect();
+      const nx = ((clientX - rect.left) / rect.width) * 2 - 1;
+      const ny = -((clientY - rect.top) / rect.height) * 2 + 1;
+      ray.setFromCamera(new THREE.Vector2(nx, ny), camera);
+      for (const { x, radius, dragRef } of planets) {
+        const sphere = new THREE.Sphere(new THREE.Vector3(x, 0, 0), radius * 1.2);
+        if (ray.ray.intersectsSphere(sphere)) return dragRef;
+      }
+      return null;
+    };
+
+    const onDown = (e: MouseEvent) => {
+      const hit = getActiveRef(e.clientX, e.clientY);
+      if (!hit) return;
+      dragging = true;
+      lastX = e.clientX;
+      activeRef = hit;
+    };
+
+    const onMove = (e: MouseEvent) => {
+      if (!dragging || !activeRef) return;
+      activeRef.current += (e.clientX - lastX) * 0.008;
+      lastX = e.clientX;
+    };
+
+    const onUp = () => { dragging = false; activeRef = null; };
+
+    // Touch support — only intercept horizontal drags on planets
+    let touchStartX = 0;
+    let touchStartY = 0;
+    let touchIsHorizontal = false;
+
+    const onTouchStart = (e: TouchEvent) => {
+      if (e.touches.length !== 1) return;
+      const t = e.touches[0]!;
+      touchStartX = t.clientX;
+      touchStartY = t.clientY;
+      touchIsHorizontal = false;
+      const hit = getActiveRef(t.clientX, t.clientY);
+      if (!hit) return;
+      dragging = true;
+      lastX = t.clientX;
+      activeRef = hit;
+    };
+
+    const onTouchMove = (e: TouchEvent) => {
+      if (!dragging || !activeRef || e.touches.length !== 1) return;
+      const t = e.touches[0]!;
+      const dx = Math.abs(t.clientX - touchStartX);
+      const dy = Math.abs(t.clientY - touchStartY);
+      if (!touchIsHorizontal && (dx > 4 || dy > 4)) touchIsHorizontal = dx > dy;
+      if (!touchIsHorizontal) { dragging = false; activeRef = null; return; }
+      e.preventDefault();
+      activeRef.current += (t.clientX - lastX) * 0.008;
+      lastX = t.clientX;
+    };
+
+    const onTouchEnd = () => { dragging = false; activeRef = null; };
+
+    document.addEventListener('mousedown', onDown);
+    document.addEventListener('mousemove', onMove);
+    document.addEventListener('mouseup', onUp);
+    document.addEventListener('touchstart', onTouchStart, { passive: true });
+    document.addEventListener('touchmove', onTouchMove, { passive: false });
+    document.addEventListener('touchend', onTouchEnd);
+
+    return () => {
+      document.removeEventListener('mousedown', onDown);
+      document.removeEventListener('mousemove', onMove);
+      document.removeEventListener('mouseup', onUp);
+      document.removeEventListener('touchstart', onTouchStart);
+      document.removeEventListener('touchmove', onTouchMove);
+      document.removeEventListener('touchend', onTouchEnd);
+    };
+  }, [camera, gl, planets]);
+
+  return null;
+}
 
 const TEX = {
   jupiter: '/textures/planets/jupiter-4k.jpg',  // 4096×2048 (solarsystemscope max)
@@ -41,6 +136,18 @@ export function SolarSystemScene() {
   const { progressRef, targetRef } = useScrollProgress();
   const { mouseRef, targetRef: mouseTargetRef } = useMouseRef();
 
+  const devDrag = useRef(0);
+  const sitesDrag = useRef(0);
+  const socialDrag = useRef(0);
+  const trafficDrag = useRef(0);
+
+  const dragPlanets: PlanetTarget[] = [
+    { x: PLANET_X.dev,     radius: 6.5, dragRef: devDrag },
+    { x: PLANET_X.sites,   radius: 5.8, dragRef: sitesDrag },
+    { x: PLANET_X.social,  radius: 5.2, dragRef: socialDrag },
+    { x: PLANET_X.traffic, radius: 5.5, dragRef: trafficDrag },
+  ];
+
   // Smooth mouse — runs in main thread once
   useEffect(() => {
     let raf = 0;
@@ -69,6 +176,7 @@ export function SolarSystemScene() {
       <directionalLight position={[-40, -20, 40]} intensity={0.25} color="#A78BFA" />
 
       <Suspense fallback={null}>
+        <DragController planets={dragPlanets} />
         <MilkyWayBackground />
 
         {/* Dev — violet gas giant @ x=0 (first squad) */}
@@ -83,9 +191,10 @@ export function SolarSystemScene() {
           ring={{ innerRadius: 8.2, outerRadius: 11.5, color: '#A78BFA', opacity: 0.32 }}
           mouseInfluence={0.18}
           mouseRef={mouseRef}
+          dragRef={devDrag}
         />
 
-        {/* Sites — ember rocky @ x=100 */}
+        {/* Sites — ember rocky @ x=50 */}
         <Planet
           position={[PLANET_X.sites, 0, 0]}
           radius={5.8}
@@ -96,9 +205,10 @@ export function SolarSystemScene() {
           atmosphere={{ color: '#FF6B3D', size: 1.06 }}
           mouseInfluence={0.20}
           mouseRef={mouseRef}
+          dragRef={sitesDrag}
         />
 
-        {/* Social — pink venus @ x=150 */}
+        {/* Social — pink venus @ x=100 */}
         <Planet
           position={[PLANET_X.social, 0, 0]}
           radius={5.2}
@@ -109,9 +219,10 @@ export function SolarSystemScene() {
           atmosphere={{ color: '#EC4899', size: 1.08 }}
           mouseInfluence={0.16}
           mouseRef={mouseRef}
+          dragRef={socialDrag}
         />
 
-        {/* Traffic — cyan neptune @ x=200 */}
+        {/* Traffic — cyan neptune @ x=150 */}
         <Planet
           position={[PLANET_X.traffic, 0, 0]}
           radius={5.5}
@@ -123,6 +234,7 @@ export function SolarSystemScene() {
           ring={{ innerRadius: 7.2, outerRadius: 8.6, color: '#06B6D4', opacity: 0.28 }}
           mouseInfluence={0.22}
           mouseRef={mouseRef}
+          dragRef={trafficDrag}
         />
 
         {/* Background stars */}

@@ -22,6 +22,8 @@ interface PlanetProps {
   mouseInfluence?: number;
   /** Reference shared via parent for mouse value. */
   mouseRef?: React.RefObject<{ x: number; y: number }>;
+  /** Drag rotation delta written by DragController each frame, consumed and reset here. */
+  dragRef?: React.MutableRefObject<number>;
 }
 
 export function Planet({
@@ -35,6 +37,7 @@ export function Planet({
   atmosphere,
   mouseInfluence = 0.15,
   mouseRef,
+  dragRef,
 }: PlanetProps) {
   const groupRef = useRef<THREE.Group>(null);
   const meshRef = useRef<THREE.Mesh>(null);
@@ -46,6 +49,10 @@ export function Planet({
   useFrame((_, delta) => {
     if (meshRef.current) {
       meshRef.current.rotation.y += rotationSpeed * delta;
+      if (dragRef && dragRef.current !== 0) {
+        meshRef.current.rotation.y += dragRef.current;
+        dragRef.current = 0;
+      }
     }
     if (groupRef.current && mouseRef?.current) {
       const targetX = axialTilt + mouseRef.current.y * mouseInfluence;
