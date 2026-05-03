@@ -221,13 +221,13 @@ export default async function AgentDetailPage({ params }: AgentPageParams) {
           </div>
         </div>
 
-        {/* Fade hero → solid content */}
-        <div className="absolute bottom-0 left-0 right-0 h-24 pointer-events-none" style={{ background: 'linear-gradient(to bottom, transparent, #050507)' }} />
+        {/* Fade hero → dark content */}
+        <div className="absolute bottom-0 left-0 right-0 h-32 pointer-events-none" style={{ background: 'linear-gradient(to bottom, transparent, rgba(2,2,8,0.95))' }} />
       </section>
 
       {/* HABILIDADES COMPLETAS */}
       {allAbilities.length > 0 && (
-        <section className="bg-[#050507] py-14 border-t border-white/[0.06]">
+        <section className="py-14 border-t border-white/[0.06] backdrop-blur-sm" style={{ background: 'rgba(2,2,8,0.72)' }}>
           <div className="mx-auto max-w-5xl px-5 sm:px-6 lg:px-12">
             <div className="mb-6 flex items-end gap-3">
               <div>
@@ -254,7 +254,7 @@ export default async function AgentDetailPage({ params }: AgentPageParams) {
 
       {/* SKILLS (slash commands) */}
       {a.skills && a.skills.length > 0 && (
-        <section className="bg-[#050507] py-12 border-t border-white/[0.06]">
+        <section className="py-12 border-t border-white/[0.06] backdrop-blur-sm" style={{ background: 'rgba(2,2,8,0.72)' }}>
           <div className="mx-auto max-w-5xl px-5 sm:px-6 lg:px-12">
             <p className="mb-1" style={{ ...MONO, color: sq.accent, textTransform: 'uppercase' }}>Skills & Comandos</p>
             <h2 className="text-2xl sm:text-3xl text-white mb-6" style={{ ...KV_DISPLAY, lineHeight: 1 }}>
@@ -278,7 +278,7 @@ export default async function AgentDetailPage({ params }: AgentPageParams) {
       )}
 
       {/* DESCRIPTION + AUTHORITIES + NEVER DOES */}
-      <section className="bg-[#050507] py-16 sm:py-20 border-t border-white/[0.06]">
+      <section className="py-16 sm:py-20 border-t border-white/[0.06] backdrop-blur-sm" style={{ background: 'rgba(2,2,8,0.40)' }}>
         <div className="mx-auto max-w-5xl px-5 sm:px-6 lg:px-12 grid grid-cols-1 lg:grid-cols-[1fr_300px] gap-12 lg:gap-16">
           {/* Left */}
           <div>
@@ -323,7 +323,7 @@ export default async function AgentDetailPage({ params }: AgentPageParams) {
 
           {/* Right — tools sidebar */}
           <aside className="lg:sticky lg:top-24 lg:self-start space-y-6">
-            <div className="border border-white/10 bg-[#0a0a0d] p-6">
+            <div className="border border-white/10 p-6" style={{ background: 'rgba(10,10,16,0.60)' }}>
               <p className="mb-3" style={{ ...MONO, color: sq.accent, textTransform: 'uppercase' }}>Tools</p>
               <ul className="space-y-2">
                 {a.tools.map((tool) => (
@@ -351,7 +351,7 @@ export default async function AgentDetailPage({ params }: AgentPageParams) {
 
       {/* SIBLINGS */}
       {siblings.length > 0 && (
-        <section className="bg-[#0a0a0d] py-16 sm:py-20 border-t border-white/[0.06]">
+        <section className="py-16 sm:py-20 border-t border-white/[0.06] backdrop-blur-sm" style={{ background: 'rgba(2,2,8,0.80)' }}>
           <div className="mx-auto max-w-7xl px-5 sm:px-6 lg:px-12">
             <div className="mb-8 flex items-end justify-between flex-wrap gap-4">
               <div>
