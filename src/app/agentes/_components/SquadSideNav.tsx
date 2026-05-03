@@ -66,7 +66,7 @@ export function SquadSideNav({ squads }: SquadSideNavProps) {
                 key={s.id}
                 type="button"
                 onClick={() => handleClick(id)}
-                className="group flex items-center gap-3 px-2.5 py-2.5 transition-all hover:bg-white/[0.06]"
+                className={`group flex items-center gap-3 py-2.5 transition-all hover:bg-white/[0.06] ${expanded ? 'px-2.5' : 'px-3 justify-center'}`}
                 aria-current={isActive ? 'true' : undefined}
                 aria-label={`${s.label} squad — ${s.count} agentes`}
               >

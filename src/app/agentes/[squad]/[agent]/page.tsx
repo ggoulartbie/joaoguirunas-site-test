@@ -5,6 +5,7 @@ import { notFound } from 'next/navigation';
 import { siteConfig } from '@/config/site';
 import { ALL_AGENTES, getAgenteBySlug, getSquad, getSiblings, type SquadId } from '@/data/agentes';
 import { AgentCard } from '../../_components/AgentCard';
+import { AgentPlanetBackground } from '../../_components/AgentPlanetBackground';
 
 const KV_DISPLAY: React.CSSProperties = { fontFamily: 'var(--font-display-serif)', fontWeight: 400, letterSpacing: '-0.03em' };
 const MONO: React.CSSProperties = { fontFamily: 'var(--font-mono)', fontSize: '0.7rem', letterSpacing: '0.14em' };
@@ -77,63 +78,19 @@ export default async function AgentDetailPage({ params }: AgentPageParams) {
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(profileJsonLd) }} />
 
-      {/* HERO — planet texture as ambient background */}
+      {/* 3D planet canvas — fixed full-screen, behind everything */}
+      <AgentPlanetBackground squadId={a.squad} />
+
+      {/* HERO — transparent, 3D scene shows through */}
       <section className="relative overflow-hidden -mt-16 pt-32 pb-16 sm:pt-44 sm:pb-24">
-        {/* Base gradient */}
-        <div
-          className="absolute inset-0"
-          style={{
-            background: `linear-gradient(135deg, #050507 0%, #08080f 60%, #050507 100%)`,
-          }}
-        />
-
-        {/* Planet sphere — right side ambient glow */}
-        <div className="absolute right-0 top-0 bottom-0 w-full sm:w-[60%] pointer-events-none overflow-hidden">
-          {/* Planet image — large circle peeking from right */}
-          <div
-            className="absolute right-[-20%] sm:right-[-15%] top-1/2 -translate-y-1/2 w-[90vw] sm:w-[55vw] max-w-[720px] aspect-square rounded-full overflow-hidden"
-            style={{ opacity: 0.22 }}
-          >
-            <img
-              src={`/textures/planets/${sq.planetTexture}`}
-              alt=""
-              aria-hidden="true"
-              className="w-full h-full object-cover"
-              style={{ filter: `brightness(1.2) saturate(1.4)` }}
-            />
-          </div>
-          {/* Color tint overlay matching squad accent */}
-          <div
-            className="absolute right-[-20%] sm:right-[-15%] top-1/2 -translate-y-1/2 w-[90vw] sm:w-[55vw] max-w-[720px] aspect-square rounded-full"
-            style={{
-              background: sq.accent,
-              opacity: 0.08,
-              mixBlendMode: 'screen',
-            }}
-          />
-          {/* Radial fade on left edge so planet blends into bg */}
-          <div
-            className="absolute inset-0"
-            style={{
-              background: `linear-gradient(to right, #050507 0%, transparent 40%)`,
-            }}
-          />
-        </div>
-
-        {/* Dot grid texture */}
-        <div
-          className="absolute inset-0 pointer-events-none opacity-30"
-          style={{
-            backgroundImage: 'radial-gradient(rgba(255,255,255,0.04) 1px, transparent 1px)',
-            backgroundSize: '24px 24px',
-          }}
-        />
-
-        {/* Accent glow emanating from planet side */}
+        {/* Subtle vignette so text stays legible over the 3D scene */}
         <div
           className="absolute inset-0 pointer-events-none"
           style={{
-            background: `radial-gradient(ellipse at 85% 50%, ${sq.accent}12 0%, transparent 55%)`,
+            background: `
+              linear-gradient(to right, rgba(2,2,10,0.75) 0%, rgba(2,2,10,0.30) 60%, transparent 100%),
+              linear-gradient(to bottom, rgba(2,2,10,0.5) 0%, transparent 30%, rgba(2,2,10,0.6) 100%)
+            `,
           }}
         />
 
