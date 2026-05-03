@@ -204,7 +204,7 @@ export function MentoriaHeroSpline() {
           </div>
 
           {/* ── RIGHT — Spline 3D ── */}
-          <div className="hidden sm:block absolute right-0 top-0 bottom-0 w-[58%] pointer-events-none">
+          <div className="hidden sm:block absolute right-0 top-0 bottom-0 w-[58%]">
             <SplineScene
               scene="https://prod.spline.design/kZDDjO5HuC9GJUM2/scene.splinecode"
               className="w-full h-full"
