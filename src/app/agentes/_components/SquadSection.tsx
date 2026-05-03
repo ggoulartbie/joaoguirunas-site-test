@@ -74,9 +74,6 @@ export function SquadSection({ squad, agentes }: SquadSectionProps) {
 
             {squad.race && (
               <div className="mt-6 pt-6 border-t border-white/[0.08]">
-                <p className="text-[10px] uppercase tracking-[0.18em] text-white/30 mb-2" style={{ fontFamily: 'var(--font-mono)' }}>
-                  Raça
-                </p>
                 <p className="text-sm font-medium mb-2" style={{ color: squad.accent, fontFamily: 'var(--font-mono)', letterSpacing: '0.08em' }}>
                   ◈ {squad.race}
                 </p>
@@ -105,9 +102,6 @@ export function SquadSection({ squad, agentes }: SquadSectionProps) {
 
               {squad.race && (
                 <div className="pt-4 border-t border-white/[0.08]">
-                  <p className="text-[10px] uppercase tracking-[0.18em] text-white/30 mb-1.5" style={{ fontFamily: 'var(--font-mono)' }}>
-                    Raça
-                  </p>
                   <p className="text-xs font-medium mb-2" style={{ color: squad.accent, fontFamily: 'var(--font-mono)', letterSpacing: '0.08em' }}>
                     ◈ {squad.race}
                   </p>
