@@ -50,3 +50,20 @@ Source: [[../agents/research/seo-audit]]. Prioridade: 3.0 e 3.3 resolvem lacunas
 | [[backlog/4.6-kv-open-source-dual-h1\|4.6]] | KV Open-Source — corrigir H1 duplo (regressão SEO/a11y) | S | backlog | — |
 
 Source: análise KV Growth Sales (2026-04-26). Epic adapta Home, Mentoria e Open-Source ao KV da Growth Sales sem alterar logos. Foco: simbologia (watermark diamante), tipografia display (Fraunces), refinamento de tokens e section badges. Stories 4.1–4.4 concluídas (QA PASS 2026-04-26). Stories 4.5 e 4.6 são follow-ups de concerns não-bloqueantes do QA.
+
+## Epic 5 — Cleanup pós-KV
+
+| Story | Título | Complexidade | Status | Agente |
+|---|---|---|---|---|
+| [[backlog/5.1-remove-orphan-cat-squads-token\|5.1]] | Remover token órfão --color-cat-squads de globals.css | XS | backlog | — |
+
+## Epic 6 — /agentes Enhancement
+
+| Story | Título | Complexidade | Status | Agente |
+|---|---|---|---|---|
+| [[backlog/6.1-upgrade-planet-textures-4k\|6.1]] | Upgrade texturas dos planetas para 4K | S | backlog | sites-dev-gamma |
+| [[backlog/6.2-enrich-agentes-json-codenames-abilities\|6.2]] | Enriquecer agentes.json com codenames, abilities e squadRole | M | backlog | sites-dev-gamma |
+| [[backlog/6.3-agentcard-race-abilities-upgrade\|6.3]] | AgentCard — exibir raça alienígena + abilities + squadRole | S | backlog | sites-dev-alpha |
+| [[backlog/6.4-agent-single-page-rewrite\|6.4]] | Rewrite da single page do agente com conteúdo rico | L | backlog | sites-dev-alpha |
+
+Objetivo: elevar a qualidade visual e informacional da página /agentes. 6.1 melhora os planetas 3D. 6.2 é a base de dados para 6.3 e 6.4. 6.3 enriquece os cards da listagem. 6.4 reescreve as páginas individuais dos agentes com identidade, raça, abilities e squadRole.

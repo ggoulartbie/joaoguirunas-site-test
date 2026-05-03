@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
+import Image from 'next/image';
 import { notFound } from 'next/navigation';
 import { siteConfig } from '@/config/site';
 import { ALL_AGENTES, getAgenteBySlug, getSquad, getSiblings, type SquadId } from '@/data/agentes';
@@ -29,7 +30,7 @@ export async function generateMetadata({ params }: AgentPageParams): Promise<Met
   if (!a) return {};
 
   const title = `${a.codename || a.name} — ${a.title || a.id} | Claude Agent Teams`;
-  const description = a.description.slice(0, 160);
+  const description = a.squadRole || a.description.slice(0, 160);
 
   return {
     title,
@@ -53,7 +54,6 @@ export default async function AgentDetailPage({ params }: AgentPageParams) {
   if (!a || !sq) notFound();
 
   const siblings = getSiblings(a, 4);
-  const initials = (a.codename || a.name).slice(0, 2).toUpperCase();
 
   const profileJsonLd = {
     '@context': 'https://schema.org',
@@ -62,7 +62,7 @@ export default async function AgentDetailPage({ params }: AgentPageParams) {
       '@type': 'Person',
       name: a.codename || a.name,
       alternateName: a.id,
-      description: a.description,
+      description: a.squadRole || a.description,
       jobTitle: a.title,
     },
   };
@@ -102,25 +102,19 @@ export default async function AgentDetailPage({ params }: AgentPageParams) {
           </nav>
 
           <div className="grid grid-cols-1 lg:grid-cols-[280px_1fr] gap-8 lg:gap-12 items-start">
-            {/* Avatar placeholder */}
+            {/* Agent photo */}
             <div
-              className="aspect-square w-full max-w-[280px] mx-auto lg:mx-0 flex items-center justify-center relative overflow-hidden border"
-              style={{
-                background: `linear-gradient(135deg, ${sq.accent}22 0%, ${sq.accent}08 50%, #0e0e11 100%)`,
-                borderColor: `${sq.accent}33`,
-              }}
+              className="aspect-square w-full max-w-[280px] mx-auto lg:mx-0 relative overflow-hidden border"
+              style={{ borderColor: `${sq.accent}33` }}
             >
-              <span
-                className="text-[8rem] font-light leading-none"
-                style={{
-                  fontFamily: 'var(--font-display-serif)',
-                  color: sq.accent,
-                  opacity: 0.7,
-                  textShadow: `0 0 60px ${sq.accent}88`,
-                }}
-              >
-                {initials}
-              </span>
+              <Image
+                src={`/agentes/${a.slug}.png`}
+                alt={a.codename || a.name}
+                fill
+                className="object-cover object-top"
+                sizes="280px"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
             </div>
 
             {/* Headline */}
@@ -129,19 +123,33 @@ export default async function AgentDetailPage({ params }: AgentPageParams) {
                 <span className="w-1.5 h-1.5 rounded-full" style={{ background: sq.accent }} />
                 {sq.label} Squad · {a.id}
               </p>
+
               <h1 className="text-5xl sm:text-6xl lg:text-7xl text-white mb-3" style={{ ...KV_DISPLAY, lineHeight: 0.92 }}>
                 {a.codename || a.name}
               </h1>
+
               {a.title && (
-                <p className="text-xl sm:text-2xl text-white/80 mb-5" style={{ fontFamily: 'var(--font-display-serif)', fontStyle: 'italic', fontWeight: 300 }}>
+                <p className="text-xl sm:text-2xl text-white/80 mb-4" style={{ fontFamily: 'var(--font-display-serif)', fontStyle: 'italic', fontWeight: 300 }}>
                   {a.title}
                 </p>
               )}
-              {(a.archetype || a.race) && (
-                <p className="text-white/55 text-sm mb-6 leading-relaxed">
-                  {a.archetype && <>Como <span className="text-white/85">{a.archetype}</span>. </>}
-                  {a.race && <>Identidade <span className="text-white/85">{a.race}</span>.</>}
-                </p>
+
+              {a.tagline && (
+                <blockquote className="border-l-2 pl-4 my-4 italic text-white/55 text-sm leading-relaxed" style={{ borderColor: sq.accent }}>
+                  {a.tagline}
+                </blockquote>
+              )}
+
+              {a.race && (
+                <div className="mb-4">
+                  <span className="inline-flex items-center gap-1.5 px-3 py-1.5 border text-sm uppercase" style={{ borderColor: `${sq.accent}55`, color: sq.accent, ...MONO }}>
+                    ◈ {a.race}
+                  </span>
+                </div>
+              )}
+
+              {a.squadRole && (
+                <p className="text-white/80 text-base leading-relaxed mb-5">{a.squadRole}</p>
               )}
 
               <div className="flex flex-wrap gap-2 mb-6">
@@ -170,6 +178,23 @@ export default async function AgentDetailPage({ params }: AgentPageParams) {
           </div>
         </div>
       </section>
+
+      {/* ESPECIALIZAÇÃO */}
+      {a.abilities && a.abilities.length > 0 && (
+        <section className="bg-[#050507] py-12 border-t border-white/[0.06]">
+          <div className="mx-auto max-w-5xl px-5 sm:px-6 lg:px-12">
+            <p className="mb-3" style={{ ...MONO, color: sq.accent, textTransform: 'uppercase' }}>Especialização</p>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+              {a.abilities.map((ability, i) => (
+                <div key={i} className="flex items-start gap-3 p-4 border border-white/[0.07] bg-white/[0.02]">
+                  <span className="mt-1.5 w-1.5 h-1.5 shrink-0 rounded-full" style={{ background: sq.accent }} />
+                  <span className="text-white/80 text-sm leading-snug">{ability}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
 
       {/* DESCRIPTION + DETAILS */}
       <section className="bg-[#050507] py-16 sm:py-20 border-t border-white/[0.06]">

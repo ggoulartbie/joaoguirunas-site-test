@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import Image from 'next/image';
 import type { Agente, Squad } from '@/data/agentes';
 
 interface AgentCardProps {
@@ -9,7 +10,6 @@ interface AgentCardProps {
 const MONO: React.CSSProperties = { fontFamily: 'var(--font-mono)', fontSize: '0.65rem', letterSpacing: '0.12em' };
 
 export function AgentCard({ agente, squad }: AgentCardProps) {
-  const initials = (agente.codename || agente.name).slice(0, 2).toUpperCase();
   const href = `/agentes/${agente.squad}/${agente.slug}`;
 
   return (
@@ -21,27 +21,22 @@ export function AgentCard({ agente, squad }: AgentCardProps) {
         background: 'rgba(2,2,10,0.45)',
       } as React.CSSProperties}
     >
-      {/* Square image placeholder */}
+      {/* Square image */}
       <div
-        className="relative aspect-square w-full overflow-hidden bg-gradient-to-br"
+        className="relative aspect-square w-full overflow-hidden"
         style={{
           background: `linear-gradient(135deg, ${squad.accent}22 0%, ${squad.accent}08 50%, #0e0e11 100%)`,
         }}
       >
-        {/* Glyph initials */}
-        <div className="absolute inset-0 flex items-center justify-center">
-          <span
-            className="text-7xl font-light tracking-tight transition-transform duration-500 group-hover:scale-110"
-            style={{
-              fontFamily: 'var(--font-display-serif)',
-              color: squad.accent,
-              opacity: 0.65,
-              textShadow: `0 0 40px ${squad.accent}66`,
-            }}
-          >
-            {initials}
-          </span>
-        </div>
+        <Image
+          src={`/agentes/${agente.slug}.png`}
+          alt={agente.codename || agente.name}
+          fill
+          className="object-cover object-top transition-transform duration-700 group-hover:scale-105"
+          sizes="(max-width: 768px) 50vw, 25vw"
+        />
+        {/* Subtle dark overlay at bottom for badge legibility */}
+        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
 
         {/* Squad badge top-left */}
         <div className="absolute top-3 left-3">
@@ -91,19 +86,25 @@ export function AgentCard({ agente, squad }: AgentCardProps) {
           </p>
         </div>
 
+        {agente.race && (
+          <p className="text-white/35 uppercase" style={{ fontFamily: 'var(--font-mono)', fontSize: '0.55rem', letterSpacing: '0.15em' }}>
+            {agente.race}
+          </p>
+        )}
+
         {agente.title && <p className="text-white/80 text-sm font-medium leading-snug">{agente.title}</p>}
 
-        <p className="text-white/55 text-sm leading-relaxed line-clamp-3 flex-1">{agente.description}</p>
+        <p className="text-white/55 text-sm leading-relaxed line-clamp-3 flex-1">
+          {agente.squadRole || agente.description}
+        </p>
 
-        {/* Tools strip */}
-        {agente.tools.length > 0 && (
+        {agente.abilities && agente.abilities.length > 0 && (
           <div className="flex flex-wrap gap-1 pt-2 border-t border-white/[0.06]">
-            {agente.tools.slice(0, 4).map((tool) => (
-              <span key={tool} className="px-1.5 py-0.5 bg-white/[0.04] text-white/50 text-[10px]" style={MONO}>
-                {tool}
+            {agente.abilities.slice(0, 3).map((ability) => (
+              <span key={ability} className="px-1.5 py-0.5 bg-white/[0.06] text-white/60 text-[10px]" style={MONO}>
+                {ability}
               </span>
             ))}
-            {agente.tools.length > 4 && <span className="px-1.5 py-0.5 text-white/40 text-[10px]" style={MONO}>+{agente.tools.length - 4}</span>}
           </div>
         )}
       </div>

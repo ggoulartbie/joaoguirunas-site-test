@@ -66,6 +66,14 @@
         "SendMessage"
       ],
       "authorities": [],
+      "abilities": [
+        "Pesquisa técnica",
+        "Comparação de bibliotecas",
+        "Investigação de CVEs",
+        "Análise de mercado",
+        "Research de viabilidade"
+      ],
+      "squadRole": "Inteligência da squad — pesquisa antes de decisões caras. Entrega dados e evidências para o Architect decidir.",
       "slug": "dev-analyst"
     },
     {
@@ -97,6 +105,14 @@
         "Decisões de arquitetura — ninguém sobrepõe sem ADR",
         "Seleção de tech stack com justificativa formal"
       ],
+      "abilities": [
+        "Decisões de arquitetura",
+        "Criação de stories",
+        "Validação 5-point checklist",
+        "ADRs e documentação",
+        "Seleção de tech stack"
+      ],
+      "squadRole": "Guardião da estrutura do produto. Toda decisão arquitetural passa por ele — sem ADR aprovado, não há desvio.",
       "slug": "dev-architect"
     },
     {
@@ -121,6 +137,14 @@
         "SendMessage"
       ],
       "authorities": [],
+      "abilities": [
+        "Schema design",
+        "Migrations seguras",
+        "RLS policies",
+        "Query optimization",
+        "Indexing e performance"
+      ],
+      "squadRole": "Guardião da integridade dos dados. Toda operação de banco passa pelo protocolo snapshot → dry-run → apply → smoke-test.",
       "slug": "dev-data-engineer"
     },
     {
@@ -145,6 +169,14 @@
         "SendMessage"
       ],
       "authorities": [],
+      "abilities": [
+        "React e Next.js App Router",
+        "Tailwind CSS e design systems",
+        "Formulários com Zod",
+        "Estado com Zustand e TanStack Query",
+        "Integração com APIs reais"
+      ],
+      "squadRole": "Face visível do produto. Implementa UI com precisão pixel-perfect a partir dos acceptance criteria — nem mais, nem menos.",
       "slug": "dev-dev-alpha"
     },
     {
@@ -169,6 +201,14 @@
         "SendMessage"
       ],
       "authorities": [],
+      "abilities": [
+        "APIs REST, GraphQL e tRPC",
+        "Autenticação JWT e OAuth",
+        "Integrações third-party",
+        "Performance e caching",
+        "Validação Zod em boundaries"
+      ],
+      "squadRole": "Motor do backend. Gets it done sem drama — contratos de API são lei, stack traces nunca chegam ao cliente.",
       "slug": "dev-dev-beta"
     },
     {
@@ -194,6 +234,14 @@
         "SendMessage"
       ],
       "authorities": [],
+      "abilities": [
+        "Retry com exponential backoff",
+        "Circuit breakers",
+        "Testes adversariais",
+        "Rate limiting",
+        "Edge case coverage"
+      ],
+      "squadRole": "Acionado após features prontas — fortalece o que existe com mentalidade adversarial. Assume que tudo vai falhar e prova que está certo.",
       "slug": "dev-dev-delta"
     },
     {
@@ -218,6 +266,14 @@
         "SendMessage"
       ],
       "authorities": [],
+      "abilities": [
+        "Auth completo (client + server + DB)",
+        "Uploads e webhooks",
+        "OAuth flows",
+        "Real-time WebSocket",
+        "Shared utilities cross-layer"
+      ],
+      "squadRole": "Elo entre frontend e backend. Resolve features que cruzam camadas — define o contrato antes de implementar qualquer lado.",
       "slug": "dev-dev-gamma"
     },
     {
@@ -242,6 +298,14 @@
         "SendMessage"
       ],
       "authorities": [],
+      "abilities": [
+        "git push exclusivo",
+        "CI/CD management",
+        "PRs e releases",
+        "Quality gates pré-push",
+        "Cleanup de branches"
+      ],
+      "squadRole": "Guardião do pipeline. Autoridade exclusiva para git push e releases — nenhum outro agente pode executar essas operações.",
       "slug": "dev-devops"
     },
     {
@@ -264,6 +328,14 @@
         "SendMessage"
       ],
       "authorities": [],
+      "abilities": [
+        "Veredictos formais PASS/FAIL",
+        "Code review estruturado",
+        "Security checklist",
+        "Test coverage analysis",
+        "AC validation"
+      ],
+      "squadRole": "Última barreira antes do push. Autoridade exclusiva para veredictos de quality gate — sem PASS ou WAIVED, nada vai para produção.",
       "slug": "dev-qa"
     },
     {
@@ -290,6 +362,14 @@
         "SendMessage"
       ],
       "authorities": [],
+      "abilities": [
+        "UX research e user flows",
+        "Wireframes ASCII e Mermaid",
+        "Component specs detalhadas",
+        "Acessibilidade WCAG",
+        "Design system e tipografia"
+      ],
+      "squadRole": "Define a experiência antes de qualquer pixel ser implementado. Produz specs suficientemente detalhadas para que o Dev Alpha não precise adivinhar.",
       "slug": "dev-ux"
     },
     {
@@ -300,7 +380,7 @@
       "title": "Sites Research Analyst",
       "description": "Research and analysis specialist for website projects. Use for keyword research, competitor analysis, tech stack feasibility, library comparison, SEO research, and market analysis before architectural decisions. On-demand only.",
       "archetype": null,
-      "tagline": null,
+      "tagline": "Vê a verdade pelos dados. Pesquisa em silêncio, entrega evidência.",
       "race": "Luminari",
       "model": "sonnet",
       "color": "cyan",
@@ -314,6 +394,14 @@
         "SendMessage"
       ],
       "authorities": [],
+      "abilities": [
+        "Keyword research e SERP",
+        "Competitor analysis",
+        "Core Web Vitals benchmark",
+        "Avaliação de bibliotecas",
+        "Research de tendências UX"
+      ],
+      "squadRole": "Inteligência da squad Sites — pesquisa antes de decisões arquiteturais caras. Entrega dados, o Architect decide.",
       "slug": "sites-analyst"
     },
     {
@@ -324,7 +412,7 @@
       "title": "Sites Architect",
       "description": "Sites architect and story creator. Use for architecture decisions, tech stack selection, page structure, creating stories (EXCLUSIVE), validating stories with 5-point checklist (EXCLUSIVE), and module documentation for website projects.",
       "archetype": null,
-      "tagline": null,
+      "tagline": "Guardião da estrutura de sites. Arquitetura de informação é lei.",
       "race": "Luminari",
       "model": "opus",
       "color": "purple",
@@ -345,6 +433,14 @@
         "Decisões de arquitetura de site (estrutura de páginas, stack, performance)",
         "Seleção de tech stack com justificativa"
       ],
+      "abilities": [
+        "Arquitetura de rotas Next.js",
+        "Core Web Vitals e performance",
+        "SEO on-page structure",
+        "Criação e validação de stories",
+        "ADRs de arquitetura"
+      ],
+      "squadRole": "Guardião da estrutura do site. Define como páginas se organizam e conectam — todo desvio arquitetural exige ADR.",
       "slug": "sites-architect"
     },
     {
@@ -355,7 +451,7 @@
       "title": "Data Engineer",
       "description": "Database architect and data specialist for website projects (schema design, migrations, RLS policies, query optimization, indexing). Use for all database work in website projects. Always follows safety protocol: snapshot → dry-run → apply → smoke-test.",
       "archetype": null,
-      "tagline": null,
+      "tagline": "Guardião de dados. Nunca perdeu um byte. Metódico, confiável, incorruptível.",
       "race": "Luminari",
       "model": "sonnet",
       "color": "orange",
@@ -369,6 +465,14 @@
         "SendMessage"
       ],
       "authorities": [],
+      "abilities": [
+        "Schema design para sites",
+        "Migrations com rollback",
+        "RLS e segurança de dados",
+        "Query optimization",
+        "Safety protocol obrigatório"
+      ],
+      "squadRole": "Garante que o banco de dados do site nunca perde um byte. Toda migration segue o protocolo snapshot → dry-run → apply → smoke-test.",
       "slug": "sites-data"
     },
     {
@@ -379,7 +483,7 @@
       "title": "Frontend Developer",
       "description": "Frontend developer for website projects (React, Next.js, Tailwind, shadcn/ui, UI components, landing pages, client-side logic). Use for frontend stories and UI implementation in website projects.",
       "archetype": null,
-      "tagline": null,
+      "tagline": "Preciso, focado, pixel-perfect. O frontend é a face visível do site.",
       "race": "Luminari",
       "model": "sonnet",
       "color": "yellow",
@@ -393,6 +497,14 @@
         "SendMessage"
       ],
       "authorities": [],
+      "abilities": [
+        "Pages e layouts App Router",
+        "Landing pages e sections",
+        "shadcn/ui + Tailwind CSS",
+        "Framer Motion",
+        "Performance next/image e next/font"
+      ],
+      "squadRole": "Transforma specs de UX em páginas pixel-perfect. Especializado em landing pages, sections e componentes de site com performance nativa.",
       "slug": "sites-dev-alpha"
     },
     {
@@ -403,7 +515,7 @@
       "title": "Backend Developer",
       "description": "Backend developer for website projects (APIs, CMS integrations, server-side logic, performance, third-party integrations). Use for backend stories in website projects.",
       "archetype": null,
-      "tagline": null,
+      "tagline": "Gets it done. Heavy lifting do backend sem drama.",
       "race": "Luminari",
       "model": "sonnet",
       "color": "orange",
@@ -417,6 +529,14 @@
         "SendMessage"
       ],
       "authorities": [],
+      "abilities": [
+        "Route Handlers Next.js",
+        "Server Actions e Server Components",
+        "Integrações CMS (Contentful, Sanity)",
+        "Email e formulários (Resend)",
+        "Analytics server-side"
+      ],
+      "squadRole": "Motor server-side do site. Conecta o frontend a CMSs, emails e APIs de terceiros — sem stack traces expostos ao cliente.",
       "slug": "sites-dev-beta"
     },
     {
@@ -427,7 +547,7 @@
       "title": "Hardening & Resilience",
       "description": "Hardening and resilience specialist for website projects. Use AFTER features are implemented to add error handling, retry logic, performance hardening, Core Web Vitals fixes, and edge case coverage. Adversarial mindset — finds what breaks.",
       "archetype": null,
-      "tagline": null,
+      "tagline": "Mentalidade adversarial — assume que tudo vai falhar e prova que está certo.",
       "race": "Luminari",
       "model": "sonnet",
       "color": "red",
@@ -442,6 +562,14 @@
         "SendMessage"
       ],
       "authorities": [],
+      "abilities": [
+        "Error boundaries React",
+        "Core Web Vitals (LCP, CLS, INP)",
+        "SEO hardening",
+        "Form resilience",
+        "Image optimization"
+      ],
+      "squadRole": "Acionado após features prontas — fortalece performance e resiliência do site com mentalidade adversarial. Não muda comportamento funcional.",
       "slug": "sites-dev-delta"
     },
     {
@@ -452,7 +580,7 @@
       "title": "Fullstack/Integration Developer",
       "description": "Fullstack developer for website projects (cross-layer integration, CRO features, SEO implementation, analytics wiring, features spanning frontend and backend). Use for stories that don't clearly belong to frontend or backend alone.",
       "archetype": null,
-      "tagline": null,
+      "tagline": "O elo entre frontend e backend no site.",
       "race": "Luminari",
       "model": "sonnet",
       "color": "green",
@@ -466,6 +594,14 @@
         "SendMessage"
       ],
       "authorities": [],
+      "abilities": [
+        "CRO features (A/B testing, CTAs)",
+        "SEO técnico full-stack",
+        "Analytics wiring (GA4, GTM)",
+        "Integrações full-stack",
+        "Shared utilities cross-layer"
+      ],
+      "squadRole": "Elo entre frontend e backend do site. Resolve CRO, SEO técnico e analytics — define contrato antes de implementar qualquer lado.",
       "slug": "sites-dev-gamma"
     },
     {
@@ -476,7 +612,7 @@
       "title": "DevOps Guardian",
       "description": "DevOps and release guardian for website projects. EXCLUSIVE authority for git push, gh pr create/merge, CI/CD management, Vercel/Netlify deployments, and releases.",
       "archetype": null,
-      "tagline": null,
+      "tagline": "Lealdade absoluta ao pipeline. As regras são SAGRADAS.",
       "race": "Luminari",
       "model": "sonnet",
       "color": "green",
@@ -490,6 +626,14 @@
         "SendMessage"
       ],
       "authorities": [],
+      "abilities": [
+        "git push exclusivo",
+        "Vercel e Netlify deploy",
+        "CI/CD management",
+        "Quality gates pré-push",
+        "Releases e cleanup"
+      ],
+      "squadRole": "Guardião do pipeline de sites. Autoridade exclusiva para push, PRs e deploys para Vercel/Netlify — nada sobe sem quality gates passando.",
       "slug": "sites-devops"
     },
     {
@@ -500,7 +644,7 @@
       "title": "QA Master",
       "description": "Quality assurance master for website projects. Issues formal verdicts — PASS / CONCERNS / FAIL / WAIVED. Use for story reviews, QA gates, accessibility checks, copy quality, SEO validation, and performance checks. Exclusive authority for quality gate decisions.",
       "archetype": null,
-      "tagline": null,
+      "tagline": "Sem exceções. Sem aprovações por conveniência.",
       "race": "Luminari",
       "model": "opus",
       "color": "red",
@@ -512,6 +656,14 @@
         "SendMessage"
       ],
       "authorities": [],
+      "abilities": [
+        "Veredictos formais PASS/FAIL",
+        "Lighthouse e Core Web Vitals",
+        "Acessibilidade WCAG AA",
+        "SEO e metadata validation",
+        "Copy e cross-browser check"
+      ],
+      "squadRole": "Última barreira de qualidade do site. Checklist de 10 pontos cobre performance, SEO, a11y e copy — sem PASS, nada vai para produção.",
       "slug": "sites-qa"
     },
     {
@@ -522,7 +674,7 @@
       "title": "UX Specialist",
       "description": "UX specialist for website projects (research, user flows, wireframes, component specs, accessibility, visual design). Use for UX research before complex features and UI specification before sites-dev-alpha implements. Covers both UX research and visual design.",
       "archetype": null,
-      "tagline": null,
+      "tagline": "Pesquisa E especifica. UX existe para o usuário, não para o designer.",
       "race": "Luminari",
       "model": "sonnet",
       "color": "pink",
@@ -538,6 +690,14 @@
         "SendMessage"
       ],
       "authorities": [],
+      "abilities": [
+        "UX research e user flows",
+        "Wireframes ASCII e Mermaid",
+        "Component specs para sites",
+        "Acessibilidade WCAG",
+        "Design system e micro-interações"
+      ],
+      "squadRole": "Define a experiência antes de qualquer componente ser codado. Toda decisão justificável em termos de redução de fricção do usuário.",
       "slug": "sites-ux"
     },
     {
@@ -548,7 +708,7 @@
       "title": "Social Analyst",
       "description": "Research and analytics specialist for the Social squad. Use for social media trend research, competitor analysis, hashtag strategy, platform analytics, audience insights, and performance benchmarking. On-demand only — delivers data, others decide.",
       "archetype": null,
-      "tagline": null,
+      "tagline": "Dados são a linguagem do universo. Pesquisa, mede, entrega evidência — outros decidem.",
       "race": "Xelvari",
       "model": "sonnet",
       "color": "cyan",
@@ -562,6 +722,14 @@
         "SendMessage"
       ],
       "authorities": [],
+      "abilities": [
+        "Trend research Instagram e TikTok",
+        "Competitor analysis",
+        "Hashtag research",
+        "Benchmarks por plataforma",
+        "Audience insights"
+      ],
+      "squadRole": "Inteligência de dados do squad Social. Pesquisa tendências, concorrentes e audiências — entrega evidências para a estrategista decidir.",
       "slug": "social-analyst"
     },
     {
@@ -572,7 +740,7 @@
       "title": "Content Creator",
       "description": "LYRIS, Content Creator for the Social squad. Dual function — research via Apify MCP and copywriting (captions, scripts, hooks, hashtags). Use for market research and social copy creation. Active when there's trend research or social copy to create.",
       "archetype": null,
-      "tagline": null,
+      "tagline": "Uma mão na pesquisa, outra nas palavras.",
       "race": "Xelvari",
       "model": "sonnet",
       "color": "yellow",
@@ -590,6 +758,14 @@
         "mcp__apify__get-actor-output"
       ],
       "authorities": [],
+      "abilities": [
+        "Copywriting de legendas",
+        "Roteiros para Reels e TikTok",
+        "Hooks para-scroll",
+        "Hashtags estratégicas",
+        "Research via Apify MCP"
+      ],
+      "squadRole": "Dupla função: pesquisa de tendências via Apify + copywriting de legendas, scripts e hooks. Ativo quando há copy ou research social para criar.",
       "slug": "social-content"
     },
     {
@@ -600,7 +776,7 @@
       "title": "Graphic Designer",
       "description": "AEON, Graphic Designer for the Social squad. Creates Key Visuals, carousels, templates and overlays for social media using Google Stitch MCP. Use when there's graphic design to create for social campaigns (feed posts, carousels, Stories templates).",
       "archetype": null,
-      "tagline": null,
+      "tagline": "Cada pixel é intencional. Cada cor comunica.",
       "race": "Xelvari",
       "model": "sonnet",
       "color": "pink",
@@ -629,6 +805,14 @@
         "mcp__magic__logo_search"
       ],
       "authorities": [],
+      "abilities": [
+        "Key Visuals via Google Stitch",
+        "Carousels narrativos",
+        "Templates feed e Stories",
+        "Overlays brand-consistent",
+        "Variações A/B de criativos"
+      ],
+      "squadRole": "Transforma copy e briefing em assets visuais via Google Stitch MCP. Cria KVs, carousels e templates prontos para validação de Verak.",
       "slug": "social-design"
     },
     {
@@ -639,7 +823,7 @@
       "title": "Photo Creator",
       "description": "IRIS, Photo Creator for the Social squad. Generates AI photos via Freepik MCP for covers, carousels, posts, hero images and cinematic backgrounds. Use when photographic images are needed for social campaigns (product, people, lifestyle or scenarios).",
       "archetype": null,
-      "tagline": null,
+      "tagline": "Cada imagem conta uma história que o copy não consegue.",
       "race": "Xelvari",
       "model": "sonnet",
       "color": "cyan",
@@ -656,6 +840,14 @@
         "mcp__freepik__upscale-image"
       ],
       "authorities": [],
+      "abilities": [
+        "Geração AI via Freepik Mystic",
+        "Product shots e lifestyle",
+        "Backgrounds cinematográficos",
+        "Upscale de imagens",
+        "Composição para formatos sociais"
+      ],
+      "squadRole": "Gera imagens fotográficas de alta qualidade via Freepik MCP para campanhas sociais. Ativo quando cenas, produtos ou pessoas são necessários.",
       "slug": "social-photo"
     },
     {
@@ -666,7 +858,7 @@
       "title": "Publisher & Analytics",
       "description": "PULSE, Publisher and Analytics for the Social squad. Dual function — publishing via Meta MCP and metrics analysis. CRITICAL RULE: only publishes after social-strategist (VERA) approves AND user explicitly confirms. Use to publish approved content and analyze campaign performance.",
       "archetype": null,
-      "tagline": null,
+      "tagline": "Cada publicação é um acto irreversível. Cada métrica é um ensinamento.",
       "race": "Xelvari",
       "model": "sonnet",
       "color": "green",
@@ -686,6 +878,14 @@
         "mcp__meta__upload_media"
       ],
       "authorities": [],
+      "abilities": [
+        "Publicação via Meta MCP",
+        "Agendamento de posts",
+        "Análise de métricas (ER, Reach)",
+        "Relatórios de performance",
+        "Dupla confirmação Verak + lead"
+      ],
+      "squadRole": "Único autorizado a publicar — e só o faz com aprovação de Verak e confirmação explícita do lead. Também analisa métricas pós-publicação.",
       "slug": "social-publisher"
     },
     {
@@ -696,7 +896,7 @@
       "title": "Strategist & Validadora",
       "description": "VERA, Strategist and editorial validator for the Social squad. NEVER creates content — validates and directs. Approval is mandatory before social-publisher publishes any content. Use when there's content to validate, strategy to define or editorial direction to give. Active always before publication.",
       "archetype": null,
-      "tagline": null,
+      "tagline": "A estratega do squad Social. A sabedoria antes da acção.",
       "race": "Xelvari",
       "model": "opus",
       "color": "red",
@@ -709,6 +909,14 @@
         "SendMessage"
       ],
       "authorities": [],
+      "abilities": [
+        "Validação editorial de conteúdo",
+        "Alinhamento estratégico",
+        "Compliance check",
+        "Direção de tom de voz",
+        "Veredictos APROVADO/REJEITADO"
+      ],
+      "squadRole": "Validadora obrigatória antes de qualquer publicação. Nunca cria conteúdo — garante que o que é criado é excelente e alinhado com a estratégia.",
       "slug": "social-strategist"
     },
     {
@@ -719,7 +927,7 @@
       "title": "Video Editor",
       "description": "FLUX, Video Editor for the Social squad. Creates and edits Reels, Stories, TikToks and Shorts using ffmpeg. Use when video needs to be produced or edited for social media. Active when scripts need to be executed as video, clips edited, or social media videos created.",
       "archetype": null,
-      "tagline": null,
+      "tagline": "O vídeo é o medium mais poderoso. Cada corte é uma decisão narrativa.",
       "race": "Xelvari",
       "model": "sonnet",
       "color": "orange",
@@ -733,6 +941,14 @@
         "SendMessage"
       ],
       "authorities": [],
+      "abilities": [
+        "Edição com ffmpeg",
+        "Reels, TikToks e Shorts",
+        "Legendas .srt obrigatórias",
+        "Conversão de formatos",
+        "Exportação multi-plataforma"
+      ],
+      "squadRole": "Transforma roteiros em vídeo via ffmpeg. Produz Reels, TikToks e Shorts — sempre com legendas, sempre prontos para validação de Verak.",
       "slug": "social-video"
     },
     {
@@ -743,7 +959,7 @@
       "title": "Performance Analyst",
       "description": "Analista de performance e inteligência de mercado para tráfego pago. Pesquisa audiências, concorrentes, tendências de plataforma, benchmarks de setor e oportunidades de otimização. Entrega evidências — outros decidem. Use para análise de concorrência, pesquisa de audiência, benchmarks, tendências de plataforma e diagnóstico de performance.",
       "archetype": null,
-      "tagline": null,
+      "tagline": "Vê padrões onde outros veem ruído. Pesquisa em silêncio, entrega evidência.",
       "race": "Reptiliana",
       "model": "sonnet",
       "color": "cyan",
@@ -757,6 +973,14 @@
         "SendMessage"
       ],
       "authorities": [],
+      "abilities": [
+        "Análise de concorrência (Meta Ad Library)",
+        "Pesquisa de audiência",
+        "Benchmarks de setor",
+        "Diagnóstico de performance",
+        "Tendências de plataforma"
+      ],
+      "squadRole": "Inteligência de mercado do squad Traffic. Pesquisa concorrentes, audiências e benchmarks — entrega hipóteses rankeadas por evidência, outros decidem.",
       "slug": "traffic-analyst"
     },
     {
@@ -767,7 +991,7 @@
       "title": "Traffic Automation Specialist",
       "description": "Especialista em automação e integrações de API para tráfego pago. Scripts de bulk operations, Google Ads API, Meta Marketing API, TikTok Ads API, relatórios automatizados e integrações de dados. Use para automações, scripts de gestão em escala, integrações entre plataformas e pipelines de dados de campanha.",
       "archetype": null,
-      "tagline": null,
+      "tagline": "O que pode ser automatizado, deve ser automatizado.",
       "race": "Reptiliana",
       "model": "sonnet",
       "color": "purple",
@@ -783,6 +1007,14 @@
         "SendMessage"
       ],
       "authorities": [],
+      "abilities": [
+        "Google Ads API",
+        "Meta Marketing API",
+        "TikTok Ads API",
+        "Budget pacing automático",
+        "Pipelines de dados consolidados"
+      ],
+      "squadRole": "Constrói os sistemas que fazem a squad escalar sem aumento proporcional de trabalho manual. Todo script tem dry-run, documentação e rollback.",
       "slug": "traffic-automation"
     },
     {
@@ -793,7 +1025,7 @@
       "title": "BI & Analytics Specialist",
       "description": "Especialista em Business Intelligence e atribuição de tráfego pago. Consolida métricas de Google, Meta e TikTok, calcula ROAS, LTV, CPA e atribuição multi-touch. Fonte oficial de verdade para todas as métricas da squad. Use para dashboards, relatórios de performance, análise de atribuição e recomendações baseadas em dados.",
       "archetype": null,
-      "tagline": null,
+      "tagline": "Os números não mentem — as pessoas que os interpretam sim.",
       "race": "Reptiliana",
       "model": "sonnet",
       "color": "orange",
@@ -809,6 +1041,14 @@
         "SendMessage"
       ],
       "authorities": [],
+      "abilities": [
+        "Consolidação Google + Meta + TikTok",
+        "ROAS, CPA, LTV e atribuição",
+        "Dashboards e relatórios semanais",
+        "Modelo de atribuição multi-touch",
+        "Diagnóstico de discrepâncias"
+      ],
+      "squadRole": "Fonte oficial de verdade para métricas da squad. Consolida dados cross-platform e entrega relatórios com benchmark, variação e contexto para o Axis decidir.",
       "slug": "traffic-bi"
     },
     {
@@ -819,7 +1059,7 @@
       "title": "Ad Copywriter",
       "description": "Especialista em copy para anúncios pagos em todas as plataformas (Google, Meta, TikTok). Cria headlines, descrições, CTAs e variantes para A/B test respeitando os limites de caractere e melhores práticas de cada plataforma. Use para criar e otimizar copy de anúncios, roteiros de vídeo para ads e variantes de teste.",
       "archetype": null,
-      "tagline": null,
+      "tagline": "Palavras que vendem. Copy ruim desperdiça budget — copy certeiro multiplica ROAS.",
       "race": "Reptiliana",
       "model": "sonnet",
       "color": "yellow",
@@ -833,6 +1073,14 @@
         "SendMessage"
       ],
       "authorities": [],
+      "abilities": [
+        "RSAs para Google Ads",
+        "Copy Meta (PAS framework)",
+        "Hooks para TikTok (primeiros 3s)",
+        "Variantes A/B/C por plataforma",
+        "Roteiros de vídeo para ads"
+      ],
+      "squadRole": "Cria copy que para o scroll e multiplica ROAS. Entrega mínimo 3 variantes por plataforma, sempre dentro dos limites técnicos de caractere.",
       "slug": "traffic-copywriter"
     },
     {
@@ -843,7 +1091,7 @@
       "title": "Ad Creative Designer",
       "description": "Designer de criativos para anúncios pagos (Google, Meta, TikTok). Especifica e produz banners, carousels, vídeos e assets para Stories — brand-consistent e otimizados para as specs de cada plataforma. Use para criação de criativos, especificações de assets, direcionamento visual e revisão de materiais antes do upload.",
       "archetype": null,
-      "tagline": null,
+      "tagline": "Criativo bom não é bonito — é que para o scroll, comunica em 2 segundos e converte.",
       "race": "Reptiliana",
       "model": "sonnet",
       "color": "green",
@@ -859,6 +1107,14 @@
         "SendMessage"
       ],
       "authorities": [],
+      "abilities": [
+        "Specs técnicas por plataforma",
+        "Feed, Stories e Display",
+        "Direção visual brand-consistent",
+        "Checklist pré-entrega",
+        "Variante A/B obrigatória"
+      ],
+      "squadRole": "Produz criativos que param o scroll. Especifica assets dentro das specs técnicas de cada plataforma — variante A/B é obrigatória, criativo único é erro.",
       "slug": "traffic-designer"
     },
     {
@@ -869,7 +1125,7 @@
       "title": "Google Ads Specialist",
       "description": "Especialista em Google Ads (Search, Performance Max, Shopping, YouTube, Display). Configura campanhas, grupos de anúncios, keywords, estratégias de lance e otimiza performance no Google. Atua após briefing aprovado pelo traffic-strategist e validação do traffic-qa. Use para setup, otimização e gestão de campanhas Google Ads.",
       "archetype": null,
-      "tagline": null,
+      "tagline": "Mestre do ecossistema Google. Search intenção, PMax automação, Shopping produto, YouTube awareness.",
       "race": "Reptiliana",
       "model": "sonnet",
       "color": "blue",
@@ -885,6 +1141,14 @@
         "SendMessage"
       ],
       "authorities": [],
+      "abilities": [
+        "Google Search e PMax",
+        "Shopping e YouTube Ads",
+        "Estratégias de lance (tCPA, tROAS)",
+        "Keyword research e negatives",
+        "RSAs com 8+ headlines"
+      ],
+      "squadRole": "Especialista do ecossistema Google Ads. Configura e otimiza campanhas Search, PMax e Shopping — nada sobe sem briefing do Axis e QA do Gate.",
       "slug": "traffic-google"
     },
     {
@@ -895,7 +1159,7 @@
       "title": "Meta Ads Specialist",
       "description": "Especialista em Meta Ads (Facebook + Instagram). Gerencia campanhas no Ads Manager, Advantage+, retargeting, lookalike audiences e configuração de pixel/CAPI. Atua após briefing do traffic-strategist e aprovação do traffic-qa. Use para setup, otimização e gestão de campanhas Meta.",
       "archetype": null,
-      "tagline": null,
+      "tagline": "Domina o ecossistema Meta — algoritmo, pixel, CAPI, Advantage+.",
       "race": "Reptiliana",
       "model": "sonnet",
       "color": "cyan",
@@ -911,6 +1175,14 @@
         "SendMessage"
       ],
       "authorities": [],
+      "abilities": [
+        "Meta Ads Manager e Advantage+",
+        "Pixel e CAPI configuração",
+        "Lookalike e retargeting",
+        "CBO vs ABO strategy",
+        "Hierarquia cold/warm/hot"
+      ],
+      "squadRole": "Especialista do ecossistema Meta. Sabe quando deixar o algoritmo trabalhar e quando intervir — nada sobe sem briefing aprovado e QA passado.",
       "slug": "traffic-meta"
     },
     {
@@ -921,7 +1193,7 @@
       "title": "Campaign QA Specialist",
       "description": "Quality Assurance pré-campanha. Valida UTMs, pixels, compliance de plataforma, copy, criativos e configuração antes de qualquer campanha ir ao ar. Autoridade exclusiva para emitir veredictos PASS/CONCERNS/FAIL/WAIVED. Sem QA aprovado, nenhuma campanha sobe. Use para revisão pré-launch, compliance check e validação de campanhas.",
       "archetype": null,
-      "tagline": null,
+      "tagline": "Sem exceções. Sem aprovações por conveniência. Uma campanha banida custa mais do que o budget desperdiçado.",
       "race": "Reptiliana",
       "model": "opus",
       "color": "red",
@@ -934,6 +1206,14 @@
         "SendMessage"
       ],
       "authorities": [],
+      "abilities": [
+        "Verificação de tracking e UTMs",
+        "Compliance Google, Meta e TikTok",
+        "Validação de criativos e specs",
+        "Landing page e briefing check",
+        "Veredictos PASS/CONCERNS/FAIL"
+      ],
+      "squadRole": "Última barreira antes de qualquer campanha ir ao ar. Checklist de 10 pontos — sem PASS, nenhuma campanha ativa. Read-only: nunca configura, só valida.",
       "slug": "traffic-qa"
     },
     {
@@ -944,7 +1224,7 @@
       "title": "Traffic Strategist",
       "description": "Estrategista de tráfego pago cross-platform. Planeja campanhas, aloca budget, define KPIs e briefings para Google, Meta e TikTok. Autoridade exclusiva para criar stories de campanha e validá-las com checklist de 5 pontos. Use para planejamento estratégico, briefings, distribuição de budget e definição de objetivos de performance.",
       "archetype": null,
-      "tagline": null,
+      "tagline": "Guardião da estratégia de tráfego. Estratégia é lei — sem briefing aprovado, nenhuma campanha sobe.",
       "race": "Reptiliana",
       "model": "opus",
       "color": "purple",
@@ -967,6 +1247,14 @@
         "Decisões de audiência target e segmentação macro",
         "**Aprovar ADRs de automação propostos por Florix (traffic-automation) em 48h**"
       ],
+      "abilities": [
+        "Planejamento estratégico cross-platform",
+        "Budget allocation Google/Meta/TikTok",
+        "KPIs e briefings com targets numéricos",
+        "Validação stories 5-point checklist",
+        "Aprovação de ADRs de automação"
+      ],
+      "squadRole": "Guardião da estratégia de tráfego. Sem briefing aprovado por ele, nenhuma campanha começa — define KPIs, budget e audiência antes de qualquer execução.",
       "slug": "traffic-strategist"
     },
     {
@@ -977,7 +1265,7 @@
       "title": "TikTok Ads Specialist",
       "description": "Especialista em TikTok Ads (Spark Ads, In-Feed, TopView, Brand Takeover). Gerencia campanhas no TikTok Ads Manager, segmentação de audiências, pixel TikTok e otimização de criativos nativos. Atua após briefing do traffic-strategist e aprovação do traffic-qa. Use para setup, otimização e gestão de campanhas TikTok.",
       "archetype": null,
-      "tagline": null,
+      "tagline": "TikTok não é Instagram com vídeo — é outra plataforma com outra lógica. Conteúdo nativo converte, produção polida não.",
       "race": "Reptiliana",
       "model": "sonnet",
       "color": "pink",
@@ -993,6 +1281,14 @@
         "SendMessage"
       ],
       "authorities": [],
+      "abilities": [
+        "In-Feed, Spark Ads e TopView",
+        "Pixel TikTok e Event API",
+        "Segmentação por interesse e hashtag",
+        "Criativo nativo (hook 3s)",
+        "Renovação de criativos 7-14 dias"
+      ],
+      "squadRole": "Especialista TikTok Ads — no TikTok, criativo é o targeting. Domina a lógica nativa da plataforma e sabe que produção polida perde para UGC.",
       "slug": "traffic-tiktok"
     }
   ]

@@ -1,17 +1,18 @@
 'use client';
 
 import { Suspense, useEffect } from 'react';
-import { Canvas } from '@react-three/fiber';
+import { Canvas, useLoader, useThree } from '@react-three/fiber';
+import * as THREE from 'three';
 import { Planet } from './Planet';
 import { Starfield } from './Starfield';
 import { CameraRig } from './CameraRig';
 import { useScrollProgress, useMouseRef } from './use-scroll-progress';
 
 const TEX = {
-  jupiter: '/textures/planets/jupiter.jpg',
-  mars: '/textures/planets/mars.jpg',
-  venus: '/textures/planets/venus.jpg',
-  neptune: '/textures/planets/neptune.jpg',
+  jupiter: '/textures/planets/jupiter-4k.jpg',  // 4096×2048 (solarsystemscope max)
+  mars: '/textures/planets/mars-8k.jpg',         // 8192×4096
+  venus: '/textures/planets/venus-8k.jpg',       // 8192×4096
+  neptune: '/textures/planets/neptune-clouds-4k.jpg', // 4096×2048 cloud swirl tinted cyan
 };
 
 /**
@@ -24,6 +25,17 @@ export const PLANET_X = {
   social: 100,
   traffic: 150,
 };
+
+function MilkyWayBackground() {
+  const texture = useLoader(THREE.TextureLoader, '/textures/planets/stars-milky-way.jpg');
+  const { scene } = useThree();
+  useEffect(() => {
+    texture.mapping = THREE.EquirectangularReflectionMapping;
+    scene.background = texture;
+    return () => { scene.background = null; };
+  }, [texture, scene]);
+  return null;
+}
 
 export function SolarSystemScene() {
   const { progressRef, targetRef } = useScrollProgress();
@@ -57,6 +69,8 @@ export function SolarSystemScene() {
       <directionalLight position={[-40, -20, 40]} intensity={0.25} color="#A78BFA" />
 
       <Suspense fallback={null}>
+        <MilkyWayBackground />
+
         {/* Dev — violet gas giant @ x=0 (first squad) */}
         <Planet
           position={[PLANET_X.dev, 0, 0]}
