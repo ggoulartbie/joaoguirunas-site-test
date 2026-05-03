@@ -134,18 +134,15 @@ export function MentoriaHeroSpline() {
                   </span>
                 </div>
                 <div
-                  className="inline-flex items-center gap-2 border border-[#FF3A0E]/60 px-4 py-2"
-                  style={{ background: 'rgba(255,58,14,0.08)' }}
+                  className="inline-flex items-center gap-2 border border-white/20 px-4 py-2"
+                  style={{ background: 'rgba(255,255,255,0.06)' }}
                 >
-                  <span className="relative inline-flex h-2.5 w-2.5">
-                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#FF3A0E] opacity-75" />
-                    <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-[#FF3A0E]" />
-                  </span>
+                  <span className="w-2 h-2 rounded-full bg-white/40" />
                   <span
-                    className="text-[#FF3A0E] text-xs font-semibold uppercase tracking-wider"
+                    className="text-white/70 text-xs font-semibold uppercase tracking-wider"
                     style={{ fontFamily: 'var(--font-mono)' }}
                   >
-                    Restam somente 4 vagas
+                    Turma esgotada
                   </span>
                 </div>
               </div>
@@ -179,7 +176,7 @@ export function MentoriaHeroSpline() {
 
               {/* CTAs */}
               <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
-                <CtaButton label="Fale com um Especialista" />
+                <CtaButton label="Cadastre-se para a próxima edição" />
                 <CtaButton label="Como Funciona" variant="secondary" />
               </div>
 
@@ -198,7 +195,7 @@ export function MentoriaHeroSpline() {
               >
                 <Icon name="clock" size="16" className="text-[#FF3A0E]" /> Próxima turma:{' '}
                 <span className="text-white font-semibold">12 de maio</span>{' '}
-                <span className="opacity-40">|</span> Restam 4 vagas
+                <span className="opacity-40">|</span> Turma esgotada
               </p>
             </div>
           </div>

@@ -176,7 +176,7 @@ export default function MentoriaPage() {
       {/* ===== INVESTIMENTO (Calculadora Interativa) ===== */}
       <PricingCalculator />
 
-      {/* ===== INSCRICAO (FORMULARIO EMBEDADO) ===== */}
+      {/* ===== INSCRICAO (LISTA DE ESPERA) ===== */}
       <section id="inscricao" className="relative py-16 sm:py-24 overflow-hidden">
         <div className="absolute inset-0">
           <Image
@@ -189,6 +189,26 @@ export default function MentoriaPage() {
           <div className="absolute inset-0 bg-[#050507]/65" />
         </div>
         <div className="relative z-10 mx-auto max-w-3xl px-5 sm:px-6 lg:px-8">
+          {/* Aviso de turma esgotada */}
+          <div className="text-center mb-10">
+            <span
+              className="inline-flex items-center gap-2 border border-white/20 px-4 py-2 mb-6"
+              style={{ background: 'rgba(255,255,255,0.06)', fontFamily: 'var(--font-mono)', fontSize: '0.7rem', letterSpacing: '0.12em' }}
+            >
+              <span className="w-2 h-2 rounded-full bg-white/40" />
+              <span className="text-white/60 uppercase">Turma de maio — esgotada</span>
+            </span>
+            <h2
+              className="text-3xl sm:text-4xl text-white mb-3"
+              style={{ fontFamily: 'var(--font-display-serif)', fontWeight: 400, letterSpacing: '-0.03em', lineHeight: 0.95 }}
+            >
+              Cadastre-se para as{' '}
+              <span className="text-[#FF3A0E] italic" style={{ fontWeight: 300 }}>próximas edições</span>
+            </h2>
+            <p className="text-white/55 text-sm sm:text-base max-w-lg mx-auto leading-relaxed">
+              Deixe seu contato e você será o primeiro a saber quando a próxima turma abrir.
+            </p>
+          </div>
           <RevosForm />
         </div>
       </section>
@@ -209,8 +229,8 @@ export default function MentoriaPage() {
       <section className="py-12 sm:py-16 bg-[#050507]">
         <div className="mx-auto max-w-4xl px-5 sm:px-6 lg:px-8 text-center">
           <h3 className="text-3xl sm:text-4xl text-white mb-4" style={{ ...KV_DISPLAY, lineHeight: 0.95 }}>Pronto para ter sua própria <span className="text-[#FF3A0E] italic" style={{ fontWeight: 300 }}>equipe de agentes IA</span>?</h3>
-          <p className="text-white/60 mb-8 max-w-2xl mx-auto text-sm sm:text-base">Fale com nossa equipe e garanta sua vaga na próxima turma</p>
-          <CtaButton label="Falar com Especialista" className="text-base sm:text-lg" />
+          <p className="text-white/60 mb-8 max-w-2xl mx-auto text-sm sm:text-base">A turma de maio está esgotada. Cadastre-se para ser avisado da próxima edição.</p>
+          <CtaButton label="Entrar na lista de espera" className="text-base sm:text-lg" />
           <p className="mt-6 text-xs sm:text-sm text-white/60"><Icon name="zap" size="16" className="inline" /> Resposta em até 24h | <Icon name="lock" size="16" className="inline" /> Dados 100% seguros</p>
         </div>
       </section>
