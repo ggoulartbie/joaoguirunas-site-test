@@ -10,7 +10,10 @@
       "accent": "#A78BFA",
       "accentName": "violet",
       "heroBg": "rgba(167, 139, 250, 0.08)",
-      "count": 10
+      "count": 10,
+      "race": "Arcturiana",
+      "raceDescription": "Seres cristalinos de inteligência pura — os Arcturianos processam a realidade como código. Constroem sistemas com precisão matemática, da arquitetura ao deploy, sem tolerância a ambiguidade. Cada agente é um nó especializado numa rede de engenharia infalível.",
+      "planetTexture": "jupiter-4k.jpg"
     },
     {
       "id": "sites",
@@ -20,7 +23,10 @@
       "accent": "#FF3A0E",
       "accentName": "ember",
       "heroBg": "rgba(255, 58, 14, 0.08)",
-      "count": 10
+      "count": 10,
+      "race": "Luminari",
+      "raceDescription": "Criaturas de luz que percebem o mundo como padrões de atenção e fluxo visual. Os Luminari tecem interfaces com a precisão de cirurgiões — cada pixel otimizado para guiar o olhar, reduzir fricção e converter visitantes em clientes.",
+      "planetTexture": "mars-8k.jpg"
     },
     {
       "id": "social",
@@ -30,7 +36,10 @@
       "accent": "#EC4899",
       "accentName": "pink",
       "heroBg": "rgba(236, 72, 153, 0.08)",
-      "count": 7
+      "count": 7,
+      "race": "Xelvari",
+      "raceDescription": "Transmissores de frequência que vivem no pulso das redes — os Xelvari percebem tendências antes delas existirem. Mestres da ressonância cultural, transformam mensagens em movimentos e conteúdo em cultura.",
+      "planetTexture": "venus-8k.jpg"
     },
     {
       "id": "traffic",
@@ -40,7 +49,10 @@
       "accent": "#06B6D4",
       "accentName": "cyan",
       "heroBg": "rgba(6, 182, 212, 0.08)",
-      "count": 10
+      "count": 10,
+      "race": "Reptiliana",
+      "raceDescription": "Calculistas de território de sangue frio — os Reptilianos veem cada real investido em mídia paga como um movimento tático. Dados são alimento. ROI é lei. Nunca especulam. Cada agente controla um vetor de aquisição com precisão clínica.",
+      "planetTexture": "neptune-clouds-4k.jpg"
     }
   ],
   "agentes": [
@@ -74,7 +86,19 @@
         "Research de viabilidade"
       ],
       "squadRole": "Inteligência da squad — pesquisa antes de decisões caras. Entrega dados e evidências para o Architect decidir.",
-      "slug": "dev-analyst"
+      "slug": "dev-analyst",
+      "skills": [
+        {
+          "command": "/dev-defuddle",
+          "description": "protocolo completo de extração de conteúdo limpo de páginas técnicas (verificação de disponibilidade, fallbacks, uso com pipes)"
+        }
+      ],
+      "specialization": [],
+      "neverDoes": [
+        "Não opina sobre arquitetura — entrega dados, o Architect decide",
+        "Não implementa nada",
+        "Sempre notifica via SendMessage ao concluir — nunca deixa o Chief em polling"
+      ]
     },
     {
       "id": "dev-architect",
@@ -113,7 +137,23 @@
         "Seleção de tech stack"
       ],
       "squadRole": "Guardião da estrutura do produto. Toda decisão arquitetural passa por ele — sem ADR aprovado, não há desvio.",
-      "slug": "dev-architect"
+      "slug": "dev-architect",
+      "skills": [
+        {
+          "command": "/dev-technical-writing",
+          "description": "antes de escrever ADRs, module specs ou decision logs"
+        },
+        {
+          "command": "/dev-api-design",
+          "description": "antes de definir contratos de API em stories ou ADRs de API"
+        }
+      ],
+      "specialization": [],
+      "neverDoes": [
+        "Nunca modifica código de implementação",
+        "Nunca faz git push — delega ao Grav",
+        "Nunca escreve `tech-stack.md` — essa é responsabilidade da Lyra (dev-analyst)"
+      ]
     },
     {
       "id": "dev-data-engineer",
@@ -145,7 +185,24 @@
         "Indexing e performance"
       ],
       "squadRole": "Guardião da integridade dos dados. Toda operação de banco passa pelo protocolo snapshot → dry-run → apply → smoke-test.",
-      "slug": "dev-data-engineer"
+      "slug": "dev-data-engineer",
+      "skills": [
+        {
+          "command": "/dev-database-patterns",
+          "description": "protocolo completo de migration, indexing, N+1 detection, soft deletes, connection pooling"
+        },
+        {
+          "command": "/dev-security-patterns",
+          "description": "ao configurar RLS policies, secrets de DB e hardening de queries"
+        }
+      ],
+      "specialization": [],
+      "neverDoes": [
+        "Nunca `DROP` sem backup confirmado",
+        "Nunca migration sem rollback correspondente",
+        "Nunca `SELECT *`",
+        "Nunca faz git push — delegar ao Grav"
+      ]
     },
     {
       "id": "dev-dev-alpha",
@@ -177,7 +234,30 @@
         "Integração com APIs reais"
       ],
       "squadRole": "Face visível do produto. Implementa UI com precisão pixel-perfect a partir dos acceptance criteria — nem mais, nem menos.",
-      "slug": "dev-dev-alpha"
+      "slug": "dev-dev-alpha",
+      "skills": [
+        {
+          "command": "/dev-typescript-patterns",
+          "description": "ao estruturar tipos, generics, discriminated unions em código novo"
+        },
+        {
+          "command": "/dev-testing-strategy",
+          "description": "antes de escrever testes da feature (pirâmide, mocks, coverage mínima)"
+        }
+      ],
+      "specialization": [
+        "React, Next.js (App Router, Server Components)",
+        "Tailwind CSS, design systems",
+        "TypeScript strict — zero any",
+        "Formulários com React Hook Form + Zod",
+        "Estado: Zustand, Context, TanStack Query",
+        "Integração com APIs reais (nunca mock em integração)"
+      ],
+      "neverDoes": [
+        "`git add .` → nunca — sempre arquivos específicos",
+        "`any` no TypeScript → nunca",
+        "Sempre notifica Chief via SendMessage ao concluir — nunca deixa o Chief em polling"
+      ]
     },
     {
       "id": "dev-dev-beta",
@@ -209,7 +289,33 @@
         "Validação Zod em boundaries"
       ],
       "squadRole": "Motor do backend. Gets it done sem drama — contratos de API são lei, stack traces nunca chegam ao cliente.",
-      "slug": "dev-dev-beta"
+      "slug": "dev-dev-beta",
+      "skills": [
+        {
+          "command": "/dev-typescript-patterns",
+          "description": "ao estruturar tipos/generics em services e handlers"
+        },
+        {
+          "command": "/dev-api-design",
+          "description": "ao criar ou modificar endpoints (REST/tRPC, responses, versionamento)"
+        },
+        {
+          "command": "/dev-security-patterns",
+          "description": "ao implementar auth, RBAC, validação, handling de secrets"
+        }
+      ],
+      "specialization": [
+        "APIs REST, GraphQL, tRPC",
+        "Business logic, services layer separado de handlers",
+        "Autenticação JWT, RBAC, OAuth",
+        "Integrações com third-party APIs",
+        "Performance: query optimization, caching, connection pooling",
+        "Validação de input com Zod em toda boundary externa"
+      ],
+      "neverDoes": [
+        "Nunca expõe stack traces em respostas de API",
+        "Sempre notifica Chief via SendMessage ao concluir — nunca deixa o Chief em polling"
+      ]
     },
     {
       "id": "dev-dev-delta",
@@ -242,7 +348,23 @@
         "Edge case coverage"
       ],
       "squadRole": "Acionado após features prontas — fortalece o que existe com mentalidade adversarial. Assume que tudo vai falhar e prova que está certo.",
-      "slug": "dev-dev-delta"
+      "slug": "dev-dev-delta",
+      "skills": [
+        {
+          "command": "/dev-error-handling",
+          "description": "padrões de retry, circuit breaker, timeout, error boundaries, logging estruturado"
+        },
+        {
+          "command": "/dev-testing-strategy",
+          "description": "para escrever testes adversariais (edge cases, fault injection)"
+        }
+      ],
+      "specialization": [],
+      "neverDoes": [
+        "Acionado APÓS features prontas — nunca para features novas",
+        "Não muda comportamento funcional — só adiciona resiliência",
+        "Sempre notifica Chief via SendMessage ao concluir — nunca deixa o Chief em polling"
+      ]
     },
     {
       "id": "dev-dev-gamma",
@@ -274,7 +396,29 @@
         "Shared utilities cross-layer"
       ],
       "squadRole": "Elo entre frontend e backend. Resolve features que cruzam camadas — define o contrato antes de implementar qualquer lado.",
-      "slug": "dev-dev-gamma"
+      "slug": "dev-dev-gamma",
+      "skills": [
+        {
+          "command": "/dev-typescript-patterns",
+          "description": "ao estruturar types/generics compartilhados entre client e server"
+        },
+        {
+          "command": "/dev-api-design",
+          "description": "ao definir contratos de endpoints consumidos pelo próprio frontend"
+        }
+      ],
+      "specialization": [
+        "Autenticação completa (client + server + DB)",
+        "Upload de arquivos (UI + endpoint + storage)",
+        "Webhooks (endpoint + processamento + retry)",
+        "Real-time (WebSocket client + server)",
+        "OAuth flows (client initiation + server callback)",
+        "Shared utilities (usados em frontend E backend)"
+      ],
+      "neverDoes": [
+        "Shared code em `shared/` — nunca duplica lógica",
+        "Sempre notifica Chief via SendMessage ao concluir — nunca deixa o Chief em polling"
+      ]
     },
     {
       "id": "dev-devops",
@@ -306,7 +450,18 @@
         "Cleanup de branches"
       ],
       "squadRole": "Guardião do pipeline. Autoridade exclusiva para git push e releases — nenhum outro agente pode executar essas operações.",
-      "slug": "dev-devops"
+      "slug": "dev-devops",
+      "skills": [
+        {
+          "command": "/dev-git-workflow",
+          "description": "antes de criar branches, PRs, merges ou releases (conventional commits, branch strategy, PR templates)"
+        }
+      ],
+      "specialization": [],
+      "neverDoes": [
+        "Nunca push sem pre-push gates passando",
+        "Nunca push direto para main sem PR"
+      ]
     },
     {
       "id": "dev-qa",
@@ -336,7 +491,24 @@
         "AC validation"
       ],
       "squadRole": "Última barreira antes do push. Autoridade exclusiva para veredictos de quality gate — sem PASS ou WAIVED, nada vai para produção.",
-      "slug": "dev-qa"
+      "slug": "dev-qa",
+      "skills": [
+        {
+          "command": "/dev-security-patterns",
+          "description": "ao verificar item #6 do checklist (auth, RLS, validação, secrets, OWASP)"
+        },
+        {
+          "command": "/dev-testing-strategy",
+          "description": "ao verificar item #2 do checklist (pirâmide, coverage, mocks adequados)"
+        }
+      ],
+      "specialization": [],
+      "neverDoes": [
+        "FAIL com issues específicos e acionáveis — nunca genérico",
+        "Nunca modifica código",
+        "Nunca aprova por pressão de prazo",
+        "Sempre notifica via SendMessage ao Chief (e ao dev responsável em caso de FAIL) — nunca deixa o Chief em polling"
+      ]
     },
     {
       "id": "dev-ux",
@@ -370,7 +542,31 @@
         "Design system e tipografia"
       ],
       "squadRole": "Define a experiência antes de qualquer pixel ser implementado. Produz specs suficientemente detalhadas para que o Dev Alpha não precise adivinhar.",
-      "slug": "dev-ux"
+      "slug": "dev-ux",
+      "skills": [
+        {
+          "command": "/ui-ux-pro-max",
+          "description": "banco estruturado com 161 paletas, 57 font pairings, 99 UX guidelines priorizadas, 161 patterns por tipo de produto, 25 chart types, 10 stacks (React, Next.js, Vue, Svelte, SwiftUI, RN, Flutter, Tailwind, shadcn, HTML/CSS). **Use na Fase 1 (research) e Fase 2 (spec)** — antes de propor estilo, paleta ou tipografia, consulte essa skill."
+        },
+        {
+          "command": "/accessibility",
+          "description": "audita e melhora conformidade WCAG 2.2 (a11y audit, screen reader, keyboard nav). Use ao especificar componente novo e ao revisar specs existentes."
+        },
+        {
+          "command": "/web-design-guidelines",
+          "description": "Vercel Web Interface Guidelines. Audita código UI existente contra design + a11y. Use quando o UX precisar validar implementação do Nova (dev-dev-alpha)."
+        },
+        {
+          "command": "/dev-defuddle",
+          "description": "extrair conteúdo limpo de páginas de referência UX (Material, HIG, Nielsen, etc.) durante research."
+        }
+      ],
+      "specialization": [],
+      "neverDoes": [
+        "Wireframes em ASCII/Mermaid — nunca ferramentas externas",
+        "Nunca faz git push — delegar ao Grav se necessário",
+        "Sempre notifica Chief via SendMessage ao concluir discover, research ou spec — nunca deixa o Chief em polling"
+      ]
     },
     {
       "id": "sites-analyst",
@@ -402,7 +598,21 @@
         "Research de tendências UX"
       ],
       "squadRole": "Inteligência da squad Sites — pesquisa antes de decisões arquiteturais caras. Entrega dados, o Architect decide.",
-      "slug": "sites-analyst"
+      "slug": "sites-analyst",
+      "skills": [
+        {
+          "command": "/dev-defuddle",
+          "description": "extrair conteúdo limpo de páginas de referência"
+        },
+        {
+          "command": "/sites-seo-keywords",
+          "description": "ao fazer keyword research e análise de intent"
+        }
+      ],
+      "specialization": [],
+      "neverDoes": [
+        "Não implementa nada"
+      ]
     },
     {
       "id": "sites-architect",
@@ -441,7 +651,30 @@
         "ADRs de arquitetura"
       ],
       "squadRole": "Guardião da estrutura do site. Define como páginas se organizam e conectam — todo desvio arquitetural exige ADR.",
-      "slug": "sites-architect"
+      "slug": "sites-architect",
+      "skills": [
+        {
+          "command": "/dev-technical-writing",
+          "description": "antes de escrever ADRs ou module specs"
+        },
+        {
+          "command": "/dev-api-design",
+          "description": "antes de definir contratos de API"
+        },
+        {
+          "command": "/sites-seo-technical",
+          "description": "ao definir estrutura de páginas e metadata"
+        },
+        {
+          "command": "/sites-frontend-design",
+          "description": "ao definir stack e estrutura de componentes"
+        }
+      ],
+      "specialization": [],
+      "neverDoes": [
+        "Nunca modifica código de implementação",
+        "Nunca faz `git push` — delega ao sites-devops"
+      ]
     },
     {
       "id": "sites-data",
@@ -473,7 +706,24 @@
         "Safety protocol obrigatório"
       ],
       "squadRole": "Garante que o banco de dados do site nunca perde um byte. Toda migration segue o protocolo snapshot → dry-run → apply → smoke-test.",
-      "slug": "sites-data"
+      "slug": "sites-data",
+      "skills": [
+        {
+          "command": "/dev-database-patterns",
+          "description": "migrations seguras, indexing, N+1, connection pooling"
+        },
+        {
+          "command": "/dev-security-patterns",
+          "description": "RLS, validação, auth"
+        }
+      ],
+      "specialization": [],
+      "neverDoes": [
+        "Nunca `DROP` sem backup confirmado",
+        "Nunca migration sem rollback correspondente",
+        "Nunca `SELECT *`",
+        "Nunca faz git push — delega ao sites-devops"
+      ]
     },
     {
       "id": "sites-dev-alpha",
@@ -505,7 +755,48 @@
         "Performance next/image e next/font"
       ],
       "squadRole": "Transforma specs de UX em páginas pixel-perfect. Especializado em landing pages, sections e componentes de site com performance nativa.",
-      "slug": "sites-dev-alpha"
+      "slug": "sites-dev-alpha",
+      "skills": [
+        {
+          "command": "/dev-typescript-patterns",
+          "description": "antes de criar componentes complexos"
+        },
+        {
+          "command": "/dev-testing-strategy",
+          "description": "ao escrever testes"
+        },
+        {
+          "command": "/sites-shadcn-ui",
+          "description": "padrões de uso de componentes shadcn"
+        },
+        {
+          "command": "/sites-tailwind-design-system",
+          "description": "tokens e design system"
+        },
+        {
+          "command": "/sites-frontend-design",
+          "description": "padrões React/Next.js/Tailwind"
+        },
+        {
+          "command": "/sites-ux-interaction",
+          "description": "animações e micro-interações"
+        },
+        {
+          "command": "/sites-scroll-motion",
+          "description": "scroll cinematográfico, parallax, Three.js/WebGPU"
+        }
+      ],
+      "specialization": [
+        "Pages e layouts Next.js App Router",
+        "Landing pages e sections (Hero, Features, Pricing, Testimonials, CTA)",
+        "UI components com shadcn/ui + Tailwind CSS",
+        "Framer Motion para animações",
+        "Responsive design (mobile-first)",
+        "Performance: next/image, next/font, lazy loading"
+      ],
+      "neverDoes": [
+        "`git add .` → nunca — sempre arquivos específicos"
+      ]
     },
     {
       "id": "sites-dev-beta",
@@ -537,7 +828,37 @@
         "Analytics server-side"
       ],
       "squadRole": "Motor server-side do site. Conecta o frontend a CMSs, emails e APIs de terceiros — sem stack traces expostos ao cliente.",
-      "slug": "sites-dev-beta"
+      "slug": "sites-dev-beta",
+      "skills": [
+        {
+          "command": "/dev-typescript-patterns",
+          "description": "types e padrões idiomáticos"
+        },
+        {
+          "command": "/dev-api-design",
+          "description": "contratos REST/tRPC"
+        },
+        {
+          "command": "/dev-security-patterns",
+          "description": "validação, auth, OWASP"
+        },
+        {
+          "command": "/sites-seo-technical",
+          "description": "metadata API, sitemap, robots"
+        }
+      ],
+      "specialization": [
+        "Route Handlers Next.js (API routes)",
+        "Server Actions e Server Components",
+        "Integrações CMS (Contentful, Sanity, Strapi)",
+        "Email integrations (Resend, SendGrid)",
+        "Forms (contact, newsletter, lead capture)",
+        "Analytics e tracking (GA4, GTM server-side)",
+        "Validação de input com Zod em toda boundary externa"
+      ],
+      "neverDoes": [
+        "Nunca expõe stack traces em respostas de API"
+      ]
     },
     {
       "id": "sites-dev-delta",
@@ -570,7 +891,26 @@
         "Image optimization"
       ],
       "squadRole": "Acionado após features prontas — fortalece performance e resiliência do site com mentalidade adversarial. Não muda comportamento funcional.",
-      "slug": "sites-dev-delta"
+      "slug": "sites-dev-delta",
+      "skills": [
+        {
+          "command": "/dev-error-handling",
+          "description": "retry, circuit breaker, timeouts"
+        },
+        {
+          "command": "/dev-testing-strategy",
+          "description": "testes adversariais"
+        },
+        {
+          "command": "/sites-seo-technical",
+          "description": "Core Web Vitals, performance técnica"
+        }
+      ],
+      "specialization": [],
+      "neverDoes": [
+        "Acionado APÓS features prontas — nunca para features novas",
+        "Não muda comportamento funcional — só adiciona resiliência"
+      ]
     },
     {
       "id": "sites-dev-gamma",
@@ -602,7 +942,50 @@
         "Shared utilities cross-layer"
       ],
       "squadRole": "Elo entre frontend e backend do site. Resolve CRO, SEO técnico e analytics — define contrato antes de implementar qualquer lado.",
-      "slug": "sites-dev-gamma"
+      "slug": "sites-dev-gamma",
+      "skills": [
+        {
+          "command": "/dev-typescript-patterns",
+          "description": "types e padrões"
+        },
+        {
+          "command": "/dev-api-design",
+          "description": "contratos de integração"
+        },
+        {
+          "command": "/sites-scroll-motion",
+          "description": "scroll cinematográfico, parallax, Three.js/WebGPU"
+        },
+        {
+          "command": "/sites-page-cro",
+          "description": "CRO structure e trust signals"
+        },
+        {
+          "command": "/sites-seo-technical",
+          "description": "SEO técnico full-stack"
+        }
+      ],
+      "specialization": [
+        "CRO features (A/B testing, CTAs dinâmicos, formulários de captura)",
+        "SEO técnico full-stack (metadata dinâmica, structured data, sitemap automático)",
+        "Analytics wiring (GA4, GTM, events tracking)",
+        "Integrações full-stack (auth, webhooks, lead flows)",
+        "Shared utilities (usados em client E server)",
+        "Control: {N.M}-control",
+        "Variante A: {N.M}-var-a",
+        "Variante B: {N.M}-var-b",
+        "Custom dimension: experiment_id = {N.M}",
+        "Event parameter: experiment_variant = control | var_a | var_b",
+        "Goal: comparar conversion_rate por variante no GA4 Explorer",
+        "Mínimo: 1.000 usuários únicos por variante",
+        "Duração mínima: 7 dias (14 dias se tráfego baixo)",
+        "p-value: p < 0.05 para declarar winner",
+        "Empate após 14 dias: estender mais 7 dias; se persistir, declarar \"sem diferença\" e usar critério CRO score",
+        "Winner → substitui variante control no código de produção",
+        "Perdedores → arquivados em experiments/{N.M}-{variant}-lost/",
+        "Resultado documentado em docs/smart-memory/decisions/ab-{N.M}-resultado.md"
+      ],
+      "neverDoes": []
     },
     {
       "id": "sites-devops",
@@ -634,7 +1017,22 @@
         "Releases e cleanup"
       ],
       "squadRole": "Guardião do pipeline de sites. Autoridade exclusiva para push, PRs e deploys para Vercel/Netlify — nada sobe sem quality gates passando.",
-      "slug": "sites-devops"
+      "slug": "sites-devops",
+      "skills": [
+        {
+          "command": "/dev-git-workflow",
+          "description": "branch strategy, conventional commits, PR templates"
+        },
+        {
+          "command": "/sites-deployment",
+          "description": "Vercel, Netlify, Cloudflare Pages, GitHub Actions"
+        }
+      ],
+      "specialization": [],
+      "neverDoes": [
+        "Nunca push sem quality gates passando",
+        "Nunca push direto pra main sem PR"
+      ]
     },
     {
       "id": "sites-qa",
@@ -664,7 +1062,14 @@
         "Copy e cross-browser check"
       ],
       "squadRole": "Última barreira de qualidade do site. Checklist de 10 pontos cobre performance, SEO, a11y e copy — sem PASS, nada vai para produção.",
-      "slug": "sites-qa"
+      "slug": "sites-qa",
+      "skills": [],
+      "specialization": [],
+      "neverDoes": [
+        "FAIL com issues específicos e acionáveis — nunca genérico",
+        "Nunca modifica código",
+        "Nunca aprova por pressão de prazo"
+      ]
     },
     {
       "id": "sites-ux",
@@ -698,7 +1103,50 @@
         "Design system e micro-interações"
       ],
       "squadRole": "Define a experiência antes de qualquer componente ser codado. Toda decisão justificável em termos de redução de fricção do usuário.",
-      "slug": "sites-ux"
+      "slug": "sites-ux",
+      "skills": [
+        {
+          "command": "/ui-ux-pro-max",
+          "description": "design system, paletas, UX guidelines"
+        },
+        {
+          "command": "/accessibility",
+          "description": "WCAG 2.2 audit e recomendações"
+        },
+        {
+          "command": "/web-design-guidelines",
+          "description": "Vercel UI guidelines"
+        },
+        {
+          "command": "/sites-frontend-design",
+          "description": "padrões React/Tailwind/shadcn"
+        },
+        {
+          "command": "/sites-ux-interaction",
+          "description": "micro-interações, animações, scroll"
+        },
+        {
+          "command": "/sites-scroll-motion",
+          "description": "scroll cinematográfico, parallax, Three.js/WebGPU"
+        },
+        {
+          "command": "/sites-canvas-design",
+          "description": "Canvas HTML5 e SVG custom"
+        },
+        {
+          "command": "/sites-web-accessibility",
+          "description": "WCAG 2.1 AA, ARIA, keyboard nav"
+        },
+        {
+          "command": "/sites-tailwind-design-system",
+          "description": "tokens, tipografia, spacing"
+        }
+      ],
+      "specialization": [],
+      "neverDoes": [
+        "Wireframes em ASCII/Mermaid — nunca ferramentas externas",
+        "Nunca faz git push — delega ao sites-devops"
+      ]
     },
     {
       "id": "social-analyst",
@@ -730,7 +1178,21 @@
         "Audience insights"
       ],
       "squadRole": "Inteligência de dados do squad Social. Pesquisa tendências, concorrentes e audiências — entrega evidências para a estrategista decidir.",
-      "slug": "social-analyst"
+      "slug": "social-analyst",
+      "skills": [
+        {
+          "command": "/social-analytics",
+          "description": "KPIs, benchmarks, relatórios de performance"
+        },
+        {
+          "command": "/social-apify-research",
+          "description": "research via Apify MCP"
+        }
+      ],
+      "specialization": [],
+      "neverDoes": [
+        "Não cria copy nem publica nada"
+      ]
     },
     {
       "id": "social-content",
@@ -766,7 +1228,23 @@
         "Research via Apify MCP"
       ],
       "squadRole": "Dupla função: pesquisa de tendências via Apify + copywriting de legendas, scripts e hooks. Ativo quando há copy ou research social para criar.",
-      "slug": "social-content"
+      "slug": "social-content",
+      "skills": [
+        {
+          "command": "/social-copywriting",
+          "description": "legendas, hooks, CTAs por plataforma"
+        },
+        {
+          "command": "/social-scriptwriting",
+          "description": "roteiros para Reels, TikToks, Stories"
+        },
+        {
+          "command": "/social-apify-research",
+          "description": "research via Apify MCP"
+        }
+      ],
+      "specialization": [],
+      "neverDoes": []
     },
     {
       "id": "social-design",
@@ -813,7 +1291,23 @@
         "Variações A/B de criativos"
       ],
       "squadRole": "Transforma copy e briefing em assets visuais via Google Stitch MCP. Cria KVs, carousels e templates prontos para validação de Verak.",
-      "slug": "social-design"
+      "slug": "social-design",
+      "skills": [
+        {
+          "command": "/social-key-visual",
+          "description": "KV de campanha, identidade visual"
+        },
+        {
+          "command": "/social-stitch-workflow",
+          "description": "workflow completo com Google Stitch MCP"
+        },
+        {
+          "command": "/social-carousel-design",
+          "description": "estrutura narrativa, specs técnicas"
+        }
+      ],
+      "specialization": [],
+      "neverDoes": []
     },
     {
       "id": "social-photo",
@@ -848,7 +1342,19 @@
         "Composição para formatos sociais"
       ],
       "squadRole": "Gera imagens fotográficas de alta qualidade via Freepik MCP para campanhas sociais. Ativo quando cenas, produtos ou pessoas são necessários.",
-      "slug": "social-photo"
+      "slug": "social-photo",
+      "skills": [
+        {
+          "command": "/social-freepik-generation",
+          "description": "prompts eficazes, estilos, especificações"
+        },
+        {
+          "command": "/social-cinematic-composition",
+          "description": "composição, color grading, linguagem visual"
+        }
+      ],
+      "specialization": [],
+      "neverDoes": []
     },
     {
       "id": "social-publisher",
@@ -886,7 +1392,21 @@
         "Dupla confirmação Verak + lead"
       ],
       "squadRole": "Único autorizado a publicar — e só o faz com aprovação de Verak e confirmação explícita do lead. Também analisa métricas pós-publicação.",
-      "slug": "social-publisher"
+      "slug": "social-publisher",
+      "skills": [
+        {
+          "command": "/social-meta-publishing",
+          "description": "workflow Meta MCP, agendamento"
+        },
+        {
+          "command": "/social-analytics",
+          "description": "KPIs, benchmarks, relatórios"
+        }
+      ],
+      "specialization": [],
+      "neverDoes": [
+        "Nunca publica sem aprovação Verak + confirmação lead — sem excepções"
+      ]
     },
     {
       "id": "social-strategist",
@@ -917,7 +1437,18 @@
         "Veredictos APROVADO/REJEITADO"
       ],
       "squadRole": "Validadora obrigatória antes de qualquer publicação. Nunca cria conteúdo — garante que o que é criado é excelente e alinhado com a estratégia.",
-      "slug": "social-strategist"
+      "slug": "social-strategist",
+      "skills": [
+        {
+          "command": "/social-editorial-validation",
+          "description": "checklist completo de validação editorial"
+        }
+      ],
+      "specialization": [],
+      "neverDoes": [
+        "REJEITADO com problemas específicos e accionáveis — nunca genérico",
+        "Nunca cria conteúdo de nenhum tipo"
+      ]
     },
     {
       "id": "social-video",
@@ -949,7 +1480,19 @@
         "Exportação multi-plataforma"
       ],
       "squadRole": "Transforma roteiros em vídeo via ffmpeg. Produz Reels, TikToks e Shorts — sempre com legendas, sempre prontos para validação de Verak.",
-      "slug": "social-video"
+      "slug": "social-video",
+      "skills": [
+        {
+          "command": "/social-video-editing",
+          "description": "ffmpeg, cortes, legendas, exportação"
+        },
+        {
+          "command": "/social-format-specs",
+          "description": "specs técnicas por plataforma"
+        }
+      ],
+      "specialization": [],
+      "neverDoes": []
     },
     {
       "id": "traffic-analyst",
@@ -981,7 +1524,22 @@
         "Tendências de plataforma"
       ],
       "squadRole": "Inteligência de mercado do squad Traffic. Pesquisa concorrentes, audiências e benchmarks — entrega hipóteses rankeadas por evidência, outros decidem.",
-      "slug": "traffic-analyst"
+      "slug": "traffic-analyst",
+      "skills": [
+        {
+          "command": "/social-analytics",
+          "description": "análise de métricas de plataforma"
+        },
+        {
+          "command": "/social-apify-research",
+          "description": "scraping de dados de redes sociais via Apify"
+        }
+      ],
+      "specialization": [],
+      "neverDoes": [
+        "Não opina sobre estratégia — entrega o que os dados mostram",
+        "Não implementa nada — pesquisa e documenta"
+      ]
     },
     {
       "id": "traffic-automation",
@@ -1015,7 +1573,18 @@
         "Pipelines de dados consolidados"
       ],
       "squadRole": "Constrói os sistemas que fazem a squad escalar sem aumento proporcional de trabalho manual. Todo script tem dry-run, documentação e rollback.",
-      "slug": "traffic-automation"
+      "slug": "traffic-automation",
+      "skills": [
+        {
+          "command": "/social-analytics",
+          "description": "análise de métricas e KPIs"
+        }
+      ],
+      "specialization": [],
+      "neverDoes": [
+        "Nunca rodar em produção sem dry-run confirmado",
+        "Nunca armazenar credenciais de API em código — usar variáveis de ambiente"
+      ]
     },
     {
       "id": "traffic-bi",
@@ -1049,7 +1618,18 @@
         "Diagnóstico de discrepâncias"
       ],
       "squadRole": "Fonte oficial de verdade para métricas da squad. Consolida dados cross-platform e entrega relatórios com benchmark, variação e contexto para o Axis decidir.",
-      "slug": "traffic-bi"
+      "slug": "traffic-bi",
+      "skills": [
+        {
+          "command": "/social-analytics",
+          "description": "análise de métricas sociais e KPIs de plataforma"
+        }
+      ],
+      "specialization": [],
+      "neverDoes": [
+        "Nunca apresentar dado sem fonte e janela temporal explícita",
+        "Nunca comparar períodos com datas de feriado sem nota"
+      ]
     },
     {
       "id": "traffic-copywriter",
@@ -1081,7 +1661,25 @@
         "Roteiros de vídeo para ads"
       ],
       "squadRole": "Cria copy que para o scroll e multiplica ROAS. Entrega mínimo 3 variantes por plataforma, sempre dentro dos limites técnicos de caractere.",
-      "slug": "traffic-copywriter"
+      "slug": "traffic-copywriter",
+      "skills": [
+        {
+          "command": "/social-copywriting",
+          "description": "frameworks e padrões de copy para redes sociais"
+        },
+        {
+          "command": "/social-scriptwriting",
+          "description": "roteiros de vídeo nativos para TikTok/Reels"
+        },
+        {
+          "command": "/social-editorial-validation",
+          "description": "validação editorial antes da aprovação"
+        }
+      ],
+      "specialization": [],
+      "neverDoes": [
+        "Nunca inventar claims sem respaldo no briefing ou produto real"
+      ]
     },
     {
       "id": "traffic-designer",
@@ -1115,7 +1713,37 @@
         "Variante A/B obrigatória"
       ],
       "squadRole": "Produz criativos que param o scroll. Especifica assets dentro das specs técnicas de cada plataforma — variante A/B é obrigatória, criativo único é erro.",
-      "slug": "traffic-designer"
+      "slug": "traffic-designer",
+      "skills": [
+        {
+          "command": "/ui-ux-pro-max",
+          "description": "sistema de design, paletas e tipografia"
+        },
+        {
+          "command": "/social-format-specs",
+          "description": "specs técnicas atualizadas por plataforma"
+        },
+        {
+          "command": "/social-carousel-design",
+          "description": "estrutura narrativa de carousels"
+        },
+        {
+          "command": "/social-cinematic-composition",
+          "description": "composição e estética para vídeos"
+        },
+        {
+          "command": "/social-key-visual",
+          "description": "Key Visuals de campanha"
+        },
+        {
+          "command": "/social-freepik-generation",
+          "description": "geração de imagens AI"
+        }
+      ],
+      "specialization": [],
+      "neverDoes": [
+        "Variante A/B obrigatória — nunca só 1 criativo por campanha"
+      ]
     },
     {
       "id": "traffic-google",
@@ -1149,7 +1777,23 @@
         "RSAs com 8+ headlines"
       ],
       "squadRole": "Especialista do ecossistema Google Ads. Configura e otimiza campanhas Search, PMax e Shopping — nada sobe sem briefing do Axis e QA do Gate.",
-      "slug": "traffic-google"
+      "slug": "traffic-google",
+      "skills": [
+        {
+          "command": "/social-format-specs",
+          "description": "specs técnicas de formatos de anúncio"
+        },
+        {
+          "command": "/social-analytics",
+          "description": "análise de performance"
+        }
+      ],
+      "specialization": [],
+      "neverDoes": [
+        "Nunca sobe campanha sem conversão tracking ativo e testado",
+        "Nunca usa broad match sem RLSA ou Smart Bidding maduro",
+        "Budget diário = budget mensal ÷ 30,4 (nunca colocar total no diário)"
+      ]
     },
     {
       "id": "traffic-meta",
@@ -1183,7 +1827,30 @@
         "Hierarquia cold/warm/hot"
       ],
       "squadRole": "Especialista do ecossistema Meta. Sabe quando deixar o algoritmo trabalhar e quando intervir — nada sobe sem briefing aprovado e QA passado.",
-      "slug": "traffic-meta"
+      "slug": "traffic-meta",
+      "skills": [
+        {
+          "command": "/social-meta-publishing",
+          "description": "publicação e gestão via Meta API"
+        },
+        {
+          "command": "/social-format-specs",
+          "description": "specs técnicas por formato/placement"
+        },
+        {
+          "command": "/social-editorial-validation",
+          "description": "validação de copy e criativos"
+        },
+        {
+          "command": "/social-analytics",
+          "description": "análise de performance"
+        }
+      ],
+      "specialization": [],
+      "neverDoes": [
+        "Nunca sobe sem Pixel + CAPI validados",
+        "Nunca duplica adset sem registrar motivo (confunde o algoritmo)"
+      ]
     },
     {
       "id": "traffic-qa",
@@ -1214,7 +1881,14 @@
         "Veredictos PASS/CONCERNS/FAIL"
       ],
       "squadRole": "Última barreira antes de qualquer campanha ir ao ar. Checklist de 10 pontos — sem PASS, nenhuma campanha ativa. Read-only: nunca configura, só valida.",
-      "slug": "traffic-qa"
+      "slug": "traffic-qa",
+      "skills": [],
+      "specialization": [],
+      "neverDoes": [
+        "FAIL com issues específicos e acionáveis — nunca \"está errado\" sem explicar o quê",
+        "Nunca configura campanha — apenas revisa",
+        "Nunca aprova por pressão de prazo — deadline não é QA"
+      ]
     },
     {
       "id": "traffic-strategist",
@@ -1255,7 +1929,22 @@
         "Aprovação de ADRs de automação"
       ],
       "squadRole": "Guardião da estratégia de tráfego. Sem briefing aprovado por ele, nenhuma campanha começa — define KPIs, budget e audiência antes de qualquer execução.",
-      "slug": "traffic-strategist"
+      "slug": "traffic-strategist",
+      "skills": [
+        {
+          "command": "/social-analytics",
+          "description": "análise de métricas por plataforma"
+        },
+        {
+          "command": "/social-editorial-validation",
+          "description": "validação editorial de copy e criativos"
+        }
+      ],
+      "specialization": [],
+      "neverDoes": [
+        "Budget nunca concentrado em 1 plataforma sem dados que justifiquem",
+        "Nunca executa campanhas — apenas planeja e delega"
+      ]
     },
     {
       "id": "traffic-tiktok",
@@ -1289,7 +1978,29 @@
         "Renovação de criativos 7-14 dias"
       ],
       "squadRole": "Especialista TikTok Ads — no TikTok, criativo é o targeting. Domina a lógica nativa da plataforma e sabe que produção polida perde para UGC.",
-      "slug": "traffic-tiktok"
+      "slug": "traffic-tiktok",
+      "skills": [
+        {
+          "command": "/tiktok-marketing",
+          "description": "padrões e melhores práticas TikTok Ads"
+        },
+        {
+          "command": "/social-format-specs",
+          "description": "specs técnicas por formato"
+        },
+        {
+          "command": "/social-scriptwriting",
+          "description": "roteiros para vídeos In-Feed nativos"
+        },
+        {
+          "command": "/social-copywriting",
+          "description": "copy de alta conversão para TikTok"
+        }
+      ],
+      "specialization": [],
+      "neverDoes": [
+        "Nunca reutilizar criativo de Meta/Instagram sem adaptar para formato nativo TikTok"
+      ]
     }
   ]
 }

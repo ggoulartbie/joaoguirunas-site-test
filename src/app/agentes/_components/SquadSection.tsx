@@ -71,6 +71,20 @@ export function SquadSection({ squad, agentes }: SquadSectionProps) {
             <p className="mt-6 text-white/40 text-sm" style={MONO}>
               {squad.count} agentes
             </p>
+
+            {squad.race && (
+              <div className="mt-6 pt-6 border-t border-white/[0.08]">
+                <p className="text-[10px] uppercase tracking-[0.18em] text-white/30 mb-2" style={{ fontFamily: 'var(--font-mono)' }}>
+                  Raça
+                </p>
+                <p className="text-sm font-medium mb-2" style={{ color: squad.accent, fontFamily: 'var(--font-mono)', letterSpacing: '0.08em' }}>
+                  ◈ {squad.race}
+                </p>
+                <p className="text-white/50 text-sm leading-relaxed max-w-sm">
+                  {squad.raceDescription}
+                </p>
+              </div>
+            )}
           </motion.div>
 
           {/* RIGHT — cards. Animate X (slide in from right, exit to left) + opacity */}
@@ -87,7 +101,19 @@ export function SquadSection({ squad, agentes }: SquadSectionProps) {
               <h2 className="text-4xl text-white mb-3" style={{ ...KV_DISPLAY, lineHeight: 0.92 }}>
                 {squad.title}
               </h2>
-              <p className="text-sm text-white/70">{squad.description}</p>
+              <p className="text-sm text-white/70 mb-4">{squad.description}</p>
+
+              {squad.race && (
+                <div className="pt-4 border-t border-white/[0.08]">
+                  <p className="text-[10px] uppercase tracking-[0.18em] text-white/30 mb-1.5" style={{ fontFamily: 'var(--font-mono)' }}>
+                    Raça
+                  </p>
+                  <p className="text-xs font-medium mb-2" style={{ color: squad.accent, fontFamily: 'var(--font-mono)', letterSpacing: '0.08em' }}>
+                    ◈ {squad.race}
+                  </p>
+                  <p className="text-white/50 text-xs leading-relaxed">{squad.raceDescription}</p>
+                </div>
+              )}
             </div>
 
             {/* Cards grid — wider gaps, no bg, transparent background lets planet show through */}

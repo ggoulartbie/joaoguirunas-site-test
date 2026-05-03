@@ -55,6 +55,11 @@ export default async function AgentDetailPage({ params }: AgentPageParams) {
 
   const siblings = getSiblings(a, 4);
 
+  // Merge abilities + specialization into one deduplicated full list
+  const specItems = a.specialization && a.specialization.length > 0 ? a.specialization : [];
+  const generalItems = a.abilities.filter((ab) => !specItems.some((s) => s.toLowerCase().includes(ab.toLowerCase().slice(0, 12))));
+  const allAbilities = [...specItems, ...generalItems];
+
   const profileJsonLd = {
     '@context': 'https://schema.org',
     '@type': 'ProfilePage',
@@ -64,6 +69,7 @@ export default async function AgentDetailPage({ params }: AgentPageParams) {
       alternateName: a.id,
       description: a.squadRole || a.description,
       jobTitle: a.title,
+      knowsAbout: allAbilities,
     },
   };
 
@@ -71,53 +77,136 @@ export default async function AgentDetailPage({ params }: AgentPageParams) {
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(profileJsonLd) }} />
 
-      {/* HERO */}
-      <section
-        className="relative overflow-hidden -mt-16 pt-32 pb-16 sm:pt-40 sm:pb-20"
-        style={{
-          background: `
-            radial-gradient(ellipse at 70% 40%, ${sq.accent}1a 0%, transparent 50%),
-            linear-gradient(to bottom, #050507, #0a0a0d)
-          `,
-        }}
-      >
+      {/* HERO — planet texture as ambient background */}
+      <section className="relative overflow-hidden -mt-16 pt-32 pb-16 sm:pt-44 sm:pb-24">
+        {/* Base gradient */}
         <div
-          className="absolute inset-0 pointer-events-none opacity-50"
+          className="absolute inset-0"
+          style={{
+            background: `linear-gradient(135deg, #050507 0%, #08080f 60%, #050507 100%)`,
+          }}
+        />
+
+        {/* Planet sphere — right side ambient glow */}
+        <div className="absolute right-0 top-0 bottom-0 w-full sm:w-[60%] pointer-events-none overflow-hidden">
+          {/* Planet image — large circle peeking from right */}
+          <div
+            className="absolute right-[-20%] sm:right-[-15%] top-1/2 -translate-y-1/2 w-[90vw] sm:w-[55vw] max-w-[720px] aspect-square rounded-full overflow-hidden"
+            style={{ opacity: 0.22 }}
+          >
+            <img
+              src={`/textures/planets/${sq.planetTexture}`}
+              alt=""
+              aria-hidden="true"
+              className="w-full h-full object-cover"
+              style={{ filter: `brightness(1.2) saturate(1.4)` }}
+            />
+          </div>
+          {/* Color tint overlay matching squad accent */}
+          <div
+            className="absolute right-[-20%] sm:right-[-15%] top-1/2 -translate-y-1/2 w-[90vw] sm:w-[55vw] max-w-[720px] aspect-square rounded-full"
+            style={{
+              background: sq.accent,
+              opacity: 0.08,
+              mixBlendMode: 'screen',
+            }}
+          />
+          {/* Radial fade on left edge so planet blends into bg */}
+          <div
+            className="absolute inset-0"
+            style={{
+              background: `linear-gradient(to right, #050507 0%, transparent 40%)`,
+            }}
+          />
+        </div>
+
+        {/* Dot grid texture */}
+        <div
+          className="absolute inset-0 pointer-events-none opacity-30"
           style={{
             backgroundImage: 'radial-gradient(rgba(255,255,255,0.04) 1px, transparent 1px)',
             backgroundSize: '24px 24px',
           }}
         />
 
+        {/* Accent glow emanating from planet side */}
+        <div
+          className="absolute inset-0 pointer-events-none"
+          style={{
+            background: `radial-gradient(ellipse at 85% 50%, ${sq.accent}12 0%, transparent 55%)`,
+          }}
+        />
+
         <div className="relative mx-auto max-w-7xl px-5 sm:px-6 lg:px-12">
           {/* Breadcrumb */}
-          <nav className="mb-8 flex items-center gap-2 text-sm" style={MONO} aria-label="Breadcrumb">
-            <Link href="/agentes" className="text-white/50 hover:text-white uppercase">Agentes</Link>
-            <span className="text-white/30">/</span>
-            <Link href={`/agentes#squad-${sq.id}`} className="uppercase hover:opacity-80" style={{ color: sq.accent }}>
+          <nav className="mb-10 flex items-center gap-2" style={MONO} aria-label="Breadcrumb">
+            <Link href="/agentes" className="text-white/40 hover:text-white uppercase transition-colors">Agentes</Link>
+            <span className="text-white/20">/</span>
+            <Link href={`/agentes#squad-${sq.id}`} className="uppercase hover:opacity-80 transition-opacity" style={{ color: sq.accent }}>
               {sq.label}
             </Link>
-            <span className="text-white/30">/</span>
-            <span className="text-white/80 uppercase">{a.id}</span>
+            <span className="text-white/20">/</span>
+            <span className="text-white/60 uppercase">{a.id}</span>
           </nav>
 
-          <div className="grid grid-cols-1 lg:grid-cols-[280px_1fr] gap-8 lg:gap-12 items-start">
-            {/* Agent photo */}
-            <div
-              className="aspect-square w-full max-w-[280px] mx-auto lg:mx-0 relative overflow-hidden border"
-              style={{ borderColor: `${sq.accent}33` }}
-            >
-              <Image
-                src={`/agentes/${a.slug}.png`}
-                alt={a.codename || a.name}
-                fill
-                className="object-cover object-top"
-                sizes="280px"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
+          <div className="grid grid-cols-1 lg:grid-cols-[300px_1fr] gap-10 lg:gap-16 items-start">
+            {/* LEFT — Agent photo + race badge */}
+            <div className="flex flex-col items-center lg:items-start gap-4">
+              <div
+                className="aspect-square w-full max-w-[280px] sm:max-w-[300px] relative overflow-hidden border"
+                style={{ borderColor: `${sq.accent}40` }}
+              >
+                <Image
+                  src={`/agentes/${a.slug}.png`}
+                  alt={a.codename || a.name}
+                  fill
+                  priority
+                  className="object-cover object-top"
+                  sizes="300px"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" />
+                {/* Squad glow on photo */}
+                <div
+                  className="absolute inset-0"
+                  style={{ background: `radial-gradient(ellipse at top, ${sq.accent}18 0%, transparent 60%)` }}
+                />
+              </div>
+
+              {/* Race badge below photo */}
+              {a.race && (
+                <div className="text-center lg:text-left w-full max-w-[300px]">
+                  <p className="text-[10px] uppercase tracking-[0.18em] text-white/25 mb-1" style={{ fontFamily: 'var(--font-mono)' }}>
+                    Raça alienígena
+                  </p>
+                  <span
+                    className="inline-flex items-center gap-2 px-3 py-2 border text-xs uppercase w-full justify-center lg:justify-start"
+                    style={{ borderColor: `${sq.accent}44`, color: sq.accent, fontFamily: 'var(--font-mono)', letterSpacing: '0.1em' }}
+                  >
+                    ◈ {a.race}
+                  </span>
+                  {sq.raceDescription && (
+                    <p className="mt-2 text-white/35 text-xs leading-relaxed hidden lg:block">
+                      {sq.raceDescription}
+                    </p>
+                  )}
+                </div>
+              )}
+
+              {/* Meta badges */}
+              <div className="flex flex-wrap gap-2 justify-center lg:justify-start w-full max-w-[300px]">
+                <span className="inline-block px-3 py-1.5 text-white/55 border border-white/10 bg-white/[0.03]" style={MONO}>
+                  {a.model}
+                </span>
+                {a.color && (
+                  <span className="inline-block px-3 py-1.5 text-white/55 border border-white/10 bg-white/[0.03]" style={MONO}>
+                    <span className="inline-block w-2 h-2 rounded-full mr-1.5 align-middle" style={{ background: sq.accent }} />
+                    {a.color}
+                  </span>
+                )}
+              </div>
             </div>
 
-            {/* Headline */}
+            {/* RIGHT — Main content */}
             <div>
               <p className="mb-3 inline-flex items-center gap-2" style={{ ...MONO, color: sq.accent, textTransform: 'uppercase' }}>
                 <span className="w-1.5 h-1.5 rounded-full" style={{ background: sq.accent }} />
@@ -129,44 +218,38 @@ export default async function AgentDetailPage({ params }: AgentPageParams) {
               </h1>
 
               {a.title && (
-                <p className="text-xl sm:text-2xl text-white/80 mb-4" style={{ fontFamily: 'var(--font-display-serif)', fontStyle: 'italic', fontWeight: 300 }}>
+                <p className="text-xl sm:text-2xl text-white/75 mb-5" style={{ fontFamily: 'var(--font-display-serif)', fontStyle: 'italic', fontWeight: 300 }}>
                   {a.title}
                 </p>
               )}
 
               {a.tagline && (
-                <blockquote className="border-l-2 pl-4 my-4 italic text-white/55 text-sm leading-relaxed" style={{ borderColor: sq.accent }}>
+                <blockquote className="border-l-2 pl-4 mb-5 italic text-white/50 text-sm leading-relaxed max-w-xl" style={{ borderColor: sq.accent }}>
                   {a.tagline}
                 </blockquote>
               )}
 
-              {a.race && (
-                <div className="mb-4">
-                  <span className="inline-flex items-center gap-1.5 px-3 py-1.5 border text-sm uppercase" style={{ borderColor: `${sq.accent}55`, color: sq.accent, ...MONO }}>
-                    ◈ {a.race}
-                  </span>
-                </div>
-              )}
-
               {a.squadRole && (
-                <p className="text-white/80 text-base leading-relaxed mb-5">{a.squadRole}</p>
+                <p className="text-white/80 text-base sm:text-lg leading-relaxed mb-6 max-w-2xl">{a.squadRole}</p>
               )}
 
-              <div className="flex flex-wrap gap-2 mb-6">
-                <span className="inline-block px-3 py-1.5 text-white/70 border border-white/10 bg-white/[0.04]" style={MONO}>
-                  Model: <span className="text-white">{a.model}</span>
-                </span>
-                {a.color && (
-                  <span className="inline-block px-3 py-1.5 text-white/70 border border-white/10 bg-white/[0.04]" style={MONO}>
-                    <span className="inline-block w-2 h-2 rounded-full mr-1.5 align-middle" style={{ background: sq.accent }} />
-                    {a.color}
-                  </span>
-                )}
+              {/* Tools grid */}
+              <div className="mb-6">
+                <p className="text-[10px] uppercase tracking-[0.16em] text-white/30 mb-3" style={{ fontFamily: 'var(--font-mono)' }}>
+                  Tools disponíveis
+                </p>
+                <div className="flex flex-wrap gap-1.5">
+                  {a.tools.map((tool) => (
+                    <span key={tool} className="px-2.5 py-1 text-white/65 border border-white/[0.10] bg-white/[0.03] text-xs" style={{ fontFamily: 'var(--font-mono)' }}>
+                      {tool}
+                    </span>
+                  ))}
+                </div>
               </div>
 
               <a
                 href="/skills/claude-agent-teams"
-                className="inline-flex items-center justify-center gap-2 px-6 py-3 text-sm font-semibold uppercase transition-all hover:brightness-110"
+                className="inline-flex items-center justify-center gap-2 px-7 py-3.5 text-sm font-semibold uppercase transition-all hover:brightness-110 active:scale-[0.98]"
                 style={{ ...MONO, background: sq.accent, color: '#050507' }}
               >
                 Instalar squad completa
@@ -179,16 +262,26 @@ export default async function AgentDetailPage({ params }: AgentPageParams) {
         </div>
       </section>
 
-      {/* ESPECIALIZAÇÃO */}
-      {a.abilities && a.abilities.length > 0 && (
-        <section className="bg-[#050507] py-12 border-t border-white/[0.06]">
+      {/* HABILIDADES COMPLETAS */}
+      {allAbilities.length > 0 && (
+        <section className="bg-[#050507] py-14 border-t border-white/[0.06]">
           <div className="mx-auto max-w-5xl px-5 sm:px-6 lg:px-12">
-            <p className="mb-3" style={{ ...MONO, color: sq.accent, textTransform: 'uppercase' }}>Especialização</p>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-              {a.abilities.map((ability, i) => (
-                <div key={i} className="flex items-start gap-3 p-4 border border-white/[0.07] bg-white/[0.02]">
+            <div className="mb-6 flex items-end gap-3">
+              <div>
+                <p className="mb-1" style={{ ...MONO, color: sq.accent, textTransform: 'uppercase' }}>Especialização</p>
+                <h2 className="text-2xl sm:text-3xl text-white" style={{ ...KV_DISPLAY, lineHeight: 1 }}>
+                  O que {a.codename || a.name} domina
+                </h2>
+              </div>
+              <span className="mb-0.5 text-white/25 text-sm" style={{ fontFamily: 'var(--font-mono)' }}>
+                {allAbilities.length} habilidades
+              </span>
+            </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2.5">
+              {allAbilities.map((ability, i) => (
+                <div key={i} className="flex items-start gap-3 p-4 border border-white/[0.07] bg-white/[0.02] hover:border-white/[0.14] transition-colors">
                   <span className="mt-1.5 w-1.5 h-1.5 shrink-0 rounded-full" style={{ background: sq.accent }} />
-                  <span className="text-white/80 text-sm leading-snug">{ability}</span>
+                  <span className="text-white/75 text-sm leading-snug">{ability}</span>
                 </div>
               ))}
             </div>
@@ -196,27 +289,68 @@ export default async function AgentDetailPage({ params }: AgentPageParams) {
         </section>
       )}
 
-      {/* DESCRIPTION + DETAILS */}
-      <section className="bg-[#050507] py-16 sm:py-20 border-t border-white/[0.06]">
-        <div className="mx-auto max-w-5xl px-5 sm:px-6 lg:px-12 grid grid-cols-1 lg:grid-cols-[1fr_280px] gap-12 lg:gap-16">
-          {/* Left — full description + authorities */}
-          <div>
-            <p className="mb-4" style={{ ...MONO, color: sq.accent, textTransform: 'uppercase' }}>O que faz</p>
-            <h2 className="text-3xl sm:text-4xl text-white mb-6" style={{ ...KV_DISPLAY, lineHeight: 1 }}>
-              Quando usar este agente
+      {/* SKILLS (slash commands) */}
+      {a.skills && a.skills.length > 0 && (
+        <section className="bg-[#050507] py-12 border-t border-white/[0.06]">
+          <div className="mx-auto max-w-5xl px-5 sm:px-6 lg:px-12">
+            <p className="mb-1" style={{ ...MONO, color: sq.accent, textTransform: 'uppercase' }}>Skills & Comandos</p>
+            <h2 className="text-2xl sm:text-3xl text-white mb-6" style={{ ...KV_DISPLAY, lineHeight: 1 }}>
+              Invoke diretamente no Claude Code
             </h2>
-            <p className="text-white/75 leading-relaxed text-base sm:text-lg mb-8">{a.description}</p>
+            <div className="flex flex-col gap-3">
+              {a.skills.map((skill) => (
+                <div key={skill.command} className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4 p-4 border border-white/[0.08] bg-white/[0.02]">
+                  <code
+                    className="shrink-0 px-3 py-1.5 text-sm border"
+                    style={{ fontFamily: 'var(--font-mono)', color: sq.accent, background: `${sq.accent}10`, borderColor: `${sq.accent}33` }}
+                  >
+                    {skill.command}
+                  </code>
+                  <span className="text-white/60 text-sm leading-snug">{skill.description}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* DESCRIPTION + AUTHORITIES + NEVER DOES */}
+      <section className="bg-[#050507] py-16 sm:py-20 border-t border-white/[0.06]">
+        <div className="mx-auto max-w-5xl px-5 sm:px-6 lg:px-12 grid grid-cols-1 lg:grid-cols-[1fr_300px] gap-12 lg:gap-16">
+          {/* Left */}
+          <div>
+            <p className="mb-1" style={{ ...MONO, color: sq.accent, textTransform: 'uppercase' }}>Quando usar</p>
+            <h2 className="text-3xl sm:text-4xl text-white mb-6" style={{ ...KV_DISPLAY, lineHeight: 1 }}>
+              Contexto de uso ideal
+            </h2>
+            <p className="text-white/70 leading-relaxed text-base sm:text-lg mb-10">{a.description}</p>
 
             {a.authorities.length > 0 && (
               <>
-                <h3 className="text-xl text-white mb-4 mt-10" style={{ ...KV_DISPLAY }}>
+                <h3 className="text-xl text-white mb-4" style={{ ...KV_DISPLAY }}>
                   Autoridades exclusivas
                 </h3>
-                <ul className="space-y-2">
+                <ul className="space-y-3 mb-10">
                   {a.authorities.map((auth, i) => (
-                    <li key={i} className="flex gap-3 text-white/70 text-sm leading-relaxed">
+                    <li key={i} className="flex gap-3 text-white/65 text-sm leading-relaxed">
                       <span className="mt-2 w-1 h-1 shrink-0 rounded-full" style={{ background: sq.accent }} />
                       <span>{auth}</span>
+                    </li>
+                  ))}
+                </ul>
+              </>
+            )}
+
+            {a.neverDoes && a.neverDoes.length > 0 && (
+              <>
+                <h3 className="text-xl text-white mb-4" style={{ ...KV_DISPLAY }}>
+                  Fora do escopo
+                </h3>
+                <ul className="space-y-3">
+                  {a.neverDoes.map((item, i) => (
+                    <li key={i} className="flex gap-3 text-white/45 text-sm leading-relaxed line-through decoration-white/20">
+                      <span className="mt-2 w-1 h-1 shrink-0 rounded-full bg-white/20 no-underline" style={{ textDecoration: 'none' }} />
+                      <span>{item}</span>
                     </li>
                   ))}
                 </ul>
@@ -225,18 +359,29 @@ export default async function AgentDetailPage({ params }: AgentPageParams) {
           </div>
 
           {/* Right — tools sidebar */}
-          <aside className="lg:sticky lg:top-24 lg:self-start">
+          <aside className="lg:sticky lg:top-24 lg:self-start space-y-6">
             <div className="border border-white/10 bg-[#0a0a0d] p-6">
               <p className="mb-3" style={{ ...MONO, color: sq.accent, textTransform: 'uppercase' }}>Tools</p>
               <ul className="space-y-2">
                 {a.tools.map((tool) => (
-                  <li key={tool} className="flex items-center gap-2 text-white/80 text-sm">
+                  <li key={tool} className="flex items-center gap-2 text-white/75 text-sm">
                     <span className="w-1 h-1 rounded-full" style={{ background: sq.accent }} />
                     <span style={{ fontFamily: 'var(--font-mono)' }}>{tool}</span>
                   </li>
                 ))}
               </ul>
             </div>
+
+            {/* Race card */}
+            {a.race && sq.raceDescription && (
+              <div className="border p-6" style={{ borderColor: `${sq.accent}30`, background: `${sq.accent}06` }}>
+                <p className="mb-2" style={{ ...MONO, color: sq.accent, textTransform: 'uppercase' }}>Raça</p>
+                <p className="text-white/80 text-sm font-medium mb-3" style={{ fontFamily: 'var(--font-mono)', letterSpacing: '0.06em' }}>
+                  ◈ {a.race}
+                </p>
+                <p className="text-white/45 text-xs leading-relaxed">{sq.raceDescription}</p>
+              </div>
+            )}
           </aside>
         </div>
       </section>
@@ -254,7 +399,7 @@ export default async function AgentDetailPage({ params }: AgentPageParams) {
               </div>
               <Link
                 href={`/agentes#squad-${sq.id}`}
-                className="text-white/60 hover:text-white text-sm uppercase border border-white/10 px-4 py-2 hover:bg-white/[0.05] transition-all"
+                className="text-white/55 hover:text-white text-sm uppercase border border-white/10 px-4 py-2 hover:bg-white/[0.05] transition-all"
                 style={MONO}
               >
                 Ver squad completa →

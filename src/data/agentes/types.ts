@@ -9,6 +9,14 @@ export interface Squad {
   accentName: string;
   heroBg: string;
   count: number;
+  race: string;
+  raceDescription: string;
+  planetTexture: string;
+}
+
+export interface AgentSkill {
+  command: string;
+  description: string;
 }
 
 export interface Agente {
@@ -26,6 +34,9 @@ export interface Agente {
   tools: string[];
   authorities: string[];
   abilities: string[];
+  specialization: string[];
+  skills: AgentSkill[];
+  neverDoes: string[];
   squadRole: string;
   slug: string;
 }
