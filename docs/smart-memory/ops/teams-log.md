@@ -9,6 +9,21 @@ tags: [ops]
 
 Registro de todos os Agent Teams formados neste projeto. Lead (team-os) atualiza a cada `*dispatch` e `*close`.
 
+## 2026-05-03 — Team joao-guirunas-site-agentes-upgrade
+
+**Objetivo:** Melhoria da página /agentes — texturas 3D 4K, enriquecimento de dados dos agentes, redesign do AgentCard e rewrite das single pages
+**Lead:** team-os (skill)
+**Composição:**
+- sites-dev-gamma — Stories 6.1 (planet textures) + 6.2 (agentes.json enrichment)
+- sites-dev-alpha — Stories 6.3 (AgentCard) + 6.4 (single page rewrite)
+
+**Status:** ativo
+**Início:** 2026-05-03T03:45:00-03:00
+**Encerrado:** —
+**Stories:** 6.1, 6.2, 6.3, 6.4
+
+---
+
 ## 2026-04-23 — Team joao-guirunas-site-discovery
 
 **Objetivo:** Bootstrap — descoberta inicial do projeto

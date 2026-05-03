@@ -1,7 +1,7 @@
 ---
 title: Shared Context
 type: status-board
-updated: 2026-04-27
+updated: 2026-05-03
 tags: [ops]
 ---
 
@@ -23,13 +23,17 @@ O lead (team-os) atualiza este arquivo a cada mudança de estado dos teammates.
 
 ## Último encerramento
 
-**Data:** 2026-04-27
-**Sessão:** Fixes inline na página de mentoria (sem team formal)
+**Data:** 2026-05-03
+**Sessão:** Sprint /agentes — texturas 8K, dados enriquecidos, AgentCard e single pages (team joao-guirunas-site-agentes-upgrade)
 **Trabalho realizado:**
-- MentoriaNav removido da página (não era pretendido)
-- Hero height aumentado: 380px→520px mobile / 62vh→90vh desktop
-- Imagem hero reposicionada: `translateX(200px) scaleX(-1)` — João visível à direita
-- Stories 4.1 e 4.2 arquivadas em done/
+- Mars e Venus atualizados para texturas 8K (8192×4096) via Solar System Scope
+- Jupiter mantido em 4K (solarsystemscope máximo disponível)
+- MilkyWay texture (stars-milky-way.jpg) aplicada como background equirectangular da cena 3D
+- agentes.json enriquecido: abilities + squadRole para todos os 37 agentes
+- Codenames preenchidos para sites/social/traffic (estavam null)
+- AgentCard atualizado: race badge + abilities top-3 + squadRole
+- Single page reescrita: foto real + tagline blockquote + race badge + especialização grid
+- Stories 6.1–6.4 concluídas
 
 ## Decisões ativas
 <!-- Architect atualiza após cada ADR -->
