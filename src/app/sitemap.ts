@@ -1,5 +1,6 @@
 import type { MetadataRoute } from 'next';
 import { siteConfig } from '@/config/site';
+import { ALL_AGENTES } from '@/data/agentes';
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const base = siteConfig.url;
@@ -8,6 +9,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
   const pages: Array<{ path: string; priority: number; freq: MetadataRoute.Sitemap[number]['changeFrequency'] }> = [
     { path: '/',                          priority: 1.0, freq: 'weekly' },
     { path: '/mentoria',                  priority: 0.9, freq: 'weekly' },
+    { path: '/agentes',                   priority: 0.9, freq: 'weekly' },
     { path: '/open-source',               priority: 0.8, freq: 'weekly' },
     { path: '/workshop-1',                priority: 0.8, freq: 'monthly' },
     { path: '/mentoria/apresentacao',     priority: 0.7, freq: 'monthly' },
@@ -60,10 +62,21 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { path: '/monitor/aiox-monitor',      priority: 0.5, freq: 'monthly' },
   ];
 
-  return pages.map(({ path, priority, freq }) => ({
-    url: `${base}${path}`,
+  // Agent profile pages — one per agent
+  const agentEntries: MetadataRoute.Sitemap = ALL_AGENTES.map((a) => ({
+    url: `${base}/agentes/${a.squad}/${a.slug}`,
     lastModified: now,
-    changeFrequency: freq,
-    priority,
+    changeFrequency: 'monthly' as const,
+    priority: 0.5,
   }));
+
+  return [
+    ...pages.map(({ path, priority, freq }) => ({
+      url: `${base}${path}`,
+      lastModified: now,
+      changeFrequency: freq,
+      priority,
+    })),
+    ...agentEntries,
+  ];
 }

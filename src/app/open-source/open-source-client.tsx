@@ -9,6 +9,7 @@ import {
   Search, X, ArrowRight,
 } from 'lucide-react';
 import { GrowthWatermark } from '@/shared/components/ui/growth-watermark';
+import { SQUADS, TOTAL_AGENTES } from '@/data/agentes';
 
 const CINEMA: [number, number, number, number] = [0.7, 0, 0.2, 1];
 const GLIDE: [number, number, number, number] = [0.25, 1, 0.3, 1];
@@ -214,6 +215,116 @@ export function OpenSourceClient() {
               </motion.div>
             ))}
           </motion.div>
+        </div>
+      </section>
+
+      {/* ── 1.5 Featured: Agent Teams ── */}
+      <section className="relative bg-[#050507] py-12 sm:py-16">
+        <div className="mx-auto max-w-6xl px-6 lg:px-8">
+          <Link
+            href="/agentes"
+            className="group relative block overflow-hidden border border-white/10 hover:border-[#FF3A0E]/50 transition-all"
+            style={{
+              background: `
+                radial-gradient(ellipse at 80% 50%, rgba(255,58,14,0.10) 0%, transparent 60%),
+                linear-gradient(135deg, #0a0a0d 0%, #050507 100%)
+              `,
+            }}
+          >
+            {/* dot grid */}
+            <div
+              className="absolute inset-0 pointer-events-none opacity-40"
+              style={{
+                backgroundImage: 'radial-gradient(rgba(255,255,255,0.06) 1px, transparent 1px)',
+                backgroundSize: '24px 24px',
+              }}
+            />
+
+            <div className="relative grid grid-cols-1 lg:grid-cols-[1fr_auto] gap-8 lg:gap-12 items-center p-8 sm:p-12">
+              <div>
+                <div className="flex items-center gap-3 mb-5">
+                  <span
+                    className="inline-block px-2.5 py-1 text-[10px] font-bold tracking-wider uppercase"
+                    style={{ background: '#FF3A0E', color: '#050507', fontFamily: 'var(--font-mono)' }}
+                  >
+                    Novo
+                  </span>
+                  <span
+                    className="text-white/50 uppercase"
+                    style={{ fontFamily: 'var(--font-mono)', fontSize: 11, letterSpacing: '0.14em' }}
+                  >
+                    Centro de Treinamento Claude
+                  </span>
+                </div>
+
+                <h2
+                  className="font-[family-name:var(--font-display-serif)] font-[400] leading-[0.95] tracking-[-0.02em] text-white mb-4"
+                  style={{ fontSize: 'clamp(36px, 5vw, 56px)' }}
+                >
+                  {TOTAL_AGENTES} agentes que{' '}
+                  <span className="italic font-[300]" style={{ color: '#FF3A0E' }}>
+                    trabalham por você
+                  </span>
+                </h2>
+
+                <p className="text-white/60 text-sm sm:text-base leading-relaxed max-w-2xl mb-6">
+                  Conheça as 4 squads completas — Dev, Sites, Social e Traffic. Cada agente com persona,
+                  autoridades e skills definidos. Drop-in pra qualquer projeto Claude Code.
+                </p>
+
+                {/* Squad chips */}
+                <div className="flex flex-wrap gap-2 mb-6">
+                  {SQUADS.map((s) => (
+                    <span
+                      key={s.id}
+                      className="inline-flex items-center gap-1.5 px-2.5 py-1 border"
+                      style={{
+                        borderColor: `${s.accent}55`,
+                        background: `${s.accent}0d`,
+                        fontFamily: 'var(--font-mono)',
+                        fontSize: 10,
+                        letterSpacing: '0.12em',
+                      }}
+                    >
+                      <span className="w-1 h-1 rounded-full" style={{ background: s.accent }} />
+                      <span className="text-white/85 uppercase">{s.label}</span>
+                      <span className="text-white/40">{s.count}</span>
+                    </span>
+                  ))}
+                </div>
+
+                <span
+                  className="inline-flex items-center gap-2 text-[#FF3A0E] uppercase font-semibold transition-transform group-hover:translate-x-1"
+                  style={{ fontFamily: 'var(--font-mono)', fontSize: 12, letterSpacing: '0.12em' }}
+                >
+                  Conhecer os {TOTAL_AGENTES} agentes
+                  <ArrowRight className="h-4 w-4" />
+                </span>
+              </div>
+
+              {/* Big number on the right */}
+              <div className="hidden lg:flex items-center justify-center pr-4">
+                <div className="text-center">
+                  <div
+                    className="font-[family-name:var(--font-display-serif)] font-[300] leading-none"
+                    style={{
+                      fontSize: 'clamp(120px, 14vw, 180px)',
+                      color: '#FF3A0E',
+                      textShadow: '0 0 80px rgba(255,58,14,0.4)',
+                    }}
+                  >
+                    {TOTAL_AGENTES}
+                  </div>
+                  <div
+                    className="text-white/50 uppercase mt-2"
+                    style={{ fontFamily: 'var(--font-mono)', fontSize: 11, letterSpacing: '0.18em' }}
+                  >
+                    Agentes
+                  </div>
+                </div>
+              </div>
+            </div>
+          </Link>
         </div>
       </section>
 
