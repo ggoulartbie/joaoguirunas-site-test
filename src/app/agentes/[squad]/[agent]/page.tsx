@@ -81,7 +81,10 @@ export default async function AgentDetailPage({ params }: AgentPageParams) {
       {/* 3D planet canvas — fixed full-screen, behind everything */}
       <AgentPlanetBackground squadId={a.squad} />
 
-      {/* HERO — transparent, 3D scene shows through */}
+      {/* All page content sits above the fixed canvas */}
+      <div className="relative z-10">
+
+      {/* HERO — transparent over 3D scene */}
       <section className="relative overflow-hidden -mt-16 pt-32 pb-16 sm:pt-44 sm:pb-24">
         {/* Subtle vignette so text stays legible over the 3D scene */}
         <div
@@ -217,6 +220,9 @@ export default async function AgentDetailPage({ params }: AgentPageParams) {
             </div>
           </div>
         </div>
+
+        {/* Fade hero → solid content */}
+        <div className="absolute bottom-0 left-0 right-0 h-24 pointer-events-none" style={{ background: 'linear-gradient(to bottom, transparent, #050507)' }} />
       </section>
 
       {/* HABILIDADES COMPLETAS */}
@@ -371,6 +377,8 @@ export default async function AgentDetailPage({ params }: AgentPageParams) {
           </div>
         </section>
       )}
+
+      </div>{/* end relative z-10 */}
     </>
   );
 }
