@@ -7,12 +7,12 @@ import { X, GraduationCap, LogOut, LayoutDashboard, BookOpen, MessageSquare, Cal
 import { cn } from '@/lib/utils'
 
 const navItems = [
-  { href: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
-  { href: '/meus-cursos', label: 'Meus Cursos', icon: BookOpen },
-  { href: '/forum', label: 'Fórum', icon: MessageSquare },
-  { href: '/agenda', label: 'Agenda', icon: Calendar },
-  { href: '/certificados', label: 'Certificados', icon: Award },
-  { href: '/perfil', label: 'Perfil', icon: User },
+  { href: '/academy/dashboard', label: 'Dashboard', icon: LayoutDashboard },
+  { href: '/academy/meus-cursos', label: 'Meus Cursos', icon: BookOpen },
+  { href: '/academy/forum', label: 'Fórum', icon: MessageSquare },
+  { href: '/academy/agenda', label: 'Agenda', icon: Calendar },
+  { href: '/academy/certificados', label: 'Certificados', icon: Award },
+  { href: '/academy/perfil', label: 'Perfil', icon: User },
 ]
 
 type Props = {

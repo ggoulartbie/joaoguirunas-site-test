@@ -4,7 +4,7 @@ import { useState, useTransition } from 'react'
 import { useRouter } from 'next/navigation'
 import { Send } from 'lucide-react'
 import type { ForumCategory } from '@/types/student'
-import { createThread } from '@/app/(student)/forum/actions'
+import { createThread } from '@/app/(academy)/academy/(student)/forum/actions'
 
 type Props = {
   categories: ForumCategory[]
@@ -28,7 +28,7 @@ export function NewThreadForm({ categories }: Props) {
       if (result.error) {
         setError(result.error)
       } else {
-        router.push('/forum')
+        router.push('/academy/forum')
       }
     })
   }

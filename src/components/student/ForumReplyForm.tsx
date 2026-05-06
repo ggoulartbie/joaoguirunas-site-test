@@ -2,7 +2,7 @@
 
 import { useState, useTransition } from 'react'
 import { Send } from 'lucide-react'
-import { createReply } from '@/app/(student)/forum/actions'
+import { createReply } from '@/app/(academy)/academy/(student)/forum/actions'
 
 type Props = {
   threadId: string

@@ -2,7 +2,7 @@
 
 import { useTransition } from 'react'
 import { CheckCircle } from 'lucide-react'
-import { markAsAccepted } from '@/app/(student)/forum/actions'
+import { markAsAccepted } from '@/app/(academy)/academy/(student)/forum/actions'
 
 export function AcceptAnswerButton({
   replyId,

@@ -5,13 +5,13 @@ import { usePathname } from 'next/navigation'
 import { Bell, Menu } from 'lucide-react'
 
 const BREADCRUMB_MAP: Record<string, string> = {
-  '/admin': 'Dashboard',
-  '/admin/turmas': 'Turmas',
-  '/admin/cursos': 'Cursos',
-  '/admin/usuarios': 'Usuários',
-  '/admin/pagamentos': 'Pagamentos',
-  '/admin/moderacao': 'Moderação',
-  '/admin/forum': 'Fórum',
+  '/academy/admin': 'Dashboard',
+  '/academy/admin/turmas': 'Turmas',
+  '/academy/admin/cursos': 'Cursos',
+  '/academy/admin/usuarios': 'Usuários',
+  '/academy/admin/pagamentos': 'Pagamentos',
+  '/academy/admin/moderacao': 'Moderação',
+  '/academy/admin/forum': 'Fórum',
 }
 
 function getBreadcrumb(pathname: string): string {
@@ -41,7 +41,7 @@ export function AdminTopBar() {
           <Bell className="h-5 w-5 text-white/50 transition-colors hover:text-white/80" />
         </button>
 
-        <Link href="/perfil" aria-label="Perfil">
+        <Link href="/academy/perfil" aria-label="Perfil">
           <div className="flex h-8 w-8 items-center justify-center bg-[#FF3A0E]/20 font-mono text-xs font-bold text-[#FF3A0E] transition-colors hover:bg-[#FF3A0E]/30">
             A
           </div>

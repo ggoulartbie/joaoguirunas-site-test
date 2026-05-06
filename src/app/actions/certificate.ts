@@ -110,7 +110,7 @@ export async function checkAndIssueCertificate(
 
   if (error) throw new Error('Erro ao emitir certificado: ' + error.message)
 
-  revalidatePath('/certificados')
+  revalidatePath('/academy/certificados')
   sendCertificateEmail(userId, courseId, cohortId, verificationCode).catch(() => null)
 
   return cert

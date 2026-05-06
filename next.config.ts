@@ -15,7 +15,25 @@ const nextConfig: NextConfig = {
     ],
   },
   async redirects() {
-    return [];
+    return [
+      { source: '/login', destination: '/academy/login', permanent: true },
+      { source: '/cadastro', destination: '/academy/cadastro', permanent: true },
+      { source: '/recuperar-senha', destination: '/academy/recuperar-senha', permanent: true },
+      { source: '/redefinir-senha', destination: '/academy/redefinir-senha', permanent: true },
+      { source: '/dashboard', destination: '/academy/dashboard', permanent: true },
+      { source: '/meus-cursos', destination: '/academy/meus-cursos', permanent: true },
+      { source: '/perfil', destination: '/academy/perfil', permanent: true },
+      { source: '/agenda', destination: '/academy/agenda', permanent: true },
+      { source: '/certificados', destination: '/academy/certificados', permanent: true },
+      { source: '/turmas', destination: '/academy/turmas', permanent: true },
+      { source: '/turmas/:slug', destination: '/academy/turmas/:slug', permanent: true },
+      { source: '/certificado/:path*', destination: '/academy/certificado/:path*', permanent: true },
+      { source: '/checkout/:path*', destination: '/academy/checkout/:path*', permanent: true },
+      { source: '/curso/:path*', destination: '/academy/curso/:path*', permanent: true },
+      { source: '/forum/:path*', destination: '/academy/forum/:path*', permanent: true },
+      { source: '/admin/:path*', destination: '/academy/admin/:path*', permanent: true },
+      { source: '/403', destination: '/academy/403', permanent: true },
+    ]
   },
   async rewrites() {
     return [];

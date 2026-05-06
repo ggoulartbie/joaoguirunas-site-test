@@ -15,13 +15,13 @@ import {
 } from 'lucide-react'
 
 const navItems = [
-  { href: '/admin', label: 'Dashboard', icon: LayoutDashboard, exact: true },
-  { href: '/admin/turmas', label: 'Turmas', icon: GraduationCap },
-  { href: '/admin/cursos', label: 'Cursos', icon: BookOpen },
-  { href: '/admin/usuarios', label: 'Usuários', icon: Users },
-  { href: '/admin/pagamentos', label: 'Pagamentos', icon: CreditCard },
-  { href: '/admin/moderacao', label: 'Moderação', icon: MessageSquare },
-  { href: '/admin/forum', label: 'Fórum', icon: Shield },
+  { href: '/academy/admin', label: 'Dashboard', icon: LayoutDashboard, exact: true },
+  { href: '/academy/admin/turmas', label: 'Turmas', icon: GraduationCap },
+  { href: '/academy/admin/cursos', label: 'Cursos', icon: BookOpen },
+  { href: '/academy/admin/usuarios', label: 'Usuários', icon: Users },
+  { href: '/academy/admin/pagamentos', label: 'Pagamentos', icon: CreditCard },
+  { href: '/academy/admin/moderacao', label: 'Moderação', icon: MessageSquare },
+  { href: '/academy/admin/forum', label: 'Fórum', icon: Shield },
 ]
 
 export function AdminSidebar() {
@@ -69,7 +69,7 @@ export function AdminSidebar() {
 
         <div className="border-t border-white/10 p-4">
           <Link
-            href="/dashboard"
+            href="/academy/dashboard"
             className="mb-1 flex w-full items-center gap-3 px-3 py-2 font-mono text-xs uppercase tracking-wider text-white/30 transition-colors hover:text-white/60"
           >
             <GraduationCap className="h-4 w-4 shrink-0" />

@@ -8,7 +8,6 @@ export default function OnboardingLayout({ children }: { children: ReactNode }) 
           __html: `
             header, footer, .skip-link { display: none !important; }
             #main-content { padding-top: 0 !important; }
-            body { overflow: hidden; }
           `,
         }}
       />

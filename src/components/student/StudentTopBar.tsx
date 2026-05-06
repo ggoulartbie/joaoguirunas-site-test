@@ -5,12 +5,12 @@ import { usePathname } from 'next/navigation'
 import { NotificationBell } from './NotificationBell'
 
 const BREADCRUMB_MAP: Record<string, string> = {
-  '/dashboard': 'Dashboard',
-  '/meus-cursos': 'Meus Cursos',
-  '/forum': 'Fórum',
-  '/agenda': 'Agenda',
-  '/certificados': 'Certificados',
-  '/perfil': 'Perfil',
+  '/academy/dashboard': 'Dashboard',
+  '/academy/meus-cursos': 'Meus Cursos',
+  '/academy/forum': 'Fórum',
+  '/academy/agenda': 'Agenda',
+  '/academy/certificados': 'Certificados',
+  '/academy/perfil': 'Perfil',
 }
 
 type Notification = {
@@ -54,7 +54,7 @@ export function StudentTopBar({ notifications, userInitials, onMenuClick }: Prop
         <NotificationBell initialNotifications={notifications} />
 
         <Link
-          href="/perfil"
+          href="/academy/perfil"
           aria-label="Ir para perfil"
           className="flex h-8 w-8 items-center justify-center bg-white/10 font-mono text-xs font-bold text-white/70 transition-colors hover:bg-white/15 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FF3A0E] focus-visible:ring-offset-1 focus-visible:ring-offset-[#050507]"
         >

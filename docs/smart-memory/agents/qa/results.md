@@ -11,6 +11,50 @@ Histórico de veredictos emitidos pelo sites-qa (Axilun).
 
 ---
 
+## 2026-05-06 — F4.1.b Comments persistência real — ⚠️ CONCERNS
+
+**Escopo:** Gate de quality F4.1.b — Server Actions de comments com persistência real.
+**Submetido por:** sites-dev-stripe.
+**Arquivo avaliado:**
+- `src/lib/actions/comments.ts`
+
+### Verificações aprovadas
+
+- **`addComment` (linhas 11-44):** Zod (lessonId UUID, content 1-4000 chars, parentCommentId UUID opt), `requireUser()`, **guard `has_access` adicional** (linhas 27-31) bloqueando insert sem matrícula que dê acesso à lesson, INSERT em `comments` com todos os campos pedidos. Acima do mínimo do gate.
+- **`editComment` (linhas 46-81):** Zod, ownership check explícito (linha 67 — `comment.author_id !== user.id`), bloqueio se `deleted_at` (linha 66), **janela de 15 min implementada** (constante `EDIT_WINDOW_MS = 15 * 60 * 1000` linha 9; cálculo de `age` linhas 69-70), update de `content` + `updated_at`.
+- **`deleteComment` (linhas 83-119):** soft delete via UPDATE de `deleted_at` (linhas 110-113); **role-based authorization** — busca role do user (linhas 92-98); `isPrivileged` cobre ADMIN e MENTOR (extensão razoável para moderação); aluno comum só deleta o próprio (linha 108); idempotência via check `deleted_at` prévio (linha 107).
+- **TS clean:** `npx tsc --noEmit` retorna zero erros no projeto.
+
+### Concern bloqueante para o gate (não exploitable hoje, mas critério explícito)
+
+- **[CONCERN-1] Sanitização DOMPurify NÃO aplicada — critério #4 do gate explicitamente não cumprido.**
+  - `addComment:36` e `editComment:74` persistem `parsed.data.content` cru, sem chamar `sanitizeHtml`.
+  - Helper existe e está pronto: `src/lib/content/html.ts` (DOMPurify via isomorphic-dompurify, `'server-only'`, ALLOWED_TAGS/ATTR seguros) — exportado em `src/lib/content/index.ts:54`.
+  - **Render atual mitiga XSS imediato:** `CommentsSection.tsx:132` renderiza via `{comment.content}` (text node JSX, escape automático React), então não há vetor exploitable agora.
+  - **Risco real, defesa em profundidade falha:** o `CommentForm` placeholder e mock-data sugerem "Markdown suportado" — qualquer migração futura para `dangerouslySetInnerHTML`, render via Markdown→HTML, email que cite o conteúdo, ou export de API consumirá o payload tóxico já gravado.
+  - **Correção é mecânica:** `import { sanitizeHtml } from '@/lib/content'`; em `addComment:36` trocar `content: parsed.data.content` por `content: sanitizeHtml(parsed.data.content)`; idem em `editComment:74`.
+
+### Concerns informativos (não bloqueantes)
+
+- **[CONCERN-2] `revalidatePath('/', 'layout')`** invalida cache global a cada comentário — caro em produção. Considerar `revalidatePath` mais específico no path da lesson (ex: `/curso/${courseSlug}/aula/${lessonSlug}`) em iteração de hardening.
+- **[CONCERN-3] `editComment` não verifica se `parent_comment_id` mudaria** — não permite reparentar (correto, mas não é validado explicitamente; o update só toca `content` e `updated_at` — OK por construção).
+
+### Veredicto
+
+```
+VEREDICTO: CONCERNS
+Story: F4.1.b — Comments persistência real | Data: 2026-05-06
+Checklist: 4/5 critérios principais OK; sanitização (critério #4) não aplicada
+Issues: CONCERN-1 (sanitização ausente — critério explícito do gate);
+        CONCERN-2 e CONCERN-3 informativos
+Próximo passo: @sites-dev-stripe — recomendado adicionar 2 chamadas a sanitizeHtml
+  em addComment e editComment ANTES do push (correção 4 linhas, alinha com critério
+  explícito + defesa em profundidade). Se sites-devops priorizar timing, pode liberar
+  push como CONCERNS aceitos e abrir story de hardening F4.1.c imediato.
+```
+
+---
+
 ## 2026-05-06 — F5.3.b Fix certificado forjável (CRITICAL SECURITY) — ✅ PASS
 
 **Escopo:** Gate de segurança crítico — fix da forgery em `/certificado/v/[code]` + auto-emissão `checkAndIssueCertificate` integrada com `markLessonComplete`.

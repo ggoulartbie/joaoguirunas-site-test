@@ -66,7 +66,7 @@ export async function GET(req: NextRequest) {
             cohortName,
             days,
             expiresAt,
-            `${APP_URL}/perfil`,
+            `${APP_URL}/academy/perfil`,
           )
 
           if (days === 15) results.reminders.d15++

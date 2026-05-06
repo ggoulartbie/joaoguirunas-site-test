@@ -3,7 +3,7 @@
 import { useState, useTransition } from 'react'
 import { MessageSquare, ThumbsUp } from 'lucide-react'
 import { CheckCircle2 } from 'lucide-react'
-import { createReply } from '@/app/(student)/forum/actions'
+import { createReply } from '@/app/(academy)/academy/(student)/forum/actions'
 import { AcceptAnswerButton } from './AcceptAnswerButton'
 import type { ForumReplyWithMeta } from '@/types/student'
 

@@ -7,18 +7,7 @@ import { Footer } from './Footer';
 // Rotas com layout próprio — não recebem Header/Footer global
 const CHROME_EXCLUDED = [
   '/',
-  '/dashboard',
-  '/meus-cursos',
-  '/curso',
-  '/forum',
-  '/agenda',
-  '/certificados',
-  '/perfil',
-  '/admin',
-  '/login',
-  '/cadastro',
-  '/recuperar-senha',
-  '/redefinir-senha',
+  '/academy',
   '/certificado',
 ];
 

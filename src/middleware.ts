@@ -2,15 +2,15 @@ import { NextResponse, type NextRequest } from 'next/server'
 import { createServerClient } from '@supabase/ssr'
 
 const PUBLIC_PATHS = [
-  '/login',
-  '/cadastro',
-  '/recuperar-senha',
-  '/redefinir-senha',
-  '/auth',
+  '/academy/login',
+  '/academy/cadastro',
+  '/academy/recuperar-senha',
+  '/academy/redefinir-senha',
+  '/academy/auth',
   '/turmas',
-  '/checkout',
+  '/academy/checkout',
   '/certificado',
-  '/403',
+  '/academy/403',
   '/_next',
   '/favicon',
   '/api/webhooks',
@@ -56,13 +56,13 @@ export async function middleware(request: NextRequest) {
 
   if (!user) {
     const loginUrl = request.nextUrl.clone()
-    loginUrl.pathname = '/login'
+    loginUrl.pathname = '/academy/login'
     loginUrl.searchParams.set('next', pathname)
     return NextResponse.redirect(loginUrl)
   }
 
-  // rotas /admin/* exigem role ADMIN — verificado no servidor
-  if (pathname.startsWith('/admin')) {
+  // rotas /academy/admin/* exigem role ADMIN — verificado no servidor
+  if (pathname.startsWith('/academy/admin')) {
     const { data: profile } = await supabase
       .from('profiles')
       .select('role')
@@ -70,7 +70,7 @@ export async function middleware(request: NextRequest) {
       .single()
 
     if (!profile || profile.role !== 'ADMIN') {
-      return NextResponse.redirect(new URL('/403', request.url))
+      return NextResponse.redirect(new URL('/academy/403', request.url))
     }
   }
 
@@ -81,23 +81,23 @@ export const config = {
   // Middleware ONLY runs on course platform routes.
   // Institutional site routes (/, /mentoria, /agentes, etc.) are never matched.
   matcher: [
-    '/login',
-    '/cadastro',
-    '/recuperar-senha',
-    '/redefinir-senha',
-    '/auth/:path*',
+    '/academy/login',
+    '/academy/cadastro',
+    '/academy/recuperar-senha',
+    '/academy/redefinir-senha',
+    '/academy/auth/:path*',
     '/turmas/:path*',
     '/certificado/:path*',
-    '/403',
+    '/academy/403',
     '/api/webhooks/:path*',
-    '/dashboard/:path*',
-    '/meus-cursos/:path*',
-    '/curso/:path*',
-    '/admin/:path*',
-    '/forum/:path*',
-    '/agenda/:path*',
-    '/certificados/:path*',
-    '/perfil/:path*',
-    '/checkout/:path*',
+    '/academy/dashboard/:path*',
+    '/academy/meus-cursos/:path*',
+    '/academy/curso/:path*',
+    '/academy/admin/:path*',
+    '/academy/forum/:path*',
+    '/academy/agenda/:path*',
+    '/academy/certificados/:path*',
+    '/academy/perfil/:path*',
+    '/academy/checkout/:path*',
   ],
 }

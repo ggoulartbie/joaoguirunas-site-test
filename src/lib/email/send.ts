@@ -21,7 +21,7 @@ const FROM = process.env.RESEND_FROM_EMAIL ?? 'noreply@example.com'
 const APP_URL = process.env.NEXT_PUBLIC_APP_URL ?? 'http://localhost:3000'
 
 export async function sendWelcomeEmail(to: string, name: string) {
-  const html = await render(WelcomeEmail({ name, loginUrl: `${APP_URL}/login` }))
+  const html = await render(WelcomeEmail({ name, loginUrl: `${APP_URL}/academy/login` }))
 
   return getResend().emails.send({
     from: FROM,
@@ -46,7 +46,7 @@ export async function sendPaymentApprovedEmail(to: string, name: string, cohortN
   const html = await render(PaymentApprovedEmail({
     name,
     cohortName,
-    dashboardUrl: `${APP_URL}/dashboard`,
+    dashboardUrl: `${APP_URL}/academy/dashboard`,
   }))
 
   return getResend().emails.send({
@@ -61,7 +61,7 @@ export async function sendPaymentFailedEmail(to: string, name: string, cohortNam
   const html = await render(PaymentFailedEmail({
     name,
     cohortName,
-    updatePaymentUrl: `${APP_URL}/perfil`,
+    updatePaymentUrl: `${APP_URL}/academy/perfil`,
   }))
 
   return getResend().emails.send({
@@ -82,7 +82,7 @@ export async function sendAutoRenewalEmail(
     name,
     cohortName,
     newExpiresAt,
-    profileUrl: `${APP_URL}/perfil`,
+    profileUrl: `${APP_URL}/academy/perfil`,
   }))
 
   return getResend().emails.send({
@@ -103,7 +103,7 @@ export async function sendMembershipExtendedEmail(
     name,
     cohortName,
     newExpiresAt,
-    dashboardUrl: `${APP_URL}/dashboard`,
+    dashboardUrl: `${APP_URL}/academy/dashboard`,
   }))
 
   return getResend().emails.send({
@@ -151,7 +151,7 @@ export async function sendNewMaterialEmail(
     cohortName,
     materialTitle,
     lessonTitle,
-    dashboardUrl: dashboardUrl ?? `${APP_URL}/dashboard`,
+    dashboardUrl: dashboardUrl ?? `${APP_URL}/academy/dashboard`,
   }))
 
   return getResend().emails.send({
@@ -198,8 +198,8 @@ export async function sendWelcomeToCohortEmail(
     name,
     cohortName,
     startDate,
-    dashboardUrl: `${APP_URL}/meus-cursos`,
-    forumUrl: `${APP_URL}/forum`,
+    dashboardUrl: `${APP_URL}/academy/meus-cursos`,
+    forumUrl: `${APP_URL}/academy/forum`,
   }))
 
   return getResend().emails.send({

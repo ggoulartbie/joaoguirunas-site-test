@@ -2,7 +2,7 @@
 
 import { useTransition } from 'react'
 import { ThumbsUp } from 'lucide-react'
-import { voteThread } from '@/app/(student)/forum/actions'
+import { voteThread } from '@/app/(academy)/academy/(student)/forum/actions'
 
 export function VoteButton({ threadId, voteCount }: { threadId: string; voteCount: number }) {
   const [pending, startTransition] = useTransition()

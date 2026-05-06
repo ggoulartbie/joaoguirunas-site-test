@@ -10,7 +10,7 @@ export async function requireUser() {
   const { data: { user } } = await supabase.auth.getUser()
 
   if (!user) {
-    redirect('/login')
+    redirect('/academy/login')
   }
 
   return user
@@ -27,7 +27,7 @@ export async function requireRole(role: Role) {
     .single()
 
   if (!profile || profile.role !== role) {
-    redirect('/403')
+    redirect('/academy/403')
   }
 
   return { user, profile }
@@ -44,7 +44,7 @@ export async function requireAdmin() {
     .single()
 
   if (!profile || profile.role !== 'ADMIN') {
-    redirect('/403')
+    redirect('/academy/403')
   }
 
   return { user, profile }

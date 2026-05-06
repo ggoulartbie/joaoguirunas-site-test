@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { downloadMaterialAction } from '@/app/(student)/curso/[slug]/aula/[lesson-slug]/material-actions'
+import { downloadMaterialAction } from '@/app/(academy)/academy/(student)/curso/[slug]/aula/[lesson-slug]/material-actions'
 import type { Database } from '@/types/database'
 
 type Material = Database['public']['Tables']['materials']['Row']

@@ -5,7 +5,7 @@ import {
   uploadMaterialAction,
   addLinkMaterialAction,
   deleteMaterialAction,
-} from '@/app/(admin)/admin/cursos/material-actions'
+} from '@/app/(academy)/academy/(admin)/admin/cursos/material-actions'
 import type { Database } from '@/types/database'
 
 type Material = Database['public']['Tables']['materials']['Row']
