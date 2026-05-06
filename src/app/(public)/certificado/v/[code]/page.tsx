@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import { CheckCircle2, Award, Download, AlertTriangle } from 'lucide-react'
+import { supabaseAdmin } from '@/lib/supabase/admin'
 
 type Props = {
   params: Promise<{ code: string }>
@@ -14,39 +15,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   }
 }
 
-type CertificateData = {
-  valid: true
-  name: string
-  courseName: string
-  cohortName: string
-  issuedAt: Date
-  verificationCode: string
-} | { valid: false }
-
-async function verifyCertificate(code: string): Promise<CertificateData> {
-  // TODO F5.3: buscar via supabaseAdmin — sem RLS, leitura pública por código
-  // const { data } = await supabaseAdmin
-  //   .from('certificates')
-  //   .select('*, profiles(name), courses(title), cohorts(name)')
-  //   .eq('verification_code', code)
-  //   .single()
-  // if (!data) return { valid: false }
-
-  // Mock: qualquer código retorna válido em desenvolvimento
-  if (!code || code.length < 6) return { valid: false }
-
-  return {
-    valid: true,
-    name: 'João Guirunas',
-    courseName: 'Claude Code',
-    cohortName: 'Curso Online — Padrão',
-    issuedAt: new Date('2026-04-20'),
-    verificationCode: code,
-  }
-}
-
-function formatDate(date: Date) {
-  return date.toLocaleDateString('pt-BR', {
+function formatDate(iso: string) {
+  return new Date(iso).toLocaleDateString('pt-BR', {
     day: '2-digit',
     month: 'long',
     year: 'numeric',
@@ -55,7 +25,23 @@ function formatDate(date: Date) {
 
 export default async function CertificateVerificationPage({ params }: Props) {
   const { code } = await params
-  const result = await verifyCertificate(code)
+
+  const { data: cert } = await supabaseAdmin
+    .from('certificates')
+    .select(`
+      id,
+      verification_code,
+      issued_at,
+      profiles(name),
+      courses(title),
+      cohorts(name)
+    `)
+    .eq('verification_code', code.toUpperCase())
+    .maybeSingle()
+
+  const profile = cert ? (Array.isArray(cert.profiles) ? cert.profiles[0] : cert.profiles) : null
+  const courseData = cert ? (Array.isArray(cert.courses) ? cert.courses[0] : cert.courses) : null
+  const cohortData = cert ? (Array.isArray(cert.cohorts) ? cert.cohorts[0] : cert.cohorts) : null
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-[#050507] px-4 py-16">
@@ -67,7 +53,7 @@ export default async function CertificateVerificationPage({ params }: Props) {
           </Link>
         </div>
 
-        {result.valid ? (
+        {cert ? (
           <div className="border border-white/10 bg-[#0C0C12]">
             {/* Barra accent */}
             <div className="h-1 bg-[#FF3A0E]" />
@@ -81,7 +67,7 @@ export default async function CertificateVerificationPage({ params }: Props) {
                     Certificado válido
                   </p>
                   <p className="mt-0.5 text-xs text-white/30">
-                    Verificado em {formatDate(new Date())}
+                    Verificado em {formatDate(new Date().toISOString())}
                   </p>
                 </div>
               </div>
@@ -92,7 +78,7 @@ export default async function CertificateVerificationPage({ params }: Props) {
                     Concluinte
                   </p>
                   <p className="mt-1 text-xl font-bold text-white">
-                    {result.name}
+                    {profile?.name ?? '—'}
                   </p>
                 </div>
 
@@ -103,7 +89,7 @@ export default async function CertificateVerificationPage({ params }: Props) {
                     Curso
                   </p>
                   <p className="mt-1 text-base font-semibold text-white">
-                    {result.courseName}
+                    {courseData?.title ?? '—'}
                   </p>
                 </div>
 
@@ -112,7 +98,7 @@ export default async function CertificateVerificationPage({ params }: Props) {
                     Turma
                   </p>
                   <p className="mt-1 text-sm text-white/70">
-                    {result.cohortName}
+                    {cohortData?.name ?? '—'}
                   </p>
                 </div>
 
@@ -121,7 +107,7 @@ export default async function CertificateVerificationPage({ params }: Props) {
                     Data de emissão
                   </p>
                   <p className="mt-1 text-sm text-white/70">
-                    {formatDate(result.issuedAt)}
+                    {formatDate(cert.issued_at)}
                   </p>
                 </div>
 
@@ -133,12 +119,12 @@ export default async function CertificateVerificationPage({ params }: Props) {
                       Código de verificação
                     </p>
                     <p className="mt-1 font-mono text-sm font-bold tracking-widest text-[#FF3A0E]">
-                      {result.verificationCode}
+                      {cert.verification_code}
                     </p>
                   </div>
 
                   <a
-                    href={`/api/certificado/${result.verificationCode}`}
+                    href={`/api/certificado/${cert.verification_code}`}
                     download
                     className="flex items-center gap-1.5 border border-white/10 px-3 py-2 font-mono text-xs uppercase tracking-wide text-white/50 transition-colors hover:border-white/20 hover:text-white/80"
                   >

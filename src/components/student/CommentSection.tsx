@@ -1,10 +1,11 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useTransition } from 'react'
 import { Pin, Trash2, Edit2, CornerDownRight, Send } from 'lucide-react'
 import type { CommentWithAuthor } from '@/types/student'
+import { addComment, editComment, deleteComment } from '@/lib/actions/comments'
 
-const EDIT_WINDOW_MS = 30 * 60 * 1000
+const EDIT_WINDOW_MS = 15 * 60 * 1000
 
 const ROLE_CONFIG: Record<string, { label: string; className: string } | undefined> = {
   MENTOR: { label: 'Mentor', className: 'bg-[#FF3A0E]/15 text-[#FF3A0E]' },
@@ -38,35 +39,76 @@ type CommentItemProps = {
   comment: CommentWithAuthor
   replies?: CommentWithAuthor[]
   currentUserId: string
+  lessonId: string
   onReply: (parentId: string) => void
+  onOptimisticEdit: (id: string, content: string) => void
+  onOptimisticDelete: (id: string) => void
+  onOptimisticReply: (reply: CommentWithAuthor) => void
 }
 
-function CommentItem({ comment, replies = [], currentUserId, onReply }: CommentItemProps) {
+function CommentItem({
+  comment,
+  replies = [],
+  currentUserId,
+  lessonId,
+  onReply,
+  onOptimisticEdit,
+  onOptimisticDelete,
+  onOptimisticReply,
+}: CommentItemProps) {
   const [editing, setEditing] = useState(false)
   const [editContent, setEditContent] = useState(comment.content)
   const [replyOpen, setReplyOpen] = useState(false)
   const [replyContent, setReplyContent] = useState('')
+  const [, startTransition] = useTransition()
 
   const isDeleted = !!comment.deleted_at
   const badge = ROLE_CONFIG[comment.authorRole]
 
   async function handleEdit(e: React.FormEvent) {
     e.preventDefault()
-    // TODO: Server Action editComment(comment.id, editContent)
+    const trimmed = editContent.trim()
+    if (!trimmed) return
+    onOptimisticEdit(comment.id, trimmed)
     setEditing(false)
+    startTransition(async () => {
+      await editComment(comment.id, trimmed)
+    })
   }
 
   async function handleReply(e: React.FormEvent) {
     e.preventDefault()
-    // TODO: Server Action addComment(lessonId, replyContent, comment.id)
+    const trimmed = replyContent.trim()
+    if (!trimmed) return
+    const now = new Date().toISOString()
+    const optimistic: CommentWithAuthor = {
+      id: `opt-${Date.now()}`,
+      lesson_id: lessonId,
+      content: trimmed,
+      created_at: now,
+      updated_at: now,
+      deleted_at: null,
+      is_pinned: false,
+      parent_comment_id: comment.id,
+      authorId: currentUserId,
+      authorName: 'Você',
+      authorRole: 'STUDENT',
+    }
     setReplyContent('')
     setReplyOpen(false)
+    onOptimisticReply(optimistic)
     onReply(comment.id)
+    startTransition(async () => {
+      await addComment(lessonId, trimmed, comment.id)
+    })
   }
 
   async function handleDelete() {
     if (!confirm('Remover este comentário?')) return
-    // TODO: Server Action deleteComment(comment.id)
+    onOptimisticDelete(comment.id)
+    startTransition(async () => {
+      await deleteComment(comment.id)
+    })
   }
 
   return (
@@ -169,7 +211,16 @@ function CommentItem({ comment, replies = [], currentUserId, onReply }: CommentI
       {replies.length > 0 && (
         <div className="ml-6 space-y-2 border-l border-white/10 pl-4">
           {replies.map((reply) => (
-            <CommentItem key={reply.id} comment={reply} currentUserId={currentUserId} onReply={() => {}} />
+            <CommentItem
+              key={reply.id}
+              comment={reply}
+              currentUserId={currentUserId}
+              lessonId={lessonId}
+              onReply={() => {}}
+              onOptimisticEdit={onOptimisticEdit}
+              onOptimisticDelete={onOptimisticDelete}
+              onOptimisticReply={onOptimisticReply}
+            />
           ))}
         </div>
       )}
@@ -183,50 +234,86 @@ type Props = {
   currentUserId?: string
 }
 
-export function CommentSection({ lessonId: _lessonId, initialComments = [], currentUserId = '' }: Props) {
-  const [comments] = useState<CommentWithAuthor[]>(initialComments)
+export function CommentSection({ lessonId, initialComments = [], currentUserId = '' }: Props) {
+  const [comments, setComments] = useState<CommentWithAuthor[]>(initialComments)
   const [newComment, setNewComment] = useState('')
+  const [, startTransition] = useTransition()
   const [submitting, setSubmitting] = useState(false)
 
   const topLevel = comments.filter((c) => !c.parent_comment_id)
   const nested = comments.filter((c) => !!c.parent_comment_id)
 
+  function handleOptimisticEdit(id: string, content: string) {
+    setComments((prev) =>
+      prev.map((c) => (c.id === id ? { ...c, content, updated_at: new Date().toISOString() } : c))
+    )
+  }
+
+  function handleOptimisticDelete(id: string) {
+    setComments((prev) =>
+      prev.map((c) => (c.id === id ? { ...c, deleted_at: new Date().toISOString() } : c))
+    )
+  }
+
+  function handleOptimisticReply(reply: CommentWithAuthor) {
+    setComments((prev) => [...prev, reply])
+  }
+
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
-    if (!newComment.trim()) return
+    const trimmed = newComment.trim()
+    if (!trimmed) return
     setSubmitting(true)
-    // TODO: Server Action addComment(lessonId, newComment)
-    await new Promise((r) => setTimeout(r, 600))
+    const now = new Date().toISOString()
+    const optimistic: CommentWithAuthor = {
+      id: `opt-${Date.now()}`,
+      lesson_id: lessonId,
+      content: trimmed,
+      created_at: now,
+      updated_at: now,
+      deleted_at: null,
+      is_pinned: false,
+      parent_comment_id: null,
+      authorId: currentUserId,
+      authorName: 'Você',
+      authorRole: 'STUDENT',
+    }
+    setComments((prev) => [...prev, optimistic])
     setNewComment('')
-    setSubmitting(false)
+    startTransition(async () => {
+      await addComment(lessonId, trimmed)
+      setSubmitting(false)
+    })
   }
 
   return (
     <div className="space-y-5">
       <h3 className="font-mono text-xs uppercase tracking-widest text-white/40">
-        Comentários ({topLevel.length})
+        Comentários ({topLevel.filter((c) => !c.deleted_at).length})
       </h3>
 
-      <form onSubmit={handleSubmit} className="space-y-2">
-        <textarea
-          value={newComment}
-          onChange={(e) => setNewComment(e.target.value)}
-          placeholder="Deixe um comentário ou dúvida sobre esta aula..."
-          rows={3}
-          disabled={submitting}
-          className="w-full resize-none border border-white/10 bg-[#0C0C12] p-3 text-sm text-white placeholder:text-white/30 focus:border-white/20 focus:outline-none"
-        />
-        <div className="flex justify-end">
-          <button
-            type="submit"
-            disabled={submitting || !newComment.trim()}
-            className="flex items-center gap-2 bg-[#FF3A0E] px-4 py-2 font-mono text-xs uppercase tracking-wide text-white hover:bg-[#FF5A1F] disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
-          >
-            <Send className="h-3.5 w-3.5" />
-            {submitting ? 'Enviando...' : 'Comentar'}
-          </button>
-        </div>
-      </form>
+      {currentUserId && (
+        <form onSubmit={handleSubmit} className="space-y-2">
+          <textarea
+            value={newComment}
+            onChange={(e) => setNewComment(e.target.value)}
+            placeholder="Deixe um comentário ou dúvida sobre esta aula..."
+            rows={3}
+            disabled={submitting}
+            className="w-full resize-none border border-white/10 bg-[#0C0C12] p-3 text-sm text-white placeholder:text-white/30 focus:border-white/20 focus:outline-none"
+          />
+          <div className="flex justify-end">
+            <button
+              type="submit"
+              disabled={submitting || !newComment.trim()}
+              className="flex items-center gap-2 bg-[#FF3A0E] px-4 py-2 font-mono text-xs uppercase tracking-wide text-white hover:bg-[#FF5A1F] disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+            >
+              <Send className="h-3.5 w-3.5" />
+              {submitting ? 'Enviando...' : 'Comentar'}
+            </button>
+          </div>
+        </form>
+      )}
 
       {topLevel.length === 0 ? (
         <p className="text-sm text-white/30">Seja o primeiro a comentar nesta aula.</p>
@@ -240,7 +327,11 @@ export function CommentSection({ lessonId: _lessonId, initialComments = [], curr
                 comment={comment}
                 replies={replies}
                 currentUserId={currentUserId}
+                lessonId={lessonId}
                 onReply={() => {}}
+                onOptimisticEdit={handleOptimisticEdit}
+                onOptimisticDelete={handleOptimisticDelete}
+                onOptimisticReply={handleOptimisticReply}
               />
             )
           })}
