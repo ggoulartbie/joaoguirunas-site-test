@@ -28,7 +28,7 @@ export default async function StudentLayout({
           .limit(20),
         supabase
           .from('profiles')
-          .select('name, bio')
+          .select('name, bio, role')
           .eq('id', user.id)
           .single(),
       ])
@@ -46,6 +46,7 @@ export default async function StudentLayout({
       .toUpperCase() ?? 'JG'
 
   const needsOnboarding = user !== null && !profile?.name && !profile?.bio
+  const isAdmin = profile?.role === 'ADMIN'
 
   return (
     <>
@@ -57,7 +58,7 @@ export default async function StudentLayout({
         Pular para conteúdo principal
       </a>
 
-      <StudentShell notifications={notifications} userInitials={userInitials}>
+      <StudentShell notifications={notifications} userInitials={userInitials} isAdmin={isAdmin}>
         {children}
       </StudentShell>
 

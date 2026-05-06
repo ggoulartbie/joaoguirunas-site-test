@@ -117,7 +117,16 @@ export function AnimatedHero() {
             Open Source
           </Link>
 
-          {/* 2 — Mentoria (KV principal) */}
+          {/* 2 — Curso Online */}
+          <Link
+            href="/curso-online"
+            className="inline-flex items-center justify-center px-7 py-3 text-sm font-semibold text-white/70 transition-all duration-200 hover:text-white hover:bg-white/[0.05]"
+            style={{ border: '1px solid rgba(255,255,255,0.14)', letterSpacing: '-0.01em' }}
+          >
+            Curso Online
+          </Link>
+
+          {/* 3 — Mentoria (KV principal) */}
           <Link
             href="/mentoria"
             className="group inline-flex items-center justify-center gap-2 px-7 py-3 text-sm font-semibold transition-all duration-200 hover:brightness-110 active:scale-[0.98]"
@@ -127,20 +136,6 @@ export function AnimatedHero() {
             <ArrowRight size={15} className="transition-transform duration-200 group-hover:translate-x-0.5" />
           </Link>
 
-          {/* 3 — Consultoria com logo GrowthSales */}
-          <Link
-            href="https://www.growthsales.ai"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center justify-center gap-2 px-7 py-3 text-sm font-semibold text-white/70 transition-all duration-200 hover:text-white hover:bg-white/[0.05]"
-            style={{ border: '1px solid rgba(255,255,255,0.14)', letterSpacing: '-0.01em' }}
-          >
-            {/* Triângulo GrowthSales */}
-            <svg width="14" height="11" viewBox="0 0 530 390" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-              <path d="M434.945 344H92L263.473 47L434.945 344ZM175 302H351L263 149L175 302Z" fill="currentColor" />
-            </svg>
-            Consultoria
-          </Link>
         </motion.div>
       </div>
 

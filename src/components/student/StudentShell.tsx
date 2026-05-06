@@ -17,10 +17,11 @@ type Notification = {
 type Props = {
   notifications: Notification[]
   userInitials: string
+  isAdmin?: boolean
   children: React.ReactNode
 }
 
-export function StudentShell({ notifications, userInitials, children }: Props) {
+export function StudentShell({ notifications, userInitials, isAdmin, children }: Props) {
   const [mobileNavOpen, setMobileNavOpen] = useState(false)
 
   return (
@@ -33,6 +34,7 @@ export function StudentShell({ notifications, userInitials, children }: Props) {
         <StudentTopBar
           notifications={notifications}
           userInitials={userInitials}
+          isAdmin={isAdmin}
           onMenuClick={() => setMobileNavOpen(true)}
         />
         <main id="main-content" className="flex-1 p-4 sm:p-6 lg:p-8">
