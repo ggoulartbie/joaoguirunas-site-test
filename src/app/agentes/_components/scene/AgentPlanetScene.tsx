@@ -201,7 +201,7 @@ export function AgentPlanetScene({ squadId }: AgentPlanetSceneProps) {
           segments={isMobile ? 64 : 96}
         />
 
-        <Starfield count={isMobile ? 150 : 400} radius={280} mouseRef={mouseRef} />
+        <Starfield count={isMobile ? 400 : 1000} radius={280} mouseRef={mouseRef} />
       </Suspense>
 
       <ScrollCamera scrollRef={scrollRef} />

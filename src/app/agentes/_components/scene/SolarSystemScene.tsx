@@ -244,7 +244,7 @@ export function SolarSystemScene() {
         />
 
         {/* Background stars */}
-        <Starfield count={isMobile ? 200 : 500} radius={320} mouseRef={mouseRef} />
+        <Starfield count={isMobile ? 500 : 1200} radius={320} mouseRef={mouseRef} />
       </Suspense>
 
       <CameraRig progressRef={progressRef} targetRef={targetRef} mouseRef={mouseRef} mobile={isMobile} />
