@@ -24,7 +24,7 @@ export function LockedContent({ cohortName, cohortSlug, cohortDescription }: Pro
 
       <Link
         href={`/turmas/${cohortSlug}`}
-        className="mt-8 flex items-center gap-2 bg-[var(--ember)] px-5 py-3 font-mono text-xs uppercase tracking-wider text-white transition-colors hover:bg-[#FF5A1F]"
+        className="mt-8 flex items-center gap-2 bg-[var(--ember)] px-5 py-3 font-mono text-xs uppercase tracking-wider text-white transition-colors hover:bg-[var(--ember-glow)]"
       >
         Ver detalhes da turma
         <ArrowRight className="h-3.5 w-3.5" />

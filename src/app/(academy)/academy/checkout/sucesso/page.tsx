@@ -121,13 +121,11 @@ export default async function CheckoutSucessoPage({ searchParams }: Props) {
 
         <Link
           href="/academy/certificados"
-          className="text-xs tracking-wider uppercase transition-colors"
+          className="text-xs tracking-wider uppercase transition-colors hover:text-[var(--bone)]"
           style={{
             fontFamily: 'var(--type-mono)',
             color: 'var(--bone-mute)',
           }}
-          onMouseOver={(e) => (e.currentTarget.style.color = 'var(--bone)')}
-          onMouseOut={(e) => (e.currentTarget.style.color = 'var(--bone-mute)')}
         >
           Ver certificados
         </Link>

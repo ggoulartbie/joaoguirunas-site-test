@@ -34,8 +34,8 @@ function formatDate(iso: string) {
 }
 
 const ROLE_BADGE: Record<string, { label: string; className: string } | undefined> = {
-  MENTOR: { label: 'Mentor', className: 'bg-[var(--ember)]/15 text-[var(--ember)]' },
-  ADMIN: { label: 'Admin', className: 'bg-yellow-500/15 text-yellow-400' },
+  MENTOR: { label: 'Mentor', className: 'bg-[color:var(--ember)]/15 text-[color:var(--ember)]' },
+  ADMIN: { label: 'Admin', className: 'bg-[color:var(--bone-mute)]/20 text-[color:var(--bone-dim)]' },
 }
 
 function Avatar({ name }: { name: string }) {
@@ -174,7 +174,7 @@ export default async function ForumThreadPage({ params }: Props) {
             </span>
           )}
           {thread.is_resolved && (
-            <span className="flex items-center gap-1 font-mono text-[10px] uppercase tracking-widest text-green-400">
+            <span className="flex items-center gap-1 font-mono text-[10px] uppercase tracking-widest text-[color:var(--ember)]">
               <CheckCircle2 className="h-3 w-3" />
               Resolvido
             </span>

@@ -86,7 +86,7 @@ export function NotificationBell({ initialNotifications }: Props) {
         aria-haspopup="true"
         className="relative focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ember)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--void)]"
       >
-        <Bell className="h-5 w-5 text-white/50 transition-colors hover:text-white/80" />
+        <Bell className="h-5 w-5 text-[var(--bone-mute)] transition-colors hover:text-[var(--bone-dim)]" />
         {unreadCount > 0 && (
           <span
             aria-hidden="true"
@@ -102,11 +102,11 @@ export function NotificationBell({ initialNotifications }: Props) {
           ref={panelRef}
           role="dialog"
           aria-label="Notificações"
-          className="absolute right-0 top-full mt-2 w-80 border border-white/10 bg-[var(--ink)] shadow-xl z-50"
+          className="absolute right-0 top-full mt-2 w-80 border border-[var(--hairline)] bg-[var(--ink)] shadow-xl z-50"
         >
           {/* Header */}
-          <div className="flex items-center justify-between border-b border-white/10 px-4 py-3">
-            <span className="font-mono text-[10px] uppercase tracking-widest text-white/40">
+          <div className="flex items-center justify-between border-b border-[var(--hairline)] px-4 py-3">
+            <span className="font-mono text-[10px] uppercase tracking-widest text-[var(--bone-mute)]">
               Notificações
             </span>
             <div className="flex items-center gap-2">
@@ -116,7 +116,7 @@ export function NotificationBell({ initialNotifications }: Props) {
                   disabled={pending}
                   title="Marcar todas como lidas"
                   aria-label="Marcar todas as notificações como lidas"
-                  className="text-white/30 transition-colors hover:text-white/70 disabled:opacity-40 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-[var(--ember)]"
+                  className="text-[var(--bone-mute)] transition-colors hover:text-[var(--bone-dim)] disabled:opacity-40 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-[var(--ember)]"
                 >
                   <CheckCheck className="h-3.5 w-3.5" />
                 </button>
@@ -124,7 +124,7 @@ export function NotificationBell({ initialNotifications }: Props) {
               <button
                 onClick={() => setOpen(false)}
                 aria-label="Fechar notificações"
-                className="text-white/30 transition-colors hover:text-white/70 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-[var(--ember)]"
+                className="text-[var(--bone-mute)] transition-colors hover:text-[var(--bone-dim)] focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-[var(--ember)]"
               >
                 <X className="h-3.5 w-3.5" />
               </button>
@@ -134,11 +134,11 @@ export function NotificationBell({ initialNotifications }: Props) {
           {/* List */}
           <ul
             role="list"
-            className="max-h-80 overflow-y-auto divide-y divide-white/5"
+            className="max-h-80 overflow-y-auto divide-y divide-[var(--hairline)]"
             aria-label="Lista de notificações"
           >
             {notifications.length === 0 ? (
-              <li className="px-4 py-8 text-center font-mono text-xs text-white/30">
+              <li className="px-4 py-8 text-center font-mono text-xs text-[var(--bone-mute)]">
                 Nenhuma notificação
               </li>
             ) : (
@@ -147,19 +147,19 @@ export function NotificationBell({ initialNotifications }: Props) {
                 const content = (
                   <div className="flex items-start gap-3 px-4 py-3">
                     <div
-                      className={`mt-1 h-1.5 w-1.5 shrink-0 rounded-full ${isUnread ? 'bg-[var(--ember)]' : 'bg-transparent'}`}
+                      className={`mt-1 h-1.5 w-1.5 shrink-0 ${isUnread ? 'bg-[var(--ember)]' : 'bg-transparent'}`}
                       aria-hidden="true"
                     />
                     <div className="min-w-0 flex-1">
-                      <p className={`text-xs font-medium leading-snug ${isUnread ? 'text-white' : 'text-white/50'}`}>
+                      <p className={`text-xs font-medium leading-snug ${isUnread ? 'text-[var(--bone)]' : 'text-[var(--bone-mute)]'}`}>
                         {n.title}
                       </p>
                       {n.message && (
-                        <p className="mt-0.5 text-[11px] leading-snug text-white/40 line-clamp-2">
+                        <p className="mt-0.5 text-[11px] leading-snug text-[var(--bone-mute)] line-clamp-2">
                           {n.message}
                         </p>
                       )}
-                      <p className="mt-1 font-mono text-[10px] text-white/20">
+                      <p className="mt-1 font-mono text-[10px] text-[var(--bone-mute)]">
                         {timeAgo(n.created_at)}
                       </p>
                     </div>
@@ -167,7 +167,7 @@ export function NotificationBell({ initialNotifications }: Props) {
                       <button
                         onClick={(e) => { e.stopPropagation(); e.preventDefault(); handleMarkRead(n.id) }}
                         aria-label={`Marcar "${n.title}" como lida`}
-                        className="shrink-0 text-white/20 transition-colors hover:text-white/60 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-[var(--ember)]"
+                        className="shrink-0 text-[var(--bone-mute)] transition-colors hover:text-[var(--bone)] focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-[var(--ember)]"
                       >
                         <Check className="h-3.5 w-3.5" />
                       </button>
@@ -176,12 +176,12 @@ export function NotificationBell({ initialNotifications }: Props) {
                 )
 
                 return (
-                  <li key={n.id} className={isUnread ? 'bg-white/[0.02]' : ''}>
+                  <li key={n.id} className={isUnread ? 'bg-[var(--ink-2)]' : ''}>
                     {n.action_url ? (
                       <Link
                         href={n.action_url}
                         onClick={() => { if (isUnread) handleMarkRead(n.id); setOpen(false) }}
-                        className="block transition-colors hover:bg-white/5 focus-visible:outline-none focus-visible:ring-inset focus-visible:ring-1 focus-visible:ring-[var(--ember)]"
+                        className="block transition-colors hover:bg-[var(--ink-2)] focus-visible:outline-none focus-visible:ring-inset focus-visible:ring-1 focus-visible:ring-[var(--ember)]"
                       >
                         {content}
                       </Link>

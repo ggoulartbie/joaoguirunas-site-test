@@ -8,7 +8,7 @@ export const metadata: Metadata = { title: 'Novo Curso' }
 export default function NovoCursoPage() {
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between border-b border-[rgba(255,255,255,0.07)] pb-4">
+      <div className="flex items-center justify-between border-b border-[var(--hairline)] pb-4">
         <div>
           <Link
             href="/academy/admin/cursos"
@@ -18,11 +18,11 @@ export default function NovoCursoPage() {
             Cursos
           </Link>
           <p className="font-mono text-[10px] uppercase tracking-widest text-[var(--bone-mute)]">Admin / Cursos</p>
-          <h1 className="font-[--type-display] text-[28px] italic text-[var(--bone)]">Novo Curso</h1>
+          <h1 className="font-[family-name:var(--type-display)] text-[32px] italic font-light text-[var(--bone)]">Novo Curso</h1>
         </div>
       </div>
 
-      <div className="max-w-3xl border border-[rgba(255,255,255,0.07)] bg-[var(--ink)] p-6" style={{ borderRadius: 0 }}>
+      <div className="max-w-3xl border border-[var(--hairline)] bg-[var(--ink)] p-6" style={{ borderRadius: 0 }}>
         <p className="mb-6 font-mono text-[10px] uppercase tracking-widest text-[var(--bone-mute)]">
           Módulos e aulas serão adicionados na próxima etapa
         </p>

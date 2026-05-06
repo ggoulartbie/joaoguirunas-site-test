@@ -108,8 +108,11 @@ export function VideoPlayer({
 
   if (!videoId || !isVideoProvider(provider) || provider !== 'VIMEO') {
     return (
-      <div className="flex aspect-video w-full items-center justify-center bg-zinc-900">
-        <p className="font-mono text-xs text-white/30">Vídeo não disponível</p>
+      <div
+        className="flex aspect-video w-full items-center justify-center"
+        style={{ background: 'var(--ink-3)' }}
+      >
+        <p className="font-mono text-xs" style={{ color: 'var(--bone-mute)' }}>Vídeo não disponível</p>
       </div>
     )
   }
@@ -117,7 +120,7 @@ export function VideoPlayer({
   return (
     <div className={className}>
       {/* Vimeo Player SDK mounts the iframe inside this div */}
-      <div ref={containerRef} className="aspect-video w-full overflow-hidden bg-black" />
+      <div ref={containerRef} className="aspect-video w-full overflow-hidden" style={{ background: 'var(--void)' }} />
     </div>
   )
 }

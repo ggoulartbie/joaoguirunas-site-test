@@ -36,9 +36,9 @@ export const MOCK_COURSES: MockCourse[] = [
     updated_at: '2026-04-01T00:00:00Z',
     deleted_at: null,
     modules: [
-      { id: 'mod-1', course_id: 'course-1', slug: 'closures', title: 'Closures e Escopo', description: null, sort_order: 1, created_at: '', updated_at: '', deleted_at: null, lessonCount: 4 },
-      { id: 'mod-2', course_id: 'course-1', slug: 'async', title: 'Programação Assíncrona', description: null, sort_order: 2, created_at: '', updated_at: '', deleted_at: null, lessonCount: 5 },
-      { id: 'mod-3', course_id: 'course-1', slug: 'patterns', title: 'Padrões de Design', description: null, sort_order: 3, created_at: '', updated_at: '', deleted_at: null, lessonCount: 6 },
+      { id: 'mod-1', course_id: 'course-1', slug: 'closures', title: 'Closures e Escopo', description: null, cover_image_url: null, sort_order: 1, created_at: '', updated_at: '', deleted_at: null, lessonCount: 4 },
+      { id: 'mod-2', course_id: 'course-1', slug: 'async', title: 'Programação Assíncrona', description: null, cover_image_url: null, sort_order: 2, created_at: '', updated_at: '', deleted_at: null, lessonCount: 5 },
+      { id: 'mod-3', course_id: 'course-1', slug: 'patterns', title: 'Padrões de Design', description: null, cover_image_url: null, sort_order: 3, created_at: '', updated_at: '', deleted_at: null, lessonCount: 6 },
     ],
   },
   {
@@ -53,8 +53,8 @@ export const MOCK_COURSES: MockCourse[] = [
     updated_at: '2026-04-10T00:00:00Z',
     deleted_at: null,
     modules: [
-      { id: 'mod-4', course_id: 'course-2', slug: 'hooks', title: 'Hooks Essenciais', description: null, sort_order: 1, created_at: '', updated_at: '', deleted_at: null, lessonCount: 6 },
-      { id: 'mod-5', course_id: 'course-2', slug: 'estado-global', title: 'Estado Global', description: null, sort_order: 2, created_at: '', updated_at: '', deleted_at: null, lessonCount: 4 },
+      { id: 'mod-4', course_id: 'course-2', slug: 'hooks', title: 'Hooks Essenciais', description: null, cover_image_url: null, sort_order: 1, created_at: '', updated_at: '', deleted_at: null, lessonCount: 6 },
+      { id: 'mod-5', course_id: 'course-2', slug: 'estado-global', title: 'Estado Global', description: null, cover_image_url: null, sort_order: 2, created_at: '', updated_at: '', deleted_at: null, lessonCount: 4 },
     ],
   },
   {
@@ -69,9 +69,9 @@ export const MOCK_COURSES: MockCourse[] = [
     updated_at: '2026-04-20T00:00:00Z',
     deleted_at: null,
     modules: [
-      { id: 'mod-6', course_id: 'course-3', slug: 'api-rest', title: 'API REST', description: null, sort_order: 1, created_at: '', updated_at: '', deleted_at: null, lessonCount: 7 },
-      { id: 'mod-7', course_id: 'course-3', slug: 'auth', title: 'Autenticação e Segurança', description: null, sort_order: 2, created_at: '', updated_at: '', deleted_at: null, lessonCount: 5 },
-      { id: 'mod-8', course_id: 'course-3', slug: 'postgres', title: 'PostgreSQL na Prática', description: null, sort_order: 3, created_at: '', updated_at: '', deleted_at: null, lessonCount: 6 },
+      { id: 'mod-6', course_id: 'course-3', slug: 'api-rest', title: 'API REST', description: null, cover_image_url: null, sort_order: 1, created_at: '', updated_at: '', deleted_at: null, lessonCount: 7 },
+      { id: 'mod-7', course_id: 'course-3', slug: 'auth', title: 'Autenticação e Segurança', description: null, cover_image_url: null, sort_order: 2, created_at: '', updated_at: '', deleted_at: null, lessonCount: 5 },
+      { id: 'mod-8', course_id: 'course-3', slug: 'postgres', title: 'PostgreSQL na Prática', description: null, cover_image_url: null, sort_order: 3, created_at: '', updated_at: '', deleted_at: null, lessonCount: 6 },
     ],
   },
 ]

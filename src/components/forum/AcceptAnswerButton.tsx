@@ -18,7 +18,7 @@ export function AcceptAnswerButton({
       type="button"
       disabled={pending}
       onClick={() => startTransition(async () => { await markAsAccepted(replyId) })}
-      className="flex items-center gap-1 font-mono text-[10px] text-emerald-400/60 hover:text-emerald-400 transition-colors disabled:opacity-50"
+      className="flex items-center gap-1 font-mono text-[10px] text-[color:var(--bone-mute)] transition-colors hover:text-[color:var(--ember)] disabled:opacity-50"
     >
       <CheckCircle className="h-3.5 w-3.5" />
       Melhor resposta

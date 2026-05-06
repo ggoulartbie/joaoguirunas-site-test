@@ -70,10 +70,10 @@ export function StudentSidebar({ mobileOpen = false, onClose }: Props) {
         style={{ borderBottom: '1px solid var(--hairline)' }}
       >
         <Image
-          src="/images/brand/logo-header.png"
+          src="/images/brand/logo-horizontal.svg"
           alt="João Guirunas"
           width={140}
-          height={32}
+          height={26}
           priority
           style={{ objectFit: 'contain', objectPosition: 'left center' }}
         />

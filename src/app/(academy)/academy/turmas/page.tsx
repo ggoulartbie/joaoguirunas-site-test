@@ -283,16 +283,11 @@ export default async function TurmasPage() {
                 return (
                   <div
                     key={cohort.id}
-                    className="group flex flex-col"
+                    className="group flex flex-col border border-[var(--hairline)] hover:border-[var(--hairline-strong)] transition-colors"
                     style={{
                       background: 'var(--ink)',
-                      border: '1px solid var(--hairline)',
                       overflow: 'hidden',
-                      cursor: 'pointer',
-                      transition: 'border-color 0.15s',
                     }}
-                    onMouseEnter={e => (e.currentTarget.style.borderColor = 'var(--hairline-strong)')}
-                    onMouseLeave={e => (e.currentTarget.style.borderColor = 'var(--hairline)')}
                   >
                     {/* Thumbnail */}
                     <div

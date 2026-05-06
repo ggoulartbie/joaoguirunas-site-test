@@ -804,6 +804,7 @@ export type Database = {
       modules: {
         Row: {
           course_id: string
+          cover_image_url: string | null
           created_at: string
           deleted_at: string | null
           description: string | null
@@ -815,6 +816,7 @@ export type Database = {
         }
         Insert: {
           course_id: string
+          cover_image_url?: string | null
           created_at?: string
           deleted_at?: string | null
           description?: string | null
@@ -826,6 +828,7 @@ export type Database = {
         }
         Update: {
           course_id?: string
+          cover_image_url?: string | null
           created_at?: string
           deleted_at?: string | null
           description?: string | null

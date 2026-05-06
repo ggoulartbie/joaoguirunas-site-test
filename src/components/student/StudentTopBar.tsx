@@ -45,12 +45,9 @@ export function StudentTopBar({ notifications, userInitials, onMenuClick }: Prop
       {/* Left: hamburger + breadcrumb */}
       <div className="flex items-center gap-3">
         <button
-          className="flex h-8 w-8 items-center justify-center transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ember)] focus-visible:ring-offset-1 focus-visible:ring-offset-[var(--void)] lg:hidden"
-          style={{ color: 'var(--bone-mute)' }}
+          className="flex h-8 w-8 items-center justify-center text-[var(--bone-mute)] hover:text-[var(--bone)] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ember)] focus-visible:ring-offset-1 focus-visible:ring-offset-[var(--void)] lg:hidden"
           aria-label="Abrir menu de navegação"
           onClick={onMenuClick}
-          onMouseEnter={(e) => { e.currentTarget.style.color = 'var(--bone)' }}
-          onMouseLeave={(e) => { e.currentTarget.style.color = 'var(--bone-mute)' }}
         >
           <Menu className="h-5 w-5" aria-hidden="true" />
         </button>

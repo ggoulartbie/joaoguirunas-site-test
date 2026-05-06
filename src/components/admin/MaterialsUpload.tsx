@@ -98,19 +98,21 @@ export function MaterialsUpload({ lessonId, materials }: MaterialsUploadProps) {
           {materials.map((m) => (
             <li
               key={m.id}
-              className="flex items-center gap-3 border border-white/[0.07] bg-white/[0.03] px-4 py-2.5"
+              className="flex items-center gap-3 border border-[var(--hairline)] bg-[var(--ink-2)] px-4 py-2.5"
             >
-              <span className="text-xs text-white/40">{KIND_LABELS[m.kind]}</span>
-              <span className="min-w-0 flex-1 truncate text-sm text-white">{m.title}</span>
+              <span className="font-mono text-[10px] uppercase tracking-widest text-[var(--bone-mute)]">
+                {KIND_LABELS[m.kind]}
+              </span>
+              <span className="min-w-0 flex-1 truncate font-sans text-sm text-[var(--bone-dim)]">{m.title}</span>
               {m.size_bytes && (
-                <span className="shrink-0 text-xs text-white/30">
+                <span className="shrink-0 font-mono text-[10px] text-[var(--bone-mute)]">
                   {(m.size_bytes / (1024 * 1024)).toFixed(1)} MB
                 </span>
               )}
               <button
                 onClick={() => handleDelete(m.id)}
                 disabled={deleting === m.id}
-                className="shrink-0 text-xs text-red-400/70 hover:text-red-400 disabled:opacity-50"
+                className="shrink-0 font-mono text-[10px] uppercase tracking-wider text-[var(--ember)] opacity-60 transition-opacity hover:opacity-100 disabled:opacity-30"
               >
                 {deleting === m.id ? '...' : 'Remover'}
               </button>
@@ -119,7 +121,7 @@ export function MaterialsUpload({ lessonId, materials }: MaterialsUploadProps) {
         </ul>
       )}
 
-      {/* área de drop */}
+      {/* area de drop */}
       <div
         onDragOver={(e) => { e.preventDefault(); setDragging(true) }}
         onDragLeave={() => setDragging(false)}
@@ -131,8 +133,8 @@ export function MaterialsUpload({ lessonId, materials }: MaterialsUploadProps) {
         onClick={() => fileInputRef.current?.click()}
         className={`flex cursor-pointer flex-col items-center justify-center border-2 border-dashed px-6 py-8 transition-colors ${
           dragging
-            ? 'border-white/[0.30] bg-white/[0.07]'
-            : 'border-white/[0.07] bg-white/[0.03] hover:border-white/[0.16] hover:bg-white/[0.05]'
+            ? 'border-[var(--hairline-strong)] bg-[var(--ink-3)]'
+            : 'border-[var(--hairline)] bg-[var(--ink-2)] hover:border-[var(--hairline-strong)] hover:bg-[var(--ink-3)]'
         }`}
       >
         <input
@@ -143,11 +145,11 @@ export function MaterialsUpload({ lessonId, materials }: MaterialsUploadProps) {
           className="hidden"
           onChange={(e) => handleFiles(e.target.files)}
         />
-        <p className="text-sm text-white/50">
+        <p className="font-sans text-sm text-[var(--bone-dim)]">
           {uploading ? 'Enviando...' : 'Arraste arquivos ou clique para selecionar'}
         </p>
-        <p className="mt-1 text-xs text-white/30">
-          PDF, ZIP, Imagens — máx. {MAX_MB}MB por arquivo
+        <p className="mt-1 font-mono text-[10px] uppercase tracking-widest text-[var(--bone-mute)]">
+          PDF, ZIP, Imagens — max. {MAX_MB}MB por arquivo
         </p>
       </div>
 
@@ -155,37 +157,40 @@ export function MaterialsUpload({ lessonId, materials }: MaterialsUploadProps) {
       {!linkMode ? (
         <button
           onClick={() => setLinkMode(true)}
-          className="text-sm text-white/50 hover:text-white/80 transition-colors"
+          className="font-mono text-[10px] uppercase tracking-widest text-[var(--bone-mute)] transition-colors hover:text-[var(--bone-dim)]"
         >
           + Adicionar link externo
         </button>
       ) : (
-        <div className="space-y-2 border border-white/[0.07] bg-white/[0.03] p-4">
+        <div className="space-y-2 border border-[var(--hairline)] bg-[var(--ink-2)] p-4">
           <input
             type="text"
             placeholder="Título do link"
             value={linkTitle}
             onChange={(e) => setLinkTitle(e.target.value)}
-            className="w-full border border-white/[0.07] bg-transparent px-3 py-2 font-mono text-sm text-[var(--bone)] placeholder:text-[var(--bone-mute)] focus:border-white/[0.16] focus:outline-none"
+            className="w-full border border-[var(--hairline)] bg-transparent px-3 py-2 font-mono text-sm text-[var(--bone)] placeholder:text-[var(--bone-mute)] focus:border-[var(--ember)] focus:outline-none"
+            style={{ borderRadius: 0 }}
           />
           <input
             type="url"
             placeholder="https://..."
             value={linkUrl}
             onChange={(e) => setLinkUrl(e.target.value)}
-            className="w-full border border-white/[0.07] bg-transparent px-3 py-2 font-mono text-sm text-[var(--bone)] placeholder:text-[var(--bone-mute)] focus:border-white/[0.16] focus:outline-none"
+            className="w-full border border-[var(--hairline)] bg-transparent px-3 py-2 font-mono text-sm text-[var(--bone)] placeholder:text-[var(--bone-mute)] focus:border-[var(--ember)] focus:outline-none"
+            style={{ borderRadius: 0 }}
           />
           <div className="flex gap-2">
             <button
               onClick={handleAddLink}
               disabled={!linkTitle || !linkUrl}
-              className="bg-[var(--ember)] px-4 py-1.5 font-mono text-[10px] uppercase tracking-widest text-[var(--void)] disabled:opacity-40"
+              className="bg-[var(--ember)] px-4 py-1.5 font-mono text-[10px] uppercase tracking-widest text-[var(--void)] transition-opacity hover:opacity-90 disabled:opacity-40"
+              style={{ borderRadius: 0 }}
             >
               Adicionar
             </button>
             <button
               onClick={() => { setLinkMode(false); setLinkTitle(''); setLinkUrl('') }}
-              className="text-sm text-white/40 hover:text-white/70"
+              className="font-mono text-[10px] uppercase tracking-widest text-[var(--bone-mute)] transition-colors hover:text-[var(--bone-dim)]"
             >
               Cancelar
             </button>

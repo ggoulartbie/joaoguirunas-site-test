@@ -37,12 +37,10 @@ export default async function EditarTurmaPage({
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between border-b border-white/[0.07] pb-4">
+      <div className="flex items-center justify-between border-b border-[var(--hairline)] pb-4">
         <div>
-          <h1
-            className="font-serif text-[28px] italic text-[var(--bone)]"
-            style={{ fontFamily: 'var(--type-display, Georgia, serif)' }}
-          >
+          <p className="font-mono text-[10px] uppercase tracking-widest text-[var(--bone-mute)]">Admin / Turmas</p>
+          <h1 className="font-[family-name:var(--type-display)] text-[32px] italic font-light text-[var(--bone)]">
             Editar Turma
           </h1>
           <p className="mt-1 font-mono text-[10px] uppercase tracking-widest text-[var(--bone-mute)]">

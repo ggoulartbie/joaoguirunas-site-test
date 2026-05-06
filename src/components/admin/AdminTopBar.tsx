@@ -25,7 +25,7 @@ export function AdminTopBar() {
   const label = getBreadcrumb(pathname)
 
   return (
-    <header className="sticky top-0 z-30 flex h-14 items-center justify-between border-b border-white/[0.07] bg-[var(--void)] px-6">
+    <header className="sticky top-0 z-30 flex h-14 items-center justify-between border-b border-[var(--hairline)] bg-[var(--void)] px-6">
       <span className="font-mono text-[10px] uppercase tracking-widest text-[var(--bone-mute)]">
         {label}
       </span>
@@ -34,7 +34,7 @@ export function AdminTopBar() {
         <span className="border border-[var(--ember)]/30 bg-[var(--ember)]/10 px-2 py-0.5 font-mono text-[10px] uppercase tracking-widest text-[var(--ember)]">
           Admin
         </span>
-        <div className="flex h-8 w-8 items-center justify-center rounded-full bg-[var(--ember)]/20 font-mono text-xs font-bold text-[var(--ember)]">
+        <div className="flex h-8 w-8 items-center justify-center bg-[var(--ember)]/20 font-mono text-xs font-bold text-[var(--ember)]">
           A
         </div>
       </div>

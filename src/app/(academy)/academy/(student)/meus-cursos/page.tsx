@@ -18,7 +18,13 @@ export default function MeusCursosPage() {
   const locked = courses.filter((c) => c.isPartialAccess && c.accessibleModulesCount === 0)
 
   return (
-    <div className="mx-auto max-w-5xl space-y-12">
+    <div
+      className="mx-auto max-w-5xl space-y-12"
+      style={{
+        backgroundImage: 'radial-gradient(rgba(255,255,255,0.05) 1px, transparent 1px)',
+        backgroundSize: '24px 24px',
+      }}
+    >
       {/* Page header */}
       <div>
         <p
@@ -91,7 +97,8 @@ export default function MeusCursosPage() {
                   }}
                 >
                   <BookOpen
-                    style={{ width: 32, height: 32, color: 'rgba(132,132,140,0.3)' }}
+                    className="opacity-30"
+                    style={{ width: 32, height: 32, color: 'var(--bone-mute)' }}
                   />
                 </div>
 
@@ -106,8 +113,8 @@ export default function MeusCursosPage() {
                       letterSpacing: '0.16em',
                       textTransform: 'uppercase',
                       border: isComplete
-                        ? '1px solid rgba(255,255,255,0.07)'
-                        : '1px solid rgba(255,58,14,0.3)',
+                        ? '1px solid var(--hairline)'
+                        : '1px solid var(--hairline-strong)',
                       color: isComplete ? 'var(--bone-mute)' : 'var(--ember)',
                       padding: '2px 8px',
                       alignSelf: 'flex-start',
@@ -293,7 +300,7 @@ export default function MeusCursosPage() {
                     justifyContent: 'center',
                   }}
                 >
-                  <Lock style={{ width: 32, height: 32, color: 'rgba(132,132,140,0.3)' }} />
+                  <Lock className="opacity-30" style={{ width: 32, height: 32, color: 'var(--bone-mute)' }} />
                 </div>
 
                 {/* Body */}
@@ -398,7 +405,8 @@ function EmptyState() {
       }}
     >
       <BookOpen
-        style={{ width: 48, height: 48, color: 'rgba(132,132,140,0.3)', marginBottom: 20 }}
+        className="opacity-30"
+        style={{ width: 48, height: 48, color: 'var(--bone-mute)', marginBottom: 20 }}
       />
       <p
         style={{

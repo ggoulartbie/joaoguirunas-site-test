@@ -14,10 +14,10 @@ export default async function AdminPagamentosPage() {
 
   return (
     <div className="space-y-6">
-      <div>
-        <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-[var(--bone-mute)]">Admin / Pagamentos</p>
-        <h1 className="mt-1 font-serif text-[28px] italic font-light text-[var(--bone)]">Pagamentos</h1>
-        <p className="mt-1 font-mono text-xs text-[var(--bone-mute)]">
+      <div className="border-b border-[var(--hairline)] pb-4">
+        <p className="font-mono text-[10px] uppercase tracking-widest text-[var(--bone-mute)]">Admin / Pagamentos</p>
+        <h1 className="mt-1 font-[family-name:var(--type-display)] text-[32px] italic font-light text-[var(--bone)]">Pagamentos</h1>
+        <p className="mt-1 font-mono text-[10px] uppercase tracking-widest text-[var(--bone-mute)]">
           Histórico de transações, reembolsos e exportações
         </p>
       </div>

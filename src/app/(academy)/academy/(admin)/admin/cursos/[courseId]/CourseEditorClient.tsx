@@ -286,6 +286,7 @@ export function CourseEditorClient({
           title: modTitle,
           slug: modSlug,
           description: null,
+          cover_image_url: null,
           sort_order: prev.length,
           created_at: new Date().toISOString(),
           updated_at: new Date().toISOString(),

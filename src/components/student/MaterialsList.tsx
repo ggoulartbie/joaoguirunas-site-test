@@ -24,7 +24,7 @@ export function MaterialsList({ materials }: MaterialsListProps) {
 
   if (materials.length === 0) {
     return (
-      <p className="text-sm text-white/40">Nenhum material disponível para esta aula.</p>
+      <p className="text-sm" style={{ color: 'var(--bone-mute)' }}>Nenhum material disponível para esta aula.</p>
     )
   }
 
@@ -66,18 +66,22 @@ export function MaterialsList({ materials }: MaterialsListProps) {
           onClick={() => handleDownload(material)}
           disabled={loading === material.id}
           aria-label={`${material.kind === 'LINK' ? 'Abrir' : 'Baixar'} ${material.title}`}
-          className="flex w-full items-center gap-3  border border-white/10 bg-white/5 px-4 py-3 text-left transition-colors hover:bg-white/10 disabled:opacity-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ember)] focus-visible:ring-offset-1 focus-visible:ring-offset-[var(--void)]"
+          className="flex w-full items-center gap-3 px-4 py-3 text-left transition-colors disabled:opacity-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ember)] focus-visible:ring-offset-1 focus-visible:ring-offset-[var(--void)] hover:border-[var(--hairline-strong)]"
+          style={{
+            background: 'var(--ink-2)',
+            border: '1px solid var(--hairline)',
+          }}
         >
           <span className="text-lg" aria-hidden>
             {KIND_ICONS[material.kind] ?? KIND_ICONS['OTHER']}
           </span>
           <div className="min-w-0 flex-1">
-            <p className="truncate text-sm font-medium text-white">{material.title}</p>
+            <p className="truncate text-sm font-medium" style={{ color: 'var(--bone)' }}>{material.title}</p>
             {material.size_bytes && (
-              <p className="text-xs text-white/40">{formatBytes(material.size_bytes)}</p>
+              <p className="text-xs" style={{ color: 'var(--bone-mute)' }}>{formatBytes(material.size_bytes)}</p>
             )}
           </div>
-          <span className="shrink-0 text-xs text-white/40">
+          <span className="shrink-0 font-mono text-xs" style={{ color: 'var(--bone-mute)' }}>
             {loading === material.id ? 'Preparando...' : material.kind === 'LINK' ? 'Abrir' : 'Baixar'}
           </span>
         </button>

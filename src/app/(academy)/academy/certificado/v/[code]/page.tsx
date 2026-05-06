@@ -149,9 +149,9 @@ export default async function CertificateVerificationPage({ params }: Props) {
                     <span
                       className="font-mono text-[10px] uppercase tracking-wider px-2 py-1 border"
                       style={{
-                        color: '#4ade80',
-                        backgroundColor: 'rgba(74,222,128,0.10)',
-                        borderColor: 'rgba(74,222,128,0.30)',
+                        color: 'var(--ember)',
+                        backgroundColor: 'rgba(255,58,14,0.08)',
+                        borderColor: 'rgba(255,58,14,0.25)',
                         borderRadius: 0,
                       }}
                     >
@@ -168,20 +168,8 @@ export default async function CertificateVerificationPage({ params }: Props) {
                   <a
                     href={`/api/certificado/${cert.verification_code}`}
                     download
-                    className="flex items-center gap-1.5 border px-3 py-2 font-mono text-[11px] uppercase tracking-wider transition-colors"
-                    style={{
-                      borderColor: 'var(--hairline)',
-                      color: 'var(--bone-mute)',
-                      borderRadius: 0,
-                    }}
-                    onMouseEnter={(e) => {
-                      e.currentTarget.style.borderColor = 'var(--hairline-strong)'
-                      e.currentTarget.style.color = 'var(--bone)'
-                    }}
-                    onMouseLeave={(e) => {
-                      e.currentTarget.style.borderColor = 'var(--hairline)'
-                      e.currentTarget.style.color = 'var(--bone-mute)'
-                    }}
+                    className="flex items-center gap-1.5 border border-[var(--hairline)] hover:border-[var(--hairline-strong)] px-3 py-2 font-mono text-[11px] uppercase tracking-wider text-[var(--bone-mute)] hover:text-[var(--bone)] transition-colors"
+                    style={{ borderRadius: 0 }}
                   >
                     <Download className="h-3 w-3" />
                     PDF

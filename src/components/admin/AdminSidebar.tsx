@@ -62,9 +62,9 @@ export function AdminSidebar() {
     <aside className="fixed inset-y-0 left-0 z-50 hidden w-64 flex-col border-r border-white/[0.07] bg-[var(--void)] lg:flex">
       <div className="flex h-16 flex-col justify-center border-b border-white/[0.07] px-6">
         <Image
-          src="/images/brand/logo-header.png"
+          src="/images/brand/logo-horizontal.svg"
           width={140}
-          height={32}
+          height={26}
           alt="Logo"
           className="object-contain object-left"
           priority

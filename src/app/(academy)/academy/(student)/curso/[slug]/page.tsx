@@ -5,125 +5,281 @@ import {
   Lock,
   CheckCircle2,
   ChevronDown,
-  ExternalLink,
+  Play,
+  FileText,
+  HelpCircle,
 } from 'lucide-react'
-import { MOCK_COURSES, MOCK_MODULES } from '@/components/student/mock-data'
+import { supabaseAdmin } from '@/lib/supabase/admin'
+import { requireUser } from '@/lib/auth/helpers'
 
 type Props = {
   params: Promise<{ slug: string }>
 }
 
+// ─── Types ───────────────────────────────────────────────────────────────────
+
+type LessonRow = {
+  id: string
+  title: string
+  slug: string
+  kind: string
+  sort_order: number
+  deleted_at: string | null
+}
+
+type ModuleRow = {
+  id: string
+  title: string
+  slug: string
+  sort_order: number
+  deleted_at: string | null
+  lessons: LessonRow[]
+}
+
+type CourseRow = {
+  id: string
+  title: string
+  description: string | null
+  cover_image_url: string | null
+  slug: string
+  modules: ModuleRow[]
+}
+
+// ─── Metadata ────────────────────────────────────────────────────────────────
+
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params
-  const course = MOCK_COURSES.find((c) => c.slug === slug)
+  const { data: course } = await supabaseAdmin
+    .from('courses')
+    .select('title')
+    .eq('slug', slug)
+    .is('deleted_at', null)
+    .single()
   return { title: course?.title ?? 'Curso' }
 }
 
+// ─── Page ────────────────────────────────────────────────────────────────────
+
 export default async function CursoPage({ params }: Props) {
   const { slug } = await params
+  const user = await requireUser()
 
-  // TODO F3.2: substituir por getCourseWithModules(slug, userId)
-  // valida acesso, carrega módulos com progresso real
-  const course = MOCK_COURSES.find((c) => c.slug === slug)
+  // 1. Fetch course with modules and lessons
+  const { data: rawCourse } = await supabaseAdmin
+    .from('courses')
+    .select(`
+      id, title, description, cover_image_url, slug,
+      modules (
+        id, title, slug, sort_order, deleted_at,
+        lessons (
+          id, title, slug, kind, sort_order, deleted_at
+        )
+      )
+    `)
+    .eq('slug', slug)
+    .is('deleted_at', null)
+    .single()
 
-  if (!course) notFound()
+  if (!rawCourse) notFound()
 
-  const modules = MOCK_MODULES
-  const completedModules = modules.filter(
-    (m) => !m.isLocked && m.completedLessons === m.totalLessons && m.totalLessons > 0
-  ).length
-  const unlockedModules = modules.filter((m) => !m.isLocked)
+  // 2. Normalise: filter soft-deleted modules & lessons, sort both
+  const course: CourseRow = {
+    id: rawCourse.id,
+    title: rawCourse.title,
+    description: rawCourse.description,
+    cover_image_url: rawCourse.cover_image_url,
+    slug: rawCourse.slug,
+    modules: ((rawCourse.modules as ModuleRow[]) ?? [])
+      .filter((m) => !m.deleted_at)
+      .sort((a, b) => a.sort_order - b.sort_order)
+      .map((m) => ({
+        ...m,
+        lessons: (m.lessons ?? [])
+          .filter((l) => !l.deleted_at)
+          .sort((a, b) => a.sort_order - b.sort_order),
+      })),
+  }
+
+  // 3. Collect all lesson IDs for progress query
+  const allLessonIds = course.modules.flatMap((m) => m.lessons.map((l) => l.id))
+
+  // 4. Fetch user's progress for all lessons in this course
+  const { data: progressRows } = allLessonIds.length > 0
+    ? await supabaseAdmin
+        .from('lesson_progress')
+        .select('lesson_id, completed')
+        .eq('user_id', user.id)
+        .in('lesson_id', allLessonIds)
+    : { data: [] }
+
+  const completedSet = new Set(
+    (progressRows ?? []).filter((r) => r.completed).map((r) => r.lesson_id)
+  )
+
+  // 5. Fetch user's cohort memberships to determine which modules are accessible
+  const { data: memberRows } = await supabaseAdmin
+    .from('cohort_members')
+    .select('cohort_id')
+    .eq('user_id', user.id)
+    .eq('status', 'ACTIVE')
+
+  const userCohortIds = (memberRows ?? []).map((r) => r.cohort_id)
+
+  // 6. Fetch cohort_courses for this course + user's cohorts → get included_module_ids
+  const { data: cohortCourseRows } = userCohortIds.length > 0
+    ? await supabaseAdmin
+        .from('cohort_courses')
+        .select('cohort_id, included_module_ids')
+        .eq('course_id', course.id)
+        .in('cohort_id', userCohortIds)
+    : { data: [] }
+
+  // Union of all module IDs the user has access to across their cohorts
+  const accessibleModuleIds = new Set(
+    (cohortCourseRows ?? []).flatMap((r) => r.included_module_ids ?? [])
+  )
+
+  // If cohort_courses is empty, assume full access (direct enrollment or admin)
+  const hasGlobalAccess = (cohortCourseRows ?? []).length === 0
+
+  // 7. Compute progress stats
+  const totalLessons = allLessonIds.length
+  const completedLessons = allLessonIds.filter((id) => completedSet.has(id)).length
+  const progressPercent = totalLessons > 0
+    ? Math.round((completedLessons / totalLessons) * 100)
+    : 0
+
+  // 8. Determine "retomar" link — first incomplete lesson, fallback to first lesson
+  const firstIncomplete = course.modules
+    .filter((m) => hasGlobalAccess || accessibleModuleIds.has(m.id))
+    .flatMap((m) => m.lessons)
+    .find((l) => !completedSet.has(l.id))
+  const firstLesson = course.modules
+    .filter((m) => hasGlobalAccess || accessibleModuleIds.has(m.id))
+    .flatMap((m) => m.lessons)[0]
+  const resumeLesson = firstIncomplete ?? firstLesson
 
   return (
     <div className="mx-auto max-w-4xl">
-      {/* Hero header */}
+      {/* ── Hero ────────────────────────────────────────────────────────── */}
       <div
-        className="border-b p-6 lg:p-8"
+        className="relative border-b overflow-hidden"
         style={{
           background: 'var(--ink)',
           borderColor: 'var(--hairline)',
         }}
       >
-        {/* Breadcrumb */}
-        <p className="font-mono text-[11px] uppercase tracking-wider" style={{ color: 'var(--bone-mute)' }}>
-          <Link
-            href="/academy/meus-cursos"
-            className="transition-colors hover:text-[var(--bone)]"
-            style={{ color: 'var(--bone-mute)' }}
-          >
-            Meus Cursos
-          </Link>
-          {' / '}
-          <span style={{ color: 'var(--bone-dim)' }}>{course.title}</span>
-        </p>
-
-        <h1
-          className="mt-3 font-[var(--type-display)] italic"
-          style={{
-            fontSize: 'clamp(2rem, 5vw, 2.625rem)',
-            lineHeight: 1.1,
-            color: 'var(--bone)',
-          }}
-        >
-          {course.title}
-        </h1>
-
-        <p className="mt-3 text-base" style={{ color: 'var(--bone-dim)' }}>
-          {course.description}
-        </p>
-
-        <div className="mt-4 space-y-2">
-          <div className="flex items-center justify-between">
-            <span className="font-mono text-[11px]" style={{ color: 'var(--bone-mute)' }}>
-              {course.completedLessons}/{course.totalLessons} aulas concluídas
-            </span>
-            <span className="font-mono text-sm font-bold" style={{ color: 'var(--ember)' }}>
-              {course.progressPercent}%
-            </span>
-          </div>
+        {/* Cover image as dimmed background */}
+        {course.cover_image_url && (
           <div
-            className="h-px w-full"
-            style={{ background: 'var(--ink-3)' }}
-            role="progressbar"
-            aria-valuenow={course.progressPercent}
-            aria-valuemin={0}
-            aria-valuemax={100}
-          >
-            <div
-              className="h-px transition-all"
-              style={{
-                width: `${course.progressPercent}%`,
-                background: 'var(--ember)',
-              }}
-            />
-          </div>
-        </div>
+            className="pointer-events-none absolute inset-0"
+            aria-hidden="true"
+            style={{
+              backgroundImage: `url(${course.cover_image_url})`,
+              backgroundSize: 'cover',
+              backgroundPosition: 'center',
+              opacity: 0.08,
+            }}
+          />
+        )}
 
-        <div className="mt-4 flex items-center gap-4 font-mono text-[11px]" style={{ color: 'var(--bone-mute)' }}>
-          <span>{unlockedModules.length} módulos acessíveis</span>
-          <span>{completedModules} módulos concluídos</span>
+        <div className="relative p-6 lg:p-8">
+          {/* Breadcrumb */}
+          <p className="font-mono text-[11px] uppercase tracking-wider" style={{ color: 'var(--bone-mute)' }}>
+            <Link
+              href="/academy/meus-cursos"
+              className="transition-colors hover:text-[var(--bone)]"
+              style={{ color: 'var(--bone-mute)' }}
+            >
+              Meus Cursos
+            </Link>
+            {' / '}
+            <span style={{ color: 'var(--bone-dim)' }}>{course.title}</span>
+          </p>
+
+          {/* Title */}
+          <h1
+            className="mt-3 font-[var(--type-display)] italic"
+            style={{
+              fontSize: 'clamp(2rem, 5vw, 2.625rem)',
+              lineHeight: 1.1,
+              color: 'var(--bone)',
+            }}
+          >
+            {course.title}
+          </h1>
+
+          {course.description && (
+            <p className="mt-3 text-base" style={{ color: 'var(--bone-dim)' }}>
+              {course.description}
+            </p>
+          )}
+
+          {/* Progress bar */}
+          <div className="mt-5 space-y-2">
+            <div className="flex items-center justify-between">
+              <span className="font-mono text-[11px]" style={{ color: 'var(--bone-mute)' }}>
+                {completedLessons}/{totalLessons} aulas concluídas · {course.modules.length} módulos
+              </span>
+              <span className="font-mono text-sm font-bold" style={{ color: 'var(--ember)' }}>
+                {progressPercent}%
+              </span>
+            </div>
+            <div
+              className="h-px w-full"
+              style={{ background: 'var(--hairline-strong)' }}
+              role="progressbar"
+              aria-valuenow={progressPercent}
+              aria-valuemin={0}
+              aria-valuemax={100}
+            >
+              <div
+                className="h-px transition-all"
+                style={{
+                  width: `${progressPercent}%`,
+                  background: 'var(--ember)',
+                }}
+              />
+            </div>
+          </div>
+
+          {/* Retomar CTA */}
+          {resumeLesson && (
+            <div className="mt-5">
+              <Link
+                href={`/academy/curso/${slug}/aula/${resumeLesson.slug}`}
+                className="inline-flex items-center gap-2 border px-4 py-2 font-mono text-[11px] uppercase tracking-wider transition-colors hover:border-[var(--ember)] hover:text-[var(--ember)]"
+                style={{
+                  borderColor: 'var(--hairline-strong)',
+                  color: 'var(--bone-dim)',
+                }}
+              >
+                <Play className="h-3 w-3" aria-hidden="true" />
+                {progressPercent === 0 ? 'Começar' : 'Retomar'}
+              </Link>
+            </div>
+          )}
         </div>
       </div>
 
-      {/* Lista de módulos */}
-      <div className="mt-8 space-y-2 px-0">
-        {modules.map((module, index) => {
-          const moduleProgress =
-            module.totalLessons > 0
-              ? Math.round((module.completedLessons / module.totalLessons) * 100)
-              : 0
-          const isComplete =
-            !module.isLocked &&
-            module.totalLessons > 0 &&
-            module.completedLessons === module.totalLessons
+      {/* ── Module list ─────────────────────────────────────────────────── */}
+      <div className="mt-6 space-y-2">
+        {course.modules.map((module, index) => {
+          const isAccessible = hasGlobalAccess || accessibleModuleIds.has(module.id)
+          const moduleLessonIds = module.lessons.map((l) => l.id)
+          const moduleCompleted = moduleLessonIds.filter((id) => completedSet.has(id)).length
+          const moduleTotal = moduleLessonIds.length
+          const moduleProgress = moduleTotal > 0
+            ? Math.round((moduleCompleted / moduleTotal) * 100)
+            : 0
+          const isComplete = isAccessible && moduleTotal > 0 && moduleCompleted === moduleTotal
 
-          if (module.isLocked) {
+          if (!isAccessible) {
             return (
               <LockedModuleCard
                 key={module.id}
                 module={module}
                 index={index}
-                slug={slug}
               />
             )
           }
@@ -133,9 +289,12 @@ export default async function CursoPage({ params }: Props) {
               key={module.id}
               module={module}
               index={index}
-              slug={slug}
-              isComplete={isComplete}
+              courseSlug={slug}
+              moduleCompleted={moduleCompleted}
+              moduleTotal={moduleTotal}
               moduleProgress={moduleProgress}
+              isComplete={isComplete}
+              completedSet={completedSet}
             />
           )
         })}
@@ -144,18 +303,34 @@ export default async function CursoPage({ params }: Props) {
   )
 }
 
+// ─── Lesson kind icon ────────────────────────────────────────────────────────
+
+function LessonKindIcon({ kind }: { kind: string }) {
+  if (kind === 'VIDEO') return <Play className="h-3.5 w-3.5 shrink-0" aria-hidden="true" />
+  if (kind === 'QUIZ') return <HelpCircle className="h-3.5 w-3.5 shrink-0" aria-hidden="true" />
+  return <FileText className="h-3.5 w-3.5 shrink-0" aria-hidden="true" />
+}
+
+// ─── Module accordion (unlocked) ─────────────────────────────────────────────
+
 function ModuleAccordion({
   module,
   index,
-  slug,
-  isComplete,
+  courseSlug,
+  moduleCompleted,
+  moduleTotal,
   moduleProgress,
+  isComplete,
+  completedSet,
 }: {
-  module: (typeof MOCK_MODULES)[number]
+  module: ModuleRow
   index: number
-  slug: string
-  isComplete: boolean
+  courseSlug: string
+  moduleCompleted: number
+  moduleTotal: number
   moduleProgress: number
+  isComplete: boolean
+  completedSet: Set<string>
 }) {
   return (
     <details
@@ -170,23 +345,27 @@ function ModuleAccordion({
         className="flex cursor-pointer list-none items-center justify-between p-4"
         style={{ borderBottom: '1px solid var(--hairline)' }}
       >
-        <div className="flex items-center gap-3">
-          <span className="font-mono text-[11px]" style={{ color: 'var(--bone-mute)' }}>
+        <div className="flex items-center gap-3 min-w-0">
+          <span className="font-mono text-[11px] shrink-0" style={{ color: 'var(--bone-mute)' }}>
             {String(index + 1).padStart(2, '0')}
           </span>
-          <span className="text-[15px] font-medium" style={{ color: 'var(--bone)' }}>
+          <span className="text-[15px] font-medium truncate" style={{ color: 'var(--bone)' }}>
             {module.title}
           </span>
           {isComplete && (
-            <CheckCircle2 className="h-3.5 w-3.5 shrink-0 text-green-400" aria-hidden="true" />
+            <CheckCircle2
+              className="h-3.5 w-3.5 shrink-0"
+              style={{ color: 'var(--ember)' }}
+              aria-label="Módulo concluído"
+            />
           )}
         </div>
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-3 shrink-0 ml-3">
           <span
             className="font-mono text-[11px]"
             style={{ color: 'var(--bone-mute)' }}
           >
-            {module.totalLessons} aulas
+            {moduleTotal} {moduleTotal === 1 ? 'aula' : 'aulas'}
           </span>
           {moduleProgress > 0 && moduleProgress < 100 && (
             <span className="font-mono text-[11px]" style={{ color: 'var(--ember)' }}>
@@ -201,29 +380,83 @@ function ModuleAccordion({
         </div>
       </summary>
 
-      <div
-        className="px-4 py-3"
-        style={{ borderTop: '1px solid var(--hairline)' }}
-      >
-        <p className="font-mono text-[11px]" style={{ color: 'var(--bone-mute)' }}>
-          {module.completedLessons}/{module.totalLessons} aulas concluídas
-        </p>
-      </div>
+      {/* Lesson list */}
+      <ul>
+        {module.lessons.map((lesson, lessonIndex) => {
+          const isCompleted = completedSet.has(lesson.id)
+          const lessonHref = `/academy/curso/${courseSlug}/aula/${lesson.slug}`
+
+          return (
+            <li key={lesson.id}>
+              <Link
+                href={lessonHref}
+                className="flex items-center gap-3 px-4 py-3 transition-colors hover:bg-[rgba(255,255,255,0.03)]"
+                style={{
+                  borderBottom: '1px solid var(--hairline)',
+                  color: 'var(--bone-dim)',
+                  textDecoration: 'none',
+                }}
+              >
+                {/* Lesson number */}
+                <span
+                  className="font-mono text-[11px] shrink-0 w-6 text-right"
+                  style={{ color: 'var(--bone-mute)' }}
+                >
+                  {String(lessonIndex + 1).padStart(2, '0')}
+                </span>
+
+                {/* Kind icon */}
+                <span style={{ color: 'var(--bone-mute)' }}>
+                  <LessonKindIcon kind={lesson.kind} />
+                </span>
+
+                {/* Title */}
+                <span className="flex-1 min-w-0 text-[13px] leading-snug truncate">
+                  {lesson.title}
+                </span>
+
+                {/* Completion check */}
+                {isCompleted && (
+                  <CheckCircle2
+                    className="h-3.5 w-3.5 shrink-0"
+                    style={{ color: 'var(--ember)' }}
+                    aria-label="Aula concluída"
+                  />
+                )}
+              </Link>
+            </li>
+          )
+        })}
+
+        {/* Module progress footer */}
+        {moduleTotal > 0 && (
+          <li
+            className="px-4 py-2.5 font-mono text-[11px]"
+            style={{
+              color: 'var(--bone-mute)',
+              borderTop: module.lessons.length > 0 ? undefined : '1px solid var(--hairline)',
+            }}
+          >
+            {moduleCompleted}/{moduleTotal} aulas concluídas
+          </li>
+        )}
+      </ul>
     </details>
   )
 }
+
+// ─── Locked module card ───────────────────────────────────────────────────────
 
 function LockedModuleCard({
   module,
   index,
 }: {
-  module: (typeof MOCK_MODULES)[number]
+  module: ModuleRow
   index: number
-  slug: string
 }) {
   return (
     <div
-      className="flex items-start gap-4 p-4 opacity-60"
+      className="flex items-start gap-4 p-4 opacity-50"
       style={{
         background: 'var(--ink)',
         border: '1px solid var(--hairline)',
@@ -240,24 +473,9 @@ function LockedModuleCard({
             {module.title}
           </span>
         </div>
-
-        {module.lockedByCohortName && (
-          <p className="mt-1 font-mono text-[11px]" style={{ color: 'var(--bone-mute)' }}>
-            Disponível na turma{' '}
-            <span style={{ color: 'var(--bone-dim)' }}>{module.lockedByCohortName}</span>
-          </p>
-        )}
-
-        {module.lockedByCohortSlug && (
-          <Link
-            href={`/turmas/${module.lockedByCohortSlug}`}
-            className="mt-2 flex items-center gap-1 font-mono text-[10px] uppercase tracking-wide transition-colors"
-            style={{ color: 'rgba(255,58,14,0.6)' }}
-          >
-            <ExternalLink className="h-3 w-3" />
-            Conhecer turma
-          </Link>
-        )}
+        <p className="mt-1 font-mono text-[11px]" style={{ color: 'var(--bone-mute)' }}>
+          {module.lessons.length} {module.lessons.length === 1 ? 'aula' : 'aulas'} · acesso não incluído na sua turma
+        </p>
       </div>
     </div>
   )

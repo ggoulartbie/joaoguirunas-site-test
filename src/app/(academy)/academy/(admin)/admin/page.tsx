@@ -66,7 +66,7 @@ function StatCard({ label, value, variation, variant = 'default', icon: Icon }: 
 
   return (
     <div
-      className="group relative flex flex-col gap-4 border border-[rgba(255,255,255,0.07)] bg-[var(--ink)] p-5 transition-colors hover:border-[rgba(255,255,255,0.16)]"
+      className="group relative flex flex-col gap-4 border border-[var(--hairline)] bg-[var(--ink)] p-5 transition-colors hover:border-[var(--hairline-strong)]"
       style={{ borderRadius: 0 }}
     >
       <div className="flex items-start justify-between">
@@ -90,7 +90,7 @@ function StatCard({ label, value, variation, variant = 'default', icon: Icon }: 
 const STATUS_STYLES: Record<string, string> = {
   ativo: 'border-emerald-400/40 text-emerald-400',
   erro: 'border-[var(--ember)]/40 text-[var(--ember)]',
-  novo: 'border-[rgba(255,255,255,0.16)] text-[var(--bone-dim)]',
+  novo: 'border-[var(--hairline-strong)] text-[var(--bone-dim)]',
   alerta: 'border-amber-400/40 text-amber-400',
 }
 
@@ -106,7 +106,7 @@ export default function AdminDashboardPage() {
         <span className="font-mono text-[10px] uppercase tracking-widest text-[var(--bone-mute)]">
           Painel Admin
         </span>
-        <h1 className="font-serif text-4xl italic text-[var(--bone)]">
+        <h1 className="font-[family-name:var(--type-display)] text-4xl italic font-light text-[var(--bone)]">
           Visão Geral
         </h1>
         <p className="font-mono text-[10px] text-[var(--bone-mute)]">
@@ -186,10 +186,10 @@ export default function AdminDashboardPage() {
               Ver tudo
             </a>
           </div>
-          <div className="border border-[rgba(255,255,255,0.07)]" style={{ borderRadius: 0 }}>
+          <div className="border border-[var(--hairline)]" style={{ borderRadius: 0 }}>
             <table className="w-full">
               <thead>
-                <tr className="border-b border-[rgba(255,255,255,0.16)] bg-[var(--ink-2)]">
+                <tr className="border-b border-[var(--hairline-strong)] bg-[var(--ink-2)]">
                   <th className="px-4 py-3 text-left font-mono text-[10px] uppercase tracking-widest text-[var(--bone-mute)]">
                     Aluno
                   </th>
@@ -208,14 +208,14 @@ export default function AdminDashboardPage() {
                 {MOCK_RECENT_ACTIVITY.map((row) => (
                   <tr
                     key={row.id}
-                    className="border-b border-[rgba(255,255,255,0.07)] transition-colors last:border-0 hover:bg-[rgba(14,14,17,0.5)]"
+                    className="border-b border-[var(--hairline)] transition-colors last:border-0 hover:bg-[rgba(14,14,17,0.5)]"
                   >
                     <td className="px-4 py-3 font-sans text-sm text-[var(--bone-dim)]">{row.user}</td>
                     <td className="px-4 py-3 font-sans text-sm text-[var(--bone-dim)]">{row.detail}</td>
                     <td className="px-4 py-3 font-mono text-[11px] text-[var(--bone-mute)]">{row.time}</td>
                     <td className="px-4 py-3">
                       <span
-                        className={`border px-2 py-0.5 font-mono text-[10px] uppercase tracking-wider ${STATUS_STYLES[row.status] ?? 'border-[rgba(255,255,255,0.07)] text-[var(--bone-mute)]'}`}
+                        className={`border px-2 py-0.5 font-mono text-[10px] uppercase tracking-wider ${STATUS_STYLES[row.status] ?? 'border-[var(--hairline)] text-[var(--bone-mute)]'}`}
                         style={{ borderRadius: 0 }}
                       >
                         {row.status}
@@ -241,7 +241,7 @@ export default function AdminDashboardPage() {
               Ver tudo
             </a>
           </div>
-          <div className="border border-[rgba(255,255,255,0.07)] bg-[var(--ink)] p-5" style={{ borderRadius: 0 }}>
+          <div className="border border-[var(--hairline)] bg-[var(--ink)] p-5" style={{ borderRadius: 0 }}>
             <div className="space-y-5">
               {m.activeStudentsByCohort.map((cohort) => {
                 const pct = Math.round((cohort.count / totalActive) * 100)
@@ -264,7 +264,7 @@ export default function AdminDashboardPage() {
                 )
               })}
             </div>
-            <div className="mt-6 border-t border-[rgba(255,255,255,0.07)] pt-4">
+            <div className="mt-6 border-t border-[var(--hairline)] pt-4">
               <div className="flex items-center justify-between">
                 <span className="font-mono text-[10px] uppercase tracking-widest text-[var(--bone-mute)]">
                   Total
@@ -293,7 +293,7 @@ export default function AdminDashboardPage() {
             <a
               key={action.label}
               href={action.href}
-              className="flex flex-col gap-3 border border-[rgba(255,255,255,0.07)] bg-[var(--ink)] p-4 transition-colors hover:border-[var(--ember)]"
+              className="flex flex-col gap-3 border border-[var(--hairline)] bg-[var(--ink)] p-4 transition-colors hover:border-[var(--ember)]"
               style={{ borderRadius: 0 }}
             >
               <action.icon className="h-5 w-5 text-[var(--ember)]" />

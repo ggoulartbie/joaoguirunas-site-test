@@ -63,10 +63,10 @@ export function OnboardingWizard({ userName }: Props) {
     >
       <div
         ref={dialogRef}
-        className="w-full max-w-md border border-white/10 bg-[var(--ink)] shadow-2xl"
+        className="w-full max-w-md border border-[var(--hairline)] bg-[var(--ink)] shadow-2xl"
       >
         {/* Progress bar */}
-        <div className="flex h-1 bg-white/5">
+        <div className="flex h-1 bg-[var(--ink-2)]">
           {STEPS.map((s) => (
             <div
               key={s.id}
@@ -76,24 +76,24 @@ export function OnboardingWizard({ userName }: Props) {
         </div>
 
         {/* Step indicators */}
-        <div className="flex items-center justify-between border-b border-white/10 px-6 py-4">
+        <div className="flex items-center justify-between border-b border-[var(--hairline)] px-6 py-4">
           <div className="flex items-center gap-3">
             {STEPS.map((s) => (
               <div key={s.id} className="flex items-center gap-1.5">
                 <div
                   className={`flex h-5 w-5 items-center justify-center font-mono text-[10px] ${
                     step === s.id
-                      ? 'bg-[var(--ember)] text-white'
+                      ? 'bg-[var(--ember)] text-[var(--void)]'
                       : step > s.id
                       ? 'bg-[var(--ember)]/30 text-[var(--ember)]'
-                      : 'bg-white/5 text-white/20'
+                      : 'bg-[var(--ink-2)] text-[var(--bone-mute)]'
                   }`}
                 >
                   {s.id}
                 </div>
                 <span
                   className={`hidden font-mono text-[10px] uppercase tracking-wider sm:block ${
-                    step === s.id ? 'text-white/70' : 'text-white/20'
+                    step === s.id ? 'text-[var(--bone-dim)]' : 'text-[var(--bone-mute)]'
                   }`}
                 >
                   {s.label}
@@ -106,7 +106,7 @@ export function OnboardingWizard({ userName }: Props) {
               onClick={handleSkip}
               disabled={pending}
               aria-label="Pular configuração de perfil"
-              className="text-white/20 transition-colors hover:text-white/60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ember)]"
+              className="text-[var(--bone-mute)] transition-colors hover:text-[var(--bone-dim)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ember)]"
             >
               <X className="h-4 w-4" />
             </button>
@@ -121,17 +121,17 @@ export function OnboardingWizard({ userName }: Props) {
                 <GraduationCap className="h-8 w-8 text-[var(--ember)]" aria-hidden="true" />
               </div>
               <div>
-                <h2 id="onboarding-title" className="text-xl font-bold text-white">
+                <h2 id="onboarding-title" className="text-xl font-bold text-[var(--bone)]">
                   Bem-vindo à plataforma
                 </h2>
-                <p className="mt-2 text-sm text-white/50">
+                <p className="mt-2 text-sm text-[var(--bone-mute)]">
                   Você acaba de entrar na sua área de aprendizado. Vamos dar um tour rápido antes de começar.
                 </p>
               </div>
               <button
                 ref={firstFocusRef}
                 onClick={() => setStep(2)}
-                className="flex w-full items-center justify-center gap-2 bg-[var(--ember)] px-6 py-3 font-mono text-xs uppercase tracking-wider text-white transition-colors hover:bg-[#FF5A1F] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ember)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--ink)]"
+                className="flex w-full items-center justify-center gap-2 bg-[var(--ember)] px-6 py-3 font-mono text-xs uppercase tracking-wider text-white transition-colors hover:bg-[var(--ember-glow)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ember)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--ink)]"
               >
                 Começar
                 <ArrowRight className="h-3.5 w-3.5" aria-hidden="true" />
@@ -146,10 +146,10 @@ export function OnboardingWizard({ userName }: Props) {
                   <Compass className="h-5 w-5 text-[var(--ember)]" aria-hidden="true" />
                 </div>
                 <div>
-                  <h2 id="onboarding-title" className="font-semibold text-white">
+                  <h2 id="onboarding-title" className="font-semibold text-[var(--bone)]">
                     O que você encontra aqui
                   </h2>
-                  <p className="text-sm text-white/40">Um tour rápido pelos recursos</p>
+                  <p className="text-sm text-[var(--bone-mute)]">Um tour rápido pelos recursos</p>
                 </div>
               </div>
 
@@ -160,11 +160,11 @@ export function OnboardingWizard({ userName }: Props) {
                   { icon: '💬', label: 'Fórum', desc: 'Tire dúvidas e conecte-se com a turma' },
                   { icon: '🎓', label: 'Certificados', desc: 'Baixe seus certificados após concluir' },
                 ].map(({ icon, label, desc }) => (
-                  <li key={label} className="flex items-start gap-3 border border-white/5 bg-white/[0.02] p-3">
+                  <li key={label} className="flex items-start gap-3 border border-[var(--hairline)] bg-[var(--ink-2)] p-3">
                     <span className="text-base" aria-hidden="true">{icon}</span>
                     <div>
-                      <p className="font-mono text-xs font-medium uppercase tracking-wide text-white/80">{label}</p>
-                      <p className="text-xs text-white/40">{desc}</p>
+                      <p className="font-mono text-xs font-medium uppercase tracking-wide text-[var(--bone-dim)]">{label}</p>
+                      <p className="text-xs text-[var(--bone-mute)]">{desc}</p>
                     </div>
                   </li>
                 ))}
@@ -173,7 +173,7 @@ export function OnboardingWizard({ userName }: Props) {
               <button
                 ref={step === 2 ? firstFocusRef : undefined}
                 onClick={() => setStep(3)}
-                className="flex w-full items-center justify-center gap-2 bg-[var(--ember)] px-6 py-3 font-mono text-xs uppercase tracking-wider text-white transition-colors hover:bg-[#FF5A1F] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ember)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--ink)]"
+                className="flex w-full items-center justify-center gap-2 bg-[var(--ember)] px-6 py-3 font-mono text-xs uppercase tracking-wider text-white transition-colors hover:bg-[var(--ember-glow)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ember)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--ink)]"
               >
                 Continuar
                 <ArrowRight className="h-3.5 w-3.5" aria-hidden="true" />
@@ -188,16 +188,16 @@ export function OnboardingWizard({ userName }: Props) {
                   <User className="h-5 w-5 text-[var(--ember)]" aria-hidden="true" />
                 </div>
                 <div>
-                  <h2 id="onboarding-title" className="font-semibold text-white">
+                  <h2 id="onboarding-title" className="font-semibold text-[var(--bone)]">
                     Configure seu perfil
                   </h2>
-                  <p className="text-sm text-white/40">Opcional — pode editar depois em /perfil</p>
+                  <p className="text-sm text-[var(--bone-mute)]">Opcional — pode editar depois em /perfil</p>
                 </div>
               </div>
 
               <div className="space-y-4">
                 <div>
-                  <label htmlFor="onboarding-name" className="mb-1.5 block font-mono text-[10px] uppercase tracking-wider text-white/40">
+                  <label htmlFor="onboarding-name" className="mb-1.5 block font-mono text-[10px] uppercase tracking-wider text-[var(--bone-mute)]">
                     Nome
                   </label>
                   <input
@@ -207,13 +207,13 @@ export function OnboardingWizard({ userName }: Props) {
                     value={name}
                     onChange={(e) => setName(e.target.value)}
                     placeholder="Seu nome"
-                    className="w-full border border-white/10 bg-white/[0.03] px-3 py-2 font-mono text-sm text-white/80 placeholder:text-white/20 focus:border-white/20 focus:outline-none"
+                    className="w-full border border-[var(--hairline)] bg-[var(--ink-2)] px-3 py-2 font-mono text-sm text-[var(--bone-dim)] placeholder:text-[var(--bone-mute)] focus:border-[var(--hairline-strong)] focus:outline-none"
                     autoComplete="name"
                   />
                 </div>
                 <div>
-                  <label htmlFor="onboarding-bio" className="mb-1.5 block font-mono text-[10px] uppercase tracking-wider text-white/40">
-                    Bio <span className="text-white/20">(opcional)</span>
+                  <label htmlFor="onboarding-bio" className="mb-1.5 block font-mono text-[10px] uppercase tracking-wider text-[var(--bone-mute)]">
+                    Bio <span className="text-[var(--bone-mute)]">(opcional)</span>
                   </label>
                   <textarea
                     id="onboarding-bio"
@@ -221,7 +221,7 @@ export function OnboardingWizard({ userName }: Props) {
                     onChange={(e) => setBio(e.target.value)}
                     placeholder="Conte um pouco sobre você..."
                     rows={3}
-                    className="w-full resize-none border border-white/10 bg-white/[0.03] px-3 py-2 font-mono text-sm text-white/80 placeholder:text-white/20 focus:border-white/20 focus:outline-none"
+                    className="w-full resize-none border border-[var(--hairline)] bg-[var(--ink-2)] px-3 py-2 font-mono text-sm text-[var(--bone-dim)] placeholder:text-[var(--bone-mute)] focus:border-[var(--hairline-strong)] focus:outline-none"
                   />
                 </div>
               </div>
@@ -230,7 +230,7 @@ export function OnboardingWizard({ userName }: Props) {
                 <button
                   onClick={handleFinish}
                   disabled={pending}
-                  className="flex flex-1 items-center justify-center gap-2 bg-[var(--ember)] px-6 py-3 font-mono text-xs uppercase tracking-wider text-white transition-colors hover:bg-[#FF5A1F] disabled:opacity-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ember)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--ink)]"
+                  className="flex flex-1 items-center justify-center gap-2 bg-[var(--ember)] px-6 py-3 font-mono text-xs uppercase tracking-wider text-white transition-colors hover:bg-[var(--ember-glow)] disabled:opacity-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ember)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--ink)]"
                 >
                   {pending ? 'Salvando...' : 'Concluir'}
                 </button>

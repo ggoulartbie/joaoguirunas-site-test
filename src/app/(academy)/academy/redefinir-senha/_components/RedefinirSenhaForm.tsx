@@ -57,8 +57,9 @@ export function RedefinirSenhaForm() {
     return (
       <div
         style={{
-          background: 'rgba(34,197,94,0.08)',
-          border: '1px solid rgba(34,197,94,0.2)',
+          background: 'var(--ink)',
+          border: '1px solid var(--hairline-strong)',
+          borderTop: '2px solid var(--ember)',
           padding: '16px',
           borderRadius: 0,
         }}
@@ -67,7 +68,7 @@ export function RedefinirSenhaForm() {
           style={{
             fontFamily: 'var(--type-sans)',
             fontSize: '14px',
-            color: '#4ade80',
+            color: 'var(--bone)',
           }}
         >
           Senha redefinida com sucesso. Redirecionando...
@@ -210,15 +211,13 @@ export function RedefinirSenhaForm() {
       <p className="mt-6 text-center">
         <Link
           href="/academy/login"
+          className="transition-colors hover:text-[var(--bone)]"
           style={{
             fontFamily: 'var(--type-sans)',
             fontSize: '14px',
             color: 'var(--bone-mute)',
             textDecoration: 'none',
-            transition: 'color 0.2s',
           }}
-          onMouseEnter={(e) => ((e.currentTarget as HTMLElement).style.color = 'var(--bone)')}
-          onMouseLeave={(e) => ((e.currentTarget as HTMLElement).style.color = 'var(--bone-mute)')}
         >
           Voltar ao login
         </Link>

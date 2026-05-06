@@ -34,7 +34,13 @@ export default function DashboardPage() {
   })
 
   return (
-    <div className="mx-auto max-w-5xl space-y-10">
+    <div
+      className="mx-auto max-w-5xl space-y-10"
+      style={{
+        backgroundImage: 'radial-gradient(rgba(255,255,255,0.05) 1px, transparent 1px)',
+        backgroundSize: '24px 24px',
+      }}
+    >
 
       {/* Saudação */}
       <div>
@@ -63,11 +69,7 @@ export default function DashboardPage() {
           {expiringCohorts.map((cohort) => (
             <div
               key={cohort.id}
-              className="flex flex-col gap-3 border-l-2 px-4 py-3 sm:flex-row sm:items-center sm:justify-between"
-              style={{
-                borderLeftColor: 'var(--ember)',
-                background: 'rgba(255,58,14,0.08)',
-              }}
+              className="flex flex-col gap-3 border-l-2 border-l-[var(--ember)] bg-[var(--ember)]/[0.08] px-4 py-3 sm:flex-row sm:items-center sm:justify-between"
             >
               <div className="flex items-center gap-3">
                 <AlertTriangle className="h-4 w-4 shrink-0" style={{ color: 'var(--ember)' }} />
@@ -227,17 +229,10 @@ export default function DashboardPage() {
             <Link
               key={cohort.id}
               href="/academy/meus-cursos"
-              className="group block border p-5 transition-colors"
+              className="group block border border-[var(--hairline)] hover:border-[var(--hairline-strong)] p-5 transition-colors"
               style={{
                 background: 'var(--ink)',
-                borderColor: 'var(--hairline)',
                 borderRadius: 0,
-              }}
-              onMouseEnter={(e) => {
-                (e.currentTarget as HTMLElement).style.borderColor = 'var(--hairline-strong)'
-              }}
-              onMouseLeave={(e) => {
-                (e.currentTarget as HTMLElement).style.borderColor = 'var(--hairline)'
               }}
             >
               <div className="flex items-start justify-between gap-4">

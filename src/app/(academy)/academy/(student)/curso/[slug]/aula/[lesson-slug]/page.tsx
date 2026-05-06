@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
-import { ArrowLeft, ArrowRight, Play, CheckCircle2, Lock } from 'lucide-react'
+import { ArrowLeft, ArrowRight, Play } from 'lucide-react'
 import { createClient } from '@/lib/supabase/server'
 import { supabaseAdmin } from '@/lib/supabase/admin'
 import { requireUser } from '@/lib/auth/helpers'
@@ -10,6 +10,7 @@ import { VideoPlayer } from '@/components/student/VideoPlayer'
 import { LockedContent } from '@/components/student/LockedContent'
 import { MarkCompleteButton } from '@/components/student/MarkCompleteButton'
 import { LessonTabs } from './LessonTabs'
+import { CourseSidebar, MobileLessonDrawer } from './CourseSidebar'
 import type { CommentWithAuthor } from '@/types/student'
 import type { UserRole } from '@/types/student'
 
@@ -37,7 +38,7 @@ export default async function AulaPage({ params }: Props) {
   const user = await requireUser()
   const supabase = await createClient()
 
-  // Fetch lesson with module + course context for nav and locked cohort info
+  // Fetch lesson with module + course context
   const { data: lesson } = await supabase
     .from('lessons')
     .select(`
@@ -86,19 +87,89 @@ export default async function AulaPage({ params }: Props) {
 
   const hasAccess = access === true
 
-  // Fetch sibling lessons for prev/next navigation
-  const { data: siblings } = await supabase
-    .from('lessons')
-    .select('id, slug, title, sort_order')
-    .eq('module_id', lesson.module_id)
-    .is('deleted_at', null)
-    .order('sort_order')
+  // --- Cross-module navigation: fetch ALL lessons in course ---
+  const { data: allModulesRaw } = await supabaseAdmin
+    .from('modules')
+    .select(`
+      id, title, sort_order,
+      lessons!inner (id, slug, title, sort_order, deleted_at)
+    `)
+    .eq('course_id', lesson.modules.course_id)
+    .is('lessons.deleted_at', null)
+    .order('sort_order', { ascending: true })
+    .order('sort_order', { foreignTable: 'lessons', ascending: true })
 
-  const currentIndex = siblings?.findIndex((l) => l.id === lesson.id) ?? -1
-  const prevLesson = currentIndex > 0 ? siblings?.[currentIndex - 1] : null
-  const nextLesson = siblings && currentIndex < siblings.length - 1 ? siblings[currentIndex + 1] : null
+  // Flatten all lessons with module metadata
+  const allLessons = (allModulesRaw ?? []).flatMap((m) => {
+    const lessons = Array.isArray(m.lessons) ? m.lessons : [m.lessons]
+    return lessons.map((l) => ({
+      ...l,
+      moduleTitle: m.title,
+      moduleId: m.id,
+    }))
+  })
 
-  // Fetch lesson progress (seconds + completed state) — only when user has access
+  const globalIndex = allLessons.findIndex((l) => l.id === lesson.id)
+  const globalPrevRaw = globalIndex > 0 ? allLessons[globalIndex - 1] : null
+  const globalNextRaw =
+    globalIndex < allLessons.length - 1 ? allLessons[globalIndex + 1] : null
+
+  // Normalize to NavLesson (strip deleted_at and other extra fields)
+  const globalPrev: NavLesson | null = globalPrevRaw
+    ? {
+        id: globalPrevRaw.id,
+        slug: globalPrevRaw.slug,
+        title: globalPrevRaw.title,
+        moduleTitle: globalPrevRaw.moduleTitle,
+        moduleId: globalPrevRaw.moduleId,
+      }
+    : null
+  const globalNext: NavLesson | null = globalNextRaw
+    ? {
+        id: globalNextRaw.id,
+        slug: globalNextRaw.slug,
+        title: globalNextRaw.title,
+        moduleTitle: globalNextRaw.moduleTitle,
+        moduleId: globalNextRaw.moduleId,
+      }
+    : null
+
+  // --- Build sidebar module data ---
+  // Fetch progress for all lessons to mark completed
+  const { data: progressRows } = hasAccess
+    ? await supabaseAdmin
+        .from('lesson_progress')
+        .select('lesson_id, completed')
+        .eq('user_id', user.id)
+        .eq('completed', true)
+    : { data: [] }
+
+  const completedIds = new Set((progressRows ?? []).map((p) => p.lesson_id))
+
+  const sidebarModules = (allModulesRaw ?? []).map((m) => {
+    const lessons = (Array.isArray(m.lessons) ? m.lessons : [m.lessons]).map(
+      (l) => ({
+        id: l.id,
+        slug: l.slug,
+        title: l.title,
+        sort_order: l.sort_order,
+        completed: completedIds.has(l.id),
+      })
+    )
+    return {
+      id: m.id,
+      title: m.title,
+      sort_order: m.sort_order,
+      completedCount: lessons.filter((l) => l.completed).length,
+      totalCount: lessons.length,
+      lessons,
+    }
+  })
+
+  const totalLessons = allLessons.length
+  const totalCompleted = completedIds.size
+
+  // --- Fetch current lesson progress ---
   const progress = hasAccess
     ? await supabase
         .from('lesson_progress')
@@ -113,9 +184,12 @@ export default async function AulaPage({ params }: Props) {
   const module = Array.isArray(lesson.modules) ? lesson.modules[0] : lesson.modules
   const course = module && (Array.isArray(module.courses) ? module.courses[0] : module.courses)
   const cohortCourses = course?.cohort_courses ?? []
-  const firstCohort = Array.isArray(cohortCourses) && cohortCourses.length > 0
-    ? (Array.isArray(cohortCourses[0].cohorts) ? cohortCourses[0].cohorts[0] : cohortCourses[0].cohorts)
-    : null
+  const firstCohort =
+    Array.isArray(cohortCourses) && cohortCourses.length > 0
+      ? Array.isArray(cohortCourses[0].cohorts)
+        ? cohortCourses[0].cohorts[0]
+        : cohortCourses[0].cohorts
+      : null
 
   if (!hasAccess) {
     return (
@@ -124,7 +198,10 @@ export default async function AulaPage({ params }: Props) {
           className="border-b p-6"
           style={{ borderColor: 'var(--hairline)' }}
         >
-          <p className="font-mono text-[11px] uppercase tracking-wider" style={{ color: 'var(--bone-mute)' }}>
+          <p
+            className="font-mono text-[11px] uppercase tracking-wider"
+            style={{ color: 'var(--bone-mute)' }}
+          >
             <Link
               href={`/academy/curso/${slug}`}
               className="transition-colors hover:text-[var(--bone)]"
@@ -157,7 +234,6 @@ export default async function AulaPage({ params }: Props) {
   }
 
   // Render lesson content only when access is confirmed
-  // video_id is never included in the response when hasAccess = false
   const renderedContent =
     lesson.content && lesson.content_format
       ? await renderContent(
@@ -166,7 +242,7 @@ export default async function AulaPage({ params }: Props) {
         )
       : null
 
-  // Fetch real comments (access already confirmed — supabaseAdmin bypasses RLS)
+  // Fetch comments
   const { data: rawComments } = await supabaseAdmin
     .from('comments')
     .select(`
@@ -190,38 +266,39 @@ export default async function AulaPage({ params }: Props) {
       is_pinned: c.is_pinned,
       parent_comment_id: c.parent_comment_id,
       authorId: profile?.id ?? '',
-      authorName: profile?.name ?? 'Anônimo',
+      authorName: profile?.name ?? 'Anonimo',
       authorRole: (profile?.role ?? 'STUDENT') as UserRole,
     }
   })
 
-  // Fetch real materials for this lesson
+  // Fetch materials
   const { data: rawMaterials } = await supabaseAdmin
     .from('materials')
-    .select('id, title, kind, external_url, storage_path, size_bytes, sort_order, lesson_id, created_at')
+    .select(
+      'id, title, kind, external_url, storage_path, size_bytes, sort_order, lesson_id, created_at'
+    )
     .eq('lesson_id', lesson.id)
     .order('sort_order', { ascending: true })
 
   const materials = rawMaterials ?? []
 
-  // Fetch current user's profile name for comment ownership display
-  const { data: profile } = await supabaseAdmin
-    .from('profiles')
-    .select('name')
-    .eq('id', user.id)
-    .single()
+  const currentModuleId = module?.id ?? ''
 
   return (
-    <div className="mx-auto max-w-4xl">
-      <div className="flex flex-col lg:flex-row lg:items-start">
-        {/* Main content */}
-        <div className="flex-1 min-w-0">
-          {/* Player */}
+    // Negative margin to break out of the shell's padding and use full viewport width for the layout
+    <div
+      className="-mx-4 -mt-4 sm:-mx-6 sm:-mt-6 lg:-mx-8 lg:-mt-8 flex flex-col"
+      style={{ minHeight: 'calc(100vh - 57px)' }}
+    >
+      {/* Main two-column layout */}
+      <div className="flex flex-1 flex-col lg:flex-row lg:items-stretch">
+        {/* ── Left: main content column ── */}
+        <div className="flex flex-1 min-w-0 flex-col">
+          {/* Video player */}
           <div
-            className="aspect-video border-b"
+            className="aspect-video w-full shrink-0"
             style={{
               background: 'var(--ink-3)',
-              borderColor: 'var(--hairline)',
             }}
           >
             {lesson.kind === 'VIDEO' && lesson.video_id ? (
@@ -242,7 +319,7 @@ export default async function AulaPage({ params }: Props) {
             )}
           </div>
 
-          {/* Below player */}
+          {/* Below player: breadcrumb + title + MarkComplete */}
           <div
             className="border-b p-4 lg:p-6"
             style={{
@@ -250,7 +327,11 @@ export default async function AulaPage({ params }: Props) {
               borderColor: 'var(--hairline)',
             }}
           >
-            <p className="font-mono text-[11px] uppercase tracking-wider" style={{ color: 'var(--bone-mute)' }}>
+            {/* Breadcrumb */}
+            <p
+              className="font-mono text-[11px] uppercase tracking-wider"
+              style={{ color: 'var(--bone-mute)' }}
+            >
               <Link
                 href={`/academy/curso/${slug}`}
                 className="transition-colors hover:text-[var(--bone)]"
@@ -259,13 +340,16 @@ export default async function AulaPage({ params }: Props) {
                 {course?.title ?? 'Curso'}
               </Link>
               {' / '}
-              <span style={{ color: 'var(--bone-dim)' }}>{lesson.title}</span>
+              <span style={{ color: 'var(--bone-dim)' }}>
+                {module?.title ?? ''}
+              </span>
             </p>
 
+            {/* Lesson title */}
             <h1
               className="mt-2 font-[var(--type-display)] italic"
               style={{
-                fontSize: 'clamp(1.75rem, 4vw, 2rem)',
+                fontSize: 'clamp(1.5rem, 3.5vw, 2rem)',
                 lineHeight: 1.15,
                 color: 'var(--bone)',
               }}
@@ -273,56 +357,28 @@ export default async function AulaPage({ params }: Props) {
               {lesson.title}
             </h1>
 
+            {/* MarkCompleteButton */}
             <div className="mt-4 flex items-center justify-between">
               <MarkCompleteButton
                 lessonId={lesson.id}
                 initialCompleted={progress?.completed ?? false}
               />
 
-              {/* Prev / Next */}
-              <div className="flex items-center gap-4">
-                {prevLesson ? (
-                  <Link
-                    href={`/academy/curso/${slug}/aula/${prevLesson.slug}`}
-                    className="flex items-center gap-1.5 font-mono text-[11px] uppercase tracking-wide transition-colors"
-                    style={{ color: 'var(--bone-mute)' }}
-                  >
-                    <ArrowLeft className="h-3.5 w-3.5" />
-                    Anterior
-                  </Link>
-                ) : (
-                  <span
-                    className="flex items-center gap-1.5 font-mono text-[11px] uppercase tracking-wide"
-                    style={{ color: 'rgba(132,132,140,0.3)' }}
-                  >
-                    <ArrowLeft className="h-3.5 w-3.5" />
-                    Anterior
-                  </span>
-                )}
-
-                {nextLesson ? (
-                  <Link
-                    href={`/academy/curso/${slug}/aula/${nextLesson.slug}`}
-                    className="flex items-center gap-1.5 font-mono text-[11px] uppercase tracking-wide transition-colors"
-                    style={{ color: 'var(--bone-mute)' }}
-                  >
-                    Próxima
-                    <ArrowRight className="h-3.5 w-3.5" />
-                  </Link>
-                ) : (
-                  <span
-                    className="flex items-center gap-1.5 font-mono text-[11px] uppercase tracking-wide"
-                    style={{ color: 'rgba(132,132,140,0.3)' }}
-                  >
-                    Próxima
-                    <ArrowRight className="h-3.5 w-3.5" />
-                  </span>
-                )}
+              {/* Mobile: lesson list toggle */}
+              <div className="flex lg:hidden">
+                <MobileLessonDrawer
+                  modules={sidebarModules}
+                  currentLessonId={lesson.id}
+                  currentModuleId={currentModuleId}
+                  courseSlug={slug}
+                  totalCompleted={totalCompleted}
+                  totalLessons={totalLessons}
+                />
               </div>
             </div>
           </div>
 
-          {/* Tabs */}
+          {/* Tabs: Sobre, Materiais, Comentarios */}
           <LessonTabs
             courseSlug={slug}
             lessonSlug={lessonSlug}
@@ -334,30 +390,30 @@ export default async function AulaPage({ params }: Props) {
             lessonId={lesson.id}
             currentUserId={user.id}
           />
+
+          {/* ── Bottom prev/next nav cards ── */}
+          <NavCards
+            slug={slug}
+            globalPrev={globalPrev}
+            globalNext={globalNext}
+          />
         </div>
 
-        {/* Sidebar — course outline */}
+        {/* ── Right: Course outline sidebar (desktop only) ── */}
         <aside
-          className="hidden lg:flex lg:w-80 lg:flex-col lg:self-stretch shrink-0 border-l sticky top-0 h-screen overflow-y-auto"
+          className="hidden lg:flex lg:w-80 lg:flex-col shrink-0 border-l sticky top-0 h-screen overflow-hidden"
           style={{
             background: 'var(--void)',
             borderColor: 'var(--hairline)',
           }}
         >
-          <div
-            className="border-b px-4 py-3"
-            style={{ borderColor: 'var(--hairline)' }}
-          >
-            <p className="font-mono text-[11px] uppercase tracking-widest" style={{ color: 'var(--bone-mute)' }}>
-              Conteudo do curso
-            </p>
-          </div>
-
-          <SidebarLessonList
-            siblings={siblings ?? []}
+          <CourseSidebar
+            modules={sidebarModules}
             currentLessonId={lesson.id}
-            slug={slug}
-            progress={progress}
+            currentModuleId={currentModuleId}
+            courseSlug={slug}
+            totalCompleted={totalCompleted}
+            totalLessons={totalLessons}
           />
         </aside>
       </div>
@@ -365,43 +421,133 @@ export default async function AulaPage({ params }: Props) {
   )
 }
 
-function SidebarLessonList({
-  siblings,
-  currentLessonId,
-  slug,
-}: {
-  siblings: { id: string; slug: string; title: string; sort_order: number }[]
-  currentLessonId: string
+// ── Nav cards component (server, no event handlers) ──
+type NavLesson = {
+  id: string
   slug: string
-  progress: { seconds_watched: number; completed: boolean } | null
+  title: string
+  moduleTitle: string
+  moduleId: string
+}
+
+function NavCards({
+  slug,
+  globalPrev,
+  globalNext,
+}: {
+  slug: string
+  globalPrev: NavLesson | null
+  globalNext: NavLesson | null
 }) {
   return (
-    <ul className="flex-1">
-      {siblings.map((lesson, index) => {
-        const isCurrent = lesson.id === currentLessonId
+    <div
+      className="border-t grid grid-cols-1 sm:grid-cols-2"
+      style={{
+        borderColor: 'var(--hairline)',
+        background: 'var(--ink)',
+      }}
+    >
+      {/* Previous lesson card */}
+      {globalPrev ? (
+        <Link
+          href={`/academy/curso/${slug}/aula/${globalPrev.slug}`}
+          className="group flex flex-col gap-1.5 border-r p-4 lg:p-5 transition-colors"
+          style={{
+            borderColor: 'var(--hairline)',
+            borderBottom: '1px solid var(--hairline)',
+          }}
+        >
+          <span
+            className="flex items-center gap-1.5 font-mono text-[10px] uppercase tracking-widest"
+            style={{ color: 'var(--bone-mute)' }}
+          >
+            <ArrowLeft className="h-3 w-3" aria-hidden="true" />
+            Aula anterior
+          </span>
+          <span
+            className="text-[13px] leading-snug font-medium line-clamp-2 transition-colors group-hover:text-[var(--bone)]"
+            style={{ color: 'var(--bone-dim)' }}
+          >
+            {globalPrev.title}
+          </span>
+          <span
+            className="font-mono text-[10px] truncate"
+            style={{ color: 'var(--bone-mute)', opacity: 0.6 }}
+          >
+            {globalPrev.moduleTitle}
+          </span>
+        </Link>
+      ) : (
+        <div
+          className="flex flex-col gap-1.5 p-4 lg:p-5 border-r"
+          style={{
+            borderColor: 'var(--hairline)',
+            borderBottom: '1px solid var(--hairline)',
+            opacity: 0.3,
+          }}
+        >
+          <span
+            className="flex items-center gap-1.5 font-mono text-[10px] uppercase tracking-widest"
+            style={{ color: 'var(--bone-mute)' }}
+          >
+            <ArrowLeft className="h-3 w-3" aria-hidden="true" />
+            Aula anterior
+          </span>
+          <span className="text-[13px]" style={{ color: 'var(--bone-mute)' }}>
+            Primeira aula
+          </span>
+        </div>
+      )}
 
-        return (
-          <li key={lesson.id}>
-            <Link
-              href={`/academy/curso/${slug}/aula/${lesson.slug}`}
-              className="flex items-start gap-3 px-4 py-3 transition-colors"
-              style={{
-                background: isCurrent ? 'rgba(255,58,14,0.07)' : 'transparent',
-                borderLeft: isCurrent ? '2px solid var(--ember)' : '2px solid transparent',
-                borderBottom: '1px solid var(--hairline)',
-                color: isCurrent ? 'var(--bone)' : 'var(--bone-mute)',
-              }}
-            >
-              <span className="mt-0.5 font-mono text-[11px] shrink-0" style={{ color: 'var(--bone-mute)' }}>
-                {String(index + 1).padStart(2, '0')}
-              </span>
-              <span className="text-[13px] leading-snug">
-                {lesson.title}
-              </span>
-            </Link>
-          </li>
-        )
-      })}
-    </ul>
+      {/* Next lesson card */}
+      {globalNext ? (
+        <Link
+          href={`/academy/curso/${slug}/aula/${globalNext.slug}`}
+          className="group flex flex-col gap-1.5 p-4 lg:p-5 transition-colors text-right"
+          style={{
+            borderBottom: '1px solid var(--hairline)',
+          }}
+        >
+          <span
+            className="flex items-center justify-end gap-1.5 font-mono text-[10px] uppercase tracking-widest"
+            style={{ color: 'var(--bone-mute)' }}
+          >
+            Proxima aula
+            <ArrowRight className="h-3 w-3" aria-hidden="true" />
+          </span>
+          <span
+            className="text-[13px] leading-snug font-medium line-clamp-2 transition-colors group-hover:text-[var(--bone)]"
+            style={{ color: 'var(--bone-dim)' }}
+          >
+            {globalNext.title}
+          </span>
+          <span
+            className="font-mono text-[10px] truncate"
+            style={{ color: 'var(--bone-mute)', opacity: 0.6 }}
+          >
+            {globalNext.moduleTitle}
+          </span>
+        </Link>
+      ) : (
+        <div
+          className="flex flex-col gap-1.5 p-4 lg:p-5 text-right"
+          style={{
+            borderBottom: '1px solid var(--hairline)',
+            opacity: 0.3,
+          }}
+        >
+          <span
+            className="flex items-center justify-end gap-1.5 font-mono text-[10px] uppercase tracking-widest"
+            style={{ color: 'var(--bone-mute)' }}
+          >
+            Proxima aula
+            <ArrowRight className="h-3 w-3" aria-hidden="true" />
+          </span>
+          <span className="text-[13px]" style={{ color: 'var(--bone-mute)' }}>
+            Ultima aula
+          </span>
+        </div>
+      )}
+    </div>
   )
 }

@@ -63,11 +63,9 @@ function SessionCard({ session }: { session: LiveSessionWithCohort }) {
         <div className="flex flex-wrap items-center gap-2 mb-2">
           {isLive && (
             <span
-              className="font-mono text-[10px] uppercase tracking-wider px-2 py-0.5 border"
+              className="font-mono text-[10px] uppercase tracking-wider px-2 py-0.5 border border-[var(--ember)]/20 bg-[var(--ember)]/10"
               style={{
                 color: 'var(--ember)',
-                backgroundColor: 'rgba(255,58,14,0.10)',
-                borderColor: 'rgba(255,58,14,0.20)',
                 borderRadius: 0,
               }}
             >
@@ -86,9 +84,9 @@ function SessionCard({ session }: { session: LiveSessionWithCohort }) {
             <span
               className="font-mono text-[10px] uppercase tracking-wider px-2 py-0.5 border"
               style={{
-                color: '#4ade80',
-                backgroundColor: 'rgba(74,222,128,0.10)',
-                borderColor: 'rgba(74,222,128,0.20)',
+                color: 'var(--bone-mute)',
+                backgroundColor: 'var(--ink-2)',
+                borderColor: 'var(--hairline)',
                 borderRadius: 0,
               }}
             >
@@ -151,7 +149,7 @@ function SessionCard({ session }: { session: LiveSessionWithCohort }) {
             href={session.recording_url!}
             target="_blank"
             rel="noopener noreferrer"
-            className="flex items-center gap-1.5 px-3 h-9 border font-mono text-[11px] uppercase tracking-wider transition-colors hover:border-white/20 hover:text-white/80"
+            className="flex items-center gap-1.5 px-3 h-9 border font-mono text-[11px] uppercase tracking-wider transition-colors hover:border-[var(--hairline-strong)] hover:text-[var(--bone-dim)]"
             style={{
               borderColor: 'var(--hairline)',
               color: 'var(--bone-mute)',
@@ -178,7 +176,13 @@ export default function AgendaPage() {
   const past = sessions.filter((s) => new Date(s.scheduled_at) < now)
 
   return (
-    <div className="mx-auto max-w-3xl space-y-8">
+    <div
+      className="mx-auto max-w-3xl space-y-8"
+      style={{
+        backgroundImage: 'radial-gradient(rgba(255,255,255,0.05) 1px, transparent 1px)',
+        backgroundSize: '24px 24px',
+      }}
+    >
       <div>
         <p
           className="font-mono text-[11px] uppercase tracking-[0.2em] mb-2"
@@ -220,8 +224,8 @@ export default function AgendaPage() {
           }}
         >
           <Calendar
-            className="h-12 w-12"
-            style={{ color: 'rgba(132,132,140,0.30)' }}
+            className="h-12 w-12 opacity-30"
+            style={{ color: 'var(--bone-mute)' }}
           />
           <p
             className="mt-4 font-sans text-[14px]"

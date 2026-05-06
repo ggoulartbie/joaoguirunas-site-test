@@ -62,7 +62,7 @@ export function ForumReplyForm({ threadId, parentReplyId, onSuccess, compact = f
         <button
           type="submit"
           disabled={isPending || !content.trim()}
-          className="flex items-center gap-2 bg-[var(--ember)] px-4 py-2 font-mono text-xs uppercase tracking-wide text-white transition-colors hover:bg-[#FF5A1F] disabled:opacity-40 disabled:cursor-not-allowed"
+          className="flex items-center gap-2 bg-[var(--ember)] px-4 py-2 font-mono text-xs uppercase tracking-wide text-white transition-colors hover:bg-[var(--ember-glow)] disabled:opacity-40 disabled:cursor-not-allowed"
         >
           <Send className="h-3.5 w-3.5" aria-hidden="true" />
           {isPending ? 'Enviando...' : 'Responder'}

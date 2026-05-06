@@ -20,15 +20,12 @@ export default function CertificadosPage() {
   return (
     <div className="mx-auto max-w-3xl space-y-8">
       <div>
-        <p
-          className="font-mono text-[11px] uppercase tracking-[0.2em] mb-2"
-          style={{ color: 'var(--ember)' }}
-        >
+        <p className="mb-2 font-mono text-[11px] uppercase tracking-[0.2em] text-[color:var(--ember)]">
           Certificados
         </p>
         <h1
-          className="font-display italic text-[36px] leading-tight"
-          style={{ color: 'var(--bone)' }}
+          className="font-[family-name:var(--type-display)] italic text-[color:var(--bone)]"
+          style={{ fontSize: '36px', lineHeight: 1.1 }}
         >
           Suas conquistas
         </h1>
@@ -36,69 +33,50 @@ export default function CertificadosPage() {
 
       {certificates.length === 0 ? (
         <div
-          className="flex flex-col items-center justify-center py-20 text-center border"
-          style={{
-            backgroundColor: 'var(--ink)',
-            borderColor: 'var(--hairline)',
-            borderRadius: 0,
-          }}
+          className="flex flex-col items-center justify-center border border-[color:var(--hairline)] bg-[color:var(--ink)] py-20 text-center"
+          style={{ borderRadius: 0 }}
         >
-          <Award className="h-12 w-12" style={{ color: 'rgba(132,132,140,0.30)' }} />
-          <p className="mt-4 font-sans text-[14px]" style={{ color: 'var(--bone-mute)' }}>
+          <Award className="h-12 w-12 text-[color:var(--bone-mute)] opacity-30" />
+          <p className="mt-4 font-[family-name:var(--type-sans)] text-[14px] text-[color:var(--bone-mute)]">
             Nenhum certificado ainda. Conclua um curso para emitir seu certificado.
           </p>
           <Link
             href="/academy/meus-cursos"
-            className="mt-4 font-mono text-[11px] uppercase tracking-wider transition-colors hover:opacity-80"
-            style={{ color: 'var(--ember)' }}
+            className="mt-4 font-mono text-[11px] uppercase tracking-wider text-[color:var(--ember)] transition-colors hover:text-[color:var(--ember-glow)]"
           >
             Ver meus cursos
           </Link>
         </div>
       ) : (
-        <div className="grid sm:grid-cols-2 gap-4">
+        <div className="grid gap-4 sm:grid-cols-2">
           {certificates.map((cert) => (
             <div
               key={cert.id}
-              className="border p-5 flex flex-col"
-              style={{
-                backgroundColor: 'var(--ink)',
-                borderColor: 'var(--hairline)',
-                borderRadius: 0,
-              }}
+              className="flex flex-col border border-[color:var(--hairline)] bg-[color:var(--ink)] p-5 transition-colors hover:border-[color:var(--hairline-strong)]"
+              style={{ borderRadius: 0 }}
             >
-              <Award className="h-6 w-6" style={{ color: 'var(--ember)' }} />
+              <Award className="h-6 w-6 text-[color:var(--ember)]" />
 
-              <p
-                className="font-sans text-[15px] font-medium mt-3 leading-snug"
-                style={{ color: 'var(--bone)' }}
-              >
+              <p className="mt-3 font-[family-name:var(--type-sans)] text-[15px] font-medium leading-snug text-[color:var(--bone)]">
                 {cert.courseName}
               </p>
-              <p className="font-mono text-[11px] mt-1" style={{ color: 'var(--bone-mute)' }}>
+              <p className="mt-1 font-mono text-[11px] text-[color:var(--bone-mute)]">
                 {cert.issued_at ? formatDate(cert.issued_at) : '—'}
               </p>
-              <p className="font-mono text-[11px] mt-0.5" style={{ color: 'var(--bone-mute)' }}>
+              <p className="mt-0.5 font-mono text-[11px] text-[color:var(--bone-mute)]">
                 {cert.cohortName}
               </p>
-              <p
-                className="font-mono text-[10px] mt-1"
-                style={{ color: 'rgba(132,132,140,0.50)' }}
-              >
+              <p className="mt-1 font-mono text-[10px] text-[color:var(--bone-mute)] opacity-50">
                 {cert.verification_code}
               </p>
 
-              <div className="flex items-center gap-3 mt-4">
+              <div className="mt-4 flex items-center gap-3">
                 {cert.pdf_storage_path && (
                   <a
                     href={`/api/certificado/${cert.verification_code}`}
                     download
-                    className="flex items-center gap-1.5 border px-3 py-2 font-mono text-[11px] uppercase tracking-wider transition-colors hover:border-[var(--ember)]"
-                    style={{
-                      borderColor: 'var(--hairline)',
-                      color: 'var(--ember)',
-                      borderRadius: 0,
-                    }}
+                    className="flex items-center gap-1.5 border border-[color:var(--hairline)] px-3 py-2 font-mono text-[11px] uppercase tracking-wider text-[color:var(--bone-mute)] transition-colors hover:border-[color:var(--hairline-strong)] hover:text-[color:var(--bone)]"
+                    style={{ borderRadius: 0 }}
                   >
                     <Download className="h-3 w-3" />
                     Baixar PDF
@@ -108,8 +86,7 @@ export default function CertificadosPage() {
                   href={`/academy/certificado/v/${cert.verification_code}`}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center gap-1 font-mono text-[10px] uppercase tracking-wider transition-colors hover:text-[var(--bone)]"
-                  style={{ color: 'var(--bone-mute)' }}
+                  className="flex items-center gap-1 font-mono text-[10px] uppercase tracking-wider text-[color:var(--bone-mute)] transition-colors hover:text-[color:var(--bone)]"
                 >
                   <ExternalLink className="h-3 w-3" />
                   Verificar

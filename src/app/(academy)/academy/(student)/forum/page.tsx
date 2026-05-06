@@ -217,7 +217,7 @@ export default async function ForumPage({
               {/* Direita: resolved */}
               {thread.is_resolved && (
                 <div className="shrink-0">
-                  <CheckCircle2 className="h-4 w-4 text-green-400" />
+                  <CheckCircle2 className="h-4 w-4 text-[color:var(--ember)]" />
                 </div>
               )}
             </Link>

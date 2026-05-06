@@ -48,8 +48,8 @@ function CommentItem({
 
   if (comment.deleted_at) {
     return (
-      <div className={`${isReply ? 'ml-8 border-l border-white/5 pl-4' : ''}`}>
-        <p className="py-2 font-mono text-xs italic text-white/20">
+      <div className={`${isReply ? 'ml-8 pl-4' : ''}`} style={isReply ? { borderLeft: '1px solid var(--hairline)' } : undefined}>
+        <p className="py-2 font-mono text-xs italic" style={{ color: 'var(--bone-mute)', opacity: 0.5 }}>
           [comentário removido]
         </p>
       </div>
@@ -67,17 +67,20 @@ function CommentItem({
   }
 
   return (
-    <div className={`group ${isReply ? 'ml-8 border-l border-white/5 pl-4' : ''}`}>
+    <div className={`group ${isReply ? 'ml-8 pl-4' : ''}`} style={isReply ? { borderLeft: '1px solid var(--hairline)' } : undefined}>
       <div className="flex gap-3 py-3">
         {/* Avatar */}
-        <div className="mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center bg-white/10 font-mono text-[10px] font-bold text-white/50">
+        <div
+          className="mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center font-mono text-[10px] font-bold"
+          style={{ background: 'var(--ink-3)', color: 'var(--bone-mute)' }}
+        >
           {comment.authorName.charAt(0).toUpperCase()}
         </div>
 
         <div className="flex-1 min-w-0">
           {/* Header */}
           <div className="flex flex-wrap items-center gap-2">
-            <span className="font-mono text-xs font-semibold text-white/80">
+            <span className="font-mono text-xs font-semibold" style={{ color: 'var(--bone-dim)' }}>
               {comment.authorName}
             </span>
             {badge?.label && (
@@ -88,12 +91,12 @@ function CommentItem({
               </span>
             )}
             {comment.is_pinned && (
-              <span className="flex items-center gap-1 font-mono text-[9px] uppercase tracking-wider text-amber-400/60">
+              <span className="flex items-center gap-1 font-mono text-[9px] uppercase tracking-wider" style={{ color: 'var(--bone-mute)' }}>
                 <Pin className="h-2.5 w-2.5" />
                 Fixado
               </span>
             )}
-            <span className="font-mono text-[10px] text-white/20">
+            <span className="font-mono text-[10px]" style={{ color: 'var(--bone-mute)', opacity: 0.6 }}>
               {formatRelative(comment.created_at)}
             </span>
           </div>
@@ -105,14 +108,20 @@ function CommentItem({
                 value={editContent}
                 onChange={(e) => setEditContent(e.target.value)}
                 rows={3}
-                className="w-full border border-white/10 bg-white/[0.03] px-3 py-2 font-mono text-sm text-white/80 focus:border-white/20 focus:outline-none"
+                className="w-full px-3 py-2 font-mono text-sm focus:outline-none"
+                style={{
+                  background: 'var(--ink-2)',
+                  border: '1px solid var(--hairline)',
+                  color: 'var(--bone-dim)',
+                }}
                 autoFocus
               />
               <div className="flex gap-2">
                 <button
                   type="button"
                   onClick={handleSaveEdit}
-                  className="flex items-center gap-1.5 bg-[var(--ember)] px-3 py-1.5 font-mono text-[10px] uppercase tracking-wider text-white"
+                  className="flex items-center gap-1.5 px-3 py-1.5 font-mono text-[10px] uppercase tracking-wider"
+                  style={{ background: 'var(--ember)', color: 'var(--bone)' }}
                 >
                   <Check className="h-3 w-3" />
                   Salvar
@@ -120,7 +129,8 @@ function CommentItem({
                 <button
                   type="button"
                   onClick={() => { setEditing(false); setEditContent(comment.content) }}
-                  className="flex items-center gap-1.5 border border-white/10 px-3 py-1.5 font-mono text-[10px] uppercase tracking-wider text-white/40"
+                  className="flex items-center gap-1.5 px-3 py-1.5 font-mono text-[10px] uppercase tracking-wider"
+                  style={{ border: '1px solid var(--hairline)', color: 'var(--bone-mute)' }}
                 >
                   <X className="h-3 w-3" />
                   Cancelar
@@ -128,7 +138,7 @@ function CommentItem({
               </div>
             </div>
           ) : (
-            <p className="mt-1 text-sm text-white/70 leading-relaxed">
+            <p className="mt-1 text-sm leading-relaxed" style={{ color: 'var(--bone-dim)' }}>
               {comment.content}
             </p>
           )}
@@ -140,7 +150,8 @@ function CommentItem({
                 <button
                   type="button"
                   onClick={() => onReply(comment.id, comment.authorName)}
-                  className="flex items-center gap-1 font-mono text-[10px] uppercase tracking-wider text-white/30 transition-colors hover:text-white/60"
+                  className="flex items-center gap-1 font-mono text-[10px] uppercase tracking-wider transition-colors hover:opacity-100"
+                  style={{ color: 'var(--bone-mute)', opacity: 0.6 }}
                 >
                   <Reply className="h-3 w-3" />
                   Responder
@@ -151,7 +162,8 @@ function CommentItem({
                   <button
                     type="button"
                     onClick={() => setEditing(true)}
-                    className="flex items-center gap-1 font-mono text-[10px] uppercase tracking-wider text-white/30 transition-colors hover:text-white/60"
+                    className="flex items-center gap-1 font-mono text-[10px] uppercase tracking-wider transition-colors hover:opacity-100"
+                    style={{ color: 'var(--bone-mute)', opacity: 0.6 }}
                   >
                     <Pencil className="h-3 w-3" />
                     Editar
@@ -159,7 +171,8 @@ function CommentItem({
                   <button
                     type="button"
                     onClick={() => onDelete(comment.id)}
-                    className="flex items-center gap-1 font-mono text-[10px] uppercase tracking-wider text-white/30 transition-colors hover:text-red-400/70"
+                    className="flex items-center gap-1 font-mono text-[10px] uppercase tracking-wider transition-colors hover:text-red-400"
+                    style={{ color: 'var(--bone-mute)', opacity: 0.6 }}
                   >
                     <Trash2 className="h-3 w-3" />
                     Excluir
@@ -216,8 +229,8 @@ function CommentForm({
   return (
     <form onSubmit={handleSubmit} className="space-y-2">
       {replyingToName && (
-        <p className="font-mono text-[10px] text-white/30">
-          Respondendo a <span className="text-white/60">{replyingToName}</span>
+        <p className="font-mono text-[10px]" style={{ color: 'var(--bone-mute)' }}>
+          Respondendo a <span style={{ color: 'var(--bone-dim)' }}>{replyingToName}</span>
         </p>
       )}
       <textarea
@@ -227,7 +240,12 @@ function CommentForm({
         rows={3}
         autoFocus={autoFocus}
         disabled={isPending}
-        className="w-full border border-white/10 bg-white/[0.03] px-3 py-2.5 font-mono text-sm text-white/80 placeholder-white/20 focus:border-white/20 focus:outline-none disabled:opacity-50"
+        className="w-full px-3 py-2.5 font-mono text-sm focus:outline-none disabled:opacity-50"
+        style={{
+          background: 'var(--ink-2)',
+          border: '1px solid var(--hairline)',
+          color: 'var(--bone-dim)',
+        }}
       />
       {error && (
         <p className="font-mono text-xs text-red-400">{error}</p>
@@ -236,7 +254,8 @@ function CommentForm({
         <button
           type="submit"
           disabled={isPending || !content.trim()}
-          className="bg-[var(--ember)] px-4 py-2 font-mono text-[10px] uppercase tracking-wider text-white disabled:cursor-not-allowed disabled:opacity-40"
+          className="px-4 py-2 font-mono text-[10px] uppercase tracking-wider disabled:cursor-not-allowed disabled:opacity-40"
+          style={{ background: 'var(--ember)', color: 'var(--bone)' }}
         >
           {isPending ? 'Enviando...' : 'Comentar'}
         </button>
@@ -244,7 +263,8 @@ function CommentForm({
           <button
             type="button"
             onClick={onCancel}
-            className="border border-white/10 px-4 py-2 font-mono text-[10px] uppercase tracking-wider text-white/40 transition-colors hover:text-white/70"
+            className="px-4 py-2 font-mono text-[10px] uppercase tracking-wider transition-colors hover:opacity-100"
+            style={{ border: '1px solid var(--hairline)', color: 'var(--bone-mute)', opacity: 0.7 }}
           >
             Cancelar
           </button>
@@ -305,11 +325,11 @@ export function CommentsSection({
   return (
     <div className="space-y-6">
       <div className="flex items-center gap-2">
-        <h3 className="font-mono text-xs uppercase tracking-widest text-white/40">
+        <h3 className="font-mono text-xs uppercase tracking-widest" style={{ color: 'var(--bone-mute)' }}>
           Comentários
         </h3>
         {visibleCount > 0 && (
-          <span className="font-mono text-[10px] text-white/20">({visibleCount})</span>
+          <span className="font-mono text-[10px]" style={{ color: 'var(--bone-mute)', opacity: 0.5 }}>({visibleCount})</span>
         )}
       </div>
 
@@ -322,13 +342,13 @@ export function CommentsSection({
 
       {/* Thread list */}
       {topLevel.length === 0 ? (
-        <p className="py-4 font-mono text-xs text-white/20">
+        <p className="py-4 font-mono text-xs" style={{ color: 'var(--bone-mute)', opacity: 0.5 }}>
           Seja o primeiro a comentar nesta aula.
         </p>
       ) : (
-        <div className="divide-y divide-white/5">
+        <div style={{ borderTop: '1px solid var(--hairline)' }}>
           {topLevel.map((comment) => (
-            <div key={comment.id}>
+            <div key={comment.id} style={{ borderBottom: '1px solid var(--hairline)' }}>
               <CommentItem
                 comment={comment}
                 currentUserId={currentUserId}
@@ -352,7 +372,7 @@ export function CommentsSection({
 
               {/* Reply form */}
               {replyingTo !== null && replyingTo.id === comment.id && (
-                <div className="ml-8 border-l border-white/5 py-3 pl-4">
+                <div className="ml-8 py-3 pl-4" style={{ borderLeft: '1px solid var(--hairline)' }}>
                   <CommentForm
                     lessonId={lessonId}
                     parentCommentId={comment.id}

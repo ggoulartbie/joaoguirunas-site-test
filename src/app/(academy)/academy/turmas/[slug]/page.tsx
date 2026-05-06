@@ -633,11 +633,8 @@ export default async function TurmaSlugPage({ params }: Props) {
               ) : cohort.is_purchasable ? (
                 <Link
                   href={checkoutHref}
+                  className="block w-full text-center bg-[var(--ember)] hover:bg-[var(--ember-glow)] transition-colors"
                   style={{
-                    display: 'block',
-                    width: '100%',
-                    textAlign: 'center',
-                    background: 'var(--ember)',
                     color: 'var(--void)',
                     fontFamily: 'var(--type-mono)',
                     fontSize: 11,
@@ -646,10 +643,7 @@ export default async function TurmaSlugPage({ params }: Props) {
                     padding: '14px 0',
                     fontWeight: 500,
                     textDecoration: 'none',
-                    transition: 'background 0.15s',
                   }}
-                  onMouseEnter={(e) => { e.currentTarget.style.background = 'var(--ember-glow)' }}
-                  onMouseLeave={(e) => { e.currentTarget.style.background = 'var(--ember)' }}
                 >
                   Matricular-se agora →
                 </Link>

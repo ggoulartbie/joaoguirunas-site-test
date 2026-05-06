@@ -1,9 +1,11 @@
 'use client'
 
-import { useState, useTransition } from 'react'
+import { useState, useTransition, useRef } from 'react'
+import Image from 'next/image'
 import Link from 'next/link'
-import { RefreshCw, ExternalLink, Check } from 'lucide-react'
+import { RefreshCw, ExternalLink, Check, Camera, Loader2 } from 'lucide-react'
 import { enableAutoRenewal, disableAutoRenewal } from '@/app/actions/autoRenewal'
+import { createClient } from '@/lib/supabase/client'
 
 type MembershipStatus = 'ACTIVE' | 'EXPIRED' | 'REMOVED' | 'PAST_DUE'
 
@@ -163,22 +165,97 @@ function SectionDividerLabel({ children }: { children: React.ReactNode }) {
 function ProfileHeader({
   profile,
   email,
+  avatarUrl,
+  onAvatarChange,
 }: {
   profile: ServerProfile
   email: string
+  avatarUrl: string | null
+  onAvatarChange: (url: string) => void
 }) {
   const avatarInitial = (profile?.name ?? email).charAt(0).toUpperCase()
+  const fileInputRef = useRef<HTMLInputElement>(null)
+  const [uploading, setUploading] = useState(false)
+  const [uploadError, setUploadError] = useState('')
+
+  async function handleFileChange(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0]
+    if (!file) return
+    setUploading(true)
+    setUploadError('')
+
+    try {
+      const supabase = createClient()
+      const { data: { user } } = await supabase.auth.getUser()
+      if (!user) throw new Error('Não autenticado')
+
+      const ext = file.name.split('.').pop() ?? 'jpg'
+      const path = `${user.id}/avatar.${ext}`
+
+      const { error: uploadErr } = await supabase.storage
+        .from('avatars')
+        .upload(path, file, { upsert: true })
+      if (uploadErr) throw uploadErr
+
+      const { data: urlData } = supabase.storage.from('avatars').getPublicUrl(path)
+      const publicUrl = urlData.publicUrl
+
+      await supabase.from('profiles').update({ avatar_url: publicUrl }).eq('id', user.id)
+      onAvatarChange(publicUrl)
+    } catch {
+      setUploadError('Erro ao fazer upload. Tente novamente.')
+    } finally {
+      setUploading(false)
+      if (fileInputRef.current) fileInputRef.current.value = ''
+    }
+  }
 
   return (
     <div className="border border-[rgba(255,255,255,0.07)] bg-[var(--ink)] p-6">
       <div className="flex items-center gap-5">
-        <div className="flex h-20 w-20 shrink-0 items-center justify-center rounded-full bg-[var(--ember)]/20">
-          <span className="font-mono text-2xl uppercase text-[var(--ember)]">{avatarInitial}</span>
+        {/* Avatar com upload */}
+        <div className="relative shrink-0">
+          <button
+            type="button"
+            onClick={() => fileInputRef.current?.click()}
+            disabled={uploading}
+            aria-label="Alterar foto de perfil"
+            className="group relative flex h-20 w-20 items-center justify-center overflow-hidden bg-[var(--ember)]/20 focus-visible:outline focus-visible:outline-2 focus-visible:outline-[var(--ember)]"
+          >
+            {avatarUrl ? (
+              <Image
+                src={avatarUrl}
+                alt="Foto de perfil"
+                fill
+                sizes="80px"
+                style={{ objectFit: 'cover' }}
+              />
+            ) : (
+              <span className="font-mono text-2xl uppercase text-[var(--ember)]">{avatarInitial}</span>
+            )}
+            {uploading ? (
+              <div className="absolute inset-0 flex items-center justify-center bg-black/60">
+                <Loader2 className="h-5 w-5 animate-spin text-white" />
+              </div>
+            ) : (
+              <div className="absolute inset-0 flex items-center justify-center bg-black/50 opacity-0 transition-opacity group-hover:opacity-100">
+                <Camera className="h-5 w-5 text-white" />
+              </div>
+            )}
+          </button>
+          <input
+            ref={fileInputRef}
+            type="file"
+            accept="image/jpeg,image/png,image/webp"
+            className="hidden"
+            onChange={handleFileChange}
+          />
         </div>
-        <div className="min-w-0">
+
+        <div className="min-w-0 flex-1">
           {profile?.name && (
             <p
-              className="truncate font-[family-name:var(--type-display)] text-[28px] italic leading-tight text-[var(--bone)]"
+              className="truncate text-[28px] italic leading-tight text-[var(--bone)]"
               style={{ fontFamily: 'var(--type-display, serif)' }}
             >
               {profile.name}
@@ -186,10 +263,16 @@ function ProfileHeader({
           )}
           <p className="mt-0.5 font-mono text-[12px] text-[var(--bone-mute)]">{email}</p>
           {profile?.bio && (
-            <p className="mt-2 font-[family-name:var(--type-sans)] text-sm text-[var(--bone-dim)]">
+            <p className="mt-2 text-sm text-[var(--bone-dim)]" style={{ fontFamily: 'var(--type-sans)' }}>
               {profile.bio}
             </p>
           )}
+          {uploadError && (
+            <p className="mt-1 font-mono text-[11px] text-[var(--ember)]">{uploadError}</p>
+          )}
+          <p className="mt-2 font-mono text-[10px] text-[var(--bone-mute)]">
+            Clique na foto para alterar · JPG, PNG ou WebP · máx. 2MB
+          </p>
         </div>
       </div>
     </div>
@@ -585,12 +668,18 @@ export function PerfilClient({
   serverMemberships = [],
   serverPayments = [],
 }: PerfilClientProps) {
+  const [avatarUrl, setAvatarUrl] = useState<string | null>(serverProfile?.avatar_url ?? null)
   const memberships = serverMemberships.map(toMembership)
   const payments = serverPayments.map(toPayment)
 
   return (
     <div className="mx-auto max-w-2xl">
-      <ProfileHeader profile={serverProfile ?? null} email={serverEmail} />
+      <ProfileHeader
+        profile={serverProfile ?? null}
+        email={serverEmail}
+        avatarUrl={avatarUrl}
+        onAvatarChange={setAvatarUrl}
+      />
       <EditProfileForm profile={serverProfile ?? null} email={serverEmail} />
       <MembershipsSection memberships={memberships} />
       <PaymentsSection payments={payments} />
