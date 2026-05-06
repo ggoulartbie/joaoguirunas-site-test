@@ -83,8 +83,8 @@ export default async function TurmaSlugPage({ params }: Props) {
     : null
   const sold = spotsLeft !== null && spotsLeft === 0
   const checkoutHref = user
-    ? `/checkout/${cohort.slug}`
-    : `/login?next=/checkout/${cohort.slug}`
+    ? `/academy/checkout/${cohort.slug}`
+    : `/academy/login?next=/academy/checkout/${cohort.slug}`
 
   const features: string[] = []
   if (cohort.has_live_sessions) features.push('Sessões ao vivo')
@@ -92,59 +92,293 @@ export default async function TurmaSlugPage({ params }: Props) {
   if (cohort.allows_auto_renewal) features.push('Renovação automática')
   if (cohort.access_duration_days) features.push(`Acesso por ${cohort.access_duration_days} dias`)
 
+  const fillPercent = cohort.total_seats && cohort.total_seats > 0
+    ? Math.round((cohort.filled_seats / cohort.total_seats) * 100)
+    : null
+
   return (
-    <div className="min-h-screen bg-[#050507] text-white">
+    <div style={{ background: 'var(--void)', minHeight: '100vh' }}>
+      {/* Dot texture */}
+      <div
+        className="pointer-events-none fixed inset-0 z-0"
+        style={{
+          backgroundImage: 'radial-gradient(rgba(255,255,255,0.05) 1px, transparent 1px)',
+          backgroundSize: '24px 24px',
+          opacity: 0.55,
+        }}
+      />
+
+      {/* Nav */}
+      <nav
+        style={{
+          borderBottom: '1px solid var(--hairline)',
+          background: 'var(--void)',
+          position: 'relative',
+          zIndex: 10,
+        }}
+      >
+        <div
+          style={{
+            maxWidth: 960,
+            margin: '0 auto',
+            padding: '0 24px',
+            height: 56,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+          }}
+        >
+          <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+            <Image src="/images/brand/symbol-official.svg" alt="João Guirunas" width={28} height={28} priority />
+            <span
+              style={{
+                fontFamily: 'var(--type-mono)',
+                fontSize: 10,
+                letterSpacing: '0.18em',
+                textTransform: 'uppercase',
+                color: 'var(--bone-mute)',
+              }}
+            >
+              João Guirunas Academy
+            </span>
+          </div>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 24 }}>
+            <Link
+              href="/academy/turmas"
+              style={{
+                fontFamily: 'var(--type-mono)',
+                fontSize: 10,
+                letterSpacing: '0.18em',
+                textTransform: 'uppercase',
+                color: 'var(--bone-mute)',
+                textDecoration: 'none',
+              }}
+            >
+              ← Turmas
+            </Link>
+            <Link
+              href="/academy/login"
+              style={{
+                fontFamily: 'var(--type-mono)',
+                fontSize: 10,
+                letterSpacing: '0.18em',
+                textTransform: 'uppercase',
+                color: 'var(--bone-dim)',
+                textDecoration: 'none',
+              }}
+            >
+              Entrar →
+            </Link>
+          </div>
+        </div>
+      </nav>
+
       {/* Hero */}
-      <div className="relative">
+      <section
+        style={{
+          position: 'relative',
+          zIndex: 1,
+          background: 'var(--ink)',
+          borderBottom: '1px solid var(--hairline)',
+        }}
+      >
         {cohort.cover_image_url && (
-          <div className="absolute inset-0 h-72 overflow-hidden">
+          <div
+            style={{
+              position: 'absolute',
+              inset: 0,
+              overflow: 'hidden',
+            }}
+          >
             <Image
               src={cohort.cover_image_url}
               alt={cohort.name}
               fill
               priority
-              className="object-cover opacity-20"
+              style={{ objectFit: 'cover', opacity: 0.12 }}
             />
-            <div className="absolute inset-0 bg-gradient-to-b from-transparent to-[#050507]" />
+            <div
+              style={{
+                position: 'absolute',
+                inset: 0,
+                background: 'linear-gradient(to bottom, transparent 0%, var(--ink) 100%)',
+              }}
+            />
           </div>
         )}
-        <div className="relative mx-auto max-w-4xl px-6 pt-20 pb-12">
-          <p className="mb-3 font-mono text-[10px] uppercase tracking-widest text-white/30">
-            <Link href="/turmas" className="hover:text-white/60 transition-colors">Turmas</Link>
+        <div
+          style={{
+            position: 'relative',
+            maxWidth: 960,
+            margin: '0 auto',
+            padding: '72px 24px 64px',
+          }}
+        >
+          {/* Eyebrow breadcrumb */}
+          <p
+            style={{
+              fontFamily: 'var(--type-mono)',
+              fontSize: 10,
+              letterSpacing: '0.18em',
+              textTransform: 'uppercase',
+              color: 'var(--bone-mute)',
+              marginBottom: 24,
+            }}
+          >
+            <Link
+              href="/academy/turmas"
+              style={{ color: 'var(--bone-mute)', textDecoration: 'none' }}
+            >
+              Turmas
+            </Link>
             {' / '}
-            <span>{cohort.name}</span>
+            <span style={{ color: 'var(--bone-dim)' }}>{cohort.name}</span>
           </p>
-          <h1 className="text-4xl font-bold tracking-tight">{cohort.name}</h1>
+
+          {/* Status badge */}
+          {!sold && (
+            <span
+              style={{
+                display: 'inline-block',
+                fontFamily: 'var(--type-mono)',
+                fontSize: 10,
+                letterSpacing: '0.16em',
+                textTransform: 'uppercase',
+                border: '1px solid rgba(255,58,14,0.3)',
+                color: 'var(--ember)',
+                padding: '3px 10px',
+                marginBottom: 20,
+              }}
+            >
+              {cohort.status === 'OPEN' ? 'Vagas abertas' : 'Em andamento'}
+            </span>
+          )}
+
+          {/* Title */}
+          <h1
+            style={{
+              fontFamily: 'var(--type-display)',
+              fontWeight: 300,
+              fontStyle: 'italic',
+              fontSize: 'clamp(36px, 5vw, 64px)',
+              letterSpacing: '-0.025em',
+              lineHeight: 1,
+              color: 'var(--bone)',
+              marginBottom: 20,
+            }}
+          >
+            {cohort.name}
+          </h1>
+
           {cohort.description && (
-            <p className="mt-4 max-w-2xl text-lg text-white/50">{cohort.description}</p>
+            <p
+              style={{
+                fontFamily: 'var(--type-display)',
+                fontStyle: 'italic',
+                fontWeight: 300,
+                fontSize: 18,
+                color: 'var(--bone-dim)',
+                lineHeight: 1.5,
+                maxWidth: 560,
+              }}
+            >
+              {cohort.description}
+            </p>
           )}
         </div>
-      </div>
+      </section>
 
       {/* Body */}
-      <div className="mx-auto max-w-4xl px-6 pb-24">
-        <div className="grid gap-8 lg:grid-cols-[1fr_320px]">
-          {/* Left */}
-          <div className="space-y-10">
-            {/* Dates / meta */}
-            {(cohort.start_date || cohort.end_date) && (
-              <div className="flex flex-wrap gap-6 border-b border-white/10 pb-6">
+      <div
+        style={{
+          position: 'relative',
+          zIndex: 1,
+          maxWidth: 960,
+          margin: '0 auto',
+          padding: '64px 24px 120px',
+        }}
+      >
+        <div
+          style={{
+            display: 'grid',
+            gap: 40,
+            gridTemplateColumns: '1fr',
+          }}
+          className="lg:grid-cols-[1fr_300px]"
+        >
+          {/* Left column */}
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 48 }}>
+
+            {/* Datas / meta */}
+            {(cohort.start_date || cohort.end_date || spotsLeft !== null) && (
+              <div
+                style={{
+                  display: 'flex',
+                  flexWrap: 'wrap',
+                  gap: 32,
+                  paddingBottom: 32,
+                  borderBottom: '1px solid var(--hairline)',
+                }}
+              >
                 {cohort.start_date && (
                   <div>
-                    <p className="font-mono text-[10px] uppercase tracking-wider text-white/30">Início</p>
-                    <p className="mt-1 text-sm text-white/70">{formatDate(cohort.start_date)}</p>
+                    <p
+                      style={{
+                        fontFamily: 'var(--type-mono)',
+                        fontSize: 10,
+                        letterSpacing: '0.18em',
+                        textTransform: 'uppercase',
+                        color: 'var(--bone-mute)',
+                        marginBottom: 4,
+                      }}
+                    >
+                      Início
+                    </p>
+                    <p style={{ fontFamily: 'var(--type-sans)', fontSize: 14, color: 'var(--bone-dim)' }}>
+                      {formatDate(cohort.start_date)}
+                    </p>
                   </div>
                 )}
                 {cohort.end_date && (
                   <div>
-                    <p className="font-mono text-[10px] uppercase tracking-wider text-white/30">Término</p>
-                    <p className="mt-1 text-sm text-white/70">{formatDate(cohort.end_date)}</p>
+                    <p
+                      style={{
+                        fontFamily: 'var(--type-mono)',
+                        fontSize: 10,
+                        letterSpacing: '0.18em',
+                        textTransform: 'uppercase',
+                        color: 'var(--bone-mute)',
+                        marginBottom: 4,
+                      }}
+                    >
+                      Término
+                    </p>
+                    <p style={{ fontFamily: 'var(--type-sans)', fontSize: 14, color: 'var(--bone-dim)' }}>
+                      {formatDate(cohort.end_date)}
+                    </p>
                   </div>
                 )}
                 {spotsLeft !== null && (
                   <div>
-                    <p className="font-mono text-[10px] uppercase tracking-wider text-white/30">Vagas</p>
-                    <p className={`mt-1 text-sm ${sold ? 'text-red-400' : 'text-white/70'}`}>
+                    <p
+                      style={{
+                        fontFamily: 'var(--type-mono)',
+                        fontSize: 10,
+                        letterSpacing: '0.18em',
+                        textTransform: 'uppercase',
+                        color: 'var(--bone-mute)',
+                        marginBottom: 4,
+                      }}
+                    >
+                      Vagas
+                    </p>
+                    <p
+                      style={{
+                        fontFamily: 'var(--type-sans)',
+                        fontSize: 14,
+                        color: sold ? 'var(--ember)' : 'var(--bone-dim)',
+                      }}
+                    >
                       {sold ? 'Esgotadas' : `${spotsLeft} restante${spotsLeft !== 1 ? 's' : ''}`}
                     </p>
                   </div>
@@ -152,33 +386,90 @@ export default async function TurmaSlugPage({ params }: Props) {
               </div>
             )}
 
-            {/* Courses included */}
+            {/* Cursos incluídos */}
             {courses.length > 0 && (
               <div>
-                <h2 className="mb-4 font-mono text-[10px] uppercase tracking-widest text-white/40">
+                <p
+                  style={{
+                    fontFamily: 'var(--type-mono)',
+                    fontSize: 10,
+                    letterSpacing: '0.18em',
+                    textTransform: 'uppercase',
+                    color: 'var(--bone-mute)',
+                    marginBottom: 20,
+                  }}
+                >
                   Cursos incluídos
-                </h2>
-                <div className="space-y-3">
+                </p>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 1, background: 'var(--hairline)' }}>
                   {courses.map((course) => (
                     <div
                       key={course.id}
-                      className="flex items-start gap-4 border border-white/10 bg-white/[0.02] p-4"
+                      style={{
+                        display: 'flex',
+                        alignItems: 'flex-start',
+                        gap: 16,
+                        background: 'var(--ink)',
+                        padding: '16px 20px',
+                      }}
                     >
-                      {course.cover_image_url && (
-                        <div className="relative h-14 w-20 shrink-0 overflow-hidden bg-white/5">
+                      {course.cover_image_url ? (
+                        <div
+                          style={{
+                            position: 'relative',
+                            width: 72,
+                            height: 48,
+                            flexShrink: 0,
+                            overflow: 'hidden',
+                            background: 'var(--ink-2)',
+                          }}
+                        >
                           <Image
                             src={course.cover_image_url}
                             alt={course.title}
                             fill
-                            className="object-cover"
-                            sizes="80px"
+                            style={{ objectFit: 'cover' }}
+                            sizes="72px"
                           />
                         </div>
+                      ) : (
+                        <div
+                          style={{
+                            width: 72,
+                            height: 48,
+                            flexShrink: 0,
+                            background: 'var(--ink-2)',
+                          }}
+                        />
                       )}
                       <div>
-                        <p className="font-mono text-sm font-medium text-white/90">{course.title}</p>
+                        <p
+                          style={{
+                            fontFamily: 'var(--type-sans)',
+                            fontSize: 14,
+                            fontWeight: 500,
+                            color: 'var(--bone)',
+                            lineHeight: 1.3,
+                          }}
+                        >
+                          {course.title}
+                        </p>
                         {course.description && (
-                          <p className="mt-1 text-xs text-white/40 line-clamp-2">{course.description}</p>
+                          <p
+                            style={{
+                              fontFamily: 'var(--type-sans)',
+                              fontSize: 12,
+                              color: 'var(--bone-mute)',
+                              marginTop: 4,
+                              lineHeight: 1.5,
+                              display: '-webkit-box',
+                              WebkitLineClamp: 2,
+                              WebkitBoxOrient: 'vertical',
+                              overflow: 'hidden',
+                            }}
+                          >
+                            {course.description}
+                          </p>
                         )}
                       </div>
                     </div>
@@ -190,13 +481,35 @@ export default async function TurmaSlugPage({ params }: Props) {
             {/* Features */}
             {features.length > 0 && (
               <div>
-                <h2 className="mb-4 font-mono text-[10px] uppercase tracking-widest text-white/40">
+                <p
+                  style={{
+                    fontFamily: 'var(--type-mono)',
+                    fontSize: 10,
+                    letterSpacing: '0.18em',
+                    textTransform: 'uppercase',
+                    color: 'var(--bone-mute)',
+                    marginBottom: 16,
+                  }}
+                >
                   O que está incluído
-                </h2>
-                <ul className="space-y-2">
+                </p>
+                <ul style={{ display: 'flex', flexDirection: 'column', gap: 10, listStyle: 'none', padding: 0, margin: 0 }}>
                   {features.map((f) => (
-                    <li key={f} className="flex items-center gap-2.5 text-sm text-white/70">
-                      <Check className="h-3.5 w-3.5 text-emerald-400 shrink-0" />
+                    <li
+                      key={f}
+                      style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: 10,
+                        fontFamily: 'var(--type-sans)',
+                        fontSize: 14,
+                        color: 'var(--bone-dim)',
+                      }}
+                    >
+                      <Check
+                        style={{ width: 14, height: 14, color: 'var(--ember)', flexShrink: 0 }}
+                        aria-hidden="true"
+                      />
                       {f}
                     </li>
                   ))}
@@ -205,46 +518,171 @@ export default async function TurmaSlugPage({ params }: Props) {
             )}
           </div>
 
-          {/* Sticky CTA card */}
+          {/* Right column — sticky CTA */}
           <div className="lg:sticky lg:top-8 self-start">
-            <div className="border border-white/10 bg-white/[0.03] p-6 space-y-4">
+            <div
+              style={{
+                border: '1px solid var(--hairline)',
+                background: 'var(--ink)',
+                padding: '28px 24px',
+                display: 'flex',
+                flexDirection: 'column',
+                gap: 20,
+              }}
+            >
+              {/* Preço */}
               <div>
-                <p className="font-mono text-[10px] uppercase tracking-wider text-white/30">Investimento</p>
-                <p className="mt-1 text-3xl font-bold">
+                <p
+                  style={{
+                    fontFamily: 'var(--type-mono)',
+                    fontSize: 10,
+                    letterSpacing: '0.18em',
+                    textTransform: 'uppercase',
+                    color: 'var(--bone-mute)',
+                    marginBottom: 8,
+                  }}
+                >
+                  Investimento
+                </p>
+                <p
+                  style={{
+                    fontFamily: 'var(--type-display)',
+                    fontWeight: 300,
+                    fontSize: 36,
+                    letterSpacing: '-0.025em',
+                    color: 'var(--bone)',
+                    lineHeight: 1,
+                  }}
+                >
                   {formatPrice(cohort.entry_price_cents)}
                 </p>
                 {cohort.max_installments_entry > 1 && cohort.entry_price_cents && (
-                  <p className="mt-1 text-xs text-white/40">
+                  <p
+                    style={{
+                      fontFamily: 'var(--type-mono)',
+                      fontSize: 10,
+                      color: 'var(--bone-mute)',
+                      marginTop: 6,
+                    }}
+                  >
                     em até {cohort.max_installments_entry}x de{' '}
                     {formatPrice(Math.ceil(cohort.entry_price_cents / cohort.max_installments_entry))}
                   </p>
                 )}
               </div>
 
+              {/* Barra de vagas */}
+              {fillPercent !== null && !sold && (
+                <div>
+                  <div
+                    style={{
+                      height: 2,
+                      background: 'var(--hairline)',
+                      position: 'relative',
+                      overflow: 'hidden',
+                    }}
+                  >
+                    <div
+                      style={{
+                        position: 'absolute',
+                        left: 0,
+                        top: 0,
+                        height: '100%',
+                        width: `${fillPercent}%`,
+                        background: 'var(--ember)',
+                        transition: 'width 0.3s ease',
+                      }}
+                    />
+                  </div>
+                  {spotsLeft !== null && (
+                    <p
+                      style={{
+                        fontFamily: 'var(--type-mono)',
+                        fontSize: 10,
+                        letterSpacing: '0.14em',
+                        textTransform: 'uppercase',
+                        color: 'var(--bone-mute)',
+                        marginTop: 8,
+                      }}
+                    >
+                      {spotsLeft} {spotsLeft === 1 ? 'vaga restante' : 'vagas restantes'}
+                    </p>
+                  )}
+                </div>
+              )}
+
+              {/* CTA button */}
               {sold ? (
                 <button
                   disabled
-                  className="w-full bg-white/10 py-3 font-mono text-xs uppercase tracking-wider text-white/30 cursor-not-allowed"
+                  style={{
+                    width: '100%',
+                    fontFamily: 'var(--type-mono)',
+                    fontSize: 11,
+                    letterSpacing: '0.18em',
+                    textTransform: 'uppercase',
+                    padding: '14px 0',
+                    border: '1px solid var(--hairline-strong)',
+                    background: 'transparent',
+                    color: 'var(--bone-mute)',
+                    cursor: 'not-allowed',
+                  }}
                 >
                   Turma esgotada
                 </button>
               ) : cohort.is_purchasable ? (
                 <Link
                   href={checkoutHref}
-                  className="block w-full bg-white py-3 text-center font-mono text-xs uppercase tracking-wider text-[#050507] font-semibold transition-opacity hover:opacity-90"
+                  style={{
+                    display: 'block',
+                    width: '100%',
+                    textAlign: 'center',
+                    background: 'var(--ember)',
+                    color: 'var(--void)',
+                    fontFamily: 'var(--type-mono)',
+                    fontSize: 11,
+                    letterSpacing: '0.18em',
+                    textTransform: 'uppercase',
+                    padding: '14px 0',
+                    fontWeight: 500,
+                    textDecoration: 'none',
+                    transition: 'background 0.15s',
+                  }}
+                  onMouseEnter={(e) => { e.currentTarget.style.background = 'var(--ember-glow)' }}
+                  onMouseLeave={(e) => { e.currentTarget.style.background = 'var(--ember)' }}
                 >
-                  Matricular-se agora
+                  Matricular-se agora →
                 </Link>
               ) : (
-                <p className="text-center font-mono text-xs text-white/30">
+                <p
+                  style={{
+                    textAlign: 'center',
+                    fontFamily: 'var(--type-mono)',
+                    fontSize: 10,
+                    letterSpacing: '0.14em',
+                    textTransform: 'uppercase',
+                    color: 'var(--bone-mute)',
+                  }}
+                >
                   Inscrições em breve
                 </p>
               )}
 
+              {/* Login hint */}
               {!user && cohort.is_purchasable && !sold && (
-                <p className="text-center font-mono text-[10px] text-white/30">
+                <p
+                  style={{
+                    textAlign: 'center',
+                    fontFamily: 'var(--type-mono)',
+                    fontSize: 10,
+                    color: 'var(--bone-mute)',
+                  }}
+                >
                   Necessário{' '}
-                  <Link href={`/login?next=/checkout/${cohort.slug}`} className="underline hover:text-white/60">
+                  <Link
+                    href={`/academy/login?next=/academy/checkout/${cohort.slug}`}
+                    style={{ color: 'var(--ember)', textDecoration: 'none' }}
+                  >
                     fazer login
                   </Link>{' '}
                   para prosseguir
@@ -254,6 +692,29 @@ export default async function TurmaSlugPage({ params }: Props) {
           </div>
         </div>
       </div>
+
+      {/* Footer simples */}
+      <footer
+        style={{
+          position: 'relative',
+          zIndex: 1,
+          borderTop: '1px solid var(--hairline)',
+          padding: '24px',
+          textAlign: 'center',
+        }}
+      >
+        <span
+          style={{
+            fontFamily: 'var(--type-mono)',
+            fontSize: 10,
+            letterSpacing: '0.18em',
+            textTransform: 'uppercase',
+            color: 'var(--bone-mute)',
+          }}
+        >
+          João Guirunas Academy · {new Date().getFullYear()}
+        </span>
+      </footer>
     </div>
   )
 }
