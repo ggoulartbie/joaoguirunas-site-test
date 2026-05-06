@@ -1,8 +1,6 @@
 'use client'
 
-import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { Bell, Menu } from 'lucide-react'
 
 const BREADCRUMB_MAP: Record<string, string> = {
   '/academy/admin': 'Dashboard',
@@ -27,25 +25,18 @@ export function AdminTopBar() {
   const label = getBreadcrumb(pathname)
 
   return (
-    <header className="sticky top-0 z-30 flex h-16 items-center justify-between border-b border-white/10 bg-[#050507]/95 px-6 backdrop-blur-sm">
-      <button className="mr-4 lg:hidden" aria-label="Abrir menu">
-        <Menu className="h-5 w-5 text-white/60" />
-      </button>
-
-      <span className="font-mono text-xs uppercase tracking-widest text-white/40">
+    <header className="sticky top-0 z-30 flex h-14 items-center justify-between border-b border-white/[0.07] bg-[#050507] px-6">
+      <span className="font-mono text-[10px] uppercase tracking-widest text-[#84848c]">
         {label}
       </span>
 
-      <div className="flex items-center gap-4">
-        <button className="relative" aria-label="Notificações">
-          <Bell className="h-5 w-5 text-white/50 transition-colors hover:text-white/80" />
-        </button>
-
-        <Link href="/academy/perfil" aria-label="Perfil">
-          <div className="flex h-8 w-8 items-center justify-center bg-[#FF3A0E]/20 font-mono text-xs font-bold text-[#FF3A0E] transition-colors hover:bg-[#FF3A0E]/30">
-            A
-          </div>
-        </Link>
+      <div className="flex items-center gap-3">
+        <span className="border border-[#ff3a0e]/30 bg-[#ff3a0e]/10 px-2 py-0.5 font-mono text-[10px] uppercase tracking-widest text-[#ff3a0e]">
+          Admin
+        </span>
+        <div className="flex h-8 w-8 items-center justify-center rounded-full bg-[#ff3a0e]/20 font-mono text-xs font-bold text-[#ff3a0e]">
+          A
+        </div>
       </div>
     </header>
   )
