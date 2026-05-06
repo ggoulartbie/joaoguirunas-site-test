@@ -29,7 +29,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     .eq('modules.courses.slug', slug)
     .single()
 
-  return { title: lesson?.title ?? lessonSlug }
+  return { title: lesson?.title ?? lessonSlug, robots: { index: false, follow: false } }
 }
 
 export default async function AulaPage({ params }: Props) {

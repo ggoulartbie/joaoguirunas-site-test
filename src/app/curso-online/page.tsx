@@ -1,8 +1,8 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import { Check, X, ArrowRight, Play, FileText, MessageSquare, Award } from 'lucide-react'
-import { createClient } from '@/lib/supabase/server'
 import { siteConfig } from '@/config/site'
+import { createPublicCheckoutSession } from '@/app/actions/checkoutPublic'
 
 export const metadata: Metadata = {
   title: 'Curso Online | Claude Agents Team — R$ 499',
@@ -88,14 +88,12 @@ const TESTIMONIALS = [
   },
 ]
 
+async function checkoutAction() {
+  'use server'
+  await createPublicCheckoutSession(COHORT_SLUG)
+}
+
 export default async function CursoOnlinePage() {
-  const supabase = await createClient()
-  const { data: { user } } = await supabase.auth.getUser()
-
-  const checkoutHref = user
-    ? `/academy/checkout/${COHORT_SLUG}`
-    : `/academy/login?next=/academy/checkout/${COHORT_SLUG}`
-
   return (
     <>
       <script
@@ -169,14 +167,16 @@ export default async function CursoOnlinePage() {
             próprio ritmo. Acesso completo ao conteúdo, materiais e certificado.
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-            <Link
-              href={checkoutHref}
-              className="inline-flex items-center justify-center gap-2 px-8 py-4 text-sm font-semibold uppercase transition-all hover:brightness-110 active:scale-[0.98] w-full sm:w-auto"
-              style={{ ...KV_MONO, background: '#FF3A0E', color: '#050507', fontSize: '12px' }}
-            >
-              Comprar agora — R$ 499
-              <ArrowRight size={14} aria-hidden="true" />
-            </Link>
+            <form action={checkoutAction} className="w-full sm:w-auto">
+              <button
+                type="submit"
+                className="inline-flex items-center justify-center gap-2 px-8 py-4 text-sm font-semibold uppercase transition-all hover:brightness-110 active:scale-[0.98] w-full sm:w-auto"
+                style={{ ...KV_MONO, background: '#FF3A0E', color: '#050507', fontSize: '12px' }}
+              >
+                Comprar agora — R$ 499
+                <ArrowRight size={14} aria-hidden="true" />
+              </button>
+            </form>
             <a
               href="#o-que-inclui"
               className="inline-flex items-center justify-center px-8 py-4 text-sm font-semibold uppercase transition-all hover:bg-white/[0.05] w-full sm:w-auto"
@@ -320,14 +320,16 @@ export default async function CursoOnlinePage() {
                 </div>
               ))}
             </div>
-            <Link
-              href={checkoutHref}
-              className="inline-flex items-center justify-center gap-2 px-10 py-4 text-sm font-semibold uppercase transition-all hover:brightness-110 active:scale-[0.98] w-full sm:w-auto"
-              style={{ ...KV_MONO, background: '#FF3A0E', color: '#050507', fontSize: '12px' }}
-            >
-              Comprar agora — R$ 499
-              <ArrowRight size={14} aria-hidden="true" />
-            </Link>
+            <form action={checkoutAction} className="w-full sm:w-auto">
+              <button
+                type="submit"
+                className="inline-flex items-center justify-center gap-2 px-10 py-4 text-sm font-semibold uppercase transition-all hover:brightness-110 active:scale-[0.98] w-full sm:w-auto"
+                style={{ ...KV_MONO, background: '#FF3A0E', color: '#050507', fontSize: '12px' }}
+              >
+                Comprar agora — R$ 499
+                <ArrowRight size={14} aria-hidden="true" />
+              </button>
+            </form>
             <p className="mt-4 text-xs" style={{ ...KV_MONO, color: 'rgba(255,255,255,0.2)' }}>
               Preferes acompanhamento ao vivo?{' '}
               <Link href="/mentoria" className="underline underline-offset-2" style={{ color: 'rgba(255,255,255,0.4)' }}>
