@@ -33,15 +33,14 @@ export function AgentCard({ agente, squad }: AgentCardProps) {
           alt={agente.codename || agente.name}
           fill
           className="object-cover object-top transition-transform duration-700 group-hover:scale-105"
-          sizes="(max-width: 768px) 50vw, 25vw"
+          sizes="(max-width: 768px) 160px, 220px"
         />
-        {/* Subtle dark overlay at bottom for badge legibility */}
         <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
 
         {/* Squad badge top-left */}
-        <div className="absolute top-3 left-3">
+        <div className="absolute top-2 left-2">
           <span
-            className="inline-flex items-center gap-1.5 px-2 py-1 backdrop-blur-sm"
+            className="inline-flex items-center gap-1 px-1.5 py-0.5 backdrop-blur-sm"
             style={{
               background: 'rgba(0,0,0,0.4)',
               border: `1px solid ${squad.accent}55`,
@@ -54,59 +53,42 @@ export function AgentCard({ agente, squad }: AgentCardProps) {
         </div>
 
         {/* Model badge top-right */}
-        <div className="absolute top-3 right-3">
+        <div className="absolute top-2 right-2">
           <span
-            className="inline-block px-2 py-1 text-white/60 backdrop-blur-sm"
+            className="inline-block px-1.5 py-0.5 text-white/60 backdrop-blur-sm"
             style={{ background: 'rgba(0,0,0,0.4)', border: '1px solid rgba(255,255,255,0.10)', ...MONO }}
           >
             {agente.model}
           </span>
         </div>
 
-        {/* Bottom gradient + arrow */}
         <div className="absolute bottom-0 left-0 right-0 h-16" style={{ background: 'linear-gradient(to top, rgba(2,2,10,0.85), transparent)' }} />
-        <div className="absolute bottom-3 right-3 opacity-0 group-hover:opacity-100 transition-opacity">
-          <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke={squad.accent}>
+        <div className="absolute bottom-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity">
+          <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke={squad.accent}>
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M17 8l4 4m0 0l-4 4m4-4H3" />
           </svg>
         </div>
       </div>
 
       {/* Body */}
-      <div className="p-3 sm:p-5 flex flex-col gap-2 sm:gap-3 flex-1">
+      <div className="p-2 sm:p-3 flex flex-col gap-1.5 flex-1">
         <div>
           <h3
-            className="text-base sm:text-xl text-white mb-0.5 transition-colors group-hover:text-[var(--accent)] leading-tight"
+            className="text-sm sm:text-base text-white mb-0.5 transition-colors group-hover:text-[var(--accent)] leading-tight"
             style={{ fontFamily: 'var(--font-display-serif)', fontWeight: 400, letterSpacing: '-0.01em' }}
           >
             {agente.codename || agente.name}
           </h3>
-          <p className="text-white/50 text-[10px] sm:text-xs" style={MONO}>
+          <p className="text-white/50 text-[9px] sm:text-[10px]" style={MONO}>
             {agente.id}
           </p>
         </div>
 
-        {agente.race && (
-          <p className="text-white/35 uppercase hidden sm:block" style={{ fontFamily: 'var(--font-mono)', fontSize: '0.55rem', letterSpacing: '0.15em' }}>
-            {agente.race}
-          </p>
-        )}
+        {agente.title && <p className="text-white/80 text-[10px] sm:text-xs font-medium leading-snug">{agente.title}</p>}
 
-        {agente.title && <p className="text-white/80 text-xs sm:text-sm font-medium leading-snug">{agente.title}</p>}
-
-        <p className="text-white/55 text-xs sm:text-sm leading-relaxed line-clamp-2 sm:line-clamp-3 flex-1">
+        <p className="text-white/55 text-[10px] sm:text-xs leading-relaxed line-clamp-2 flex-1">
           {agente.squadRole || agente.description}
         </p>
-
-        {agente.abilities && agente.abilities.length > 0 && (
-          <div className="hidden sm:flex flex-wrap gap-1 pt-2 border-t border-white/[0.06]">
-            {agente.abilities.slice(0, 3).map((ability) => (
-              <span key={ability} className="px-1.5 py-0.5 bg-white/[0.06] text-white/60 text-[10px]" style={MONO}>
-                {ability}
-              </span>
-            ))}
-          </div>
-        )}
       </div>
     </Link>
   );

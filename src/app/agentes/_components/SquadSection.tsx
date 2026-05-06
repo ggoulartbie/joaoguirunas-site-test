@@ -16,7 +16,6 @@ interface SquadSectionProps {
 export function SquadSection({ squad, agentes }: SquadSectionProps) {
   const sectionRef = useRef<HTMLElement>(null);
 
-  // Mobile: portrait viewport — simpler animations, natural height, 2-col grid
   const isMobile = typeof window !== 'undefined' && window.innerWidth < 1024;
 
   const { scrollYProgress } = useScroll({
@@ -24,8 +23,6 @@ export function SquadSection({ squad, agentes }: SquadSectionProps) {
     offset: ['start end', 'end start'],
   });
 
-  // Desktop: slide in from right → hold → slide out to left
-  // Mobile: fade + slight Y lift only (no horizontal translate)
   const cardsX = useTransform(
     scrollYProgress,
     [0.05, 0.30, 0.65, 0.90],
@@ -43,6 +40,9 @@ export function SquadSection({ squad, agentes }: SquadSectionProps) {
     isMobile ? [0, 1] : [0, 1, 1, 0],
   );
 
+  const evenAgentes = agentes.filter((_, i) => i % 2 === 0);
+  const oddAgentes = agentes.filter((_, i) => i % 2 !== 0);
+
   return (
     <section
       ref={sectionRef}
@@ -59,9 +59,8 @@ export function SquadSection({ squad, agentes }: SquadSectionProps) {
       />
 
       <div className={`${isMobile ? '' : 'sticky top-[12vh]'} mx-auto max-w-7xl px-5 sm:px-6 lg:px-12`}>
-        {/* On desktop: cards live in the right half so the planet is visible on the left */}
         <div className="grid grid-cols-1 lg:grid-cols-[1fr_minmax(640px,720px)] gap-10 items-start">
-          {/* LEFT — squad label hovering near the planet (desktop only) */}
+          {/* LEFT — squad header */}
           <motion.div
             className="hidden lg:flex flex-col justify-center min-h-[60vh]"
             style={{ y: headerY, opacity: headerOpacity }}
@@ -94,11 +93,8 @@ export function SquadSection({ squad, agentes }: SquadSectionProps) {
             )}
           </motion.div>
 
-          {/* RIGHT — cards */}
-          <motion.div
-            style={{ x: cardsX, opacity: cardsOpacity }}
-            className="will-change-transform"
-          >
+          {/* RIGHT — belt */}
+          <div>
             {/* Mobile-only header */}
             <div className="lg:hidden mb-6">
               <p className="mb-2 inline-flex items-center gap-2" style={{ ...MONO, color: squad.accent, textTransform: 'uppercase' }}>
@@ -120,13 +116,47 @@ export function SquadSection({ squad, agentes }: SquadSectionProps) {
               )}
             </div>
 
-            {/* Cards grid — 2-col on all sizes, transparent bg lets planet show through */}
-            <div className="grid grid-cols-2 gap-2.5 sm:gap-4">
-              {agentes.map((a) => (
-                <AgentCard key={a.id} agente={a} squad={squad} />
-              ))}
+            {/* Mobile — single horizontal scroll */}
+            <div
+              className="lg:hidden overflow-x-auto pb-3"
+              style={{ scrollSnapType: 'x mandatory', WebkitOverflowScrolling: 'touch' } as React.CSSProperties}
+            >
+              <div className="flex gap-2.5" style={{ width: 'max-content' }}>
+                {agentes.map((a) => (
+                  <div key={a.id} className="w-[160px] flex-shrink-0" style={{ scrollSnapAlign: 'start' }}>
+                    <AgentCard agente={a} squad={squad} />
+                  </div>
+                ))}
+              </div>
             </div>
-          </motion.div>
+
+            {/* Desktop — animated 2-row belt */}
+            <div className="hidden lg:block overflow-hidden">
+              <motion.div
+                style={{ x: cardsX, opacity: cardsOpacity }}
+                className="will-change-transform"
+              >
+                <div className="flex flex-col gap-3">
+                  {/* Row 1: índices pares */}
+                  <div className="flex gap-3">
+                    {evenAgentes.map((a) => (
+                      <div key={a.id} className="w-[220px] flex-shrink-0">
+                        <AgentCard agente={a} squad={squad} />
+                      </div>
+                    ))}
+                  </div>
+                  {/* Row 2: índices ímpares — offset para profundidade */}
+                  <div className="flex gap-3" style={{ marginLeft: '110px' }}>
+                    {oddAgentes.map((a) => (
+                      <div key={a.id} className="w-[220px] flex-shrink-0">
+                        <AgentCard agente={a} squad={squad} />
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </motion.div>
+            </div>
+          </div>
         </div>
       </div>
     </section>
