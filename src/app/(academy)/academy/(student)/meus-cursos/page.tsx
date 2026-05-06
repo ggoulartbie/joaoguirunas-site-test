@@ -1,10 +1,14 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
-import { Lock, BookOpen, CheckCircle2 } from 'lucide-react'
-import { ProgressBar } from '@/components/student/ProgressBar'
+import { Lock, BookOpen } from 'lucide-react'
 import { MOCK_COURSES } from '@/components/student/mock-data'
 
 export const metadata: Metadata = { title: 'Meus Cursos' }
+
+function formatDate(date: string | null): string {
+  if (!date) return ''
+  return new Intl.DateTimeFormat('pt-BR', { day: '2-digit', month: '2-digit', year: 'numeric' }).format(new Date(date))
+}
 
 export default function MeusCursosPage() {
   // TODO F3.2: substituir por getUserCourses(userId) — união das cohorts ativas
@@ -14,97 +18,418 @@ export default function MeusCursosPage() {
   const locked = courses.filter((c) => c.isPartialAccess && c.accessibleModulesCount === 0)
 
   return (
-    <div className="mx-auto max-w-5xl space-y-8">
+    <div className="mx-auto max-w-5xl space-y-12">
+      {/* Page header */}
       <div>
-        <h1 className="text-2xl font-bold text-white">Meus Cursos</h1>
-        <p className="mt-1 text-sm text-white/50">
-          Conteúdo liberado pelas suas turmas ativas
+        <p
+          style={{
+            fontFamily: 'var(--type-mono)',
+            fontSize: 10,
+            letterSpacing: '0.18em',
+            textTransform: 'uppercase',
+            color: 'var(--bone-mute)',
+            marginBottom: 12,
+          }}
+        >
+          Academy · Área do aluno
         </p>
+        <h1
+          style={{
+            fontFamily: 'var(--type-display)',
+            fontWeight: 300,
+            fontSize: 'clamp(28px, 4vw, 40px)',
+            fontStyle: 'italic',
+            letterSpacing: '-0.02em',
+            lineHeight: 1,
+            color: 'var(--bone)',
+          }}
+        >
+          Meus Cursos
+        </h1>
+        {available.length > 0 && (
+          <p
+            style={{
+              fontFamily: 'var(--type-sans)',
+              fontSize: 14,
+              color: 'var(--bone-mute)',
+              marginTop: 8,
+            }}
+          >
+            {available.length} {available.length === 1 ? 'curso disponível' : 'cursos disponíveis'}
+          </p>
+        )}
       </div>
 
-      {/* Cursos acessíveis */}
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {available.map((course) => (
-          <Link
-            key={course.id}
-            href={`/curso/${course.slug}`}
-            className="group flex flex-col border border-white/10 bg-[#0C0C12] p-5 transition-colors hover:border-white/20 hover:bg-[#121218]"
-          >
-            {/* Cover placeholder */}
-            <div className="mb-4 flex h-28 items-center justify-center bg-white/5">
-              <BookOpen className="h-8 w-8 text-white/20" />
-            </div>
+      {/* Grid de cursos acessíveis */}
+      {available.length === 0 ? (
+        <EmptyState />
+      ) : (
+        <div className="grid gap-px sm:grid-cols-2 xl:grid-cols-3" style={{ background: 'var(--hairline)' }}>
+          {available.map((course) => {
+            const isComplete = course.progressPercent === 100
+            const status = isComplete ? 'CONCLUÍDO' : course.isPartialAccess ? 'PARCIAL' : 'ATIVO'
 
-            <div className="flex flex-1 flex-col">
-              <h2 className="font-semibold text-white group-hover:text-[#FF3A0E] transition-colors">
-                {course.title}
-              </h2>
-              <p className="mt-1 line-clamp-2 text-xs text-white/50">
-                {course.description}
-              </p>
-
-              {/* Cohort badge */}
-              <div className="mt-3">
-                <span className="inline-block border border-white/10 px-2 py-0.5 font-mono text-[10px] uppercase tracking-wide text-white/40">
-                  {course.cohortName}
-                </span>
-              </div>
-
-              {/* Acesso parcial */}
-              {course.isPartialAccess && (
-                <div className="mt-2 flex items-center gap-1.5 text-yellow-400">
-                  <Lock className="h-3 w-3" />
-                  <span className="font-mono text-[10px] uppercase tracking-wide">
-                    {course.accessibleModulesCount}/{course.totalModulesCount} módulos
-                  </span>
+            return (
+              <Link
+                key={course.id}
+                href={`/curso/${course.slug}`}
+                className="group flex flex-col"
+                style={{
+                  background: 'var(--ink)',
+                  overflow: 'hidden',
+                  transition: 'border-color 0.15s',
+                  border: '1px solid var(--hairline)',
+                  textDecoration: 'none',
+                }}
+                onMouseEnter={e => (e.currentTarget.style.borderColor = 'var(--hairline-strong)')}
+                onMouseLeave={e => (e.currentTarget.style.borderColor = 'var(--hairline)')}
+              >
+                {/* Thumbnail */}
+                <div
+                  style={{
+                    aspectRatio: '16/9',
+                    background: 'var(--ink-2)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                  }}
+                >
+                  <BookOpen
+                    style={{ width: 32, height: 32, color: 'rgba(132,132,140,0.3)' }}
+                  />
                 </div>
-              )}
 
-              {/* Progresso */}
-              <div className="mt-4 space-y-1.5">
-                <div className="flex items-center justify-between">
-                  <span className="font-mono text-[10px] uppercase tracking-wide text-white/30">
+                {/* Body */}
+                <div style={{ padding: '20px', flex: 1, display: 'flex', flexDirection: 'column' }}>
+                  {/* Badge status */}
+                  <span
+                    style={{
+                      display: 'inline-block',
+                      fontFamily: 'var(--type-mono)',
+                      fontSize: 10,
+                      letterSpacing: '0.16em',
+                      textTransform: 'uppercase',
+                      border: isComplete
+                        ? '1px solid rgba(255,255,255,0.07)'
+                        : '1px solid rgba(255,58,14,0.3)',
+                      color: isComplete ? 'var(--bone-mute)' : 'var(--ember)',
+                      padding: '2px 8px',
+                      alignSelf: 'flex-start',
+                    }}
+                  >
+                    {status}
+                  </span>
+
+                  {/* Nome */}
+                  <p
+                    style={{
+                      fontFamily: 'var(--type-sans)',
+                      fontWeight: 500,
+                      fontSize: 16,
+                      color: 'var(--bone)',
+                      marginTop: 8,
+                      lineHeight: 1.3,
+                    }}
+                  >
+                    {course.title}
+                  </p>
+
+                  {/* Descrição */}
+                  {course.description && (
+                    <p
+                      style={{
+                        fontFamily: 'var(--type-sans)',
+                        fontSize: 13,
+                        color: 'var(--bone-dim)',
+                        marginTop: 4,
+                        lineHeight: 1.5,
+                        display: '-webkit-box',
+                        WebkitLineClamp: 2,
+                        WebkitBoxOrient: 'vertical',
+                        overflow: 'hidden',
+                      }}
+                    >
+                      {course.description}
+                    </p>
+                  )}
+
+                  {/* Acesso parcial */}
+                  {course.isPartialAccess && (
+                    <div
+                      style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: 6,
+                        marginTop: 10,
+                      }}
+                    >
+                      <Lock style={{ width: 12, height: 12, color: 'var(--bone-mute)' }} />
+                      <span
+                        style={{
+                          fontFamily: 'var(--type-mono)',
+                          fontSize: 10,
+                          letterSpacing: '0.14em',
+                          textTransform: 'uppercase',
+                          color: 'var(--bone-mute)',
+                        }}
+                      >
+                        {course.accessibleModulesCount}/{course.totalModulesCount} módulos
+                      </span>
+                    </div>
+                  )}
+
+                  {/* Progress bar */}
+                  <div style={{ marginTop: 'auto', paddingTop: 12 }}>
+                    <div
+                      style={{
+                        height: 2,
+                        background: 'var(--ink-3)',
+                        position: 'relative',
+                        overflow: 'hidden',
+                      }}
+                    >
+                      <div
+                        style={{
+                          position: 'absolute',
+                          left: 0,
+                          top: 0,
+                          height: '100%',
+                          width: `${course.progressPercent}%`,
+                          background: 'var(--ember)',
+                        }}
+                      />
+                    </div>
+                    <div
+                      style={{
+                        display: 'flex',
+                        justifyContent: 'flex-end',
+                        marginTop: 4,
+                      }}
+                    >
+                      <span
+                        style={{
+                          fontFamily: 'var(--type-mono)',
+                          fontSize: 10,
+                          fontWeight: 700,
+                          color: 'var(--ember)',
+                        }}
+                      >
+                        {course.progressPercent}%
+                      </span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Card footer */}
+                <div
+                  style={{
+                    borderTop: '1px solid var(--hairline)',
+                    padding: '12px 20px',
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                  }}
+                >
+                  <span
+                    style={{
+                      fontFamily: 'var(--type-mono)',
+                      fontSize: 11,
+                      color: 'var(--bone-mute)',
+                    }}
+                  >
                     {course.completedLessons}/{course.totalLessons} aulas
                   </span>
-                  {course.progressPercent === 100 && (
-                    <CheckCircle2 className="h-3.5 w-3.5 text-green-400" />
-                  )}
+                  <span
+                    style={{
+                      fontFamily: 'var(--type-mono)',
+                      fontSize: 11,
+                      letterSpacing: '0.14em',
+                      textTransform: 'uppercase',
+                      color: 'var(--ember)',
+                      transition: 'color 0.15s',
+                    }}
+                    className="group-hover:text-[var(--ember-glow)]"
+                  >
+                    Acessar →
+                  </span>
                 </div>
-                <ProgressBar value={course.progressPercent} showLabel />
-              </div>
-            </div>
-          </Link>
-        ))}
-      </div>
+              </Link>
+            )
+          })}
+        </div>
+      )}
 
-      {/* Cursos completamente bloqueados */}
+      {/* Cursos bloqueados */}
       {locked.length > 0 && (
         <div>
-          <h2 className="font-mono text-xs uppercase tracking-widest text-white/30">
+          <p
+            style={{
+              fontFamily: 'var(--type-mono)',
+              fontSize: 10,
+              letterSpacing: '0.18em',
+              textTransform: 'uppercase',
+              color: 'var(--bone-mute)',
+              marginBottom: 16,
+            }}
+          >
             Conteúdo bloqueado
-          </h2>
-          <div className="mt-3 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          </p>
+          <div className="grid gap-px sm:grid-cols-2 xl:grid-cols-3" style={{ background: 'var(--hairline)' }}>
             {locked.map((course) => (
               <div
                 key={course.id}
-                className="flex flex-col border border-white/5 bg-[#0C0C12]/50 p-5 opacity-60"
+                style={{
+                  background: 'var(--ink)',
+                  border: '1px solid var(--hairline)',
+                  overflow: 'hidden',
+                  opacity: 0.6,
+                  display: 'flex',
+                  flexDirection: 'column',
+                }}
               >
-                <div className="mb-4 flex h-28 items-center justify-center bg-white/3">
-                  <Lock className="h-8 w-8 text-white/15" />
-                </div>
-                <h2 className="font-semibold text-white/50">{course.title}</h2>
-                <p className="mt-1 text-xs text-white/30">{course.description}</p>
-                <Link
-                  href={`/turmas/${course.cohortSlug}`}
-                  className="mt-4 font-mono text-[10px] uppercase tracking-wide text-[#FF3A0E]/70 hover:text-[#FF3A0E] transition-colors"
+                {/* Thumbnail */}
+                <div
+                  style={{
+                    aspectRatio: '16/9',
+                    background: 'var(--ink-2)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                  }}
                 >
-                  Disponível na turma {course.cohortName} &rarr;
-                </Link>
+                  <Lock style={{ width: 32, height: 32, color: 'rgba(132,132,140,0.3)' }} />
+                </div>
+
+                {/* Body */}
+                <div style={{ padding: '20px', flex: 1 }}>
+                  <span
+                    style={{
+                      display: 'inline-block',
+                      fontFamily: 'var(--type-mono)',
+                      fontSize: 10,
+                      letterSpacing: '0.16em',
+                      textTransform: 'uppercase',
+                      border: '1px solid var(--hairline)',
+                      color: 'var(--bone-mute)',
+                      padding: '2px 8px',
+                    }}
+                  >
+                    Bloqueado
+                  </span>
+                  <p
+                    style={{
+                      fontFamily: 'var(--type-sans)',
+                      fontWeight: 500,
+                      fontSize: 16,
+                      color: 'var(--bone)',
+                      marginTop: 8,
+                    }}
+                  >
+                    {course.title}
+                  </p>
+                  {course.description && (
+                    <p
+                      style={{
+                        fontFamily: 'var(--type-sans)',
+                        fontSize: 13,
+                        color: 'var(--bone-dim)',
+                        marginTop: 4,
+                        display: '-webkit-box',
+                        WebkitLineClamp: 2,
+                        WebkitBoxOrient: 'vertical',
+                        overflow: 'hidden',
+                      }}
+                    >
+                      {course.description}
+                    </p>
+                  )}
+                </div>
+
+                {/* Footer */}
+                <div
+                  style={{
+                    borderTop: '1px solid var(--hairline)',
+                    padding: '12px 20px',
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                  }}
+                >
+                  <span
+                    style={{
+                      fontFamily: 'var(--type-mono)',
+                      fontSize: 11,
+                      color: 'var(--bone-mute)',
+                    }}
+                  >
+                    {course.cohortName}
+                  </span>
+                  <Link
+                    href={`/turmas/${course.cohortSlug}`}
+                    style={{
+                      fontFamily: 'var(--type-mono)',
+                      fontSize: 11,
+                      letterSpacing: '0.14em',
+                      textTransform: 'uppercase',
+                      color: 'var(--ember)',
+                      textDecoration: 'none',
+                    }}
+                  >
+                    Ver turma →
+                  </Link>
+                </div>
               </div>
             ))}
           </div>
         </div>
       )}
+    </div>
+  )
+}
+
+function EmptyState() {
+  return (
+    <div
+      style={{
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+        padding: '80px 40px',
+        textAlign: 'center',
+        border: '1px solid var(--hairline)',
+        background: 'var(--ink)',
+      }}
+    >
+      <BookOpen
+        style={{ width: 48, height: 48, color: 'rgba(132,132,140,0.3)', marginBottom: 20 }}
+      />
+      <p
+        style={{
+          fontFamily: 'var(--type-sans)',
+          fontSize: 16,
+          color: 'var(--bone-mute)',
+          marginBottom: 20,
+        }}
+      >
+        Nenhum curso encontrado
+      </p>
+      <Link
+        href="/turmas"
+        style={{
+          display: 'inline-flex',
+          alignItems: 'center',
+          gap: 8,
+          fontFamily: 'var(--type-mono)',
+          fontSize: 11,
+          letterSpacing: '0.18em',
+          textTransform: 'uppercase',
+          color: 'var(--ember)',
+          textDecoration: 'none',
+        }}
+      >
+        Explorar turmas →
+      </Link>
     </div>
   )
 }
