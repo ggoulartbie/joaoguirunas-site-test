@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { Geist, Geist_Mono, Space_Grotesk, Fraunces, Inter_Tight } from 'next/font/google';
+import { Geist, Geist_Mono, Space_Grotesk, Fraunces, Inter_Tight, JetBrains_Mono } from 'next/font/google';
 import { Analytics } from '@vercel/analytics/next';
 import { SpeedInsights } from '@vercel/speed-insights/next';
 import { SiteChrome } from '@/shared/components/layout/SiteChrome';
@@ -36,8 +36,15 @@ const fraunces = Fraunces({
 
 const interTight = Inter_Tight({
   subsets: ['latin'],
-  weight: ['700', '800'],
+  weight: ['300', '400', '500', '600', '700', '800'],
   variable: '--font-inter-tight',
+  display: 'swap',
+});
+
+const jetbrainsMono = JetBrains_Mono({
+  subsets: ['latin'],
+  weight: ['400', '500'],
+  variable: '--font-mono-jetbrains',
   display: 'swap',
 });
 
@@ -92,7 +99,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang={siteConfig.lang} className={`dark ${geist.variable} ${geistMono.variable} ${spaceGrotesk.variable} ${fraunces.variable} ${interTight.variable}`}>
+    <html lang={siteConfig.lang} className={`dark ${geist.variable} ${geistMono.variable} ${spaceGrotesk.variable} ${fraunces.variable} ${interTight.variable} ${jetbrainsMono.variable}`}>
       <head>
         {/* Google Analytics */}
         <script async src="https://www.googletagmanager.com/gtag/js?id=G-3JD3TYNF7V" />

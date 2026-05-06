@@ -5,9 +5,7 @@ import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 import Link from 'next/link'
-import { useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
-import { Button } from '@/shared/components/ui/button'
 
 const schema = z.object({
   name: z.string().min(2, 'Nome deve ter no mínimo 2 caracteres'),
@@ -21,8 +19,35 @@ const schema = z.object({
 
 type FormData = z.infer<typeof schema>
 
+const formStyles = `
+  .rf-input {
+    background: var(--ink-2);
+    border: 1px solid var(--hairline);
+    color: var(--bone);
+    width: 100%;
+    padding: 12px 16px;
+    font-size: 14px;
+    outline: none;
+    border-radius: 0;
+    font-family: var(--type-sans);
+    transition: border-color 0.15s;
+    box-sizing: border-box;
+  }
+  .rf-input::placeholder { color: var(--bone-mute); }
+  .rf-input:focus { border-color: var(--hairline-strong); }
+  .rf-label {
+    font-family: var(--type-mono);
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--bone-mute);
+    font-weight: 500;
+    display: block;
+    margin-bottom: 6px;
+  }
+`
+
 export function CadastroForm() {
-  const router = useRouter()
   const [serverError, setServerError] = useState<string | null>(null)
   const [success, setSuccess] = useState(false)
 
@@ -59,15 +84,63 @@ export function CadastroForm() {
 
   if (success) {
     return (
-      <div className="rounded-xl border border-white/10 bg-white/5 p-8 text-center">
-        <div className="mb-3 text-3xl">✉️</div>
-        <h2 className="text-lg font-semibold text-white">Confirme seu email</h2>
-        <p className="mt-2 text-sm text-white/50">
+      <div
+        style={{
+          background: 'var(--ink)',
+          border: '1px solid var(--hairline)',
+          padding: '40px',
+          textAlign: 'center',
+        }}
+      >
+        <div
+          style={{
+            fontFamily: 'var(--type-mono)',
+            fontSize: 10,
+            letterSpacing: '0.18em',
+            textTransform: 'uppercase',
+            color: 'var(--ember)',
+            marginBottom: 16,
+          }}
+        >
+          Email enviado
+        </div>
+        <h2
+          style={{
+            fontFamily: 'var(--type-display)',
+            fontWeight: 300,
+            fontStyle: 'italic',
+            fontSize: 28,
+            color: 'var(--bone)',
+            letterSpacing: '-0.025em',
+            lineHeight: 1.1,
+          }}
+        >
+          Confirme seu email
+        </h2>
+        <p
+          style={{
+            fontFamily: 'var(--type-sans)',
+            fontSize: 14,
+            color: 'var(--bone-dim)',
+            marginTop: 12,
+            fontWeight: 300,
+            lineHeight: 1.6,
+          }}
+        >
           Enviamos um link de confirmação para seu email. Clique nele para ativar sua conta.
         </p>
         <Link
-          href="/login"
-          className="mt-6 inline-block text-sm text-white/70 hover:text-white transition-colors"
+          href="/academy/login"
+          style={{
+            display: 'inline-block',
+            marginTop: 24,
+            fontFamily: 'var(--type-mono)',
+            fontSize: 10,
+            letterSpacing: '0.18em',
+            textTransform: 'uppercase',
+            color: 'var(--bone-mute)',
+            textDecoration: 'none',
+          }}
         >
           Voltar ao login
         </Link>
@@ -76,77 +149,130 @@ export function CadastroForm() {
   }
 
   return (
-    <div className="rounded-xl border border-white/10 bg-white/5 p-8 backdrop-blur-sm">
+    <div
+      style={{
+        background: 'var(--ink)',
+        border: '1px solid var(--hairline)',
+        padding: '40px',
+      }}
+    >
+      <style>{formStyles}</style>
+
       <form onSubmit={handleSubmit(onSubmit)} noValidate className="space-y-5">
-        <div className="space-y-1.5">
-          <label className="text-sm text-white/70" htmlFor="name">
+        {/* Nome */}
+        <div>
+          <label className="rf-label" htmlFor="name">
             Nome completo
           </label>
           <input
             id="name"
             type="text"
             autoComplete="name"
-            className="w-full rounded-lg border border-white/10 bg-white/5 px-4 py-2.5 text-sm text-white placeholder:text-white/30 focus:border-white/30 focus:outline-none focus:ring-1 focus:ring-white/20"
             placeholder="Seu nome"
+            className="rf-input"
             {...register('name')}
           />
           {errors.name && (
-            <p className="text-xs text-red-400">{errors.name.message}</p>
+            <p style={{ fontSize: 12, color: 'var(--ember)', marginTop: 4 }}>
+              {errors.name.message}
+            </p>
           )}
         </div>
 
-        <div className="space-y-1.5">
-          <label className="text-sm text-white/70" htmlFor="email">
+        {/* Email */}
+        <div>
+          <label className="rf-label" htmlFor="email">
             Email
           </label>
           <input
             id="email"
             type="email"
             autoComplete="email"
-            className="w-full rounded-lg border border-white/10 bg-white/5 px-4 py-2.5 text-sm text-white placeholder:text-white/30 focus:border-white/30 focus:outline-none focus:ring-1 focus:ring-white/20"
             placeholder="seu@email.com"
+            className="rf-input"
             {...register('email')}
           />
           {errors.email && (
-            <p className="text-xs text-red-400">{errors.email.message}</p>
+            <p style={{ fontSize: 12, color: 'var(--ember)', marginTop: 4 }}>
+              {errors.email.message}
+            </p>
           )}
         </div>
 
-        <div className="space-y-1.5">
-          <label className="text-sm text-white/70" htmlFor="password">
+        {/* Senha */}
+        <div>
+          <label className="rf-label" htmlFor="password">
             Senha
           </label>
           <input
             id="password"
             type="password"
             autoComplete="new-password"
-            className="w-full rounded-lg border border-white/10 bg-white/5 px-4 py-2.5 text-sm text-white placeholder:text-white/30 focus:border-white/30 focus:outline-none focus:ring-1 focus:ring-white/20"
             placeholder="Mínimo 8 caracteres"
+            className="rf-input"
             {...register('password')}
           />
           {errors.password && (
-            <p className="text-xs text-red-400">{errors.password.message}</p>
+            <p style={{ fontSize: 12, color: 'var(--ember)', marginTop: 4 }}>
+              {errors.password.message}
+            </p>
           )}
         </div>
 
+        {/* Erro servidor */}
         {serverError && (
-          <p className="rounded-lg bg-red-500/10 px-4 py-2.5 text-sm text-red-400">
+          <div
+            style={{
+              background: 'rgba(255,58,14,0.1)',
+              border: '1px solid rgba(255,58,14,0.2)',
+              padding: '10px 16px',
+              fontSize: 13,
+              color: 'var(--ember)',
+            }}
+          >
             {serverError}
-          </p>
+          </div>
         )}
 
-        <Button
+        {/* Submit */}
+        <button
           type="submit"
           disabled={isSubmitting}
-          className="w-full bg-white text-black hover:bg-white/90 disabled:opacity-50"
+          style={{
+            background: 'var(--ember)',
+            color: 'var(--void)',
+            fontFamily: 'var(--type-mono)',
+            fontSize: 11,
+            letterSpacing: '0.18em',
+            textTransform: 'uppercase',
+            width: '100%',
+            padding: '12px 0',
+            border: 'none',
+            borderRadius: 0,
+            cursor: isSubmitting ? 'not-allowed' : 'pointer',
+            opacity: isSubmitting ? 0.5 : 1,
+            transition: 'opacity 0.15s',
+            fontWeight: 500,
+          }}
         >
           {isSubmitting ? 'Criando conta...' : 'Criar conta'}
-        </Button>
+        </button>
       </form>
 
-      <p className="mt-6 text-center text-sm text-white/40">
+      <p
+        style={{
+          marginTop: 24,
+          textAlign: 'center',
+          fontSize: 13,
+          color: 'var(--bone-mute)',
+          fontFamily: 'var(--type-sans)',
+        }}
+      >
         Já tem conta?{' '}
-        <Link href="/login" className="text-white/70 hover:text-white transition-colors">
+        <Link
+          href="/academy/login"
+          style={{ color: 'var(--ember)', textDecoration: 'none' }}
+        >
           Entrar
         </Link>
       </p>
