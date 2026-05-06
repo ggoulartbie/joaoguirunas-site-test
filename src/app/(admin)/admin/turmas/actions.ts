@@ -11,6 +11,19 @@ type CohortInsert = Database['public']['Tables']['cohorts']['Insert']
 type CohortUpdate = Database['public']['Tables']['cohorts']['Update']
 type CouponInsert = Database['public']['Tables']['coupons']['Insert']
 
+// Represents a course selection: courseId → array of specific moduleIds (empty = all modules)
+const cohortCourseSchema = z.object({
+  courseId: z.string().uuid(),
+  includedModuleIds: z.array(z.string().uuid()).default([]),
+})
+
+const cohortCrossExtensionSchema = z.object({
+  targetCohortId: z.string().uuid(),
+  daysGranted: z.number().int().positive(),
+  description: z.string().optional(),
+  isActive: z.boolean().default(true),
+})
+
 const cohortSchema = z.object({
   slug: z.string().min(1).max(100).regex(/^[a-z0-9-]+$/, 'Slug: apenas letras minúsculas, números e hífens'),
   name: z.string().min(1).max(200),
@@ -32,7 +45,48 @@ const cohortSchema = z.object({
   max_installments_extension: z.number().int().min(1).max(12).default(1),
   extension_duration_days: z.number().int().positive().optional(),
   allows_auto_renewal: z.boolean().default(false),
+  // B7: course selections
+  cohortCourses: z.array(cohortCourseSchema).default([]),
+  // B6: cross extension rules
+  crossExtensions: z.array(cohortCrossExtensionSchema).default([]),
 })
+
+async function saveCohortCourses(cohortId: string, cohortCourses: z.infer<typeof cohortCourseSchema>[]) {
+  // Delete existing associations before reinserting (idempotent replace)
+  await supabaseAdmin.from('cohort_courses').delete().eq('cohort_id', cohortId)
+
+  if (cohortCourses.length === 0) return
+
+  const { error } = await supabaseAdmin.from('cohort_courses').insert(
+    cohortCourses.map((cc, idx) => ({
+      cohort_id: cohortId,
+      course_id: cc.courseId,
+      included_module_ids: cc.includedModuleIds,
+      sort_order: idx,
+    }))
+  )
+  if (error) throw new Error('Erro ao salvar cursos da turma: ' + error.message)
+}
+
+async function saveCrossExtensions(cohortId: string, extensions: z.infer<typeof cohortCrossExtensionSchema>[]) {
+  // Delete existing extensions before reinserting
+  await supabaseAdmin.from('cohort_cross_extensions').delete().eq('source_cohort_id', cohortId)
+
+  if (extensions.length === 0) return
+
+  const { error } = await supabaseAdmin.from('cohort_cross_extensions').insert(
+    extensions
+      .filter((e) => e.targetCohortId)
+      .map((e) => ({
+        source_cohort_id: cohortId,
+        target_cohort_id: e.targetCohortId,
+        days_granted: e.daysGranted,
+        description: e.description ?? null,
+        is_active: e.isActive,
+      }))
+  )
+  if (error) throw new Error('Erro ao salvar extensões cruzadas: ' + error.message)
+}
 
 export async function createCohort(data: z.infer<typeof cohortSchema>) {
   await requireAdmin()
@@ -43,17 +97,26 @@ export async function createCohort(data: z.infer<typeof cohortSchema>) {
   }
 
   const insertData: CohortInsert = {
-    ...parsed.data,
-    cover_image_url: parsed.data.cover_image_url || null,
-    group_url: parsed.data.group_url || null,
+    slug: parsed.data.slug,
+    name: parsed.data.name,
     description: parsed.data.description || null,
+    cover_image_url: parsed.data.cover_image_url || null,
+    status: parsed.data.status,
     start_date: parsed.data.start_date || null,
     end_date: parsed.data.end_date || null,
     total_seats: parsed.data.total_seats ?? null,
     access_duration_days: parsed.data.access_duration_days ?? null,
+    group_url: parsed.data.group_url || null,
+    has_live_sessions: parsed.data.has_live_sessions,
+    has_support: parsed.data.has_support,
+    is_purchasable: parsed.data.is_purchasable,
+    has_public_page: parsed.data.has_public_page,
     entry_price_cents: parsed.data.entry_price_cents ?? null,
     extension_price_cents: parsed.data.extension_price_cents ?? null,
+    max_installments_entry: parsed.data.max_installments_entry,
+    max_installments_extension: parsed.data.max_installments_extension,
     extension_duration_days: parsed.data.extension_duration_days ?? null,
+    allows_auto_renewal: parsed.data.allows_auto_renewal,
   }
 
   const { data: cohort, error } = await supabaseAdmin
@@ -63,6 +126,12 @@ export async function createCohort(data: z.infer<typeof cohortSchema>) {
     .single()
 
   if (error || !cohort) throw new Error(error?.message ?? 'Erro ao criar turma')
+
+  // B7: persist course associations
+  await saveCohortCourses(cohort.id, parsed.data.cohortCourses)
+
+  // B6: persist cross extension rules
+  await saveCrossExtensions(cohort.id, parsed.data.crossExtensions)
 
   if (parsed.data.is_purchasable) {
     await syncCohortWithStripe(cohort.id)
@@ -83,17 +152,26 @@ export async function updateCohort(cohortId: string, data: z.infer<typeof cohort
   }
 
   const updateData: CohortUpdate = {
-    ...parsed.data,
-    cover_image_url: parsed.data.cover_image_url || null,
-    group_url: parsed.data.group_url || null,
+    slug: parsed.data.slug,
+    name: parsed.data.name,
     description: parsed.data.description || null,
+    cover_image_url: parsed.data.cover_image_url || null,
+    status: parsed.data.status,
     start_date: parsed.data.start_date || null,
     end_date: parsed.data.end_date || null,
     total_seats: parsed.data.total_seats ?? null,
     access_duration_days: parsed.data.access_duration_days ?? null,
+    group_url: parsed.data.group_url || null,
+    has_live_sessions: parsed.data.has_live_sessions,
+    has_support: parsed.data.has_support,
+    is_purchasable: parsed.data.is_purchasable,
+    has_public_page: parsed.data.has_public_page,
     entry_price_cents: parsed.data.entry_price_cents ?? null,
     extension_price_cents: parsed.data.extension_price_cents ?? null,
+    max_installments_entry: parsed.data.max_installments_entry,
+    max_installments_extension: parsed.data.max_installments_extension,
     extension_duration_days: parsed.data.extension_duration_days ?? null,
+    allows_auto_renewal: parsed.data.allows_auto_renewal,
   }
 
   const { error } = await supabaseAdmin
@@ -103,7 +181,12 @@ export async function updateCohort(cohortId: string, data: z.infer<typeof cohort
 
   if (error) throw new Error(error.message)
 
-  // Sempre re-sincroniza ao salvar (idempotente)
+  // B7: replace course associations
+  await saveCohortCourses(cohortId, parsed.data.cohortCourses)
+
+  // B6: replace cross extension rules
+  await saveCrossExtensions(cohortId, parsed.data.crossExtensions)
+
   if (parsed.data.is_purchasable) {
     await syncCohortWithStripe(cohortId)
   }
@@ -112,7 +195,12 @@ export async function updateCohort(cohortId: string, data: z.infer<typeof cohort
   revalidatePath(`/admin/turmas/${cohortId}`)
 }
 
-export async function addMemberToCohort(cohortId: string, userId: string, expiresAt?: string) {
+export async function addMemberToCohort(
+  cohortId: string,
+  userId: string,
+  memberRole: 'STUDENT' | 'MENTOR' = 'STUDENT',
+  expiresAt?: string,
+) {
   await requireAdmin()
 
   const { data: existing } = await supabaseAdmin
@@ -123,11 +211,11 @@ export async function addMemberToCohort(cohortId: string, userId: string, expire
     .maybeSingle()
 
   if (existing) {
-    // Reativa membro existente
     const { error } = await supabaseAdmin
       .from('cohort_members')
       .update({
         status: 'ACTIVE',
+        member_role: memberRole,
         expires_at: expiresAt ?? null,
         joined_at: new Date().toISOString(),
       })
@@ -137,14 +225,24 @@ export async function addMemberToCohort(cohortId: string, userId: string, expire
     const { error } = await supabaseAdmin.from('cohort_members').insert({
       cohort_id: cohortId,
       user_id: userId,
-      member_role: 'STUDENT',
+      member_role: memberRole,
       status: 'ACTIVE',
       expires_at: expiresAt ?? null,
     })
     if (error) throw new Error(error.message)
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    await (supabaseAdmin.rpc as any)('increment_filled_seats', { p_cohort_id: cohortId })
+    // Increment filled_seats manually (no RPC in generated types)
+    const { data: cohortRow } = await supabaseAdmin
+      .from('cohorts')
+      .select('filled_seats')
+      .eq('id', cohortId)
+      .single()
+    if (cohortRow) {
+      await supabaseAdmin
+        .from('cohorts')
+        .update({ filled_seats: cohortRow.filled_seats + 1 })
+        .eq('id', cohortId)
+    }
   }
 
   revalidatePath(`/admin/turmas/${cohortId}`)
@@ -218,19 +316,20 @@ export async function createCoupon(data: {
   revalidatePath(`/admin/turmas/${data.cohortId}`)
 }
 
+// B4: memberRole parameter added
 export async function addMemberByCohortEmail(
   cohortId: string,
   email: string,
-  expiresAt?: string
+  memberRole: 'STUDENT' | 'MENTOR' = 'STUDENT',
+  expiresAt?: string,
 ) {
   await requireAdmin()
 
-  // Look up user by email in auth.users via admin API
   const { data: listResult } = await supabaseAdmin.auth.admin.listUsers({ perPage: 1000 })
   const user = listResult?.users.find((u) => u.email === email)
   if (!user) throw new Error(`Usuário com e-mail "${email}" não encontrado na plataforma`)
 
-  await addMemberToCohort(cohortId, user.id, expiresAt)
+  await addMemberToCohort(cohortId, user.id, memberRole, expiresAt)
 }
 
 export async function deactivateCoupon(couponId: string) {

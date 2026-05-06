@@ -18,7 +18,7 @@ import {
   Save,
   ArrowLeft,
 } from 'lucide-react'
-import { createCohort, updateCohort, addMemberByCohortEmail } from './actions'
+import { createCohort, updateCohort, addMemberByCohortEmail, createCoupon } from './actions'
 
 type CohortCourse = Database['public']['Tables']['cohort_courses']['Row']
 type CrossExtension = Database['public']['Tables']['cohort_cross_extensions']['Row']
@@ -305,6 +305,8 @@ export function CohortForm(props: CohortFormProps) {
   const [newCouponKind, setNewCouponKind] = useState('PERCENT')
   const [newCouponValue, setNewCouponValue] = useState('')
   const [newCouponAppliesTo, setNewCouponAppliesTo] = useState('ENTRY')
+  const [couponError, setCouponError] = useState<string | null>(null)
+  const [couponPending, startCouponTransition] = useTransition()
 
   const [saved, setSaved] = useState(false)
 
@@ -400,6 +402,22 @@ export function CohortForm(props: CohortFormProps) {
   }
 
   function buildFormData() {
+    // B7: build cohortCourses from selectedCourses state
+    const cohortCoursesPayload = Object.entries(selectedCourses).map(([courseId, moduleSet]) => ({
+      courseId,
+      includedModuleIds: moduleSet === null ? [] : Array.from(moduleSet),
+    }))
+
+    // B6: build crossExtensions from extensions state
+    const crossExtensionsPayload = extensions
+      .filter((e) => e.targetCohortId && e.daysGranted)
+      .map((e) => ({
+        targetCohortId: e.targetCohortId,
+        daysGranted: parseInt(e.daysGranted, 10),
+        description: e.description || undefined,
+        isActive: e.isActive,
+      }))
+
     return {
       name,
       slug,
@@ -421,6 +439,8 @@ export function CohortForm(props: CohortFormProps) {
       max_installments_extension: parseInt(maxInstExt, 10) || 1,
       extension_duration_days: extDurationDays ? parseInt(extDurationDays, 10) : undefined,
       allows_auto_renewal: allowsAutoRenewal,
+      cohortCourses: cohortCoursesPayload,
+      crossExtensions: crossExtensionsPayload,
     }
   }
 
@@ -447,15 +467,51 @@ export function CohortForm(props: CohortFormProps) {
     setMemberError(null)
     startMemberTransition(async () => {
       try {
-        // Look up user by email via the action — action accepts userId, so we need to find by email first
-        // Since addMemberToCohort expects userId, we pass email as a search hint via a new action
-        await addMemberByCohortEmail(props.cohort.id, memberEmail, memberExpiresAt || undefined)
+        // B4: pass memberRole so the action respects the selected role
+        await addMemberByCohortEmail(
+          props.cohort.id,
+          memberEmail,
+          memberRole as 'STUDENT' | 'MENTOR',
+          memberExpiresAt || undefined,
+        )
         setShowAddMember(false)
         setMemberEmail('')
         setMemberExpiresAt('')
+        setMemberRole('STUDENT')
         router.refresh()
       } catch (err) {
         setMemberError(err instanceof Error ? err.message : 'Erro ao adicionar membro')
+      }
+    })
+  }
+
+  function handleSaveCoupon() {
+    if (!isEdit) return
+    setCouponError(null)
+    const discountValue = newCouponKind === 'PERCENT'
+      ? parseInt(newCouponValue, 10)
+      : parseBRL(newCouponValue)
+    if (!newCouponCode || !discountValue) {
+      setCouponError('Preencha o código e o valor do desconto')
+      return
+    }
+    startCouponTransition(async () => {
+      try {
+        await createCoupon({
+          cohortId: props.cohort.id,
+          code: newCouponCode,
+          discountKind: newCouponKind as 'PERCENT' | 'FIXED',
+          discountValue,
+          appliesTo: newCouponAppliesTo as 'ENTRY' | 'EXTENSION' | 'BOTH',
+        })
+        setShowAddCoupon(false)
+        setNewCouponCode('')
+        setNewCouponKind('PERCENT')
+        setNewCouponValue('')
+        setNewCouponAppliesTo('ENTRY')
+        router.refresh()
+      } catch (err) {
+        setCouponError(err instanceof Error ? err.message : 'Erro ao criar cupom')
       }
     })
   }
@@ -1283,18 +1339,22 @@ export function CohortForm(props: CohortFormProps) {
                         />
                       </div>
                     </div>
+                    {couponError && (
+                      <p className="mt-2 font-mono text-xs text-red-400">{couponError}</p>
+                    )}
                     <div className="mt-3 flex gap-2">
                       <button
                         type="button"
-                        className="bg-[#FF3A0E] px-4 py-2 font-mono text-xs uppercase tracking-wider text-white"
-                        onClick={() => setShowAddCoupon(false)}
+                        disabled={couponPending}
+                        className="bg-[#FF3A0E] px-4 py-2 font-mono text-xs uppercase tracking-wider text-white disabled:opacity-40"
+                        onClick={handleSaveCoupon}
                       >
-                        Salvar
+                        {couponPending ? 'Salvando...' : 'Salvar'}
                       </button>
                       <button
                         type="button"
                         className="border border-white/10 px-4 py-2 font-mono text-xs uppercase tracking-wider text-white/40"
-                        onClick={() => setShowAddCoupon(false)}
+                        onClick={() => { setShowAddCoupon(false); setCouponError(null) }}
                       >
                         Cancelar
                       </button>

@@ -66,17 +66,27 @@ async function triggerCertificateCheck(userId: string, lessonId: string): Promis
   const courseId = moduleData?.course_id
   if (!courseId) return
 
-  // Find the user's active cohort membership for a cohort that contains this course
-  const { data: member } = await supabaseAdmin
+  // Get all active cohort memberships for this user
+  const { data: memberships } = await supabaseAdmin
     .from('cohort_members')
-    .select('cohort_id, cohort_courses!inner(course_id)')
+    .select('cohort_id')
     .eq('user_id', userId)
     .eq('status', 'ACTIVE')
-    .eq('cohort_courses.course_id', courseId)
+
+  if (!memberships || memberships.length === 0) return
+
+  const cohortIds = memberships.map((m) => m.cohort_id)
+
+  // Find a cohort among the user's memberships that includes this course
+  const { data: cohortCourse } = await supabaseAdmin
+    .from('cohort_courses')
+    .select('cohort_id')
+    .eq('course_id', courseId)
+    .in('cohort_id', cohortIds)
     .limit(1)
     .maybeSingle()
 
-  const cohortId = member?.cohort_id
+  const cohortId = cohortCourse?.cohort_id
   if (!cohortId) return
 
   await checkAndIssueCertificate(userId, courseId, cohortId)
