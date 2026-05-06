@@ -2,11 +2,24 @@ import 'server-only'
 import Stripe from 'stripe'
 import type { CreateCheckoutParams, CheckoutSession, PaymentAdapter } from './interface'
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
-  apiVersion: '2026-04-22.dahlia',
+let _stripe: Stripe | null = null
+
+function getStripe(): Stripe {
+  if (!_stripe) {
+    const key = process.env.STRIPE_SECRET_KEY
+    if (!key) throw new Error('STRIPE_SECRET_KEY is not configured')
+    _stripe = new Stripe(key, { apiVersion: '2026-04-22.dahlia' })
+  }
+  return _stripe
+}
+
+export const stripe: Stripe = new Proxy({} as Stripe, {
+  get(_target, prop) {
+    return (getStripe() as unknown as Record<string | symbol, unknown>)[prop]
+  },
 })
 
-export { stripe }
+export { getStripe }
 
 export class StripeAdapter implements PaymentAdapter {
   async createCheckoutSession(params: CreateCheckoutParams): Promise<CheckoutSession> {
