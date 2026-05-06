@@ -1,10 +1,10 @@
 'use client'
 
 import { Download } from 'lucide-react'
-import type { LiveSession } from './mock-data'
+import type { LiveSessionWithCohort } from '@/types/student'
 
 type Props = {
-  session: LiveSession
+  session: LiveSessionWithCohort
 }
 
 function formatICSDate(date: Date): string {
@@ -14,11 +14,11 @@ function formatICSDate(date: Date): string {
     .replace(/\.\d{3}/, '')
 }
 
-function generateICS(session: LiveSession): string {
-  const start = formatICSDate(session.scheduledAt)
-  const end = formatICSDate(
-    new Date(session.scheduledAt.getTime() + session.durationMinutes * 60 * 1000)
-  )
+function generateICS(session: LiveSessionWithCohort): string {
+  const startDate = new Date(session.scheduled_at)
+  const endDate = new Date(startDate.getTime() + session.duration_minutes * 60 * 1000)
+  const start = formatICSDate(startDate)
+  const end = formatICSDate(endDate)
   const now = formatICSDate(new Date())
   const uid = `${session.id}-${Date.now()}@joaoguirunas.com`
 

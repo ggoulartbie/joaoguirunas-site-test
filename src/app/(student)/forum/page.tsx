@@ -8,9 +8,8 @@ import {
 
 export const metadata: Metadata = { title: 'Fórum' }
 
-function timeAgo(date: Date): string {
-  const now = new Date()
-  const diffMs = now.getTime() - date.getTime()
+function timeAgo(iso: string): string {
+  const diffMs = Date.now() - new Date(iso).getTime()
   const diffDays = Math.floor(diffMs / 86400000)
   const diffHours = Math.floor(diffMs / 3600000)
   const diffMins = Math.floor(diffMs / 60000)
@@ -30,7 +29,7 @@ export default function ForumPage() {
   // TODO F5.1: substituir por getForumCategories() + getRecentThreads(userId)
   const categories = MOCK_FORUM_CATEGORIES
   const threads = MOCK_FORUM_THREADS.sort(
-    (a, b) => b.lastActivityAt.getTime() - a.lastActivityAt.getTime()
+    (a, b) => new Date(b.last_activity_at).getTime() - new Date(a.last_activity_at).getTime()
   )
 
   return (
@@ -75,7 +74,7 @@ export default function ForumPage() {
               <div className="flex items-center gap-2.5">
                 <span
                   className="h-2 w-2 shrink-0 rounded-full"
-                  style={{ backgroundColor: cat.color }}
+                  style={{ backgroundColor: cat.color ?? undefined }}
                 />
                 <span className="text-sm font-medium text-white group-hover:text-[#FF3A0E] transition-colors">
                   {cat.name}
@@ -105,7 +104,7 @@ export default function ForumPage() {
               >
                 {/* Status icon */}
                 <div className="mt-0.5 shrink-0">
-                  {thread.isResolved ? (
+                  {thread.is_resolved ? (
                     <CheckCircle2 className="h-4 w-4 text-green-400" />
                   ) : (
                     <MessageSquare className="h-4 w-4 text-white/20" />
@@ -114,7 +113,7 @@ export default function ForumPage() {
 
                 <div className="min-w-0 flex-1">
                   <div className="flex flex-wrap items-center gap-2">
-                    {thread.isPinned && (
+                    {thread.is_pinned && (
                       <Pin className="h-3 w-3 shrink-0 text-[#FF3A0E]" />
                     )}
                     <h3 className="text-sm font-medium text-white group-hover:text-[#FF3A0E] transition-colors">
@@ -135,7 +134,7 @@ export default function ForumPage() {
                       )}
                     </span>
                     <span className="text-xs text-white/30">
-                      {timeAgo(thread.lastActivityAt)}
+                      {timeAgo(thread.last_activity_at)}
                     </span>
                   </div>
                 </div>

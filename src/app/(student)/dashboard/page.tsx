@@ -7,8 +7,8 @@ import { MOCK_COHORTS } from '@/components/student/mock-data'
 
 export const metadata: Metadata = { title: 'Dashboard' }
 
-function formatDate(date: Date) {
-  return date.toLocaleDateString('pt-BR', {
+function formatDate(iso: string) {
+  return new Date(iso).toLocaleDateString('pt-BR', {
     weekday: 'short',
     day: 'numeric',
     month: 'short',
@@ -25,11 +25,11 @@ export default function DashboardPage() {
   const lastAccessed = cohorts.find((c) => c.lastAccessedLessonSlug)
   const nextLive = cohorts
     .filter((c) => c.nextLiveSessionAt)
-    .sort((a, b) => a.nextLiveSessionAt!.getTime() - b.nextLiveSessionAt!.getTime())[0]
+    .sort((a, b) => new Date(a.nextLiveSessionAt!).getTime() - new Date(b.nextLiveSessionAt!).getTime())[0]
 
   const expiringCohorts = cohorts.filter((c) => {
-    if (!c.expiresAt) return false
-    const days = Math.ceil((c.expiresAt.getTime() - Date.now()) / 86400000)
+    if (!c.expires_at) return false
+    const days = Math.ceil((new Date(c.expires_at).getTime() - Date.now()) / 86400000)
     return days <= 30
   })
 
@@ -40,9 +40,7 @@ export default function DashboardPage() {
         <p className="font-mono text-xs uppercase tracking-widest text-white/40">
           Bem-vindo de volta
         </p>
-        <h1 className="mt-1 text-2xl font-bold text-white">
-          {user.name}
-        </h1>
+        <h1 className="mt-1 text-2xl font-bold text-white">{user.name}</h1>
       </div>
 
       {/* Avisos de expiração */}
@@ -54,14 +52,14 @@ export default function DashboardPage() {
               className="flex flex-col gap-3 border border-[#FF3A0E]/30 bg-[#FF3A0E]/5 p-4 sm:flex-row sm:items-center sm:justify-between"
             >
               <div className="flex items-center gap-3">
-                <ExpirationBadge expiresAt={cohort.expiresAt!} />
+                <ExpirationBadge expiresAt={cohort.expires_at!} />
                 <span className="text-sm text-white/80">
                   Matrícula em{' '}
                   <span className="font-semibold text-white">{cohort.name}</span>
                 </span>
               </div>
               <Link
-                href={`/perfil`}
+                href="/perfil"
                 className="flex items-center gap-1.5 font-mono text-xs uppercase tracking-wider text-[#FF3A0E] hover:text-[#FF5A1F] transition-colors"
               >
                 <RefreshCw className="h-3 w-3" />
@@ -121,9 +119,7 @@ export default function DashboardPage() {
               <div className="flex items-start gap-3">
                 <Calendar className="mt-0.5 h-4 w-4 shrink-0 text-[#FF3A0E]" />
                 <div>
-                  <p className="text-sm font-medium text-white">
-                    {nextLive.name}
-                  </p>
+                  <p className="text-sm font-medium text-white">{nextLive.name}</p>
                   <p className="mt-1 font-mono text-xs text-white/50">
                     {formatDate(nextLive.nextLiveSessionAt)}
                   </p>
@@ -138,9 +134,7 @@ export default function DashboardPage() {
               </Link>
             </div>
           ) : (
-            <p className="mt-4 text-sm text-white/40">
-              Nenhum encontro agendado.
-            </p>
+            <p className="mt-4 text-sm text-white/40">Nenhum encontro agendado.</p>
           )}
         </div>
       </div>
@@ -162,11 +156,8 @@ export default function DashboardPage() {
                   <p className="truncate font-semibold text-white group-hover:text-[#FF3A0E] transition-colors">
                     {cohort.name}
                   </p>
-                  {cohort.expiresAt && (
-                    <ExpirationBadge
-                      expiresAt={cohort.expiresAt}
-                      className="mt-2"
-                    />
+                  {cohort.expires_at && (
+                    <ExpirationBadge expiresAt={cohort.expires_at} className="mt-2" />
                   )}
                 </div>
                 <span className="shrink-0 font-mono text-lg font-bold text-[#FF3A0E]">

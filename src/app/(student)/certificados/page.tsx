@@ -5,8 +5,8 @@ import { MOCK_CERTIFICATES } from '@/components/student/mock-data'
 
 export const metadata: Metadata = { title: 'Certificados' }
 
-function formatDate(date: Date) {
-  return date.toLocaleDateString('pt-BR', {
+function formatDate(iso: string) {
+  return new Date(iso).toLocaleDateString('pt-BR', {
     day: '2-digit',
     month: 'long',
     year: 'numeric',
@@ -57,17 +57,17 @@ export default function CertificadosPage() {
                   </div>
                   <p className="mt-0.5 text-sm text-white/50">{cert.cohortName}</p>
                   <p className="mt-1 font-mono text-xs text-white/30">
-                    Emitido em {formatDate(cert.issuedAt)}
+                    Emitido em {cert.issued_at ? formatDate(cert.issued_at) : '—'}
                   </p>
                   <p className="mt-1 font-mono text-[10px] uppercase tracking-wider text-[#FF3A0E]/70">
-                    {cert.verificationCode}
+                    {cert.verification_code}
                   </p>
                 </div>
               </div>
 
               <div className="flex shrink-0 gap-3">
                 <Link
-                  href={`/certificado/v/${cert.verificationCode}`}
+                  href={`/certificado/v/${cert.verification_code}`}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex items-center gap-1.5 border border-white/10 px-3 py-2 font-mono text-xs uppercase tracking-wide text-white/50 transition-colors hover:border-white/20 hover:text-white/80"
@@ -75,9 +75,9 @@ export default function CertificadosPage() {
                   <ExternalLink className="h-3 w-3" />
                   Verificar
                 </Link>
-                {cert.pdfAvailable && (
+                {cert.pdf_storage_path && (
                   <a
-                    href={`/api/certificado/${cert.verificationCode}`}
+                    href={`/api/certificado/${cert.verification_code}`}
                     download
                     className="flex items-center gap-1.5 bg-[#FF3A0E] px-3 py-2 font-mono text-xs uppercase tracking-wide text-white transition-colors hover:bg-[#FF5A1F]"
                   >

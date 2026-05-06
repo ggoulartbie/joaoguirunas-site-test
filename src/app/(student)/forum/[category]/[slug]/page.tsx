@@ -12,8 +12,8 @@ import {
 import {
   MOCK_FORUM_THREADS,
   MOCK_FORUM_REPLIES,
-  type ForumReply,
 } from '@/components/student/mock-data'
+import type { ForumReplyWithMeta } from '@/types/student'
 import { ForumReplyForm } from '@/components/student/ForumReplyForm'
 
 type Props = {
@@ -26,8 +26,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return { title: thread?.title ?? 'Tópico' }
 }
 
-function formatDate(date: Date) {
-  return date.toLocaleDateString('pt-BR', {
+function formatDate(iso: string) {
+  return new Date(iso).toLocaleDateString('pt-BR', {
     day: '2-digit',
     month: 'short',
     year: 'numeric',
@@ -45,7 +45,7 @@ function ReplyCard({
   reply,
   children,
 }: {
-  reply: ForumReply
+  reply: ForumReplyWithMeta
   children?: React.ReactNode
 }) {
   const badge = ROLE_BADGE[reply.authorRole]
@@ -53,12 +53,12 @@ function ReplyCard({
   return (
     <div
       className={`relative border bg-[#0C0C12] p-4 ${
-        reply.isAcceptedAnswer
+        reply.is_accepted_answer
           ? 'border-green-500/40'
           : 'border-white/10'
       }`}
     >
-      {reply.isAcceptedAnswer && (
+      {reply.is_accepted_answer && (
         <div className="mb-3 flex items-center gap-1.5">
           <CheckCircle2 className="h-3.5 w-3.5 text-green-400" />
           <span className="font-mono text-[10px] uppercase tracking-wider text-green-400">
@@ -81,7 +81,7 @@ function ReplyCard({
           </span>
         )}
         <span className="ml-auto font-mono text-xs text-white/30">
-          {formatDate(reply.createdAt)}
+          {formatDate(reply.created_at)}
         </span>
       </div>
 
@@ -123,10 +123,10 @@ export default async function ForumThreadPage({ params }: Props) {
   if (!thread) notFound()
 
   const topLevelReplies = MOCK_FORUM_REPLIES.filter(
-    (r) => r.threadId === thread.id && r.parentReplyId === null
+    (r) => r.thread_id === thread.id && r.parent_reply_id === null
   )
   const nestedReplies = MOCK_FORUM_REPLIES.filter(
-    (r) => r.threadId === thread.id && r.parentReplyId !== null
+    (r) => r.thread_id === thread.id && r.parent_reply_id !== null
   )
 
   const badge = ROLE_BADGE[thread.authorRole]
@@ -150,13 +150,13 @@ export default async function ForumThreadPage({ params }: Props) {
             {thread.categoryName}
           </span>
           <div className="flex items-center gap-3">
-            {thread.isPinned && (
+            {thread.is_pinned && (
               <div className="flex items-center gap-1 font-mono text-[10px] uppercase tracking-wide text-[#FF3A0E]">
                 <Pin className="h-3 w-3" />
                 Fixado
               </div>
             )}
-            {thread.isResolved && (
+            {thread.is_resolved && (
               <div className="flex items-center gap-1 font-mono text-[10px] uppercase tracking-wide text-green-400">
                 <CheckCircle2 className="h-3 w-3" />
                 Resolvido
@@ -180,7 +180,7 @@ export default async function ForumThreadPage({ params }: Props) {
               </span>
             )}
             <span className="ml-auto font-mono text-xs text-white/30">
-              {formatDate(thread.createdAt)}
+              {formatDate(thread.created_at)}
             </span>
           </div>
 
@@ -212,7 +212,7 @@ export default async function ForumThreadPage({ params }: Props) {
 
           {topLevelReplies.map((reply) => {
             const children = nestedReplies.filter(
-              (r) => r.parentReplyId === reply.id
+              (r) => r.parent_reply_id === reply.id
             )
             return (
               <ReplyCard key={reply.id} reply={reply}>

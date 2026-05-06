@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { Send } from 'lucide-react'
-import type { ForumCategory } from './mock-data'
+import type { ForumCategory } from '@/types/student'
 
 type Props = {
   categories: ForumCategory[]

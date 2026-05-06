@@ -2,7 +2,37 @@ import type { Metadata } from 'next'
 import Link from 'next/link'
 import { ArrowLeft, ArrowRight, CheckCircle, Lock } from 'lucide-react'
 import { CommentSection } from '@/components/student/CommentSection'
+import { LessonTabs } from './LessonTabs'
 import { MOCK_COMMENTS } from '@/components/student/mock-data'
+import type { Database } from '@/types/database'
+
+type Material = Database['public']['Tables']['materials']['Row']
+
+// Mock de materiais — substituído por query real na F4.2
+const MOCK_MATERIALS: Material[] = [
+  {
+    id: 'mat-1',
+    lesson_id: 'lesson-demo',
+    title: 'Slide da Aula — Frameworks de Decisão',
+    kind: 'PDF',
+    storage_path: 'materials/frameworks-decisao.pdf',
+    external_url: null,
+    size_bytes: Math.round(1024 * 1024 * 2.4),
+    sort_order: 1,
+    created_at: '2026-05-01T00:00:00Z',
+  },
+  {
+    id: 'mat-2',
+    lesson_id: 'lesson-demo',
+    title: 'Template de Decisão — Notion',
+    kind: 'LINK',
+    storage_path: null,
+    external_url: 'https://notion.so/template-exemplo',
+    size_bytes: null,
+    sort_order: 2,
+    created_at: '2026-05-01T00:00:00Z',
+  },
+]
 
 type Props = {
   params: Promise<{ slug: string; 'lesson-slug': string }>
@@ -33,7 +63,7 @@ export default async function AulaPage({ params }: Props) {
     .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
     .join(' ')
 
-  const lessonComments = MOCK_COMMENTS.filter((c) => c.lessonId === 'lesson-demo')
+  const lessonComments = MOCK_COMMENTS.filter((c) => c.lesson_id === 'lesson-demo')
 
   if (!hasAccess) {
     return (
@@ -102,38 +132,15 @@ export default async function AulaPage({ params }: Props) {
       </div>
 
       {/* Tabs: Sobre / Materiais / Comentários */}
-      <LessonTabs lessonSlug={lessonSlug} comments={lessonComments} />
-    </div>
-  )
-}
-
-function LessonTabs({
-  lessonSlug: _lessonSlug,
-  comments,
-}: {
-  lessonSlug: string
-  comments: (typeof MOCK_COMMENTS)
-}) {
-  return (
-    <div className="space-y-4">
-      {/* Tab nav — será Client Component com estado em F3.3 */}
-      <div className="flex border-b border-white/10">
-        {['Sobre a aula', 'Materiais', 'Comentários'].map((tab, i) => (
-          <button
-            key={tab}
-            className={`px-4 py-2.5 font-mono text-xs uppercase tracking-wide transition-colors ${
-              i === 2
-                ? 'border-b-2 border-[#FF3A0E] text-white'
-                : 'text-white/40 hover:text-white/70'
-            }`}
-          >
-            {tab}
-          </button>
-        ))}
-      </div>
-
-      {/* Comments tab ativa por padrão neste shell */}
-      <CommentSection lessonId="lesson-demo" initialComments={comments} />
+      <LessonTabs
+        courseSlug={slug}
+        lessonSlug={lessonSlug}
+        activeTab="sobre"
+        description="Descrição da aula será carregada da base de dados na F3.2."
+        materials={MOCK_MATERIALS}
+        comments={lessonComments}
+        lessonId="lesson-demo"
+      />
     </div>
   )
 }
