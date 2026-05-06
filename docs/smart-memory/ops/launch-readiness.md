@@ -64,23 +64,26 @@ tags: [ops, launch, prontidão]
 - F8.4 Observabilidade: Sentry + Vercel Analytics
 - F8.5 E2E Playwright: 21 testes passando (auth, lesson-access, checkout, admin)
 
+### Fixes de segurança e persistência
+- F4.1.b — Comments com persistência real no Supabase (addComment/editComment/deleteComment via server actions reais)
+- F5.1.b — Forum UI wired: VoteButton + AcceptAnswerButton + inline reply form (ReplyCard)
+- F5.3.b — Certificate forgery fix: query real no /certificado/v/[code] com maybeSingle() null-guard
+- F6.3.c — CohortForm: cohort_courses/cross_extensions/coupon/memberRole todos wired à Server Action
+- Middleware scoped to platform routes only — site institucional (/, /mentoria, /agentes) não interceptado
+
 ---
 
-## Concerns documentados (não bloqueantes)
+## Concerns (não bloqueantes)
 
-- **F4.1.b — Comments sem persistência real**: CommentsSection usa Server Actions (addComment/editComment/deleteComment) mas os comentários podem não estar retornando do banco após submit sem revalidatePath. Workaround: page reload atualiza. Task #58 registrada.
-- **/agentes mobile — FAIL QA (2026-05-05)**: Belt scroll-driven sem fallback mobile, vw não atualiza em resize, SquadSideNav cobre conteúdo. Não impacta a plataforma de cursos (rota separada do site institucional). Task de fix registrada pelo QA.
-- **F5.3.b — Certificate forgery**: /certificado/v/[code] pode retornar "válido" mesmo com código adulterado se a query não fizer verificação server-side adequada. Task #57 in progress.
+- **/agentes mobile — FAIL QA (2026-05-05)**: Belt scroll-driven sem fallback mobile, vw não atualiza em resize, SquadSideNav cobre conteúdo. Não impacta a plataforma de cursos (rota separada). Housekeeping futuro.
 - **Token CSS órfão `--color-cat-squads`**: Definido em globals.css mas sem consumo. Housekeeping futuro.
 
 ---
 
 ## Pendente de ação
 
-- **F5.3.b — Certificate forgery fix**: query real no /certificado/v/[code] — task #57 in progress
-- **F4.1.b — Comments com persistência real no Supabase** — task #58 pendente
 - **Domínio de produção** — aguardando João configurar DNS no Vercel
-- **Variáveis de ambiente prod** — checklist na seção abaixo (F8.6 pendente)
+- **Variáveis de ambiente prod** — configurar todas as env vars no painel Vercel (ver tabela abaixo)
 - **F8.6 — Deploy Vercel + domínio** — task #47 pendente
 
 ---

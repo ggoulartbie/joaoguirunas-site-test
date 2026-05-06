@@ -1,13 +1,165 @@
 ---
 title: QA Results
 type: qa-log
-updated: 2026-05-05T00:00
+updated: 2026-05-06T00:00
 tags: [qa, veredictos]
 ---
 
 # QA Results — Veredictos formais
 
 Histórico de veredictos emitidos pelo sites-qa (Axilun).
+
+---
+
+## 2026-05-06 — F5.3.b Fix certificado forjável (CRITICAL SECURITY) — ✅ PASS
+
+**Escopo:** Gate de segurança crítico — fix da forgery em `/certificado/v/[code]` + auto-emissão `checkAndIssueCertificate` integrada com `markLessonComplete`.
+**Submetido por:** sites-dev-gamma.
+**Arquivos avaliados:**
+- `src/app/(public)/certificado/v/[code]/page.tsx`
+- `src/app/actions/certificate.ts`
+- `src/app/actions/progress.ts`
+
+### Verificações de segurança aprovadas
+
+- **Query real no DB com fallback null:** `page.tsx:29-40` faz `supabaseAdmin.from('certificates').select(...).eq('verification_code', code.toUpperCase()).maybeSingle()`. Linha 56 renderiza "Certificado não encontrado" quando `cert === null` (branch :138-153) com o code tentado.
+- **Teste anti-forgery passou:** code aleatório (ex: `AAAAAAAAAA`) faz `maybeSingle()` retornar `null` → branch de erro. **Forgery client-side bloqueada.** Critério mínimo do gate atendido.
+- **Normalização case-insensitive:** `code.toUpperCase()` na linha 39 previne bypass por casing (`abc123` vs `ABC123`).
+- **`robots: noindex`** (page.tsx:14) — código forjado nem é indexado por buscadores.
+- **Entropia real do verification_code:** `crypto.randomBytes(6).toString('hex').toUpperCase()` (certificate.ts:36, :98) — 12 chars hex (~48 bits, espaço de 2^48 ≈ 281 trilhões). CSPRNG, não previsível, não sequencial.
+
+### Verificações funcionais aprovadas
+
+- **`checkAndIssueCertificate` (certificate.ts:59-117):**
+  - Idempotente: linhas 65-73 retornam existente se já emitido para `(user_id, course_id, cohort_id)`.
+  - Conta total: linhas 76-82 — `lessons` join `modules!inner(course_id)`, filtro `deleted_at IS NULL`.
+  - Conta completadas: linhas 87-94 — `lesson_progress` com `completed=true` filtrado por `IN (lessonIds)`.
+  - Gate 100%: `if (completedCount < totalLessons) return null` (linha 95).
+  - Edge case curso vazio: `if (totalLessons === 0) return null` (linha 83) — previne emissão fantasma.
+- **Integração com markLessonComplete:** `progress.ts:54` chama `triggerCertificateCheck` fire-and-forget com `.catch(console.error)`. `triggerCertificateCheck` (linhas 57-93) resolve courseId via `lesson → module.course_id`, busca memberships ACTIVE do user (linhas 70-75), encontra cohort via `cohort_courses` (linhas 81-87), e dispara `checkAndIssueCertificate`.
+- **TS clean:** `npx tsc --noEmit` retorna zero erros no projeto inteiro.
+
+### Notas informativas (não bloqueantes, defesa em profundidade)
+
+- `markLessonComplete` (progress.ts:36-55) não revalida acesso à lesson antes de marcar, mas a tabela `lesson_progress` deve ter RLS exigindo acesso, e mesmo que houvesse marca espúria, `checkAndIssueCertificate` exige membership ACTIVE em cohort que inclua o curso (via `triggerCertificateCheck`). Defesa em profundidade existe.
+- `checkAndIssueCertificate` confia que o cohortId chega válido (sem revalidar membership). O único call site já filtrou por ACTIVE — OK por contrato, mas refatoração futura poderia revalidar aqui para defesa adicional.
+
+### Veredicto
+
+```
+VEREDICTO: PASS
+Story: F5.3.b — Fix certificado forjável (CRITICAL SECURITY) | Data: 2026-05-06
+Checklist: 10/10 incluindo teste anti-forgery
+Issues bloqueantes: nenhum
+Próximo passo: @sites-devops liberado para push imediato. Último bloqueio
+  de segurança removido.
+```
+
+---
+
+## 2026-05-06 — Lesson page (F4 integration) dados reais — ✅ PASS (com CONCERNs)
+
+**Escopo:** Gate de quality — wiring de dados reais (comments + materials) na lesson page.
+**Submetido por:** sites-dev-gamma.
+**Arquivos avaliados:**
+- `src/app/(student)/curso/[slug]/aula/[lesson-slug]/page.tsx`
+- `src/app/(student)/curso/[slug]/aula/[lesson-slug]/LessonTabs.tsx`
+- `src/app/(student)/curso/[slug]/aula/[lesson-slug]/material-actions.ts`
+- `src/components/student/MaterialsList.tsx`
+- `src/lib/storage/materials.ts`
+
+### Verificações aprovadas
+
+- **Comments reais:** `page.tsx:153-179` faz query real em `comments` com join em `profiles(id, name, role)` — sem MOCK_COMMENTS. Mapeamento server-side resolve `authorId/authorName/authorRole` para `CommentWithAuthor[]`.
+- **Materials reais:** `page.tsx:182-188` query real em `materials`. Sem MOCK_MATERIALS.
+- **Signed URL via has_access:** `lib/storage/materials.ts:26-79` — `getMaterialSignedUrl` valida user, busca material, faz `rpc('has_access')` + bypass admin, gera signed URL com expiry 5min via `supabaseAdmin.storage` (bucket privado). LINK retorna `external_url` direto.
+- **Import morto removido:** `page.tsx` imports limpos. `LessonContent` ainda em uso correto em LessonTabs:6,84.
+- **Props completas:** page.tsx:276-277 passa `currentUserId={user.id}` e `currentUserName={profile?.name ?? ''}` para LessonTabs.
+- **TS:** zero erros nos arquivos do escopo deste gate.
+
+### Concerns documentados (não bloqueantes)
+
+- **[CONCERN-1] Prop semantics confusa em LessonTabs.**
+  - `LessonTabs.tsx:46` marca `currentUserName` como `_currentUserName` (unused) e linha 98 passa `currentUserName={currentUserId ?? ''}` para CommentsSection.
+  - Funcionalmente correto porque `CommentsSection` internamente faz `authorId === currentUserId` (UUID vs UUID), mas semanticamente o "nome" é o UUID. Frágil — qualquer refactor que comece a usar `currentUserName` como display vai quebrar.
+  - Sugestão: ou renomear a prop em `CommentsSection` para `currentUserId`, ou efetivamente usar `_currentUserName` no display.
+
+- **[CONCERN-2] Arquivo órfão com erros TS no projeto.**
+  - `src/components/student/CommentSection.tsx` (singular — NÃO usado em lugar algum) tem 2 erros TS: linha 88 (null não atribuível a string) e linha 289 (props faltantes).
+  - Pré-existe a este commit (introduzido por `8719c9e`) e não impacta a lesson page (que usa `CommentsSection` plural via LessonTabs).
+  - O build TS do projeto está quebrado por causa desse legado — recomendado deletar em housekeeping separado.
+
+### Veredicto
+
+```
+VEREDICTO: PASS (com 2 CONCERNs)
+Story: Lesson page F4 integration | Data: 2026-05-06
+Checklist: 7/7 critérios principais OK
+Issues: nenhum bloqueante; 2 concerns documentados
+Próximo passo: @sites-devops liberado para incluir no próximo push.
+```
+
+---
+
+## 2026-05-06 — F5.1.b Forum persistência real — ❌ FAIL
+
+**Escopo:** Gate de quality F5.1.b — Forum com Server Actions reais (commit `46caa4d`).
+**Submetido por:** sites-dev-stripe.
+**Arquivos avaliados:**
+- `src/app/(student)/forum/actions.ts`
+- `src/app/(student)/forum/page.tsx`
+- `src/app/(student)/forum/[category]/[slug]/page.tsx`
+- `src/app/(student)/forum/novo/page.tsx`
+- `src/components/student/NewThreadForm.tsx`
+- `src/components/student/ForumReplyForm.tsx`
+
+### Camada server-side: APROVADA
+
+- `createThread` — Zod (categoryId UUID, title 3-200, content min 10), guard `requireActiveMember`, slug com sufixo `Date.now()` para unicidade.
+- `createReply` — Zod, guard, atualiza `last_activity_at` da thread após insert.
+- `voteThread` — toggle correto via `votes` (insert se não existe, delete se existe). Tabela confirmada no schema (`types/database.ts:1002`).
+- `markAsAccepted` — verifica `forum_threads.author_id === user.id` antes de marcar, e seta `is_resolved` na thread.
+- Cohort guard ACTIVE em `forum/page.tsx:33-42` e `forum/novo/page.tsx:16-25` redirecting para `/meus-cursos?erro=forum-acesso`.
+- Queries reais sem mock-data nas três páginas.
+- `npx tsc --noEmit` retorna zero erros.
+
+### Issues bloqueantes (CRITICAL)
+
+- **[CRITICAL-1] Upvote não funcional — falha critério Seção 8 explicitamente.**
+  - `src/app/(student)/forum/[category]/[slug]/page.tsx:88-92` (replies) e `:254-258` (thread principal): botões `<button>` envolvendo `<ThumbsUp>` SEM `onClick`, `formAction` ou wrapper de form.
+  - Action `voteThread` em `forum/actions.ts:119` está implementada mas **unreachable pelo UI** — usuário não tem como votar.
+  - Ação corretiva: extrair em Client Component (`VoteButton`) com `useTransition` chamando `voteThread(threadId)`. Para reply, criar análoga aceitando `replyId`.
+
+- **[CRITICAL-2] markAsAccepted não acessível.**
+  - `[category]/[slug]/page.tsx` não renderiza nenhum botão "Marcar como aceita" visível ao autor da thread.
+  - Action funciona mas é unreachable.
+  - Ação corretiva: passar `currentUserId` para um Client Component `AcceptAnswerButton` renderizado quando `currentUserId === thread.authorId && !reply.is_accepted_answer`.
+
+- **[CRITICAL-3] Botão "Responder" decorativo em ReplyCard.**
+  - `[category]/[slug]/page.tsx:93-96` — `<button>` sem handler.
+  - `createReply` aceita `parentReplyId` mas o UI não permite ao usuário acionar reply aninhado.
+  - Ação corretiva: wire o botão para alternar `<ForumReplyForm threadId={thread.id} parentReplyId={reply.id} />` inline.
+
+### Concerns (não bloqueantes)
+
+- **[CONCERN-1] Busca por título não implementada** — Seção 8 prevê. Documentado como CONCERN; pode ser fase posterior.
+- **[CONCERN-2] Links órfãos.**
+  - `forum/page.tsx:139` → `/forum/categoria/${cat.slug}` — rota `/forum/categoria/...` não existe (estrutura tem só `[category]/[slug]`).
+  - `forum/page.tsx:229` → `/forum/todos` — rota inexistente.
+  - Ambos geram 404. Ou criar `forum/[category]/page.tsx` (listing por categoria) + `forum/todos/page.tsx`, ou ajustar hrefs para algo válido.
+- **[CONCERN-3] revalidatePath duplicado** em `forum/actions.ts:114-115` — duas chamadas para `/forum`.
+
+### Veredicto
+
+```
+VEREDICTO: FAIL
+Story: F5.1.b | Data: 2026-05-06
+Checklist: 7/10 (server PASS; UI wiring FAIL)
+Issues bloqueantes: CRITICAL-1, CRITICAL-2, CRITICAL-3
+Próximo passo: @sites-dev-stripe corrigir CRITICAL-1/2/3 (extrair Client Components
+  com useTransition para voteThread/markAsAccepted/parentReplyId) e resubmeter.
+NÃO liberar push F5.1 até essas correções.
+```
 
 ---
 
