@@ -9,6 +9,38 @@ tags: [ops]
 
 Registro de todos os Agent Teams formados neste projeto. Lead (team-os) atualiza a cada `*dispatch` e `*close`.
 
+## 2026-05-05 — Team joao-guirunas-site-agentes-belt
+
+**Objetivo:** Redesign /agentes — horizontal card belt + cards metade do tamanho + transição fluida entre squads
+**Lead:** team-os (skill)
+**Composição:**
+- sites-dev-alpha — implementação frontend (SquadSection.tsx + AgentCard.tsx)
+
+**Status:** encerrado
+**Encerrado:** 2026-05-05
+**Stories:** [[../stories/done/F9.1-agentes-horizontal-belt-cards]]
+
+## 2026-05-05 — Team joao-guirunas-site-plataforma-cursos-mvp
+
+**Objetivo:** Construir plataforma de cursos multi-cohort com área do aluno, área admin, pagamentos Stripe e acesso baseado em turmas — 8 fases conforme PRD v3.0
+**Lead:** team-os (skill)
+**Composição:**
+- sites-architect — Quebrar PRD em stories por fase, ADRs
+- sites-data — Schema SQL, migrations, RLS, has_access() (Fase 1)
+- sites-dev-beta — Auth middleware, APIs, webhooks Stripe (Fases 2 e 7)
+- sites-dev-alpha — UI área do aluno + área pública (Fases 3, 4, 5)
+- sites-dev-gamma — Video adapter, MDX/TipTap, cross-layer (Fases 3 e 6)
+- sites-qa — Gate formal de aceite entre fases
+- sites-devops — Deploy Vercel + CI/CD (Fase 8)
+
+**Status:** ativo
+**Início:** 2026-05-05T00:00:00-03:00
+**Encerrado:** —
+**PRD:** docs/PRD-plataforma-cursos.md
+**Stories:** ver [[../stories/BACKLOG]] (sites-architect populando)
+
+---
+
 ## 2026-05-03 — Team joao-guirunas-site-agentes-upgrade
 
 **Objetivo:** Melhoria da página /agentes — texturas 3D 4K, enriquecimento de dados dos agentes, redesign do AgentCard e rewrite das single pages
