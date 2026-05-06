@@ -7,6 +7,7 @@ import {
   sendMembershipExtendedEmail,
   sendAutoRenewalEmail,
   sendPaymentFailedEmail,
+  sendWelcomeToCohortEmail,
 } from '@/lib/email/send'
 
 export const runtime = 'nodejs'
@@ -109,7 +110,7 @@ async function handleCheckoutCompleted(session: Stripe.Checkout.Session) {
 
   const { data: cohort } = await supabaseAdmin
     .from('cohorts')
-    .select('id, name, access_duration_days, extension_duration_days')
+    .select('id, name, access_duration_days, extension_duration_days, start_date')
     .eq('id', cohort_id)
     .single()
 
@@ -204,6 +205,7 @@ async function handleCheckoutCompleted(session: Stripe.Checkout.Session) {
   if (userInfo) {
     if (purchase_kind === 'ENTRY') {
       await sendPaymentApprovedEmail(userInfo.email, userInfo.name, cohort.name).catch(console.error)
+      sendWelcomeToCohortEmail(userInfo.email, userInfo.name, cohort.name, cohort.start_date ?? null).catch(console.error)
     } else {
       await sendMembershipExtendedEmail(
         userInfo.email,

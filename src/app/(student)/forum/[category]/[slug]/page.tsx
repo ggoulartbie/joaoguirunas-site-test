@@ -5,13 +5,15 @@ import {
   ArrowLeft,
   CheckCircle2,
   Pin,
-  ThumbsUp,
   MessageSquare,
   CornerDownRight,
 } from 'lucide-react'
 import { supabaseAdmin } from '@/lib/supabase/admin'
+import { requireUser } from '@/lib/auth/helpers'
 import type { ForumReplyWithMeta } from '@/types/student'
 import { ForumReplyForm } from '@/components/student/ForumReplyForm'
+import { VoteButton } from '@/components/forum/VoteButton'
+import { ReplyCard } from '@/components/forum/ReplyCard'
 
 type Props = {
   params: Promise<{ category: string; slug: string }>
@@ -42,78 +44,15 @@ const ROLE_BADGE: Record<string, { label: string; className: string } | undefine
   ADMIN: { label: 'Admin', className: 'bg-yellow-500/15 text-yellow-400' },
 }
 
-function ReplyCard({
-  reply,
-  children,
-}: {
-  reply: ForumReplyWithMeta
-  children?: React.ReactNode
-}) {
-  const badge = ROLE_BADGE[reply.authorRole]
-
-  return (
-    <div
-      className={`relative border bg-[#0C0C12] p-4 ${
-        reply.is_accepted_answer ? 'border-green-500/40' : 'border-white/10'
-      }`}
-    >
-      {reply.is_accepted_answer && (
-        <div className="mb-3 flex items-center gap-1.5">
-          <CheckCircle2 className="h-3.5 w-3.5 text-green-400" />
-          <span className="font-mono text-[10px] uppercase tracking-wider text-green-400">
-            Resposta aceita
-          </span>
-        </div>
-      )}
-
-      <div className="mb-3 flex items-center gap-2">
-        <div className="flex h-7 w-7 items-center justify-center bg-white/10 font-mono text-xs font-bold text-white/60">
-          {reply.authorName.charAt(0)}
-        </div>
-        <span className="text-sm font-medium text-white/80">{reply.authorName}</span>
-        {badge && (
-          <span className={`px-1.5 py-0.5 font-mono text-[10px] uppercase tracking-wide ${badge.className}`}>
-            {badge.label}
-          </span>
-        )}
-        <span className="ml-auto font-mono text-xs text-white/30">
-          {formatDate(reply.created_at)}
-        </span>
-      </div>
-
-      <div className="prose prose-sm prose-invert max-w-none text-white/80">
-        <p className="whitespace-pre-wrap text-sm leading-relaxed">{reply.content}</p>
-      </div>
-
-      <div className="mt-3 flex items-center gap-4">
-        <button className="flex items-center gap-1.5 font-mono text-xs text-white/30 transition-colors hover:text-white/60">
-          <ThumbsUp className="h-3 w-3" />
-          {reply.voteCount}
-        </button>
-        <button className="flex items-center gap-1.5 font-mono text-xs text-white/30 transition-colors hover:text-[#FF3A0E]">
-          <MessageSquare className="h-3 w-3" />
-          Responder
-        </button>
-      </div>
-
-      {children && (
-        <div className="mt-4 ml-4 space-y-3 border-l border-white/10 pl-4">
-          {children}
-        </div>
-      )}
-    </div>
-  )
-}
-
 export default async function ForumThreadPage({ params }: Props) {
   const { slug } = await params
+  const user = await requireUser()
 
-  // Buscar thread com categoria e autor
   const { data: threadRaw } = await supabaseAdmin
     .from('forum_threads')
     .select(`
       id, slug, title, content, created_at, last_activity_at,
-      is_pinned, is_resolved, view_count,
+      is_pinned, is_resolved, view_count, author_id,
       forum_categories(slug, name),
       profiles(name, role)
     `)
@@ -126,7 +65,6 @@ export default async function ForumThreadPage({ params }: Props) {
   const cat = threadRaw.forum_categories as { slug: string; name: string } | null
   const threadAuthor = threadRaw.profiles as { name: string; role: string } | null
 
-  // Contagens
   const [{ count: replyCount }, { count: voteCount }] = await Promise.all([
     supabaseAdmin
       .from('forum_replies')
@@ -141,6 +79,7 @@ export default async function ForumThreadPage({ params }: Props) {
 
   const thread = {
     id: threadRaw.id,
+    author_id: threadRaw.author_id,
     slug: threadRaw.slug,
     title: threadRaw.title,
     content: threadRaw.content,
@@ -154,7 +93,6 @@ export default async function ForumThreadPage({ params }: Props) {
     voteCount: voteCount ?? 0,
   }
 
-  // Buscar replies com autor e votos
   const { data: repliesRaw } = await supabaseAdmin
     .from('forum_replies')
     .select(`
@@ -252,10 +190,7 @@ export default async function ForumThreadPage({ params }: Props) {
           </div>
 
           <div className="mt-4 flex items-center gap-4 border-t border-white/10 pt-4">
-            <button className="flex items-center gap-1.5 font-mono text-xs text-white/30 transition-colors hover:text-white/60">
-              <ThumbsUp className="h-3.5 w-3.5" />
-              {thread.voteCount} votos
-            </button>
+            <VoteButton threadId={thread.id} voteCount={thread.voteCount} />
             <span className="font-mono text-xs text-white/20">
               {thread.replyCount} {thread.replyCount === 1 ? 'resposta' : 'respostas'}
             </span>
@@ -272,13 +207,24 @@ export default async function ForumThreadPage({ params }: Props) {
           </h2>
 
           {topLevelReplies.map((reply) => {
-            const children = nestedReplies.filter(
-              (r) => r.parent_reply_id === reply.id
-            )
+            const children = nestedReplies.filter((r) => r.parent_reply_id === reply.id)
             return (
-              <ReplyCard key={reply.id} reply={reply}>
+              <ReplyCard
+                key={reply.id}
+                reply={reply}
+                threadId={thread.id}
+                threadAuthorId={thread.author_id}
+                currentUserId={user.id}
+              >
                 {children.map((child) => (
-                  <ReplyCard key={child.id} reply={child} />
+                  <ReplyCard
+                    key={child.id}
+                    reply={child}
+                    threadId={thread.id}
+                    threadAuthorId={thread.author_id}
+                    currentUserId={user.id}
+                    isNested
+                  />
                 ))}
               </ReplyCard>
             )
@@ -293,6 +239,14 @@ export default async function ForumThreadPage({ params }: Props) {
         </h2>
         <ForumReplyForm threadId={thread.id} />
       </div>
+
+      {/* Sem respostas ainda */}
+      {topLevelReplies.length === 0 && (
+        <div className="flex items-center gap-2 py-6 text-sm text-white/30">
+          <MessageSquare className="h-4 w-4" />
+          Ainda sem respostas. Seja o primeiro!
+        </div>
+      )}
     </div>
   )
 }

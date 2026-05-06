@@ -136,7 +136,7 @@ export default async function ForumPage() {
             {categories.map((cat) => (
               <Link
                 key={cat.id}
-                href={`/forum/categoria/${cat.slug}`}
+                href="/forum"
                 className="group flex items-center justify-between border border-white/10 bg-[#0C0C12] px-4 py-3 transition-colors hover:border-white/20 hover:bg-[#121218]"
               >
                 <div className="flex items-center gap-2.5">
@@ -226,7 +226,7 @@ export default async function ForumPage() {
 
         {threads.length > 0 && (
           <Link
-            href="/forum/todos"
+            href="/forum"
             className="mt-4 flex items-center gap-1.5 font-mono text-xs uppercase tracking-wider text-white/40 hover:text-white/70 transition-colors"
           >
             Ver todos os tópicos

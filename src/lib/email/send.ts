@@ -11,6 +11,7 @@ import { MembershipExtendedEmail } from '../../../emails/templates/MembershipExt
 import { NewMaterialEmail } from '../../../emails/templates/NewMaterialEmail'
 import { LiveSessionReminderEmail } from '../../../emails/templates/LiveSessionReminderEmail'
 import { CertificateReadyEmail } from '../../../emails/templates/CertificateReadyEmail'
+import { WelcomeToCohortEmail } from '../../../emails/templates/WelcomeToCohortEmail'
 
 function getResend() {
   return new Resend(process.env.RESEND_API_KEY)
@@ -183,6 +184,28 @@ export async function sendLiveSessionReminderEmail(
     from: FROM,
     to,
     subject: `Lembrete: ${sessionTitle} — amanhã`,
+    html,
+  })
+}
+
+export async function sendWelcomeToCohortEmail(
+  to: string,
+  name: string,
+  cohortName: string,
+  startDate: string | null
+) {
+  const html = await render(WelcomeToCohortEmail({
+    name,
+    cohortName,
+    startDate,
+    dashboardUrl: `${APP_URL}/meus-cursos`,
+    forumUrl: `${APP_URL}/forum`,
+  }))
+
+  return getResend().emails.send({
+    from: FROM,
+    to,
+    subject: `Bem-vindo à turma ${cohortName}!`,
     html,
   })
 }

@@ -1,14 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { supabaseAdmin } from '@/lib/supabase/admin'
-import { sendLiveSessionReminderEmail } from '@/lib/email/send'
-import { Resend } from 'resend'
+import { sendLiveSessionReminderEmail, sendExpirationReminderEmail } from '@/lib/email/send'
 
 export const runtime = 'nodejs'
 export const maxDuration = 60
 
 export async function GET(req: NextRequest) {
-  const resend = new Resend(process.env.RESEND_API_KEY)
-  const FROM = process.env.RESEND_FROM_EMAIL ?? 'noreply@example.com'
   const APP_URL = process.env.NEXT_PUBLIC_APP_URL ?? ''
 
   // Vercel Cron authentication
@@ -61,20 +58,16 @@ export async function GET(req: NextRequest) {
           if (!profile?.email) continue
 
           const cohortName = (member.cohorts as { name: string } | null)?.name ?? 'sua turma'
-          const cohortSlug = (member.cohorts as { slug: string } | null)?.slug ?? ''
+          const expiresAt = (member as { expires_at?: string | null }).expires_at ?? new Date().toISOString()
 
-          await resend.emails.send({
-            from: FROM,
-            to: profile.email,
-            subject: `Sua matrícula em "${cohortName}" expira em ${days} dias`,
-            html: expiryReminderHtml({
-              name: profile.name,
-              cohortName,
-              daysLeft: days,
-              renewUrl: `${APP_URL}/perfil`,
-              cohortUrl: `${APP_URL}/turmas/${cohortSlug}`,
-            }),
-          })
+          await sendExpirationReminderEmail(
+            profile.email,
+            profile.name,
+            cohortName,
+            days,
+            expiresAt,
+            `${APP_URL}/perfil`,
+          )
 
           if (days === 15) results.reminders.d15++
           else if (days === 7) results.reminders.d7++
@@ -207,31 +200,3 @@ async function getUserProfile(userId: string): Promise<{ name: string; email: st
   return { name: profile?.name ?? 'Aluno', email: data.user.email }
 }
 
-function expiryReminderHtml({
-  name,
-  cohortName,
-  daysLeft,
-  renewUrl,
-  cohortUrl,
-}: {
-  name: string
-  cohortName: string
-  daysLeft: number
-  renewUrl: string
-  cohortUrl: string
-}): string {
-  return `
-    <div style="font-family:sans-serif;max-width:520px;margin:0 auto;padding:24px;background:#050507;color:#e5e5e5">
-      <h2 style="color:#FF3A0E;margin-bottom:8px">Sua matrícula expira em ${daysLeft} dias</h2>
-      <p>Olá, ${name}.</p>
-      <p>Sua matrícula em <strong>${cohortName}</strong> expira em <strong>${daysLeft} dias</strong>.</p>
-      <p>Para continuar com acesso ao conteúdo, renove sua matrícula agora.</p>
-      <a href="${renewUrl}" style="display:inline-block;background:#FF3A0E;color:#fff;padding:12px 24px;text-decoration:none;font-weight:bold;margin-top:16px">
-        Renovar matrícula
-      </a>
-      <p style="margin-top:24px;font-size:12px;color:#888">
-        Ou <a href="${cohortUrl}" style="color:#FF3A0E">veja os detalhes da turma</a>.
-      </p>
-    </div>
-  `.trim()
-}
