@@ -1,7 +1,7 @@
 'use client';
 
 import { Suspense, useEffect, useRef } from 'react';
-import { Canvas, useLoader, useThree, useFrame } from '@react-three/fiber';
+import { Canvas, useThree, useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
 import { Planet } from './Planet';
 import { Starfield } from './Starfield';
@@ -53,14 +53,12 @@ const SQUAD_CONFIG: Record<SquadId, {
   },
 };
 
-function MilkyWayBg() {
-  const texture = useLoader(THREE.TextureLoader, '/textures/planets/stars-milky-way.jpg');
+function DarkBackground() {
   const { scene } = useThree();
   useEffect(() => {
-    texture.mapping = THREE.EquirectangularReflectionMapping;
-    scene.background = texture;
+    scene.background = new THREE.Color('#02020a');
     return () => { scene.background = null; };
-  }, [texture, scene]);
+  }, [scene]);
   return null;
 }
 
@@ -186,7 +184,7 @@ export function AgentPlanetScene({ squadId }: AgentPlanetSceneProps) {
       <directionalLight position={[-20, -10, 20]} intensity={0.2} color={config.tint} />
 
       <Suspense fallback={null}>
-        <MilkyWayBg />
+        <DarkBackground />
 
         <Planet
           position={[0, 0, 0]}
@@ -203,7 +201,7 @@ export function AgentPlanetScene({ squadId }: AgentPlanetSceneProps) {
           segments={isMobile ? 64 : 96}
         />
 
-        <Starfield count={isMobile ? 2500 : 4500} radius={280} mouseRef={mouseRef} />
+        <Starfield count={isMobile ? 150 : 400} radius={280} mouseRef={mouseRef} />
       </Suspense>
 
       <ScrollCamera scrollRef={scrollRef} />

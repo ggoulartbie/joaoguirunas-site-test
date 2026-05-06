@@ -47,11 +47,11 @@ export function Starfield({ count = 4500, radius = 220, mouseRef }: StarfieldPro
         <bufferAttribute attach="attributes-size" args={[sizes, 1]} count={count} />
       </bufferGeometry>
       <pointsMaterial
-        size={0.6}
+        size={0.5}
         sizeAttenuation
-        color="#c8d0e0"
+        color="#9aa3b0"
         transparent
-        opacity={0.30}
+        opacity={0.12}
         depthWrite={false}
         blending={THREE.AdditiveBlending}
       />
