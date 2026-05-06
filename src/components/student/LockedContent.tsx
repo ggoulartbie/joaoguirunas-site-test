@@ -9,8 +9,8 @@ type Props = {
 
 export function LockedContent({ cohortName, cohortSlug, cohortDescription }: Props) {
   return (
-    <div className="flex flex-col items-center border border-white/10 bg-[#0C0C12] px-8 py-16 text-center">
-      <div className="flex h-16 w-16 items-center justify-center border border-white/10 bg-[#050507]">
+    <div className="flex flex-col items-center border border-white/10 bg-[var(--ink)] px-8 py-16 text-center">
+      <div className="flex h-16 w-16 items-center justify-center border border-white/10 bg-[var(--void)]">
         <Lock className="h-7 w-7 text-white/20" />
       </div>
 
@@ -24,7 +24,7 @@ export function LockedContent({ cohortName, cohortSlug, cohortDescription }: Pro
 
       <Link
         href={`/turmas/${cohortSlug}`}
-        className="mt-8 flex items-center gap-2 bg-[#FF3A0E] px-5 py-3 font-mono text-xs uppercase tracking-wider text-white transition-colors hover:bg-[#FF5A1F]"
+        className="mt-8 flex items-center gap-2 bg-[var(--ember)] px-5 py-3 font-mono text-xs uppercase tracking-wider text-white transition-colors hover:bg-[#FF5A1F]"
       >
         Ver detalhes da turma
         <ArrowRight className="h-3.5 w-3.5" />

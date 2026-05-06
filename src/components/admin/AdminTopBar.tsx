@@ -25,16 +25,16 @@ export function AdminTopBar() {
   const label = getBreadcrumb(pathname)
 
   return (
-    <header className="sticky top-0 z-30 flex h-14 items-center justify-between border-b border-white/[0.07] bg-[#050507] px-6">
-      <span className="font-mono text-[10px] uppercase tracking-widest text-[#84848c]">
+    <header className="sticky top-0 z-30 flex h-14 items-center justify-between border-b border-white/[0.07] bg-[var(--void)] px-6">
+      <span className="font-mono text-[10px] uppercase tracking-widest text-[var(--bone-mute)]">
         {label}
       </span>
 
       <div className="flex items-center gap-3">
-        <span className="border border-[#ff3a0e]/30 bg-[#ff3a0e]/10 px-2 py-0.5 font-mono text-[10px] uppercase tracking-widest text-[#ff3a0e]">
+        <span className="border border-[var(--ember)]/30 bg-[var(--ember)]/10 px-2 py-0.5 font-mono text-[10px] uppercase tracking-widest text-[var(--ember)]">
           Admin
         </span>
-        <div className="flex h-8 w-8 items-center justify-center rounded-full bg-[#ff3a0e]/20 font-mono text-xs font-bold text-[#ff3a0e]">
+        <div className="flex h-8 w-8 items-center justify-center rounded-full bg-[var(--ember)]/20 font-mono text-xs font-bold text-[var(--ember)]">
           A
         </div>
       </div>

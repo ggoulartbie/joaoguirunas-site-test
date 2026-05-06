@@ -97,17 +97,10 @@ export default function DashboardPage() {
           {lastAccessed ? (
             <Link
               href={`/curso/${lastAccessed.lastAccessedCourseSlug}/aula/${lastAccessed.lastAccessedLessonSlug}`}
-              className="group block border p-6 transition-colors"
+              className="group block border border-[var(--hairline)] hover:border-[var(--hairline-strong)] p-6 transition-colors"
               style={{
                 background: 'var(--ink)',
-                borderColor: 'var(--hairline)',
                 borderRadius: 0,
-              }}
-              onMouseEnter={(e) => {
-                (e.currentTarget as HTMLElement).style.borderColor = 'var(--hairline-strong)'
-              }}
-              onMouseLeave={(e) => {
-                (e.currentTarget as HTMLElement).style.borderColor = 'var(--hairline)'
               }}
             >
               <p

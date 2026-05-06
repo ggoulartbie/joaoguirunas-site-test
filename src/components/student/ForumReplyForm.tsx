@@ -47,7 +47,7 @@ export function ForumReplyForm({ threadId, parentReplyId, onSuccess, compact = f
           placeholder={compact ? 'Escreva uma resposta...' : 'Escreva sua resposta em Markdown...'}
           aria-label="Conteúdo da resposta"
           rows={compact ? 3 : 6}
-          className="w-full resize-y border border-white/10 bg-[#0C0C12] p-3 text-sm text-white placeholder:text-white/30 focus:border-white/20 focus:outline-none"
+          className="w-full resize-y border border-white/10 bg-[var(--ink)] p-3 text-sm text-white placeholder:text-white/30 focus:border-white/20 focus:outline-none"
           disabled={isPending}
         />
       </div>
@@ -62,7 +62,7 @@ export function ForumReplyForm({ threadId, parentReplyId, onSuccess, compact = f
         <button
           type="submit"
           disabled={isPending || !content.trim()}
-          className="flex items-center gap-2 bg-[#FF3A0E] px-4 py-2 font-mono text-xs uppercase tracking-wide text-white transition-colors hover:bg-[#FF5A1F] disabled:opacity-40 disabled:cursor-not-allowed"
+          className="flex items-center gap-2 bg-[var(--ember)] px-4 py-2 font-mono text-xs uppercase tracking-wide text-white transition-colors hover:bg-[#FF5A1F] disabled:opacity-40 disabled:cursor-not-allowed"
         >
           <Send className="h-3.5 w-3.5" aria-hidden="true" />
           {isPending ? 'Enviando...' : 'Responder'}

@@ -41,13 +41,13 @@ export function NewCourseForm() {
   }
 
   const inputClass =
-    'w-full border border-[rgba(255,255,255,0.16)] bg-[#16161a] px-3 py-3 font-mono text-sm text-[#f1f1f3] placeholder-[#84848c] outline-none focus:border-[#ff3a0e] transition-colors'
+    'w-full border border-[rgba(255,255,255,0.16)] bg-[var(--ink-2)] px-3 py-3 font-mono text-sm text-[var(--bone)] placeholder-[var(--bone-mute)] outline-none focus:border-[var(--ember)] transition-colors'
 
   return (
     <form onSubmit={handleSubmit} className="space-y-5">
       <div className="grid gap-5 sm:grid-cols-2">
         <div className="space-y-1.5">
-          <label className="font-mono text-[10px] uppercase tracking-widest text-[#84848c]">Título</label>
+          <label className="font-mono text-[10px] uppercase tracking-widest text-[var(--bone-mute)]">Título</label>
           <input
             value={title}
             onChange={(e) => handleTitleChange(e.target.value)}
@@ -59,7 +59,7 @@ export function NewCourseForm() {
         </div>
 
         <div className="space-y-1.5">
-          <label className="font-mono text-[10px] uppercase tracking-widest text-[#84848c]">Slug</label>
+          <label className="font-mono text-[10px] uppercase tracking-widest text-[var(--bone-mute)]">Slug</label>
           <input
             value={slug}
             onChange={(e) => setSlug(e.target.value)}
@@ -68,12 +68,12 @@ export function NewCourseForm() {
             className={inputClass}
             style={{ borderRadius: 0 }}
           />
-          <p className="font-mono text-[10px] text-[#84848c]">Gerado automaticamente — pode editar</p>
+          <p className="font-mono text-[10px] text-[var(--bone-mute)]">Gerado automaticamente — pode editar</p>
         </div>
       </div>
 
       <div className="space-y-1.5">
-        <label className="font-mono text-[10px] uppercase tracking-widest text-[#84848c]">Descrição</label>
+        <label className="font-mono text-[10px] uppercase tracking-widest text-[var(--bone-mute)]">Descrição</label>
         <textarea
           value={description}
           onChange={(e) => setDescription(e.target.value)}
@@ -85,14 +85,14 @@ export function NewCourseForm() {
       </div>
 
       {error && (
-        <p className="font-mono text-xs text-[#ff3a0e]">{error}</p>
+        <p className="font-mono text-xs text-[var(--ember)]">{error}</p>
       )}
 
       <div className="flex justify-end gap-3 border-t border-[rgba(255,255,255,0.07)] pt-4">
         <button
           type="button"
           onClick={() => router.back()}
-          className="border border-[rgba(255,255,255,0.16)] px-4 py-2.5 font-mono text-xs uppercase tracking-wider text-[#c5c5ca] transition-colors hover:border-[rgba(255,255,255,0.3)] hover:text-[#f1f1f3]"
+          className="border border-[rgba(255,255,255,0.16)] px-4 py-2.5 font-mono text-xs uppercase tracking-wider text-[var(--bone-dim)] transition-colors hover:border-[rgba(255,255,255,0.3)] hover:text-[var(--bone)]"
           style={{ borderRadius: 0 }}
         >
           Cancelar
@@ -100,7 +100,7 @@ export function NewCourseForm() {
         <button
           type="submit"
           disabled={pending || !title || !slug}
-          className="bg-[#ff3a0e] px-5 py-2.5 font-mono text-xs font-semibold uppercase tracking-wider text-[#050507] transition-opacity hover:opacity-90 disabled:opacity-40"
+          className="bg-[var(--ember)] px-5 py-2.5 font-mono text-xs font-semibold uppercase tracking-wider text-[var(--void)] transition-opacity hover:opacity-90 disabled:opacity-40"
           style={{ borderRadius: 0 }}
         >
           {pending ? 'Criando...' : 'Criar Curso'}

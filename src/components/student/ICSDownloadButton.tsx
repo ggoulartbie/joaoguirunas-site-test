@@ -61,7 +61,7 @@ export function ICSDownloadButton({ session }: Props) {
     <button
       onClick={handleDownload}
       aria-label={`Exportar ${session.title} para calendário (.ics)`}
-      className="flex items-center gap-1.5 border border-white/10 px-3 py-2 font-mono text-xs uppercase tracking-wide text-white/40 hover:border-white/20 hover:text-white/70 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FF3A0E] focus-visible:ring-offset-1 focus-visible:ring-offset-[#050507]"
+      className="flex items-center gap-1.5 border border-white/10 px-3 py-2 font-mono text-xs uppercase tracking-wide text-white/40 hover:border-white/20 hover:text-white/70 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ember)] focus-visible:ring-offset-1 focus-visible:ring-offset-[var(--void)]"
     >
       <Download className="h-3.5 w-3.5" aria-hidden="true" />
       Exportar .ics

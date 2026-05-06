@@ -1,7 +1,7 @@
 ---
 title: Shared Context
 type: status-board
-updated: 2026-05-03
+updated: 2026-05-06
 tags: [ops]
 ---
 
@@ -23,17 +23,19 @@ O lead (team-os) atualiza este arquivo a cada mudança de estado dos teammates.
 
 ## Último encerramento
 
-**Data:** 2026-05-03
-**Sessão:** Sprint /agentes — texturas 8K, dados enriquecidos, AgentCard e single pages (team joao-guirunas-site-agentes-upgrade)
+**Data:** 2026-05-06
+**Sessão:** Mentoria Onboarding Tool — formulário presencial com Supabase + PDF upload
 **Trabalho realizado:**
-- Mars e Venus atualizados para texturas 8K (8192×4096) via Solar System Scope
-- Jupiter mantido em 4K (solarsystemscope máximo disponível)
-- MilkyWay texture (stars-milky-way.jpg) aplicada como background equirectangular da cena 3D
-- agentes.json enriquecido: abilities + squadRole para todos os 37 agentes
-- Codenames preenchidos para sites/social/traffic (estavam null)
-- AgentCard atualizado: race badge + abilities top-3 + squadRole
-- Single page reescrita: foto real + tagline blockquote + race badge + especialização grid
-- Stories 6.1–6.4 concluídas
+- Tabela `onboarding` + bucket `onboarding-pdfs` criados via migrations
+- `/mentoria/onboarding` — lista single-line com CRUD, copy prompt, PDF ↗
+- `/mentoria/onboarding/[id]` — formulário com auto-save, ✓ por campo, nav com Planejamento último
+- PDF upload via signed URL (fix do limite 1MB do Next.js server actions)
+
+## ⚠️ Pendente para próxima sessão
+
+- **git commit + push** de todos os arquivos modificados (nenhum commit desta sessão ainda)
+  - Novo: `OnboardingListClient.tsx`, `[id]/OnboardingFormClient.tsx`, `[id]/page.tsx`, `onboarding.ts`, 2 migrations
+  - Modificados (plataforma-cursos): academy pages, AdminSidebar, MaterialsUpload
 
 ## Decisões ativas
 <!-- Architect atualiza após cada ADR -->

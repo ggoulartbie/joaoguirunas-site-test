@@ -14,7 +14,7 @@ Font.register({
 
 const styles = StyleSheet.create({
   page: {
-    backgroundColor: '#050507',
+    backgroundColor: 'var(--void)',
     padding: 60,
     fontFamily: 'Helvetica',
     flexDirection: 'column',
@@ -22,7 +22,7 @@ const styles = StyleSheet.create({
   },
   accentBar: {
     height: 4,
-    backgroundColor: '#FF3A0E',
+    backgroundColor: 'var(--ember)',
     marginBottom: 48,
   },
   label: {
@@ -45,7 +45,7 @@ const styles = StyleSheet.create({
   },
   divider: {
     height: 1,
-    backgroundColor: '#1A1A22',
+    backgroundColor: 'var(--ink-2)',
     marginVertical: 24,
   },
   sectionLabel: {
@@ -70,7 +70,7 @@ const styles = StyleSheet.create({
   },
   verificationCode: {
     fontSize: 9,
-    color: '#FF3A0E',
+    color: 'var(--ember)',
     letterSpacing: 2,
     fontFamily: 'Helvetica-Bold',
   },

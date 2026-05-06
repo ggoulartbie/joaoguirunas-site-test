@@ -1,8 +1,10 @@
 'use client';
 
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Image from 'next/image';
+import type { OnboardingRow, OnboardingUpdate } from '@/lib/actions/onboarding';
+import { updateOnboarding, getOnboardingPdfUrl, getOnboardingPdfUploadUrl, confirmPdfUpload } from '@/lib/actions/onboarding';
 
 const EMBER = '#FF3A0E';
 
@@ -33,6 +35,7 @@ interface Phase {
   amber?: boolean;
   description: string;
   image: string;
+  bannerHeight?: number;
   modules: Module[];
 }
 
@@ -42,6 +45,7 @@ const PHASES: Phase[] = [
     label: 'Dia Presencial',
     date: '12 de maio · Terça · 13h–18h',
     accent: true,
+    bannerHeight: 440,
     description: 'Um dia intensivo para resetar sua mentalidade sobre IA, dominar as ferramentas na prática e criar o seu primeiro agente Claude do zero.',
     image: '/images/claudia-guirunas.png',
     modules: [
@@ -296,17 +300,68 @@ function phaseAccentColor(phase: Phase) {
 function scrollTo(id: string) {
   const el = document.getElementById(id);
   if (!el) return;
-  // 48px sticky nav height + 24px breathing room
   const top = el.getBoundingClientRect().top + window.scrollY - 72;
   window.scrollTo({ top, behavior: 'smooth' });
 }
 
-function buildPrompt(answers: Answers): string {
+function rowToAnswers(row: OnboardingRow): Answers {
+  return {
+    perfil_nome: row.nome || '',
+    perfil_profissao: row.profissao || '',
+    perfil_empresa: row.empresa || '',
+    perfil_segmento: row.segmento || '',
+    perfil_cidade: row.cidade || '',
+    perfil_linkedin: row.linkedin || '',
+    obj_1: row.obj_1 || '',
+    obj_2: row.obj_2 || '',
+    obj_3: row.obj_3 || '',
+    obj_4: row.obj_4 || '',
+    ctx_1: row.ctx_1 || '',
+    ctx_2: row.ctx_2 || '',
+    ctx_3: row.ctx_3 || '',
+    ctx_4: row.ctx_4 || '',
+    proj_nome: row.proj_nome || '',
+    proj_problema: row.proj_problema || '',
+    proj_publico: row.proj_publico || '',
+    proj_tools: row.proj_tools || '',
+    proj_resultado: row.proj_resultado || '',
+    planejamento: row.planejamento || '',
+  };
+}
+
+function answersToUpdate(answers: Answers): OnboardingUpdate {
+  const v = (k: string) => answers[k]?.trim() || null;
+  return {
+    nome: answers['perfil_nome']?.trim() || '',
+    profissao: v('perfil_profissao'),
+    empresa: v('perfil_empresa'),
+    segmento: v('perfil_segmento'),
+    cidade: v('perfil_cidade'),
+    linkedin: v('perfil_linkedin'),
+    obj_1: v('obj_1'),
+    obj_2: v('obj_2'),
+    obj_3: v('obj_3'),
+    obj_4: v('obj_4'),
+    ctx_1: v('ctx_1'),
+    ctx_2: v('ctx_2'),
+    ctx_3: v('ctx_3'),
+    ctx_4: v('ctx_4'),
+    proj_nome: v('proj_nome'),
+    proj_problema: v('proj_problema'),
+    proj_publico: v('proj_publico'),
+    proj_tools: v('proj_tools'),
+    proj_resultado: v('proj_resultado'),
+    planejamento: v('planejamento'),
+  };
+}
+
+export function buildPrompt(answers: Answers): string {
   const get = (key: string) => answers[key]?.trim() || '(não preenchido)';
   const nome = answers['perfil_nome']?.trim() || 'Mentorado';
   const empresa = answers['perfil_empresa']?.trim();
   const cargo = answers['perfil_profissao']?.trim();
   const projeto = answers['proj_nome']?.trim() || 'Projeto da Mentoria';
+  const planejamento = answers['planejamento']?.trim();
 
   return `# GERAÇÃO DE APRESENTAÇÃO DE ONBOARDING — MENTORIA CLAUDE CODE + IA
 
@@ -433,8 +488,15 @@ Apresentação ao vivo do projeto desenvolvido durante a mentoria. Cada mentorad
 **Claudia Guirunas** — Especialista em mindset e desbloqueio mental para adoção de tecnologia. Conduz a abertura do presencial com foco em eliminar crenças limitantes e preparar o mentorado emocionalmente para a transformação.
 
 ---
+${planejamento ? `
+## 7. PLANEJAMENTO DO MENTORADO (notas do mentor)
 
-## 7. INSTRUÇÕES DE GERAÇÃO
+${planejamento}
+
+---
+
+` : ''}
+## ${planejamento ? '8' : '7'}. INSTRUÇÕES DE GERAÇÃO
 
 Gere uma **apresentação completa em Markdown** pronta para converter em PDF. Use a seguinte estrutura:
 
@@ -483,11 +545,37 @@ Liste 5 a 7 ações concretas e específicas para ${nome} nas primeiras 48h apó
 - Formate o Markdown de forma limpa — sem HTML, sem emojis excessivos`;
 }
 
+// ─── Count Badge ─────────────────────────────────────────────────────────────
+
+function CountBadge({ filled, total, color }: { filled: number; total: number; color: string }) {
+  const done = filled === total;
+  return (
+    <motion.span
+      key={filled}
+      initial={{ scale: 0.85, opacity: 0.5 }}
+      animate={{ scale: 1, opacity: 1 }}
+      transition={{ duration: 0.2 }}
+      style={{
+        ...MONO,
+        fontSize: '0.58rem',
+        padding: '2px 10px',
+        color: done ? '#34D399' : color,
+        border: `1px solid ${done ? 'rgba(52,211,153,0.3)' : `${color}30`}`,
+        background: done ? 'rgba(52,211,153,0.06)' : `${color}0a`,
+        transition: 'color 0.3s, border-color 0.3s, background 0.3s',
+      }}
+    >
+      {filled}/{total}{done ? ' ✓' : ''}
+    </motion.span>
+  );
+}
+
 // ─── Phase Section ────────────────────────────────────────────────────────────
 
 function PhaseSection({ phase }: { phase: Phase }) {
   const accent = phaseAccentColor(phase);
   const liveColor = '#34D399';
+  const bannerH = phase.bannerHeight ?? 280;
 
   return (
     <section
@@ -496,14 +584,13 @@ function PhaseSection({ phase }: { phase: Phase }) {
       className="py-20 sm:py-24"
       style={{ borderBottom: '1px solid rgba(255,255,255,0.07)' }}
     >
-      {/* ── Full-width image banner ── */}
       <motion.div
         initial={{ opacity: 0, y: 24 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, margin: '-40px' }}
         transition={{ duration: 0.6 }}
         className="relative overflow-hidden mb-12"
-        style={{ minHeight: 280, border: `1px solid ${accent}22` }}
+        style={{ minHeight: bannerH, border: `1px solid ${accent}22` }}
       >
         <Image
           src={phase.image}
@@ -515,8 +602,7 @@ function PhaseSection({ phase }: { phase: Phase }) {
         <div className="absolute inset-0" style={{ background: 'linear-gradient(to right, rgba(8,8,12,0.9) 0%, rgba(8,8,12,0.6) 55%, rgba(8,8,12,0.3) 100%)' }} />
         <div className="absolute inset-0" style={{ background: 'linear-gradient(to top, rgba(8,8,12,0.65) 0%, transparent 55%)' }} />
 
-        <div className="relative flex flex-col justify-between p-8 sm:p-12" style={{ minHeight: 280 }}>
-          {/* Top: label + date */}
+        <div className="relative flex flex-col justify-between p-8 sm:p-12" style={{ minHeight: bannerH }}>
           <div className="flex flex-wrap items-center gap-3">
             <span style={{ ...MONO, color: accent, border: `1px solid ${accent}45`, background: 'rgba(8,8,12,0.8)', padding: '5px 14px' }}>
               {phase.label}
@@ -526,7 +612,6 @@ function PhaseSection({ phase }: { phase: Phase }) {
             )}
           </div>
 
-          {/* Bottom: description + count */}
           <div>
             <p
               className="text-2xl sm:text-3xl font-semibold text-white max-w-xl leading-snug mb-5"
@@ -544,7 +629,6 @@ function PhaseSection({ phase }: { phase: Phase }) {
         </div>
       </motion.div>
 
-      {/* ── Module cards ── */}
       <div className="space-y-5">
         {phase.modules.map((mod, i) => {
           const isLive = !!mod.live;
@@ -566,7 +650,6 @@ function PhaseSection({ phase }: { phase: Phase }) {
               className="flex gap-6 p-7 sm:p-8"
               style={{ border: `1px solid ${borderColor}`, background: bg }}
             >
-              {/* Badge */}
               <div
                 className="flex-shrink-0 flex items-center justify-center w-10 h-10 rounded-full mt-0.5"
                 style={{ border: `2px solid ${numBorder}` }}
@@ -580,7 +663,6 @@ function PhaseSection({ phase }: { phase: Phase }) {
                 )}
               </div>
 
-              {/* Content */}
               <div className="flex-1 min-w-0">
                 <div className="flex flex-wrap items-baseline gap-x-4 gap-y-1 mb-3">
                   <h3 className="text-base sm:text-lg font-semibold text-white" style={{ letterSpacing: '-0.01em' }}>
@@ -590,19 +672,14 @@ function PhaseSection({ phase }: { phase: Phase }) {
                     <span style={{ ...MONO, fontSize: '0.58rem', color: dateColor }}>{mod.date}</span>
                   )}
                 </div>
-
                 <p className="text-sm leading-relaxed mb-4" style={{ color: 'rgba(255,255,255,0.48)', maxWidth: '52ch' }}>
                   {mod.description}
                 </p>
-
                 <div className="flex flex-wrap gap-1.5">
                   {mod.tags.map((tag) => (
                     <span
                       key={tag}
-                      style={{
-                        ...MONO, fontSize: '0.53rem', padding: '2px 9px',
-                        color: tagColor, border: `1px solid ${tagBorder}`,
-                      }}
+                      style={{ ...MONO, fontSize: '0.53rem', padding: '2px 9px', color: tagColor, border: `1px solid ${tagBorder}` }}
                     >
                       {tag}
                     </span>
@@ -617,7 +694,118 @@ function PhaseSection({ phase }: { phase: Phase }) {
   );
 }
 
-// ─── Prompt Preview Section ───────────────────────────────────────────────────
+// ─── PDF Upload ───────────────────────────────────────────────────────────────
+
+function PdfUpload({ id, initialPdfPath }: { id: string; initialPdfPath: string | null }) {
+  const [pdfPath, setPdfPath] = useState(initialPdfPath);
+  const [uploading, setUploading] = useState(false);
+  const [error, setError] = useState('');
+  const [signedUrl, setSignedUrl] = useState('');
+  const fileRef = useRef<HTMLInputElement>(null);
+
+  const handleFile = useCallback(async (file: File) => {
+    if (!file || file.type !== 'application/pdf') { setError('Selecione um arquivo PDF'); return; }
+    setUploading(true); setError('');
+
+    const urlResult = await getOnboardingPdfUploadUrl(id);
+    if ('error' in urlResult) { setError(urlResult.error); setUploading(false); return; }
+
+    const uploadRes = await fetch(urlResult.uploadUrl, {
+      method: 'PUT',
+      body: file,
+      headers: { 'Content-Type': 'application/pdf' },
+    });
+    if (!uploadRes.ok) { setError(`Falha no upload: ${uploadRes.statusText}`); setUploading(false); return; }
+
+    const confirmResult = await confirmPdfUpload(id);
+    setUploading(false);
+    if ('error' in confirmResult) { setError(confirmResult.error); return; }
+    setPdfPath(`${id}/apresentacao.pdf`);
+    setSignedUrl('ok');
+  }, [id]);
+
+  const handleGetUrl = useCallback(async () => {
+    if (!pdfPath) return;
+    const result = await getOnboardingPdfUrl(pdfPath);
+    if ('error' in result) { setError(result.error); return; }
+    window.open(result.signedUrl, '_blank');
+  }, [pdfPath]);
+
+  return (
+    <section className="py-16 sm:py-20" style={{ borderBottom: '1px solid rgba(255,255,255,0.07)' }}>
+      <motion.div initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.5 }}>
+        <p className="mb-3" style={{ ...MONO, color: 'rgba(129,140,248,0.8)' }}>Documento</p>
+        <h2 className="text-2xl sm:text-3xl font-semibold text-white mb-3" style={{ letterSpacing: '-0.02em' }}>
+          PDF da <span style={{ color: '#818cf8' }}>Apresentação</span>
+        </h2>
+        <p className="text-sm sm:text-base leading-relaxed mb-8 max-w-lg" style={{ color: 'rgba(255,255,255,0.45)' }}>
+          Após gerar a apresentação no Claude, faça upload do PDF aqui para ficar salvo junto ao mentorado.
+        </p>
+      </motion.div>
+
+      <div className="max-w-2xl">
+        {pdfPath ? (
+          <motion.div
+            initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }}
+            className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 p-6"
+            style={{ border: '1px solid rgba(129,140,248,0.25)', background: 'rgba(129,140,248,0.04)' }}
+          >
+            <div className="flex items-center gap-3">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#818cf8" strokeWidth={1.5}>
+                <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z" />
+                <polyline points="14 2 14 8 20 8" />
+              </svg>
+              <div>
+                <p className="text-white text-sm font-medium">apresentacao.pdf</p>
+                <p style={{ ...MONO, fontSize: '0.55rem', color: 'rgba(255,255,255,0.3)' }}>Salvo no Supabase Storage</p>
+              </div>
+            </div>
+            <div className="flex gap-2">
+              <button onClick={handleGetUrl}
+                className="transition-opacity hover:opacity-70"
+                style={{ ...MONO, fontSize: '0.6rem', padding: '7px 16px', color: '#818cf8', border: '1px solid rgba(129,140,248,0.35)', background: 'rgba(129,140,248,0.08)' }}>
+                Baixar ↗
+              </button>
+              <button onClick={() => fileRef.current?.click()}
+                className="transition-opacity hover:opacity-70"
+                style={{ ...MONO, fontSize: '0.6rem', padding: '7px 16px', color: 'rgba(255,255,255,0.4)', border: '1px solid rgba(255,255,255,0.1)' }}>
+                {uploading ? 'Enviando…' : 'Substituir'}
+              </button>
+            </div>
+          </motion.div>
+        ) : (
+          <motion.button
+            initial={{ opacity: 0, y: 8 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}
+            onClick={() => fileRef.current?.click()}
+            disabled={uploading}
+            className="w-full flex flex-col items-center justify-center gap-3 transition-all hover:border-[rgba(129,140,248,0.4)] hover:bg-[rgba(129,140,248,0.04)] disabled:opacity-50"
+            style={{ border: '1px dashed rgba(255,255,255,0.12)', padding: '40px 24px', background: 'transparent' }}
+          >
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.25)" strokeWidth={1.5}>
+              <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M17 8l-5-5-5 5M12 3v12" />
+            </svg>
+            <p style={{ ...MONO, fontSize: '0.65rem', color: 'rgba(255,255,255,0.3)' }}>
+              {uploading ? 'Enviando…' : 'Clique para selecionar o PDF'}
+            </p>
+          </motion.button>
+        )}
+
+        <input ref={fileRef} type="file" accept="application/pdf" className="hidden"
+          onChange={(e) => { const f = e.target.files?.[0]; if (f) handleFile(f); e.target.value = ''; }}
+        />
+
+        {signedUrl && (
+          <p className="mt-3" style={{ ...MONO, fontSize: '0.6rem', color: '#34D399' }}>✓ PDF enviado com sucesso</p>
+        )}
+        {error && (
+          <p className="mt-3" style={{ ...MONO, fontSize: '0.6rem', color: '#f87171' }}>{error}</p>
+        )}
+      </div>
+    </section>
+  );
+}
+
+// ─── Prompt Preview ───────────────────────────────────────────────────────────
 
 function PromptPreview({ answers, filledCount, totalFields }: { answers: Answers; filledCount: number; totalFields: number }) {
   const [copied, setCopied] = useState(false);
@@ -632,7 +820,6 @@ function PromptPreview({ answers, filledCount, totalFields }: { answers: Answers
 
   return (
     <section className="py-20 sm:py-24 pb-32">
-      {/* Header */}
       <motion.div
         initial={{ opacity: 0, y: 16 }}
         whileInView={{ opacity: 1, y: 0 }}
@@ -645,10 +832,9 @@ function PromptPreview({ answers, filledCount, totalFields }: { answers: Answers
           Prompt para o <span style={{ color: EMBER }}>Claude</span>
         </h2>
         <p className="text-sm sm:text-base leading-relaxed mb-6 max-w-lg" style={{ color: 'rgba(255,255,255,0.45)' }}>
-          Cole este prompt no Claude para gerar a apresentação PDF personalizada do mentorado. Quanto mais campos preenchidos, mais rica fica a apresentação.
+          Cole este prompt no Claude para gerar a apresentação PDF personalizada do mentorado.
         </p>
 
-        {/* Progress bar */}
         <div className="flex items-center gap-4 mb-2">
           <div className="flex-1 h-1 max-w-xs" style={{ background: 'rgba(255,255,255,0.07)' }}>
             <div
@@ -657,12 +843,11 @@ function PromptPreview({ answers, filledCount, totalFields }: { answers: Answers
             />
           </div>
           <span style={{ ...MONO, color: pct === 100 ? '#34D399' : 'rgba(255,255,255,0.35)', fontSize: '0.6rem' }}>
-            {filledCount} de {totalFields} campos preenchidos {pct === 100 ? '✓' : ''}
+            {filledCount} de {totalFields} campos {pct === 100 ? '✓' : ''}
           </span>
         </div>
       </motion.div>
 
-      {/* Prompt text block */}
       <motion.div
         initial={{ opacity: 0, y: 12 }}
         whileInView={{ opacity: 1, y: 0 }}
@@ -671,7 +856,6 @@ function PromptPreview({ answers, filledCount, totalFields }: { answers: Answers
         className="relative"
         style={{ border: '1px solid rgba(255,255,255,0.09)', background: 'rgba(255,255,255,0.018)' }}
       >
-        {/* Top bar */}
         <div
           className="flex items-center justify-between px-5 py-3"
           style={{ borderBottom: '1px solid rgba(255,255,255,0.07)' }}
@@ -687,7 +871,6 @@ function PromptPreview({ answers, filledCount, totalFields }: { answers: Answers
           </span>
         </div>
 
-        {/* Prompt text — scrollable */}
         <pre
           className="overflow-auto p-6 sm:p-8 text-xs sm:text-sm leading-relaxed whitespace-pre-wrap"
           style={{
@@ -702,7 +885,6 @@ function PromptPreview({ answers, filledCount, totalFields }: { answers: Answers
         </pre>
       </motion.div>
 
-      {/* Copy button — full width, prominent */}
       <motion.div
         initial={{ opacity: 0, y: 8 }}
         whileInView={{ opacity: 1, y: 0 }}
@@ -724,36 +906,18 @@ function PromptPreview({ answers, filledCount, totalFields }: { answers: Answers
         >
           <AnimatePresence mode="wait">
             {copied ? (
-              <motion.span
-                key="check"
-                initial={{ opacity: 0, scale: 0.85 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0 }}
-                className="flex items-center gap-2.5"
-              >
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5}>
-                  <polyline points="20 6 9 17 4 12" />
-                </svg>
+              <motion.span key="check" initial={{ opacity: 0, scale: 0.85 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0 }} className="flex items-center gap-2.5">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5}><polyline points="20 6 9 17 4 12" /></svg>
                 Prompt copiado — cole no Claude
               </motion.span>
             ) : (
-              <motion.span
-                key="copy"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                className="flex items-center gap-2.5"
-              >
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
-                  <rect x="9" y="9" width="13" height="13" rx="1" />
-                  <path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1" />
-                </svg>
+              <motion.span key="copy" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="flex items-center gap-2.5">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}><rect x="9" y="9" width="13" height="13" rx="1" /><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1" /></svg>
                 Copiar prompt completo
               </motion.span>
             )}
           </AnimatePresence>
         </button>
-
         <p className="text-center mt-3" style={{ ...MONO, color: 'rgba(255,255,255,0.2)', fontSize: '0.55rem' }}>
           Abra claude.ai → novo chat → cole o prompt → envie
         </p>
@@ -762,19 +926,77 @@ function PromptPreview({ answers, filledCount, totalFields }: { answers: Answers
   );
 }
 
-// ─── Componente principal ─────────────────────────────────────────────────────
+// ─── Save Status ──────────────────────────────────────────────────────────────
 
-export function OnboardingClient() {
+type SaveStatus = 'idle' | 'saving' | 'saved' | 'error';
+
+function SaveIndicator({ status }: { status: SaveStatus }) {
+  const cfg: Record<SaveStatus, { label: string; color: string; pulse?: boolean }> = {
+    idle:   { label: 'auto-save', color: 'rgba(255,255,255,0.18)' },
+    saving: { label: 'Salvando…', color: 'rgba(255,255,255,0.5)', pulse: true },
+    saved:  { label: '✓ Salvo',   color: '#34D399' },
+    error:  { label: '✗ Erro',    color: '#f87171' },
+  };
+  const { label, color, pulse } = cfg[status];
+  return (
+    <AnimatePresence mode="wait">
+      <motion.span
+        key={status}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        transition={{ duration: 0.25 }}
+        className="flex items-center gap-1.5"
+        style={{ ...MONO, fontSize: '0.6rem', color }}
+      >
+        {pulse && <span className="inline-block w-1.5 h-1.5 rounded-full animate-pulse flex-shrink-0" style={{ background: color }} />}
+        {label}
+      </motion.span>
+    </AnimatePresence>
+  );
+}
+
+// ─── Main component ───────────────────────────────────────────────────────────
+
+export function OnboardingFormClient({ id, initialData }: { id: string; initialData: OnboardingRow }) {
   const [activeId, setActiveId] = useState<string>('presencial');
-  const [answers, setAnswers] = useState<Answers>({});
+  const [answers, setAnswers] = useState<Answers>(() => rowToAnswers(initialData));
+  const [saveStatus, setSaveStatus] = useState<SaveStatus>('idle');
 
-  const totalFields = PROFILE_FIELDS.length + QUESTION_GROUPS.flatMap((g) => g.items).length + PROJECT_FIELDS.length;
+  const isFirstRender = useRef(true);
+  const saveTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const totalFields = PROFILE_FIELDS.length + QUESTION_GROUPS.flatMap((g) => g.items).length + PROJECT_FIELDS.length + 1; // +1 for planejamento
   const filledCount = Object.values(answers).filter((v) => v.trim().length > 0).length;
 
   const setAnswer = useCallback((key: string, value: string) => {
     setAnswers((prev) => ({ ...prev, [key]: value }));
   }, []);
 
+  // Auto-save on answers change (skip first render)
+  useEffect(() => {
+    if (isFirstRender.current) {
+      isFirstRender.current = false;
+      return;
+    }
+    if (saveTimer.current) clearTimeout(saveTimer.current);
+    saveTimer.current = setTimeout(async () => {
+      setSaveStatus('saving');
+      const result = await updateOnboarding(id, answersToUpdate(answers));
+      if ('error' in result) {
+        setSaveStatus('error');
+      } else {
+        setSaveStatus('saved');
+        setTimeout(() => setSaveStatus('idle'), 2000);
+      }
+    }, 1500);
+    return () => {
+      if (saveTimer.current) clearTimeout(saveTimer.current);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [answers]);
+
+  // Intersection observer for sticky nav
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
@@ -788,10 +1010,17 @@ export function OnboardingClient() {
     return () => observer.disconnect();
   }, []);
 
+  const profileFilled = PROFILE_FIELDS.filter((f) => answers[f.key]?.trim()).length;
+  const objFilled = (QUESTION_GROUPS[0]?.items ?? []).filter((i) => answers[i.key]?.trim()).length;
+  const ctxFilled = (QUESTION_GROUPS[1]?.items ?? []).filter((i) => answers[i.key]?.trim()).length;
+  const projFilled = PROJECT_FIELDS.filter((f) => answers[f.key]?.trim()).length;
+
+  const PLANEJAMENTO_NAV = { id: 'planejamento-mentorado', label: 'Planejamento' };
+
   return (
     <div className="min-h-screen" style={{ background: '#08080C', color: '#fff' }}>
 
-      {/* ── Hero ─────────────────────────────────────────────────────────── */}
+      {/* ── Hero ─────────────────────────────────────────────────────── */}
       <section className="relative flex flex-col items-end" style={{ minHeight: '62vh' }}>
         <Image
           src="/images/bg-open-source.png"
@@ -801,37 +1030,37 @@ export function OnboardingClient() {
           sizes="100vw"
           priority
         />
-        <div
-          className="absolute inset-0"
-          style={{ background: 'linear-gradient(to bottom, rgba(8,8,12,0.5) 0%, rgba(8,8,12,0.5) 50%, rgba(8,8,12,0.98) 100%)' }}
-        />
-        <div
-          className="absolute inset-0"
-          style={{ background: 'linear-gradient(to right, rgba(8,8,12,0.78) 0%, rgba(8,8,12,0.2) 60%, transparent 100%)' }}
-        />
+        <div className="absolute inset-0" style={{ background: 'linear-gradient(to bottom, rgba(8,8,12,0.5) 0%, rgba(8,8,12,0.5) 50%, rgba(8,8,12,0.98) 100%)' }} />
+        <div className="absolute inset-0" style={{ background: 'linear-gradient(to right, rgba(8,8,12,0.78) 0%, rgba(8,8,12,0.2) 60%, transparent 100%)' }} />
 
         {/* Top bar */}
-        <div
-          className="absolute top-0 left-0 right-0 z-10 flex items-center justify-between px-6 sm:px-10 py-5"
-          style={{ borderBottom: '1px solid rgba(255,255,255,0.07)' }}
-        >
-          <span style={{ ...MONO, color: 'rgba(255,255,255,0.3)' }}>João Guirunas · Mentoria</span>
-          <a
-            href="/mentoria"
-            className="transition-opacity hover:opacity-70"
-            style={{ ...MONO, color: EMBER, border: `1px solid ${EMBER}35`, padding: '5px 14px' }}
-          >
-            ← Voltar
-          </a>
+        <div className="absolute top-0 left-0 right-0 z-10 flex items-center justify-between px-6 sm:px-10 py-5" style={{ borderBottom: '1px solid rgba(255,255,255,0.07)' }}>
+          <div className="flex items-center gap-4">
+            <span style={{ ...MONO, color: 'rgba(255,255,255,0.3)' }}>João Guirunas · Mentoria</span>
+            <SaveIndicator status={saveStatus} />
+          </div>
+          <div className="flex items-center gap-3">
+            <a
+              href="/mentoria/onboarding"
+              style={{ ...MONO, color: 'rgba(255,255,255,0.3)', border: '1px solid rgba(255,255,255,0.1)', padding: '5px 14px' }}
+              className="transition-opacity hover:opacity-70"
+            >
+              ← Lista
+            </a>
+            <a
+              href="/mentoria"
+              className="transition-opacity hover:opacity-70"
+              style={{ ...MONO, color: EMBER, border: `1px solid ${EMBER}35`, padding: '5px 14px' }}
+            >
+              ← Mentoria
+            </a>
+          </div>
         </div>
 
         {/* Hero content */}
         <div className="relative z-10 w-full max-w-4xl mx-auto px-6 sm:px-10 pb-16 pt-36">
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
-            <div
-              className="inline-flex items-center gap-2 mb-7"
-              style={{ border: `1px solid ${EMBER}35`, background: `${EMBER}0e`, padding: '5px 16px' }}
-            >
+            <div className="inline-flex items-center gap-2 mb-7" style={{ border: `1px solid ${EMBER}35`, background: `${EMBER}0e`, padding: '5px 16px' }}>
               <span className="relative inline-flex h-1.5 w-1.5">
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full opacity-75" style={{ background: EMBER }} />
                 <span className="relative inline-flex rounded-full h-1.5 w-1.5" style={{ background: EMBER }} />
@@ -843,9 +1072,11 @@ export function OnboardingClient() {
               className="text-4xl sm:text-5xl lg:text-[64px] text-white mb-6 max-w-3xl"
               style={{ fontFamily: 'var(--font-display-serif)', fontWeight: 400, lineHeight: 0.95, letterSpacing: '-0.03em' }}
             >
-              Bem-vindo à{' '}
-              <span style={{ color: EMBER, fontStyle: 'italic' }}>Mentoria</span>
-              <br />Claude Code + IA
+              {answers['perfil_nome']?.trim() ? (
+                <>Bem-vindo, <span style={{ color: EMBER, fontStyle: 'italic' }}>{answers['perfil_nome'].trim()}</span></>
+              ) : (
+                <>Bem-vindo à{' '}<span style={{ color: EMBER, fontStyle: 'italic' }}>Mentoria</span><br />Claude Code + IA</>
+              )}
             </h1>
 
             <p className="text-base sm:text-lg leading-relaxed max-w-lg mb-10" style={{ color: 'rgba(255,255,255,0.52)' }}>
@@ -876,7 +1107,7 @@ export function OnboardingClient() {
         </div>
       </section>
 
-      {/* ── Sticky nav ───────────────────────────────────────────────────── */}
+      {/* ── Sticky nav ───────────────────────────────────────────────── */}
       <nav
         className="sticky top-0 z-40"
         style={{ background: 'rgba(8,8,12,0.97)', backdropFilter: 'blur(12px)', borderBottom: '1px solid rgba(255,255,255,0.07)' }}
@@ -902,30 +1133,43 @@ export function OnboardingClient() {
                 </button>
               );
             })}
+            {/* Separador */}
+            <div style={{ width: 1, margin: '10px 6px', background: 'rgba(255,255,255,0.08)' }} />
+            {/* Planejamento Mentorado — último */}
+            <button
+              onClick={() => scrollTo(PLANEJAMENTO_NAV.id)}
+              className="transition-all duration-200"
+              style={{
+                ...MONO,
+                color: activeId === PLANEJAMENTO_NAV.id ? '#818cf8' : 'rgba(255,255,255,0.3)',
+                padding: '14px 18px',
+                borderBottom: `2px solid ${activeId === PLANEJAMENTO_NAV.id ? '#818cf8' : 'transparent'}`,
+                whiteSpace: 'nowrap',
+              }}
+            >
+              {PLANEJAMENTO_NAV.label}
+            </button>
           </div>
         </div>
       </nav>
 
-      {/* ── Main content ─────────────────────────────────────────────────── */}
+      {/* ── Main content ─────────────────────────────────────────────── */}
       <main className="max-w-4xl mx-auto px-6 sm:px-10">
 
         {PHASES.map((phase) => (
           <PhaseSection key={phase.id} phase={phase} />
         ))}
 
-        {/* ── Perfil do Mentorado ───────────────────────────────────────── */}
-        <section
-          id="perfil"
-          className="py-16 sm:py-20"
-          style={{ borderBottom: '1px solid rgba(255,255,255,0.07)' }}
-        >
-          <motion.div
-            initial={{ opacity: 0, y: 16 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.5 }}
-          >
-            <p className="mb-3" style={{ ...MONO, color: `${EMBER}b0` }}>Identificação</p>
+        {/* Anchor para o nav "Planejamento Mentorado" */}
+        <div id="planejamento-mentorado" data-section="true" style={{ height: 0, overflow: 'hidden' }} />
+
+        {/* ── Perfil do Mentorado ───────────────────────────────────── */}
+        <section id="perfil" className="py-16 sm:py-20" style={{ borderBottom: '1px solid rgba(255,255,255,0.07)' }}>
+          <motion.div initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.5 }}>
+            <div className="flex items-center gap-3 mb-3">
+              <p style={{ ...MONO, color: `${EMBER}b0` }}>Identificação</p>
+              <CountBadge filled={profileFilled} total={PROFILE_FIELDS.length} color={EMBER} />
+            </div>
             <h2 className="text-2xl sm:text-3xl font-semibold text-white mb-3" style={{ letterSpacing: '-0.02em' }}>
               Perfil do <span style={{ color: EMBER }}>Mentorado</span>
             </h2>
@@ -942,13 +1186,20 @@ export function OnboardingClient() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: i * 0.06, duration: 0.35 }}
-                className={`p-5 ${field.full ? 'sm:col-span-2' : ''}`}
+                className={`relative p-5 ${field.full ? 'sm:col-span-2' : ''}`}
                 style={{
                   border: `1px solid ${answers[field.key]?.trim() ? `${EMBER}35` : 'rgba(255,255,255,0.07)'}`,
                   background: answers[field.key]?.trim() ? `${EMBER}07` : 'rgba(255,255,255,0.02)',
                   transition: 'border-color 0.3s, background 0.3s',
                 }}
               >
+                <AnimatePresence>
+                  {answers[field.key]?.trim() && (
+                    <motion.span initial={{ opacity: 0, scale: 0.6 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0 }}
+                      className="absolute top-3 right-4"
+                      style={{ ...MONO, fontSize: '0.65rem', color: '#34D399' }}>✓</motion.span>
+                  )}
+                </AnimatePresence>
                 <p className="mb-2" style={{ ...MONO, color: `${EMBER}99` }}>{field.label}</p>
                 <div style={{ height: 1, background: 'rgba(255,255,255,0.05)', marginBottom: 10 }} />
                 <input
@@ -964,7 +1215,7 @@ export function OnboardingClient() {
           </div>
         </section>
 
-        {/* ── Questions ────────────────────────────────────────────────── */}
+        {/* ── Questions ────────────────────────────────────────────── */}
         {QUESTION_GROUPS.map((group) => (
           <section
             key={group.id}
@@ -972,19 +1223,17 @@ export function OnboardingClient() {
             className="py-16 sm:py-20"
             style={{ borderBottom: '1px solid rgba(255,255,255,0.07)' }}
           >
-            <motion.div
-              initial={{ opacity: 0, y: 16 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5 }}
-            >
-              <p className="mb-3" style={{ ...MONO, color: `${EMBER}b0` }}>Perguntas</p>
-              <h2 className="text-2xl sm:text-3xl font-semibold text-white mb-3" style={{ letterSpacing: '-0.02em' }}>
-                {group.title}
-              </h2>
-              <p className="text-sm sm:text-base leading-relaxed mb-8 max-w-lg" style={{ color: 'rgba(255,255,255,0.45)' }}>
-                {group.description}
-              </p>
+            <motion.div initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.5 }}>
+              <div className="flex items-center gap-3 mb-3">
+                <p style={{ ...MONO, color: `${EMBER}b0` }}>Perguntas</p>
+                <CountBadge
+                  filled={group.id === 'objetivos' ? objFilled : ctxFilled}
+                  total={group.items.length}
+                  color={EMBER}
+                />
+              </div>
+              <h2 className="text-2xl sm:text-3xl font-semibold text-white mb-3" style={{ letterSpacing: '-0.02em' }}>{group.title}</h2>
+              <p className="text-sm sm:text-base leading-relaxed mb-8 max-w-lg" style={{ color: 'rgba(255,255,255,0.45)' }}>{group.description}</p>
             </motion.div>
 
             <div className="space-y-4 max-w-2xl">
@@ -1003,8 +1252,14 @@ export function OnboardingClient() {
                   }}
                 >
                   <div className="flex items-start gap-3 mb-3">
-                    <span style={{ ...MONO, color: EMBER, fontSize: '0.7rem' }} className="flex-shrink-0 mt-0.5">
-                      {String(i + 1).padStart(2, '0')}
+                    <span className="flex-shrink-0 mt-0.5 w-6 text-center" style={{ ...MONO, fontSize: '0.7rem' }}>
+                      <AnimatePresence mode="wait">
+                        {answers[item.key]?.trim() ? (
+                          <motion.span key="check" initial={{ scale: 0 }} animate={{ scale: 1 }} exit={{ scale: 0 }} transition={{ duration: 0.18 }} style={{ color: '#34D399', display: 'block' }}>✓</motion.span>
+                        ) : (
+                          <motion.span key="num" initial={{ scale: 0 }} animate={{ scale: 1 }} exit={{ scale: 0 }} transition={{ duration: 0.18 }} style={{ color: EMBER, display: 'block' }}>{String(i + 1).padStart(2, '0')}</motion.span>
+                        )}
+                      </AnimatePresence>
                     </span>
                     <p className="text-sm sm:text-base text-white/80 leading-relaxed">{item.question}</p>
                   </div>
@@ -1014,13 +1269,7 @@ export function OnboardingClient() {
                     value={answers[item.key] || ''}
                     onChange={(e) => setAnswer(item.key, e.target.value)}
                     className="w-full resize-none outline-none bg-transparent text-sm leading-relaxed placeholder:text-white/20 text-white/75"
-                    style={{
-                      fontFamily: 'var(--font-mono)',
-                      fontSize: '0.78rem',
-                      borderTop: '1px solid rgba(255,255,255,0.06)',
-                      paddingTop: 10,
-                      caretColor: EMBER,
-                    }}
+                    style={{ fontFamily: 'var(--font-mono)', fontSize: '0.78rem', borderTop: '1px solid rgba(255,255,255,0.06)', paddingTop: 10, caretColor: EMBER }}
                   />
                 </motion.div>
               ))}
@@ -1028,15 +1277,13 @@ export function OnboardingClient() {
           </section>
         ))}
 
-        {/* ── Project definition ────────────────────────────────────────── */}
+        {/* ── Project definition ────────────────────────────────────── */}
         <section id="projeto" className="py-16 sm:py-20" style={{ borderBottom: '1px solid rgba(255,255,255,0.07)' }}>
-          <motion.div
-            initial={{ opacity: 0, y: 16 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.5 }}
-          >
-            <p className="mb-3" style={{ ...MONO, color: `${EMBER}b0` }}>Definição</p>
+          <motion.div initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.5 }}>
+            <div className="flex items-center gap-3 mb-3">
+              <p style={{ ...MONO, color: `${EMBER}b0` }}>Definição</p>
+              <CountBadge filled={projFilled} total={PROJECT_FIELDS.length} color={EMBER} />
+            </div>
             <h2 className="text-2xl sm:text-3xl font-semibold text-white mb-3" style={{ letterSpacing: '-0.02em' }}>
               Projeto da <span style={{ color: EMBER }}>Mentoria</span>
             </h2>
@@ -1053,13 +1300,20 @@ export function OnboardingClient() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: i * 0.06, duration: 0.35 }}
-                className={`p-5 ${i === PROJECT_FIELDS.length - 1 && PROJECT_FIELDS.length % 2 !== 0 ? 'sm:col-span-2' : ''}`}
+                className={`relative p-5 ${i === PROJECT_FIELDS.length - 1 && PROJECT_FIELDS.length % 2 !== 0 ? 'sm:col-span-2' : ''}`}
                 style={{
                   border: `1px solid ${answers[field.key]?.trim() ? `${EMBER}30` : 'rgba(255,255,255,0.07)'}`,
                   background: answers[field.key]?.trim() ? `${EMBER}06` : 'rgba(255,255,255,0.02)',
                   transition: 'border-color 0.3s, background 0.3s',
                 }}
               >
+                <AnimatePresence>
+                  {answers[field.key]?.trim() && (
+                    <motion.span initial={{ opacity: 0, scale: 0.6 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0 }}
+                      className="absolute top-3 right-4"
+                      style={{ ...MONO, fontSize: '0.65rem', color: '#34D399' }}>✓</motion.span>
+                  )}
+                </AnimatePresence>
                 <p className="mb-2" style={{ ...MONO, color: `${EMBER}99` }}>{field.label}</p>
                 <div style={{ height: 1, background: 'rgba(255,255,255,0.05)', marginBottom: 10 }} />
                 <input
@@ -1075,11 +1329,13 @@ export function OnboardingClient() {
           </div>
         </section>
 
-        {/* ── Prompt Preview — ao final, completo ──────────────────────── */}
+        {/* ── Prompt Preview ────────────────────────────────────────── */}
         <PromptPreview answers={answers} filledCount={filledCount} totalFields={totalFields} />
 
-      </main>
+        {/* ── PDF Upload ───────────────────────────────────────────── */}
+        <PdfUpload id={id} initialPdfPath={initialData.pdf_path} />
 
+      </main>
     </div>
   );
 }

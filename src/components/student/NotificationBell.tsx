@@ -84,13 +84,13 @@ export function NotificationBell({ initialNotifications }: Props) {
         aria-label={`Notificações${unreadCount > 0 ? ` — ${unreadCount} não lidas` : ''}`}
         aria-expanded={open}
         aria-haspopup="true"
-        className="relative focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FF3A0E] focus-visible:ring-offset-2 focus-visible:ring-offset-[#050507]"
+        className="relative focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ember)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--void)]"
       >
         <Bell className="h-5 w-5 text-white/50 transition-colors hover:text-white/80" />
         {unreadCount > 0 && (
           <span
             aria-hidden="true"
-            className="absolute -right-1 -top-1 flex h-3.5 w-3.5 items-center justify-center bg-[#FF3A0E] font-mono text-[9px] text-white"
+            className="absolute -right-1 -top-1 flex h-3.5 w-3.5 items-center justify-center bg-[var(--ember)] font-mono text-[9px] text-white"
           >
             {unreadCount > 9 ? '9+' : unreadCount}
           </span>
@@ -102,7 +102,7 @@ export function NotificationBell({ initialNotifications }: Props) {
           ref={panelRef}
           role="dialog"
           aria-label="Notificações"
-          className="absolute right-0 top-full mt-2 w-80 border border-white/10 bg-[#0C0C12] shadow-xl z-50"
+          className="absolute right-0 top-full mt-2 w-80 border border-white/10 bg-[var(--ink)] shadow-xl z-50"
         >
           {/* Header */}
           <div className="flex items-center justify-between border-b border-white/10 px-4 py-3">
@@ -116,7 +116,7 @@ export function NotificationBell({ initialNotifications }: Props) {
                   disabled={pending}
                   title="Marcar todas como lidas"
                   aria-label="Marcar todas as notificações como lidas"
-                  className="text-white/30 transition-colors hover:text-white/70 disabled:opacity-40 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-[#FF3A0E]"
+                  className="text-white/30 transition-colors hover:text-white/70 disabled:opacity-40 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-[var(--ember)]"
                 >
                   <CheckCheck className="h-3.5 w-3.5" />
                 </button>
@@ -124,7 +124,7 @@ export function NotificationBell({ initialNotifications }: Props) {
               <button
                 onClick={() => setOpen(false)}
                 aria-label="Fechar notificações"
-                className="text-white/30 transition-colors hover:text-white/70 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-[#FF3A0E]"
+                className="text-white/30 transition-colors hover:text-white/70 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-[var(--ember)]"
               >
                 <X className="h-3.5 w-3.5" />
               </button>
@@ -147,7 +147,7 @@ export function NotificationBell({ initialNotifications }: Props) {
                 const content = (
                   <div className="flex items-start gap-3 px-4 py-3">
                     <div
-                      className={`mt-1 h-1.5 w-1.5 shrink-0 rounded-full ${isUnread ? 'bg-[#FF3A0E]' : 'bg-transparent'}`}
+                      className={`mt-1 h-1.5 w-1.5 shrink-0 rounded-full ${isUnread ? 'bg-[var(--ember)]' : 'bg-transparent'}`}
                       aria-hidden="true"
                     />
                     <div className="min-w-0 flex-1">
@@ -167,7 +167,7 @@ export function NotificationBell({ initialNotifications }: Props) {
                       <button
                         onClick={(e) => { e.stopPropagation(); e.preventDefault(); handleMarkRead(n.id) }}
                         aria-label={`Marcar "${n.title}" como lida`}
-                        className="shrink-0 text-white/20 transition-colors hover:text-white/60 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-[#FF3A0E]"
+                        className="shrink-0 text-white/20 transition-colors hover:text-white/60 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-[var(--ember)]"
                       >
                         <Check className="h-3.5 w-3.5" />
                       </button>
@@ -181,7 +181,7 @@ export function NotificationBell({ initialNotifications }: Props) {
                       <Link
                         href={n.action_url}
                         onClick={() => { if (isUnread) handleMarkRead(n.id); setOpen(false) }}
-                        className="block transition-colors hover:bg-white/5 focus-visible:outline-none focus-visible:ring-inset focus-visible:ring-1 focus-visible:ring-[#FF3A0E]"
+                        className="block transition-colors hover:bg-white/5 focus-visible:outline-none focus-visible:ring-inset focus-visible:ring-1 focus-visible:ring-[var(--ember)]"
                       >
                         {content}
                       </Link>

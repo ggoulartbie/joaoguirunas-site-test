@@ -24,7 +24,7 @@ export default async function EditarTurmaPage({
   if (!cohort) {
     return (
       <div className="flex items-center justify-center py-24">
-        <p className="font-mono text-sm text-[#84848c]">Turma nao encontrada</p>
+        <p className="font-mono text-sm text-[var(--bone-mute)]">Turma nao encontrada</p>
       </div>
     )
   }
@@ -40,18 +40,18 @@ export default async function EditarTurmaPage({
       <div className="flex items-center justify-between border-b border-white/[0.07] pb-4">
         <div>
           <h1
-            className="font-serif text-[28px] italic text-[#f1f1f3]"
+            className="font-serif text-[28px] italic text-[var(--bone)]"
             style={{ fontFamily: 'var(--type-display, Georgia, serif)' }}
           >
             Editar Turma
           </h1>
-          <p className="mt-1 font-mono text-[10px] uppercase tracking-widest text-[#84848c]">
+          <p className="mt-1 font-mono text-[10px] uppercase tracking-widest text-[var(--bone-mute)]">
             {cohort.name}
           </p>
         </div>
         <Link
           href="/academy/admin/turmas"
-          className="flex items-center gap-2 font-mono text-[10px] uppercase tracking-widest text-[#84848c] transition-colors hover:text-[#c5c5ca]"
+          className="flex items-center gap-2 font-mono text-[10px] uppercase tracking-widest text-[var(--bone-mute)] transition-colors hover:text-[var(--bone-dim)]"
         >
           <ArrowLeft className="h-3.5 w-3.5" />
           Voltar

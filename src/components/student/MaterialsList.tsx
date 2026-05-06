@@ -58,7 +58,7 @@ export function MaterialsList({ materials }: MaterialsListProps) {
   return (
     <div className="space-y-2">
       {error && (
-        <p className="rounded-lg bg-red-500/10 px-4 py-2 text-sm text-red-400">{error}</p>
+        <p className=" bg-red-500/10 px-4 py-2 text-sm text-red-400">{error}</p>
       )}
       {materials.map((material) => (
         <button
@@ -66,7 +66,7 @@ export function MaterialsList({ materials }: MaterialsListProps) {
           onClick={() => handleDownload(material)}
           disabled={loading === material.id}
           aria-label={`${material.kind === 'LINK' ? 'Abrir' : 'Baixar'} ${material.title}`}
-          className="flex w-full items-center gap-3 rounded-lg border border-white/10 bg-white/5 px-4 py-3 text-left transition-colors hover:bg-white/10 disabled:opacity-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FF3A0E] focus-visible:ring-offset-1 focus-visible:ring-offset-[#050507]"
+          className="flex w-full items-center gap-3  border border-white/10 bg-white/5 px-4 py-3 text-left transition-colors hover:bg-white/10 disabled:opacity-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ember)] focus-visible:ring-offset-1 focus-visible:ring-offset-[var(--void)]"
         >
           <span className="text-lg" aria-hidden>
             {KIND_ICONS[material.kind] ?? KIND_ICONS['OTHER']}

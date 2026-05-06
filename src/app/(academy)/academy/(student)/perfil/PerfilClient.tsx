@@ -114,8 +114,8 @@ function daysUntil(d: Date): number {
 
 const STATUS_COLORS: Record<MembershipStatus, string> = {
   ACTIVE: 'text-emerald-400',
-  EXPIRED: 'text-[#84848c]',
-  REMOVED: 'text-[#ff3a0e]',
+  EXPIRED: 'text-[var(--bone-mute)]',
+  REMOVED: 'text-[var(--ember)]',
   PAST_DUE: 'text-amber-400',
 }
 
@@ -128,9 +128,9 @@ const STATUS_LABELS: Record<MembershipStatus, string> = {
 
 const PAYMENT_STATUS_COLORS: Record<string, string> = {
   APPROVED: 'text-emerald-400 bg-emerald-400/10',
-  DECLINED: 'text-[#ff3a0e] bg-[#ff3a0e]/10',
+  DECLINED: 'text-[var(--ember)] bg-[var(--ember)]/10',
   PENDING: 'text-amber-400 bg-amber-400/10',
-  REFUNDED: 'text-[#84848c] bg-white/5',
+  REFUNDED: 'text-[var(--bone-mute)] bg-white/5',
 }
 
 const PAYMENT_STATUS_LABELS: Record<string, string> = {
@@ -148,7 +148,7 @@ const KIND_LABELS: Record<string, string> = {
 
 function MonoLabel({ children }: { children: React.ReactNode }) {
   return (
-    <label className="mb-1 block font-mono text-[10px] uppercase tracking-wider text-[#84848c]">
+    <label className="mb-1 block font-mono text-[10px] uppercase tracking-wider text-[var(--bone-mute)]">
       {children}
     </label>
   )
@@ -156,7 +156,7 @@ function MonoLabel({ children }: { children: React.ReactNode }) {
 
 function SectionDividerLabel({ children }: { children: React.ReactNode }) {
   return (
-    <p className="font-mono text-[10px] uppercase tracking-widest text-[#84848c]">{children}</p>
+    <p className="font-mono text-[10px] uppercase tracking-widest text-[var(--bone-mute)]">{children}</p>
   )
 }
 
@@ -170,23 +170,23 @@ function ProfileHeader({
   const avatarInitial = (profile?.name ?? email).charAt(0).toUpperCase()
 
   return (
-    <div className="border border-[rgba(255,255,255,0.07)] bg-[#0e0e11] p-6">
+    <div className="border border-[rgba(255,255,255,0.07)] bg-[var(--ink)] p-6">
       <div className="flex items-center gap-5">
-        <div className="flex h-20 w-20 shrink-0 items-center justify-center rounded-full bg-[#ff3a0e]/20">
-          <span className="font-mono text-2xl uppercase text-[#ff3a0e]">{avatarInitial}</span>
+        <div className="flex h-20 w-20 shrink-0 items-center justify-center rounded-full bg-[var(--ember)]/20">
+          <span className="font-mono text-2xl uppercase text-[var(--ember)]">{avatarInitial}</span>
         </div>
         <div className="min-w-0">
           {profile?.name && (
             <p
-              className="truncate font-[family-name:var(--type-display)] text-[28px] italic leading-tight text-[#f1f1f3]"
+              className="truncate font-[family-name:var(--type-display)] text-[28px] italic leading-tight text-[var(--bone)]"
               style={{ fontFamily: 'var(--type-display, serif)' }}
             >
               {profile.name}
             </p>
           )}
-          <p className="mt-0.5 font-mono text-[12px] text-[#84848c]">{email}</p>
+          <p className="mt-0.5 font-mono text-[12px] text-[var(--bone-mute)]">{email}</p>
           {profile?.bio && (
-            <p className="mt-2 font-[family-name:var(--type-sans)] text-sm text-[#c5c5ca]">
+            <p className="mt-2 font-[family-name:var(--type-sans)] text-sm text-[var(--bone-dim)]">
               {profile.bio}
             </p>
           )}
@@ -245,10 +245,10 @@ function EditProfileForm({
   }
 
   const inputClass =
-    'w-full border border-[rgba(255,255,255,0.16)] bg-[#16161a] p-3 font-mono text-sm text-[#f1f1f3] outline-none transition-colors focus:border-[#ff3a0e]'
+    'w-full border border-[rgba(255,255,255,0.16)] bg-[var(--ink-2)] p-3 font-mono text-sm text-[var(--bone)] outline-none transition-colors focus:border-[var(--ember)]'
 
   return (
-    <div className="mt-4 border border-[rgba(255,255,255,0.07)] bg-[#0e0e11] p-6">
+    <div className="mt-4 border border-[rgba(255,255,255,0.07)] bg-[var(--ink)] p-6">
       <SectionDividerLabel>Editar perfil</SectionDividerLabel>
 
       <div className="mt-4 space-y-4">
@@ -272,8 +272,8 @@ function EditProfileForm({
         </div>
 
         {profileError && (
-          <div className="border border-[#ff3a0e]/20 bg-[#ff3a0e]/10 p-3">
-            <p className="font-mono text-[12px] text-[#ff3a0e]">{profileError}</p>
+          <div className="border border-[var(--ember)]/20 bg-[var(--ember)]/10 p-3">
+            <p className="font-mono text-[12px] text-[var(--ember)]">{profileError}</p>
           </div>
         )}
 
@@ -289,7 +289,7 @@ function EditProfileForm({
         <button
           type="button"
           onClick={handleSaveProfile}
-          className="mt-2 bg-[#ff3a0e] px-5 py-2.5 font-mono text-xs uppercase tracking-wider text-[#050507]"
+          className="mt-2 bg-[var(--ember)] px-5 py-2.5 font-mono text-xs uppercase tracking-wider text-[var(--void)]"
         >
           Salvar perfil
         </button>
@@ -333,8 +333,8 @@ function EditProfileForm({
           </div>
 
           {passwordError && (
-            <div className="border border-[#ff3a0e]/20 bg-[#ff3a0e]/10 p-3">
-              <p className="font-mono text-[12px] text-[#ff3a0e]">{passwordError}</p>
+            <div className="border border-[var(--ember)]/20 bg-[var(--ember)]/10 p-3">
+              <p className="font-mono text-[12px] text-[var(--ember)]">{passwordError}</p>
             </div>
           )}
 
@@ -350,7 +350,7 @@ function EditProfileForm({
           <button
             type="button"
             onClick={handleChangePassword}
-            className="bg-[#ff3a0e] px-5 py-2.5 font-mono text-xs uppercase tracking-wider text-[#050507]"
+            className="bg-[var(--ember)] px-5 py-2.5 font-mono text-xs uppercase tracking-wider text-[var(--void)]"
           >
             Alterar senha
           </button>
@@ -391,7 +391,7 @@ function MembershipsSection({ memberships: initialMemberships }: { memberships: 
   if (memberships.length === 0) return null
 
   return (
-    <div className="mt-4 border border-[rgba(255,255,255,0.07)] bg-[#0e0e11] p-6">
+    <div className="mt-4 border border-[rgba(255,255,255,0.07)] bg-[var(--ink)] p-6">
       <SectionDividerLabel>Minhas turmas</SectionDividerLabel>
 
       {active.length > 0 && (
@@ -406,12 +406,12 @@ function MembershipsSection({ memberships: initialMemberships }: { memberships: 
                 className={`border p-4 ${
                   isExpiringSoon
                     ? 'border-amber-400/20 bg-amber-400/5'
-                    : 'border-[rgba(255,255,255,0.07)] bg-[#16161a]'
+                    : 'border-[rgba(255,255,255,0.07)] bg-[var(--ink-2)]'
                 }`}
               >
                 <div className="flex items-start justify-between gap-4">
                   <div className="min-w-0 flex-1">
-                    <p className="font-mono text-sm font-medium text-[#f1f1f3]">{m.cohortName}</p>
+                    <p className="font-mono text-sm font-medium text-[var(--bone)]">{m.cohortName}</p>
                     <div className="mt-1 flex flex-wrap items-center gap-3">
                       <span
                         className={`font-mono text-[10px] uppercase tracking-wider ${STATUS_COLORS[m.status]}`}
@@ -420,14 +420,14 @@ function MembershipsSection({ memberships: initialMemberships }: { memberships: 
                       </span>
                       {m.expiresAt ? (
                         <span
-                          className={`font-mono text-[10px] ${isExpiringSoon ? 'text-amber-400' : 'text-[#84848c]'}`}
+                          className={`font-mono text-[10px] ${isExpiringSoon ? 'text-amber-400' : 'text-[var(--bone-mute)]'}`}
                         >
                           {days !== null && days > 0
                             ? `Expira em ${days} dia${days !== 1 ? 's' : ''} — ${formatDate(m.expiresAt)}`
                             : `Expirou em ${formatDate(m.expiresAt)}`}
                         </span>
                       ) : (
-                        <span className="font-mono text-[10px] text-[#84848c]">Vitalício</span>
+                        <span className="font-mono text-[10px] text-[var(--bone-mute)]">Vitalício</span>
                       )}
                     </div>
                   </div>
@@ -435,7 +435,7 @@ function MembershipsSection({ memberships: initialMemberships }: { memberships: 
                   {m.isPurchasable && m.extensionPriceCents && (
                     <Link
                       href={`/checkout/${m.cohortSlug}`}
-                      className="shrink-0 bg-[#ff3a0e] px-3 py-1.5 font-mono text-[10px] uppercase tracking-wider text-[#050507] transition-opacity hover:opacity-90"
+                      className="shrink-0 bg-[var(--ember)] px-3 py-1.5 font-mono text-[10px] uppercase tracking-wider text-[var(--void)] transition-opacity hover:opacity-90"
                     >
                       Estender por {formatBRL(m.extensionPriceCents)}
                     </Link>
@@ -445,8 +445,8 @@ function MembershipsSection({ memberships: initialMemberships }: { memberships: 
                 {m.isPurchasable && m.allowsAutoRenewal && (
                   <div className="mt-3 flex items-center justify-between border-t border-[rgba(255,255,255,0.07)] pt-3">
                     <div>
-                      <p className="font-mono text-xs text-[#c5c5ca]">Renovação automática</p>
-                      <p className="font-mono text-[10px] text-[#84848c]">
+                      <p className="font-mono text-xs text-[var(--bone-dim)]">Renovação automática</p>
+                      <p className="font-mono text-[10px] text-[var(--bone-mute)]">
                         {m.autoRenewEnabled
                           ? `Ativa${m.extensionDurationDays ? ` — renova +${m.extensionDurationDays} dias` : ''}`
                           : 'Desativada — renovação manual'}
@@ -458,7 +458,7 @@ function MembershipsSection({ memberships: initialMemberships }: { memberships: 
                       aria-checked={m.autoRenewEnabled}
                       disabled={togglingId === m.id && pending}
                       onClick={() => toggleAutoRenew(m.id, m.autoRenewEnabled)}
-                      className={`relative h-5 w-9 transition-colors disabled:opacity-50 ${m.autoRenewEnabled ? 'bg-[#ff3a0e]' : 'bg-[rgba(255,255,255,0.1)]'}`}
+                      className={`relative h-5 w-9 transition-colors disabled:opacity-50 ${m.autoRenewEnabled ? 'bg-[var(--ember)]' : 'bg-[rgba(255,255,255,0.1)]'}`}
                     >
                       <span
                         className={`absolute top-0.5 h-4 w-4 bg-white transition-transform ${m.autoRenewEnabled ? 'translate-x-4' : 'translate-x-0.5'}`}
@@ -475,7 +475,7 @@ function MembershipsSection({ memberships: initialMemberships }: { memberships: 
       {past.length > 0 && (
         <div className={active.length > 0 ? 'mt-4' : 'mt-4'}>
           {active.length > 0 && (
-            <p className="mb-2 font-mono text-[10px] uppercase tracking-widest text-[#84848c]">
+            <p className="mb-2 font-mono text-[10px] uppercase tracking-widest text-[var(--bone-mute)]">
               Histórico
             </p>
           )}
@@ -483,18 +483,18 @@ function MembershipsSection({ memberships: initialMemberships }: { memberships: 
             {past.map((m) => (
               <div
                 key={m.id}
-                className="flex items-center justify-between border border-[rgba(255,255,255,0.07)] bg-[#16161a] px-4 py-3"
+                className="flex items-center justify-between border border-[rgba(255,255,255,0.07)] bg-[var(--ink-2)] px-4 py-3"
               >
                 <div>
-                  <p className="font-mono text-sm text-[#84848c]">{m.cohortName}</p>
-                  <p className="font-mono text-[10px] text-[#84848c]/60">
+                  <p className="font-mono text-sm text-[var(--bone-mute)]">{m.cohortName}</p>
+                  <p className="font-mono text-[10px] text-[var(--bone-mute)]/60">
                     {m.expiresAt ? `Expirou em ${formatDate(m.expiresAt)}` : 'Removida'}
                   </p>
                 </div>
                 {m.isPurchasable && m.extensionPriceCents && (
                   <Link
                     href={`/checkout/${m.cohortSlug}`}
-                    className="flex items-center gap-1.5 border border-[rgba(255,255,255,0.16)] px-3 py-1.5 font-mono text-[10px] uppercase tracking-wider text-[#84848c] transition-colors hover:border-[rgba(255,255,255,0.3)] hover:text-[#c5c5ca]"
+                    className="flex items-center gap-1.5 border border-[rgba(255,255,255,0.16)] px-3 py-1.5 font-mono text-[10px] uppercase tracking-wider text-[var(--bone-mute)] transition-colors hover:border-[rgba(255,255,255,0.3)] hover:text-[var(--bone-dim)]"
                   >
                     <RefreshCw className="h-3 w-3" />
                     Reativar por {formatBRL(m.extensionPriceCents)}
@@ -513,17 +513,17 @@ function PaymentsSection({ payments }: { payments: Payment[] }) {
   if (payments.length === 0) return null
 
   return (
-    <div className="mt-4 border border-[rgba(255,255,255,0.07)] bg-[#0e0e11] p-6">
+    <div className="mt-4 border border-[rgba(255,255,255,0.07)] bg-[var(--ink)] p-6">
       <SectionDividerLabel>Histórico de pagamentos</SectionDividerLabel>
 
       <div className="mt-4 overflow-x-auto border border-[rgba(255,255,255,0.07)]">
         <table className="w-full min-w-[480px]">
           <thead>
-            <tr className="border-b border-[rgba(255,255,255,0.07)] bg-[#16161a]">
+            <tr className="border-b border-[rgba(255,255,255,0.07)] bg-[var(--ink-2)]">
               {['Turma', 'Tipo', 'Valor', 'Status', 'Data', ''].map((h) => (
                 <th
                   key={h}
-                  className="px-4 py-3 text-left font-mono text-[10px] uppercase tracking-wider text-[#84848c]"
+                  className="px-4 py-3 text-left font-mono text-[10px] uppercase tracking-wider text-[var(--bone-mute)]"
                 >
                   {h}
                 </th>
@@ -532,22 +532,22 @@ function PaymentsSection({ payments }: { payments: Payment[] }) {
           </thead>
           <tbody className="divide-y divide-[rgba(255,255,255,0.07)]">
             {payments.map((p) => (
-              <tr key={p.id} className="transition-colors hover:bg-[#16161a]">
-                <td className="px-4 py-3 font-mono text-xs text-[#c5c5ca]">{p.cohortName}</td>
-                <td className="px-4 py-3 font-mono text-[10px] text-[#84848c]">
+              <tr key={p.id} className="transition-colors hover:bg-[var(--ink-2)]">
+                <td className="px-4 py-3 font-mono text-xs text-[var(--bone-dim)]">{p.cohortName}</td>
+                <td className="px-4 py-3 font-mono text-[10px] text-[var(--bone-mute)]">
                   {KIND_LABELS[p.purchaseKind]}
                 </td>
-                <td className="px-4 py-3 font-mono text-sm font-semibold text-[#f1f1f3]">
+                <td className="px-4 py-3 font-mono text-sm font-semibold text-[var(--bone)]">
                   {formatBRL(p.amountCents)}
                 </td>
                 <td className="px-4 py-3">
                   <span
-                    className={`px-2 py-0.5 font-mono text-[10px] uppercase tracking-wider ${PAYMENT_STATUS_COLORS[p.status] ?? 'text-[#84848c]'}`}
+                    className={`px-2 py-0.5 font-mono text-[10px] uppercase tracking-wider ${PAYMENT_STATUS_COLORS[p.status] ?? 'text-[var(--bone-mute)]'}`}
                   >
                     {PAYMENT_STATUS_LABELS[p.status] ?? p.status}
                   </span>
                 </td>
-                <td className="px-4 py-3 font-mono text-[10px] text-[#84848c]">
+                <td className="px-4 py-3 font-mono text-[10px] text-[var(--bone-mute)]">
                   {p.paidAt ? formatDate(p.paidAt) : '—'}
                 </td>
                 <td className="px-4 py-3">
@@ -556,7 +556,7 @@ function PaymentsSection({ payments }: { payments: Payment[] }) {
                       href="https://dashboard.stripe.com/test/payments"
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="text-[#84848c] transition-colors hover:text-[#c5c5ca]"
+                      className="text-[var(--bone-mute)] transition-colors hover:text-[var(--bone-dim)]"
                       title="Ver recibo no Stripe"
                     >
                       <ExternalLink className="h-3.5 w-3.5" />

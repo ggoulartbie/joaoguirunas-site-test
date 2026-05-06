@@ -1,7 +1,7 @@
--- seed.sql — Mentoria Claude Code + AIOX (Turma 1)
--- Roda como service_role (bypassa RLS)
--- IDs fixos para facilitar reset/replay
--- Idempotente via ON CONFLICT / DELETE+INSERT
+-- Migration: seed_mentoria_curso
+-- Remove dados demo e insere estrutura real do curso
+-- "Mentoria Claude Code + AIOX — Agentes IA na Prática"
+-- Idempotente: pode ser reaplicada sem efeito colateral
 
 -- ============================================================
 -- CLEANUP — remover dados demo antigos
@@ -59,53 +59,6 @@ delete from public.courses
 where id = '10000000-0000-0000-0000-000000000001';
 
 -- ============================================================
--- AUTH USERS
--- Inserção direta em auth.users (service_role apenas)
--- handle_new_user trigger cria profiles automaticamente
--- Senhas em bcrypt — placeholder para dev (senha: Test1234!)
--- ============================================================
-
-insert into auth.users (
-  id,
-  instance_id,
-  email,
-  encrypted_password,
-  email_confirmed_at,
-  raw_user_meta_data,
-  role,
-  aud,
-  created_at,
-  updated_at
-)
-values
-  (
-    '00000000-0000-0000-0000-000000000001',
-    '00000000-0000-0000-0000-000000000000',
-    'joaoguirunasramos@gmail.com',
-    crypt('Test1234!', gen_salt('bf')),
-    now(),
-    '{"name": "João Guirunas"}'::jsonb,
-    'authenticated',
-    'authenticated',
-    now(),
-    now()
-  )
-on conflict (id) do nothing;
-
--- ============================================================
--- PROFILES
--- handle_new_user cria com role='STUDENT' por padrão.
--- Atualizar role do admin após insert.
--- ============================================================
-
-insert into public.profiles (id, name, role)
-values
-  ('00000000-0000-0000-0000-000000000001', 'João Guirunas', 'ADMIN')
-on conflict (id) do update set
-  name = excluded.name,
-  role = excluded.role;
-
--- ============================================================
 -- COURSE: mentoria-claude-code-aiox
 -- ============================================================
 
@@ -124,7 +77,6 @@ on conflict (id) do nothing;
 -- MODULES (6 módulos)
 -- ============================================================
 
--- Módulo 1: Dia Presencial
 insert into public.modules (id, course_id, slug, title, sort_order)
 values (
   '20000000-0000-0000-0000-000000000001',
@@ -135,7 +87,6 @@ values (
 )
 on conflict (id) do nothing;
 
--- Módulo 2: Semana 1
 insert into public.modules (id, course_id, slug, title, sort_order)
 values (
   '20000000-0000-0000-0000-000000000002',
@@ -146,7 +97,6 @@ values (
 )
 on conflict (id) do nothing;
 
--- Módulo 3: Semana 2
 insert into public.modules (id, course_id, slug, title, sort_order)
 values (
   '20000000-0000-0000-0000-000000000003',
@@ -157,7 +107,6 @@ values (
 )
 on conflict (id) do nothing;
 
--- Módulo 4: Semana 3
 insert into public.modules (id, course_id, slug, title, sort_order)
 values (
   '20000000-0000-0000-0000-000000000004',
@@ -168,7 +117,6 @@ values (
 )
 on conflict (id) do nothing;
 
--- Módulo 5: Semana 4
 insert into public.modules (id, course_id, slug, title, sort_order)
 values (
   '20000000-0000-0000-0000-000000000005',
@@ -179,7 +127,6 @@ values (
 )
 on conflict (id) do nothing;
 
--- Módulo 6: Bônus Online
 insert into public.modules (id, course_id, slug, title, sort_order)
 values (
   '20000000-0000-0000-0000-000000000006',
@@ -192,9 +139,9 @@ on conflict (id) do nothing;
 
 -- ============================================================
 -- LESSONS
--- Módulo 1: 5 aulas (sort_order 0..4)
 -- ============================================================
 
+-- Módulo 1: Dia Presencial (5 aulas)
 insert into public.lessons (id, module_id, slug, title, sort_order, kind)
 values (
   '30000000-0000-0000-0000-000000000001',
@@ -250,7 +197,7 @@ values (
 )
 on conflict (id) do nothing;
 
--- Módulo 2: Semana 1 — 1 aula
+-- Módulo 2: Semana 1 (1 aula)
 insert into public.lessons (id, module_id, slug, title, sort_order, kind)
 values (
   '30000000-0000-0000-0000-000000000006',
@@ -262,7 +209,7 @@ values (
 )
 on conflict (id) do nothing;
 
--- Módulo 3: Semana 2 — 1 aula
+-- Módulo 3: Semana 2 (1 aula)
 insert into public.lessons (id, module_id, slug, title, sort_order, kind)
 values (
   '30000000-0000-0000-0000-000000000007',
@@ -274,7 +221,7 @@ values (
 )
 on conflict (id) do nothing;
 
--- Módulo 4: Semana 3 — 1 aula
+-- Módulo 4: Semana 3 (1 aula)
 insert into public.lessons (id, module_id, slug, title, sort_order, kind)
 values (
   '30000000-0000-0000-0000-000000000008',
@@ -286,7 +233,7 @@ values (
 )
 on conflict (id) do nothing;
 
--- Módulo 5: Semana 4 — 1 aula
+-- Módulo 5: Semana 4 (1 aula)
 insert into public.lessons (id, module_id, slug, title, sort_order, kind)
 values (
   '30000000-0000-0000-0000-000000000009',
@@ -298,7 +245,7 @@ values (
 )
 on conflict (id) do nothing;
 
--- Módulo 6: Bônus Online — 2 aulas
+-- Módulo 6: Bônus Online (2 aulas + encerramento)
 insert into public.lessons (id, module_id, slug, title, sort_order, kind)
 values (
   '30000000-0000-0000-0000-000000000010',
@@ -321,7 +268,6 @@ values (
 )
 on conflict (id) do nothing;
 
--- Lesson extra: Apresentação de Projetos + Encerramento (num 14, no módulo Bônus Online)
 insert into public.lessons (id, module_id, slug, title, sort_order, kind)
 values (
   '30000000-0000-0000-0000-000000000012',
@@ -365,7 +311,7 @@ values (
 on conflict (id) do nothing;
 
 -- ============================================================
--- COHORT_COURSES: Turma 1 libera todos os módulos do curso
+-- COHORT_COURSES
 -- ============================================================
 
 insert into public.cohort_courses (cohort_id, course_id, included_module_ids, sort_order)
@@ -378,10 +324,9 @@ values (
 on conflict (cohort_id, course_id) do nothing;
 
 -- ============================================================
--- LIVE SESSIONS (7 encontros — horário UTC, 22:00 = 19h Brasília)
+-- LIVE SESSIONS (7 encontros — 22:00 UTC = 19h Brasília)
 -- ============================================================
 
--- 1. Semana 1 — único encontro
 insert into public.live_sessions (id, cohort_id, title, scheduled_at, duration_minutes)
 values (
   '50000000-0000-0000-0000-000000000001',
@@ -392,7 +337,6 @@ values (
 )
 on conflict (id) do nothing;
 
--- 2. Semana 2 — encontro 1
 insert into public.live_sessions (id, cohort_id, title, scheduled_at, duration_minutes)
 values (
   '50000000-0000-0000-0000-000000000002',
@@ -403,7 +347,6 @@ values (
 )
 on conflict (id) do nothing;
 
--- 3. Semana 2 — encontro 2
 insert into public.live_sessions (id, cohort_id, title, scheduled_at, duration_minutes)
 values (
   '50000000-0000-0000-0000-000000000003',
@@ -414,7 +357,6 @@ values (
 )
 on conflict (id) do nothing;
 
--- 4. Semana 3 — único encontro
 insert into public.live_sessions (id, cohort_id, title, scheduled_at, duration_minutes)
 values (
   '50000000-0000-0000-0000-000000000004',
@@ -425,7 +367,6 @@ values (
 )
 on conflict (id) do nothing;
 
--- 5. Semana 4 — encontro 1
 insert into public.live_sessions (id, cohort_id, title, scheduled_at, duration_minutes)
 values (
   '50000000-0000-0000-0000-000000000005',
@@ -436,7 +377,6 @@ values (
 )
 on conflict (id) do nothing;
 
--- 6. Semana 4 — encontro 2
 insert into public.live_sessions (id, cohort_id, title, scheduled_at, duration_minutes)
 values (
   '50000000-0000-0000-0000-000000000006',
@@ -447,7 +387,6 @@ values (
 )
 on conflict (id) do nothing;
 
--- 7. Encerramento
 insert into public.live_sessions (id, cohort_id, title, scheduled_at, duration_minutes)
 values (
   '50000000-0000-0000-0000-000000000007',
@@ -459,37 +398,9 @@ values (
 on conflict (id) do nothing;
 
 -- ============================================================
--- FORUM CATEGORIES
+-- PROFILE ADMIN — garantir role correto
 -- ============================================================
 
-insert into public.forum_categories (id, slug, name, description, sort_order, color, is_active)
-values
-  ('70000000-0000-0000-0000-000000000001', 'duvidas-tecnicas', 'Dúvidas Técnicas', 'Perguntas sobre código, ferramentas e implementação.', 1, '#3B82F6', true),
-  ('70000000-0000-0000-0000-000000000002', 'geral',            'Geral',             'Discussões gerais, apresentações e off-topic.',         2, '#10B981', true),
-  ('70000000-0000-0000-0000-000000000003', 'networking',       'Networking',        'Conecte-se com outros alunos e mentores.',              3, '#8B5CF6', true)
-on conflict (id) do nothing;
-
--- ============================================================
--- SMOKE TESTS (rodar no Studio após seed)
--- ============================================================
--- Verificar course criado:
--- select id, slug, title from public.courses where id = '10000000-0000-0000-0000-000000000001';
---
--- Verificar 6 módulos:
--- select count(*) from public.modules where course_id = '10000000-0000-0000-0000-000000000001'; -- esperado: 6
---
--- Verificar 13 lessons (5+1+1+1+1+2+1+1 = 13 total no seed, 12 lições + 1 encerramento):
--- select count(*) from public.lessons l join public.modules m on m.id = l.module_id
---   where m.course_id = '10000000-0000-0000-0000-000000000001'; -- esperado: 13
---
--- Verificar cohort Turma 1:
--- select slug, status, total_seats, entry_price_cents from public.cohorts
---   where id = '40000000-0000-0000-0000-000000000001';
---
--- Verificar 7 live_sessions:
--- select count(*) from public.live_sessions
---   where cohort_id = '40000000-0000-0000-0000-000000000001'; -- esperado: 7
---
--- Verificar admin:
--- select id, name, role from public.profiles
---   where id = '00000000-0000-0000-0000-000000000001'; -- esperado: ADMIN
+update public.profiles
+set role = 'ADMIN'
+where id = '00000000-0000-0000-0000-000000000001';

@@ -50,7 +50,7 @@ export function NewThreadForm({ categories }: Props) {
           value={categoryId}
           onChange={(e) => setCategoryId(e.target.value)}
           required
-          className="w-full border border-white/10 bg-[#0C0C12] px-3 py-2.5 text-sm text-white focus:border-white/20 focus:outline-none"
+          className="w-full border border-white/10 bg-[var(--ink)] px-3 py-2.5 text-sm text-white focus:border-white/20 focus:outline-none"
         >
           <option value="" disabled>
             Selecione uma categoria...
@@ -75,7 +75,7 @@ export function NewThreadForm({ categories }: Props) {
           placeholder="Seja específico e claro..."
           required
           maxLength={200}
-          className="w-full border border-white/10 bg-[#0C0C12] px-3 py-2.5 text-sm text-white placeholder:text-white/30 focus:border-white/20 focus:outline-none"
+          className="w-full border border-white/10 bg-[var(--ink)] px-3 py-2.5 text-sm text-white placeholder:text-white/30 focus:border-white/20 focus:outline-none"
         />
         <p className="mt-1 text-right font-mono text-[10px] text-white/20">
           {title.length}/200
@@ -93,7 +93,7 @@ export function NewThreadForm({ categories }: Props) {
           placeholder="Descreva sua dúvida, ideia ou experiência... (Markdown suportado)"
           rows={8}
           required
-          className="w-full resize-y border border-white/10 bg-[#0C0C12] p-3 text-sm text-white placeholder:text-white/30 focus:border-white/20 focus:outline-none"
+          className="w-full resize-y border border-white/10 bg-[var(--ink)] p-3 text-sm text-white placeholder:text-white/30 focus:border-white/20 focus:outline-none"
         />
         <p className="mt-1 font-mono text-[10px] text-white/20">
           Suporte a Markdown: **negrito**, *itálico*, `código`, ```bloco```
@@ -111,7 +111,7 @@ export function NewThreadForm({ categories }: Props) {
         <button
           type="submit"
           disabled={isPending || !title.trim() || !categoryId || !content.trim()}
-          className="flex items-center gap-2 bg-[#FF3A0E] px-5 py-2.5 font-mono text-xs uppercase tracking-wide text-white transition-colors hover:bg-[#FF5A1F] disabled:opacity-40 disabled:cursor-not-allowed"
+          className="flex items-center gap-2 bg-[var(--ember)] px-5 py-2.5 font-mono text-xs uppercase tracking-wide text-white transition-colors hover:bg-[#FF5A1F] disabled:opacity-40 disabled:cursor-not-allowed"
         >
           <Send className="h-3.5 w-3.5" />
           {isPending ? 'Publicando...' : 'Publicar tópico'}

@@ -96,7 +96,7 @@ export default async function TurmasPage() {
           }}
         >
           <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-            <Image src="/images/brand/logo-symbol.svg" alt="João Guirunas" width={28} height={24} />
+            <Image src="/images/brand/symbol-official.svg" alt="João Guirunas" width={28} height={24} />
             <span
               style={{
                 fontFamily: 'var(--type-mono)',

@@ -14,8 +14,8 @@ const ROLE_LABELS: Record<string, string> = {
 
 const STATUS_COLORS: Record<string, string> = {
   ACTIVE: 'text-emerald-400',
-  EXPIRED: 'text-[#84848c]',
-  REMOVED: 'text-[#ff3a0e]',
+  EXPIRED: 'text-[var(--bone-mute)]',
+  REMOVED: 'text-[var(--ember)]',
   PAST_DUE: 'text-amber-400',
 }
 
@@ -35,13 +35,13 @@ function avatarInitials(name: string) {
 function RoleBadge({ role }: { role: string }) {
   if (role === 'ADMIN') {
     return (
-      <span className="border border-[#ff3a0e] bg-[#ff3a0e]/10 px-2 py-0.5 font-mono text-[10px] uppercase tracking-wide text-[#ff3a0e]">
+      <span className="border border-[var(--ember)] bg-[var(--ember)]/10 px-2 py-0.5 font-mono text-[10px] uppercase tracking-wide text-[var(--ember)]">
         {ROLE_LABELS[role] ?? role}
       </span>
     )
   }
   return (
-    <span className="border border-[rgba(255,255,255,0.07)] bg-transparent px-2 py-0.5 font-mono text-[10px] uppercase tracking-wide text-[#84848c]">
+    <span className="border border-[rgba(255,255,255,0.07)] bg-transparent px-2 py-0.5 font-mono text-[10px] uppercase tracking-wide text-[var(--bone-mute)]">
       {ROLE_LABELS[role] ?? role}
     </span>
   )
@@ -58,14 +58,14 @@ function UserProfileModal({
 
   return (
     <div className="fixed inset-0 z-50 flex items-start justify-center overflow-y-auto bg-black/70 p-4 pt-16">
-      <div className="w-full max-w-2xl border border-[rgba(255,255,255,0.07)] bg-[#0e0e11]">
+      <div className="w-full max-w-2xl border border-[rgba(255,255,255,0.07)] bg-[var(--ink)]">
         <div className="flex items-center justify-between border-b border-[rgba(255,255,255,0.07)] px-6 py-4">
-          <h2 className="font-mono text-sm font-semibold uppercase tracking-wider text-[#f1f1f3]">
+          <h2 className="font-mono text-sm font-semibold uppercase tracking-wider text-[var(--bone)]">
             Perfil — {user.name}
           </h2>
           <button
             onClick={onClose}
-            className="text-[#84848c] transition-colors hover:text-[#f1f1f3]"
+            className="text-[var(--bone-mute)] transition-colors hover:text-[var(--bone)]"
           >
             <X className="h-4 w-4" />
           </button>
@@ -73,21 +73,21 @@ function UserProfileModal({
 
         <div className="divide-y divide-[rgba(255,255,255,0.07)] p-6">
           <div className="pb-5">
-            <p className="mb-3 font-mono text-[10px] uppercase tracking-wider text-[#84848c]">
+            <p className="mb-3 font-mono text-[10px] uppercase tracking-wider text-[var(--bone-mute)]">
               Identidade
             </p>
             <div className="grid gap-2 md:grid-cols-2">
               <div>
-                <p className="font-mono text-[10px] text-[#84848c]">ID</p>
-                <p className="font-mono text-xs text-[#c5c5ca]">{user.id}</p>
+                <p className="font-mono text-[10px] text-[var(--bone-mute)]">ID</p>
+                <p className="font-mono text-xs text-[var(--bone-dim)]">{user.id}</p>
               </div>
               <div>
-                <p className="font-mono text-[10px] text-[#84848c]">Cadastro</p>
-                <p className="font-mono text-xs text-[#c5c5ca]">{formatDate(user.created_at)}</p>
+                <p className="font-mono text-[10px] text-[var(--bone-mute)]">Cadastro</p>
+                <p className="font-mono text-xs text-[var(--bone-dim)]">{formatDate(user.created_at)}</p>
               </div>
               <div>
-                <p className="font-mono text-[10px] text-[#84848c]">Stripe Customer</p>
-                <p className="font-mono text-xs text-[#c5c5ca]">
+                <p className="font-mono text-[10px] text-[var(--bone-mute)]">Stripe Customer</p>
+                <p className="font-mono text-xs text-[var(--bone-dim)]">
                   {user.stripe_customer_id ?? '—'}
                 </p>
               </div>
@@ -95,14 +95,14 @@ function UserProfileModal({
           </div>
 
           <div className="py-5">
-            <p className="mb-3 font-mono text-[10px] uppercase tracking-wider text-[#84848c]">
+            <p className="mb-3 font-mono text-[10px] uppercase tracking-wider text-[var(--bone-mute)]">
               Papel
             </p>
             <div className="flex items-center gap-3">
               <select
                 value={role}
                 onChange={(e) => setRole(e.target.value)}
-                className="border border-[rgba(255,255,255,0.16)] bg-[#16161a] px-3 py-2 font-mono text-xs text-[#c5c5ca] focus:outline-none"
+                className="border border-[rgba(255,255,255,0.16)] bg-[var(--ink-2)] px-3 py-2 font-mono text-xs text-[var(--bone-dim)] focus:outline-none"
               >
                 {Object.entries(ROLE_LABELS).map(([v, l]) => (
                   <option key={v} value={v}>
@@ -112,7 +112,7 @@ function UserProfileModal({
               </select>
               <button
                 type="button"
-                className="bg-[#ff3a0e] px-3 py-2 font-mono text-[10px] uppercase tracking-wider text-white"
+                className="bg-[var(--ember)] px-3 py-2 font-mono text-[10px] uppercase tracking-wider text-white"
                 onClick={() => {}}
               >
                 Atualizar
@@ -121,11 +121,11 @@ function UserProfileModal({
           </div>
 
           <div className="py-5">
-            <p className="mb-3 font-mono text-[10px] uppercase tracking-wider text-[#84848c]">
+            <p className="mb-3 font-mono text-[10px] uppercase tracking-wider text-[var(--bone-mute)]">
               Matrículas
             </p>
             {!user.memberships?.length ? (
-              <p className="font-mono text-xs text-[#84848c]">Nenhuma matrícula</p>
+              <p className="font-mono text-xs text-[var(--bone-mute)]">Nenhuma matrícula</p>
             ) : (
               <div className="space-y-2">
                 {user.memberships.map((m) => (
@@ -134,20 +134,20 @@ function UserProfileModal({
                     className="flex items-center justify-between border border-[rgba(255,255,255,0.07)] px-4 py-3"
                   >
                     <div>
-                      <p className="font-mono text-xs text-[#f1f1f3]">{m.cohortName}</p>
-                      <p className="font-mono text-[10px] text-[#84848c]">
+                      <p className="font-mono text-xs text-[var(--bone)]">{m.cohortName}</p>
+                      <p className="font-mono text-[10px] text-[var(--bone-mute)]">
                         Expira: {m.expires_at ? formatDate(m.expires_at) : 'Vitalício'}
                       </p>
                     </div>
                     <div className="flex items-center gap-3">
                       <span
-                        className={`font-mono text-[10px] ${STATUS_COLORS[m.status] ?? 'text-[#84848c]'}`}
+                        className={`font-mono text-[10px] ${STATUS_COLORS[m.status] ?? 'text-[var(--bone-mute)]'}`}
                       >
                         {m.status}
                       </span>
                       <button
                         type="button"
-                        className="border border-[rgba(255,255,255,0.07)] px-2 py-1 font-mono text-[9px] uppercase tracking-wider text-[#84848c] hover:text-[#c5c5ca]"
+                        className="border border-[rgba(255,255,255,0.07)] px-2 py-1 font-mono text-[9px] uppercase tracking-wider text-[var(--bone-mute)] hover:text-[var(--bone-dim)]"
                       >
                         Estender
                       </button>
@@ -159,7 +159,7 @@ function UserProfileModal({
             <div className="mt-3 flex flex-wrap gap-2">
               <button
                 type="button"
-                className="border border-[rgba(255,255,255,0.07)] px-3 py-1.5 font-mono text-[10px] uppercase tracking-wider text-[#84848c] transition-colors hover:border-[rgba(255,255,255,0.16)] hover:text-[#c5c5ca]"
+                className="border border-[rgba(255,255,255,0.07)] px-3 py-1.5 font-mono text-[10px] uppercase tracking-wider text-[var(--bone-mute)] transition-colors hover:border-[rgba(255,255,255,0.16)] hover:text-[var(--bone-dim)]"
               >
                 Conceder acesso manual
               </button>
@@ -167,7 +167,7 @@ function UserProfileModal({
           </div>
 
           <div className="pt-5">
-            <p className="mb-3 font-mono text-[10px] uppercase tracking-wider text-[#84848c]">
+            <p className="mb-3 font-mono text-[10px] uppercase tracking-wider text-[var(--bone-mute)]">
               Ações
             </p>
             <div className="flex flex-wrap gap-2">
@@ -179,7 +179,7 @@ function UserProfileModal({
               </button>
               <button
                 type="button"
-                className="border border-[#ff3a0e]/30 px-3 py-1.5 font-mono text-[10px] uppercase tracking-wider text-[#ff3a0e] transition-colors hover:bg-[#ff3a0e]/10"
+                className="border border-[var(--ember)]/30 px-3 py-1.5 font-mono text-[10px] uppercase tracking-wider text-[var(--ember)] transition-colors hover:bg-[var(--ember)]/10"
               >
                 Desativar conta
               </button>
@@ -223,19 +223,19 @@ export function UsersClient() {
           placeholder="Buscar por nome ou email..."
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          className="w-60 border border-[rgba(255,255,255,0.16)] bg-[#16161a] px-3 py-2 font-mono text-xs text-[#f1f1f3] placeholder-[#84848c] focus:outline-none"
+          className="w-60 border border-[rgba(255,255,255,0.16)] bg-[var(--ink-2)] px-3 py-2 font-mono text-xs text-[var(--bone)] placeholder-[var(--bone-mute)] focus:outline-none"
         />
 
         <div className="flex items-center gap-2">
-          <span className="font-mono text-[10px] uppercase tracking-wider text-[#84848c]">Papel:</span>
+          <span className="font-mono text-[10px] uppercase tracking-wider text-[var(--bone-mute)]">Papel:</span>
           {['all', 'STUDENT', 'MENTOR', 'SUPPORT', 'ADMIN'].map((r) => (
             <button
               key={r}
               onClick={() => setRoleFilter(r)}
               className={`px-2.5 py-1 font-mono text-[10px] uppercase tracking-wider transition-colors ${
                 roleFilter === r
-                  ? 'bg-[#ff3a0e] text-white'
-                  : 'border border-[rgba(255,255,255,0.07)] text-[#84848c] hover:text-[#c5c5ca]'
+                  ? 'bg-[var(--ember)] text-white'
+                  : 'border border-[rgba(255,255,255,0.07)] text-[var(--bone-mute)] hover:text-[var(--bone-dim)]'
               }`}
             >
               {r === 'all' ? 'Todos' : ROLE_LABELS[r]}
@@ -244,12 +244,12 @@ export function UsersClient() {
         </div>
 
         <div className="flex items-center gap-2">
-          <span className="font-mono text-[10px] uppercase tracking-wider text-[#84848c]">Turma:</span>
+          <span className="font-mono text-[10px] uppercase tracking-wider text-[var(--bone-mute)]">Turma:</span>
           <div className="relative">
             <select
               value={cohortFilter}
               onChange={(e) => setCohortFilter(e.target.value)}
-              className="appearance-none border border-[rgba(255,255,255,0.16)] bg-[#16161a] py-2 pl-3 pr-7 font-mono text-[10px] text-[#84848c] focus:outline-none"
+              className="appearance-none border border-[rgba(255,255,255,0.16)] bg-[var(--ink-2)] py-2 pl-3 pr-7 font-mono text-[10px] text-[var(--bone-mute)] focus:outline-none"
             >
               <option value="all">Todas</option>
               {MOCK_COHORTS.map((c) => (
@@ -258,7 +258,7 @@ export function UsersClient() {
                 </option>
               ))}
             </select>
-            <ChevronDown className="pointer-events-none absolute right-2 top-1/2 h-3 w-3 -translate-y-1/2 text-[#84848c]" />
+            <ChevronDown className="pointer-events-none absolute right-2 top-1/2 h-3 w-3 -translate-y-1/2 text-[var(--bone-mute)]" />
           </div>
         </div>
       </div>
@@ -267,11 +267,11 @@ export function UsersClient() {
       <div className="border border-[rgba(255,255,255,0.07)]">
         <table className="w-full">
           <thead>
-            <tr className="bg-[#16161a]">
+            <tr className="bg-[var(--ink-2)]">
               {['Usuário', 'ID', 'Papel', 'Turmas', 'Criado em', 'Ações'].map((h) => (
                 <th
                   key={h}
-                  className="px-4 py-3 text-left font-mono text-[10px] uppercase tracking-wide text-[#84848c]"
+                  className="px-4 py-3 text-left font-mono text-[10px] uppercase tracking-wide text-[var(--bone-mute)]"
                 >
                   {h}
                 </th>
@@ -282,35 +282,35 @@ export function UsersClient() {
             {filtered.map((user) => (
               <tr
                 key={user.id}
-                className="border-b border-[rgba(255,255,255,0.07)] hover:bg-[#050507]/40"
+                className="border-b border-[rgba(255,255,255,0.07)] hover:bg-[var(--void)]/40"
               >
                 <td className="px-4 py-3">
                   <div className="flex items-center gap-3">
-                    <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-[#ff3a0e]/20">
-                      <span className="font-mono text-[10px] font-semibold text-[#ff3a0e]">
+                    <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-[var(--ember)]/20">
+                      <span className="font-mono text-[10px] font-semibold text-[var(--ember)]">
                         {avatarInitials(user.name)}
                       </span>
                     </div>
-                    <span className="font-mono text-xs text-[#f1f1f3]">{user.name}</span>
+                    <span className="font-mono text-xs text-[var(--bone)]">{user.name}</span>
                   </div>
                 </td>
-                <td className="px-4 py-3 font-mono text-[10px] text-[#84848c]">
+                <td className="px-4 py-3 font-mono text-[10px] text-[var(--bone-mute)]">
                   {user.id.slice(0, 12)}…
                 </td>
                 <td className="px-4 py-3">
                   <RoleBadge role={user.role} />
                 </td>
-                <td className="px-4 py-3 font-mono text-xs text-[#84848c]">
+                <td className="px-4 py-3 font-mono text-xs text-[var(--bone-mute)]">
                   {user.memberships?.length ?? 0}
                 </td>
-                <td className="px-4 py-3 font-mono text-[10px] text-[#84848c]">
+                <td className="px-4 py-3 font-mono text-[10px] text-[var(--bone-mute)]">
                   {formatDate(user.created_at)}
                 </td>
                 <td className="px-4 py-3">
                   <button
                     type="button"
                     onClick={() => setSelectedUser(user)}
-                    className="font-mono text-[10px] uppercase tracking-wide text-[#84848c] transition-colors hover:text-[#f1f1f3]"
+                    className="font-mono text-[10px] uppercase tracking-wide text-[var(--bone-mute)] transition-colors hover:text-[var(--bone)]"
                   >
                     Ver perfil
                   </button>
@@ -321,7 +321,7 @@ export function UsersClient() {
         </table>
       </div>
 
-      <p className="font-mono text-[10px] text-[#84848c]">
+      <p className="font-mono text-[10px] text-[var(--bone-mute)]">
         {filtered.length} usuário{filtered.length !== 1 ? 's' : ''} encontrado{filtered.length !== 1 ? 's' : ''}
       </p>
     </>

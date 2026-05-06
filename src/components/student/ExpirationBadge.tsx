@@ -21,7 +21,7 @@ export function ExpirationBadge({ expiresAt, className }: Props) {
     <div
       className={cn(
         'flex items-center gap-1.5 px-2.5 py-1 font-mono text-xs uppercase tracking-wide',
-        urgent ? 'bg-[#FF3A0E]/15 text-[#FF3A0E]' : 'bg-yellow-500/10 text-yellow-400',
+        urgent ? 'bg-[var(--ember)]/15 text-[var(--ember)]' : 'bg-yellow-500/10 text-yellow-400',
         className
       )}
     >

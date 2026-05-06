@@ -16,8 +16,8 @@ const STATUS_LABELS: Record<string, string> = {
 const STATUS_BADGE: Record<string, string> = {
   PENDING: 'bg-amber-400/10 text-amber-400',
   APPROVED: 'bg-emerald-400/10 text-emerald-400',
-  DECLINED: 'bg-[#ff3a0e]/10 text-[#ff3a0e]',
-  REFUNDED: 'bg-transparent text-[#84848c] border border-[rgba(255,255,255,0.07)]',
+  DECLINED: 'bg-[var(--ember)]/10 text-[var(--ember)]',
+  REFUNDED: 'bg-transparent text-[var(--bone-mute)] border border-[rgba(255,255,255,0.07)]',
 }
 
 const KIND_LABELS: Record<string, string> = {
@@ -54,38 +54,38 @@ function RefundConfirmModal({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-4">
-      <div className="w-full max-w-md border border-[#ff3a0e]/20 bg-[#0e0e11]">
+      <div className="w-full max-w-md border border-[var(--ember)]/20 bg-[var(--ink)]">
         <div className="flex items-center justify-between border-b border-[rgba(255,255,255,0.07)] px-6 py-4">
           <div className="flex items-center gap-2">
-            <AlertTriangle className="h-4 w-4 text-[#ff3a0e]" />
-            <h2 className="font-mono text-sm font-semibold uppercase tracking-wider text-[#f1f1f3]">
+            <AlertTriangle className="h-4 w-4 text-[var(--ember)]" />
+            <h2 className="font-mono text-sm font-semibold uppercase tracking-wider text-[var(--bone)]">
               Confirmar Reembolso
             </h2>
           </div>
-          <button onClick={onCancel} className="text-[#84848c] hover:text-[#f1f1f3]">
+          <button onClick={onCancel} className="text-[var(--bone-mute)] hover:text-[var(--bone)]">
             <X className="h-4 w-4" />
           </button>
         </div>
 
         <div className="p-6">
-          <div className="mb-4 space-y-2 border border-[rgba(255,255,255,0.07)] bg-[#16161a] p-4">
+          <div className="mb-4 space-y-2 border border-[rgba(255,255,255,0.07)] bg-[var(--ink-2)] p-4">
             <div className="flex justify-between">
-              <span className="font-mono text-[10px] text-[#84848c]">Aluno</span>
-              <span className="font-mono text-xs text-[#c5c5ca]">{payment.userName}</span>
+              <span className="font-mono text-[10px] text-[var(--bone-mute)]">Aluno</span>
+              <span className="font-mono text-xs text-[var(--bone-dim)]">{payment.userName}</span>
             </div>
             <div className="flex justify-between">
-              <span className="font-mono text-[10px] text-[#84848c]">Turma</span>
-              <span className="font-mono text-xs text-[#c5c5ca]">{payment.cohortName}</span>
+              <span className="font-mono text-[10px] text-[var(--bone-mute)]">Turma</span>
+              <span className="font-mono text-xs text-[var(--bone-dim)]">{payment.cohortName}</span>
             </div>
             <div className="flex justify-between">
-              <span className="font-mono text-[10px] text-[#84848c]">Valor</span>
-              <span className="font-mono text-sm font-bold text-[#f1f1f3]">
+              <span className="font-mono text-[10px] text-[var(--bone-mute)]">Valor</span>
+              <span className="font-mono text-sm font-bold text-[var(--bone)]">
                 {formatBRL(payment.amount_cents)}
               </span>
             </div>
           </div>
 
-          <p className="mb-4 font-mono text-xs text-[#84848c]">
+          <p className="mb-4 font-mono text-xs text-[var(--bone-mute)]">
             Esta ação é irreversível. O reembolso será processado via Stripe e a matrícula do aluno
             será encerrada.
           </p>
@@ -95,9 +95,9 @@ function RefundConfirmModal({
               type="checkbox"
               checked={confirmed}
               onChange={(e) => setConfirmed(e.target.checked)}
-              className="mt-0.5 accent-[#ff3a0e]"
+              className="mt-0.5 accent-[var(--ember)]"
             />
-            <span className="font-mono text-xs text-[#c5c5ca]">
+            <span className="font-mono text-xs text-[var(--bone-dim)]">
               Confirmo que li as informações acima e quero prosseguir com o reembolso
             </span>
           </label>
@@ -106,7 +106,7 @@ function RefundConfirmModal({
             <button
               type="button"
               onClick={onCancel}
-              className="flex-1 border border-[rgba(255,255,255,0.07)] py-2.5 font-mono text-xs uppercase tracking-wider text-[#84848c] transition-colors hover:text-[#c5c5ca]"
+              className="flex-1 border border-[rgba(255,255,255,0.07)] py-2.5 font-mono text-xs uppercase tracking-wider text-[var(--bone-mute)] transition-colors hover:text-[var(--bone-dim)]"
             >
               Cancelar
             </button>
@@ -114,7 +114,7 @@ function RefundConfirmModal({
               type="button"
               disabled={!confirmed}
               onClick={onConfirm}
-              className="flex-1 bg-[#ff3a0e] py-2.5 font-mono text-xs font-semibold uppercase tracking-wider text-white disabled:cursor-not-allowed disabled:opacity-40"
+              className="flex-1 bg-[var(--ember)] py-2.5 font-mono text-xs font-semibold uppercase tracking-wider text-white disabled:cursor-not-allowed disabled:opacity-40"
             >
               Reembolsar
             </button>
@@ -183,10 +183,10 @@ function FailedWebhooksPanel({ events }: { events: FailedEvent[] }) {
   }
 
   return (
-    <div className="border border-[#ff3a0e]/20 bg-[#ff3a0e]/[0.03]">
-      <div className="flex items-center gap-2 border-b border-[#ff3a0e]/20 px-4 py-3">
-        <AlertTriangle className="h-3.5 w-3.5 text-[#ff3a0e]" />
-        <span className="font-mono text-xs font-semibold uppercase tracking-wider text-[#ff3a0e]">
+    <div className="border border-[var(--ember)]/20 bg-[var(--ember)]/[0.03]">
+      <div className="flex items-center gap-2 border-b border-[var(--ember)]/20 px-4 py-3">
+        <AlertTriangle className="h-3.5 w-3.5 text-[var(--ember)]" />
+        <span className="font-mono text-xs font-semibold uppercase tracking-wider text-[var(--ember)]">
           Webhooks com falha ({items.length})
         </span>
       </div>
@@ -194,20 +194,20 @@ function FailedWebhooksPanel({ events }: { events: FailedEvent[] }) {
         {items.map((ev) => (
           <div key={ev.id} className="flex flex-wrap items-start justify-between gap-3 px-4 py-3">
             <div className="min-w-0 flex-1 space-y-0.5">
-              <p className="font-mono text-xs text-[#c5c5ca]">{ev.event_type}</p>
-              <p className="font-mono text-[10px] text-[#84848c]">{ev.stripe_event_id}</p>
+              <p className="font-mono text-xs text-[var(--bone-dim)]">{ev.event_type}</p>
+              <p className="font-mono text-[10px] text-[var(--bone-mute)]">{ev.stripe_event_id}</p>
               {ev.error_message && (
-                <p className="font-mono text-[10px] text-[#ff3a0e]/70">{ev.error_message}</p>
+                <p className="font-mono text-[10px] text-[var(--ember)]/70">{ev.error_message}</p>
               )}
               {errors[ev.id] && (
-                <p className="font-mono text-[10px] text-[#ff3a0e]">{errors[ev.id]}</p>
+                <p className="font-mono text-[10px] text-[var(--ember)]">{errors[ev.id]}</p>
               )}
             </div>
             <button
               type="button"
               disabled={retrying === ev.id}
               onClick={() => handleRetry(ev.id)}
-              className="flex shrink-0 items-center gap-1.5 border border-[rgba(255,255,255,0.07)] px-3 py-1.5 font-mono text-[10px] uppercase tracking-wider text-[#84848c] transition-colors hover:border-[rgba(255,255,255,0.16)] hover:text-[#c5c5ca] disabled:cursor-not-allowed disabled:opacity-40"
+              className="flex shrink-0 items-center gap-1.5 border border-[rgba(255,255,255,0.07)] px-3 py-1.5 font-mono text-[10px] uppercase tracking-wider text-[var(--bone-mute)] transition-colors hover:border-[rgba(255,255,255,0.16)] hover:text-[var(--bone-dim)] disabled:cursor-not-allowed disabled:opacity-40"
             >
               <RefreshCw className={`h-3 w-3 ${retrying === ev.id ? 'animate-spin' : ''}`} />
               Reprocessar
@@ -247,7 +247,7 @@ export function PaymentsClient({ failedWebhookEvents }: { failedWebhookEvents: F
       {/* Toolbar */}
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div className="flex flex-wrap gap-2">
-          <span className="self-center font-mono text-[10px] uppercase tracking-wider text-[#84848c]">
+          <span className="self-center font-mono text-[10px] uppercase tracking-wider text-[var(--bone-mute)]">
             Status:
           </span>
           {['all', 'APPROVED', 'DECLINED', 'PENDING', 'REFUNDED'].map((s) => (
@@ -256,8 +256,8 @@ export function PaymentsClient({ failedWebhookEvents }: { failedWebhookEvents: F
               onClick={() => setStatusFilter(s)}
               className={`px-2.5 py-1 font-mono text-[10px] uppercase tracking-wider transition-colors ${
                 statusFilter === s
-                  ? 'bg-[#ff3a0e] text-white'
-                  : 'border border-[rgba(255,255,255,0.07)] text-[#84848c] hover:text-[#c5c5ca]'
+                  ? 'bg-[var(--ember)] text-white'
+                  : 'border border-[rgba(255,255,255,0.07)] text-[var(--bone-mute)] hover:text-[var(--bone-dim)]'
               }`}
             >
               {s === 'all' ? 'Todos' : STATUS_LABELS[s]}
@@ -268,7 +268,7 @@ export function PaymentsClient({ failedWebhookEvents }: { failedWebhookEvents: F
         <button
           type="button"
           onClick={() => downloadCSV(filtered)}
-          className="flex items-center gap-2 border border-[rgba(255,255,255,0.07)] px-3 py-1.5 font-mono text-[10px] uppercase tracking-wider text-[#84848c] transition-colors hover:border-[rgba(255,255,255,0.16)] hover:text-[#c5c5ca]"
+          className="flex items-center gap-2 border border-[rgba(255,255,255,0.07)] px-3 py-1.5 font-mono text-[10px] uppercase tracking-wider text-[var(--bone-mute)] transition-colors hover:border-[rgba(255,255,255,0.16)] hover:text-[var(--bone-dim)]"
         >
           Exportar CSV
         </button>
@@ -278,11 +278,11 @@ export function PaymentsClient({ failedWebhookEvents }: { failedWebhookEvents: F
       <div className="overflow-x-auto border border-[rgba(255,255,255,0.07)]">
         <table className="w-full min-w-[700px]">
           <thead>
-            <tr className="bg-[#16161a]">
+            <tr className="bg-[var(--ink-2)]">
               {['Usuário', 'Turma', 'Valor', 'Status', 'Data', 'Ação'].map((h) => (
                 <th
                   key={h}
-                  className="px-4 py-3 text-left font-mono text-[10px] uppercase tracking-wide text-[#84848c]"
+                  className="px-4 py-3 text-left font-mono text-[10px] uppercase tracking-wide text-[var(--bone-mute)]"
                 >
                   {h}
                 </th>
@@ -293,26 +293,26 @@ export function PaymentsClient({ failedWebhookEvents }: { failedWebhookEvents: F
             {filtered.map((payment) => (
               <tr
                 key={payment.id}
-                className="border-b border-[rgba(255,255,255,0.07)] hover:bg-[#050507]/40"
+                className="border-b border-[rgba(255,255,255,0.07)] hover:bg-[var(--void)]/40"
               >
                 <td className="px-4 py-3">
                   <div className="flex flex-col">
-                    <span className="font-mono text-xs text-[#f1f1f3]">{payment.userName}</span>
-                    <span className="font-mono text-[10px] text-[#84848c]">{payment.userEmail}</span>
+                    <span className="font-mono text-xs text-[var(--bone)]">{payment.userName}</span>
+                    <span className="font-mono text-[10px] text-[var(--bone-mute)]">{payment.userEmail}</span>
                   </div>
                 </td>
-                <td className="px-4 py-3 font-mono text-xs text-[#c5c5ca]">{payment.cohortName}</td>
-                <td className="px-4 py-3 font-mono text-sm font-bold text-[#f1f1f3]">
+                <td className="px-4 py-3 font-mono text-xs text-[var(--bone-dim)]">{payment.cohortName}</td>
+                <td className="px-4 py-3 font-mono text-sm font-bold text-[var(--bone)]">
                   {formatBRL(payment.amount_cents)}
                 </td>
                 <td className="px-4 py-3">
                   <span
-                    className={`px-2 py-0.5 font-mono text-[10px] uppercase tracking-wide ${STATUS_BADGE[payment.status] ?? 'text-[#84848c]'}`}
+                    className={`px-2 py-0.5 font-mono text-[10px] uppercase tracking-wide ${STATUS_BADGE[payment.status] ?? 'text-[var(--bone-mute)]'}`}
                   >
                     {STATUS_LABELS[payment.status] ?? payment.status}
                   </span>
                 </td>
-                <td className="px-4 py-3 font-mono text-[10px] text-[#84848c]">
+                <td className="px-4 py-3 font-mono text-[10px] text-[var(--bone-mute)]">
                   {formatDateTime(payment.paid_at ?? payment.created_at)}
                 </td>
                 <td className="px-4 py-3">
@@ -322,7 +322,7 @@ export function PaymentsClient({ failedWebhookEvents }: { failedWebhookEvents: F
                         href={`https://dashboard.stripe.com/test/payments/${payment.stripe_payment_intent_id}`}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="p-1 text-[#84848c] transition-colors hover:text-[#c5c5ca]"
+                        className="p-1 text-[var(--bone-mute)] transition-colors hover:text-[var(--bone-dim)]"
                         title="Ver no Stripe"
                       >
                         <ExternalLink className="h-3.5 w-3.5" />
@@ -332,7 +332,7 @@ export function PaymentsClient({ failedWebhookEvents }: { failedWebhookEvents: F
                       <button
                         type="button"
                         onClick={() => setRefundTarget(payment)}
-                        className="border border-[#ff3a0e]/20 px-2.5 py-1 font-mono text-[9px] uppercase tracking-wider text-[#ff3a0e]/70 transition-colors hover:border-[#ff3a0e]/40 hover:text-[#ff3a0e]"
+                        className="border border-[var(--ember)]/20 px-2.5 py-1 font-mono text-[9px] uppercase tracking-wider text-[var(--ember)]/70 transition-colors hover:border-[var(--ember)]/40 hover:text-[var(--ember)]"
                       >
                         Reembolsar
                       </button>
@@ -345,7 +345,7 @@ export function PaymentsClient({ failedWebhookEvents }: { failedWebhookEvents: F
         </table>
       </div>
 
-      <p className="font-mono text-[10px] text-[#84848c]">
+      <p className="font-mono text-[10px] text-[var(--bone-mute)]">
         {filtered.length} pagamento{filtered.length !== 1 ? 's' : ''} encontrado
         {filtered.length !== 1 ? 's' : ''}
       </p>

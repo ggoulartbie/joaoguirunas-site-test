@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import Image from 'next/image'
 import type { Metadata } from 'next'
+import { BackButton } from './_components/BackButton'
 
 export const metadata: Metadata = {
   title: 'Acesso restrito',
@@ -69,7 +70,7 @@ export default function ForbiddenPage() {
 
         <Link
           href="/academy/dashboard"
-          className="mt-8 inline-block"
+          className="mt-8 inline-block transition-[filter] hover:brightness-110"
           style={{
             fontFamily: 'var(--type-mono)',
             fontSize: '11px',
@@ -81,24 +82,12 @@ export default function ForbiddenPage() {
             padding: '14px 32px',
             borderRadius: 0,
             textDecoration: 'none',
-            transition: 'filter 0.2s',
           }}
-          onMouseEnter={(e) => ((e.currentTarget as HTMLElement).style.filter = 'brightness(1.1)')}
-          onMouseLeave={(e) => ((e.currentTarget as HTMLElement).style.filter = '')}
         >
           Ir para o Dashboard
         </Link>
 
-        <Link
-          href="#"
-          onClick={(e) => { e.preventDefault(); history.back() }}
-          className="mt-4 inline-block text-sm transition-colors"
-          style={{ color: 'var(--bone-mute)', textDecoration: 'none' }}
-          onMouseEnter={(e) => ((e.currentTarget as HTMLElement).style.color = 'var(--bone)')}
-          onMouseLeave={(e) => ((e.currentTarget as HTMLElement).style.color = 'var(--bone-mute)')}
-        >
-          Voltar
-        </Link>
+        <BackButton />
       </div>
     </div>
   )

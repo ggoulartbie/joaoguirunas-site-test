@@ -25,7 +25,7 @@ export function MarkCompleteButton({ lessonId, initialCompleted }: Props) {
   }
 
   return (
-    <div className="flex items-center justify-between border border-white/10 bg-[#0C0C12] p-4">
+    <div className="flex items-center justify-between border border-white/10 bg-[var(--ink)] p-4">
       <span className="text-sm text-white/60">
         {completed ? 'Aula concluída' : 'Concluiu esta aula?'}
       </span>
@@ -33,7 +33,7 @@ export function MarkCompleteButton({ lessonId, initialCompleted }: Props) {
         onClick={handleClick}
         disabled={completed || loading}
         aria-label={completed ? 'Aula marcada como concluída' : 'Marcar aula como concluída'}
-        className={`flex items-center gap-2 border px-4 py-2 font-mono text-xs uppercase tracking-wide transition-colors disabled:cursor-default focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FF3A0E] focus-visible:ring-offset-1 focus-visible:ring-offset-[#050507] ${
+        className={`flex items-center gap-2 border px-4 py-2 font-mono text-xs uppercase tracking-wide transition-colors disabled:cursor-default focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ember)] focus-visible:ring-offset-1 focus-visible:ring-offset-[var(--void)] ${
           completed
             ? 'border-green-500/40 text-green-400'
             : 'border-white/10 text-white/50 hover:border-green-500/40 hover:text-green-400'

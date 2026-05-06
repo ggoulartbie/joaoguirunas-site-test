@@ -34,14 +34,14 @@ function formatDate(iso: string) {
 }
 
 const ROLE_BADGE: Record<string, { label: string; className: string } | undefined> = {
-  MENTOR: { label: 'Mentor', className: 'bg-[#FF3A0E]/15 text-[#FF3A0E]' },
+  MENTOR: { label: 'Mentor', className: 'bg-[var(--ember)]/15 text-[var(--ember)]' },
   ADMIN: { label: 'Admin', className: 'bg-yellow-500/15 text-yellow-400' },
 }
 
 function Avatar({ name }: { name: string }) {
   return (
     <div
-      className="flex h-8 w-8 shrink-0 items-center justify-center bg-[#FF3A0E]/20 font-mono text-xs font-bold uppercase text-[color:var(--ember)]"
+      className="flex h-8 w-8 shrink-0 items-center justify-center bg-[var(--ember)]/20 font-mono text-xs font-bold uppercase text-[color:var(--ember)]"
       style={{ borderRadius: '9999px' }}
     >
       {name.charAt(0)}

@@ -2,8 +2,9 @@
 
 import Image from 'next/image'
 import Link from 'next/link'
-import { usePathname } from 'next/navigation'
+import { usePathname, useRouter } from 'next/navigation'
 import { cn } from '@/lib/utils'
+import { createClient } from '@/lib/supabase/client'
 import {
   LayoutDashboard,
   Users,
@@ -48,9 +49,17 @@ const navGroups = [
 
 export function AdminSidebar() {
   const pathname = usePathname()
+  const router = useRouter()
+
+  async function handleLogout() {
+    const supabase = createClient()
+    await supabase.auth.signOut()
+    router.push('/academy/login')
+    router.refresh()
+  }
 
   return (
-    <aside className="fixed inset-y-0 left-0 z-50 hidden w-64 flex-col border-r border-white/[0.07] bg-[#050507] lg:flex">
+    <aside className="fixed inset-y-0 left-0 z-50 hidden w-64 flex-col border-r border-white/[0.07] bg-[var(--void)] lg:flex">
       <div className="flex h-16 flex-col justify-center border-b border-white/[0.07] px-6">
         <Image
           src="/images/brand/logo-header.png"
@@ -60,7 +69,7 @@ export function AdminSidebar() {
           className="object-contain object-left"
           priority
         />
-        <span className="mt-1 font-mono text-[10px] uppercase tracking-widest text-[#ff3a0e]">
+        <span className="mt-1 font-mono text-[10px] uppercase tracking-widest text-[var(--ember)]">
           Admin
         </span>
       </div>
@@ -68,7 +77,7 @@ export function AdminSidebar() {
       <nav className="flex flex-1 flex-col overflow-y-auto py-2">
         {navGroups.map((group) => (
           <div key={group.label}>
-            <p className="px-6 pb-1 pt-4 font-mono text-[10px] uppercase tracking-widest text-[#84848c]">
+            <p className="px-6 pb-1 pt-4 font-mono text-[10px] uppercase tracking-widest text-[var(--bone-mute)]">
               {group.label}
             </p>
             {group.items.map(({ href, label, icon: Icon, exact }) => {
@@ -82,14 +91,14 @@ export function AdminSidebar() {
                   className={cn(
                     'flex items-center gap-3 px-6 py-2.5 font-mono text-xs uppercase tracking-wider transition-colors',
                     active
-                      ? 'border-l-2 border-[#ff3a0e] bg-[#ff3a0e]/[0.06] text-[#ff3a0e]'
-                      : 'border-l-2 border-transparent text-[#84848c] hover:bg-white/[0.04] hover:text-[#f1f1f3]'
+                      ? 'border-l-2 border-[var(--ember)] bg-[var(--ember)]/[0.06] text-[var(--ember)]'
+                      : 'border-l-2 border-transparent text-[var(--bone-mute)] hover:bg-white/[0.04] hover:text-[var(--bone)]'
                   )}
                 >
                   <Icon
                     className={cn(
                       'h-4 w-4 shrink-0',
-                      active ? 'text-[#ff3a0e]' : 'text-[#84848c]'
+                      active ? 'text-[var(--ember)]' : 'text-[var(--bone-mute)]'
                     )}
                   />
                   {label}
@@ -103,12 +112,15 @@ export function AdminSidebar() {
       <div className="border-t border-white/[0.07]">
         <Link
           href="/"
-          className="flex w-full items-center gap-3 px-6 py-3 font-mono text-xs uppercase tracking-wider text-[#84848c] transition-colors hover:text-[#ff3a0e]"
+          className="flex w-full items-center gap-3 px-6 py-3 font-mono text-xs uppercase tracking-wider text-[var(--bone-mute)] transition-colors hover:text-[var(--ember)]"
         >
           <ExternalLink className="h-4 w-4 shrink-0" />
           Voltar ao site
         </Link>
-        <button className="flex w-full items-center gap-3 px-6 py-3 font-mono text-xs uppercase tracking-wider text-[#84848c] transition-colors hover:text-[#ff3a0e]">
+        <button
+          onClick={handleLogout}
+          className="flex w-full items-center gap-3 px-6 py-3 font-mono text-xs uppercase tracking-wider text-[var(--bone-mute)] transition-colors hover:text-[var(--ember)]"
+        >
           <LogOut className="h-4 w-4 shrink-0" />
           Logout
         </button>

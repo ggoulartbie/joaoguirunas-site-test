@@ -166,20 +166,20 @@ export function MaterialsUpload({ lessonId, materials }: MaterialsUploadProps) {
             placeholder="Título do link"
             value={linkTitle}
             onChange={(e) => setLinkTitle(e.target.value)}
-            className="w-full border border-white/[0.07] bg-transparent px-3 py-2 font-mono text-sm text-[#f1f1f3] placeholder:text-[#84848c] focus:border-white/[0.16] focus:outline-none"
+            className="w-full border border-white/[0.07] bg-transparent px-3 py-2 font-mono text-sm text-[var(--bone)] placeholder:text-[var(--bone-mute)] focus:border-white/[0.16] focus:outline-none"
           />
           <input
             type="url"
             placeholder="https://..."
             value={linkUrl}
             onChange={(e) => setLinkUrl(e.target.value)}
-            className="w-full border border-white/[0.07] bg-transparent px-3 py-2 font-mono text-sm text-[#f1f1f3] placeholder:text-[#84848c] focus:border-white/[0.16] focus:outline-none"
+            className="w-full border border-white/[0.07] bg-transparent px-3 py-2 font-mono text-sm text-[var(--bone)] placeholder:text-[var(--bone-mute)] focus:border-white/[0.16] focus:outline-none"
           />
           <div className="flex gap-2">
             <button
               onClick={handleAddLink}
               disabled={!linkTitle || !linkUrl}
-              className="bg-[#ff3a0e] px-4 py-1.5 font-mono text-[10px] uppercase tracking-widest text-[#050507] disabled:opacity-40"
+              className="bg-[var(--ember)] px-4 py-1.5 font-mono text-[10px] uppercase tracking-widest text-[var(--void)] disabled:opacity-40"
             >
               Adicionar
             </button>
@@ -194,7 +194,7 @@ export function MaterialsUpload({ lessonId, materials }: MaterialsUploadProps) {
       )}
 
       {error && (
-        <p className="bg-[#ff3a0e]/10 px-4 py-2 font-mono text-[11px] text-[#ff3a0e]">{error}</p>
+        <p className="bg-[var(--ember)]/10 px-4 py-2 font-mono text-[11px] text-[var(--ember)]">{error}</p>
       )}
     </div>
   )

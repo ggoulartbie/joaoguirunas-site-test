@@ -59,23 +59,23 @@ function StatCard({ label, value, variation, variant = 'default', icon: Icon }: 
     variant === 'positive'
       ? 'text-emerald-400'
       : variant === 'danger'
-        ? 'text-[#ff3a0e]'
+        ? 'text-[var(--ember)]'
         : variant === 'warning'
           ? 'text-amber-400'
-          : 'text-[#84848c]'
+          : 'text-[var(--bone-mute)]'
 
   return (
     <div
-      className="group relative flex flex-col gap-4 border border-[rgba(255,255,255,0.07)] bg-[#0e0e11] p-5 transition-colors hover:border-[rgba(255,255,255,0.16)]"
+      className="group relative flex flex-col gap-4 border border-[rgba(255,255,255,0.07)] bg-[var(--ink)] p-5 transition-colors hover:border-[rgba(255,255,255,0.16)]"
       style={{ borderRadius: 0 }}
     >
       <div className="flex items-start justify-between">
-        <span className="font-mono text-[10px] uppercase tracking-widest text-[#84848c]">
+        <span className="font-mono text-[10px] uppercase tracking-widest text-[var(--bone-mute)]">
           {label}
         </span>
-        <Icon className="h-5 w-5 text-[#84848c]" />
+        <Icon className="h-5 w-5 text-[var(--bone-mute)]" />
       </div>
-      <span className="font-mono text-[32px] font-bold leading-none text-[#f1f1f3]">
+      <span className="font-mono text-[32px] font-bold leading-none text-[var(--bone)]">
         {value}
       </span>
       {variation && (
@@ -89,8 +89,8 @@ function StatCard({ label, value, variation, variant = 'default', icon: Icon }: 
 
 const STATUS_STYLES: Record<string, string> = {
   ativo: 'border-emerald-400/40 text-emerald-400',
-  erro: 'border-[#ff3a0e]/40 text-[#ff3a0e]',
-  novo: 'border-[rgba(255,255,255,0.16)] text-[#c5c5ca]',
+  erro: 'border-[var(--ember)]/40 text-[var(--ember)]',
+  novo: 'border-[rgba(255,255,255,0.16)] text-[var(--bone-dim)]',
   alerta: 'border-amber-400/40 text-amber-400',
 }
 
@@ -103,13 +103,13 @@ export default function AdminDashboardPage() {
 
       {/* Header */}
       <div className="space-y-1">
-        <span className="font-mono text-[10px] uppercase tracking-widest text-[#84848c]">
+        <span className="font-mono text-[10px] uppercase tracking-widest text-[var(--bone-mute)]">
           Painel Admin
         </span>
-        <h1 className="font-serif text-4xl italic text-[#f1f1f3]">
+        <h1 className="font-serif text-4xl italic text-[var(--bone)]">
           Visão Geral
         </h1>
-        <p className="font-mono text-[10px] text-[#84848c]">
+        <p className="font-mono text-[10px] text-[var(--bone-mute)]">
           Dados mockados — integração real após F1.8 + F2.3
         </p>
       </div>
@@ -176,12 +176,12 @@ export default function AdminDashboardPage() {
         {/* Recent Activity Table */}
         <div className="lg:col-span-2">
           <div className="mb-3 flex items-center justify-between">
-            <span className="font-mono text-[10px] uppercase tracking-widest text-[#84848c]">
+            <span className="font-mono text-[10px] uppercase tracking-widest text-[var(--bone-mute)]">
               Atividade Recente
             </span>
             <a
               href="/academy/admin/alunos"
-              className="font-mono text-[10px] uppercase tracking-wider text-[#ff3a0e] transition-opacity hover:opacity-70"
+              className="font-mono text-[10px] uppercase tracking-wider text-[var(--ember)] transition-opacity hover:opacity-70"
             >
               Ver tudo
             </a>
@@ -189,17 +189,17 @@ export default function AdminDashboardPage() {
           <div className="border border-[rgba(255,255,255,0.07)]" style={{ borderRadius: 0 }}>
             <table className="w-full">
               <thead>
-                <tr className="border-b border-[rgba(255,255,255,0.16)] bg-[#16161a]">
-                  <th className="px-4 py-3 text-left font-mono text-[10px] uppercase tracking-widest text-[#84848c]">
+                <tr className="border-b border-[rgba(255,255,255,0.16)] bg-[var(--ink-2)]">
+                  <th className="px-4 py-3 text-left font-mono text-[10px] uppercase tracking-widest text-[var(--bone-mute)]">
                     Aluno
                   </th>
-                  <th className="px-4 py-3 text-left font-mono text-[10px] uppercase tracking-widest text-[#84848c]">
+                  <th className="px-4 py-3 text-left font-mono text-[10px] uppercase tracking-widest text-[var(--bone-mute)]">
                     Detalhe
                   </th>
-                  <th className="px-4 py-3 text-left font-mono text-[10px] uppercase tracking-widest text-[#84848c]">
+                  <th className="px-4 py-3 text-left font-mono text-[10px] uppercase tracking-widest text-[var(--bone-mute)]">
                     Tempo
                   </th>
-                  <th className="px-4 py-3 text-left font-mono text-[10px] uppercase tracking-widest text-[#84848c]">
+                  <th className="px-4 py-3 text-left font-mono text-[10px] uppercase tracking-widest text-[var(--bone-mute)]">
                     Status
                   </th>
                 </tr>
@@ -210,12 +210,12 @@ export default function AdminDashboardPage() {
                     key={row.id}
                     className="border-b border-[rgba(255,255,255,0.07)] transition-colors last:border-0 hover:bg-[rgba(14,14,17,0.5)]"
                   >
-                    <td className="px-4 py-3 font-sans text-sm text-[#c5c5ca]">{row.user}</td>
-                    <td className="px-4 py-3 font-sans text-sm text-[#c5c5ca]">{row.detail}</td>
-                    <td className="px-4 py-3 font-mono text-[11px] text-[#84848c]">{row.time}</td>
+                    <td className="px-4 py-3 font-sans text-sm text-[var(--bone-dim)]">{row.user}</td>
+                    <td className="px-4 py-3 font-sans text-sm text-[var(--bone-dim)]">{row.detail}</td>
+                    <td className="px-4 py-3 font-mono text-[11px] text-[var(--bone-mute)]">{row.time}</td>
                     <td className="px-4 py-3">
                       <span
-                        className={`border px-2 py-0.5 font-mono text-[10px] uppercase tracking-wider ${STATUS_STYLES[row.status] ?? 'border-[rgba(255,255,255,0.07)] text-[#84848c]'}`}
+                        className={`border px-2 py-0.5 font-mono text-[10px] uppercase tracking-wider ${STATUS_STYLES[row.status] ?? 'border-[rgba(255,255,255,0.07)] text-[var(--bone-mute)]'}`}
                         style={{ borderRadius: 0 }}
                       >
                         {row.status}
@@ -231,45 +231,45 @@ export default function AdminDashboardPage() {
         {/* Cohort Breakdown */}
         <div>
           <div className="mb-3 flex items-center justify-between">
-            <span className="font-mono text-[10px] uppercase tracking-widest text-[#84848c]">
+            <span className="font-mono text-[10px] uppercase tracking-widest text-[var(--bone-mute)]">
               Alunos por Turma
             </span>
             <a
               href="/academy/admin/turmas"
-              className="font-mono text-[10px] uppercase tracking-wider text-[#ff3a0e] transition-opacity hover:opacity-70"
+              className="font-mono text-[10px] uppercase tracking-wider text-[var(--ember)] transition-opacity hover:opacity-70"
             >
               Ver tudo
             </a>
           </div>
-          <div className="border border-[rgba(255,255,255,0.07)] bg-[#0e0e11] p-5" style={{ borderRadius: 0 }}>
+          <div className="border border-[rgba(255,255,255,0.07)] bg-[var(--ink)] p-5" style={{ borderRadius: 0 }}>
             <div className="space-y-5">
               {m.activeStudentsByCohort.map((cohort) => {
                 const pct = Math.round((cohort.count / totalActive) * 100)
                 return (
                   <div key={cohort.name} className="space-y-2">
                     <div className="flex items-center justify-between">
-                      <span className="font-mono text-[11px] text-[#c5c5ca]">{cohort.name}</span>
-                      <span className="font-mono text-[11px] font-bold text-[#f1f1f3]">
+                      <span className="font-mono text-[11px] text-[var(--bone-dim)]">{cohort.name}</span>
+                      <span className="font-mono text-[11px] font-bold text-[var(--bone)]">
                         {cohort.count}
                       </span>
                     </div>
                     <div className="h-px w-full bg-[rgba(255,255,255,0.07)]">
                       <div
-                        className="h-px bg-[#ff3a0e]"
+                        className="h-px bg-[var(--ember)]"
                         style={{ width: `${pct}%` }}
                       />
                     </div>
-                    <span className="font-mono text-[10px] text-[#84848c]">{pct}% do total</span>
+                    <span className="font-mono text-[10px] text-[var(--bone-mute)]">{pct}% do total</span>
                   </div>
                 )
               })}
             </div>
             <div className="mt-6 border-t border-[rgba(255,255,255,0.07)] pt-4">
               <div className="flex items-center justify-between">
-                <span className="font-mono text-[10px] uppercase tracking-widest text-[#84848c]">
+                <span className="font-mono text-[10px] uppercase tracking-widest text-[var(--bone-mute)]">
                   Total
                 </span>
-                <span className="font-mono text-xl font-bold text-[#f1f1f3]">{totalActive}</span>
+                <span className="font-mono text-xl font-bold text-[var(--bone)]">{totalActive}</span>
               </div>
             </div>
           </div>
@@ -279,7 +279,7 @@ export default function AdminDashboardPage() {
       {/* Quick Actions */}
       <div>
         <div className="mb-3">
-          <span className="font-mono text-[10px] uppercase tracking-widest text-[#84848c]">
+          <span className="font-mono text-[10px] uppercase tracking-widest text-[var(--bone-mute)]">
             Ações Rápidas
           </span>
         </div>
@@ -293,11 +293,11 @@ export default function AdminDashboardPage() {
             <a
               key={action.label}
               href={action.href}
-              className="flex flex-col gap-3 border border-[rgba(255,255,255,0.07)] bg-[#0e0e11] p-4 transition-colors hover:border-[#ff3a0e]"
+              className="flex flex-col gap-3 border border-[rgba(255,255,255,0.07)] bg-[var(--ink)] p-4 transition-colors hover:border-[var(--ember)]"
               style={{ borderRadius: 0 }}
             >
-              <action.icon className="h-5 w-5 text-[#ff3a0e]" />
-              <span className="font-mono text-[11px] uppercase tracking-wider text-[#c5c5ca]">
+              <action.icon className="h-5 w-5 text-[var(--ember)]" />
+              <span className="font-mono text-[11px] uppercase tracking-wider text-[var(--bone-dim)]">
                 {action.label}
               </span>
             </a>

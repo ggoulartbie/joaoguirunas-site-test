@@ -1,11 +1,13 @@
 import type { Metadata } from 'next';
-import { OnboardingClient } from './OnboardingClient';
+import { listOnboardings } from '@/lib/actions/onboarding';
+import { OnboardingListClient } from './OnboardingListClient';
 
 export const metadata: Metadata = {
-  title: 'Onboarding — Mentoria Claude Code + IA',
+  title: 'Onboardings — Mentoria',
   robots: { index: false, follow: false },
 };
 
-export default function OnboardingPage() {
-  return <OnboardingClient />;
+export default async function OnboardingListPage() {
+  const records = await listOnboardings();
+  return <OnboardingListClient initialRecords={records} />;
 }

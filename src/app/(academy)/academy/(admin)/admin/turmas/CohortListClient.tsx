@@ -16,10 +16,10 @@ const STATUS_LABELS: Record<string, string> = {
 
 const STATUS_BADGE: Record<string, string> = {
   OPEN: 'text-green-400 border border-green-500/30',
-  IN_PROGRESS: 'text-[#ff3a0e] border border-[#ff3a0e]/30',
-  CLOSED: 'text-[#84848c] border border-white/[0.07]',
-  ARCHIVED: 'text-[#84848c] border border-white/[0.07]',
-  DRAFT: 'text-[#c5c5ca] border border-white/[0.07]',
+  IN_PROGRESS: 'text-[var(--ember)] border border-[var(--ember)]/30',
+  CLOSED: 'text-[var(--bone-mute)] border border-white/[0.07]',
+  ARCHIVED: 'text-[var(--bone-mute)] border border-white/[0.07]',
+  DRAFT: 'text-[var(--bone-dim)] border border-white/[0.07]',
 }
 
 function formatBRL(cents: number) {
@@ -29,7 +29,7 @@ function formatBRL(cents: number) {
 function OccupancyBar({ filled, total }: { filled: number; total: number | null }) {
   if (total === null) {
     return (
-      <span className="font-mono text-xs text-[#84848c]">
+      <span className="font-mono text-xs text-[var(--bone-mute)]">
         {filled} / ∞
       </span>
     )
@@ -39,11 +39,11 @@ function OccupancyBar({ filled, total }: { filled: number; total: number | null 
     <div className="flex items-center gap-2">
       <div className="h-px w-20 bg-white/10">
         <div
-          className={`h-px ${pct >= 90 ? 'bg-red-400' : 'bg-[#ff3a0e]'}`}
+          className={`h-px ${pct >= 90 ? 'bg-red-400' : 'bg-[var(--ember)]'}`}
           style={{ width: `${pct}%` }}
         />
       </div>
-      <span className="font-mono text-xs text-[#84848c]">{filled}/{total}</span>
+      <span className="font-mono text-xs text-[var(--bone-mute)]">{filled}/{total}</span>
     </div>
   )
 }
@@ -64,7 +64,7 @@ export function CohortListClient() {
       {/* Filters */}
       <div className="flex flex-wrap gap-3">
         <div className="flex items-center gap-2">
-          <span className="font-mono text-[10px] uppercase tracking-widest text-[#84848c]">Status:</span>
+          <span className="font-mono text-[10px] uppercase tracking-widest text-[var(--bone-mute)]">Status:</span>
           {['all', 'DRAFT', 'OPEN', 'IN_PROGRESS', 'CLOSED', 'ARCHIVED'].map((s) => (
             <button
               key={s}
@@ -72,8 +72,8 @@ export function CohortListClient() {
               style={{ borderRadius: 0 }}
               className={`px-2.5 py-1 font-mono text-[10px] uppercase tracking-widest transition-colors ${
                 statusFilter === s
-                  ? 'bg-[#ff3a0e] text-[#050507]'
-                  : 'border border-white/[0.07] text-[#84848c] hover:border-white/[0.16] hover:text-[#c5c5ca]'
+                  ? 'bg-[var(--ember)] text-[var(--void)]'
+                  : 'border border-white/[0.07] text-[var(--bone-mute)] hover:border-white/[0.16] hover:text-[var(--bone-dim)]'
               }`}
             >
               {s === 'all' ? 'Todos' : STATUS_LABELS[s]}
@@ -81,7 +81,7 @@ export function CohortListClient() {
           ))}
         </div>
         <div className="flex items-center gap-2">
-          <span className="font-mono text-[10px] uppercase tracking-widest text-[#84848c]">Tipo:</span>
+          <span className="font-mono text-[10px] uppercase tracking-widest text-[var(--bone-mute)]">Tipo:</span>
           {[
             { value: 'all', label: 'Todos' },
             { value: 'purchasable', label: 'Vendavel' },
@@ -93,8 +93,8 @@ export function CohortListClient() {
               style={{ borderRadius: 0 }}
               className={`px-2.5 py-1 font-mono text-[10px] uppercase tracking-widest transition-colors ${
                 purchasableFilter === value
-                  ? 'bg-[#ff3a0e] text-[#050507]'
-                  : 'border border-white/[0.07] text-[#84848c] hover:border-white/[0.16] hover:text-[#c5c5ca]'
+                  ? 'bg-[var(--ember)] text-[var(--void)]'
+                  : 'border border-white/[0.07] text-[var(--bone-mute)] hover:border-white/[0.16] hover:text-[var(--bone-dim)]'
               }`}
             >
               {label}
@@ -107,23 +107,23 @@ export function CohortListClient() {
       <div className="border border-white/[0.07]" style={{ borderRadius: 0 }}>
         <table className="w-full" style={{ borderRadius: 0 }}>
           <thead>
-            <tr className="border-b border-white/[0.07] bg-[#16161a]">
-              <th className="px-4 py-3 text-left font-mono text-[10px] uppercase tracking-widest text-[#84848c]">
+            <tr className="border-b border-white/[0.07] bg-[var(--ink-2)]">
+              <th className="px-4 py-3 text-left font-mono text-[10px] uppercase tracking-widest text-[var(--bone-mute)]">
                 Turma
               </th>
-              <th className="hidden px-4 py-3 text-left font-mono text-[10px] uppercase tracking-widest text-[#84848c] md:table-cell">
+              <th className="hidden px-4 py-3 text-left font-mono text-[10px] uppercase tracking-widest text-[var(--bone-mute)] md:table-cell">
                 Status
               </th>
-              <th className="hidden px-4 py-3 text-left font-mono text-[10px] uppercase tracking-widest text-[#84848c] lg:table-cell">
+              <th className="hidden px-4 py-3 text-left font-mono text-[10px] uppercase tracking-widest text-[var(--bone-mute)] lg:table-cell">
                 Vagas
               </th>
-              <th className="hidden px-4 py-3 text-left font-mono text-[10px] uppercase tracking-widest text-[#84848c] xl:table-cell">
+              <th className="hidden px-4 py-3 text-left font-mono text-[10px] uppercase tracking-widest text-[var(--bone-mute)] xl:table-cell">
                 Periodo
               </th>
-              <th className="hidden px-4 py-3 text-left font-mono text-[10px] uppercase tracking-widest text-[#84848c] xl:table-cell">
+              <th className="hidden px-4 py-3 text-left font-mono text-[10px] uppercase tracking-widest text-[var(--bone-mute)] xl:table-cell">
                 Preco
               </th>
-              <th className="px-4 py-3 text-right font-mono text-[10px] uppercase tracking-widest text-[#84848c]">
+              <th className="px-4 py-3 text-right font-mono text-[10px] uppercase tracking-widest text-[var(--bone-mute)]">
                 Acoes
               </th>
             </tr>
@@ -131,7 +131,7 @@ export function CohortListClient() {
           <tbody className="divide-y divide-white/[0.04]">
             {filtered.length === 0 ? (
               <tr>
-                <td colSpan={6} className="px-4 py-8 text-center font-mono text-xs text-[#84848c]">
+                <td colSpan={6} className="px-4 py-8 text-center font-mono text-xs text-[var(--bone-mute)]">
                   Nenhuma turma encontrada
                 </td>
               </tr>
@@ -140,11 +140,11 @@ export function CohortListClient() {
                 <tr key={cohort.id} className="group hover:bg-white/[0.02]">
                   <td className="px-4 py-4">
                     <div className="flex flex-col gap-1">
-                      <span className="font-mono text-sm font-medium text-[#f1f1f3]">
+                      <span className="font-mono text-sm font-medium text-[var(--bone)]">
                         {cohort.name}
                       </span>
                       <div className="flex items-center gap-2">
-                        <span className="font-mono text-[10px] text-[#84848c]">{cohort.slug}</span>
+                        <span className="font-mono text-[10px] text-[var(--bone-mute)]">{cohort.slug}</span>
                         {cohort.is_purchasable && (
                           <span
                             style={{ borderRadius: 0 }}
@@ -156,7 +156,7 @@ export function CohortListClient() {
                         {cohort.has_public_page && (
                           <span
                             style={{ borderRadius: 0 }}
-                            className="border border-white/[0.16] px-1.5 py-0.5 font-mono text-[9px] uppercase tracking-widest text-[#c5c5ca]"
+                            className="border border-white/[0.16] px-1.5 py-0.5 font-mono text-[9px] uppercase tracking-widest text-[var(--bone-dim)]"
                           >
                             LP Publica
                           </span>
@@ -167,19 +167,19 @@ export function CohortListClient() {
                   <td className="hidden px-4 py-4 md:table-cell">
                     <span
                       style={{ borderRadius: 0 }}
-                      className={`px-2 py-1 font-mono text-[10px] uppercase tracking-widest ${STATUS_BADGE[cohort.status] ?? 'text-[#84848c] border border-white/[0.07]'}`}
+                      className={`px-2 py-1 font-mono text-[10px] uppercase tracking-widest ${STATUS_BADGE[cohort.status] ?? 'text-[var(--bone-mute)] border border-white/[0.07]'}`}
                     >
                       {STATUS_LABELS[cohort.status] ?? cohort.status}
                     </span>
                   </td>
                   <td className="hidden px-4 py-4 lg:table-cell">
                     <div className="flex items-center gap-2">
-                      <Users className="h-3.5 w-3.5 text-[#84848c]" />
+                      <Users className="h-3.5 w-3.5 text-[var(--bone-mute)]" />
                       <OccupancyBar filled={cohort.filled_seats} total={cohort.total_seats} />
                     </div>
                   </td>
                   <td className="hidden px-4 py-4 xl:table-cell">
-                    <span className="font-mono text-xs text-[#84848c]">
+                    <span className="font-mono text-xs text-[var(--bone-mute)]">
                       {cohort.start_date
                         ? new Date(cohort.start_date).toLocaleDateString('pt-BR')
                         : '—'}
@@ -189,7 +189,7 @@ export function CohortListClient() {
                     </span>
                   </td>
                   <td className="hidden px-4 py-4 xl:table-cell">
-                    <span className="font-mono text-xs text-[#c5c5ca]">
+                    <span className="font-mono text-xs text-[var(--bone-dim)]">
                       {cohort.entry_price_cents ? formatBRL(cohort.entry_price_cents) : '—'}
                     </span>
                   </td>
@@ -200,7 +200,7 @@ export function CohortListClient() {
                           href={`/turmas/${cohort.slug}`}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="p-1.5 text-[#84848c] transition-colors hover:text-[#c5c5ca]"
+                          className="p-1.5 text-[var(--bone-mute)] transition-colors hover:text-[var(--bone-dim)]"
                           title="Ver LP publica"
                         >
                           <ExternalLink className="h-3.5 w-3.5" />
@@ -209,7 +209,7 @@ export function CohortListClient() {
                       <Link
                         href={`/academy/admin/turmas/${cohort.id}`}
                         style={{ borderRadius: 0 }}
-                        className="flex items-center gap-1.5 border border-white/[0.07] px-3 py-1.5 font-mono text-[10px] uppercase tracking-widest text-[#84848c] transition-colors hover:border-white/[0.16] hover:text-[#f1f1f3]"
+                        className="flex items-center gap-1.5 border border-white/[0.07] px-3 py-1.5 font-mono text-[10px] uppercase tracking-widest text-[var(--bone-mute)] transition-colors hover:border-white/[0.16] hover:text-[var(--bone)]"
                       >
                         <Pencil className="h-3 w-3" />
                         Editar
@@ -223,7 +223,7 @@ export function CohortListClient() {
         </table>
       </div>
 
-      <p className="font-mono text-[10px] text-[#84848c]">
+      <p className="font-mono text-[10px] text-[var(--bone-mute)]">
         {filtered.length} turma{filtered.length !== 1 ? 's' : ''} encontrada{filtered.length !== 1 ? 's' : ''}
       </p>
     </div>

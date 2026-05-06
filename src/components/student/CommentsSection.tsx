@@ -12,7 +12,7 @@ import { Pin, Pencil, Trash2, Reply, X, Check } from 'lucide-react'
 type Comment = CommentWithAuthor
 
 const ROLE_BADGE: Record<string, { label: string; color: string }> = {
-  MENTOR: { label: 'Mentor', color: 'text-[#FF3A0E] border-[#FF3A0E]/30 bg-[#FF3A0E]/5' },
+  MENTOR: { label: 'Mentor', color: 'text-[var(--ember)] border-[var(--ember)]/30 bg-[var(--ember)]/5' },
   ADMIN: { label: 'Admin', color: 'text-amber-400 border-amber-400/30 bg-amber-400/5' },
   STUDENT: { label: '', color: '' },
 }
@@ -112,7 +112,7 @@ function CommentItem({
                 <button
                   type="button"
                   onClick={handleSaveEdit}
-                  className="flex items-center gap-1.5 bg-[#FF3A0E] px-3 py-1.5 font-mono text-[10px] uppercase tracking-wider text-white"
+                  className="flex items-center gap-1.5 bg-[var(--ember)] px-3 py-1.5 font-mono text-[10px] uppercase tracking-wider text-white"
                 >
                   <Check className="h-3 w-3" />
                   Salvar
@@ -236,7 +236,7 @@ function CommentForm({
         <button
           type="submit"
           disabled={isPending || !content.trim()}
-          className="bg-[#FF3A0E] px-4 py-2 font-mono text-[10px] uppercase tracking-wider text-white disabled:cursor-not-allowed disabled:opacity-40"
+          className="bg-[var(--ember)] px-4 py-2 font-mono text-[10px] uppercase tracking-wider text-white disabled:cursor-not-allowed disabled:opacity-40"
         >
           {isPending ? 'Enviando...' : 'Comentar'}
         </button>

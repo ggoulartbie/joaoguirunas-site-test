@@ -12,7 +12,7 @@ export function ProgressBar({ value, className, showLabel = false }: Props) {
     <div className={cn('flex items-center gap-3', className)}>
       <div className="h-1 flex-1 bg-white/10">
         <div
-          className="h-full bg-[#FF3A0E] transition-all duration-500"
+          className="h-full bg-[var(--ember)] transition-all duration-500"
           style={{ width: `${clamped}%` }}
           role="progressbar"
           aria-valuenow={clamped}

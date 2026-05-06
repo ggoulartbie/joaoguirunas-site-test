@@ -88,13 +88,13 @@ function SectionHeader({
       onClick={onToggle}
       className="flex w-full items-center justify-between border-b border-white/[0.07] px-4 py-3 text-left transition-colors hover:bg-white/[0.02]"
     >
-      <span className="font-mono text-[10px] font-semibold uppercase tracking-widest text-[#84848c]">
+      <span className="font-mono text-[10px] font-semibold uppercase tracking-widest text-[var(--bone-mute)]">
         {String(idx).padStart(2, '0')} — {label}
       </span>
       {open ? (
-        <ChevronDown className="h-3.5 w-3.5 text-[#84848c]" />
+        <ChevronDown className="h-3.5 w-3.5 text-[var(--bone-mute)]" />
       ) : (
-        <ChevronRight className="h-3.5 w-3.5 text-[#84848c]" />
+        <ChevronRight className="h-3.5 w-3.5 text-[var(--bone-mute)]" />
       )}
     </button>
   )
@@ -102,7 +102,7 @@ function SectionHeader({
 
 function FieldLabel({ children }: { children: React.ReactNode }) {
   return (
-    <label className="mb-1.5 block font-mono text-[10px] uppercase tracking-widest text-[#84848c]">
+    <label className="mb-1.5 block font-mono text-[10px] uppercase tracking-widest text-[var(--bone-mute)]">
       {children}
     </label>
   )
@@ -126,7 +126,7 @@ function TextInput({
       onChange={(e) => onChange(e.target.value)}
       placeholder={placeholder}
       style={{ borderRadius: 0 }}
-      className="w-full border border-white/[0.16] bg-[#16161a] px-3 py-2.5 font-mono text-sm text-[#f1f1f3] placeholder-[#84848c] focus:border-[#ff3a0e]/50 focus:outline-none"
+      className="w-full border border-white/[0.16] bg-[var(--ink-2)] px-3 py-2.5 font-mono text-sm text-[var(--bone)] placeholder-[var(--bone-mute)] focus:border-[var(--ember)]/50 focus:outline-none"
     />
   )
 }
@@ -150,13 +150,13 @@ function Checkbox({
         style={{ borderRadius: 0 }}
         className={`flex h-4 w-4 shrink-0 items-center justify-center border transition-colors ${
           checked
-            ? 'border-[#ff3a0e] bg-[#ff3a0e]'
+            ? 'border-[var(--ember)] bg-[var(--ember)]'
             : 'border-white/[0.16] hover:border-white/[0.30]'
         }`}
       >
-        {checked && <Check className="h-2.5 w-2.5 text-[#050507]" />}
+        {checked && <Check className="h-2.5 w-2.5 text-[var(--void)]" />}
       </button>
-      <span className="font-mono text-xs text-[#c5c5ca]">{label}</span>
+      <span className="font-mono text-xs text-[var(--bone-dim)]">{label}</span>
     </label>
   )
 }
@@ -175,10 +175,10 @@ function SelectInput({
       value={value}
       onChange={(e) => onChange(e.target.value)}
       style={{ borderRadius: 0 }}
-      className="w-full border border-white/[0.16] bg-[#16161a] px-3 py-2.5 font-mono text-sm text-[#f1f1f3] focus:border-[#ff3a0e]/50 focus:outline-none"
+      className="w-full border border-white/[0.16] bg-[var(--ink-2)] px-3 py-2.5 font-mono text-sm text-[var(--bone)] focus:border-[var(--ember)]/50 focus:outline-none"
     >
       {options.map((o) => (
-        <option key={o.value} value={o.value} className="bg-[#16161a]">
+        <option key={o.value} value={o.value} className="bg-[var(--ink-2)]">
           {o.label}
         </option>
       ))}
@@ -215,7 +215,7 @@ const MEMBER_ROLE_LABELS: Record<string, string> = {
 
 const MEMBER_STATUS_COLORS: Record<string, string> = {
   ACTIVE: 'text-green-400',
-  EXPIRED: 'text-[#84848c]',
+  EXPIRED: 'text-[var(--bone-mute)]',
   REMOVED: 'text-red-400',
   PAST_DUE: 'text-amber-400',
 }
@@ -542,8 +542,8 @@ export function CohortForm(props: CohortFormProps) {
             style={{ borderRadius: 0 }}
             className={`px-2.5 py-1 font-mono text-[10px] uppercase tracking-widest transition-colors ${
               openSections.has(id)
-                ? 'bg-[#ff3a0e]/10 text-[#ff3a0e]'
-                : 'border border-white/[0.07] text-[#84848c] hover:border-white/[0.16] hover:text-[#c5c5ca]'
+                ? 'bg-[var(--ember)]/10 text-[var(--ember)]'
+                : 'border border-white/[0.07] text-[var(--bone-mute)] hover:border-white/[0.16] hover:text-[var(--bone-dim)]'
             }`}
           >
             {sectionIndexMap[id]}. {label}
@@ -560,7 +560,7 @@ export function CohortForm(props: CohortFormProps) {
           onToggle={() => toggleSection('identidade')}
         />
         {openSections.has('identidade') && (
-          <div className="grid gap-4 bg-[#16161a]/30 p-5 md:grid-cols-2">
+          <div className="grid gap-4 bg-[var(--ink-2)]/30 p-5 md:grid-cols-2">
             <div>
               <FieldLabel>Nome da turma *</FieldLabel>
               <TextInput
@@ -585,7 +585,7 @@ export function CohortForm(props: CohortFormProps) {
                 rows={3}
                 placeholder="Descreva brevemente o que esta turma oferece..."
                 style={{ borderRadius: 0 }}
-                className="w-full border border-white/[0.16] bg-[#16161a] px-3 py-2.5 font-mono text-sm text-[#f1f1f3] placeholder-[#84848c] focus:border-[#ff3a0e]/50 focus:outline-none"
+                className="w-full border border-white/[0.16] bg-[var(--ink-2)] px-3 py-2.5 font-mono text-sm text-[var(--bone)] placeholder-[var(--bone-mute)] focus:border-[var(--ember)]/50 focus:outline-none"
               />
             </div>
             <div>
@@ -609,7 +609,7 @@ export function CohortForm(props: CohortFormProps) {
           onToggle={() => toggleSection('status')}
         />
         {openSections.has('status') && (
-          <div className="grid gap-4 bg-[#16161a]/30 p-5 md:grid-cols-3">
+          <div className="grid gap-4 bg-[var(--ink-2)]/30 p-5 md:grid-cols-3">
             <div>
               <FieldLabel>Status *</FieldLabel>
               <SelectInput
@@ -648,7 +648,7 @@ export function CohortForm(props: CohortFormProps) {
           onToggle={() => toggleSection('acesso')}
         />
         {openSections.has('acesso') && (
-          <div className="grid gap-4 bg-[#16161a]/30 p-5 md:grid-cols-2">
+          <div className="grid gap-4 bg-[var(--ink-2)]/30 p-5 md:grid-cols-2">
             <div>
               <FieldLabel>Duracao do acesso (dias — vazio = vitalicio)</FieldLabel>
               <TextInput
@@ -691,8 +691,8 @@ export function CohortForm(props: CohortFormProps) {
           onToggle={() => toggleSection('cursos')}
         />
         {openSections.has('cursos') && (
-          <div className="bg-[#16161a]/30 p-5">
-            <p className="mb-4 font-mono text-[10px] text-[#84848c]">
+          <div className="bg-[var(--ink-2)]/30 p-5">
+            <p className="mb-4 font-mono text-[10px] text-[var(--bone-mute)]">
               Selecione cursos e, opcionalmente, quais modulos especificos liberar. Deixar
               sub-itens desmarcados equivale a liberar todos os modulos do curso.
             </p>
@@ -710,12 +710,12 @@ export function CohortForm(props: CohortFormProps) {
                         style={{ borderRadius: 0 }}
                         className={`flex h-4 w-4 shrink-0 items-center justify-center border transition-colors ${
                           isCourseSelected
-                            ? 'border-[#ff3a0e] bg-[#ff3a0e]'
+                            ? 'border-[var(--ember)] bg-[var(--ember)]'
                             : 'border-white/[0.16] hover:border-white/[0.30]'
                         }`}
                         aria-label={`Selecionar ${course.title}`}
                       >
-                        {isCourseSelected && <Check className="h-2.5 w-2.5 text-[#050507]" />}
+                        {isCourseSelected && <Check className="h-2.5 w-2.5 text-[var(--void)]" />}
                       </button>
 
                       <button
@@ -731,17 +731,17 @@ export function CohortForm(props: CohortFormProps) {
                         className="flex flex-1 items-center gap-2 text-left"
                       >
                         <span
-                          className={`font-mono text-sm ${isCourseSelected ? 'text-[#f1f1f3]' : 'text-[#84848c]'}`}
+                          className={`font-mono text-sm ${isCourseSelected ? 'text-[var(--bone)]' : 'text-[var(--bone-mute)]'}`}
                         >
                           {course.title}
                         </span>
-                        <span className="font-mono text-[10px] text-[#84848c]">
+                        <span className="font-mono text-[10px] text-[var(--bone-mute)]">
                           {course.modules.length} modulo{course.modules.length !== 1 ? 's' : ''}
                         </span>
                         {isExpanded ? (
-                          <ChevronDown className="ml-auto h-3 w-3 text-[#84848c]" />
+                          <ChevronDown className="ml-auto h-3 w-3 text-[var(--bone-mute)]" />
                         ) : (
-                          <ChevronRight className="ml-auto h-3 w-3 text-[#84848c]" />
+                          <ChevronRight className="ml-auto h-3 w-3 text-[var(--bone-mute)]" />
                         )}
                       </button>
 
@@ -752,7 +752,7 @@ export function CohortForm(props: CohortFormProps) {
                             onClick={() =>
                               setSelectedCourses((prev) => ({ ...prev, [course.id]: null }))
                             }
-                            className="font-mono text-[9px] uppercase tracking-widest text-[#84848c] hover:text-[#c5c5ca]"
+                            className="font-mono text-[9px] uppercase tracking-widest text-[var(--bone-mute)] hover:text-[var(--bone-dim)]"
                           >
                             Todos
                           </button>
@@ -764,7 +764,7 @@ export function CohortForm(props: CohortFormProps) {
                                 [course.id]: new Set(),
                               }))
                             }
-                            className="font-mono text-[9px] uppercase tracking-widest text-[#84848c] hover:text-[#c5c5ca]"
+                            className="font-mono text-[9px] uppercase tracking-widest text-[var(--bone-mute)] hover:text-[var(--bone-dim)]"
                           >
                             Limpar
                           </button>
@@ -773,7 +773,7 @@ export function CohortForm(props: CohortFormProps) {
                     </div>
 
                     {isExpanded && (
-                      <div className="border-t border-white/[0.07] bg-[#0e0e11]">
+                      <div className="border-t border-white/[0.07] bg-[var(--ink)]">
                         {course.modules.map((mod) => {
                           const isModSel = isModuleSelected(course.id, mod.id)
                           return (
@@ -797,19 +797,19 @@ export function CohortForm(props: CohortFormProps) {
                                 style={{ borderRadius: 0 }}
                                 className={`flex h-3.5 w-3.5 shrink-0 items-center justify-center border transition-colors ${
                                   isModSel
-                                    ? 'border-[#ff3a0e]/70 bg-[#ff3a0e]/70'
+                                    ? 'border-[var(--ember)]/70 bg-[var(--ember)]/70'
                                     : 'border-white/[0.16] hover:border-white/[0.30]'
                                 }`}
                                 aria-label={`Selecionar modulo ${mod.title}`}
                               >
-                                {isModSel && <Check className="h-2 w-2 text-[#050507]" />}
+                                {isModSel && <Check className="h-2 w-2 text-[var(--void)]" />}
                               </button>
                               <span
-                                className={`font-mono text-xs ${isModSel ? 'text-[#c5c5ca]' : 'text-[#84848c]'}`}
+                                className={`font-mono text-xs ${isModSel ? 'text-[var(--bone-dim)]' : 'text-[var(--bone-mute)]'}`}
                               >
                                 {mod.title}
                               </span>
-                              <span className="ml-auto font-mono text-[10px] text-[#84848c]">
+                              <span className="ml-auto font-mono text-[10px] text-[var(--bone-mute)]">
                                 {mod.lessonCount} aula{mod.lessonCount !== 1 ? 's' : ''}
                               </span>
                             </div>
@@ -823,7 +823,7 @@ export function CohortForm(props: CohortFormProps) {
             </div>
 
             {Object.keys(selectedCourses).length > 0 && (
-              <p className="mt-3 font-mono text-[10px] text-[#84848c]">
+              <p className="mt-3 font-mono text-[10px] text-[var(--bone-mute)]">
                 {Object.keys(selectedCourses).length} curso
                 {Object.keys(selectedCourses).length !== 1 ? 's' : ''} selecionado
                 {Object.keys(selectedCourses).length !== 1 ? 's' : ''}
@@ -842,7 +842,7 @@ export function CohortForm(props: CohortFormProps) {
           onToggle={() => toggleSection('comercial')}
         />
         {openSections.has('comercial') && (
-          <div className="space-y-5 bg-[#16161a]/30 p-5">
+          <div className="space-y-5 bg-[var(--ink-2)]/30 p-5">
             <div className="flex flex-col gap-4">
               <Checkbox
                 checked={isPurchasable}
@@ -921,8 +921,8 @@ export function CohortForm(props: CohortFormProps) {
           onToggle={() => toggleSection('extensoes')}
         />
         {openSections.has('extensoes') && (
-          <div className="bg-[#16161a]/30 p-5">
-            <p className="mb-4 font-mono text-[10px] text-[#84848c]">
+          <div className="bg-[var(--ink-2)]/30 p-5">
+            <p className="mb-4 font-mono text-[10px] text-[var(--bone-mute)]">
               Quando alguem comprar esta turma, quantos dias sao adicionados em outras turmas?
             </p>
 
@@ -1001,7 +1001,7 @@ export function CohortForm(props: CohortFormProps) {
               type="button"
               onClick={addExtension}
               style={{ borderRadius: 0 }}
-              className="mt-3 flex items-center gap-2 border border-white/[0.07] px-3 py-2 font-mono text-[10px] uppercase tracking-widest text-[#84848c] transition-colors hover:border-white/[0.16] hover:text-[#c5c5ca]"
+              className="mt-3 flex items-center gap-2 border border-white/[0.07] px-3 py-2 font-mono text-[10px] uppercase tracking-widest text-[var(--bone-mute)] transition-colors hover:border-white/[0.16] hover:text-[var(--bone-dim)]"
             >
               <Plus className="h-3.5 w-3.5" />
               Adicionar extensao cruzada
@@ -1019,22 +1019,22 @@ export function CohortForm(props: CohortFormProps) {
           onToggle={() => toggleSection('membros')}
         />
         {openSections.has('membros') && (
-          <div className="bg-[#16161a]/30 p-5">
+          <div className="bg-[var(--ink-2)]/30 p-5">
             {!isEdit ? (
-              <p className="font-mono text-xs text-[#84848c]">
+              <p className="font-mono text-xs text-[var(--bone-mute)]">
                 Salve a turma primeiro para adicionar membros.
               </p>
             ) : (
               <>
                 <div className="mb-4 flex items-center justify-between">
-                  <span className="font-mono text-xs text-[#84848c]">
+                  <span className="font-mono text-xs text-[var(--bone-mute)]">
                     {members.length} membro{members.length !== 1 ? 's' : ''}
                   </span>
                   <button
                     type="button"
                     onClick={() => setShowAddMember(true)}
                     style={{ borderRadius: 0 }}
-                    className="flex items-center gap-1.5 border border-white/[0.07] px-3 py-1.5 font-mono text-[10px] uppercase tracking-widest text-[#84848c] transition-colors hover:border-white/[0.16] hover:text-[#c5c5ca]"
+                    className="flex items-center gap-1.5 border border-white/[0.07] px-3 py-1.5 font-mono text-[10px] uppercase tracking-widest text-[var(--bone-mute)] transition-colors hover:border-white/[0.16] hover:text-[var(--bone-dim)]"
                   >
                     <Plus className="h-3 w-3" />
                     Adicionar
@@ -1043,7 +1043,7 @@ export function CohortForm(props: CohortFormProps) {
 
                 {showAddMember && (
                   <div className="mb-4 border border-white/[0.07] p-4">
-                    <p className="mb-3 font-mono text-[10px] uppercase tracking-widest text-[#84848c]">
+                    <p className="mb-3 font-mono text-[10px] uppercase tracking-widest text-[var(--bone-mute)]">
                       Adicionar membro manualmente
                     </p>
                     <div className="grid gap-3 md:grid-cols-3">
@@ -1080,7 +1080,7 @@ export function CohortForm(props: CohortFormProps) {
                         type="button"
                         disabled={memberPending || !memberEmail}
                         style={{ borderRadius: 0 }}
-                        className="bg-[#ff3a0e] px-4 py-2 font-mono text-[10px] uppercase tracking-widest text-[#050507] disabled:opacity-40"
+                        className="bg-[var(--ember)] px-4 py-2 font-mono text-[10px] uppercase tracking-widest text-[var(--void)] disabled:opacity-40"
                         onClick={handleAddMember}
                       >
                         {memberPending ? 'Adicionando...' : 'Adicionar'}
@@ -1088,7 +1088,7 @@ export function CohortForm(props: CohortFormProps) {
                       <button
                         type="button"
                         style={{ borderRadius: 0 }}
-                        className="border border-white/[0.07] px-4 py-2 font-mono text-[10px] uppercase tracking-widest text-[#84848c] transition-colors hover:text-[#c5c5ca]"
+                        className="border border-white/[0.07] px-4 py-2 font-mono text-[10px] uppercase tracking-widest text-[var(--bone-mute)] transition-colors hover:text-[var(--bone-dim)]"
                         onClick={() => { setShowAddMember(false); setMemberError(null) }}
                       >
                         Cancelar
@@ -1099,11 +1099,11 @@ export function CohortForm(props: CohortFormProps) {
 
                 <table className="w-full" style={{ borderRadius: 0 }}>
                   <thead>
-                    <tr className="border-b border-white/[0.07] bg-[#16161a]">
+                    <tr className="border-b border-white/[0.07] bg-[var(--ink-2)]">
                       {['Aluno', 'Papel', 'Status', 'Expira em', 'Acoes'].map((h) => (
                         <th
                           key={h}
-                          className="px-3 py-2.5 text-left font-mono text-[10px] uppercase tracking-widest text-[#84848c]"
+                          className="px-3 py-2.5 text-left font-mono text-[10px] uppercase tracking-widest text-[var(--bone-mute)]"
                         >
                           {h}
                         </th>
@@ -1115,23 +1115,23 @@ export function CohortForm(props: CohortFormProps) {
                       <tr key={m.id} className="hover:bg-white/[0.02]">
                         <td className="px-3 py-3">
                           <div className="flex flex-col">
-                            <span className="font-mono text-xs text-[#f1f1f3]">{m.userName}</span>
-                            <span className="font-mono text-[10px] text-[#84848c]">{m.userEmail}</span>
+                            <span className="font-mono text-xs text-[var(--bone)]">{m.userName}</span>
+                            <span className="font-mono text-[10px] text-[var(--bone-mute)]">{m.userEmail}</span>
                           </div>
                         </td>
                         <td className="px-3 py-3">
-                          <span className="font-mono text-[10px] text-[#c5c5ca]">
+                          <span className="font-mono text-[10px] text-[var(--bone-dim)]">
                             {MEMBER_ROLE_LABELS[m.member_role] ?? m.member_role}
                           </span>
                         </td>
                         <td className="px-3 py-3">
                           <span
-                            className={`font-mono text-[10px] ${MEMBER_STATUS_COLORS[m.status] ?? 'text-[#84848c]'}`}
+                            className={`font-mono text-[10px] ${MEMBER_STATUS_COLORS[m.status] ?? 'text-[var(--bone-mute)]'}`}
                           >
                             {m.status}
                           </span>
                         </td>
-                        <td className="px-3 py-3 font-mono text-xs text-[#84848c]">
+                        <td className="px-3 py-3 font-mono text-xs text-[var(--bone-mute)]">
                           {formatDate(m.expires_at)}
                         </td>
                         <td className="px-3 py-3">
@@ -1161,22 +1161,22 @@ export function CohortForm(props: CohortFormProps) {
           onToggle={() => toggleSection('sessoes')}
         />
         {openSections.has('sessoes') && (
-          <div className="bg-[#16161a]/30 p-5">
+          <div className="bg-[var(--ink-2)]/30 p-5">
             {!isEdit ? (
-              <p className="font-mono text-xs text-[#84848c]">
+              <p className="font-mono text-xs text-[var(--bone-mute)]">
                 Salve a turma primeiro para agendar sessoes.
               </p>
             ) : (
               <>
                 <div className="mb-4 flex items-center justify-between">
-                  <span className="font-mono text-xs text-[#84848c]">
+                  <span className="font-mono text-xs text-[var(--bone-mute)]">
                     {liveSessions.length} sessao{liveSessions.length !== 1 ? 'es' : ''}
                   </span>
                   <button
                     type="button"
                     onClick={() => setShowAddSession(!showAddSession)}
                     style={{ borderRadius: 0 }}
-                    className="flex items-center gap-1.5 border border-white/[0.07] px-3 py-1.5 font-mono text-[10px] uppercase tracking-widest text-[#84848c] transition-colors hover:border-white/[0.16] hover:text-[#c5c5ca]"
+                    className="flex items-center gap-1.5 border border-white/[0.07] px-3 py-1.5 font-mono text-[10px] uppercase tracking-widest text-[var(--bone-mute)] transition-colors hover:border-white/[0.16] hover:text-[var(--bone-dim)]"
                   >
                     <Plus className="h-3 w-3" />
                     Agendar
@@ -1185,7 +1185,7 @@ export function CohortForm(props: CohortFormProps) {
 
                 {showAddSession && (
                   <div className="mb-4 border border-white/[0.07] p-4">
-                    <p className="mb-3 font-mono text-[10px] uppercase tracking-widest text-[#84848c]">
+                    <p className="mb-3 font-mono text-[10px] uppercase tracking-widest text-[var(--bone-mute)]">
                       Nova sessao ao vivo
                     </p>
                     <div className="grid gap-3 md:grid-cols-2">
@@ -1227,7 +1227,7 @@ export function CohortForm(props: CohortFormProps) {
                       <button
                         type="button"
                         style={{ borderRadius: 0 }}
-                        className="bg-[#ff3a0e] px-4 py-2 font-mono text-[10px] uppercase tracking-widest text-[#050507]"
+                        className="bg-[var(--ember)] px-4 py-2 font-mono text-[10px] uppercase tracking-widest text-[var(--void)]"
                         onClick={() => setShowAddSession(false)}
                       >
                         Salvar
@@ -1235,7 +1235,7 @@ export function CohortForm(props: CohortFormProps) {
                       <button
                         type="button"
                         style={{ borderRadius: 0 }}
-                        className="border border-white/[0.07] px-4 py-2 font-mono text-[10px] uppercase tracking-widest text-[#84848c] transition-colors hover:text-[#c5c5ca]"
+                        className="border border-white/[0.07] px-4 py-2 font-mono text-[10px] uppercase tracking-widest text-[var(--bone-mute)] transition-colors hover:text-[var(--bone-dim)]"
                         onClick={() => setShowAddSession(false)}
                       >
                         Cancelar
@@ -1248,8 +1248,8 @@ export function CohortForm(props: CohortFormProps) {
                   {liveSessions.map((ls) => (
                     <div key={ls.id} className="flex items-center justify-between border border-white/[0.07] px-4 py-3">
                       <div>
-                        <p className="font-mono text-xs text-[#f1f1f3]">{ls.title}</p>
-                        <p className="font-mono text-[10px] text-[#84848c]">
+                        <p className="font-mono text-xs text-[var(--bone)]">{ls.title}</p>
+                        <p className="font-mono text-[10px] text-[var(--bone-mute)]">
                           {formatDate(ls.scheduled_at)} · {ls.duration_minutes} min
                         </p>
                       </div>
@@ -1277,22 +1277,22 @@ export function CohortForm(props: CohortFormProps) {
           onToggle={() => toggleSection('cupons')}
         />
         {openSections.has('cupons') && (
-          <div className="bg-[#16161a]/30 p-5">
+          <div className="bg-[var(--ink-2)]/30 p-5">
             {!isEdit ? (
-              <p className="font-mono text-xs text-[#84848c]">
+              <p className="font-mono text-xs text-[var(--bone-mute)]">
                 Salve a turma primeiro para criar cupons.
               </p>
             ) : (
               <>
                 <div className="mb-4 flex items-center justify-between">
-                  <span className="font-mono text-xs text-[#84848c]">
+                  <span className="font-mono text-xs text-[var(--bone-mute)]">
                     {coupons.length} cupom{coupons.length !== 1 ? 'ns' : ''}
                   </span>
                   <button
                     type="button"
                     onClick={() => setShowAddCoupon(!showAddCoupon)}
                     style={{ borderRadius: 0 }}
-                    className="flex items-center gap-1.5 border border-white/[0.07] px-3 py-1.5 font-mono text-[10px] uppercase tracking-widest text-[#84848c] transition-colors hover:border-white/[0.16] hover:text-[#c5c5ca]"
+                    className="flex items-center gap-1.5 border border-white/[0.07] px-3 py-1.5 font-mono text-[10px] uppercase tracking-widest text-[var(--bone-mute)] transition-colors hover:border-white/[0.16] hover:text-[var(--bone-dim)]"
                   >
                     <Plus className="h-3 w-3" />
                     Novo Cupom
@@ -1301,7 +1301,7 @@ export function CohortForm(props: CohortFormProps) {
 
                 {showAddCoupon && (
                   <div className="mb-4 border border-white/[0.07] p-4">
-                    <p className="mb-3 font-mono text-[10px] uppercase tracking-widest text-[#84848c]">
+                    <p className="mb-3 font-mono text-[10px] uppercase tracking-widest text-[var(--bone-mute)]">
                       Criar cupom
                     </p>
                     <div className="grid gap-3 md:grid-cols-3">
@@ -1356,7 +1356,7 @@ export function CohortForm(props: CohortFormProps) {
                         type="button"
                         disabled={couponPending}
                         style={{ borderRadius: 0 }}
-                        className="bg-[#ff3a0e] px-4 py-2 font-mono text-[10px] uppercase tracking-widest text-[#050507] disabled:opacity-40"
+                        className="bg-[var(--ember)] px-4 py-2 font-mono text-[10px] uppercase tracking-widest text-[var(--void)] disabled:opacity-40"
                         onClick={handleSaveCoupon}
                       >
                         {couponPending ? 'Salvando...' : 'Salvar'}
@@ -1364,7 +1364,7 @@ export function CohortForm(props: CohortFormProps) {
                       <button
                         type="button"
                         style={{ borderRadius: 0 }}
-                        className="border border-white/[0.07] px-4 py-2 font-mono text-[10px] uppercase tracking-widest text-[#84848c] transition-colors hover:text-[#c5c5ca]"
+                        className="border border-white/[0.07] px-4 py-2 font-mono text-[10px] uppercase tracking-widest text-[var(--bone-mute)] transition-colors hover:text-[var(--bone-dim)]"
                         onClick={() => { setShowAddCoupon(false); setCouponError(null) }}
                       >
                         Cancelar
@@ -1375,11 +1375,11 @@ export function CohortForm(props: CohortFormProps) {
 
                 <table className="w-full" style={{ borderRadius: 0 }}>
                   <thead>
-                    <tr className="border-b border-white/[0.07] bg-[#16161a]">
+                    <tr className="border-b border-white/[0.07] bg-[var(--ink-2)]">
                       {['Codigo', 'Desconto', 'Aplica em', 'Usos', 'Status', 'Acoes'].map((h) => (
                         <th
                           key={h}
-                          className="px-3 py-2.5 text-left font-mono text-[10px] uppercase tracking-widest text-[#84848c]"
+                          className="px-3 py-2.5 text-left font-mono text-[10px] uppercase tracking-widest text-[var(--bone-mute)]"
                         >
                           {h}
                         </th>
@@ -1389,24 +1389,24 @@ export function CohortForm(props: CohortFormProps) {
                   <tbody className="divide-y divide-white/[0.04]">
                     {coupons.map((c) => (
                       <tr key={c.id} className="hover:bg-white/[0.02]">
-                        <td className="px-3 py-3 font-mono text-xs font-medium text-[#f1f1f3]">
+                        <td className="px-3 py-3 font-mono text-xs font-medium text-[var(--bone)]">
                           {c.code}
                         </td>
-                        <td className="px-3 py-3 font-mono text-xs text-[#c5c5ca]">
+                        <td className="px-3 py-3 font-mono text-xs text-[var(--bone-dim)]">
                           {c.discount_kind === 'PERCENT'
                             ? `${c.discount_value}%`
                             : formatBRL(c.discount_value)}
                         </td>
-                        <td className="px-3 py-3 font-mono text-[10px] text-[#84848c]">
+                        <td className="px-3 py-3 font-mono text-[10px] text-[var(--bone-mute)]">
                           {c.applies_to}
                         </td>
-                        <td className="px-3 py-3 font-mono text-xs text-[#84848c]">
+                        <td className="px-3 py-3 font-mono text-xs text-[var(--bone-mute)]">
                           {c.current_uses}
                           {c.max_uses ? ` / ${c.max_uses}` : ''}
                         </td>
                         <td className="px-3 py-3">
                           <span
-                            className={`font-mono text-[10px] ${c.is_active ? 'text-green-400' : 'text-[#84848c]'}`}
+                            className={`font-mono text-[10px] ${c.is_active ? 'text-green-400' : 'text-[var(--bone-mute)]'}`}
                           >
                             {c.is_active ? 'Ativo' : 'Inativo'}
                           </span>
@@ -1437,7 +1437,7 @@ export function CohortForm(props: CohortFormProps) {
         <div className="flex items-center justify-between">
           <Link
             href="/academy/admin/turmas"
-            className="flex items-center gap-2 font-mono text-[10px] uppercase tracking-widest text-[#84848c] transition-colors hover:text-[#c5c5ca]"
+            className="flex items-center gap-2 font-mono text-[10px] uppercase tracking-widest text-[var(--bone-mute)] transition-colors hover:text-[var(--bone-dim)]"
           >
             <ArrowLeft className="h-3.5 w-3.5" />
             Voltar para Turmas
@@ -1455,7 +1455,7 @@ export function CohortForm(props: CohortFormProps) {
               onClick={handleSave}
               disabled={pending}
               style={{ borderRadius: 0 }}
-              className="flex items-center gap-2 bg-[#ff3a0e] px-6 py-2.5 font-mono text-[10px] font-semibold uppercase tracking-widest text-[#050507] transition-opacity hover:opacity-90 disabled:opacity-40"
+              className="flex items-center gap-2 bg-[var(--ember)] px-6 py-2.5 font-mono text-[10px] font-semibold uppercase tracking-widest text-[var(--void)] transition-opacity hover:opacity-90 disabled:opacity-40"
             >
               <Save className="h-3.5 w-3.5" />
               {pending ? 'Salvando...' : isEdit ? 'Salvar alteracoes' : 'Criar turma'}

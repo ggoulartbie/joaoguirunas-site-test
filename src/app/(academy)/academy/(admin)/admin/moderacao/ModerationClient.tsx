@@ -31,30 +31,30 @@ function CommentCard({
   if (removed) return null
 
   return (
-    <div className="border border-[rgba(255,255,255,0.07)] bg-[#0e0e11] p-4">
+    <div className="border border-[rgba(255,255,255,0.07)] bg-[var(--ink)] p-4">
       <div className="mb-3 flex flex-wrap items-center gap-2">
-        <span className="font-mono text-xs font-medium text-[#f1f1f3]">{comment.authorName}</span>
-        <span className="font-mono text-[10px] text-[#84848c]">em</span>
-        <span className="font-mono text-[10px] text-[#c5c5ca]">{comment.lessonTitle}</span>
-        <span className="font-mono text-[10px] text-[#84848c]">·</span>
-        <span className="border border-[rgba(255,255,255,0.07)] px-1.5 py-0.5 font-mono text-[9px] text-[#84848c]">
+        <span className="font-mono text-xs font-medium text-[var(--bone)]">{comment.authorName}</span>
+        <span className="font-mono text-[10px] text-[var(--bone-mute)]">em</span>
+        <span className="font-mono text-[10px] text-[var(--bone-dim)]">{comment.lessonTitle}</span>
+        <span className="font-mono text-[10px] text-[var(--bone-mute)]">·</span>
+        <span className="border border-[rgba(255,255,255,0.07)] px-1.5 py-0.5 font-mono text-[9px] text-[var(--bone-mute)]">
           {comment.cohortName}
         </span>
       </div>
 
-      <div className="mb-3 border-l-2 border-[#ff3a0e] bg-[#ff3a0e]/5 p-3">
-        <p className="font-mono text-sm leading-relaxed text-[#c5c5ca]">{comment.content}</p>
+      <div className="mb-3 border-l-2 border-[var(--ember)] bg-[var(--ember)]/5 p-3">
+        <p className="font-mono text-sm leading-relaxed text-[var(--bone-dim)]">{comment.content}</p>
       </div>
 
       <div className="flex items-center justify-between">
-        <p className="font-mono text-[11px] uppercase tracking-wide text-[#84848c]">
+        <p className="font-mono text-[11px] uppercase tracking-wide text-[var(--bone-mute)]">
           {formatDateTime(comment.created_at)}
         </p>
         <div className="flex items-center gap-2">
           <button
             type="button"
             onClick={() => { setRemoved(true) }}
-            className="border border-[rgba(255,255,255,0.07)] px-3 py-1 font-mono text-[11px] uppercase tracking-wide text-[#84848c] transition-colors hover:border-[rgba(255,255,255,0.16)] hover:text-[#c5c5ca]"
+            className="border border-[rgba(255,255,255,0.07)] px-3 py-1 font-mono text-[11px] uppercase tracking-wide text-[var(--bone-mute)] transition-colors hover:border-[rgba(255,255,255,0.16)] hover:text-[var(--bone-dim)]"
           >
             Ignorar
           </button>
@@ -68,7 +68,7 @@ function CommentCard({
           <button
             type="button"
             onClick={() => { onRemove(comment.id); setRemoved(true) }}
-            className="border border-[#ff3a0e]/20 bg-[#ff3a0e]/10 px-3 py-1 font-mono text-[11px] uppercase tracking-wide text-[#ff3a0e] transition-colors hover:bg-[#ff3a0e]/20"
+            className="border border-[var(--ember)]/20 bg-[var(--ember)]/10 px-3 py-1 font-mono text-[11px] uppercase tracking-wide text-[var(--ember)] transition-colors hover:bg-[var(--ember)]/20"
           >
             Remover
           </button>
@@ -92,32 +92,32 @@ function ThreadCard({
   if (removed) return null
 
   return (
-    <div className="border border-[rgba(255,255,255,0.07)] bg-[#0e0e11] p-4">
+    <div className="border border-[rgba(255,255,255,0.07)] bg-[var(--ink)] p-4">
       <div className="mb-3 flex flex-wrap items-center gap-2">
-        <span className="font-mono text-xs font-medium text-[#f1f1f3]">{thread.authorName}</span>
-        <span className="font-mono text-[10px] text-[#84848c]">em</span>
-        <span className="border border-[rgba(255,255,255,0.07)] px-1.5 py-0.5 font-mono text-[9px] text-[#84848c]">
+        <span className="font-mono text-xs font-medium text-[var(--bone)]">{thread.authorName}</span>
+        <span className="font-mono text-[10px] text-[var(--bone-mute)]">em</span>
+        <span className="border border-[rgba(255,255,255,0.07)] px-1.5 py-0.5 font-mono text-[9px] text-[var(--bone-mute)]">
           #{thread.categoryName}
         </span>
       </div>
 
-      <p className="mb-2 font-mono text-sm font-medium text-[#f1f1f3]">{thread.title}</p>
+      <p className="mb-2 font-mono text-sm font-medium text-[var(--bone)]">{thread.title}</p>
 
-      <div className="mb-3 border-l-2 border-[#ff3a0e] bg-[#ff3a0e]/5 p-3">
-        <p className="line-clamp-2 font-mono text-xs leading-relaxed text-[#c5c5ca]">
+      <div className="mb-3 border-l-2 border-[var(--ember)] bg-[var(--ember)]/5 p-3">
+        <p className="line-clamp-2 font-mono text-xs leading-relaxed text-[var(--bone-dim)]">
           {thread.content}
         </p>
       </div>
 
       <div className="flex items-center justify-between">
-        <p className="font-mono text-[11px] uppercase tracking-wide text-[#84848c]">
+        <p className="font-mono text-[11px] uppercase tracking-wide text-[var(--bone-mute)]">
           {formatDateTime(thread.created_at)} · {thread.view_count} views · {thread.replyCount} resp.
         </p>
         <div className="flex items-center gap-2">
           <button
             type="button"
             onClick={() => { setRemoved(true) }}
-            className="border border-[rgba(255,255,255,0.07)] px-3 py-1 font-mono text-[11px] uppercase tracking-wide text-[#84848c] transition-colors hover:border-[rgba(255,255,255,0.16)] hover:text-[#c5c5ca]"
+            className="border border-[rgba(255,255,255,0.07)] px-3 py-1 font-mono text-[11px] uppercase tracking-wide text-[var(--bone-mute)] transition-colors hover:border-[rgba(255,255,255,0.16)] hover:text-[var(--bone-dim)]"
           >
             Ignorar
           </button>
@@ -131,7 +131,7 @@ function ThreadCard({
           <button
             type="button"
             onClick={() => { onRemove(thread.id); setRemoved(true) }}
-            className="border border-[#ff3a0e]/20 bg-[#ff3a0e]/10 px-3 py-1 font-mono text-[11px] uppercase tracking-wide text-[#ff3a0e] transition-colors hover:bg-[#ff3a0e]/20"
+            className="border border-[var(--ember)]/20 bg-[var(--ember)]/10 px-3 py-1 font-mono text-[11px] uppercase tracking-wide text-[var(--ember)] transition-colors hover:bg-[var(--ember)]/20"
           >
             Remover
           </button>
@@ -171,14 +171,14 @@ export function ModerationClient() {
           onClick={() => setActiveTab('comments')}
           className={`flex items-center gap-2 px-4 py-2.5 font-mono text-xs uppercase tracking-wider transition-colors ${
             activeTab === 'comments'
-              ? 'border-b-2 border-[#ff3a0e] text-[#ff3a0e]'
-              : 'text-[#84848c] hover:text-[#c5c5ca]'
+              ? 'border-b-2 border-[var(--ember)] text-[var(--ember)]'
+              : 'text-[var(--bone-mute)] hover:text-[var(--bone-dim)]'
           }`}
         >
           <MessageSquare className="h-3.5 w-3.5" />
           Comentários
           {comments.length > 0 && (
-            <span className="flex h-4 min-w-4 items-center justify-center bg-[#ff3a0e] px-1 font-mono text-[9px] text-white">
+            <span className="flex h-4 min-w-4 items-center justify-center bg-[var(--ember)] px-1 font-mono text-[9px] text-white">
               {comments.length}
             </span>
           )}
@@ -188,14 +188,14 @@ export function ModerationClient() {
           onClick={() => setActiveTab('threads')}
           className={`flex items-center gap-2 px-4 py-2.5 font-mono text-xs uppercase tracking-wider transition-colors ${
             activeTab === 'threads'
-              ? 'border-b-2 border-[#ff3a0e] text-[#ff3a0e]'
-              : 'text-[#84848c] hover:text-[#c5c5ca]'
+              ? 'border-b-2 border-[var(--ember)] text-[var(--ember)]'
+              : 'text-[var(--bone-mute)] hover:text-[var(--bone-dim)]'
           }`}
         >
           <Hash className="h-3.5 w-3.5" />
           Tópicos do Fórum
           {threads.length > 0 && (
-            <span className="flex h-4 min-w-4 items-center justify-center bg-[#ff3a0e] px-1 font-mono text-[9px] text-white">
+            <span className="flex h-4 min-w-4 items-center justify-center bg-[var(--ember)] px-1 font-mono text-[9px] text-white">
               {threads.length}
             </span>
           )}
@@ -206,7 +206,7 @@ export function ModerationClient() {
         <div className="space-y-3">
           {comments.length === 0 ? (
             <div className="py-12 text-center">
-              <p className="font-mono text-sm text-[#84848c]">Nenhum comentário na fila</p>
+              <p className="font-mono text-sm text-[var(--bone-mute)]">Nenhum comentário na fila</p>
             </div>
           ) : (
             comments.map((c) => (
@@ -225,7 +225,7 @@ export function ModerationClient() {
         <div className="space-y-3">
           {threads.length === 0 ? (
             <div className="py-12 text-center">
-              <p className="font-mono text-sm text-[#84848c]">Nenhum tópico na fila</p>
+              <p className="font-mono text-sm text-[var(--bone-mute)]">Nenhum tópico na fila</p>
             </div>
           ) : (
             threads.map((t) => (

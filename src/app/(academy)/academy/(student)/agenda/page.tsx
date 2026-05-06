@@ -36,14 +36,11 @@ function SessionCard({ session }: { session: LiveSessionWithCohort }) {
 
   return (
     <div
-      className="group flex gap-4 items-start border p-5 transition-colors"
+      className="group flex gap-4 items-start border border-[var(--hairline)] hover:border-[var(--hairline-strong)] p-5 transition-colors"
       style={{
         backgroundColor: 'var(--ink)',
-        borderColor: 'var(--hairline)',
         borderRadius: 0,
       }}
-      onMouseEnter={(e) => (e.currentTarget.style.borderColor = 'var(--hairline-strong)')}
-      onMouseLeave={(e) => (e.currentTarget.style.borderColor = 'var(--hairline)')}
     >
       {/* Date column */}
       <div

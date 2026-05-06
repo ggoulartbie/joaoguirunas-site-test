@@ -85,26 +85,26 @@ export function ForumModerationClient({ initialThreads, initialReplies }: Props)
           onClick={() => setTab('threads')}
           className={`flex items-center gap-2 px-5 py-3 font-mono text-xs uppercase tracking-wider transition-colors ${
             tab === 'threads'
-              ? 'border-b-2 border-[#ff3a0e] text-[#f1f1f3]'
-              : 'text-[#84848c] hover:text-[#c5c5ca]'
+              ? 'border-b-2 border-[var(--ember)] text-[var(--bone)]'
+              : 'text-[var(--bone-mute)] hover:text-[var(--bone-dim)]'
           }`}
         >
           <MessageSquare className="h-3.5 w-3.5" />
           Tópicos
-          <span className="font-mono text-[9px] text-[#84848c]">({threads.length})</span>
+          <span className="font-mono text-[9px] text-[var(--bone-mute)]">({threads.length})</span>
         </button>
         <button
           type="button"
           onClick={() => setTab('replies')}
           className={`flex items-center gap-2 px-5 py-3 font-mono text-xs uppercase tracking-wider transition-colors ${
             tab === 'replies'
-              ? 'border-b-2 border-[#ff3a0e] text-[#f1f1f3]'
-              : 'text-[#84848c] hover:text-[#c5c5ca]'
+              ? 'border-b-2 border-[var(--ember)] text-[var(--bone)]'
+              : 'text-[var(--bone-mute)] hover:text-[var(--bone-dim)]'
           }`}
         >
           <Reply className="h-3.5 w-3.5" />
           Respostas
-          <span className="font-mono text-[9px] text-[#84848c]">({replies.length})</span>
+          <span className="font-mono text-[9px] text-[var(--bone-mute)]">({replies.length})</span>
         </button>
       </div>
 
@@ -123,38 +123,38 @@ export function ForumModerationClient({ initialThreads, initialReplies }: Props)
       {tab === 'threads' && (
         <div className="overflow-x-auto border border-[rgba(255,255,255,0.07)]">
           {threads.length === 0 ? (
-            <p className="p-6 font-mono text-xs text-[#84848c]">Nenhum tópico.</p>
+            <p className="p-6 font-mono text-xs text-[var(--bone-mute)]">Nenhum tópico.</p>
           ) : (
             <table className="w-full text-left">
               <thead>
-                <tr className="bg-[#16161a]">
-                  <th className="px-4 py-3 font-mono text-[10px] uppercase tracking-wide text-[#84848c]">Título</th>
-                  <th className="px-4 py-3 font-mono text-[10px] uppercase tracking-wide text-[#84848c]">Autor</th>
-                  <th className="px-4 py-3 font-mono text-[10px] uppercase tracking-wide text-[#84848c]">Data</th>
-                  <th className="px-4 py-3 font-mono text-[10px] uppercase tracking-wide text-[#84848c]">Status</th>
-                  <th className="px-4 py-3 font-mono text-[10px] uppercase tracking-wide text-[#84848c]">Ação</th>
+                <tr className="bg-[var(--ink-2)]">
+                  <th className="px-4 py-3 font-mono text-[10px] uppercase tracking-wide text-[var(--bone-mute)]">Título</th>
+                  <th className="px-4 py-3 font-mono text-[10px] uppercase tracking-wide text-[var(--bone-mute)]">Autor</th>
+                  <th className="px-4 py-3 font-mono text-[10px] uppercase tracking-wide text-[var(--bone-mute)]">Data</th>
+                  <th className="px-4 py-3 font-mono text-[10px] uppercase tracking-wide text-[var(--bone-mute)]">Status</th>
+                  <th className="px-4 py-3 font-mono text-[10px] uppercase tracking-wide text-[var(--bone-mute)]">Ação</th>
                 </tr>
               </thead>
               <tbody>
                 {threads.map((t) => (
                   <tr
                     key={t.id}
-                    className={`border-b border-[rgba(255,255,255,0.07)] hover:bg-[#050507]/40 ${t.deleted_at ? 'opacity-40' : ''}`}
+                    className={`border-b border-[rgba(255,255,255,0.07)] hover:bg-[var(--void)]/40 ${t.deleted_at ? 'opacity-40' : ''}`}
                   >
                     <td className="px-4 py-3">
-                      <p className="max-w-xs truncate font-mono text-xs text-[#f1f1f3]">{t.title}</p>
-                      <p className="mt-0.5 max-w-xs truncate font-mono text-[10px] text-[#84848c]">{t.content}</p>
+                      <p className="max-w-xs truncate font-mono text-xs text-[var(--bone)]">{t.title}</p>
+                      <p className="mt-0.5 max-w-xs truncate font-mono text-[10px] text-[var(--bone-mute)]">{t.content}</p>
                     </td>
-                    <td className="px-4 py-3 font-mono text-xs text-[#c5c5ca]">
+                    <td className="px-4 py-3 font-mono text-xs text-[var(--bone-dim)]">
                       {t.profiles?.name ?? t.author_id.slice(0, 8)}
                     </td>
-                    <td className="whitespace-nowrap px-4 py-3 font-mono text-[10px] text-[#84848c]">
+                    <td className="whitespace-nowrap px-4 py-3 font-mono text-[10px] text-[var(--bone-mute)]">
                       {formatDate(t.created_at)}
                     </td>
                     <td className="px-4 py-3">
                       <span
                         className={`font-mono text-[9px] uppercase tracking-wider ${
-                          t.deleted_at ? 'text-[#ff3a0e]' : 'text-emerald-400'
+                          t.deleted_at ? 'text-[var(--ember)]' : 'text-emerald-400'
                         }`}
                       >
                         {t.deleted_at ? 'Oculto' : 'Visível'}
@@ -164,7 +164,7 @@ export function ForumModerationClient({ initialThreads, initialReplies }: Props)
                       <button
                         type="button"
                         onClick={() => handleThreadAction(t.id, t.deleted_at ? 'restore' : 'hide')}
-                        className="flex items-center gap-1.5 font-mono text-[10px] uppercase tracking-wider text-[#84848c] transition-colors hover:text-[#f1f1f3]"
+                        className="flex items-center gap-1.5 font-mono text-[10px] uppercase tracking-wider text-[var(--bone-mute)] transition-colors hover:text-[var(--bone)]"
                       >
                         {t.deleted_at ? (
                           <>
@@ -191,37 +191,37 @@ export function ForumModerationClient({ initialThreads, initialReplies }: Props)
       {tab === 'replies' && (
         <div className="overflow-x-auto border border-[rgba(255,255,255,0.07)]">
           {replies.length === 0 ? (
-            <p className="p-6 font-mono text-xs text-[#84848c]">Nenhuma resposta.</p>
+            <p className="p-6 font-mono text-xs text-[var(--bone-mute)]">Nenhuma resposta.</p>
           ) : (
             <table className="w-full text-left">
               <thead>
-                <tr className="bg-[#16161a]">
-                  <th className="px-4 py-3 font-mono text-[10px] uppercase tracking-wide text-[#84848c]">Conteúdo</th>
-                  <th className="px-4 py-3 font-mono text-[10px] uppercase tracking-wide text-[#84848c]">Autor</th>
-                  <th className="px-4 py-3 font-mono text-[10px] uppercase tracking-wide text-[#84848c]">Data</th>
-                  <th className="px-4 py-3 font-mono text-[10px] uppercase tracking-wide text-[#84848c]">Status</th>
-                  <th className="px-4 py-3 font-mono text-[10px] uppercase tracking-wide text-[#84848c]">Ação</th>
+                <tr className="bg-[var(--ink-2)]">
+                  <th className="px-4 py-3 font-mono text-[10px] uppercase tracking-wide text-[var(--bone-mute)]">Conteúdo</th>
+                  <th className="px-4 py-3 font-mono text-[10px] uppercase tracking-wide text-[var(--bone-mute)]">Autor</th>
+                  <th className="px-4 py-3 font-mono text-[10px] uppercase tracking-wide text-[var(--bone-mute)]">Data</th>
+                  <th className="px-4 py-3 font-mono text-[10px] uppercase tracking-wide text-[var(--bone-mute)]">Status</th>
+                  <th className="px-4 py-3 font-mono text-[10px] uppercase tracking-wide text-[var(--bone-mute)]">Ação</th>
                 </tr>
               </thead>
               <tbody>
                 {replies.map((r) => (
                   <tr
                     key={r.id}
-                    className={`border-b border-[rgba(255,255,255,0.07)] hover:bg-[#050507]/40 ${r.deleted_at ? 'opacity-40' : ''}`}
+                    className={`border-b border-[rgba(255,255,255,0.07)] hover:bg-[var(--void)]/40 ${r.deleted_at ? 'opacity-40' : ''}`}
                   >
                     <td className="px-4 py-3">
-                      <p className="max-w-sm truncate font-mono text-xs text-[#f1f1f3]">{r.content}</p>
+                      <p className="max-w-sm truncate font-mono text-xs text-[var(--bone)]">{r.content}</p>
                     </td>
-                    <td className="px-4 py-3 font-mono text-xs text-[#c5c5ca]">
+                    <td className="px-4 py-3 font-mono text-xs text-[var(--bone-dim)]">
                       {r.profiles?.name ?? r.author_id.slice(0, 8)}
                     </td>
-                    <td className="whitespace-nowrap px-4 py-3 font-mono text-[10px] text-[#84848c]">
+                    <td className="whitespace-nowrap px-4 py-3 font-mono text-[10px] text-[var(--bone-mute)]">
                       {formatDate(r.created_at)}
                     </td>
                     <td className="px-4 py-3">
                       <span
                         className={`font-mono text-[9px] uppercase tracking-wider ${
-                          r.deleted_at ? 'text-[#ff3a0e]' : 'text-emerald-400'
+                          r.deleted_at ? 'text-[var(--ember)]' : 'text-emerald-400'
                         }`}
                       >
                         {r.deleted_at ? 'Oculto' : 'Visível'}
@@ -231,7 +231,7 @@ export function ForumModerationClient({ initialThreads, initialReplies }: Props)
                       <button
                         type="button"
                         onClick={() => handleReplyAction(r.id, r.deleted_at ? 'restore' : 'hide')}
-                        className="flex items-center gap-1.5 font-mono text-[10px] uppercase tracking-wider text-[#84848c] transition-colors hover:text-[#f1f1f3]"
+                        className="flex items-center gap-1.5 font-mono text-[10px] uppercase tracking-wider text-[var(--bone-mute)] transition-colors hover:text-[var(--bone)]"
                       >
                         {r.deleted_at ? (
                           <>

@@ -73,16 +73,12 @@ export default function MeusCursosPage() {
               <Link
                 key={course.id}
                 href={`/curso/${course.slug}`}
-                className="group flex flex-col"
+                className="group flex flex-col border border-[var(--hairline)] hover:border-[var(--hairline-strong)] transition-colors"
                 style={{
                   background: 'var(--ink)',
                   overflow: 'hidden',
-                  transition: 'border-color 0.15s',
-                  border: '1px solid var(--hairline)',
                   textDecoration: 'none',
                 }}
-                onMouseEnter={e => (e.currentTarget.style.borderColor = 'var(--hairline-strong)')}
-                onMouseLeave={e => (e.currentTarget.style.borderColor = 'var(--hairline)')}
               >
                 {/* Thumbnail */}
                 <div

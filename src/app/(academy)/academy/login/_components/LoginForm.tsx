@@ -54,10 +54,11 @@ export function LoginForm() {
       <style>{`
         .rf-input {
           width: 100%;
-          border: 1px solid var(--hairline-strong);
-          background: var(--ink-2);
+          border: 1px solid rgba(255,255,255,0.28);
+          background: transparent;
           border-radius: 0;
-          padding: 14px 16px;
+          padding: 16px 18px;
+          min-height: 52px;
           color: var(--bone);
           font-family: var(--type-sans);
           font-size: 14px;
@@ -66,21 +67,20 @@ export function LoginForm() {
           box-sizing: border-box;
         }
         .rf-input::placeholder {
-          color: var(--bone-mute);
-          opacity: 0.5;
+          color: rgba(241,241,243,0.35);
         }
         .rf-input:focus {
           border-color: var(--ember);
-          box-shadow: 0 0 0 1px rgba(255,58,14,0.2);
+          box-shadow: 0 0 0 2px rgba(255,58,14,0.15);
         }
         .rf-btn {
           display: block;
           width: 100%;
-          height: 44px;
+          height: 48px;
           background: var(--ember);
           color: var(--void);
           font-family: var(--type-mono);
-          font-size: 11px;
+          font-size: 12px;
           font-weight: 600;
           letter-spacing: 0.22em;
           text-transform: uppercase;
@@ -107,7 +107,7 @@ export function LoginForm() {
         style={{
           background: 'var(--ink)',
           borderTop: '2px solid var(--ember)',
-          padding: '40px',
+          padding: '52px 48px',
           borderRadius: 0,
         }}
       >
@@ -120,7 +120,7 @@ export function LoginForm() {
                 display: 'block',
                 fontFamily: 'var(--type-sans)',
                 fontSize: '12px',
-                color: 'var(--bone-mute)',
+                color: 'var(--bone-dim)',
               }}
             >
               Email
@@ -157,7 +157,7 @@ export function LoginForm() {
                 style={{
                   fontFamily: 'var(--type-sans)',
                   fontSize: '12px',
-                  color: 'var(--bone-mute)',
+                  color: 'var(--bone-dim)',
                 }}
               >
                 Senha
@@ -223,6 +223,7 @@ export function LoginForm() {
             </div>
           )}
 
+          <div style={{ marginTop: '8px' }} />
           <button type="submit" disabled={isSubmitting} className="rf-btn">
             {isSubmitting ? 'Entrando...' : 'Entrar'}
           </button>

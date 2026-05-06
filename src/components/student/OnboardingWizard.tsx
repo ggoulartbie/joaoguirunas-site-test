@@ -63,14 +63,14 @@ export function OnboardingWizard({ userName }: Props) {
     >
       <div
         ref={dialogRef}
-        className="w-full max-w-md border border-white/10 bg-[#0C0C12] shadow-2xl"
+        className="w-full max-w-md border border-white/10 bg-[var(--ink)] shadow-2xl"
       >
         {/* Progress bar */}
         <div className="flex h-1 bg-white/5">
           {STEPS.map((s) => (
             <div
               key={s.id}
-              className={`flex-1 transition-colors ${step >= s.id ? 'bg-[#FF3A0E]' : 'bg-transparent'}`}
+              className={`flex-1 transition-colors ${step >= s.id ? 'bg-[var(--ember)]' : 'bg-transparent'}`}
             />
           ))}
         </div>
@@ -83,9 +83,9 @@ export function OnboardingWizard({ userName }: Props) {
                 <div
                   className={`flex h-5 w-5 items-center justify-center font-mono text-[10px] ${
                     step === s.id
-                      ? 'bg-[#FF3A0E] text-white'
+                      ? 'bg-[var(--ember)] text-white'
                       : step > s.id
-                      ? 'bg-[#FF3A0E]/30 text-[#FF3A0E]'
+                      ? 'bg-[var(--ember)]/30 text-[var(--ember)]'
                       : 'bg-white/5 text-white/20'
                   }`}
                 >
@@ -106,7 +106,7 @@ export function OnboardingWizard({ userName }: Props) {
               onClick={handleSkip}
               disabled={pending}
               aria-label="Pular configuração de perfil"
-              className="text-white/20 transition-colors hover:text-white/60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FF3A0E]"
+              className="text-white/20 transition-colors hover:text-white/60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ember)]"
             >
               <X className="h-4 w-4" />
             </button>
@@ -117,8 +117,8 @@ export function OnboardingWizard({ userName }: Props) {
         <div className="px-6 py-8">
           {step === 1 && (
             <div className="space-y-4 text-center">
-              <div className="mx-auto flex h-16 w-16 items-center justify-center bg-[#FF3A0E]/10">
-                <GraduationCap className="h-8 w-8 text-[#FF3A0E]" aria-hidden="true" />
+              <div className="mx-auto flex h-16 w-16 items-center justify-center bg-[var(--ember)]/10">
+                <GraduationCap className="h-8 w-8 text-[var(--ember)]" aria-hidden="true" />
               </div>
               <div>
                 <h2 id="onboarding-title" className="text-xl font-bold text-white">
@@ -131,7 +131,7 @@ export function OnboardingWizard({ userName }: Props) {
               <button
                 ref={firstFocusRef}
                 onClick={() => setStep(2)}
-                className="flex w-full items-center justify-center gap-2 bg-[#FF3A0E] px-6 py-3 font-mono text-xs uppercase tracking-wider text-white transition-colors hover:bg-[#FF5A1F] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FF3A0E] focus-visible:ring-offset-2 focus-visible:ring-offset-[#0C0C12]"
+                className="flex w-full items-center justify-center gap-2 bg-[var(--ember)] px-6 py-3 font-mono text-xs uppercase tracking-wider text-white transition-colors hover:bg-[#FF5A1F] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ember)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--ink)]"
               >
                 Começar
                 <ArrowRight className="h-3.5 w-3.5" aria-hidden="true" />
@@ -142,8 +142,8 @@ export function OnboardingWizard({ userName }: Props) {
           {step === 2 && (
             <div className="space-y-6">
               <div className="flex items-center gap-3">
-                <div className="flex h-10 w-10 shrink-0 items-center justify-center bg-[#FF3A0E]/10">
-                  <Compass className="h-5 w-5 text-[#FF3A0E]" aria-hidden="true" />
+                <div className="flex h-10 w-10 shrink-0 items-center justify-center bg-[var(--ember)]/10">
+                  <Compass className="h-5 w-5 text-[var(--ember)]" aria-hidden="true" />
                 </div>
                 <div>
                   <h2 id="onboarding-title" className="font-semibold text-white">
@@ -173,7 +173,7 @@ export function OnboardingWizard({ userName }: Props) {
               <button
                 ref={step === 2 ? firstFocusRef : undefined}
                 onClick={() => setStep(3)}
-                className="flex w-full items-center justify-center gap-2 bg-[#FF3A0E] px-6 py-3 font-mono text-xs uppercase tracking-wider text-white transition-colors hover:bg-[#FF5A1F] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FF3A0E] focus-visible:ring-offset-2 focus-visible:ring-offset-[#0C0C12]"
+                className="flex w-full items-center justify-center gap-2 bg-[var(--ember)] px-6 py-3 font-mono text-xs uppercase tracking-wider text-white transition-colors hover:bg-[#FF5A1F] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ember)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--ink)]"
               >
                 Continuar
                 <ArrowRight className="h-3.5 w-3.5" aria-hidden="true" />
@@ -184,8 +184,8 @@ export function OnboardingWizard({ userName }: Props) {
           {step === 3 && (
             <div className="space-y-5">
               <div className="flex items-center gap-3">
-                <div className="flex h-10 w-10 shrink-0 items-center justify-center bg-[#FF3A0E]/10">
-                  <User className="h-5 w-5 text-[#FF3A0E]" aria-hidden="true" />
+                <div className="flex h-10 w-10 shrink-0 items-center justify-center bg-[var(--ember)]/10">
+                  <User className="h-5 w-5 text-[var(--ember)]" aria-hidden="true" />
                 </div>
                 <div>
                   <h2 id="onboarding-title" className="font-semibold text-white">
@@ -230,7 +230,7 @@ export function OnboardingWizard({ userName }: Props) {
                 <button
                   onClick={handleFinish}
                   disabled={pending}
-                  className="flex flex-1 items-center justify-center gap-2 bg-[#FF3A0E] px-6 py-3 font-mono text-xs uppercase tracking-wider text-white transition-colors hover:bg-[#FF5A1F] disabled:opacity-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FF3A0E] focus-visible:ring-offset-2 focus-visible:ring-offset-[#0C0C12]"
+                  className="flex flex-1 items-center justify-center gap-2 bg-[var(--ember)] px-6 py-3 font-mono text-xs uppercase tracking-wider text-white transition-colors hover:bg-[#FF5A1F] disabled:opacity-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ember)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--ink)]"
                 >
                   {pending ? 'Salvando...' : 'Concluir'}
                 </button>

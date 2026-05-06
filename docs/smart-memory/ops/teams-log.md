@@ -1,13 +1,36 @@
 ---
 title: Teams Log
 type: task-log
-updated: 2026-04-23
+updated: 2026-05-06
 tags: [ops]
 ---
 
 # Teams Log
 
 Registro de todos os Agent Teams formados neste projeto. Lead (team-os) atualiza a cada `*dispatch` e `*close`.
+
+## 2026-05-06 — Sessão inline — Mentoria Onboarding Tool
+
+**Objetivo:** Construir ferramenta de onboarding presencial para mentorados — formulário com auto-save no Supabase, lista com CRUD, upload de PDF no Storage
+**Lead:** team-os (skill) + trabalho inline
+**Composição:** — (sem Agent Team formal)
+
+**Status:** encerrado
+**Encerrado:** 2026-05-06
+**Trabalho realizado:**
+- Tabela `public.onboarding` criada (migration 20260506070000) com todos os campos do formulário + trigger `updated_at`
+- Bucket privado `onboarding-pdfs` criado (migration 20260506080000) + policy bloqueando acesso público
+- `src/lib/actions/onboarding.ts` — server actions: create, update, delete, list, get, upload PDF (signed URL), get PDF URL
+- Rota `/mentoria/onboarding` = lista paginada com grid single-line, status badge, copy prompt, PDF ↗, excluir (2-step)
+- Rota `/mentoria/onboarding/[id]` = formulário vertical com auto-save debounced 1500ms, save indicator, ✓ por campo, nav com "Planejamento" como último item
+- PDF upload corrigido: signed URL (`createSignedUploadUrl`) → PUT direto ao Supabase Storage → `confirmPdfUpload` — evita limite de 1MB do Next.js server actions
+- PromptPreview vem antes do PdfUpload (gera no Claude primeiro, depois faz upload)
+
+**Pendente (próxima sessão):**
+- `git commit` + push das mudanças (nenhum commit ainda desta sessão)
+- Arquivos modificados mas não commitados: `OnboardingListClient.tsx`, `OnboardingFormClient.tsx`, `onboarding.ts`, migrations, academy pages (plataforma-cursos)
+
+---
 
 ## 2026-05-05 — Team joao-guirunas-site-agentes-belt
 
