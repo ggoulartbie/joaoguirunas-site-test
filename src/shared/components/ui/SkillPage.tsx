@@ -19,6 +19,7 @@ export interface SkillPageProps {
   primaryLink?: string;
   primaryLabel?: string;
   isExternal?: boolean;
+  showMentoria?: boolean;
   author?: string;
   authorUrl?: string;
   bgImage?: string;
@@ -95,6 +96,7 @@ export function SkillPage({
   primaryLink,
   primaryLabel = 'Ver no GitHub',
   isExternal = false,
+  showMentoria = false,
   author,
   authorUrl,
   bgImage,
@@ -235,6 +237,23 @@ export function SkillPage({
                 {isExternal ? <ExternalLink className="h-4 w-4" /> : <GitHubIcon className="h-4 w-4" />}
                 {primaryLabel}
               </a>
+              {showMentoria && (
+                <Link
+                  href="/mentoria"
+                  className="inline-flex items-center gap-2 transition-all hover:brightness-110"
+                  style={{
+                    border: '1px solid rgba(255,58,14,0.45)',
+                    color: 'rgba(255,58,14,0.9)',
+                    background: 'rgba(255,58,14,0.06)',
+                    padding: '14px 20px',
+                    fontSize: 14,
+                    fontWeight: 500,
+                    letterSpacing: '-0.01em',
+                  }}
+                >
+                  Mentoria
+                </Link>
+              )}
               <Link
                 href="/open-source"
                 className="inline-flex items-center gap-2 transition-all hover:bg-white/5"
@@ -346,24 +365,45 @@ export function SkillPage({
                   Explore o repositório, contribua ou integre na sua operação.
                 </p>
               </div>
-              <a
-                href={primaryLink}
-                target={isExternal ? '_blank' : undefined}
-                rel={isExternal ? 'noopener noreferrer' : undefined}
-                className="inline-flex items-center gap-2 flex-shrink-0 transition-all hover:brightness-110 active:scale-[0.98]"
-                style={{
-                  background: '#FF3A0E',
-                  color: '#050507',
-                  padding: '14px 24px',
-                  fontSize: 14,
-                  fontWeight: 600,
-                  letterSpacing: '-0.01em',
-                  whiteSpace: 'nowrap',
-                }}
-              >
-                {primaryLabel}
-                <ArrowRight className="h-4 w-4" />
-              </a>
+              <div className="flex flex-wrap gap-3 flex-shrink-0">
+                {showMentoria && (
+                  <Link
+                    href="/mentoria"
+                    className="inline-flex items-center gap-2 transition-all hover:brightness-110 active:scale-[0.98]"
+                    style={{
+                      background: '#FF3A0E',
+                      color: '#050507',
+                      padding: '14px 24px',
+                      fontSize: 14,
+                      fontWeight: 600,
+                      letterSpacing: '-0.01em',
+                      whiteSpace: 'nowrap',
+                    }}
+                  >
+                    Conhecer a Mentoria
+                    <ArrowRight className="h-4 w-4" />
+                  </Link>
+                )}
+                <a
+                  href={primaryLink}
+                  target={isExternal ? '_blank' : undefined}
+                  rel={isExternal ? 'noopener noreferrer' : undefined}
+                  className="inline-flex items-center gap-2 transition-all hover:bg-white/5"
+                  style={{
+                    border: '1px solid rgba(255,255,255,0.16)',
+                    color: showMentoria ? 'rgba(255,255,255,0.55)' : '#050507',
+                    background: showMentoria ? 'transparent' : '#FF3A0E',
+                    padding: '14px 20px',
+                    fontSize: 14,
+                    fontWeight: showMentoria ? 500 : 600,
+                    letterSpacing: '-0.01em',
+                    whiteSpace: 'nowrap',
+                  }}
+                >
+                  {primaryLabel}
+                  {!showMentoria && <ArrowRight className="h-4 w-4" />}
+                </a>
+              </div>
             </div>
           </div>
         </section>

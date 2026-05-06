@@ -80,6 +80,7 @@ export default function ClaudeAgentTeamsPage() {
       primaryLink="https://github.com/joaoguirunas/claude-agent-teams"
       primaryLabel="Ver no GitHub"
       isExternal
+      showMentoria
       author="@joaoguirunas"
       authorUrl="https://github.com/joaoguirunas"
       bgImage="/images/bg-aiox.png"

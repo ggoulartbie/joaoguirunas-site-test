@@ -57,9 +57,10 @@ export function AgentesHero({ total, squads }: AgentesHeroProps) {
             </div>
 
             <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
+              {/* Primary — scroll to squads */}
               <a
                 href="#squads"
-                className="inline-flex items-center justify-center gap-2 px-6 sm:px-8 py-3 sm:py-4 text-sm font-semibold uppercase transition-all hover:brightness-110 active:scale-[0.98]"
+                className="inline-flex items-center justify-center gap-2 px-6 sm:px-8 py-3 sm:py-4 uppercase transition-all hover:brightness-110 active:scale-[0.98]"
                 style={{ ...MONO, background: '#FF3A0E', color: '#050507' }}
               >
                 <span>Conhecer os agentes</span>
@@ -67,10 +68,21 @@ export function AgentesHero({ total, squads }: AgentesHeroProps) {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19 9l-7 7-7-7" />
                 </svg>
               </a>
+
+              {/* Secondary — mentoria */}
+              <a
+                href="/mentoria"
+                className="inline-flex items-center justify-center gap-2 px-6 py-3 uppercase transition-all hover:brightness-110"
+                style={{ ...MONO, border: '1px solid rgba(255,58,14,0.45)', color: 'rgba(255,58,14,0.9)', background: 'rgba(255,58,14,0.06)' }}
+              >
+                Mentoria
+              </a>
+
+              {/* Tertiary — install, discreto */}
               <a
                 href="/skills/claude-agent-teams"
-                className="inline-flex items-center justify-center gap-2 text-white/70 px-6 py-3 text-sm font-semibold uppercase transition-all hover:bg-white/[0.05] hover:text-white"
-                style={{ ...MONO, border: '1px solid rgba(255,255,255,0.16)' }}
+                className="inline-flex items-center justify-center gap-2 px-5 py-3 uppercase transition-all hover:text-white/60"
+                style={{ ...MONO, color: 'rgba(255,255,255,0.28)', border: '1px solid rgba(255,255,255,0.08)' }}
               >
                 Como instalar
               </a>
