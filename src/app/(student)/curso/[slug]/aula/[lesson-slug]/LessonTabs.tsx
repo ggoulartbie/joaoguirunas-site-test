@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { CommentSection } from '@/components/student/CommentSection'
+import { CommentsSection } from '@/components/student/CommentsSection'
 import { MaterialsList } from '@/components/student/MaterialsList'
 import { LessonContent } from '@/components/editor/LessonContent'
 import type { CommentWithAuthor } from '@/types/student'
@@ -95,7 +95,7 @@ export function LessonTabs({
         )}
 
         {active === 'comentarios' && (
-          <CommentSection lessonId={lessonId} initialComments={comments} currentUserId={currentUserId} />
+          <CommentsSection lessonId={lessonId} initialComments={comments} currentUserName={currentUserId ?? ''} />
         )}
       </div>
     </div>

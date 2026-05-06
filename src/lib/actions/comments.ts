@@ -1,16 +1,45 @@
 'use server'
 
-// TODO F4.1: implementar com Supabase quando F2.3 (auth) estiver pronto
-// Todas as actions validam has_access() antes de escrever
+import { z } from 'zod'
+import { revalidatePath } from 'next/cache'
+import { supabaseAdmin } from '@/lib/supabase/admin'
+import { requireUser } from '@/lib/auth/helpers'
+import { createClient } from '@/lib/supabase/server'
+
+const EDIT_WINDOW_MS = 15 * 60 * 1000
 
 export async function addComment(
-  _lessonId: string,
-  _content: string,
-  _parentCommentId?: string
+  lessonId: string,
+  content: string,
+  parentCommentId?: string
 ): Promise<{ success: boolean; error?: string }> {
-  // 1. requireUser() — redireciona se não autenticado
-  // 2. has_access(userId, lessonId) — 403 se sem acesso
-  // 3. INSERT em comments
+  const parsed = z.object({
+    lessonId: z.string().uuid(),
+    content: z.string().min(1).max(4000),
+    parentCommentId: z.string().uuid().optional(),
+  }).safeParse({ lessonId, content, parentCommentId })
+
+  if (!parsed.success) return { success: false, error: 'Conteúdo inválido' }
+
+  const user = await requireUser()
+
+  const supabase = await createClient()
+  const { data: access } = await supabase.rpc('has_access', {
+    p_user_id: user.id,
+    p_lesson_id: parsed.data.lessonId,
+  })
+  if (!access) return { success: false, error: 'Acesso negado a esta aula' }
+
+  const { error } = await supabaseAdmin.from('comments').insert({
+    lesson_id: parsed.data.lessonId,
+    author_id: user.id,
+    content: parsed.data.content,
+    parent_comment_id: parsed.data.parentCommentId ?? null,
+  })
+
+  if (error) return { success: false, error: 'Erro ao publicar comentário' }
+
+  revalidatePath('/', 'layout')
   return { success: true }
 }
 
@@ -18,20 +47,73 @@ export async function editComment(
   commentId: string,
   content: string
 ): Promise<{ success: boolean; error?: string }> {
-  // 1. requireUser()
-  // 2. Verificar author_id === userId
-  // 3. Verificar created_at + 30min > now() — janela de edição
-  // 4. UPDATE comments SET content, updated_at
-  void commentId
-  void content
+  const parsed = z.object({
+    commentId: z.string().uuid(),
+    content: z.string().min(1).max(4000),
+  }).safeParse({ commentId, content })
+
+  if (!parsed.success) return { success: false, error: 'Conteúdo inválido' }
+
+  const user = await requireUser()
+
+  const { data: comment, error: fetchErr } = await supabaseAdmin
+    .from('comments')
+    .select('author_id, created_at, deleted_at')
+    .eq('id', parsed.data.commentId)
+    .single()
+
+  if (fetchErr || !comment) return { success: false, error: 'Comentário não encontrado' }
+  if (comment.deleted_at) return { success: false, error: 'Comentário removido' }
+  if (comment.author_id !== user.id) return { success: false, error: 'Sem permissão' }
+
+  const age = Date.now() - new Date(comment.created_at).getTime()
+  if (age > EDIT_WINDOW_MS) return { success: false, error: 'Janela de edição de 15 min expirada' }
+
+  const { error } = await supabaseAdmin
+    .from('comments')
+    .update({ content: parsed.data.content, updated_at: new Date().toISOString() })
+    .eq('id', parsed.data.commentId)
+
+  if (error) return { success: false, error: 'Erro ao editar comentário' }
+
+  revalidatePath('/', 'layout')
   return { success: true }
 }
 
 export async function deleteComment(
   commentId: string
 ): Promise<{ success: boolean; error?: string }> {
-  // 1. requireUser()
-  // 2. Se author === userId OU role ADMIN/MENTOR: soft delete (deleted_at = now())
-  void commentId
+  if (!z.string().uuid().safeParse(commentId).success) {
+    return { success: false, error: 'ID inválido' }
+  }
+
+  const user = await requireUser()
+
+  const { data: profile } = await supabaseAdmin
+    .from('profiles')
+    .select('role')
+    .eq('id', user.id)
+    .single()
+
+  const isPrivileged = profile?.role === 'ADMIN' || profile?.role === 'MENTOR'
+
+  const { data: comment, error: fetchErr } = await supabaseAdmin
+    .from('comments')
+    .select('author_id, deleted_at')
+    .eq('id', commentId)
+    .single()
+
+  if (fetchErr || !comment) return { success: false, error: 'Comentário não encontrado' }
+  if (comment.deleted_at) return { success: false, error: 'Já removido' }
+  if (!isPrivileged && comment.author_id !== user.id) return { success: false, error: 'Sem permissão' }
+
+  const { error } = await supabaseAdmin
+    .from('comments')
+    .update({ deleted_at: new Date().toISOString() })
+    .eq('id', commentId)
+
+  if (error) return { success: false, error: 'Erro ao remover comentário' }
+
+  revalidatePath('/', 'layout')
   return { success: true }
 }

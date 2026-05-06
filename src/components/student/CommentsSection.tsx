@@ -57,7 +57,7 @@ function CommentItem({
   }
 
   const badge = ROLE_BADGE[comment.authorRole]
-  const isOwn = comment.authorName === currentUserId
+  const isOwn = comment.authorId === currentUserId
 
   function handleSaveEdit() {
     if (editContent.trim()) {
