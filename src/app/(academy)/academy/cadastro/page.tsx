@@ -8,32 +8,29 @@ export const metadata: Metadata = {
 
 export default function CadastroPage() {
   return (
-    <div
-      className="relative flex min-h-screen items-center justify-center px-4"
-      style={{ background: 'var(--void)' }}
-    >
-      {/* Dot texture */}
+    <div className="flex min-h-screen" style={{ background: 'var(--void)' }}>
+      {/* PAINEL ESQUERDO */}
       <div
-        className="pointer-events-none fixed inset-0 z-0"
+        className="relative flex w-full min-h-screen items-center justify-center lg:w-1/2"
         style={{
-          backgroundImage: 'radial-gradient(rgba(255,255,255,0.05) 1px, transparent 1px)',
+          background: 'var(--void)',
+          backgroundImage:
+            'radial-gradient(rgba(255,255,255,0.05) 1px, transparent 1px)',
           backgroundSize: '24px 24px',
-          opacity: 0.55,
         }}
-      />
-
-      <div className="relative z-10 w-full max-w-md">
-        {/* Brand mark */}
-        <div className="mb-10 text-center">
-          <div className="mb-4 flex items-center justify-center gap-2">
+      >
+        <div className="relative z-10 w-full max-w-sm px-6 py-16">
+          {/* Brand mark */}
+          <div className="mb-10">
             <Image
-              src="/images/brand/logo-symbol.svg"
+              src="/images/brand/symbol-official.svg"
               alt="Academy"
-              width={28}
-              height={24}
+              width={36}
+              height={36}
               priority
             />
             <span
+              className="mt-3 block"
               style={{
                 fontFamily: 'var(--type-mono)',
                 fontSize: '10px',
@@ -47,20 +44,13 @@ export default function CadastroPage() {
             </span>
           </div>
 
-          <hr
-            style={{
-              border: 'none',
-              borderTop: '1px solid var(--hairline)',
-              marginBottom: '28px',
-            }}
-          />
-
           <h1
+            className="mb-3"
             style={{
               fontFamily: 'var(--type-display)',
               fontWeight: 300,
               fontStyle: 'italic',
-              fontSize: '56px',
+              fontSize: 'clamp(42px, 5vw, 56px)',
               lineHeight: 0.9,
               color: 'var(--bone)',
               margin: 0,
@@ -69,17 +59,36 @@ export default function CadastroPage() {
             Criar conta
           </h1>
           <p
-            className="mt-3"
+            className="mb-10"
             style={{
-              fontSize: '16px',
-              color: 'rgba(241,241,243,0.45)',
+              fontFamily: 'var(--type-sans)',
+              fontSize: '15px',
+              color: 'var(--bone-dim)',
             }}
           >
             Comece sua jornada agora
           </p>
-        </div>
 
-        <CadastroForm />
+          <CadastroForm />
+        </div>
+      </div>
+
+      {/* PAINEL DIREITO */}
+      <div className="relative hidden overflow-hidden lg:block lg:w-1/2">
+        <Image
+          src="/images/brand/A1-portrait-founder.png"
+          alt="João Guirunas"
+          fill
+          style={{ objectFit: 'cover' }}
+          priority
+        />
+        <div
+          className="absolute inset-0"
+          style={{
+            background:
+              'linear-gradient(to bottom, rgba(5,5,7,0.4), rgba(5,5,7,0.1))',
+          }}
+        />
       </div>
     </div>
   )

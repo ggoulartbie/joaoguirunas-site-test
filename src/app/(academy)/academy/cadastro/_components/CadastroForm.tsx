@@ -7,15 +7,21 @@ import { z } from 'zod'
 import Link from 'next/link'
 import { createClient } from '@/lib/supabase/client'
 
-const schema = z.object({
-  name: z.string().min(2, 'Nome deve ter no mínimo 2 caracteres'),
-  email: z.string().email('Email inválido'),
-  password: z
-    .string()
-    .min(8, 'Senha deve ter no mínimo 8 caracteres')
-    .regex(/[A-Z]/, 'Senha deve conter ao menos uma letra maiúscula')
-    .regex(/[0-9]/, 'Senha deve conter ao menos um número'),
-})
+const schema = z
+  .object({
+    name: z.string().min(2, 'Nome deve ter no mínimo 2 caracteres'),
+    email: z.string().email('Email inválido'),
+    password: z
+      .string()
+      .min(8, 'Senha deve ter no mínimo 8 caracteres')
+      .regex(/[A-Z]/, 'Senha deve conter ao menos uma letra maiúscula')
+      .regex(/[0-9]/, 'Senha deve conter ao menos um número'),
+    confirmPassword: z.string(),
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    message: 'As senhas não coincidem',
+    path: ['confirmPassword'],
+  })
 
 type FormData = z.infer<typeof schema>
 
@@ -90,7 +96,7 @@ export function CadastroForm() {
       <div
         style={{
           background: 'var(--ink)',
-          border: '1px solid var(--hairline)',
+          borderTop: '2px solid var(--ember)',
           padding: '40px',
           textAlign: 'center',
         }}
@@ -155,7 +161,7 @@ export function CadastroForm() {
     <div
       style={{
         background: 'var(--ink)',
-        border: '1px solid var(--hairline)',
+        borderTop: '2px solid var(--ember)',
         padding: '40px',
       }}
     >
@@ -222,6 +228,26 @@ export function CadastroForm() {
           )}
         </div>
 
+        {/* Confirmar senha */}
+        <div>
+          <label className="rf-label" htmlFor="confirmPassword">
+            Confirmar senha
+          </label>
+          <input
+            id="confirmPassword"
+            type="password"
+            autoComplete="new-password"
+            placeholder="Repita a senha"
+            className="rf-input"
+            {...register('confirmPassword')}
+          />
+          {errors.confirmPassword && (
+            <p style={{ fontSize: 12, color: 'var(--ember)', marginTop: 4 }}>
+              {errors.confirmPassword.message}
+            </p>
+          )}
+        </div>
+
         {/* Erro servidor */}
         {serverError && (
           <div
@@ -249,7 +275,7 @@ export function CadastroForm() {
             letterSpacing: '0.18em',
             textTransform: 'uppercase',
             width: '100%',
-            padding: '12px 0',
+            height: '44px',
             border: 'none',
             borderRadius: 0,
             cursor: isSubmitting ? 'not-allowed' : 'pointer',
@@ -271,7 +297,7 @@ export function CadastroForm() {
           fontFamily: 'var(--type-sans)',
         }}
       >
-        Já tem conta?{' '}
+        Ja tem conta?{' '}
         <Link
           href="/academy/login"
           style={{ color: 'var(--ember)', textDecoration: 'none' }}
