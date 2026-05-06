@@ -30,7 +30,6 @@ type LessonTabsProps = {
   comments: Comment[]
   lessonId: string
   currentUserId?: string
-  currentUserName?: string
 }
 
 export function LessonTabs({
@@ -43,7 +42,6 @@ export function LessonTabs({
   comments,
   lessonId,
   currentUserId,
-  currentUserName: _currentUserName,
 }: LessonTabsProps) {
   const [active, setActive] = useState<Tab>(initialTab)
 
@@ -95,7 +93,7 @@ export function LessonTabs({
         )}
 
         {active === 'comentarios' && (
-          <CommentsSection lessonId={lessonId} initialComments={comments} currentUserName={currentUserId ?? ''} />
+          <CommentsSection lessonId={lessonId} initialComments={comments} currentUserId={currentUserId ?? ''} />
         )}
       </div>
     </div>

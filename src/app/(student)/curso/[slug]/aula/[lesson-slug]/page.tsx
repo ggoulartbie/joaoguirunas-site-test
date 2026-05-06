@@ -274,7 +274,6 @@ export default async function AulaPage({ params }: Props) {
         comments={comments}
         lessonId={lesson.id}
         currentUserId={user.id}
-        currentUserName={profile?.name ?? ''}
       />
     </div>
   )

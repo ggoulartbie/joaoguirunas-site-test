@@ -257,13 +257,13 @@ function CommentForm({
 type CommentsSectionProps = {
   lessonId: string
   initialComments: Comment[]
-  currentUserName: string
+  currentUserId: string
 }
 
 export function CommentsSection({
   lessonId,
   initialComments,
-  currentUserName,
+  currentUserId,
 }: CommentsSectionProps) {
   const [comments, setComments] = useState(initialComments)
   const [replyingTo, setReplyingTo] = useState<{ id: string; name: string } | null>(null)
@@ -331,7 +331,7 @@ export function CommentsSection({
             <div key={comment.id}>
               <CommentItem
                 comment={comment}
-                currentUserId={currentUserName}
+                currentUserId={currentUserId}
                 onReply={(id, name) => setReplyingTo({ id, name })}
                 onDelete={handleDelete}
                 onEdit={handleEdit}
@@ -342,7 +342,7 @@ export function CommentsSection({
                 <CommentItem
                   key={reply.id}
                   comment={reply}
-                  currentUserId={currentUserName}
+                  currentUserId={currentUserId}
                   onReply={() => {}}
                   onDelete={handleDelete}
                   onEdit={handleEdit}
