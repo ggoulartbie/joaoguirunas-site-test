@@ -207,16 +207,28 @@ export default async function AgentDetailPage({ params }: AgentPageParams) {
                 </div>
               </div>
 
-              <a
-                href="/skills/claude-agent-teams"
-                className="inline-flex items-center justify-center gap-2 px-7 py-3.5 text-sm font-semibold uppercase transition-all hover:brightness-110 active:scale-[0.98]"
-                style={{ ...MONO, background: sq.accent, color: '#050507' }}
-              >
-                Instalar squad completa
-                <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                </svg>
-              </a>
+              <div className="flex flex-col sm:flex-row gap-3">
+                {/* Primary — mentoria */}
+                <a
+                  href="/mentoria"
+                  className="inline-flex items-center justify-center gap-2 px-7 py-3.5 uppercase transition-all hover:brightness-110 active:scale-[0.98]"
+                  style={{ ...MONO, background: sq.accent, color: '#050507' }}
+                >
+                  Aprender na mentoria
+                  <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                  </svg>
+                </a>
+
+                {/* Secondary — install, bem discreto */}
+                <a
+                  href="/skills/claude-agent-teams"
+                  className="inline-flex items-center justify-center gap-2 px-5 py-3.5 uppercase text-white/40 hover:text-white/70 transition-colors"
+                  style={{ ...MONO, border: '1px solid rgba(255,255,255,0.10)' }}
+                >
+                  Instalar grátis
+                </a>
+              </div>
             </div>
           </div>
         </div>
