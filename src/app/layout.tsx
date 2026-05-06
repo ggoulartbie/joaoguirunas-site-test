@@ -1,5 +1,7 @@
 import type { Metadata } from 'next';
 import { Geist, Geist_Mono, Space_Grotesk, Fraunces, Inter_Tight } from 'next/font/google';
+import { Analytics } from '@vercel/analytics/next';
+import { SpeedInsights } from '@vercel/speed-insights/next';
 import { SiteChrome } from '@/shared/components/layout/SiteChrome';
 import { siteConfig, organizationJsonLd, websiteJsonLd } from '@/config/site';
 import './globals.css';
@@ -115,6 +117,8 @@ export default function RootLayout({
       </head>
       <body className="min-h-screen bg-[#050507] text-white antialiased">
         <SiteChrome>{children}</SiteChrome>
+        <Analytics />
+        <SpeedInsights />
       </body>
     </html>
   );

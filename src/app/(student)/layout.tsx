@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
-import { StudentSidebar } from '@/components/student/StudentSidebar'
-import { StudentTopBar } from '@/components/student/StudentTopBar'
+import { createClient } from '@/lib/supabase/server'
+import { StudentShell } from '@/components/student/StudentShell'
+import { OnboardingWizard } from '@/components/student/OnboardingWizard'
 
 export const metadata: Metadata = {
   title: {
@@ -9,20 +10,60 @@ export const metadata: Metadata = {
   },
 }
 
-export default function StudentLayout({
+export default async function StudentLayout({
   children,
 }: {
   children: React.ReactNode
 }) {
+  const supabase = await createClient()
+  const { data: { user } } = await supabase.auth.getUser()
+
+  const [notificationsResult, profileResult] = user
+    ? await Promise.all([
+        supabase
+          .from('notifications')
+          .select('id, title, message, notification_type, action_url, read_at, created_at')
+          .eq('user_id', user.id)
+          .order('created_at', { ascending: false })
+          .limit(20),
+        supabase
+          .from('profiles')
+          .select('name, bio')
+          .eq('id', user.id)
+          .single(),
+      ])
+    : [{ data: null }, { data: null }]
+
+  const notifications = notificationsResult.data ?? []
+  const profile = profileResult.data
+
+  const userInitials =
+    profile?.name
+      ?.split(' ')
+      .map((w) => w[0])
+      .join('')
+      .slice(0, 2)
+      .toUpperCase() ?? 'JG'
+
+  const needsOnboarding = user !== null && !profile?.name && !profile?.bio
+
   return (
-    <div className="flex min-h-screen bg-[#050507]">
-      <StudentSidebar />
-      <div className="flex flex-1 flex-col lg:pl-64">
-        <StudentTopBar />
-        <main id="main-content" className="flex-1 p-6 lg:p-8">
-          {children}
-        </main>
-      </div>
-    </div>
+    <>
+      {/* Skip-to-content para navegação por teclado (WCAG 2.4.1) */}
+      <a
+        href="#main-content"
+        className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:bg-[#FF3A0E] focus:px-4 focus:py-2 focus:font-mono focus:text-xs focus:uppercase focus:tracking-wider focus:text-white"
+      >
+        Pular para conteúdo principal
+      </a>
+
+      <StudentShell notifications={notifications} userInitials={userInitials}>
+        {children}
+      </StudentShell>
+
+      {needsOnboarding && (
+        <OnboardingWizard userName={null} />
+      )}
+    </>
   )
 }

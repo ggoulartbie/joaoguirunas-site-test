@@ -8,15 +8,21 @@ import { PaymentFailedEmail } from '../../../emails/templates/PaymentFailedEmail
 import { AutoRenewalEmail } from '../../../emails/templates/AutoRenewalEmail'
 import { ExpirationReminderEmail } from '../../../emails/templates/ExpirationReminderEmail'
 import { MembershipExtendedEmail } from '../../../emails/templates/MembershipExtendedEmail'
+import { NewMaterialEmail } from '../../../emails/templates/NewMaterialEmail'
+import { LiveSessionReminderEmail } from '../../../emails/templates/LiveSessionReminderEmail'
+import { CertificateReadyEmail } from '../../../emails/templates/CertificateReadyEmail'
 
-const resend = new Resend(process.env.RESEND_API_KEY)
+function getResend() {
+  return new Resend(process.env.RESEND_API_KEY)
+}
+
 const FROM = process.env.RESEND_FROM_EMAIL ?? 'noreply@example.com'
 const APP_URL = process.env.NEXT_PUBLIC_APP_URL ?? 'http://localhost:3000'
 
 export async function sendWelcomeEmail(to: string, name: string) {
   const html = await render(WelcomeEmail({ name, loginUrl: `${APP_URL}/login` }))
 
-  return resend.emails.send({
+  return getResend().emails.send({
     from: FROM,
     to,
     subject: 'Bem-vindo à plataforma',
@@ -27,7 +33,7 @@ export async function sendWelcomeEmail(to: string, name: string) {
 export async function sendPasswordResetEmail(to: string, name: string, resetUrl: string) {
   const html = await render(PasswordResetEmail({ name, resetUrl }))
 
-  return resend.emails.send({
+  return getResend().emails.send({
     from: FROM,
     to,
     subject: 'Redefinir sua senha',
@@ -42,7 +48,7 @@ export async function sendPaymentApprovedEmail(to: string, name: string, cohortN
     dashboardUrl: `${APP_URL}/dashboard`,
   }))
 
-  return resend.emails.send({
+  return getResend().emails.send({
     from: FROM,
     to,
     subject: `Acesso liberado — ${cohortName}`,
@@ -57,7 +63,7 @@ export async function sendPaymentFailedEmail(to: string, name: string, cohortNam
     updatePaymentUrl: `${APP_URL}/perfil`,
   }))
 
-  return resend.emails.send({
+  return getResend().emails.send({
     from: FROM,
     to,
     subject: 'Problema no pagamento da sua renovação',
@@ -78,7 +84,7 @@ export async function sendAutoRenewalEmail(
     profileUrl: `${APP_URL}/perfil`,
   }))
 
-  return resend.emails.send({
+  return getResend().emails.send({
     from: FROM,
     to,
     subject: `Matrícula renovada — ${cohortName}`,
@@ -99,7 +105,7 @@ export async function sendMembershipExtendedEmail(
     dashboardUrl: `${APP_URL}/dashboard`,
   }))
 
-  return resend.emails.send({
+  return getResend().emails.send({
     from: FROM,
     to,
     subject: `Acesso estendido — ${cohortName}`,
@@ -123,10 +129,85 @@ export async function sendExpirationReminderEmail(
     renewUrl,
   }))
 
-  return resend.emails.send({
+  return getResend().emails.send({
     from: FROM,
     to,
     subject: `Seu acesso a ${cohortName} expira em ${daysLeft} dias`,
+    html,
+  })
+}
+
+export async function sendNewMaterialEmail(
+  to: string,
+  name: string,
+  cohortName: string,
+  materialTitle: string,
+  lessonTitle: string,
+  dashboardUrl?: string
+) {
+  const html = await render(NewMaterialEmail({
+    name,
+    cohortName,
+    materialTitle,
+    lessonTitle,
+    dashboardUrl: dashboardUrl ?? `${APP_URL}/dashboard`,
+  }))
+
+  return getResend().emails.send({
+    from: FROM,
+    to,
+    subject: `Novo material disponível — ${cohortName}`,
+    html,
+  })
+}
+
+export async function sendLiveSessionReminderEmail(
+  to: string,
+  name: string,
+  cohortName: string,
+  sessionTitle: string,
+  scheduledAt: string,
+  durationMinutes: number,
+  meetingUrl: string | null
+) {
+  const html = await render(LiveSessionReminderEmail({
+    name,
+    cohortName,
+    sessionTitle,
+    scheduledAt,
+    durationMinutes,
+    meetingUrl,
+  }))
+
+  return getResend().emails.send({
+    from: FROM,
+    to,
+    subject: `Lembrete: ${sessionTitle} — amanhã`,
+    html,
+  })
+}
+
+export async function sendCertificateReadyEmail(
+  to: string,
+  name: string,
+  courseName: string,
+  cohortName: string,
+  verificationCode: string
+) {
+  const certificateUrl = `${APP_URL}/certificado/v/${verificationCode}`
+
+  const html = await render(CertificateReadyEmail({
+    name,
+    courseName,
+    cohortName,
+    certificateUrl,
+    verificationCode,
+  }))
+
+  return getResend().emails.send({
+    from: FROM,
+    to,
+    subject: `Seu certificado de ${courseName} está pronto`,
     html,
   })
 }

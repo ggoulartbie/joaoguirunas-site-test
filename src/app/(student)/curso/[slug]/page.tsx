@@ -121,7 +121,7 @@ export default async function CursoPage({ params }: Props) {
                     {module.title}
                   </h3>
                   {isComplete && (
-                    <CheckCircle2 className="h-4 w-4 shrink-0 text-green-400" />
+                    <CheckCircle2 className="h-4 w-4 shrink-0 text-green-400" aria-hidden="true" />
                   )}
                 </div>
 
@@ -141,7 +141,7 @@ export default async function CursoPage({ params }: Props) {
                 </div>
               </div>
 
-              <ChevronRight className="mt-1 h-4 w-4 shrink-0 text-white/20 transition-colors group-hover:text-white/60" />
+              <ChevronRight className="mt-1 h-4 w-4 shrink-0 text-white/20 transition-colors group-hover:text-white/60" aria-hidden="true" />
             </Link>
           )
         })}
@@ -165,7 +165,7 @@ function LockedModuleCard({
 
       <div className="flex-1 min-w-0">
         <div className="flex items-center gap-2">
-          <Lock className="h-3.5 w-3.5 shrink-0 text-white/30" />
+          <Lock className="h-3.5 w-3.5 shrink-0 text-white/30" aria-hidden="true" />
           <h3 className="font-semibold text-white/40">{module.title}</h3>
         </div>
 
@@ -185,7 +185,7 @@ function LockedModuleCard({
         )}
       </div>
 
-      <Circle className="mt-1 h-4 w-4 shrink-0 text-white/10" />
+      <Circle className="mt-1 h-4 w-4 shrink-0 text-white/10" aria-hidden="true" />
     </div>
   )
 }

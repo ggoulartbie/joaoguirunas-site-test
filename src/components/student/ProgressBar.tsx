@@ -18,6 +18,7 @@ export function ProgressBar({ value, className, showLabel = false }: Props) {
           aria-valuenow={clamped}
           aria-valuemin={0}
           aria-valuemax={100}
+          aria-label={`${clamped}% concluído`}
         />
       </div>
       {showLabel && (

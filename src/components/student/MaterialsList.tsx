@@ -65,7 +65,8 @@ export function MaterialsList({ materials }: MaterialsListProps) {
           key={material.id}
           onClick={() => handleDownload(material)}
           disabled={loading === material.id}
-          className="flex w-full items-center gap-3 rounded-lg border border-white/10 bg-white/5 px-4 py-3 text-left transition-colors hover:bg-white/10 disabled:opacity-50"
+          aria-label={`${material.kind === 'LINK' ? 'Abrir' : 'Baixar'} ${material.title}`}
+          className="flex w-full items-center gap-3 rounded-lg border border-white/10 bg-white/5 px-4 py-3 text-left transition-colors hover:bg-white/10 disabled:opacity-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FF3A0E] focus-visible:ring-offset-1 focus-visible:ring-offset-[#050507]"
         >
           <span className="text-lg" aria-hidden>
             {KIND_ICONS[material.kind] ?? KIND_ICONS['OTHER']}

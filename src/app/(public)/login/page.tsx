@@ -1,3 +1,4 @@
+import { Suspense } from 'react'
 import { LoginForm } from './_components/LoginForm'
 import type { Metadata } from 'next'
 
@@ -15,7 +16,9 @@ export default function LoginPage() {
             Acesse sua conta para continuar
           </p>
         </div>
-        <LoginForm />
+        <Suspense>
+          <LoginForm />
+        </Suspense>
       </div>
     </div>
   )
