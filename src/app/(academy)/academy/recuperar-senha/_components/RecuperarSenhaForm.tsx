@@ -6,7 +6,6 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 import Link from 'next/link'
 import { createClient } from '@/lib/supabase/client'
-import { Button } from '@/shared/components/ui/button'
 
 const schema = z.object({
   email: z.string().email('Email inválido'),
@@ -29,7 +28,7 @@ export function RecuperarSenhaForm() {
     const supabase = createClient()
 
     const { error } = await supabase.auth.resetPasswordForEmail(data.email, {
-      redirectTo: `${process.env.NEXT_PUBLIC_APP_URL ?? 'http://localhost:3000'}/redefinir-senha`,
+      redirectTo: `${process.env.NEXT_PUBLIC_APP_URL ?? 'http://localhost:3000'}/academy/redefinir-senha`,
     })
 
     if (error) {
@@ -42,61 +41,166 @@ export function RecuperarSenhaForm() {
 
   if (success) {
     return (
-      <div className="rounded-xl border border-white/10 bg-white/5 p-8 text-center">
-        <div className="mb-3 text-3xl">✉️</div>
-        <h2 className="text-lg font-semibold text-white">Email enviado</h2>
-        <p className="mt-2 text-sm text-white/50">
+      <div
+        style={{
+          background: 'rgba(16,185,129,0.1)',
+          border: '1px solid rgba(16,185,129,0.2)',
+          padding: '32px',
+          borderRadius: 0,
+          textAlign: 'center',
+        }}
+      >
+        <p
+          style={{
+            fontFamily: 'var(--type-sans)',
+            fontSize: '15px',
+            fontWeight: 600,
+            color: 'rgb(52,211,153)',
+            marginBottom: '8px',
+          }}
+        >
+          Email enviado
+        </p>
+        <p
+          style={{
+            fontFamily: 'var(--type-sans)',
+            fontSize: '14px',
+            color: 'var(--bone-dim)',
+            marginBottom: '24px',
+          }}
+        >
           Se este email estiver cadastrado, você receberá o link de recuperação em breve.
         </p>
         <Link
-          href="/login"
-          className="mt-6 inline-block text-sm text-white/70 hover:text-white transition-colors"
+          href="/academy/login"
+          style={{
+            fontFamily: 'var(--type-sans)',
+            fontSize: '14px',
+            color: 'var(--bone-mute)',
+            textDecoration: 'none',
+            transition: 'color 0.2s',
+          }}
+          onMouseEnter={(e) => ((e.currentTarget as HTMLElement).style.color = 'var(--bone)')}
+          onMouseLeave={(e) => ((e.currentTarget as HTMLElement).style.color = 'var(--bone-mute)')}
         >
-          Voltar ao login
+          Voltar para o login
         </Link>
       </div>
     )
   }
 
   return (
-    <div className="rounded-xl border border-white/10 bg-white/5 p-8 backdrop-blur-sm">
+    <div
+      style={{
+        background: 'var(--ink)',
+        padding: '48px',
+        borderRadius: 0,
+        borderTop: '2px solid var(--ember)',
+      }}
+    >
+      <style>{`
+        .rf-input {
+          width: 100%;
+          border: 1px solid var(--hairline-strong);
+          background: var(--ink-2);
+          border-radius: 0;
+          padding: 14px 18px;
+          color: var(--bone);
+          font-size: 0.875rem;
+          outline: none;
+          transition: border-color 0.2s, box-shadow 0.2s;
+          box-sizing: border-box;
+        }
+        .rf-input::placeholder {
+          color: rgba(241,241,243,0.25);
+        }
+        .rf-input:focus {
+          border-color: var(--ember);
+          box-shadow: 0 0 0 1px var(--ember);
+        }
+        .rf-submit-btn {
+          display: block;
+          width: 100%;
+          min-height: 44px;
+          background: var(--ember);
+          color: var(--void);
+          font-family: var(--type-mono);
+          font-size: 11px;
+          font-weight: 600;
+          letter-spacing: 0.22em;
+          text-transform: uppercase;
+          border: none;
+          border-radius: 0;
+          cursor: pointer;
+          transition: filter 0.2s;
+          outline: none;
+        }
+        .rf-submit-btn:focus-visible {
+          outline: 2px solid rgba(255,58,14,0.5);
+          outline-offset: 2px;
+        }
+        .rf-submit-btn:hover:not(:disabled) {
+          filter: brightness(1.1);
+        }
+        .rf-submit-btn:disabled {
+          opacity: 0.45;
+          cursor: not-allowed;
+        }
+      `}</style>
+
       <form onSubmit={handleSubmit(onSubmit)} noValidate className="space-y-5">
         <div className="space-y-1.5">
-          <label className="text-sm text-white/70" htmlFor="email">
+          <label
+            className="text-sm"
+            htmlFor="email"
+            style={{ color: 'rgba(241,241,243,0.6)' }}
+          >
             Email
           </label>
           <input
             id="email"
             type="email"
             autoComplete="email"
-            className="w-full rounded-lg border border-white/10 bg-white/5 px-4 py-2.5 text-sm text-white placeholder:text-white/30 focus:border-white/30 focus:outline-none focus:ring-1 focus:ring-white/20"
+            className="rf-input"
             placeholder="seu@email.com"
             {...register('email')}
           />
           {errors.email && (
-            <p className="text-xs text-red-400">{errors.email.message}</p>
+            <p className="text-xs" style={{ color: 'var(--ember)' }}>{errors.email.message}</p>
           )}
         </div>
 
         {serverError && (
-          <p className="rounded-lg bg-red-500/10 px-4 py-2.5 text-sm text-red-400">
+          <div
+            style={{
+              background: 'rgba(255,58,14,0.1)',
+              border: '1px solid rgba(255,58,14,0.2)',
+              padding: '10px 16px',
+              fontSize: 13,
+              color: 'var(--ember)',
+            }}
+          >
             {serverError}
-          </p>
+          </div>
         )}
 
-        <Button
-          type="submit"
-          disabled={isSubmitting}
-          className="w-full bg-white text-black hover:bg-white/90 disabled:opacity-50"
-        >
+        <button type="submit" disabled={isSubmitting} className="rf-submit-btn">
           {isSubmitting ? 'Enviando...' : 'Enviar link de recuperação'}
-        </Button>
+        </button>
       </form>
 
-      <p className="mt-6 text-center text-sm text-white/40">
-        Lembrou a senha?{' '}
-        <Link href="/login" className="text-white/70 hover:text-white transition-colors">
-          Entrar
+      <p
+        className="mt-6 text-center text-sm"
+        style={{ color: 'rgba(241,241,243,0.35)' }}
+      >
+        <Link
+          href="/academy/login"
+          className="transition-colors"
+          style={{ color: 'var(--bone-mute)' }}
+          onMouseEnter={(e) => ((e.currentTarget as HTMLElement).style.color = 'var(--bone)')}
+          onMouseLeave={(e) => ((e.currentTarget as HTMLElement).style.color = 'var(--bone-mute)')}
+        >
+          Voltar para o login
         </Link>
       </p>
     </div>

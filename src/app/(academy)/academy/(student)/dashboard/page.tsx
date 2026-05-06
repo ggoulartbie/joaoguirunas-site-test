@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
-import { Play, Calendar, ArrowRight, RefreshCw } from 'lucide-react'
+import { Play, Calendar, ArrowRight, AlertTriangle } from 'lucide-react'
 import { ProgressBar } from '@/components/student/ProgressBar'
 import { ExpirationBadge } from '@/components/student/ExpirationBadge'
 import { MOCK_COHORTS } from '@/components/student/mock-data'
@@ -34,13 +34,27 @@ export default function DashboardPage() {
   })
 
   return (
-    <div className="mx-auto max-w-5xl space-y-8">
+    <div className="mx-auto max-w-5xl space-y-10">
+
       {/* Saudação */}
       <div>
-        <p className="text-xs uppercase tracking-widest" style={{ fontFamily: 'var(--type-mono)', color: 'rgba(241,241,243,0.4)' }}>
+        <p
+          className="text-xs uppercase tracking-widest"
+          style={{ fontFamily: 'var(--type-mono)', color: 'var(--bone-mute)' }}
+        >
           Bem-vindo de volta
         </p>
-        <h1 className="mt-1 text-2xl font-bold text-white" style={{ fontFamily: 'var(--type-sans)' }}>{user.name}</h1>
+        <h1
+          className="mt-1 italic"
+          style={{
+            fontFamily: 'var(--type-display)',
+            fontSize: '36px',
+            color: 'var(--bone)',
+            fontWeight: 'normal',
+          }}
+        >
+          {user.name}
+        </h1>
       </div>
 
       {/* Avisos de expiração */}
@@ -49,34 +63,36 @@ export default function DashboardPage() {
           {expiringCohorts.map((cohort) => (
             <div
               key={cohort.id}
-              className="flex flex-col gap-3 border p-4 sm:flex-row sm:items-center sm:justify-between"
+              className="flex flex-col gap-3 border-l-2 px-4 py-3 sm:flex-row sm:items-center sm:justify-between"
               style={{
-                borderColor: 'rgba(255,58,14,0.3)',
-                background: 'rgba(255,58,14,0.05)',
+                borderLeftColor: 'var(--ember)',
+                background: 'rgba(255,58,14,0.08)',
               }}
             >
               <div className="flex items-center gap-3">
+                <AlertTriangle className="h-4 w-4 shrink-0" style={{ color: 'var(--ember)' }} />
                 <ExpirationBadge expiresAt={cohort.expires_at!} />
                 <span className="text-sm" style={{ color: 'var(--bone)' }}>
                   Matrícula em{' '}
-                  <span className="font-semibold text-white">{cohort.name}</span>
+                  <span className="font-semibold" style={{ color: 'var(--bone)' }}>{cohort.name}</span>
                 </span>
               </div>
               <Link
                 href="/academy/perfil"
-                className="flex items-center gap-1.5 font-mono text-xs uppercase tracking-wider transition-colors hover:brightness-110"
-                style={{ color: 'var(--ember)' }}
+                className="font-mono text-xs uppercase tracking-wider transition-opacity hover:opacity-70"
+                style={{ fontFamily: 'var(--type-mono)', color: 'var(--ember)' }}
               >
-                <RefreshCw className="h-3 w-3" />
-                Renovar acesso
+                Renovar
               </Link>
             </div>
           ))}
         </div>
       )}
 
+      {/* Grid principal */}
       <div className="grid gap-6 lg:grid-cols-3">
-        {/* Card — Continue de onde parou */}
+
+        {/* Card — Continue de onde parou (lg:col-span-2) */}
         <div className="lg:col-span-2">
           {lastAccessed ? (
             <Link
@@ -85,32 +101,50 @@ export default function DashboardPage() {
               style={{
                 background: 'var(--ink)',
                 borderColor: 'var(--hairline)',
+                borderRadius: 0,
+              }}
+              onMouseEnter={(e) => {
+                (e.currentTarget as HTMLElement).style.borderColor = 'var(--hairline-strong)'
+              }}
+              onMouseLeave={(e) => {
+                (e.currentTarget as HTMLElement).style.borderColor = 'var(--hairline)'
               }}
             >
               <p
-                className="font-mono text-xs uppercase tracking-widest"
-                style={{ color: 'rgba(241,241,243,0.4)' }}
+                className="text-xs uppercase tracking-widest"
+                style={{ fontFamily: 'var(--type-mono)', color: 'var(--bone-mute)' }}
               >
                 Continue de onde parou
               </p>
               <h2
-                className="mt-3 text-lg font-semibold text-white transition-colors group-hover:text-[var(--ember)]"
+                className="mt-3 italic transition-colors group-hover:text-[var(--ember)]"
+                style={{
+                  fontFamily: 'var(--type-display)',
+                  fontSize: '22px',
+                  fontWeight: 'normal',
+                  color: 'var(--bone)',
+                }}
               >
                 {lastAccessed.lastAccessedLessonTitle}
               </h2>
-              <p className="mt-1 text-sm" style={{ color: 'rgba(241,241,243,0.5)' }}>{lastAccessed.name}</p>
-              <div className="mt-4 flex items-center gap-3">
+              <p
+                className="mt-1 text-sm"
+                style={{ fontFamily: 'var(--type-sans)', color: 'var(--bone-mute)' }}
+              >
+                {lastAccessed.name}
+              </p>
+              <div className="mt-5 flex items-center gap-4">
                 <div
-                  className="flex h-10 w-10 items-center justify-center transition-transform group-hover:scale-105"
-                  style={{ background: 'var(--ember)' }}
+                  className="flex h-10 w-10 shrink-0 items-center justify-center"
+                  style={{ background: 'var(--ember)', borderRadius: 0 }}
                 >
                   <Play className="h-4 w-4 fill-white text-white" />
                 </div>
                 <span
-                  className="font-mono text-xs uppercase tracking-wide"
-                  style={{ color: 'rgba(241,241,243,0.6)' }}
+                  className="text-xs uppercase tracking-widest"
+                  style={{ fontFamily: 'var(--type-mono)', color: 'var(--bone-mute)' }}
                 >
-                  Retomar aula
+                  Retomar
                 </span>
               </div>
             </Link>
@@ -120,15 +154,16 @@ export default function DashboardPage() {
               style={{
                 background: 'var(--ink)',
                 borderColor: 'var(--hairline)',
+                borderRadius: 0,
               }}
             >
               <p
-                className="font-mono text-xs uppercase tracking-widest"
-                style={{ color: 'rgba(241,241,243,0.4)' }}
+                className="text-xs uppercase tracking-widest"
+                style={{ fontFamily: 'var(--type-mono)', color: 'var(--bone-mute)' }}
               >
                 Continue de onde parou
               </p>
-              <p className="mt-4 text-sm" style={{ color: 'rgba(241,241,243,0.5)' }}>
+              <p className="mt-4 text-sm" style={{ color: 'var(--bone-mute)' }}>
                 Nenhuma aula iniciada ainda.{' '}
                 <Link href="/academy/meus-cursos" className="hover:underline" style={{ color: 'var(--ember)' }}>
                   Comece agora.
@@ -138,51 +173,59 @@ export default function DashboardPage() {
           )}
         </div>
 
-        {/* Próximo encontro ao vivo */}
+        {/* Card — Próximo encontro (lg:col-span-1) */}
         <div
           className="border p-6"
           style={{
             background: 'var(--ink)',
             borderColor: 'var(--hairline)',
+            borderRadius: 0,
           }}
         >
           <p
-            className="font-mono text-xs uppercase tracking-widest"
-            style={{ color: 'rgba(241,241,243,0.4)' }}
+            className="text-xs uppercase tracking-widest"
+            style={{ fontFamily: 'var(--type-mono)', color: 'var(--bone-mute)' }}
           >
             Próximo encontro
           </p>
           {nextLive?.nextLiveSessionAt ? (
-            <div className="mt-3">
+            <div className="mt-4">
               <div className="flex items-start gap-3">
                 <Calendar className="mt-0.5 h-4 w-4 shrink-0" style={{ color: 'var(--ember)' }} />
                 <div>
-                  <p className="text-sm font-medium text-white">{nextLive.name}</p>
-                  <p className="mt-1 font-mono text-xs" style={{ color: 'rgba(241,241,243,0.5)' }}>
+                  <p className="text-sm font-medium" style={{ color: 'var(--bone)' }}>
+                    {nextLive.name}
+                  </p>
+                  <p
+                    className="mt-1 text-xs"
+                    style={{ fontFamily: 'var(--type-mono)', color: 'var(--bone-mute)' }}
+                  >
                     {formatDate(nextLive.nextLiveSessionAt)}
                   </p>
                 </div>
               </div>
               <Link
                 href="/academy/agenda"
-                className="mt-4 flex items-center gap-1.5 font-mono text-xs uppercase tracking-wider transition-colors hover:brightness-110"
-                style={{ color: 'var(--ember)' }}
+                className="mt-5 flex items-center gap-1.5 text-xs uppercase tracking-widest transition-opacity hover:opacity-70"
+                style={{ fontFamily: 'var(--type-mono)', color: 'var(--ember)' }}
               >
                 Ver agenda
                 <ArrowRight className="h-3 w-3" />
               </Link>
             </div>
           ) : (
-            <p className="mt-4 text-sm" style={{ color: 'rgba(241,241,243,0.4)' }}>Nenhum encontro agendado.</p>
+            <p className="mt-4 text-sm" style={{ color: 'var(--bone-mute)' }}>
+              Nenhum encontro agendado.
+            </p>
           )}
         </div>
       </div>
 
-      {/* Cards das cohorts com progresso */}
+      {/* Grid de turmas */}
       <div>
         <h2
-          className="font-mono text-xs uppercase tracking-widest"
-          style={{ color: 'rgba(241,241,243,0.4)' }}
+          className="text-xs uppercase tracking-widest"
+          style={{ fontFamily: 'var(--type-mono)', color: 'var(--bone-mute)' }}
         >
           Suas turmas
         </h2>
@@ -195,12 +238,20 @@ export default function DashboardPage() {
               style={{
                 background: 'var(--ink)',
                 borderColor: 'var(--hairline)',
+                borderRadius: 0,
+              }}
+              onMouseEnter={(e) => {
+                (e.currentTarget as HTMLElement).style.borderColor = 'var(--hairline-strong)'
+              }}
+              onMouseLeave={(e) => {
+                (e.currentTarget as HTMLElement).style.borderColor = 'var(--hairline)'
               }}
             >
               <div className="flex items-start justify-between gap-4">
                 <div className="min-w-0">
                   <p
-                    className="truncate font-semibold text-white transition-colors group-hover:text-[var(--ember)]"
+                    className="truncate font-medium transition-colors group-hover:text-[var(--ember)]"
+                    style={{ color: 'var(--bone)' }}
                   >
                     {cohort.name}
                   </p>
@@ -209,8 +260,8 @@ export default function DashboardPage() {
                   )}
                 </div>
                 <span
-                  className="shrink-0 font-mono text-lg font-bold"
-                  style={{ color: 'var(--ember)' }}
+                  className="shrink-0 font-bold"
+                  style={{ fontFamily: 'var(--type-mono)', color: 'var(--ember)' }}
                 >
                   {cohort.progressPercent}%
                 </span>
