@@ -41,7 +41,8 @@ export function LoginForm() {
       return
     }
 
-    const next = searchParams.get('next') || '/dashboard'
+    const nextRaw = searchParams.get('next') || '/dashboard'
+    const next = nextRaw.startsWith('/') && !nextRaw.startsWith('//') ? nextRaw : '/dashboard'
     router.push(next)
     router.refresh()
   }

@@ -5,6 +5,7 @@ import { randomBytes } from 'crypto'
 import { requireAdmin } from '@/lib/auth/helpers'
 import { supabaseAdmin } from '@/lib/supabase/admin'
 import { sendCertificateReadyEmail } from '@/lib/email/send'
+import { revalidatePath } from 'next/cache'
 
 const issueSchema = z.object({
   userId: z.string().uuid(),
@@ -48,6 +49,71 @@ export async function issueCertificate(input: z.infer<typeof issueSchema>): Prom
   sendCertificateEmail(userId, courseId, cohortId, verificationCode).catch(() => null)
 
   return { verificationCode }
+}
+
+/**
+ * Auto-issues a certificate when a user completes 100% of a course in a cohort.
+ * Idempotent — returns existing certificate if already issued.
+ * Called fire-and-forget from markLessonComplete.
+ */
+export async function checkAndIssueCertificate(
+  userId: string,
+  courseId: string,
+  cohortId: string,
+): Promise<{ id: string; verification_code: string } | null> {
+  // Idempotent: return existing if already issued
+  const { data: existing } = await supabaseAdmin
+    .from('certificates')
+    .select('id, verification_code')
+    .eq('user_id', userId)
+    .eq('course_id', courseId)
+    .eq('cohort_id', cohortId)
+    .maybeSingle()
+
+  if (existing) return existing
+
+  // Count total non-deleted lessons in this course (via modules join)
+  const { data: lessonIds } = await supabaseAdmin
+    .from('lessons')
+    .select('id, modules!inner(course_id)')
+    .eq('modules.course_id', courseId)
+    .is('deleted_at', null)
+
+  const totalLessons = lessonIds?.length ?? 0
+  if (totalLessons === 0) return null
+
+  // Count completed lesson_progress rows for this user on those lesson IDs
+  const ids = lessonIds!.map((l) => l.id)
+  const { data: completedRows } = await supabaseAdmin
+    .from('lesson_progress')
+    .select('lesson_id')
+    .eq('user_id', userId)
+    .eq('completed', true)
+    .in('lesson_id', ids)
+
+  const completedCount = completedRows?.length ?? 0
+  if (completedCount < totalLessons) return null
+
+  // 100% complete — issue certificate
+  const verificationCode = randomBytes(6).toString('hex').toUpperCase()
+
+  const { data: cert, error } = await supabaseAdmin
+    .from('certificates')
+    .insert({
+      user_id: userId,
+      course_id: courseId,
+      cohort_id: cohortId,
+      verification_code: verificationCode,
+    })
+    .select('id, verification_code')
+    .single()
+
+  if (error) throw new Error('Erro ao emitir certificado: ' + error.message)
+
+  revalidatePath('/certificados')
+  sendCertificateEmail(userId, courseId, cohortId, verificationCode).catch(() => null)
+
+  return cert
 }
 
 async function sendCertificateEmail(
