@@ -5,7 +5,7 @@ import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 import Link from 'next/link'
-import { useRouter } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
 import { Button } from '@/shared/components/ui/button'
 
@@ -18,6 +18,7 @@ type FormData = z.infer<typeof schema>
 
 export function LoginForm() {
   const router = useRouter()
+  const searchParams = useSearchParams()
   const [serverError, setServerError] = useState<string | null>(null)
 
   const {
@@ -40,7 +41,8 @@ export function LoginForm() {
       return
     }
 
-    router.push('/dashboard')
+    const next = searchParams.get('next') || '/dashboard'
+    router.push(next)
     router.refresh()
   }
 

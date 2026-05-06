@@ -41,7 +41,7 @@ export function CadastroForm() {
       password: data.password,
       options: {
         data: { name: data.name },
-        emailRedirectTo: `${process.env.NEXT_PUBLIC_APP_URL}/auth/callback`,
+        emailRedirectTo: `${process.env.NEXT_PUBLIC_APP_URL ?? 'http://localhost:3000'}/auth/callback`,
       },
     })
 

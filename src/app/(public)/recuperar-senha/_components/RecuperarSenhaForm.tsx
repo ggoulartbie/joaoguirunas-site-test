@@ -29,7 +29,7 @@ export function RecuperarSenhaForm() {
     const supabase = createClient()
 
     const { error } = await supabase.auth.resetPasswordForEmail(data.email, {
-      redirectTo: `${process.env.NEXT_PUBLIC_APP_URL}/redefinir-senha`,
+      redirectTo: `${process.env.NEXT_PUBLIC_APP_URL ?? 'http://localhost:3000'}/redefinir-senha`,
     })
 
     if (error) {
