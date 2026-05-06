@@ -2,6 +2,7 @@
 
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
+import { Menu } from 'lucide-react'
 import { NotificationBell } from './NotificationBell'
 
 const BREADCRUMB_MAP: Record<string, string> = {
@@ -35,46 +36,52 @@ export function StudentTopBar({ notifications, userInitials, onMenuClick }: Prop
 
   return (
     <header
-      className="sticky top-0 z-30 flex h-16 items-center justify-between border-b px-4 backdrop-blur-sm lg:px-6"
+      className="sticky top-0 z-30 flex h-14 items-center justify-between px-4 sm:px-6"
       style={{
-        background: 'rgba(5,5,7,0.95)',
-        borderColor: 'var(--hairline)',
+        background: 'var(--void)',
+        borderBottom: '1px solid var(--hairline)',
       }}
     >
-      {/* Mobile menu button */}
-      <button
-        className="mr-3 flex h-8 w-8 items-center justify-center transition-colors hover:text-white/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ember)] focus-visible:ring-offset-1 focus-visible:ring-offset-[#050507] lg:hidden"
-        style={{ color: 'rgba(241,241,243,0.6)' }}
-        aria-label="Abrir menu de navegação"
-        onClick={onMenuClick}
-      >
-        <svg className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-          <path fillRule="evenodd" d="M2 4.75A.75.75 0 012.75 4h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 4.75zm0 10.5a.75.75 0 01.75-.75h7.5a.75.75 0 010 1.5h-7.5a.75.75 0 01-.75-.75zM2 10a.75.75 0 01.75-.75h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 10z" clipRule="evenodd" />
-        </svg>
-      </button>
+      {/* Left: hamburger + breadcrumb */}
+      <div className="flex items-center gap-3">
+        <button
+          className="flex h-8 w-8 items-center justify-center transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ember)] focus-visible:ring-offset-1 focus-visible:ring-offset-[var(--void)] lg:hidden"
+          style={{ color: 'var(--bone-mute)' }}
+          aria-label="Abrir menu de navegação"
+          onClick={onMenuClick}
+          onMouseEnter={(e) => { e.currentTarget.style.color = 'var(--bone)' }}
+          onMouseLeave={(e) => { e.currentTarget.style.color = 'var(--bone-mute)' }}
+        >
+          <Menu className="h-5 w-5" aria-hidden="true" />
+        </button>
 
-      <span
-        className="text-xs uppercase tracking-widest"
-        style={{ fontFamily: 'var(--type-mono)', color: 'rgba(241,241,243,0.35)' }}
-      >
-        {label}
-      </span>
+        <span
+          className="hidden lg:block"
+          style={{
+            fontFamily: 'var(--type-mono)',
+            fontSize: '11px',
+            letterSpacing: '0.12em',
+            textTransform: 'uppercase',
+            color: 'var(--bone-mute)',
+          }}
+        >
+          {label}
+        </span>
+      </div>
 
+      {/* Right: notifications + avatar */}
       <div className="flex items-center gap-3 lg:gap-4">
         <NotificationBell initialNotifications={notifications} />
 
         <Link
           href="/academy/perfil"
           aria-label="Ir para perfil"
-          className="flex h-8 w-8 items-center justify-center text-xs font-bold transition-colors hover:bg-white/15 focus-visible:outline-none"
+          className="flex h-8 w-8 items-center justify-center rounded-full text-xs font-bold uppercase transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ember)] focus-visible:ring-offset-1 focus-visible:ring-offset-[var(--void)]"
           style={{
-            background: 'var(--ink-3)',
-            color: 'var(--bone)',
+            background: 'rgba(255,58,14,0.20)',
+            color: 'var(--ember)',
             fontFamily: 'var(--type-mono)',
-            outline: 'none',
           }}
-          onFocus={(e) => { e.currentTarget.style.outline = '2px solid rgba(255,58,14,0.5)'; e.currentTarget.style.outlineOffset = '2px' }}
-          onBlur={(e) => { e.currentTarget.style.outline = '' }}
         >
           {userInitials}
         </Link>

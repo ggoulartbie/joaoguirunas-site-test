@@ -33,6 +33,12 @@ function formatBytes(bytes: number | null) {
   return `${(bytes / (1024 * 1024)).toFixed(1)} MB`
 }
 
+const inputClass =
+  'w-full border border-[rgba(255,255,255,0.16)] bg-[#16161a] px-3 py-3 font-mono text-sm text-[#f1f1f3] placeholder-[#84848c] outline-none focus:border-[#ff3a0e] transition-colors'
+
+const sectionClass =
+  'border border-[rgba(255,255,255,0.07)] bg-[#0e0e11] p-6 space-y-4'
+
 export function LessonEditorClient({
   lesson,
   initialMaterials,
@@ -88,8 +94,6 @@ export function LessonEditorClient({
     if (!content) return
     setPreview((p) => !p)
     if (!preview && content) {
-      // Inline preview: for HTML just pass raw; for MDX/Markdown pass as-is
-      // Full server-side render happens in the actual lesson page
       const raw: RenderedContent =
         contentFormat === 'HTML'
           ? { format: 'HTML', html: content }
@@ -106,7 +110,6 @@ export function LessonEditorClient({
     formData.append('file', file)
     try {
       await uploadMaterial(lesson.id, courseId, formData)
-      // Refresh materials via router revalidation
       router.refresh()
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Erro no upload')
@@ -125,50 +128,52 @@ export function LessonEditorClient({
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="flex items-start justify-between gap-4">
+      <div className="flex items-center justify-between border-b border-[rgba(255,255,255,0.07)] pb-4">
         <div>
           <button
             type="button"
             onClick={() => router.push(`/academy/admin/cursos/${courseId}`)}
-            className="mb-2 flex items-center gap-1 font-mono text-[10px] text-white/30 transition-colors hover:text-white/60"
+            className="mb-1 flex items-center gap-1 font-mono text-[10px] text-[#84848c] transition-colors hover:text-[#c5c5ca]"
           >
-            <ArrowLeft className="h-3 w-3" /> Voltar ao curso
+            <ArrowLeft className="h-3 w-3" />
+            Voltar ao curso
           </button>
-          <h1 className="font-mono text-lg font-semibold uppercase tracking-widest text-white/90">
-            {lesson.title}
-          </h1>
-          <p className="mt-1 font-mono text-[10px] text-white/30">{lesson.slug}</p>
+          <p className="font-mono text-[10px] uppercase tracking-widest text-[#84848c]">Admin / Cursos / Aula</p>
+          <h1 className="font-[--type-display] text-[28px] italic text-[#f1f1f3]">{lesson.title}</h1>
+          <p className="font-mono text-[10px] text-[#84848c]">{lesson.slug}</p>
         </div>
       </div>
 
-      <form onSubmit={handleSave} className="space-y-6">
+      <form onSubmit={handleSave} className="max-w-3xl space-y-4">
         {/* Basic info */}
-        <section className="space-y-4 border border-white/10 bg-white/[0.02] p-4">
-          <p className="font-mono text-[10px] uppercase tracking-widest text-white/30">Informações</p>
+        <section className={sectionClass} style={{ borderRadius: 0 }}>
+          <p className="font-mono text-[10px] uppercase tracking-widest text-[#84848c]">Informações</p>
           <div className="grid gap-4 sm:grid-cols-2">
             <div className="space-y-1.5">
-              <label className="font-mono text-[10px] text-white/40">Título</label>
+              <label className="font-mono text-[10px] uppercase tracking-widest text-[#84848c]">Título</label>
               <input
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
                 required
-                className="w-full border border-white/10 bg-transparent px-3 py-2 font-mono text-sm text-white/80 outline-none focus:border-white/20"
+                className={inputClass}
+                style={{ borderRadius: 0 }}
               />
             </div>
             <div className="space-y-1.5">
-              <label className="font-mono text-[10px] text-white/40">Tipo de Aula</label>
-              <div className="flex flex-wrap gap-1">
+              <label className="font-mono text-[10px] uppercase tracking-widest text-[#84848c]">Tipo de Aula</label>
+              <div className="flex flex-wrap gap-1.5">
                 {KIND_OPTIONS.map((k) => (
                   <button
                     key={k}
                     type="button"
                     onClick={() => setKind(k)}
                     className={cn(
-                      'px-2.5 py-1 font-mono text-[10px] uppercase tracking-wider transition-colors',
+                      'border px-2.5 py-1.5 font-mono text-[10px] uppercase tracking-wider transition-colors',
                       kind === k
-                        ? 'bg-[#FF3A0E] text-white'
-                        : 'border border-white/10 text-white/40 hover:border-white/20 hover:text-white/70'
+                        ? 'border-[#ff3a0e] bg-[#ff3a0e] text-[#050507]'
+                        : 'border-[rgba(255,255,255,0.16)] text-[#84848c] hover:border-[rgba(255,255,255,0.3)] hover:text-[#c5c5ca]'
                     )}
+                    style={{ borderRadius: 0 }}
                   >
                     {KIND_LABELS[k]}
                   </button>
@@ -176,12 +181,13 @@ export function LessonEditorClient({
               </div>
             </div>
             <div className="space-y-1.5 sm:col-span-2">
-              <label className="font-mono text-[10px] text-white/40">Descrição</label>
+              <label className="font-mono text-[10px] uppercase tracking-widest text-[#84848c]">Descrição</label>
               <input
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
                 placeholder="Breve descrição da aula..."
-                className="w-full border border-white/10 bg-transparent px-3 py-2 font-mono text-sm text-white/80 placeholder-white/20 outline-none focus:border-white/20"
+                className={inputClass}
+                style={{ borderRadius: 0 }}
               />
             </div>
           </div>
@@ -189,15 +195,16 @@ export function LessonEditorClient({
 
         {/* Video */}
         {hasVideo && (
-          <section className="space-y-4 border border-white/10 bg-white/[0.02] p-4">
-            <p className="font-mono text-[10px] uppercase tracking-widest text-white/30">Vídeo</p>
+          <section className={sectionClass} style={{ borderRadius: 0 }}>
+            <p className="font-mono text-[10px] uppercase tracking-widest text-[#84848c]">Vídeo</p>
             <div className="grid gap-4 sm:grid-cols-3">
               <div className="space-y-1.5">
-                <label className="font-mono text-[10px] text-white/40">Provedor</label>
+                <label className="font-mono text-[10px] uppercase tracking-widest text-[#84848c]">Provedor</label>
                 <select
                   value={videoProvider}
                   onChange={(e) => setVideoProvider(e.target.value)}
-                  className="w-full border border-white/10 bg-[#0C0C12] px-3 py-2 font-mono text-xs text-white/70 outline-none"
+                  className="w-full border border-[rgba(255,255,255,0.16)] bg-[#16161a] px-3 py-3 font-mono text-xs text-[#c5c5ca] outline-none focus:border-[#ff3a0e]"
+                  style={{ borderRadius: 0 }}
                 >
                   {PROVIDER_OPTIONS.map((p) => (
                     <option key={p} value={p}>{p}</option>
@@ -205,17 +212,18 @@ export function LessonEditorClient({
                 </select>
               </div>
               <div className="space-y-1.5 sm:col-span-2">
-                <label className="font-mono text-[10px] text-white/40">ID do Vídeo</label>
+                <label className="font-mono text-[10px] uppercase tracking-widest text-[#84848c]">ID do Vídeo</label>
                 <input
                   value={videoId}
                   onChange={(e) => setVideoId(e.target.value)}
                   placeholder="Ex.: 123456789 (Vimeo)"
-                  className="w-full border border-white/10 bg-transparent px-3 py-2 font-mono text-sm text-white/80 placeholder-white/20 outline-none focus:border-white/20"
+                  className={inputClass}
+                  style={{ borderRadius: 0 }}
                 />
               </div>
             </div>
             {videoId && videoProvider === 'VIMEO' && (
-              <div className="mt-2 aspect-video w-full max-w-md overflow-hidden border border-white/10">
+              <div className="mt-2 aspect-video w-full max-w-md overflow-hidden border border-[rgba(255,255,255,0.07)]">
                 <iframe
                   src={`https://player.vimeo.com/video/${videoId}?dnt=1&title=0&byline=0`}
                   className="h-full w-full"
@@ -228,14 +236,14 @@ export function LessonEditorClient({
         )}
 
         {/* Content editor */}
-        <section className="space-y-4 border border-white/10 bg-white/[0.02] p-4">
+        <section className={sectionClass} style={{ borderRadius: 0 }}>
           <div className="flex items-center justify-between">
-            <p className="font-mono text-[10px] uppercase tracking-widest text-white/30">Conteúdo da Aula</p>
+            <p className="font-mono text-[10px] uppercase tracking-widest text-[#84848c]">Conteúdo da Aula</p>
             {content && (
               <button
                 type="button"
                 onClick={handlePreview}
-                className="flex items-center gap-1.5 font-mono text-[10px] text-white/30 transition-colors hover:text-white/70"
+                className="flex items-center gap-1.5 font-mono text-[10px] text-[#84848c] transition-colors hover:text-[#c5c5ca]"
               >
                 <Eye className="h-3 w-3" />
                 {preview ? 'Fechar preview' : 'Preview como aluno'}
@@ -244,7 +252,7 @@ export function LessonEditorClient({
           </div>
 
           {preview && previewContent ? (
-            <div className="border border-white/10 bg-black/20 p-4">
+            <div className="border border-[rgba(255,255,255,0.07)] bg-[#050507] p-4" style={{ borderRadius: 0 }}>
               <LessonContent content={previewContent} className="prose prose-invert prose-sm max-w-none" />
             </div>
           ) : (
@@ -258,24 +266,24 @@ export function LessonEditorClient({
         </section>
 
         {/* Materials */}
-        <section className="space-y-4 border border-white/10 bg-white/[0.02] p-4">
-          <p className="font-mono text-[10px] uppercase tracking-widest text-white/30">Materiais</p>
+        <section className={sectionClass} style={{ borderRadius: 0 }}>
+          <p className="font-mono text-[10px] uppercase tracking-widest text-[#84848c]">Materiais</p>
 
           {materials.length > 0 && (
-            <div className="divide-y divide-white/5">
+            <div className="divide-y divide-[rgba(255,255,255,0.07)]">
               {materials.map((mat) => (
                 <div key={mat.id} className="flex items-center gap-3 py-2.5">
-                  <FileText className="h-4 w-4 shrink-0 text-white/30" />
+                  <FileText className="h-4 w-4 shrink-0 text-[#84848c]" />
                   <div className="min-w-0 flex-1">
-                    <p className="truncate font-mono text-xs text-white/70">{mat.title}</p>
-                    <p className="font-mono text-[10px] text-white/25">
+                    <p className="truncate font-[--type-sans] text-xs text-[#c5c5ca]">{mat.title}</p>
+                    <p className="font-mono text-[10px] text-[#84848c]">
                       {mat.kind} {mat.size_bytes ? `· ${formatBytes(mat.size_bytes)}` : ''}
                     </p>
                   </div>
                   <button
                     type="button"
                     onClick={() => mat.storage_path && handleDeleteMaterial(mat.id, mat.storage_path)}
-                    className="text-white/20 transition-colors hover:text-red-400"
+                    className="text-[#84848c] transition-colors hover:text-[#ff3a0e]"
                   >
                     <Trash2 className="h-3.5 w-3.5" />
                   </button>
@@ -284,15 +292,15 @@ export function LessonEditorClient({
             </div>
           )}
 
-          {/* Drop zone / upload */}
           <label
             className={cn(
-              'flex cursor-pointer flex-col items-center gap-2 border-2 border-dashed border-white/10 p-6 transition-colors hover:border-white/20',
+              'flex cursor-pointer flex-col items-center gap-2 border border-dashed border-[rgba(255,255,255,0.16)] p-6 transition-colors hover:border-[rgba(255,255,255,0.3)]',
               uploading && 'opacity-50'
             )}
+            style={{ borderRadius: 0 }}
           >
-            <Upload className="h-5 w-5 text-white/20" />
-            <span className="font-mono text-[10px] text-white/30">
+            <Upload className="h-5 w-5 text-[#84848c]" />
+            <span className="font-mono text-[10px] text-[#84848c]">
               {uploading ? 'Enviando...' : 'Clique ou arraste para fazer upload (PDF, ZIP, imagem)'}
             </span>
             <input
@@ -307,20 +315,22 @@ export function LessonEditorClient({
         </section>
 
         {/* Actions */}
-        {error && <p className="font-mono text-xs text-red-400">{error}</p>}
-        <div className="flex items-center justify-end gap-3">
-          {saved && <span className="font-mono text-[10px] text-green-400">Salvo!</span>}
+        {error && <p className="font-mono text-xs text-[#ff3a0e]">{error}</p>}
+        <div className="flex items-center justify-end gap-3 border-t border-[rgba(255,255,255,0.07)] pt-4">
+          {saved && <span className="font-mono text-[10px] text-[#c5c5ca]">Salvo!</span>}
           <button
             type="button"
             onClick={() => router.push(`/academy/admin/cursos/${courseId}`)}
-            className="px-4 py-2 font-mono text-xs text-white/30 transition-colors hover:text-white/70"
+            className="border border-[rgba(255,255,255,0.16)] px-4 py-2.5 font-mono text-xs uppercase tracking-wider text-[#c5c5ca] transition-colors hover:border-[rgba(255,255,255,0.3)] hover:text-[#f1f1f3]"
+            style={{ borderRadius: 0 }}
           >
             Voltar
           </button>
           <button
             type="submit"
             disabled={pending}
-            className="bg-[#FF3A0E] px-5 py-2 font-mono text-xs font-semibold uppercase tracking-wider text-white transition-opacity hover:opacity-90 disabled:opacity-40"
+            className="bg-[#ff3a0e] px-5 py-2.5 font-mono text-xs font-semibold uppercase tracking-wider text-[#050507] transition-opacity hover:opacity-90 disabled:opacity-40"
+            style={{ borderRadius: 0 }}
           >
             {pending ? 'Salvando...' : 'Salvar Aula'}
           </button>

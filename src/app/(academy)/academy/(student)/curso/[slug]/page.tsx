@@ -4,12 +4,9 @@ import { notFound } from 'next/navigation'
 import {
   Lock,
   CheckCircle2,
-  Circle,
-  ChevronRight,
-  ArrowLeft,
+  ChevronDown,
   ExternalLink,
 } from 'lucide-react'
-import { ProgressBar } from '@/components/student/ProgressBar'
 import { MOCK_COURSES, MOCK_MODULES } from '@/components/student/mock-data'
 
 type Props = {
@@ -38,52 +35,78 @@ export default async function CursoPage({ params }: Props) {
   const unlockedModules = modules.filter((m) => !m.isLocked)
 
   return (
-    <div className="mx-auto max-w-3xl space-y-8">
-      {/* Breadcrumb */}
-      <div>
-        <Link
-          href="/meus-cursos"
-          className="flex items-center gap-1.5 font-mono text-xs uppercase tracking-wider text-white/40 hover:text-white/70 transition-colors"
+    <div className="mx-auto max-w-4xl">
+      {/* Hero header */}
+      <div
+        className="border-b p-6 lg:p-8"
+        style={{
+          background: 'var(--ink)',
+          borderColor: 'var(--hairline)',
+        }}
+      >
+        {/* Breadcrumb */}
+        <p className="font-mono text-[11px] uppercase tracking-wider" style={{ color: 'var(--bone-mute)' }}>
+          <Link
+            href="/academy/meus-cursos"
+            className="transition-colors hover:text-[var(--bone)]"
+            style={{ color: 'var(--bone-mute)' }}
+          >
+            Meus Cursos
+          </Link>
+          {' / '}
+          <span style={{ color: 'var(--bone-dim)' }}>{course.title}</span>
+        </p>
+
+        <h1
+          className="mt-3 font-[var(--type-display)] italic"
+          style={{
+            fontSize: 'clamp(2rem, 5vw, 2.625rem)',
+            lineHeight: 1.1,
+            color: 'var(--bone)',
+          }}
         >
-          <ArrowLeft className="h-3 w-3" />
-          Meus Cursos
-        </Link>
-      </div>
+          {course.title}
+        </h1>
 
-      {/* Header do curso */}
-      <div className="border border-white/10 bg-[#0C0C12] p-6">
-        <div className="mb-1">
-          <span className="border border-white/10 px-2 py-0.5 font-mono text-[10px] uppercase tracking-wide text-white/40">
-            {course.cohortName}
-          </span>
-        </div>
-        <h1 className="mt-3 text-2xl font-bold text-white">{course.title}</h1>
-        <p className="mt-2 text-sm text-white/60">{course.description}</p>
+        <p className="mt-3 text-base" style={{ color: 'var(--bone-dim)' }}>
+          {course.description}
+        </p>
 
-        <div className="mt-5 space-y-2">
+        <div className="mt-4 space-y-2">
           <div className="flex items-center justify-between">
-            <span className="font-mono text-xs text-white/40">
+            <span className="font-mono text-[11px]" style={{ color: 'var(--bone-mute)' }}>
               {course.completedLessons}/{course.totalLessons} aulas concluídas
             </span>
-            <span className="font-mono text-sm font-bold text-[#FF3A0E]">
+            <span className="font-mono text-sm font-bold" style={{ color: 'var(--ember)' }}>
               {course.progressPercent}%
             </span>
           </div>
-          <ProgressBar value={course.progressPercent} />
+          <div
+            className="h-px w-full"
+            style={{ background: 'var(--ink-3)' }}
+            role="progressbar"
+            aria-valuenow={course.progressPercent}
+            aria-valuemin={0}
+            aria-valuemax={100}
+          >
+            <div
+              className="h-px transition-all"
+              style={{
+                width: `${course.progressPercent}%`,
+                background: 'var(--ember)',
+              }}
+            />
+          </div>
         </div>
 
-        <div className="mt-4 flex items-center gap-4 font-mono text-xs text-white/30">
+        <div className="mt-4 flex items-center gap-4 font-mono text-[11px]" style={{ color: 'var(--bone-mute)' }}>
           <span>{unlockedModules.length} módulos acessíveis</span>
           <span>{completedModules} módulos concluídos</span>
         </div>
       </div>
 
       {/* Lista de módulos */}
-      <div className="space-y-3">
-        <h2 className="font-mono text-xs uppercase tracking-widest text-white/40">
-          Módulos
-        </h2>
-
+      <div className="mt-8 space-y-2 px-0">
         {modules.map((module, index) => {
           const moduleProgress =
             module.totalLessons > 0
@@ -100,53 +123,93 @@ export default async function CursoPage({ params }: Props) {
                 key={module.id}
                 module={module}
                 index={index}
+                slug={slug}
               />
             )
           }
 
           return (
-            <Link
+            <ModuleAccordion
               key={module.id}
-              href={`/curso/${slug}/modulo/${module.slug}`}
-              className="group flex items-start gap-4 border border-white/10 bg-[#0C0C12] p-4 transition-colors hover:border-white/20 hover:bg-[#121218]"
-            >
-              {/* Index */}
-              <span className="mt-0.5 shrink-0 font-mono text-sm text-white/20">
-                {String(index + 1).padStart(2, '0')}
-              </span>
-
-              <div className="flex-1 min-w-0">
-                <div className="flex items-center gap-2">
-                  <h3 className="font-semibold text-white group-hover:text-[#FF3A0E] transition-colors">
-                    {module.title}
-                  </h3>
-                  {isComplete && (
-                    <CheckCircle2 className="h-4 w-4 shrink-0 text-green-400" aria-hidden="true" />
-                  )}
-                </div>
-
-                <div className="mt-2 flex items-center gap-3">
-                  <span className="font-mono text-xs text-white/40">
-                    {module.completedLessons}/{module.totalLessons} aulas
-                  </span>
-                  {moduleProgress > 0 && moduleProgress < 100 && (
-                    <span className="font-mono text-xs text-[#FF3A0E]">
-                      Em andamento
-                    </span>
-                  )}
-                </div>
-
-                <div className="mt-2">
-                  <ProgressBar value={moduleProgress} />
-                </div>
-              </div>
-
-              <ChevronRight className="mt-1 h-4 w-4 shrink-0 text-white/20 transition-colors group-hover:text-white/60" aria-hidden="true" />
-            </Link>
+              module={module}
+              index={index}
+              slug={slug}
+              isComplete={isComplete}
+              moduleProgress={moduleProgress}
+            />
           )
         })}
       </div>
     </div>
+  )
+}
+
+function ModuleAccordion({
+  module,
+  index,
+  slug,
+  isComplete,
+  moduleProgress,
+}: {
+  module: (typeof MOCK_MODULES)[number]
+  index: number
+  slug: string
+  isComplete: boolean
+  moduleProgress: number
+}) {
+  return (
+    <details
+      className="group"
+      style={{
+        background: 'var(--ink)',
+        border: '1px solid var(--hairline)',
+      }}
+      open
+    >
+      <summary
+        className="flex cursor-pointer list-none items-center justify-between p-4"
+        style={{ borderBottom: '1px solid var(--hairline)' }}
+      >
+        <div className="flex items-center gap-3">
+          <span className="font-mono text-[11px]" style={{ color: 'var(--bone-mute)' }}>
+            {String(index + 1).padStart(2, '0')}
+          </span>
+          <span className="text-[15px] font-medium" style={{ color: 'var(--bone)' }}>
+            {module.title}
+          </span>
+          {isComplete && (
+            <CheckCircle2 className="h-3.5 w-3.5 shrink-0 text-green-400" aria-hidden="true" />
+          )}
+        </div>
+        <div className="flex items-center gap-3">
+          <span
+            className="font-mono text-[11px]"
+            style={{ color: 'var(--bone-mute)' }}
+          >
+            {module.totalLessons} aulas
+          </span>
+          {moduleProgress > 0 && moduleProgress < 100 && (
+            <span className="font-mono text-[11px]" style={{ color: 'var(--ember)' }}>
+              {moduleProgress}%
+            </span>
+          )}
+          <ChevronDown
+            className="h-4 w-4 transition-transform group-open:rotate-180"
+            style={{ color: 'var(--bone-mute)' }}
+            aria-hidden="true"
+          />
+        </div>
+      </summary>
+
+      <div
+        className="px-4 py-3"
+        style={{ borderTop: '1px solid var(--hairline)' }}
+      >
+        <p className="font-mono text-[11px]" style={{ color: 'var(--bone-mute)' }}>
+          {module.completedLessons}/{module.totalLessons} aulas concluídas
+        </p>
+      </div>
+    </details>
   )
 }
 
@@ -156,36 +219,46 @@ function LockedModuleCard({
 }: {
   module: (typeof MOCK_MODULES)[number]
   index: number
+  slug: string
 }) {
   return (
-    <div className="flex items-start gap-4 border border-white/5 bg-[#0C0C12]/40 p-4 opacity-70">
-      <span className="mt-0.5 shrink-0 font-mono text-sm text-white/15">
+    <div
+      className="flex items-start gap-4 p-4 opacity-60"
+      style={{
+        background: 'var(--ink)',
+        border: '1px solid var(--hairline)',
+      }}
+    >
+      <span className="mt-0.5 shrink-0 font-mono text-[11px]" style={{ color: 'var(--bone-mute)' }}>
         {String(index + 1).padStart(2, '0')}
       </span>
 
       <div className="flex-1 min-w-0">
         <div className="flex items-center gap-2">
-          <Lock className="h-3.5 w-3.5 shrink-0 text-white/30" aria-hidden="true" />
-          <h3 className="font-semibold text-white/40">{module.title}</h3>
+          <Lock className="h-3.5 w-3.5 shrink-0" style={{ color: 'var(--bone-mute)' }} aria-hidden="true" />
+          <span className="text-[15px] font-medium" style={{ color: 'var(--bone-mute)' }}>
+            {module.title}
+          </span>
         </div>
 
-        <p className="mt-1 text-xs text-white/30">
-          Esta aula faz parte da turma{' '}
-          <span className="text-white/50">{module.lockedByCohortName}</span>
-        </p>
+        {module.lockedByCohortName && (
+          <p className="mt-1 font-mono text-[11px]" style={{ color: 'var(--bone-mute)' }}>
+            Disponível na turma{' '}
+            <span style={{ color: 'var(--bone-dim)' }}>{module.lockedByCohortName}</span>
+          </p>
+        )}
 
         {module.lockedByCohortSlug && (
           <Link
             href={`/turmas/${module.lockedByCohortSlug}`}
-            className="mt-2 flex items-center gap-1 font-mono text-[10px] uppercase tracking-wide text-[#FF3A0E]/60 hover:text-[#FF3A0E] transition-colors"
+            className="mt-2 flex items-center gap-1 font-mono text-[10px] uppercase tracking-wide transition-colors"
+            style={{ color: 'rgba(255,58,14,0.6)' }}
           >
             <ExternalLink className="h-3 w-3" />
             Conhecer turma
           </Link>
         )}
       </div>
-
-      <Circle className="mt-1 h-4 w-4 shrink-0 text-white/10" aria-hidden="true" />
     </div>
   )
 }

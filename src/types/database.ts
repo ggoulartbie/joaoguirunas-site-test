@@ -886,6 +886,87 @@ export type Database = {
           },
         ]
       }
+      onboarding: {
+        Row: {
+          id: string
+          created_at: string
+          updated_at: string
+          nome: string
+          profissao: string | null
+          empresa: string | null
+          segmento: string | null
+          cidade: string | null
+          linkedin: string | null
+          obj_1: string | null
+          obj_2: string | null
+          obj_3: string | null
+          obj_4: string | null
+          ctx_1: string | null
+          ctx_2: string | null
+          ctx_3: string | null
+          ctx_4: string | null
+          proj_nome: string | null
+          proj_problema: string | null
+          proj_publico: string | null
+          proj_tools: string | null
+          proj_resultado: string | null
+          planejamento: string | null
+          status: string
+        }
+        Insert: {
+          id?: string
+          created_at?: string
+          updated_at?: string
+          nome?: string
+          profissao?: string | null
+          empresa?: string | null
+          segmento?: string | null
+          cidade?: string | null
+          linkedin?: string | null
+          obj_1?: string | null
+          obj_2?: string | null
+          obj_3?: string | null
+          obj_4?: string | null
+          ctx_1?: string | null
+          ctx_2?: string | null
+          ctx_3?: string | null
+          ctx_4?: string | null
+          proj_nome?: string | null
+          proj_problema?: string | null
+          proj_publico?: string | null
+          proj_tools?: string | null
+          proj_resultado?: string | null
+          planejamento?: string | null
+          status?: string
+        }
+        Update: {
+          id?: string
+          created_at?: string
+          updated_at?: string
+          nome?: string
+          profissao?: string | null
+          empresa?: string | null
+          segmento?: string | null
+          cidade?: string | null
+          linkedin?: string | null
+          obj_1?: string | null
+          obj_2?: string | null
+          obj_3?: string | null
+          obj_4?: string | null
+          ctx_1?: string | null
+          ctx_2?: string | null
+          ctx_3?: string | null
+          ctx_4?: string | null
+          proj_nome?: string | null
+          proj_problema?: string | null
+          proj_publico?: string | null
+          proj_tools?: string | null
+          proj_resultado?: string | null
+          planejamento?: string | null
+          status?: string
+        }
+        Relationships: []
+      }
       payments: {
         Row: {
           amount_cents: number

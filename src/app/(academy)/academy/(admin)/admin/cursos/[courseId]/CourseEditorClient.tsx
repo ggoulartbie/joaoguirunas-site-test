@@ -17,7 +17,7 @@ import {
   arrayMove,
 } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
-import { GripVertical, Plus, Pencil, Trash2, ChevronDown, ChevronRight } from 'lucide-react'
+import { GripVertical, Plus, Pencil, Trash2, ChevronDown, ChevronRight, ArrowLeft } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import {
   updateCourse,
@@ -42,6 +42,9 @@ const KIND_LABELS: Record<string, string> = {
   CODE: 'Código',
   READING: 'Leitura',
 }
+
+const inputClass =
+  'w-full border border-[rgba(255,255,255,0.16)] bg-[#16161a] px-3 py-3 font-mono text-sm text-[#f1f1f3] placeholder-[#84848c] outline-none focus:border-[#ff3a0e] transition-colors'
 
 // ── Sortable Module Row ───────────────────────────────────────────────────────
 
@@ -81,22 +84,39 @@ function SortableModule({
   return (
     <div
       ref={setNodeRef}
-      style={style}
-      className={cn('border border-white/10 bg-white/[0.02]', isDragging && 'opacity-50')}
+      style={{ ...style, borderRadius: 0 }}
+      className={cn(
+        'border border-[rgba(255,255,255,0.07)] bg-[#16161a]',
+        isDragging && 'opacity-50'
+      )}
     >
       {/* Module header */}
-      <div className="flex items-center gap-2 p-3">
-        <button type="button" {...attributes} {...listeners} className="cursor-grab text-white/20 hover:text-white/50 active:cursor-grabbing">
+      <div className="flex items-center gap-2 px-4 py-3">
+        <button
+          type="button"
+          {...attributes}
+          {...listeners}
+          className="cursor-grab text-[#84848c] opacity-50 transition-opacity hover:opacity-100 active:cursor-grabbing"
+        >
           <GripVertical className="h-4 w-4" />
         </button>
-        <button type="button" onClick={() => setOpen((o) => !o)} className="flex flex-1 items-center gap-2 text-left">
-          {open ? <ChevronDown className="h-3.5 w-3.5 text-white/30" /> : <ChevronRight className="h-3.5 w-3.5 text-white/30" />}
-          <span className="font-mono text-xs font-medium text-white/80">{mod.title}</span>
-          <span className="font-mono text-[10px] text-white/20">{mod.lessons.length} aula{mod.lessons.length !== 1 ? 's' : ''}</span>
+        <button
+          type="button"
+          onClick={() => setOpen((o) => !o)}
+          className="flex flex-1 items-center gap-2 text-left"
+        >
+          {open
+            ? <ChevronDown className="h-3.5 w-3.5 text-[#84848c]" />
+            : <ChevronRight className="h-3.5 w-3.5 text-[#84848c]" />
+          }
+          <span className="font-mono text-xs font-medium text-[#f1f1f3]">{mod.title}</span>
+          <span className="font-mono text-[10px] text-[#84848c]">
+            {mod.lessons.length} aula{mod.lessons.length !== 1 ? 's' : ''}
+          </span>
         </button>
         <Link
           href={`/admin/cursos/${courseId}/modulos/${mod.id}`}
-          className="p-1 text-white/20 transition-colors hover:text-white/60"
+          className="p-1 text-[#84848c] transition-colors hover:text-[#f1f1f3]"
         >
           <Pencil className="h-3.5 w-3.5" />
         </Link>
@@ -105,7 +125,7 @@ function SortableModule({
           onClick={() => {
             if (confirm(`Remover módulo "${mod.title}"?`)) onDelete(mod.id)
           }}
-          className="p-1 text-white/20 transition-colors hover:text-red-400"
+          className="p-1 text-[#84848c] transition-colors hover:text-[#ff3a0e]"
         >
           <Trash2 className="h-3.5 w-3.5" />
         </button>
@@ -113,24 +133,27 @@ function SortableModule({
 
       {/* Lessons list */}
       {open && (
-        <div className="border-t border-white/5 pb-2">
+        <div className="border-t border-[rgba(255,255,255,0.07)] pb-1">
           {mod.lessons.map((lesson) => (
-            <div key={lesson.id} className="flex items-center gap-2 px-4 py-2 hover:bg-white/[0.02]">
+            <div
+              key={lesson.id}
+              className="flex items-center gap-3 px-4 py-2.5 transition-colors hover:bg-[#1f1f24]"
+            >
               <span className={cn(
-                'shrink-0 px-1.5 py-0.5 font-mono text-[9px] uppercase tracking-wider',
-                lesson.kind === 'VIDEO' ? 'bg-blue-500/10 text-blue-400' :
-                lesson.kind === 'LIVE' ? 'bg-green-500/10 text-green-400' :
-                lesson.kind === 'CODE' ? 'bg-yellow-500/10 text-yellow-400' :
-                'bg-white/5 text-white/30'
-              )}>
+                'shrink-0 border border-[rgba(255,255,255,0.07)] px-1.5 py-0.5 font-mono text-[9px] uppercase tracking-wider',
+                lesson.kind === 'VIDEO' ? 'text-[#c5c5ca]' :
+                lesson.kind === 'LIVE' ? 'text-[#c5c5ca]' :
+                lesson.kind === 'CODE' ? 'text-[#c5c5ca]' :
+                'text-[#84848c]'
+              )} style={{ borderRadius: 0 }}>
                 {KIND_LABELS[lesson.kind] ?? lesson.kind}
               </span>
-              <span className="flex-1 font-mono text-xs text-white/60">{lesson.title}</span>
+              <span className="flex-1 font-[--type-sans] text-xs text-[#c5c5ca]">{lesson.title}</span>
               <Link
-                href={`/admin/cursos/${courseId}/aulas/${lesson.id}`}
-                className="font-mono text-[10px] text-white/20 transition-colors hover:text-white/60"
+                href={`/academy/admin/cursos/${courseId}/aulas/${lesson.id}`}
+                className="p-1 text-[#84848c] transition-colors hover:text-[#f1f1f3]"
               >
-                Editar
+                <Pencil className="h-3 w-3" />
               </Link>
               <button
                 type="button"
@@ -139,7 +162,7 @@ function SortableModule({
                     startTransition(() => deleteLesson(lesson.id, courseId))
                   }
                 }}
-                className="text-white/20 transition-colors hover:text-red-400"
+                className="p-1 text-[#84848c] transition-colors hover:text-[#ff3a0e]"
               >
                 <Trash2 className="h-3 w-3" />
               </button>
@@ -148,35 +171,47 @@ function SortableModule({
 
           {/* Add lesson inline form */}
           {addingLesson ? (
-            <form onSubmit={handleAddLesson} className="flex flex-wrap items-center gap-2 px-4 py-2">
+            <form onSubmit={handleAddLesson} className="flex flex-wrap items-center gap-2 border-t border-[rgba(255,255,255,0.07)] px-4 py-3">
               <input
                 autoFocus
                 value={lessonTitle}
                 onChange={(e) => { setLessonTitle(e.target.value); setLessonSlug(slugify(e.target.value)) }}
                 placeholder="Título da aula"
                 required
-                className="min-w-0 flex-1 border border-white/10 bg-white/[0.03] px-3 py-1.5 font-mono text-xs text-white/70 outline-none"
+                className="min-w-0 flex-1 border border-[rgba(255,255,255,0.16)] bg-[#0e0e11] px-3 py-2 font-mono text-xs text-[#f1f1f3] outline-none focus:border-[#ff3a0e]"
+                style={{ borderRadius: 0 }}
               />
               <input
                 value={lessonSlug}
                 onChange={(e) => setLessonSlug(e.target.value)}
                 placeholder="slug"
                 required
-                className="w-36 border border-white/10 bg-white/[0.03] px-3 py-1.5 font-mono text-[10px] text-white/50 outline-none"
+                className="w-36 border border-[rgba(255,255,255,0.16)] bg-[#0e0e11] px-3 py-2 font-mono text-[10px] text-[#84848c] outline-none focus:border-[#ff3a0e]"
+                style={{ borderRadius: 0 }}
               />
               <select
                 value={lessonKind}
                 onChange={(e) => setLessonKind(e.target.value)}
-                className="border border-white/10 bg-[#0C0C12] px-2 py-1.5 font-mono text-[10px] text-white/60 outline-none"
+                className="border border-[rgba(255,255,255,0.16)] bg-[#0e0e11] px-2 py-2 font-mono text-[10px] text-[#c5c5ca] outline-none focus:border-[#ff3a0e]"
+                style={{ borderRadius: 0 }}
               >
                 {Object.entries(KIND_LABELS).map(([k, v]) => (
                   <option key={k} value={k}>{v}</option>
                 ))}
               </select>
-              <button type="submit" disabled={pending} className="bg-[#FF3A0E] px-3 py-1.5 font-mono text-[10px] text-white disabled:opacity-40">
+              <button
+                type="submit"
+                disabled={pending}
+                className="bg-[#ff3a0e] px-3 py-2 font-mono text-[10px] font-semibold uppercase tracking-wider text-[#050507] disabled:opacity-40"
+                style={{ borderRadius: 0 }}
+              >
                 {pending ? '...' : 'Adicionar'}
               </button>
-              <button type="button" onClick={() => setAddingLesson(false)} className="font-mono text-[10px] text-white/30 hover:text-white/60">
+              <button
+                type="button"
+                onClick={() => setAddingLesson(false)}
+                className="font-mono text-[10px] text-[#84848c] transition-colors hover:text-[#c5c5ca]"
+              >
                 Cancelar
               </button>
             </form>
@@ -184,7 +219,7 @@ function SortableModule({
             <button
               type="button"
               onClick={() => setAddingLesson(true)}
-              className="flex w-full items-center gap-1.5 px-4 py-2 font-mono text-[10px] text-white/25 transition-colors hover:text-white/50"
+              className="flex w-full items-center gap-1.5 border-t border-[rgba(255,255,255,0.07)] px-4 py-2.5 font-mono text-[10px] uppercase tracking-wider text-[#84848c] transition-colors hover:text-[#c5c5ca]"
             >
               <Plus className="h-3 w-3" /> Nova Aula
             </button>
@@ -243,7 +278,21 @@ export function CourseEditorClient({
     e.preventDefault()
     startSave(async () => {
       const mod = await createModule({ course_id: course.id, title: modTitle, slug: modSlug, description: null })
-      setModules((prev) => [...prev, { ...{ id: mod.id, course_id: course.id, title: modTitle, slug: modSlug, description: null, sort_order: prev.length, created_at: new Date().toISOString(), updated_at: new Date().toISOString(), deleted_at: null }, lessons: [] }])
+      setModules((prev) => [
+        ...prev,
+        {
+          id: mod.id,
+          course_id: course.id,
+          title: modTitle,
+          slug: modSlug,
+          description: null,
+          sort_order: prev.length,
+          created_at: new Date().toISOString(),
+          updated_at: new Date().toISOString(),
+          deleted_at: null,
+          lessons: [],
+        },
+      ])
       setModTitle('')
       setModSlug('')
       setAddingModule(false)
@@ -251,64 +300,83 @@ export function CourseEditorClient({
   }
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-6">
       {/* Header */}
-      <div className="flex items-start justify-between gap-4">
+      <div className="flex items-center justify-between border-b border-[rgba(255,255,255,0.07)] pb-4">
         <div>
-          <button type="button" onClick={() => router.push('/academy/admin/cursos')} className="mb-2 font-mono text-[10px] text-white/30 transition-colors hover:text-white/60">
-            ← Cursos
+          <button
+            type="button"
+            onClick={() => router.push('/academy/admin/cursos')}
+            className="mb-1 flex items-center gap-1 font-mono text-[10px] text-[#84848c] transition-colors hover:text-[#c5c5ca]"
+          >
+            <ArrowLeft className="h-3 w-3" />
+            Cursos
           </button>
-          <h1 className="font-mono text-lg font-semibold uppercase tracking-widest text-white/90">
-            {course.title}
-          </h1>
-          <p className="mt-1 font-mono text-[10px] text-white/30">{course.slug}</p>
+          <p className="font-mono text-[10px] uppercase tracking-widest text-[#84848c]">Admin / Cursos</p>
+          <h1 className="font-[--type-display] text-[28px] italic text-[#f1f1f3]">{course.title}</h1>
+          <p className="font-mono text-[10px] text-[#84848c]">{course.slug}</p>
         </div>
-        <span className={cn(
-          'shrink-0 px-2 py-1 font-mono text-[10px] uppercase tracking-wider',
-          course.published ? 'bg-green-500/10 text-green-400' : 'bg-white/5 text-white/30'
-        )}>
+        <span
+          className={cn(
+            'shrink-0 border px-2.5 py-1 font-mono text-[10px] uppercase tracking-wider',
+            course.published
+              ? 'border-[rgba(255,255,255,0.16)] text-[#f1f1f3]'
+              : 'border-[rgba(255,255,255,0.07)] text-[#84848c]'
+          )}
+          style={{ borderRadius: 0 }}
+        >
           {course.published ? 'Publicado' : 'Rascunho'}
         </span>
       </div>
 
       {/* Course metadata form */}
-      <form onSubmit={handleSaveCourse} className="space-y-3 border border-white/10 bg-white/[0.02] p-4">
-        <p className="font-mono text-[10px] uppercase tracking-widest text-white/30">Informações do Curso</p>
-        <div className="grid gap-3 sm:grid-cols-2">
-          <div className="space-y-1">
-            <label className="font-mono text-[10px] text-white/30">Título</label>
-            <input
-              value={title}
-              onChange={(e) => setTitle(e.target.value)}
-              className="w-full border border-white/10 bg-transparent px-3 py-2 font-mono text-sm text-white/80 outline-none focus:border-white/20"
-            />
+      <div className="max-w-3xl border border-[rgba(255,255,255,0.07)] bg-[#0e0e11] p-6" style={{ borderRadius: 0 }}>
+        <p className="mb-4 font-mono text-[10px] uppercase tracking-widest text-[#84848c]">Informações do Curso</p>
+        <form onSubmit={handleSaveCourse} className="space-y-4">
+          <div className="grid gap-4 sm:grid-cols-2">
+            <div className="space-y-1.5">
+              <label className="font-mono text-[10px] uppercase tracking-widest text-[#84848c]">Título</label>
+              <input
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
+                className={inputClass}
+                style={{ borderRadius: 0 }}
+              />
+            </div>
+            <div className="space-y-1.5">
+              <label className="font-mono text-[10px] uppercase tracking-widest text-[#84848c]">Descrição</label>
+              <input
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
+                placeholder="Descrição breve..."
+                className={inputClass}
+                style={{ borderRadius: 0 }}
+              />
+            </div>
           </div>
-          <div className="space-y-1">
-            <label className="font-mono text-[10px] text-white/30">Descrição</label>
-            <input
-              value={description}
-              onChange={(e) => setDescription(e.target.value)}
-              className="w-full border border-white/10 bg-transparent px-3 py-2 font-mono text-sm text-white/80 outline-none focus:border-white/20"
-            />
+          <div className="flex justify-end border-t border-[rgba(255,255,255,0.07)] pt-4">
+            <button
+              type="submit"
+              disabled={saving}
+              className="bg-[#ff3a0e] px-5 py-2.5 font-mono text-[10px] font-semibold uppercase tracking-wider text-[#050507] transition-opacity hover:opacity-90 disabled:opacity-40"
+              style={{ borderRadius: 0 }}
+            >
+              {saving ? 'Salvando...' : 'Salvar'}
+            </button>
           </div>
-        </div>
-        <div className="flex justify-end">
-          <button type="submit" disabled={saving} className="bg-[#FF3A0E] px-4 py-1.5 font-mono text-[10px] font-semibold uppercase tracking-wider text-white disabled:opacity-40">
-            {saving ? 'Salvando...' : 'Salvar'}
-          </button>
-        </div>
-      </form>
+        </form>
+      </div>
 
       {/* Modules with drag-and-drop */}
-      <div className="space-y-3">
+      <div className="max-w-3xl space-y-3">
         <div className="flex items-center justify-between">
-          <p className="font-mono text-[10px] uppercase tracking-widest text-white/30">
+          <p className="font-mono text-[10px] uppercase tracking-widest text-[#84848c]">
             Módulos ({modules.length})
           </p>
           <button
             type="button"
             onClick={() => setAddingModule(true)}
-            className="flex items-center gap-1.5 font-mono text-[10px] uppercase tracking-wider text-white/30 transition-colors hover:text-white/70"
+            className="flex items-center gap-1.5 font-mono text-[10px] uppercase tracking-wider text-[#84848c] transition-colors hover:text-[#c5c5ca]"
           >
             <Plus className="h-3 w-3" /> Novo Módulo
           </button>
@@ -325,33 +393,48 @@ export function CourseEditorClient({
         </DndContext>
 
         {modules.length === 0 && !addingModule && (
-          <div className="py-8 text-center">
-            <p className="font-mono text-xs text-white/20">Nenhum módulo ainda — adicione o primeiro</p>
+          <div className="border border-[rgba(255,255,255,0.07)] py-10 text-center" style={{ borderRadius: 0 }}>
+            <p className="font-mono text-xs text-[#84848c]">Nenhum módulo ainda — adicione o primeiro</p>
           </div>
         )}
 
         {/* Add module inline form */}
         {addingModule && (
-          <form onSubmit={handleAddModule} className="flex flex-wrap items-center gap-2 border border-white/10 bg-white/[0.02] p-3">
+          <form
+            onSubmit={handleAddModule}
+            className="flex flex-wrap items-center gap-2 border border-[rgba(255,255,255,0.07)] bg-[#16161a] p-4"
+            style={{ borderRadius: 0 }}
+          >
             <input
               autoFocus
               value={modTitle}
               onChange={(e) => { setModTitle(e.target.value); setModSlug(slugify(e.target.value)) }}
               placeholder="Título do módulo"
               required
-              className="min-w-0 flex-1 border border-white/10 bg-white/[0.03] px-3 py-1.5 font-mono text-xs text-white/70 outline-none"
+              className="min-w-0 flex-1 border border-[rgba(255,255,255,0.16)] bg-[#0e0e11] px-3 py-2 font-mono text-xs text-[#f1f1f3] outline-none focus:border-[#ff3a0e]"
+              style={{ borderRadius: 0 }}
             />
             <input
               value={modSlug}
               onChange={(e) => setModSlug(e.target.value)}
               placeholder="slug"
               required
-              className="w-40 border border-white/10 bg-white/[0.03] px-3 py-1.5 font-mono text-[10px] text-white/50 outline-none"
+              className="w-40 border border-[rgba(255,255,255,0.16)] bg-[#0e0e11] px-3 py-2 font-mono text-[10px] text-[#84848c] outline-none focus:border-[#ff3a0e]"
+              style={{ borderRadius: 0 }}
             />
-            <button type="submit" disabled={saving} className="bg-[#FF3A0E] px-3 py-1.5 font-mono text-[10px] text-white disabled:opacity-40">
+            <button
+              type="submit"
+              disabled={saving}
+              className="bg-[#ff3a0e] px-3 py-2 font-mono text-[10px] font-semibold uppercase tracking-wider text-[#050507] disabled:opacity-40"
+              style={{ borderRadius: 0 }}
+            >
               {saving ? '...' : 'Adicionar'}
             </button>
-            <button type="button" onClick={() => setAddingModule(false)} className="font-mono text-[10px] text-white/30 hover:text-white/60">
+            <button
+              type="button"
+              onClick={() => setAddingModule(false)}
+              className="font-mono text-[10px] text-[#84848c] transition-colors hover:text-[#c5c5ca]"
+            >
               Cancelar
             </button>
           </form>

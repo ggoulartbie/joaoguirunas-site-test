@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
-import { ArrowLeft, ArrowRight } from 'lucide-react'
+import { ArrowLeft, ArrowRight, Play, CheckCircle2, Lock } from 'lucide-react'
 import { createClient } from '@/lib/supabase/server'
 import { supabaseAdmin } from '@/lib/supabase/admin'
 import { requireUser } from '@/lib/auth/helpers'
@@ -119,22 +119,39 @@ export default async function AulaPage({ params }: Props) {
 
   if (!hasAccess) {
     return (
-      <div className="mx-auto max-w-3xl space-y-6">
-        <Link
-          href={`/curso/${slug}`}
-          className="flex items-center gap-1.5 font-mono text-xs uppercase tracking-wider text-white/40 hover:text-white/70 transition-colors"
+      <div className="mx-auto max-w-4xl">
+        <div
+          className="border-b p-6"
+          style={{ borderColor: 'var(--hairline)' }}
         >
-          <ArrowLeft className="h-3 w-3" />
-          Voltar ao curso
-        </Link>
+          <p className="font-mono text-[11px] uppercase tracking-wider" style={{ color: 'var(--bone-mute)' }}>
+            <Link
+              href={`/academy/curso/${slug}`}
+              className="transition-colors hover:text-[var(--bone)]"
+              style={{ color: 'var(--bone-mute)' }}
+            >
+              Voltar ao curso
+            </Link>
+          </p>
+          <h1
+            className="mt-3 font-[var(--type-display)] italic"
+            style={{
+              fontSize: 'clamp(1.75rem, 4vw, 2rem)',
+              lineHeight: 1.1,
+              color: 'var(--bone)',
+            }}
+          >
+            {lesson.title}
+          </h1>
+        </div>
 
-        <h1 className="text-2xl font-bold text-white">{lesson.title}</h1>
-
-        <LockedContent
-          cohortName={firstCohort?.name ?? 'uma turma'}
-          cohortSlug={firstCohort?.slug ?? 'turmas'}
-          cohortDescription={firstCohort?.description ?? null}
-        />
+        <div className="p-6">
+          <LockedContent
+            cohortName={firstCohort?.name ?? 'uma turma'}
+            cohortSlug={firstCohort?.slug ?? 'turmas'}
+            cohortDescription={firstCohort?.description ?? null}
+          />
+        </div>
       </div>
     )
   }
@@ -195,86 +212,196 @@ export default async function AulaPage({ params }: Props) {
     .single()
 
   return (
-    <div className="mx-auto max-w-4xl space-y-8">
-      {/* Breadcrumb */}
-      <Link
-        href={`/curso/${slug}`}
-        className="flex items-center gap-1.5 font-mono text-xs uppercase tracking-wider text-white/40 hover:text-white/70 transition-colors"
-      >
-        <ArrowLeft className="h-3 w-3" />
-        Voltar ao curso
-      </Link>
+    <div className="mx-auto max-w-4xl">
+      <div className="flex flex-col lg:flex-row lg:items-start">
+        {/* Main content */}
+        <div className="flex-1 min-w-0">
+          {/* Player */}
+          <div
+            className="aspect-video border-b"
+            style={{
+              background: 'var(--ink-3)',
+              borderColor: 'var(--hairline)',
+            }}
+          >
+            {lesson.kind === 'VIDEO' && lesson.video_id ? (
+              <VideoPlayer
+                lessonId={lesson.id}
+                videoId={lesson.video_id}
+                provider={lesson.video_provider}
+                initialSeconds={progress?.seconds_watched ?? 0}
+              />
+            ) : (
+              <div className="flex h-full items-center justify-center">
+                <Play
+                  className="h-10 w-10"
+                  style={{ color: 'var(--ember)', opacity: 0.4 }}
+                  aria-hidden="true"
+                />
+              </div>
+            )}
+          </div>
 
-      {/* Título */}
-      <h1 className="text-2xl font-bold text-white">{lesson.title}</h1>
+          {/* Below player */}
+          <div
+            className="border-b p-4 lg:p-6"
+            style={{
+              background: 'var(--ink)',
+              borderColor: 'var(--hairline)',
+            }}
+          >
+            <p className="font-mono text-[11px] uppercase tracking-wider" style={{ color: 'var(--bone-mute)' }}>
+              <Link
+                href={`/academy/curso/${slug}`}
+                className="transition-colors hover:text-[var(--bone)]"
+                style={{ color: 'var(--bone-mute)' }}
+              >
+                {course?.title ?? 'Curso'}
+              </Link>
+              {' / '}
+              <span style={{ color: 'var(--bone-dim)' }}>{lesson.title}</span>
+            </p>
 
-      {/* Video player — video_id only reaches client when hasAccess = true */}
-      {lesson.kind === 'VIDEO' && lesson.video_id ? (
-        <VideoPlayer
-          lessonId={lesson.id}
-          videoId={lesson.video_id}
-          provider={lesson.video_provider}
-          initialSeconds={progress?.seconds_watched ?? 0}
-        />
-      ) : (
-        <div className="flex aspect-video items-center justify-center border border-white/10 bg-[#0C0C12]">
-          <p className="font-mono text-xs uppercase tracking-widest text-white/20">
-            Sem vídeo nesta aula
-          </p>
+            <h1
+              className="mt-2 font-[var(--type-display)] italic"
+              style={{
+                fontSize: 'clamp(1.75rem, 4vw, 2rem)',
+                lineHeight: 1.15,
+                color: 'var(--bone)',
+              }}
+            >
+              {lesson.title}
+            </h1>
+
+            <div className="mt-4 flex items-center justify-between">
+              <MarkCompleteButton
+                lessonId={lesson.id}
+                initialCompleted={progress?.completed ?? false}
+              />
+
+              {/* Prev / Next */}
+              <div className="flex items-center gap-4">
+                {prevLesson ? (
+                  <Link
+                    href={`/academy/curso/${slug}/aula/${prevLesson.slug}`}
+                    className="flex items-center gap-1.5 font-mono text-[11px] uppercase tracking-wide transition-colors"
+                    style={{ color: 'var(--bone-mute)' }}
+                  >
+                    <ArrowLeft className="h-3.5 w-3.5" />
+                    Anterior
+                  </Link>
+                ) : (
+                  <span
+                    className="flex items-center gap-1.5 font-mono text-[11px] uppercase tracking-wide"
+                    style={{ color: 'rgba(132,132,140,0.3)' }}
+                  >
+                    <ArrowLeft className="h-3.5 w-3.5" />
+                    Anterior
+                  </span>
+                )}
+
+                {nextLesson ? (
+                  <Link
+                    href={`/academy/curso/${slug}/aula/${nextLesson.slug}`}
+                    className="flex items-center gap-1.5 font-mono text-[11px] uppercase tracking-wide transition-colors"
+                    style={{ color: 'var(--bone-mute)' }}
+                  >
+                    Próxima
+                    <ArrowRight className="h-3.5 w-3.5" />
+                  </Link>
+                ) : (
+                  <span
+                    className="flex items-center gap-1.5 font-mono text-[11px] uppercase tracking-wide"
+                    style={{ color: 'rgba(132,132,140,0.3)' }}
+                  >
+                    Próxima
+                    <ArrowRight className="h-3.5 w-3.5" />
+                  </span>
+                )}
+              </div>
+            </div>
+          </div>
+
+          {/* Tabs */}
+          <LessonTabs
+            courseSlug={slug}
+            lessonSlug={lessonSlug}
+            activeTab="sobre"
+            description={lesson.description ?? ''}
+            descriptionContent={renderedContent}
+            materials={materials}
+            comments={comments}
+            lessonId={lesson.id}
+            currentUserId={user.id}
+          />
         </div>
-      )}
 
-      {/* Mark complete */}
-      <MarkCompleteButton
-        lessonId={lesson.id}
-        initialCompleted={progress?.completed ?? false}
-      />
-
-      {/* Prev / Next navigation */}
-      <div className="flex items-center justify-between">
-        {prevLesson ? (
-          <Link
-            href={`/curso/${slug}/aula/${prevLesson.slug}`}
-            className="flex items-center gap-1.5 font-mono text-xs uppercase tracking-wide text-white/40 transition-colors hover:text-white/70"
+        {/* Sidebar — course outline */}
+        <aside
+          className="hidden lg:flex lg:w-80 lg:flex-col lg:self-stretch shrink-0 border-l sticky top-0 h-screen overflow-y-auto"
+          style={{
+            background: 'var(--void)',
+            borderColor: 'var(--hairline)',
+          }}
+        >
+          <div
+            className="border-b px-4 py-3"
+            style={{ borderColor: 'var(--hairline)' }}
           >
-            <ArrowLeft className="h-3.5 w-3.5" />
-            Aula anterior
-          </Link>
-        ) : (
-          <span className="flex items-center gap-1.5 font-mono text-xs uppercase tracking-wide text-white/20">
-            <ArrowLeft className="h-3.5 w-3.5" />
-            Aula anterior
-          </span>
-        )}
+            <p className="font-mono text-[11px] uppercase tracking-widest" style={{ color: 'var(--bone-mute)' }}>
+              Conteudo do curso
+            </p>
+          </div>
 
-        {nextLesson ? (
-          <Link
-            href={`/curso/${slug}/aula/${nextLesson.slug}`}
-            className="flex items-center gap-1.5 font-mono text-xs uppercase tracking-wide text-white/40 transition-colors hover:text-white/70"
-          >
-            Próxima aula
-            <ArrowRight className="h-3.5 w-3.5" />
-          </Link>
-        ) : (
-          <span className="flex items-center gap-1.5 font-mono text-xs uppercase tracking-wide text-white/20">
-            Próxima aula
-            <ArrowRight className="h-3.5 w-3.5" />
-          </span>
-        )}
+          <SidebarLessonList
+            siblings={siblings ?? []}
+            currentLessonId={lesson.id}
+            slug={slug}
+            progress={progress}
+          />
+        </aside>
       </div>
-
-      {/* Tabs: Sobre / Materiais / Comentários */}
-      <LessonTabs
-        courseSlug={slug}
-        lessonSlug={lessonSlug}
-        activeTab="sobre"
-        description={lesson.description ?? ''}
-        descriptionContent={renderedContent}
-        materials={materials}
-        comments={comments}
-        lessonId={lesson.id}
-        currentUserId={user.id}
-      />
     </div>
+  )
+}
+
+function SidebarLessonList({
+  siblings,
+  currentLessonId,
+  slug,
+}: {
+  siblings: { id: string; slug: string; title: string; sort_order: number }[]
+  currentLessonId: string
+  slug: string
+  progress: { seconds_watched: number; completed: boolean } | null
+}) {
+  return (
+    <ul className="flex-1">
+      {siblings.map((lesson, index) => {
+        const isCurrent = lesson.id === currentLessonId
+
+        return (
+          <li key={lesson.id}>
+            <Link
+              href={`/academy/curso/${slug}/aula/${lesson.slug}`}
+              className="flex items-start gap-3 px-4 py-3 transition-colors"
+              style={{
+                background: isCurrent ? 'rgba(255,58,14,0.07)' : 'transparent',
+                borderLeft: isCurrent ? '2px solid var(--ember)' : '2px solid transparent',
+                borderBottom: '1px solid var(--hairline)',
+                color: isCurrent ? 'var(--bone)' : 'var(--bone-mute)',
+              }}
+            >
+              <span className="mt-0.5 font-mono text-[11px] shrink-0" style={{ color: 'var(--bone-mute)' }}>
+                {String(index + 1).padStart(2, '0')}
+              </span>
+              <span className="text-[13px] leading-snug">
+                {lesson.title}
+              </span>
+            </Link>
+          </li>
+        )
+      })}
+    </ul>
   )
 }

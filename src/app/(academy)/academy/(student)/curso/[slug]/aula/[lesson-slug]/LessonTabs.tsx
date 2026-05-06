@@ -17,7 +17,7 @@ type Tab = 'sobre' | 'materiais' | 'comentarios'
 const TAB_LABELS: { id: Tab; label: string }[] = [
   { id: 'sobre', label: 'Sobre a aula' },
   { id: 'materiais', label: 'Materiais' },
-  { id: 'comentarios', label: 'Comentários' },
+  { id: 'comentarios', label: 'Comentarios' },
 ]
 
 type LessonTabsProps = {
@@ -45,46 +45,69 @@ export function LessonTabs({
 }: LessonTabsProps) {
   const [active, setActive] = useState<Tab>(initialTab)
 
+  const activeCommentCount = comments.filter((c) => !c.deleted_at).length
+
   return (
-    <div className="border border-t-0 border-white/10">
+    <div
+      style={{
+        background: 'var(--ink)',
+        borderTop: '1px solid var(--hairline)',
+      }}
+    >
       {/* Tab nav */}
-      <div className="flex border-b border-white/10">
-        {TAB_LABELS.map(({ id, label }) => (
-          <button
-            key={id}
-            type="button"
-            onClick={() => setActive(id)}
-            className={`px-5 py-3 font-mono text-xs uppercase tracking-wider transition-colors ${
-              active === id
-                ? 'border-b-2 border-[#FF3A0E] text-white'
-                : 'text-white/40 hover:text-white/70'
-            }`}
-          >
-            {label}
-            {id === 'comentarios' && comments.filter((c) => !c.deleted_at).length > 0 && (
-              <span className="ml-1.5 font-mono text-[9px] text-white/20">
-                ({comments.filter((c) => !c.deleted_at).length})
-              </span>
-            )}
-            {id === 'materiais' && materials.length > 0 && (
-              <span className="ml-1.5 font-mono text-[9px] text-white/20">
-                ({materials.length})
-              </span>
-            )}
-          </button>
-        ))}
+      <div
+        className="inline-flex border-b"
+        style={{ borderColor: 'var(--hairline)', width: '100%' }}
+      >
+        {TAB_LABELS.map(({ id, label }) => {
+          const isActive = active === id
+
+          return (
+            <button
+              key={id}
+              type="button"
+              onClick={() => setActive(id)}
+              className="relative px-4 py-3 font-mono text-[11px] uppercase tracking-wide transition-colors"
+              style={{
+                color: isActive ? 'var(--ember)' : 'var(--bone-mute)',
+                borderBottom: isActive ? '2px solid var(--ember)' : '2px solid transparent',
+                marginBottom: '-1px',
+              }}
+            >
+              {label}
+              {id === 'comentarios' && activeCommentCount > 0 && (
+                <span
+                  className="ml-1.5 font-mono text-[9px]"
+                  style={{ color: 'var(--bone-mute)', opacity: 0.6 }}
+                >
+                  ({activeCommentCount})
+                </span>
+              )}
+              {id === 'materiais' && materials.length > 0 && (
+                <span
+                  className="ml-1.5 font-mono text-[9px]"
+                  style={{ color: 'var(--bone-mute)', opacity: 0.6 }}
+                >
+                  ({materials.length})
+                </span>
+              )}
+            </button>
+          )
+        })}
       </div>
 
       {/* Tab content */}
-      <div className="p-6">
+      <div className="space-y-4 p-4 lg:p-6">
         {active === 'sobre' && (
           descriptionContent ? (
             <LessonContent
               content={descriptionContent}
-              className="prose prose-sm prose-invert max-w-none text-white/70"
+              className="prose prose-sm prose-invert max-w-none"
             />
           ) : (
-            <p className="text-sm leading-relaxed text-white/70">{description}</p>
+            <p className="text-sm leading-relaxed" style={{ color: 'var(--bone-dim)' }}>
+              {description}
+            </p>
           )
         )}
 
@@ -93,7 +116,11 @@ export function LessonTabs({
         )}
 
         {active === 'comentarios' && (
-          <CommentsSection lessonId={lessonId} initialComments={comments} currentUserId={currentUserId ?? ''} />
+          <CommentsSection
+            lessonId={lessonId}
+            initialComments={comments}
+            currentUserId={currentUserId ?? ''}
+          />
         )}
       </div>
     </div>

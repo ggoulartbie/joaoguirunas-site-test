@@ -24,7 +24,7 @@ export function StudentShell({ notifications, userInitials, children }: Props) {
   const [mobileNavOpen, setMobileNavOpen] = useState(false)
 
   return (
-    <div className="flex min-h-screen bg-[#050507]">
+    <div className="flex min-h-screen" style={{ background: 'var(--void)' }}>
       <StudentSidebar
         mobileOpen={mobileNavOpen}
         onClose={() => setMobileNavOpen(false)}

@@ -41,74 +41,83 @@ export function CourseListClient({ initialCourses }: { initialCourses: CourseRow
         placeholder="Buscar por título ou slug..."
         value={search}
         onChange={(e) => setSearch(e.target.value)}
-        className="w-full border border-white/10 bg-white/[0.03] px-4 py-2.5 font-mono text-xs text-white/80 placeholder-white/20 outline-none focus:border-white/20"
+        className="w-full border border-[rgba(255,255,255,0.16)] bg-[#16161a] px-4 py-3 font-mono text-xs text-[#f1f1f3] placeholder-[#84848c] outline-none focus:border-[#ff3a0e]"
+        style={{ borderRadius: 0 }}
       />
 
-      {filtered.length === 0 && (
+      {filtered.length === 0 ? (
         <div className="flex flex-col items-center gap-3 py-16 text-center">
-          <BookOpen className="h-8 w-8 text-white/20" />
-          <p className="font-mono text-xs text-white/30">
+          <BookOpen className="h-8 w-8 text-[#84848c]" />
+          <p className="font-mono text-xs text-[#84848c]">
             {search ? 'Nenhum curso encontrado.' : 'Nenhum curso criado ainda.'}
           </p>
         </div>
+      ) : (
+        <table className="w-full" style={{ borderRadius: 0 }}>
+          <thead className="bg-[#16161a]">
+            <tr>
+              <th className="px-4 py-3 text-left font-mono text-[10px] uppercase tracking-wider text-[#84848c]">Curso</th>
+              <th className="px-4 py-3 text-left font-mono text-[10px] uppercase tracking-wider text-[#84848c]">Slug</th>
+              <th className="px-4 py-3 text-left font-mono text-[10px] uppercase tracking-wider text-[#84848c]">Status</th>
+              <th className="px-4 py-3 text-right font-mono text-[10px] uppercase tracking-wider text-[#84848c]">Ações</th>
+            </tr>
+          </thead>
+          <tbody className={cn(pending && 'opacity-60')}>
+            {filtered.map((course) => (
+              <tr
+                key={course.id}
+                className="border-b border-[rgba(255,255,255,0.07)] transition-colors hover:bg-[rgba(5,5,7,0.4)]"
+              >
+                <td className="px-4 py-3">
+                  <div className="flex items-center gap-3">
+                    <div className="flex h-8 w-8 shrink-0 items-center justify-center border border-[rgba(255,255,255,0.07)] bg-[#16161a]">
+                      <BookOpen className="h-3.5 w-3.5 text-[#84848c]" />
+                    </div>
+                    <span className="font-[--type-sans] text-sm text-[#f1f1f3]">{course.title}</span>
+                  </div>
+                </td>
+                <td className="px-4 py-3">
+                  <span className="font-mono text-[10px] text-[#84848c]">{course.slug}</span>
+                </td>
+                <td className="px-4 py-3">
+                  <button
+                    onClick={() => handleToggle(course.id, !course.published)}
+                    className={cn(
+                      'flex items-center gap-1.5 border px-2.5 py-1 font-mono text-[10px] uppercase tracking-wider transition-colors',
+                      course.published
+                        ? 'border-[rgba(255,255,255,0.16)] text-[#f1f1f3] hover:border-[rgba(255,255,255,0.3)]'
+                        : 'border-[rgba(255,255,255,0.07)] text-[#84848c] hover:border-[rgba(255,255,255,0.16)]'
+                    )}
+                    style={{ borderRadius: 0 }}
+                  >
+                    {course.published ? (
+                      <><Eye className="h-3 w-3" /> Publicado</>
+                    ) : (
+                      <><EyeOff className="h-3 w-3" /> Rascunho</>
+                    )}
+                  </button>
+                </td>
+                <td className="px-4 py-3">
+                  <div className="flex items-center justify-end gap-3">
+                    <Link
+                      href={`/academy/admin/cursos/${course.id}`}
+                      className="text-[#84848c] transition-colors hover:text-[#f1f1f3]"
+                    >
+                      <Pencil className="h-4 w-4" />
+                    </Link>
+                    <button
+                      onClick={() => handleDelete(course.id)}
+                      className="text-[#84848c] transition-colors hover:text-[#ff3a0e]"
+                    >
+                      <Trash2 className="h-4 w-4" />
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
       )}
-
-      <div className="divide-y divide-white/5">
-        {filtered.map((course) => (
-          <div
-            key={course.id}
-            className={cn(
-              'flex items-center justify-between gap-4 py-4',
-              pending && 'opacity-60'
-            )}
-          >
-            <div className="flex min-w-0 items-center gap-3">
-              <div className="flex h-9 w-9 shrink-0 items-center justify-center border border-white/10 bg-white/[0.03]">
-                <BookOpen className="h-4 w-4 text-white/40" />
-              </div>
-              <div className="min-w-0">
-                <p className="truncate font-mono text-sm font-medium text-white/90">
-                  {course.title}
-                </p>
-                <p className="font-mono text-[10px] text-white/30">{course.slug}</p>
-              </div>
-            </div>
-
-            <div className="flex shrink-0 items-center gap-2">
-              <button
-                onClick={() => handleToggle(course.id, !course.published)}
-                className={cn(
-                  'flex items-center gap-1.5 px-2.5 py-1 font-mono text-[10px] uppercase tracking-wider transition-colors',
-                  course.published
-                    ? 'bg-green-500/10 text-green-400 hover:bg-green-500/20'
-                    : 'bg-white/5 text-white/30 hover:bg-white/10'
-                )}
-              >
-                {course.published ? (
-                  <><Eye className="h-3 w-3" /> Publicado</>
-                ) : (
-                  <><EyeOff className="h-3 w-3" /> Rascunho</>
-                )}
-              </button>
-
-              <Link
-                href={`/admin/cursos/${course.id}`}
-                className="flex items-center gap-1.5 px-2.5 py-1 font-mono text-[10px] uppercase tracking-wider text-white/40 transition-colors hover:text-white/80"
-              >
-                <Pencil className="h-3 w-3" />
-                Editar
-              </Link>
-
-              <button
-                onClick={() => handleDelete(course.id)}
-                className="flex items-center gap-1.5 px-2.5 py-1 font-mono text-[10px] uppercase tracking-wider text-red-400/50 transition-colors hover:text-red-400"
-              >
-                <Trash2 className="h-3 w-3" />
-              </button>
-            </div>
-          </div>
-        ))}
-      </div>
     </div>
   )
 }

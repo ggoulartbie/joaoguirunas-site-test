@@ -40,58 +40,68 @@ export function NewCourseForm() {
     })
   }
 
+  const inputClass =
+    'w-full border border-[rgba(255,255,255,0.16)] bg-[#16161a] px-3 py-3 font-mono text-sm text-[#f1f1f3] placeholder-[#84848c] outline-none focus:border-[#ff3a0e] transition-colors'
+
   return (
-    <form onSubmit={handleSubmit} className="space-y-4">
-      <div className="space-y-1.5">
-        <label className="font-mono text-[10px] uppercase tracking-widest text-white/40">Título</label>
-        <input
-          value={title}
-          onChange={(e) => handleTitleChange(e.target.value)}
-          required
-          placeholder="Ex.: Fundamentos de Copywriting"
-          className="w-full border border-white/10 bg-white/[0.03] px-4 py-2.5 font-mono text-sm text-white/80 placeholder-white/20 outline-none focus:border-white/20"
-        />
+    <form onSubmit={handleSubmit} className="space-y-5">
+      <div className="grid gap-5 sm:grid-cols-2">
+        <div className="space-y-1.5">
+          <label className="font-mono text-[10px] uppercase tracking-widest text-[#84848c]">Título</label>
+          <input
+            value={title}
+            onChange={(e) => handleTitleChange(e.target.value)}
+            required
+            placeholder="Ex.: Fundamentos de Copywriting"
+            className={inputClass}
+            style={{ borderRadius: 0 }}
+          />
+        </div>
+
+        <div className="space-y-1.5">
+          <label className="font-mono text-[10px] uppercase tracking-widest text-[#84848c]">Slug</label>
+          <input
+            value={slug}
+            onChange={(e) => setSlug(e.target.value)}
+            required
+            placeholder="fundamentos-de-copywriting"
+            className={inputClass}
+            style={{ borderRadius: 0 }}
+          />
+          <p className="font-mono text-[10px] text-[#84848c]">Gerado automaticamente — pode editar</p>
+        </div>
       </div>
 
       <div className="space-y-1.5">
-        <label className="font-mono text-[10px] uppercase tracking-widest text-white/40">Slug</label>
-        <input
-          value={slug}
-          onChange={(e) => setSlug(e.target.value)}
-          required
-          placeholder="fundamentos-de-copywriting"
-          className="w-full border border-white/10 bg-white/[0.03] px-4 py-2.5 font-mono text-xs text-white/60 placeholder-white/20 outline-none focus:border-white/20"
-        />
-        <p className="font-mono text-[10px] text-white/20">Gerado automaticamente — pode editar</p>
-      </div>
-
-      <div className="space-y-1.5">
-        <label className="font-mono text-[10px] uppercase tracking-widest text-white/40">Descrição</label>
+        <label className="font-mono text-[10px] uppercase tracking-widest text-[#84848c]">Descrição</label>
         <textarea
           value={description}
           onChange={(e) => setDescription(e.target.value)}
-          rows={3}
+          rows={4}
           placeholder="Descrição breve do curso..."
-          className="w-full border border-white/10 bg-white/[0.03] px-4 py-2.5 font-mono text-sm text-white/80 placeholder-white/20 outline-none focus:border-white/20"
+          className={`${inputClass} min-h-32 resize-none`}
+          style={{ borderRadius: 0 }}
         />
       </div>
 
       {error && (
-        <p className="font-mono text-xs text-red-400">{error}</p>
+        <p className="font-mono text-xs text-[#ff3a0e]">{error}</p>
       )}
 
-      <div className="flex justify-end gap-3 pt-2">
+      <div className="flex justify-end gap-3 border-t border-[rgba(255,255,255,0.07)] pt-4">
         <button
           type="button"
           onClick={() => router.back()}
-          className="px-4 py-2 font-mono text-xs uppercase tracking-wider text-white/40 transition-colors hover:text-white/70"
+          className="border border-[rgba(255,255,255,0.16)] px-4 py-2.5 font-mono text-xs uppercase tracking-wider text-[#c5c5ca] transition-colors hover:border-[rgba(255,255,255,0.3)] hover:text-[#f1f1f3]"
+          style={{ borderRadius: 0 }}
         >
           Cancelar
         </button>
         <button
           type="submit"
           disabled={pending || !title || !slug}
-          className="bg-[#FF3A0E] px-5 py-2 font-mono text-xs font-semibold uppercase tracking-wider text-white transition-opacity hover:opacity-90 disabled:opacity-40"
+          className="bg-[#ff3a0e] px-5 py-2.5 font-mono text-xs font-semibold uppercase tracking-wider text-[#050507] transition-opacity hover:opacity-90 disabled:opacity-40"
+          style={{ borderRadius: 0 }}
         >
           {pending ? 'Criando...' : 'Criar Curso'}
         </button>
