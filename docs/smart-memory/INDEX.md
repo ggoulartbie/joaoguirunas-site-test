@@ -31,6 +31,9 @@ MOC raiz. Todo arquivo novo em `docs/smart-memory/` deve ser referenciado aqui.
 - [[ops/launch-readiness]] — relatório de prontidão de launch (features completas, concerns, env vars, infra checklist)
 - [[ops/smoke-test-script]] — roteiro de smoke test manual pós-deploy para João
 
+## Runbooks
+- [[runbooks/go-live-checklist]] — gate formal F8.7 (13 ACs: auth, conteúdo bloqueado, compra real, cross-ext, refund, emails, performance, RLS, sentry, cron, backup)
+
 ## Agentes
 - [[agents/data-engineer/schema]] — schema completo (21 tabelas, funções, índices)
 - [[agents/data-engineer/rls-policies]] — RLS policies por tabela + casos de teste

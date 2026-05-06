@@ -2,9 +2,13 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
-import { MOCK_COHORTS } from '@/components/admin/mock-data'
-import type { MockCohort } from '@/components/admin/mock-data'
 import { Pencil, Users, ExternalLink } from 'lucide-react'
+import type { Database } from '@/types/database'
+
+type CohortRow = Pick<
+  Database['public']['Tables']['cohorts']['Row'],
+  'id' | 'slug' | 'name' | 'description' | 'cover_image_url' | 'status' | 'start_date' | 'end_date' | 'total_seats' | 'filled_seats' | 'is_purchasable' | 'has_public_page' | 'entry_price_cents' | 'created_at' | 'updated_at'
+>
 
 const STATUS_LABELS: Record<string, string> = {
   DRAFT: 'Rascunho',
@@ -48,11 +52,11 @@ function OccupancyBar({ filled, total }: { filled: number; total: number | null 
   )
 }
 
-export function CohortListClient() {
+export function CohortListClient({ initialCohorts }: { initialCohorts: CohortRow[] }) {
   const [statusFilter, setStatusFilter] = useState<string>('all')
   const [purchasableFilter, setPurchasableFilter] = useState<string>('all')
 
-  const filtered = MOCK_COHORTS.filter((c: MockCohort) => {
+  const filtered = initialCohorts.filter((c) => {
     if (statusFilter !== 'all' && c.status !== statusFilter) return false
     if (purchasableFilter === 'purchasable' && !c.is_purchasable) return false
     if (purchasableFilter === 'private' && c.is_purchasable) return false

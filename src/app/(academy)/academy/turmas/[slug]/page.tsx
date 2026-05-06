@@ -96,7 +96,48 @@ export default async function TurmaSlugPage({ params }: Props) {
     ? Math.round((cohort.filled_seats / cohort.total_seats) * 100)
     : null
 
+  const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? 'https://joaoguirunas.com'
+
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'Course',
+    name: cohort.name,
+    description: cohort.description ?? undefined,
+    image: cohort.cover_image_url ?? undefined,
+    url: `${appUrl}/academy/turmas/${cohort.slug}`,
+    provider: {
+      '@type': 'Person',
+      name: 'João Guirunas',
+      url: appUrl,
+    },
+    ...(cohort.start_date ? { startDate: cohort.start_date } : {}),
+    ...(cohort.end_date ? { endDate: cohort.end_date } : {}),
+    ...(cohort.entry_price_cents
+      ? {
+          offers: {
+            '@type': 'Offer',
+            price: (cohort.entry_price_cents / 100).toFixed(2),
+            priceCurrency: 'BRL',
+            availability: sold
+              ? 'https://schema.org/SoldOut'
+              : 'https://schema.org/InStock',
+            url: `${appUrl}/academy/checkout/${cohort.slug}`,
+          },
+        }
+      : {}),
+    hasCourseInstance: courses.map((c) => ({
+      '@type': 'CourseInstance',
+      name: c.title,
+      description: c.description ?? undefined,
+    })),
+  }
+
   return (
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
     <div style={{ background: 'var(--void)', minHeight: '100vh' }}>
       {/* Dot texture */}
       <div
@@ -710,5 +751,6 @@ export default async function TurmaSlugPage({ params }: Props) {
         </span>
       </footer>
     </div>
+    </>
   )
 }

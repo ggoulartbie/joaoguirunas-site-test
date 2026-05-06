@@ -1,10 +1,16 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
+import { supabaseAdmin } from '@/lib/supabase/admin'
 import { CohortListClient } from './CohortListClient'
 
 export const metadata: Metadata = { title: 'Turmas' }
 
-export default function AdminTurmasPage() {
+export default async function AdminTurmasPage() {
+  const { data: cohorts } = await supabaseAdmin
+    .from('cohorts')
+    .select('id, slug, name, description, cover_image_url, status, start_date, end_date, total_seats, filled_seats, is_purchasable, has_public_page, entry_price_cents, created_at, updated_at')
+    .order('created_at', { ascending: false })
+
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between border-b border-[var(--hairline)] pb-4">
@@ -25,7 +31,7 @@ export default function AdminTurmasPage() {
           + Nova Turma
         </Link>
       </div>
-      <CohortListClient />
+      <CohortListClient initialCohorts={cohorts ?? []} />
     </div>
   )
 }

@@ -1,15 +1,9 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import { ArrowLeft } from 'lucide-react'
+import { notFound } from 'next/navigation'
+import { supabaseAdmin } from '@/lib/supabase/admin'
 import { CohortForm } from '../CohortForm'
-import {
-  MOCK_COHORTS,
-  MOCK_COHORT_COURSES,
-  MOCK_CROSS_EXTENSIONS,
-  MOCK_COHORT_MEMBERS,
-  MOCK_LIVE_SESSIONS,
-  MOCK_COUPONS,
-} from '@/components/admin/mock-data'
 
 export const metadata: Metadata = { title: 'Editar Turma' }
 
@@ -19,21 +13,95 @@ export default async function EditarTurmaPage({
   params: Promise<{ id: string }>
 }) {
   const { id } = await params
-  const cohort = MOCK_COHORTS.find((c) => c.id === id)
 
-  if (!cohort) {
-    return (
-      <div className="flex items-center justify-center py-24">
-        <p className="font-mono text-sm text-[var(--bone-mute)]">Turma nao encontrada</p>
-      </div>
-    )
+  const [
+    { data: cohort },
+    { data: cohortCourses },
+    { data: crossExtensions },
+    { data: rawMembers },
+    { data: liveSessions },
+    { data: coupons },
+    { data: rawCourses },
+    { data: allCohortsRaw },
+  ] = await Promise.all([
+    supabaseAdmin.from('cohorts').select('*').eq('id', id).single(),
+    supabaseAdmin.from('cohort_courses').select('*').eq('cohort_id', id),
+    supabaseAdmin.from('cohort_cross_extensions').select('*').eq('source_cohort_id', id),
+    supabaseAdmin
+      .from('cohort_members')
+      .select('*, profiles!inner(name)')
+      .eq('cohort_id', id)
+      .order('joined_at', { ascending: false }),
+    supabaseAdmin
+      .from('live_sessions')
+      .select('*')
+      .eq('cohort_id', id)
+      .order('scheduled_at', { ascending: true }),
+    supabaseAdmin
+      .from('coupons')
+      .select('*')
+      .eq('cohort_id', id)
+      .order('created_at', { ascending: false }),
+    supabaseAdmin
+      .from('courses')
+      .select('id, title, modules!inner(id, title, sort_order, lessons(id))')
+      .is('deleted_at', null)
+      .order('sort_order', { ascending: true }),
+    supabaseAdmin.from('cohorts').select('id, name').order('name', { ascending: true }),
+  ])
+
+  if (!cohort) notFound()
+
+  // Resolve member emails via auth admin (batch fetch, index by user_id)
+  const memberUserIds = (rawMembers ?? []).map((m) => m.user_id)
+  const emailMap: Record<string, string> = {}
+  if (memberUserIds.length > 0) {
+    const { data: authList } = await supabaseAdmin.auth.admin.listUsers({ perPage: 1000 })
+    for (const u of authList?.users ?? []) {
+      if (u.email) emailMap[u.id] = u.email
+    }
   }
 
-  const cohortCourses = MOCK_COHORT_COURSES.filter((cc) => cc.cohort_id === id)
-  const crossExtensions = MOCK_CROSS_EXTENSIONS.filter((e) => e.source_cohort_id === id)
-  const members = MOCK_COHORT_MEMBERS.filter((m) => m.cohort_id === id)
-  const liveSessions = MOCK_LIVE_SESSIONS.filter((ls) => ls.cohort_id === id)
-  const coupons = MOCK_COUPONS.filter((c) => c.cohort_id === id)
+  const members = (rawMembers ?? []).map((m) => {
+    const profile = m.profiles as { name: string } | null
+    return {
+      id: m.id,
+      cohort_id: m.cohort_id,
+      user_id: m.user_id,
+      member_role: m.member_role,
+      joined_at: m.joined_at,
+      expires_at: m.expires_at,
+      status: m.status,
+      auto_renew_enabled: m.auto_renew_enabled,
+      next_renewal_at: m.next_renewal_at,
+      userName: profile?.name ?? m.user_id.slice(0, 8),
+      userEmail: emailMap[m.user_id] ?? '—',
+    }
+  })
+
+  const courses = (rawCourses ?? []).map((c) => ({
+    id: c.id,
+    title: c.title,
+    modules: ((c.modules as Array<{ id: string; title: string; sort_order: number; lessons: Array<unknown> }>) ?? [])
+      .sort((a, b) => a.sort_order - b.sort_order)
+      .map((m) => ({
+        id: m.id,
+        title: m.title,
+        lessonCount: (m.lessons ?? []).length,
+      })),
+  }))
+
+  const allCohorts = (allCohortsRaw ?? []).map((c) => ({ id: c.id, name: c.name }))
+
+  const sessionsWithCohortName = (liveSessions ?? []).map((ls) => ({
+    ...ls,
+    cohortName: cohort.name,
+  }))
+
+  const couponsWithCohortName = (coupons ?? []).map((c) => ({
+    ...c,
+    cohortName: cohort.name,
+  }))
 
   return (
     <div className="space-y-6">
@@ -58,11 +126,13 @@ export default async function EditarTurmaPage({
       <CohortForm
         mode="edit"
         cohort={cohort}
-        cohortCourses={cohortCourses}
-        crossExtensions={crossExtensions}
+        cohortCourses={cohortCourses ?? []}
+        crossExtensions={crossExtensions ?? []}
         members={members}
-        liveSessions={liveSessions}
-        coupons={coupons}
+        liveSessions={sessionsWithCohortName}
+        coupons={couponsWithCohortName}
+        courses={courses}
+        allCohorts={allCohorts}
       />
     </div>
   )

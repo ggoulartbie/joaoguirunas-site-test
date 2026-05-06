@@ -1,9 +1,5 @@
-<svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" fill="none">
-<defs>
-  <linearGradient id="gs-grad" x1="22.75" y1="628.32" x2="804.51" y2="198.61" gradientUnits="userSpaceOnUse">
-    <stop offset="0.1" stop-color="#FF4400"></stop>
-    <stop offset="1" stop-color="#FF1A00"></stop>
-  </linearGradient>
-</defs>
-<path fill-rule="evenodd" clip-rule="evenodd" d="M921.001 706.671L919.622 707.725L920.209 708.15L898.465 723.903L889.106 731.061L888.953 730.795L511.604 1004.19L103 708.15L126.317 691.256L104.876 706.671L512 20V412.399L843.971 652.915L512.001 78.1611V20L921.001 706.671ZM166.956 708.148L511.604 957.849L856.253 708.148L511.604 458.447L166.956 708.148Z" fill="url(#gs-grad)"></path>
+<svg width="450" height="390" viewBox="0 0 450 390" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M424.151 357.5H96.7949L260.473 73.999L424.151 357.5Z" stroke="#FF4400" stroke-width="9"/>
+<path d="M394.945 344H52L223.473 47L394.945 344ZM135 302H311L223 149L135 302Z" fill="#FF4400"/>
+<path d="M353.151 320.5H25.7949L189.473 36.999L353.151 320.5Z" stroke="#FF4400" stroke-width="9"/>
 </svg>

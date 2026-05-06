@@ -166,8 +166,28 @@ Registro de todos os Agent Teams formados neste projeto. Lead (team-os) atualiza
 **Status:** ativo / encerrado
 **Início:** {ISO date}
 **Encerrado:** {ISO date ou —}
-**Stories:** [[../stories/{N.M}]]
+**Stories:** —
 **Resultado:** {resumo quando encerrado}
 
 ---
 -->
+
+---
+
+## 2026-05-06 — Team joao-guirunas-site-plataforma-cursos-completo
+
+**Objetivo:** Implementação completa da plataforma de cursos — Fases 1 a 9, 42 stories, do schema ao deploy
+**Lead:** team-os (skill)
+**Composição:**
+- sites-data — F1.2–F1.8 (schema, RLS, buckets, seed, tipos TS) + F9.x
+- sites-dev-beta — F2.1–F2.4 (Auth, middleware RBAC, emails)
+- sites-dev-alpha — F3.1–F5.3 + F8.1–F8.3 (player, aulas, fórum, certificados, mobile)
+- sites-dev-delta — F6.1–F6.4 (Admin dashboard + CRUD)
+- sites-dev-gamma — F7.1–F7.8 (Stripe, checkout, webhook, renovação, /perfil, /turmas)
+- sites-devops — F8.4, F8.6 (Sentry, deploy Vercel produção)
+- sites-qa — F8.5, F8.7 (Playwright E2E, go-live checklist)
+
+**Status:** ativo
+**Início:** 2026-05-06T19:30:00-03:00
+**Encerrado:** —
+**Stories:** active: 7, backlog: 35, done: 24

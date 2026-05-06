@@ -12,6 +12,7 @@ import { NewMaterialEmail } from '../../../emails/templates/NewMaterialEmail'
 import { LiveSessionReminderEmail } from '../../../emails/templates/LiveSessionReminderEmail'
 import { CertificateReadyEmail } from '../../../emails/templates/CertificateReadyEmail'
 import { WelcomeToCohortEmail } from '../../../emails/templates/WelcomeToCohortEmail'
+import { WelcomeInviteEmail } from '../../../emails/templates/WelcomeInviteEmail'
 
 function getResend() {
   return new Resend(process.env.RESEND_API_KEY)
@@ -231,6 +232,23 @@ export async function sendCertificateReadyEmail(
     from: FROM,
     to,
     subject: `Seu certificado de ${courseName} está pronto`,
+    html,
+  })
+}
+
+export async function sendWelcomeInviteEmail(
+  to: string,
+  name: string,
+  cohortName: string,
+  activateUrl: string,
+  subject?: string,
+) {
+  const html = await render(WelcomeInviteEmail({ name, cohortName, activateUrl }))
+
+  return getResend().emails.send({
+    from: FROM,
+    to,
+    subject: subject ?? `Convite de acesso — ${cohortName}`,
     html,
   })
 }

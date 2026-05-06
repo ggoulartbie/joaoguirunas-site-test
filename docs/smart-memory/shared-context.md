@@ -13,13 +13,19 @@ O lead (team-os) atualiza este arquivo a cada mudança de estado dos teammates.
 
 | Teammate | Status | Task atual | Desde |
 |---|---|---|---|
-| — | idle | — | — |
+| sites-data | ✅ concluído | F1.2–F1.8 + F9.x — todas as stories done | 2026-05-06 |
+| sites-dev-beta | 🟢 ativo | F10.1 — auth sem signup + routing → /academy/aluno | 2026-05-06 |
+| sites-dev-alpha | 🟢 ativo | F10.2 (badge admin) + F10.3 (/curso-online + home CTA) | 2026-05-06 |
+| sites-dev-delta | 🟢 ativo | F10.4 — criar aluno manual + email convite (F6.1–F6.4 ✅) | 2026-05-06 |
+| sites-dev-gamma | 🟢 ativo | F10.5 — verificar webhook Stripe autocria conta | 2026-05-06 |
+| sites-devops | ⏸️ bloqueado | F8.4 ✅ done — F8.6 deploy (Vercel MCP + git CLI) aguarda QA PASS | 2026-05-06 |
+| sites-qa | ⏸️ bloqueado | F8.7 AC1 ✅ runbook pronto — aguarda F8.6 (produção) para veredicto final | 2026-05-06 |
 
 ## Team ativo
 
-**Nome:** —
-**Objetivo:** —
-**Início:** —
+**Nome:** joao-guirunas-site-plataforma-cursos-completo
+**Objetivo:** Plataforma de cursos Fases 1–9 — 42 stories, do schema ao deploy
+**Início:** 2026-05-06T19:30:00-03:00
 
 ## Último encerramento
 

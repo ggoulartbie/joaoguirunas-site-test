@@ -75,8 +75,8 @@ export async function createCheckoutSession(cohortSlug: string, userId: string) 
     cohortSlug: cohort.slug,
     userId,
     purchaseKind,
-    successUrl: `${appUrl}/checkout/sucesso?session_id={CHECKOUT_SESSION_ID}`,
-    cancelUrl: `${appUrl}/turmas/${cohortSlug}`,
+    successUrl: `${appUrl}/academy/checkout/sucesso?session_id={CHECKOUT_SESSION_ID}`,
+    cancelUrl: `${appUrl}/academy/checkout/cancelado?turma=${cohortSlug}`,
   })
 
   redirect(session.url)

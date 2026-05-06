@@ -1,13 +1,129 @@
 ---
 title: QA Results
 type: qa-log
-updated: 2026-05-06T00:00
+updated: 2026-05-06T22:45
 tags: [qa, veredictos]
 ---
 
 # QA Results — Veredictos formais
 
 Histórico de veredictos emitidos pelo sites-qa (Axilun).
+
+---
+
+## 2026-05-06 — F8.7 Smoke test pré-lançamento (gate go-live) — ⏸️ PENDENTE de execução
+
+**Escopo:** Story F8.7 — checklist formal para gate de go-live. AC1 = documentar checklist; AC2-AC13 = executar em produção e documentar resultado.
+
+**Entrega de F8.7 nesta avaliação:**
+- ✅ AC1: `docs/smart-memory/runbooks/go-live-checklist.md` criado, cobrindo todos os 13 ACs com:
+  - Pré-requisitos (16 env vars, Stripe webhook, Resend SPF/DKIM, Vimeo whitelist, Sentry, backup, cron Vercel)
+  - AC2 Auth (cadastro, login, reset, OAuth) com verificações e expectativas explícitas
+  - AC3 Conteúdo bloqueado com **verificação crítica de DOM** (zero matches `vimeo.com/video/`)
+  - AC4 Compra real (cupom 100% ou valor simbólico) — fluxo end-to-end com queries SQL de validação
+  - AC5 Cross-extension com setup, execução e assert de `expires_at + days_granted`
+  - AC6 Refund com dupla confirmação + assert `payments.status='REFUNDED'` + bloqueio de acesso pós-refund
+  - AC7 Emails reais (WelcomeEmail, PasswordReset, PaymentApproved, PaymentReceipt, MembershipExtended)
+  - AC8 Performance (Lighthouse mobile > 80 perf, > 90 best practices em /turmas/[slug] e /dashboard)
+  - AC9 RLS auditoria com query SQL de `pg_tables WHERE rowsecurity` + spot-check de policies
+  - AC10 Sentry com erro controlado em rota admin-only + verificação de tags + source maps
+  - AC11 Cron `/api/cron/daily` com curl autenticado + asserts de auth negada
+  - AC12 Backup do dia confirmado em painel Supabase
+  - AC13 Template `launch-{YYYY-MM-DD}.md` para registro do resultado da execução
+
+**Bloqueio explícito de execução:**
+- F8.7 é o gate final antes do anúncio público
+- Veredicto PASS/CONCERNS/FAIL será emitido **somente após** execução completa em produção, com evidências (prints, logs, query outputs)
+- Pré-requisito: F8.6 (deploy Vercel + DNS + Stripe webhook prod) concluído
+- Pressão de prazo **não altera** esse critério
+
+### Veredicto
+
+```
+VEREDICTO: PENDENTE DE EXECUÇÃO (AC1 entregue; AC2-AC13 aguardam ambiente prod)
+Story: F8.7 — Smoke test pré-lançamento | Data: 2026-05-06
+Status: Checklist formal documentado e aprovado em runbook.
+Próximo passo: aguardar conclusão de F8.6 (sites-devops); executar
+checklist em produção; documentar resultado em launch-{YYYY-MM-DD}.md;
+sites-qa emite veredicto final PASS/CONCERNS/FAIL.
+```
+
+**Arquivos novos/alterados nesta avaliação:**
+- `docs/smart-memory/runbooks/go-live-checklist.md` (novo)
+- `docs/smart-memory/INDEX.md` (seção Runbooks adicionada)
+- `docs/smart-memory/stories/backlog/F8.7-smoke-test-pre-lancamento.md` (File List + QA Results preenchidos)
+
+---
+
+## 2026-05-06 — F8.5 E2E Playwright suite — ⚠️ CONCERNS
+
+**Escopo:** Story F8.5 — suite mínima E2E cobrindo fluxos críticos (compra, bloqueio, webhook idempotência, cross-extension) + CI.
+**Submetido por:** team-lead (suite pré-existente em `e2e/` mais expansão de scaffolding por sites-qa).
+
+### Verificações aprovadas
+
+- **AC1 ✅ Playwright instalado e configurado:** v1.59.1, `playwright.config.ts` válido (testDir `./e2e`, baseURL `http://localhost:3000`, webServer reutilizável, `chromium` Desktop Chrome, retries=1, fullyParallel=false).
+- **Suite de smoke estrutural sólida (23 tests originais em 4 specs):**
+  - `auth.spec.ts` — render de /login, /cadastro, /recuperar-senha; erro de credenciais; login real (skip sem `.env.test`).
+  - `checkout.spec.ts` — /turmas pública, grid/empty state, redirect Matricular-se sem login, /checkout/[slug] sem login.
+  - `lesson-access.spec.ts` — redirect /login com `next` param; /admin sem login.
+  - `admin.spec.ts` — proteção das 5 rotas /admin/*; /403 page; STUDENT redirect (skip sem `.env.test`).
+- **Discovery limpo:** `npx playwright test --list` → 27 tests em 5 specs sem warnings.
+- **TypeCheck limpo:** `npx tsc --noEmit` retorna zero erros (incluindo specs novos).
+- **Scripts de execução prontos:** `npm run test:e2e` e `test:e2e:ui` em `package.json`.
+
+### Concerns bloqueantes para entrega completa do AC
+
+- **[CONCERN-1] AC2 — Test 1 (compra Stripe modo test → cohort ativa → aula → progresso): NÃO implementado como teste executável.**
+  - Scaffolding criado em `e2e/critical-flows.spec.ts:38-77` com `test.skip` gated por `STRIPE_TEST_MODE=true`, `E2E_TEST_EMAIL`, `E2E_TEST_PASSWORD`, `E2E_TEST_COHORT_SLUG`.
+  - Implementação real depende de: conta Stripe modo test, cohort de teste no Supabase, vídeo Vimeo de teste, Price ID test.
+  - **Risco:** o fluxo crítico de receita não tem cobertura E2E automatizada. Smoke manual em F8.7 mitiga.
+
+- **[CONCERN-2] AC3 — Test 2 (bloqueio LockedContent + sem `video_id` no DOM): NÃO implementado como teste executável.**
+  - Scaffolding em `e2e/critical-flows.spec.ts:79-100` com `test.skip` gated por `E2E_LOCKED_LESSON_PATH`.
+  - **Critério vital de segurança** (Seção 8 do PRD) já validado em F3.3 (auditoria server-side anterior confirmou guard `has_access` antes de retornar `video_id`), mas sem regressão automatizada para detectar futuras quebras.
+
+- **[CONCERN-3] AC4 — Test 3 (webhook Stripe idempotência): NÃO implementado.**
+  - Scaffolding em `e2e/critical-flows.spec.ts:103-114` com `test.skip` + `test.fail(true, 'TODO')`.
+  - Idempotência depende da implementação atual em `/api/webhooks/stripe` (validar via auditoria do código + smoke F8.7 com curl duplicado).
+
+- **[CONCERN-4] AC5 — Test 4 (cross-extension `days_granted`): NÃO implementado.**
+  - Scaffolding em `e2e/critical-flows.spec.ts:116-130` com `test.skip` + `test.fail(true, 'TODO')`.
+  - Lógica de cross-extension existe (`src/app/(academy)/academy/(admin)/admin/turmas/actions.ts:73-83`) mas não há teste E2E que verifique aplicação automática.
+
+- **[CONCERN-5] AC6 — CI GitHub Actions: workflow criado mas não validado em PR real.**
+  - `.github/workflows/e2e.yml` criado: `npm ci` → install Playwright chromium → typecheck → build → `npx playwright test` → upload report artifact.
+  - **Pendência:** secrets do GitHub precisam ser configurados (E2E_SUPABASE_URL, E2E_STRIPE_SECRET_KEY, etc.) antes de o workflow funcionar de fato. Sem secrets, o build vai falhar.
+
+- **[CONCERN-6] AC7 — Banco de teste isolado: ausente.**
+  - Sem Supabase branch dedicado nem seed de teste isolado. Suite atual roda contra dev/staging compartilhado, o que limita execução paralela e cria risco de poluição de dados.
+
+### Recomendações para fechamento futuro
+
+1. **Pós-MVP:** implementar os 4 testes críticos com Stripe modo test + Supabase branch (ver concerns 1–4 e 6).
+2. **Imediato:** configurar secrets no GitHub Actions para o workflow de e2e funcionar (ver concern 5).
+3. **Imediato:** smoke test manual de F8.7 cobre os 4 fluxos críticos via execução humana em produção, mitigando temporariamente a ausência de E2E automatizado.
+
+### Veredicto
+
+```
+VEREDICTO: CONCERNS
+Story: F8.5 — E2E Playwright | Data: 2026-05-06
+Checklist:
+  AC1 ✅ Playwright configurado
+  AC2 ⚠️ Test 1 compra: scaffolding skip (não implementado)
+  AC3 ⚠️ Test 2 bloqueio: scaffolding skip (não implementado)
+  AC4 ⚠️ Test 3 webhook idempotência: scaffolding skip (não implementado)
+  AC5 ⚠️ Test 4 cross-extension: scaffolding skip (não implementado)
+  AC6 ⚠️ CI workflow criado, secrets pendentes
+  AC7 ❌ Banco isolado ausente
+Issues: 4 testes críticos como dívida explícita; CI sem secrets; banco isolado pendente
+Próximo passo: prosseguir para F8.7 (smoke manual cobre fluxos críticos no curto prazo); criar story F8.5.b para fechar dívida pós-MVP
+```
+
+**Arquivos novos/alterados nesta avaliação:**
+- `e2e/critical-flows.spec.ts` (novo — 4 testes scaffolding)
+- `.github/workflows/e2e.yml` (novo — workflow CI)
 
 ---
 

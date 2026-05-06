@@ -332,6 +332,41 @@ export async function addMemberByCohortEmail(
   await addMemberToCohort(cohortId, user.id, memberRole, expiresAt)
 }
 
+export async function createLiveSession(data: {
+  cohortId: string
+  title: string
+  description?: string
+  scheduledAt: string
+  durationMinutes: number
+  meetingUrl?: string
+}) {
+  await requireAdmin()
+
+  const { error } = await supabaseAdmin.from('live_sessions').insert({
+    cohort_id: data.cohortId,
+    title: data.title,
+    description: data.description ?? null,
+    scheduled_at: data.scheduledAt,
+    duration_minutes: data.durationMinutes,
+    meeting_url: data.meetingUrl ?? null,
+  })
+
+  if (error) throw new Error(error.message)
+  revalidatePath(`/academy/admin/turmas/${data.cohortId}`)
+}
+
+export async function deleteLiveSession(sessionId: string, cohortId: string) {
+  await requireAdmin()
+
+  const { error } = await supabaseAdmin
+    .from('live_sessions')
+    .delete()
+    .eq('id', sessionId)
+
+  if (error) throw new Error(error.message)
+  revalidatePath(`/academy/admin/turmas/${cohortId}`)
+}
+
 export async function deactivateCoupon(couponId: string) {
   await requireAdmin()
 

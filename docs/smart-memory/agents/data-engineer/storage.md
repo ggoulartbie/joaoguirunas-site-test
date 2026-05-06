@@ -2,13 +2,17 @@
 title: Storage Buckets — Plataforma de Cursos
 type: reference
 agent: sites-data
-updated: 2026-05-05
+updated: 2026-05-06
 tags: [storage, supabase, plataforma-cursos]
 ---
 
 # Storage Buckets
 
-Configurados na migration `20260506022229_storage_buckets_policies.sql`.
+Migrations:
+- `20260506022229_storage_buckets_policies.sql` — criação inicial dos 4 buckets
+- `20260506100000_avatars_bucket.sql` — recriação do bucket avatars (policies duplicadas, consolidadas depois)
+- `20260506080000_onboarding_pdf.sql` — bucket `onboarding-pdfs` (fora do escopo da plataforma de cursos)
+- `20260506120000_fix_avatars_storage_policies.sql` — **consolidação e fix F9.x**: remove todas as policies duplicadas de avatars e recria com `WITH CHECK` no UPDATE
 
 ## Buckets
 
@@ -55,8 +59,10 @@ const { data: certUrl } = await adminClient.storage
 ## Policies resumidas
 
 ### avatars
-- SELECT: público
-- INSERT/UPDATE/DELETE: `auth.uid()` deve ser a primeira pasta do path
+- SELECT: público (TO public)
+- INSERT: `auth.uid()` deve ser a primeira pasta do path (TO authenticated)
+- UPDATE: `auth.uid()` deve ser primeira pasta do path em USING **e** WITH CHECK — impede mover arquivo para path de outro usuário (F9.x fix)
+- DELETE: `auth.uid()` deve ser a primeira pasta do path (TO authenticated)
 
 ### covers
 - SELECT: público
