@@ -34,10 +34,17 @@ export function StudentTopBar({ notifications, userInitials, onMenuClick }: Prop
   const label = BREADCRUMB_MAP[pathname] ?? 'Área do Aluno'
 
   return (
-    <header className="sticky top-0 z-30 flex h-16 items-center justify-between border-b border-white/10 bg-[#050507]/95 px-4 backdrop-blur-sm lg:px-6">
+    <header
+      className="sticky top-0 z-30 flex h-16 items-center justify-between border-b px-4 backdrop-blur-sm lg:px-6"
+      style={{
+        background: 'rgba(5,5,7,0.95)',
+        borderColor: 'var(--hairline)',
+      }}
+    >
       {/* Mobile menu button */}
       <button
-        className="mr-3 flex h-8 w-8 items-center justify-center text-white/60 transition-colors hover:text-white/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FF3A0E] focus-visible:ring-offset-1 focus-visible:ring-offset-[#050507] lg:hidden"
+        className="mr-3 flex h-8 w-8 items-center justify-center transition-colors hover:text-white/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ember)] focus-visible:ring-offset-1 focus-visible:ring-offset-[#050507] lg:hidden"
+        style={{ color: 'rgba(241,241,243,0.6)' }}
         aria-label="Abrir menu de navegação"
         onClick={onMenuClick}
       >
@@ -46,7 +53,10 @@ export function StudentTopBar({ notifications, userInitials, onMenuClick }: Prop
         </svg>
       </button>
 
-      <span className="font-mono text-xs uppercase tracking-widest text-white/40">
+      <span
+        className="font-mono text-xs uppercase tracking-widest"
+        style={{ color: 'rgba(241,241,243,0.35)' }}
+      >
         {label}
       </span>
 
@@ -56,7 +66,11 @@ export function StudentTopBar({ notifications, userInitials, onMenuClick }: Prop
         <Link
           href="/academy/perfil"
           aria-label="Ir para perfil"
-          className="flex h-8 w-8 items-center justify-center bg-white/10 font-mono text-xs font-bold text-white/70 transition-colors hover:bg-white/15 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FF3A0E] focus-visible:ring-offset-1 focus-visible:ring-offset-[#050507]"
+          className="flex h-8 w-8 items-center justify-center font-mono text-xs font-bold transition-colors hover:bg-white/15 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ember)] focus-visible:ring-offset-1 focus-visible:ring-offset-[#050507]"
+          style={{
+            background: 'var(--ink-3)',
+            color: 'var(--bone)',
+          }}
         >
           {userInitials}
         </Link>

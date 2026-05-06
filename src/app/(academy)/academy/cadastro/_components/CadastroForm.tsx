@@ -22,19 +22,22 @@ type FormData = z.infer<typeof schema>
 const formStyles = `
   .rf-input {
     background: var(--ink-2);
-    border: 1px solid var(--hairline);
+    border: 1px solid var(--hairline-strong);
     color: var(--bone);
     width: 100%;
-    padding: 12px 16px;
+    padding: 14px 18px;
     font-size: 14px;
     outline: none;
     border-radius: 0;
     font-family: var(--type-sans);
-    transition: border-color 0.15s;
+    transition: border-color 0.2s, box-shadow 0.2s;
     box-sizing: border-box;
   }
-  .rf-input::placeholder { color: var(--bone-mute); }
-  .rf-input:focus { border-color: var(--hairline-strong); }
+  .rf-input::placeholder { color: rgba(241,241,243,0.25); }
+  .rf-input:focus {
+    border-color: var(--ember);
+    box-shadow: 0 0 0 1px var(--ember);
+  }
   .rf-label {
     font-family: var(--type-mono);
     font-size: 10px;

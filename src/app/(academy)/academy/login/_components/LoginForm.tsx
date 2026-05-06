@@ -7,6 +7,7 @@ import { z } from 'zod'
 import Link from 'next/link'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
+import { Button } from '@/shared/components/ui/button'
 
 const schema = z.object({
   email: z.string().email('Email inválido'),
@@ -50,76 +51,82 @@ export function LoginForm() {
     <div
       style={{
         background: 'var(--ink)',
-        border: '1px solid var(--hairline)',
-        padding: '40px',
+        padding: '48px',
+        borderRadius: 0,
+        borderTop: '2px solid var(--ember)',
       }}
     >
       <style>{`
         .rf-input {
-          background: var(--ink-2);
-          border: 1px solid var(--hairline);
-          color: var(--bone);
           width: 100%;
-          padding: 12px 16px;
-          font-size: 14px;
-          outline: none;
+          border: 1px solid var(--hairline-strong);
+          background: var(--ink-2);
           border-radius: 0;
-          font-family: var(--type-sans);
-          transition: border-color 0.15s;
+          padding: 14px 18px;
+          color: var(--bone);
+          font-size: 0.875rem;
+          outline: none;
+          transition: border-color 0.2s, box-shadow 0.2s;
           box-sizing: border-box;
         }
-        .rf-input::placeholder { color: var(--bone-mute); }
-        .rf-input:focus { border-color: var(--hairline-strong); }
-        .rf-label {
-          font-family: var(--type-mono);
-          font-size: 10px;
-          letter-spacing: 0.18em;
-          text-transform: uppercase;
-          color: var(--bone-mute);
-          font-weight: 500;
-          display: block;
-          margin-bottom: 6px;
+        .rf-input::placeholder {
+          color: rgba(241,241,243,0.25);
         }
-        .rf-forgot {
-          font-family: var(--type-mono);
-          font-size: 10px;
-          letter-spacing: 0.18em;
-          text-transform: uppercase;
-          color: var(--bone-mute);
-          text-decoration: none;
-          transition: color 0.15s;
+        .rf-input:focus {
+          border-color: var(--ember);
+          box-shadow: 0 0 0 1px var(--ember);
         }
-        .rf-forgot:hover { color: var(--bone); }
+        .rf-submit-btn {
+          font-size: 12px !important;
+          letter-spacing: 0.22em !important;
+          transition: filter 0.2s !important;
+          background: var(--ember) !important;
+          color: var(--void) !important;
+          font-family: var(--type-mono) !important;
+          text-transform: uppercase !important;
+          border-radius: 0 !important;
+        }
+        .rf-submit-btn:hover:not(:disabled) {
+          filter: brightness(1.1);
+        }
       `}</style>
 
       <form onSubmit={handleSubmit(onSubmit)} noValidate className="space-y-5">
-        {/* Email */}
-        <div>
-          <label className="rf-label" htmlFor="email">
+        <div className="space-y-1.5">
+          <label
+            className="text-sm"
+            htmlFor="email"
+            style={{ color: 'rgba(241,241,243,0.6)' }}
+          >
             Email
           </label>
           <input
             id="email"
             type="email"
             autoComplete="email"
-            placeholder="seu@email.com"
             className="rf-input"
+            placeholder="seu@email.com"
             {...register('email')}
           />
           {errors.email && (
-            <p style={{ fontSize: 12, color: 'var(--ember)', marginTop: 4 }}>
-              {errors.email.message}
-            </p>
+            <p className="text-xs" style={{ color: 'var(--ember)' }}>{errors.email.message}</p>
           )}
         </div>
 
-        {/* Senha */}
-        <div>
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 6 }}>
-            <label className="rf-label" style={{ marginBottom: 0 }} htmlFor="password">
+        <div className="space-y-1.5">
+          <div className="flex items-center justify-between">
+            <label
+              className="text-sm"
+              htmlFor="password"
+              style={{ color: 'rgba(241,241,243,0.6)' }}
+            >
               Senha
             </label>
-            <Link href="/academy/recuperar-senha" className="rf-forgot">
+            <Link
+              href="/academy/recuperar-senha"
+              className="text-xs transition-colors hover:text-white/70"
+              style={{ color: 'rgba(241,241,243,0.35)' }}
+            >
               Esqueci minha senha
             </Link>
           </div>
@@ -127,18 +134,15 @@ export function LoginForm() {
             id="password"
             type="password"
             autoComplete="current-password"
-            placeholder="••••••••"
             className="rf-input"
+            placeholder="••••••••"
             {...register('password')}
           />
           {errors.password && (
-            <p style={{ fontSize: 12, color: 'var(--ember)', marginTop: 4 }}>
-              {errors.password.message}
-            </p>
+            <p className="text-xs" style={{ color: 'var(--ember)' }}>{errors.password.message}</p>
           )}
         </div>
 
-        {/* Erro servidor */}
         {serverError && (
           <div
             style={{
@@ -153,44 +157,24 @@ export function LoginForm() {
           </div>
         )}
 
-        {/* Submit */}
-        <button
+        <Button
           type="submit"
           disabled={isSubmitting}
-          style={{
-            background: 'var(--ember)',
-            color: 'var(--void)',
-            fontFamily: 'var(--type-mono)',
-            fontSize: 11,
-            letterSpacing: '0.18em',
-            textTransform: 'uppercase',
-            width: '100%',
-            padding: '12px 0',
-            border: 'none',
-            borderRadius: 0,
-            cursor: isSubmitting ? 'not-allowed' : 'pointer',
-            opacity: isSubmitting ? 0.5 : 1,
-            transition: 'opacity 0.15s',
-            fontWeight: 500,
-          }}
+          className="rf-submit-btn w-full disabled:opacity-50"
         >
           {isSubmitting ? 'Entrando...' : 'Entrar'}
-        </button>
+        </Button>
       </form>
 
       <p
-        style={{
-          marginTop: 24,
-          textAlign: 'center',
-          fontSize: 13,
-          color: 'var(--bone-mute)',
-          fontFamily: 'var(--type-sans)',
-        }}
+        className="mt-6 text-center text-sm"
+        style={{ color: 'rgba(241,241,243,0.35)' }}
       >
         Não tem conta?{' '}
         <Link
           href="/academy/cadastro"
-          style={{ color: 'var(--ember)', textDecoration: 'none' }}
+          className="transition-colors hover:text-white"
+          style={{ color: 'rgba(241,241,243,0.65)' }}
         >
           Cadastre-se
         </Link>
