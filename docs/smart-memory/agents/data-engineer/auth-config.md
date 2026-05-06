@@ -17,7 +17,19 @@ Estas configurações residem no painel Supabase e não em código. Devem ser ap
 
 ---
 
-## 1. Provider Email/Senha
+## 1. Disable Sign Ups (F10.1)
+
+Painel → Auth → Providers → Email:
+
+| Setting | Valor |
+|---|---|
+| **Disable Sign Ups** | ✅ ACTIVADO — nenhum utilizador pode criar conta publicamente |
+
+Novos alunos são criados manualmente pelo admin (F10.4) ou via webhook Stripe (F10.5). O fluxo de convite por magic link continua a funcionar.
+
+---
+
+## 2. Provider Email/Senha
 
 | Setting | Valor |
 |---|---|

@@ -5,7 +5,7 @@ import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 import Link from 'next/link'
-import { useRouter, useSearchParams } from 'next/navigation'
+import { useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
 
 const schema = z.object({
@@ -17,7 +17,6 @@ type FormData = z.infer<typeof schema>
 
 export function LoginForm() {
   const router = useRouter()
-  const searchParams = useSearchParams()
   const [serverError, setServerError] = useState<string | null>(null)
 
   const {
@@ -40,12 +39,7 @@ export function LoginForm() {
       return
     }
 
-    const nextRaw = searchParams.get('next') || '/academy/dashboard'
-    const next =
-      nextRaw.startsWith('/') && !nextRaw.startsWith('//')
-        ? nextRaw
-        : '/academy/dashboard'
-    router.push(next)
+    router.push('/academy/aluno')
     router.refresh()
   }
 
@@ -229,32 +223,6 @@ export function LoginForm() {
           </button>
         </form>
 
-        <p
-          className="mt-6 text-center"
-          style={{
-            fontFamily: 'var(--type-sans)',
-            fontSize: '14px',
-            color: 'var(--bone-dim)',
-          }}
-        >
-          Não tem conta?{' '}
-          <Link
-            href="/academy/cadastro"
-            style={{
-              color: 'var(--bone-dim)',
-              transition: 'color 0.2s',
-              textDecoration: 'none',
-            }}
-            onMouseEnter={(e) =>
-              (e.currentTarget.style.color = 'var(--bone)')
-            }
-            onMouseLeave={(e) =>
-              (e.currentTarget.style.color = 'var(--bone-dim)')
-            }
-          >
-            Cadastre-se
-          </Link>
-        </p>
       </div>
     </>
   )

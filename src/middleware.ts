@@ -3,7 +3,6 @@ import { createServerClient } from '@supabase/ssr'
 
 const PUBLIC_PATHS = [
   '/academy/login',
-  '/academy/cadastro',
   '/academy/recuperar-senha',
   '/academy/redefinir-senha',
   '/academy/auth',
@@ -25,6 +24,24 @@ export async function middleware(request: NextRequest) {
 
   if (isPublic(pathname)) {
     return NextResponse.next()
+  }
+
+  // /academy raiz — redireciona conforme estado de autenticação
+  if (pathname === '/academy') {
+    const supabaseCheck = createServerClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+      {
+        cookies: {
+          getAll() { return request.cookies.getAll() },
+          setAll() {},
+        },
+      }
+    )
+    const { data: { user } } = await supabaseCheck.auth.getUser()
+    return NextResponse.redirect(
+      new URL(user ? '/academy/aluno' : '/academy/login', request.url)
+    )
   }
 
   let response = NextResponse.next({ request })
@@ -81,8 +98,8 @@ export const config = {
   // Middleware ONLY runs on course platform routes.
   // Institutional site routes (/, /mentoria, /agentes, etc.) are never matched.
   matcher: [
+    '/academy',
     '/academy/login',
-    '/academy/cadastro',
     '/academy/recuperar-senha',
     '/academy/redefinir-senha',
     '/academy/auth/:path*',
@@ -90,6 +107,8 @@ export const config = {
     '/certificado/:path*',
     '/academy/403',
     '/api/webhooks/:path*',
+    '/academy/aluno',
+    '/academy/aluno/:path*',
     '/academy/dashboard/:path*',
     '/academy/meus-cursos/:path*',
     '/academy/curso/:path*',
