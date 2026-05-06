@@ -24,7 +24,7 @@ export function Starfield({ count = 4500, radius = 220, mouseRef }: StarfieldPro
       positions[i * 3 + 0] = r * Math.sin(phi) * Math.cos(theta);
       positions[i * 3 + 1] = r * Math.sin(phi) * Math.sin(theta);
       positions[i * 3 + 2] = r * Math.cos(phi);
-      sizes[i] = 0.4 + Math.random() * 1.4;
+      sizes[i] = 0.2 + Math.random() * 0.7;
     }
     return { positions, sizes };
   }, [count, radius]);
@@ -47,11 +47,11 @@ export function Starfield({ count = 4500, radius = 220, mouseRef }: StarfieldPro
         <bufferAttribute attach="attributes-size" args={[sizes, 1]} count={count} />
       </bufferGeometry>
       <pointsMaterial
-        size={0.8}
+        size={0.6}
         sizeAttenuation
-        color="#ffffff"
+        color="#c8d0e0"
         transparent
-        opacity={0.85}
+        opacity={0.30}
         depthWrite={false}
         blending={THREE.AdditiveBlending}
       />

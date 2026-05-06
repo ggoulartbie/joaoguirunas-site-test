@@ -1,7 +1,7 @@
 'use client';
 
 import { Suspense, useEffect, useRef } from 'react';
-import { Canvas, useLoader, useThree } from '@react-three/fiber';
+import { Canvas, useThree } from '@react-three/fiber';
 import * as THREE from 'three';
 import { Planet } from './Planet';
 import { Starfield } from './Starfield';
@@ -121,14 +121,12 @@ export const PLANET_X = {
   traffic: 150,
 };
 
-function MilkyWayBackground() {
-  const texture = useLoader(THREE.TextureLoader, '/textures/planets/stars-milky-way.jpg');
+function DarkBackground() {
   const { scene } = useThree();
   useEffect(() => {
-    texture.mapping = THREE.EquirectangularReflectionMapping;
-    scene.background = texture;
+    scene.background = new THREE.Color('#02020a');
     return () => { scene.background = null; };
-  }, [texture, scene]);
+  }, [scene]);
   return null;
 }
 
@@ -181,7 +179,7 @@ export function SolarSystemScene() {
 
       <Suspense fallback={null}>
         <DragController planets={dragPlanets} />
-        <MilkyWayBackground />
+        <DarkBackground />
 
         {/* Dev — violet gas giant @ x=0 (first squad) */}
         <Planet
@@ -246,7 +244,7 @@ export function SolarSystemScene() {
         />
 
         {/* Background stars */}
-        <Starfield count={isMobile ? 2500 : 5500} radius={320} mouseRef={mouseRef} />
+        <Starfield count={isMobile ? 600 : 1400} radius={320} mouseRef={mouseRef} />
       </Suspense>
 
       <CameraRig progressRef={progressRef} targetRef={targetRef} mouseRef={mouseRef} mobile={isMobile} />
