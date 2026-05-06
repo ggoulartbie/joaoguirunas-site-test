@@ -1,6 +1,7 @@
 'use server'
 
 import { revalidatePath } from 'next/cache'
+import * as Sentry from '@sentry/nextjs'
 import { supabaseAdmin } from '@/lib/supabase/admin'
 import { requireAdmin } from '@/lib/auth/helpers'
 import Stripe from 'stripe'
@@ -335,6 +336,9 @@ export async function retryWebhookEvent(eventId: string) {
   } catch (err) {
     success = false
     errorMessage = err instanceof Error ? err.message : String(err)
+    Sentry.captureException(err, {
+      tags: { action: 'retryWebhookEvent', stripe_event_id: row.stripe_event_id },
+    })
   }
 
   await supabaseAdmin

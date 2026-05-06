@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
+import * as Sentry from '@sentry/nextjs'
 import { supabaseAdmin } from '@/lib/supabase/admin'
 import { sendLiveSessionReminderEmail, sendExpirationReminderEmail } from '@/lib/email/send'
 
@@ -34,6 +35,7 @@ export async function GET(req: NextRequest) {
 
     results.expired = expiredRows?.length ?? 0
   } catch (err) {
+    Sentry.captureException(err, { tags: { cron_section: 'expire_memberships' } })
     results.errors.push(`expire: ${err instanceof Error ? err.message : String(err)}`)
   }
 
@@ -77,6 +79,7 @@ export async function GET(req: NextRequest) {
         }
       }
     } catch (err) {
+      Sentry.captureException(err, { tags: { cron_section: `reminders_${days}d` } })
       results.errors.push(`reminders-${days}d: ${err instanceof Error ? err.message : String(err)}`)
     }
   }
@@ -101,6 +104,7 @@ export async function GET(req: NextRequest) {
       results.errors.push(`renewal-pending-no-stripe-event: membership ${member.id}`)
     }
   } catch (err) {
+    Sentry.captureException(err, { tags: { cron_section: 'auto_renewals' } })
     results.errors.push(`renewals: ${err instanceof Error ? err.message : String(err)}`)
   }
 
@@ -156,6 +160,7 @@ export async function GET(req: NextRequest) {
       }
     }
   } catch (err) {
+    Sentry.captureException(err, { tags: { cron_section: 'live_session_reminders' } })
     results.errors.push(`live-reminders: ${err instanceof Error ? err.message : String(err)}`)
   }
 

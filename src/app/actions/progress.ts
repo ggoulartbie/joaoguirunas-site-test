@@ -1,5 +1,6 @@
 'use server'
 
+import * as Sentry from '@sentry/nextjs'
 import { createClient } from '@/lib/supabase/server'
 import { supabaseAdmin } from '@/lib/supabase/admin'
 import { requireUser } from '@/lib/auth/helpers'
@@ -51,7 +52,9 @@ export async function markLessonComplete(lessonId: string): Promise<void> {
 
   // Auto-issue certificate if this completes 100% of the course.
   // Resolve course + active cohort via supabaseAdmin (service role, no RLS).
-  triggerCertificateCheck(user.id, lessonId).catch(console.error)
+  triggerCertificateCheck(user.id, lessonId).catch((err) => Sentry.captureException(err, {
+    tags: { action: 'markLessonComplete', lesson_id: lessonId },
+  }))
 }
 
 async function triggerCertificateCheck(userId: string, lessonId: string): Promise<void> {

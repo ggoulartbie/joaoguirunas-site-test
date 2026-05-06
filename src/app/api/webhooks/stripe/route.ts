@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import Stripe from 'stripe'
+import * as Sentry from '@sentry/nextjs'
 import { stripe } from '@/lib/payment/stripe'
 import { supabaseAdmin } from '@/lib/supabase/admin'
 import {
@@ -8,6 +9,7 @@ import {
   sendAutoRenewalEmail,
   sendPaymentFailedEmail,
   sendWelcomeToCohortEmail,
+  sendWelcomeInviteEmail,
 } from '@/lib/email/send'
 
 export const runtime = 'nodejs'
@@ -72,6 +74,9 @@ export async function POST(req: NextRequest) {
   } catch (err) {
     success = false
     errorMessage = err instanceof Error ? err.message : String(err)
+    Sentry.captureException(err, {
+      tags: { stripe_event_type: event.type, stripe_event_id: event.id },
+    })
     console.error(`Webhook error for event ${event.id}:`, errorMessage)
   }
 
@@ -101,10 +106,66 @@ async function getUserEmailAndName(userId: string): Promise<{ email: string; nam
   return { email, name: profile.name }
 }
 
-async function handleCheckoutCompleted(session: Stripe.Checkout.Session) {
-  const { cohort_id, user_id, purchase_kind } = session.metadata ?? {}
+// Finds an existing Supabase user by email or creates a new one.
+// Returns { userId, isNew }.
+async function findOrCreateUser(
+  email: string,
+  name: string,
+): Promise<{ userId: string; isNew: boolean }> {
+  const { data: listResult } = await supabaseAdmin.auth.admin.listUsers({ perPage: 1000 })
+  const existing = listResult?.users.find((u) => u.email === email)
 
-  if (!cohort_id || !user_id || !purchase_kind) {
+  if (existing) {
+    return { userId: existing.id, isNew: false }
+  }
+
+  const { data: created, error } = await supabaseAdmin.auth.admin.createUser({
+    email,
+    user_metadata: { name },
+    email_confirm: true,
+  })
+
+  if (error || !created.user) {
+    throw new Error(`Failed to create user for ${email}: ${error?.message}`)
+  }
+
+  return { userId: created.user.id, isNew: true }
+}
+
+// Generates a Supabase magic link for the user.
+async function generateMagicLink(email: string): Promise<string | null> {
+  const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? 'http://localhost:3000'
+
+  const { data, error } = await supabaseAdmin.auth.admin.generateLink({
+    type: 'magiclink',
+    email,
+    options: {
+      redirectTo: `${appUrl}/academy/meus-cursos`,
+    },
+  })
+
+  if (error || !data.properties?.action_link) {
+    console.error('Failed to generate magic link:', error?.message)
+    return null
+  }
+
+  return data.properties.action_link
+}
+
+async function handleCheckoutCompleted(session: Stripe.Checkout.Session) {
+  const { cohort_id, cohort_slug, user_id, purchase_kind } = session.metadata ?? {}
+
+  // Determine whether this is an authenticated purchase (user_id in metadata)
+  // or a public purchase (no user_id — comprador sem conta prévia).
+  const isPublicPurchase = !user_id
+
+  if (isPublicPurchase) {
+    await handlePublicCheckoutCompleted(session, cohort_slug)
+    return
+  }
+
+  // --- Authenticated purchase flow (existing logic) ---
+  if (!cohort_id || !purchase_kind) {
     throw new Error('Missing metadata on checkout session')
   }
 
@@ -147,7 +208,6 @@ async function handleCheckoutCompleted(session: Stripe.Checkout.Session) {
 
   if (daysToAdd !== null) {
     if (purchase_kind === 'EXTENSION' && existingMember?.expires_at) {
-      // Soma ao prazo restante: max(expires_at, now()) + days
       const base = new Date(existingMember.expires_at) > new Date()
         ? new Date(existingMember.expires_at)
         : new Date()
@@ -200,7 +260,6 @@ async function handleCheckoutCompleted(session: Stripe.Checkout.Session) {
 
   await applyCrossExtensions(cohort_id, user_id)
 
-  // Disparar email adequado ao tipo de compra
   const userInfo = await getUserEmailAndName(user_id)
   if (userInfo) {
     if (purchase_kind === 'ENTRY') {
@@ -215,6 +274,129 @@ async function handleCheckoutCompleted(session: Stripe.Checkout.Session) {
       ).catch(console.error)
     }
   }
+}
+
+// Handles public checkout (no user_id in metadata).
+// Creates Supabase account if needed, creates cohort_member, sends magic link email.
+async function handlePublicCheckoutCompleted(
+  session: Stripe.Checkout.Session,
+  cohortSlug: string | undefined,
+) {
+  const customerEmail = session.customer_details?.email ?? session.customer_email
+  const customerName = session.customer_details?.name ?? 'Aluno'
+
+  if (!customerEmail) {
+    throw new Error('No customer email in public checkout session')
+  }
+
+  // Resolve cohort from slug in metadata, or fall back to line_item product metadata
+  let cohort: { id: string; name: string; access_duration_days: number | null; start_date: string | null } | null = null
+
+  if (cohortSlug) {
+    const { data } = await supabaseAdmin
+      .from('cohorts')
+      .select('id, name, access_duration_days, start_date')
+      .eq('slug', cohortSlug)
+      .single()
+    cohort = data
+  }
+
+  if (!cohort) {
+    throw new Error(`Cohort not found for slug: ${cohortSlug ?? '(none)'}`)
+  }
+
+  const { userId, isNew } = await findOrCreateUser(customerEmail, customerName)
+
+  // Save stripe_customer_id on profile
+  const customerId = typeof session.customer === 'string'
+    ? session.customer
+    : session.customer?.id ?? null
+
+  if (customerId) {
+    await supabaseAdmin
+      .from('profiles')
+      .update({ stripe_customer_id: customerId })
+      .eq('id', userId)
+  }
+
+  // Calculate expires_at
+  let newExpiresAt: string | null = null
+  if (cohort.access_duration_days !== null) {
+    const base = new Date()
+    base.setDate(base.getDate() + cohort.access_duration_days)
+    newExpiresAt = base.toISOString()
+  }
+
+  // Upsert cohort_member — idempotent: if already exists (e.g. duplicate webhook), update instead
+  const { data: existingMember } = await supabaseAdmin
+    .from('cohort_members')
+    .select('id')
+    .eq('cohort_id', cohort.id)
+    .eq('user_id', userId)
+    .maybeSingle()
+
+  let memberId: string
+
+  if (existingMember) {
+    await supabaseAdmin
+      .from('cohort_members')
+      .update({ status: 'ACTIVE', expires_at: newExpiresAt })
+      .eq('id', existingMember.id)
+    memberId = existingMember.id
+  } else {
+    const { data: newMember, error } = await supabaseAdmin
+      .from('cohort_members')
+      .insert({
+        cohort_id: cohort.id,
+        user_id: userId,
+        member_role: 'STUDENT',
+        status: 'ACTIVE',
+        expires_at: newExpiresAt,
+      })
+      .select('id')
+      .single()
+
+    if (!newMember) throw new Error(`Failed to create cohort_member: ${error?.message}`)
+    memberId = newMember.id
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    await (supabaseAdmin.rpc as any)('increment_filled_seats', { p_cohort_id: cohort.id })
+  }
+
+  const paymentIntentId = typeof session.payment_intent === 'string'
+    ? session.payment_intent
+    : session.payment_intent?.id ?? null
+
+  await supabaseAdmin.from('payments').insert({
+    user_id: userId,
+    cohort_id: cohort.id,
+    purchase_kind: 'ENTRY',
+    membership_id: memberId,
+    stripe_checkout_session_id: session.id,
+    stripe_payment_intent_id: paymentIntentId,
+    amount_cents: session.amount_total ?? 0,
+    status: 'APPROVED',
+    paid_at: new Date().toISOString(),
+  })
+
+  await applyCrossExtensions(cohort.id, userId)
+
+  // Generate magic link and send welcome email with access
+  const magicLink = await generateMagicLink(customerEmail)
+  const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? 'http://localhost:3000'
+  const accessUrl = magicLink ?? `${appUrl}/academy/login`
+
+  const subject = isNew
+    ? `Acesso liberado — ${cohort.name}`
+    : `Acesso renovado — ${cohort.name}`
+
+  await sendWelcomeInviteEmail(
+    customerEmail,
+    customerName,
+    cohort.name,
+    accessUrl,
+    subject,
+  ).catch(console.error)
 }
 
 async function getSubscriptionIdFromInvoice(invoice: Stripe.Invoice): Promise<string | null> {
@@ -383,6 +565,5 @@ async function applyCrossExtensions(sourceCohortId: string, userId: string) {
         .update({ expires_at: base.toISOString(), status: 'ACTIVE' })
         .eq('id', targetMember.id)
     }
-    // Extensão cruzada só estende prazo existente, não cria membership nova
   }
 }
