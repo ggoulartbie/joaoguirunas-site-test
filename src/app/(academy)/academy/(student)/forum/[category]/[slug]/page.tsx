@@ -1,13 +1,7 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
-import {
-  ArrowLeft,
-  CheckCircle2,
-  Pin,
-  MessageSquare,
-  CornerDownRight,
-} from 'lucide-react'
+import { ArrowLeft, CheckCircle2, Pin } from 'lucide-react'
 import { supabaseAdmin } from '@/lib/supabase/admin'
 import { requireUser } from '@/lib/auth/helpers'
 import type { ForumReplyWithMeta } from '@/types/student'
@@ -42,6 +36,17 @@ function formatDate(iso: string) {
 const ROLE_BADGE: Record<string, { label: string; className: string } | undefined> = {
   MENTOR: { label: 'Mentor', className: 'bg-[#FF3A0E]/15 text-[#FF3A0E]' },
   ADMIN: { label: 'Admin', className: 'bg-yellow-500/15 text-yellow-400' },
+}
+
+function Avatar({ name }: { name: string }) {
+  return (
+    <div
+      className="flex h-8 w-8 shrink-0 items-center justify-center bg-[#FF3A0E]/20 font-mono text-xs font-bold uppercase text-[color:var(--ember)]"
+      style={{ borderRadius: '9999px' }}
+    >
+      {name.charAt(0)}
+    </div>
+  )
 }
 
 export default async function ForumThreadPage({ params }: Props) {
@@ -87,6 +92,7 @@ export default async function ForumThreadPage({ params }: Props) {
     is_pinned: threadRaw.is_pinned,
     is_resolved: threadRaw.is_resolved,
     categoryName: cat?.name ?? '',
+    categorySlug: cat?.slug ?? '',
     authorName: threadAuthor?.name ?? 'Desconhecido',
     authorRole: (threadAuthor?.role ?? 'STUDENT') as string,
     replyCount: replyCount ?? 0,
@@ -136,73 +142,98 @@ export default async function ForumThreadPage({ params }: Props) {
 
   return (
     <div className="mx-auto max-w-3xl space-y-6">
-      {/* Breadcrumb */}
-      <Link
-        href="/forum"
-        className="flex items-center gap-1.5 font-mono text-xs uppercase tracking-wider text-white/40 hover:text-white/70 transition-colors"
-      >
-        <ArrowLeft className="h-3 w-3" />
-        Fórum
-      </Link>
+      {/* Header da thread */}
+      <div className="border-b border-[color:var(--hairline)] pb-6">
+        {/* Breadcrumb */}
+        <Link
+          href="/academy/forum"
+          className="mb-4 flex items-center gap-1.5 font-mono text-[11px] uppercase tracking-widest text-[color:var(--bone-mute)] transition-colors hover:text-[color:var(--bone)]"
+        >
+          <ArrowLeft className="h-3 w-3" />
+          Fórum
+          {thread.categoryName && (
+            <>
+              <span className="text-[color:var(--hairline-strong)]">/</span>
+              <span>{thread.categoryName}</span>
+            </>
+          )}
+        </Link>
 
-      {/* Thread principal */}
-      <div className="border border-white/10 bg-[#0C0C12]">
-        <div className="flex items-center justify-between border-b border-white/10 px-5 py-3">
-          <span className="font-mono text-[10px] uppercase tracking-wider text-white/30">
+        {/* Badges de estado */}
+        <div className="mb-3 flex flex-wrap items-center gap-2">
+          <span
+            className="border border-[color:var(--hairline)] px-1.5 py-0.5 font-mono text-[10px] uppercase tracking-widest text-[color:var(--bone-mute)]"
+            style={{ borderRadius: 0 }}
+          >
             {thread.categoryName}
           </span>
-          <div className="flex items-center gap-3">
-            {thread.is_pinned && (
-              <div className="flex items-center gap-1 font-mono text-[10px] uppercase tracking-wide text-[#FF3A0E]">
-                <Pin className="h-3 w-3" />
-                Fixado
-              </div>
-            )}
-            {thread.is_resolved && (
-              <div className="flex items-center gap-1 font-mono text-[10px] uppercase tracking-wide text-green-400">
-                <CheckCircle2 className="h-3 w-3" />
-                Resolvido
-              </div>
-            )}
-          </div>
+          {thread.is_pinned && (
+            <span className="flex items-center gap-1 font-mono text-[10px] uppercase tracking-widest text-[color:var(--ember)]">
+              <Pin className="h-3 w-3" />
+              Fixado
+            </span>
+          )}
+          {thread.is_resolved && (
+            <span className="flex items-center gap-1 font-mono text-[10px] uppercase tracking-widest text-green-400">
+              <CheckCircle2 className="h-3 w-3" />
+              Resolvido
+            </span>
+          )}
         </div>
 
-        <div className="p-5">
-          <h1 className="text-xl font-bold text-white">{thread.title}</h1>
+        <h1
+          className="font-[family-name:var(--type-display)] italic text-[color:var(--bone)]"
+          style={{ fontSize: 'clamp(28px, 4vw, 32px)', lineHeight: 1.15 }}
+        >
+          {thread.title}
+        </h1>
+        <p className="mt-2 font-mono text-[11px] text-[color:var(--bone-mute)]">
+          por {thread.authorName} &bull; {formatDate(thread.created_at)} &bull; {thread.replyCount}{' '}
+          {thread.replyCount === 1 ? 'resposta' : 'respostas'}
+        </p>
+      </div>
 
-          <div className="mt-3 flex items-center gap-2">
-            <div className="flex h-7 w-7 items-center justify-center bg-white/10 font-mono text-xs font-bold text-white/60">
-              {thread.authorName.charAt(0)}
-            </div>
-            <span className="text-sm text-white/70">{thread.authorName}</span>
+      {/* Post original */}
+      <div
+        className="border border-[color:var(--hairline)] bg-[color:var(--ink)] p-5"
+        style={{ borderRadius: 0 }}
+      >
+        <div className="mb-3 flex items-center gap-2.5">
+          <Avatar name={thread.authorName} />
+          <div>
+            <span className="font-[family-name:var(--type-sans)] text-sm font-medium text-[color:var(--bone)]">
+              {thread.authorName}
+            </span>
             {badge && (
-              <span className={`px-1.5 py-0.5 font-mono text-[10px] uppercase tracking-wide ${badge.className}`}>
+              <span
+                className={`ml-2 px-1.5 py-0.5 font-mono text-[10px] uppercase tracking-widest ${badge.className}`}
+                style={{ borderRadius: 0 }}
+              >
                 {badge.label}
               </span>
             )}
-            <span className="ml-auto font-mono text-xs text-white/30">
-              {formatDate(thread.created_at)}
-            </span>
           </div>
+          <span className="ml-auto font-mono text-[11px] text-[color:var(--bone-mute)]">
+            {formatDate(thread.created_at)}
+          </span>
+        </div>
 
-          <div className="mt-4 text-sm leading-relaxed text-white/80">
-            <p className="whitespace-pre-wrap">{thread.content}</p>
-          </div>
+        <div className="font-[family-name:var(--type-sans)] text-[15px] leading-relaxed text-[color:var(--bone-dim)]">
+          <p className="whitespace-pre-wrap">{thread.content}</p>
+        </div>
 
-          <div className="mt-4 flex items-center gap-4 border-t border-white/10 pt-4">
-            <VoteButton threadId={thread.id} voteCount={thread.voteCount} />
-            <span className="font-mono text-xs text-white/20">
-              {thread.replyCount} {thread.replyCount === 1 ? 'resposta' : 'respostas'}
-            </span>
-          </div>
+        <div className="mt-4 flex items-center gap-4 border-t border-[color:var(--hairline)] pt-3">
+          <VoteButton threadId={thread.id} voteCount={thread.voteCount} />
+          <span className="font-mono text-[11px] text-[color:var(--bone-mute)]">
+            {thread.replyCount} {thread.replyCount === 1 ? 'resposta' : 'respostas'}
+          </span>
         </div>
       </div>
 
-      {/* Replies */}
+      {/* Respostas */}
       {topLevelReplies.length > 0 && (
-        <div className="space-y-3">
-          <h2 className="flex items-center gap-2 font-mono text-xs uppercase tracking-widest text-white/40">
-            <CornerDownRight className="h-3.5 w-3.5" />
+        <div className="space-y-2">
+          <h2 className="font-mono text-[11px] uppercase tracking-widest text-[color:var(--bone-mute)]">
             {thread.replyCount} {thread.replyCount === 1 ? 'resposta' : 'respostas'}
           </h2>
 
@@ -232,21 +263,23 @@ export default async function ForumThreadPage({ params }: Props) {
         </div>
       )}
 
-      {/* Form de nova resposta */}
-      <div>
-        <h2 className="mb-3 font-mono text-xs uppercase tracking-widest text-white/40">
+      {/* Sem respostas */}
+      {topLevelReplies.length === 0 && (
+        <p className="py-6 font-mono text-[11px] text-[color:var(--bone-mute)]">
+          Ainda sem respostas. Seja o primeiro!
+        </p>
+      )}
+
+      {/* Formulário de resposta */}
+      <div
+        className="border border-[color:var(--hairline)] bg-[color:var(--ink)] p-5"
+        style={{ borderRadius: 0 }}
+      >
+        <h2 className="mb-4 font-mono text-[11px] uppercase tracking-widest text-[color:var(--bone-mute)]">
           Sua resposta
         </h2>
         <ForumReplyForm threadId={thread.id} />
       </div>
-
-      {/* Sem respostas ainda */}
-      {topLevelReplies.length === 0 && (
-        <div className="flex items-center gap-2 py-6 text-sm text-white/30">
-          <MessageSquare className="h-4 w-4" />
-          Ainda sem respostas. Seja o primeiro!
-        </div>
-      )}
     </div>
   )
 }

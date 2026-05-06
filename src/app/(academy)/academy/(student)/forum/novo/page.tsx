@@ -7,7 +7,7 @@ import { supabaseAdmin } from '@/lib/supabase/admin'
 import { requireUser } from '@/lib/auth/helpers'
 import { NewThreadForm } from '@/components/student/NewThreadForm'
 
-export const metadata: Metadata = { title: 'Novo Tópico — Fórum' }
+export const metadata: Metadata = { title: 'Nova Thread — Fórum' }
 
 export default async function NovoTopicoPage() {
   const user = await requireUser()
@@ -42,22 +42,35 @@ export default async function NovoTopicoPage() {
 
   return (
     <div className="mx-auto max-w-2xl space-y-6">
+      {/* Breadcrumb */}
       <Link
-        href="/forum"
-        className="flex items-center gap-1.5 font-mono text-xs uppercase tracking-wider text-white/40 hover:text-white/70 transition-colors"
+        href="/academy/forum"
+        className="flex items-center gap-1.5 font-mono text-[11px] uppercase tracking-widest text-[color:var(--bone-mute)] transition-colors hover:text-[color:var(--bone)]"
       >
         <ArrowLeft className="h-3 w-3" />
         Fórum
       </Link>
 
+      {/* Header */}
       <div>
-        <h1 className="text-2xl font-bold text-white">Novo tópico</h1>
-        <p className="mt-1 text-sm text-white/50">
-          Compartilhe dúvidas, ideias ou experiências com a comunidade.
+        <p className="font-mono text-[11px] uppercase tracking-widest text-[color:var(--bone-mute)]">
+          Fórum
         </p>
+        <h1
+          className="mt-1 font-[family-name:var(--type-display)] italic text-[color:var(--bone)]"
+          style={{ fontSize: '36px', lineHeight: 1.1 }}
+        >
+          Nova thread
+        </h1>
       </div>
 
-      <NewThreadForm categories={categories} />
+      {/* Form */}
+      <div
+        className="border border-t-2 border-[color:var(--hairline)] bg-[color:var(--ink)] p-6"
+        style={{ borderTopColor: 'var(--ember)', borderRadius: 0 }}
+      >
+        <NewThreadForm categories={categories} />
+      </div>
     </div>
   )
 }

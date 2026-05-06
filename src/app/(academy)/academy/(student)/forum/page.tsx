@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import { redirect } from 'next/navigation'
-import { MessageSquare, Pin, CheckCircle2, ArrowRight } from 'lucide-react'
+import { ChevronUp, CheckCircle2, Plus } from 'lucide-react'
 import { createClient } from '@/lib/supabase/server'
 import { supabaseAdmin } from '@/lib/supabase/admin'
 import { requireUser } from '@/lib/auth/helpers'
@@ -19,16 +19,14 @@ function timeAgo(iso: string): string {
   return `${diffMins}min atrás`
 }
 
-const ROLE_BADGE: Record<string, { label: string; className: string }> = {
-  MENTOR: { label: 'Mentor', className: 'bg-[#FF3A0E]/15 text-[#FF3A0E]' },
-  ADMIN: { label: 'Admin', className: 'bg-yellow-500/15 text-yellow-400' },
-  STUDENT: { label: '', className: '' },
-}
-
-export default async function ForumPage() {
-  // Guard: requer matrícula ativa
+export default async function ForumPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ categoria?: string }>
+}) {
   const user = await requireUser()
   const supabase = await createClient()
+  const { categoria: activeCategory } = await searchParams
 
   const { data: membership } = await supabase
     .from('cohort_members')
@@ -41,7 +39,6 @@ export default async function ForumPage() {
     redirect('/academy/meus-cursos?erro=forum-acesso')
   }
 
-  // Categorias ativas
   const { data: categoriesRaw } = await supabaseAdmin
     .from('forum_categories')
     .select('id, slug, name, color, sort_order, is_active')
@@ -59,8 +56,7 @@ export default async function ForumPage() {
     })
   )
 
-  // Threads recentes com autor e categoria
-  const { data: threadsRaw } = await supabaseAdmin
+  let threadsQuery = supabaseAdmin
     .from('forum_threads')
     .select(`
       id, slug, title, created_at, last_activity_at,
@@ -69,8 +65,18 @@ export default async function ForumPage() {
       profiles(name, role)
     `)
     .is('deleted_at', null)
+    .order('is_pinned', { ascending: false })
     .order('last_activity_at', { ascending: false })
     .limit(20)
+
+  if (activeCategory) {
+    const cat = categories.find((c) => c.slug === activeCategory)
+    if (cat) {
+      threadsQuery = threadsQuery.eq('category_id', cat.id)
+    }
+  }
+
+  const { data: threadsRaw } = await threadsQuery
 
   type ThreadRow = NonNullable<typeof threadsRaw>[number]
 
@@ -112,126 +118,110 @@ export default async function ForumPage() {
   return (
     <div className="mx-auto max-w-3xl space-y-8">
       {/* Header */}
-      <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+      <div className="flex items-start justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-white">Fórum</h1>
-          <p className="mt-1 text-sm text-white/50">Discussões da comunidade</p>
+          <p className="font-mono text-[11px] uppercase tracking-widest text-[color:var(--bone-mute)]">
+            Comunidade
+          </p>
+          <h1
+            className="mt-1 font-[family-name:var(--type-display)] italic text-[color:var(--bone)]"
+            style={{ fontSize: '36px', lineHeight: 1.1 }}
+          >
+            Fórum
+          </h1>
         </div>
         <Link
-          href="/forum/novo"
-          className="flex shrink-0 items-center gap-2 bg-[#FF3A0E] px-4 py-2.5 font-mono text-xs uppercase tracking-wide text-white hover:bg-[#FF5A1F] transition-colors"
+          href="/academy/forum/novo"
+          className="flex shrink-0 items-center gap-2 bg-[color:var(--ember)] px-4 py-2.5 font-mono text-[11px] uppercase tracking-widest text-[color:var(--void)] transition-colors hover:bg-[color:var(--ember-glow)]"
+          style={{ borderRadius: 0 }}
         >
-          <MessageSquare className="h-3.5 w-3.5" />
-          Novo tópico
+          <Plus className="h-3.5 w-3.5" />
+          Nova thread
         </Link>
       </div>
 
-      {/* Categorias */}
+      {/* Filtros por categoria */}
       {categories.length > 0 && (
-        <div>
-          <h2 className="font-mono text-xs uppercase tracking-widest text-white/40">
-            Categorias
-          </h2>
-          <div className="mt-3 grid gap-2 sm:grid-cols-3">
-            {categories.map((cat) => (
-              <Link
-                key={cat.id}
-                href="/forum"
-                className="group flex items-center justify-between border border-white/10 bg-[#0C0C12] px-4 py-3 transition-colors hover:border-white/20 hover:bg-[#121218]"
-              >
-                <div className="flex items-center gap-2.5">
-                  <span
-                    className="h-2 w-2 shrink-0 rounded-full"
-                    style={{ backgroundColor: cat.color ?? undefined }}
-                  />
-                  <span className="text-sm font-medium text-white group-hover:text-[#FF3A0E] transition-colors">
-                    {cat.name}
-                  </span>
-                </div>
-                <span className="font-mono text-xs text-white/30">
-                  {cat.threadCount}
-                </span>
-              </Link>
-            ))}
-          </div>
+        <div className="flex flex-wrap gap-2">
+          <Link
+            href="/academy/forum"
+            className={`px-3 py-1.5 font-mono text-[11px] uppercase tracking-widest transition-colors ${
+              !activeCategory
+                ? 'bg-[color:var(--ember)] text-[color:var(--void)]'
+                : 'border border-[color:var(--hairline)] text-[color:var(--bone-mute)] hover:border-[color:var(--hairline-strong)] hover:text-[color:var(--bone)]'
+            }`}
+            style={{ borderRadius: 0 }}
+          >
+            Todos
+          </Link>
+          {categories.map((cat) => (
+            <Link
+              key={cat.id}
+              href={`/academy/forum?categoria=${cat.slug}`}
+              className={`px-3 py-1.5 font-mono text-[11px] uppercase tracking-widest transition-colors ${
+                activeCategory === cat.slug
+                  ? 'bg-[color:var(--ember)] text-[color:var(--void)]'
+                  : 'border border-[color:var(--hairline)] text-[color:var(--bone-mute)] hover:border-[color:var(--hairline-strong)] hover:text-[color:var(--bone)]'
+              }`}
+              style={{ borderRadius: 0 }}
+            >
+              {cat.name}
+            </Link>
+          ))}
         </div>
       )}
 
-      {/* Threads recentes */}
-      <div>
-        <h2 className="font-mono text-xs uppercase tracking-widest text-white/40">
-          Atividade recente
-        </h2>
-        <div className="mt-3 space-y-2">
-          {threads.length === 0 ? (
-            <p className="py-8 text-center text-sm text-white/40">
-              Nenhum tópico ainda. Seja o primeiro a publicar!
-            </p>
-          ) : (
-            threads.map((thread) => {
-              const badge = ROLE_BADGE[thread.authorRole]
-              return (
-                <Link
-                  key={thread.id}
-                  href={`/forum/${thread.categorySlug}/${thread.slug}`}
-                  className="group flex items-start gap-4 border border-white/10 bg-[#0C0C12] p-4 transition-colors hover:border-white/20 hover:bg-[#121218]"
-                >
-                  <div className="mt-0.5 shrink-0">
-                    {thread.is_resolved ? (
-                      <CheckCircle2 className="h-4 w-4 text-green-400" />
-                    ) : (
-                      <MessageSquare className="h-4 w-4 text-white/20" />
-                    )}
-                  </div>
+      {/* Lista de threads */}
+      <div className="space-y-2">
+        {threads.length === 0 ? (
+          <p className="py-12 text-center font-mono text-xs text-[color:var(--bone-mute)]">
+            Nenhum tópico ainda. Seja o primeiro a publicar!
+          </p>
+        ) : (
+          threads.map((thread) => (
+            <Link
+              key={thread.id}
+              href={`/academy/forum/${thread.categorySlug}/${thread.slug}`}
+              className="group flex items-start gap-4 border border-[color:var(--hairline)] bg-[color:var(--ink)] p-4 transition-colors hover:border-[color:var(--hairline-strong)]"
+              style={{ borderRadius: 0 }}
+            >
+              {/* Votes */}
+              <div className="flex shrink-0 flex-col items-center gap-0.5">
+                <ChevronUp
+                  className="h-4 w-4 text-[color:var(--bone-mute)]"
+                />
+                <span className="font-mono text-xs text-[color:var(--bone-mute)]">
+                  {thread.voteCount}
+                </span>
+              </div>
 
-                  <div className="min-w-0 flex-1">
-                    <div className="flex flex-wrap items-center gap-2">
-                      {thread.is_pinned && (
-                        <Pin className="h-3 w-3 shrink-0 text-[#FF3A0E]" />
-                      )}
-                      <h3 className="text-sm font-medium text-white group-hover:text-[#FF3A0E] transition-colors">
-                        {thread.title}
-                      </h3>
-                    </div>
+              {/* Centro */}
+              <div className="min-w-0 flex-1">
+                <div className="flex flex-wrap items-center gap-2">
+                  <span
+                    className="border border-[color:var(--hairline)] px-1.5 py-0.5 font-mono text-[10px] uppercase tracking-widest text-[color:var(--bone-mute)]"
+                    style={{ borderRadius: 0 }}
+                  >
+                    {thread.categoryName}
+                  </span>
+                </div>
+                <h3 className="mt-1.5 font-[family-name:var(--type-sans)] text-[15px] font-medium text-[color:var(--bone)] transition-colors group-hover:text-[color:var(--ember)]">
+                  {thread.title}
+                </h3>
+                <p className="mt-1 font-mono text-[11px] text-[color:var(--bone-mute)]">
+                  por {thread.authorName} &bull; {timeAgo(thread.last_activity_at)} &bull; {thread.replyCount}{' '}
+                  {thread.replyCount === 1 ? 'resposta' : 'respostas'}
+                </p>
+              </div>
 
-                    <div className="mt-1 flex flex-wrap items-center gap-3">
-                      <span className="border border-white/10 px-1.5 py-0.5 font-mono text-[10px] uppercase tracking-wide text-white/30">
-                        {thread.categoryName}
-                      </span>
-                      <span className="text-xs text-white/40">
-                        {thread.authorName}
-                        {badge?.label && (
-                          <span className={`ml-1.5 px-1.5 py-0.5 font-mono text-[10px] uppercase tracking-wide ${badge.className}`}>
-                            {badge.label}
-                          </span>
-                        )}
-                      </span>
-                      <span className="text-xs text-white/30">
-                        {timeAgo(thread.last_activity_at)}
-                      </span>
-                    </div>
-                  </div>
-
-                  <div className="shrink-0 text-right">
-                    <div className="flex items-center gap-3 font-mono text-xs text-white/30">
-                      <span>{thread.voteCount} votos</span>
-                      <span>{thread.replyCount} resp.</span>
-                    </div>
-                  </div>
-                </Link>
-              )
-            })
-          )}
-        </div>
-
-        {threads.length > 0 && (
-          <Link
-            href="/forum"
-            className="mt-4 flex items-center gap-1.5 font-mono text-xs uppercase tracking-wider text-white/40 hover:text-white/70 transition-colors"
-          >
-            Ver todos os tópicos
-            <ArrowRight className="h-3 w-3" />
-          </Link>
+              {/* Direita: resolved */}
+              {thread.is_resolved && (
+                <div className="shrink-0">
+                  <CheckCircle2 className="h-4 w-4 text-green-400" />
+                </div>
+              )}
+            </Link>
+          ))
         )}
       </div>
     </div>
