@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
-import { Award, Download, ExternalLink, CheckCircle2 } from 'lucide-react'
+import { Award, Download, ExternalLink } from 'lucide-react'
 import { MOCK_CERTIFICATES } from '@/components/student/mock-data'
 
 export const metadata: Metadata = { title: 'Certificados' }
@@ -20,71 +20,100 @@ export default function CertificadosPage() {
   return (
     <div className="mx-auto max-w-3xl space-y-8">
       <div>
-        <h1 className="text-2xl font-bold text-white">Certificados</h1>
-        <p className="mt-1 text-sm text-white/50">
-          Cursos concluídos com certificação disponível
+        <p
+          className="font-mono text-[11px] uppercase tracking-[0.2em] mb-2"
+          style={{ color: 'var(--ember)' }}
+        >
+          Certificados
         </p>
+        <h1
+          className="font-display italic text-[36px] leading-tight"
+          style={{ color: 'var(--bone)' }}
+        >
+          Suas conquistas
+        </h1>
       </div>
 
       {certificates.length === 0 ? (
-        <div className="flex flex-col items-center justify-center border border-white/10 bg-[#0C0C12] py-20 text-center">
-          <Award className="h-10 w-10 text-white/10" />
-          <p className="mt-4 text-sm text-white/30">
+        <div
+          className="flex flex-col items-center justify-center py-20 text-center border"
+          style={{
+            backgroundColor: 'var(--ink)',
+            borderColor: 'var(--hairline)',
+            borderRadius: 0,
+          }}
+        >
+          <Award className="h-12 w-12" style={{ color: 'rgba(132,132,140,0.30)' }} />
+          <p className="mt-4 font-sans text-[14px]" style={{ color: 'var(--bone-mute)' }}>
             Nenhum certificado ainda. Conclua um curso para emitir seu certificado.
           </p>
           <Link
-            href="/meus-cursos"
-            className="mt-4 font-mono text-xs uppercase tracking-wider text-[#FF3A0E] hover:text-[#FF5A1F] transition-colors"
+            href="/academy/meus-cursos"
+            className="mt-4 font-mono text-[11px] uppercase tracking-wider transition-colors hover:opacity-80"
+            style={{ color: 'var(--ember)' }}
           >
             Ver meus cursos
           </Link>
         </div>
       ) : (
-        <div className="space-y-3">
+        <div className="grid sm:grid-cols-2 gap-4">
           {certificates.map((cert) => (
             <div
               key={cert.id}
-              className="flex flex-col gap-4 border border-white/10 bg-[#0C0C12] p-5 sm:flex-row sm:items-center sm:justify-between"
+              className="border p-5 flex flex-col"
+              style={{
+                backgroundColor: 'var(--ink)',
+                borderColor: 'var(--hairline)',
+                borderRadius: 0,
+              }}
             >
-              <div className="flex items-start gap-4">
-                <div className="flex h-10 w-10 shrink-0 items-center justify-center bg-[#FF3A0E]/10">
-                  <Award className="h-5 w-5 text-[#FF3A0E]" />
-                </div>
-                <div>
-                  <div className="flex items-center gap-2">
-                    <h2 className="font-semibold text-white">{cert.courseName}</h2>
-                    <CheckCircle2 className="h-4 w-4 text-green-400" />
-                  </div>
-                  <p className="mt-0.5 text-sm text-white/50">{cert.cohortName}</p>
-                  <p className="mt-1 font-mono text-xs text-white/30">
-                    Emitido em {cert.issued_at ? formatDate(cert.issued_at) : '—'}
-                  </p>
-                  <p className="mt-1 font-mono text-[10px] uppercase tracking-wider text-[#FF3A0E]/70">
-                    {cert.verification_code}
-                  </p>
-                </div>
-              </div>
+              <Award className="h-6 w-6" style={{ color: 'var(--ember)' }} />
 
-              <div className="flex shrink-0 gap-3">
-                <Link
-                  href={`/certificado/v/${cert.verification_code}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center gap-1.5 border border-white/10 px-3 py-2 font-mono text-xs uppercase tracking-wide text-white/50 transition-colors hover:border-white/20 hover:text-white/80"
-                >
-                  <ExternalLink className="h-3 w-3" />
-                  Verificar
-                </Link>
+              <p
+                className="font-sans text-[15px] font-medium mt-3 leading-snug"
+                style={{ color: 'var(--bone)' }}
+              >
+                {cert.courseName}
+              </p>
+              <p className="font-mono text-[11px] mt-1" style={{ color: 'var(--bone-mute)' }}>
+                {cert.issued_at ? formatDate(cert.issued_at) : '—'}
+              </p>
+              <p className="font-mono text-[11px] mt-0.5" style={{ color: 'var(--bone-mute)' }}>
+                {cert.cohortName}
+              </p>
+              <p
+                className="font-mono text-[10px] mt-1"
+                style={{ color: 'rgba(132,132,140,0.50)' }}
+              >
+                {cert.verification_code}
+              </p>
+
+              <div className="flex items-center gap-3 mt-4">
                 {cert.pdf_storage_path && (
                   <a
                     href={`/api/certificado/${cert.verification_code}`}
                     download
-                    className="flex items-center gap-1.5 bg-[#FF3A0E] px-3 py-2 font-mono text-xs uppercase tracking-wide text-white transition-colors hover:bg-[#FF5A1F]"
+                    className="flex items-center gap-1.5 border px-3 py-2 font-mono text-[11px] uppercase tracking-wider transition-colors hover:border-[var(--ember)]"
+                    style={{
+                      borderColor: 'var(--hairline)',
+                      color: 'var(--ember)',
+                      borderRadius: 0,
+                    }}
                   >
                     <Download className="h-3 w-3" />
                     Baixar PDF
                   </a>
                 )}
+                <Link
+                  href={`/academy/certificado/v/${cert.verification_code}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-1 font-mono text-[10px] uppercase tracking-wider transition-colors hover:text-[var(--bone)]"
+                  style={{ color: 'var(--bone-mute)' }}
+                >
+                  <ExternalLink className="h-3 w-3" />
+                  Verificar
+                </Link>
               </div>
             </div>
           ))}

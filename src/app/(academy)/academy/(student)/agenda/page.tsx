@@ -1,28 +1,21 @@
 import type { Metadata } from 'next'
-import Link from 'next/link'
-import { Calendar, Clock, Video, Play, ExternalLink } from 'lucide-react'
+import { Calendar, Download, Video } from 'lucide-react'
 import { MOCK_LIVE_SESSIONS } from '@/components/student/mock-data'
 import { ICSDownloadButton } from '@/components/student/ICSDownloadButton'
 import type { LiveSessionWithCohort } from '@/types/student'
 
 export const metadata: Metadata = { title: 'Agenda' }
 
-function formatDateTime(iso: string) {
-  return new Date(iso).toLocaleDateString('pt-BR', {
-    weekday: 'long',
-    day: '2-digit',
-    month: 'long',
-    year: 'numeric',
-    hour: '2-digit',
-    minute: '2-digit',
-  })
+function formatDay(iso: string) {
+  return new Date(iso).toLocaleDateString('pt-BR', { day: '2-digit' })
+}
+
+function formatMonth(iso: string) {
+  return new Date(iso).toLocaleDateString('pt-BR', { month: 'short' }).toUpperCase().replace('.', '')
 }
 
 function formatTime(iso: string) {
-  return new Date(iso).toLocaleTimeString('pt-BR', {
-    hour: '2-digit',
-    minute: '2-digit',
-  })
+  return new Date(iso).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })
 }
 
 function isMeetingLinkAvailable(scheduledAt: string): boolean {
@@ -38,83 +31,140 @@ function linkAvailableTime(scheduledAt: string): string {
 
 function SessionCard({ session }: { session: LiveSessionWithCohort }) {
   const isPast = new Date(session.scheduled_at) < new Date()
-  const linkAvailable = isMeetingLinkAvailable(session.scheduled_at)
+  const isLive = isMeetingLinkAvailable(session.scheduled_at)
   const hasRecording = !!session.recording_url
 
   return (
-    <div className={`border bg-[#0C0C12] p-5 ${isPast ? 'border-white/5 opacity-70' : 'border-white/10'}`}>
-      <div className="mb-3 flex flex-wrap items-center gap-2">
-        {!isPast && (
-          <span className="bg-[#FF3A0E]/15 px-2 py-0.5 font-mono text-[10px] uppercase tracking-wide text-[#FF3A0E]">
-            Próximo
-          </span>
-        )}
-        {isPast && hasRecording && (
-          <span className="bg-green-500/10 px-2 py-0.5 font-mono text-[10px] uppercase tracking-wide text-green-400">
-            Gravação disponível
-          </span>
-        )}
-        {isPast && !hasRecording && (
-          <span className="bg-white/5 px-2 py-0.5 font-mono text-[10px] uppercase tracking-wide text-white/30">
-            Realizado
-          </span>
-        )}
-        <span className="border border-white/10 px-2 py-0.5 font-mono text-[10px] uppercase tracking-wide text-white/30">
-          {session.cohortName}
+    <div
+      className="group flex gap-4 items-start border p-5 transition-colors"
+      style={{
+        backgroundColor: 'var(--ink)',
+        borderColor: 'var(--hairline)',
+        borderRadius: 0,
+      }}
+      onMouseEnter={(e) => (e.currentTarget.style.borderColor = 'var(--hairline-strong)')}
+      onMouseLeave={(e) => (e.currentTarget.style.borderColor = 'var(--hairline)')}
+    >
+      {/* Date column */}
+      <div
+        className="flex flex-col items-center justify-center p-3 min-w-[64px] shrink-0 text-center"
+        style={{ backgroundColor: 'var(--ink-2)', borderRadius: 0 }}
+      >
+        <span className="font-mono font-bold text-[28px] leading-none" style={{ color: 'var(--bone)' }}>
+          {formatDay(session.scheduled_at)}
+        </span>
+        <span
+          className="font-mono text-[10px] uppercase tracking-wider mt-1"
+          style={{ color: 'var(--ember)' }}
+        >
+          {formatMonth(session.scheduled_at)}
         </span>
       </div>
 
-      <h3 className="font-semibold text-white">{session.title}</h3>
-
-      {session.description && (
-        <p className="mt-1.5 text-sm text-white/50">{session.description}</p>
-      )}
-
-      <div className="mt-3 flex flex-wrap items-center gap-4 text-sm text-white/50">
-        <div className="flex items-center gap-1.5">
-          <Calendar className="h-3.5 w-3.5 shrink-0 text-[#FF3A0E]" />
-          {formatDateTime(session.scheduled_at)}
+      {/* Content */}
+      <div className="flex-1 min-w-0">
+        <div className="flex flex-wrap items-center gap-2 mb-2">
+          {isLive && (
+            <span
+              className="font-mono text-[10px] uppercase tracking-wider px-2 py-0.5 border"
+              style={{
+                color: 'var(--ember)',
+                backgroundColor: 'rgba(255,58,14,0.10)',
+                borderColor: 'rgba(255,58,14,0.20)',
+                borderRadius: 0,
+              }}
+            >
+              Ao Vivo
+            </span>
+          )}
+          {!isPast && !isLive && (
+            <span
+              className="font-mono text-[10px] uppercase tracking-wider px-2 py-0.5"
+              style={{ color: 'var(--bone-mute)' }}
+            >
+              Em breve
+            </span>
+          )}
+          {isPast && hasRecording && (
+            <span
+              className="font-mono text-[10px] uppercase tracking-wider px-2 py-0.5 border"
+              style={{
+                color: '#4ade80',
+                backgroundColor: 'rgba(74,222,128,0.10)',
+                borderColor: 'rgba(74,222,128,0.20)',
+                borderRadius: 0,
+              }}
+            >
+              Gravação disponível
+            </span>
+          )}
+          {isPast && !hasRecording && (
+            <span
+              className="font-mono text-[10px] uppercase tracking-wider px-2 py-0.5"
+              style={{ color: 'var(--bone-mute)' }}
+            >
+              Realizado
+            </span>
+          )}
         </div>
-        <div className="flex items-center gap-1.5">
-          <Clock className="h-3.5 w-3.5 shrink-0" />
-          {session.duration_minutes} min
-        </div>
+
+        <p className="font-sans text-[16px] font-medium leading-snug" style={{ color: 'var(--bone)' }}>
+          {session.title}
+        </p>
+        <p className="font-mono text-[11px] mt-1" style={{ color: 'var(--bone-mute)' }}>
+          {session.cohortName}
+        </p>
+        <p className="font-mono text-[12px] mt-0.5" style={{ color: 'var(--bone-dim)' }}>
+          {formatTime(session.scheduled_at)} · {session.duration_minutes} min
+        </p>
       </div>
 
-      <div className="mt-4 flex flex-wrap items-center gap-3">
-        {!isPast && (
-          linkAvailable && session.meeting_url ? (
-            <a
-              href={session.meeting_url}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center gap-1.5 bg-[#FF3A0E] px-3 py-2 font-mono text-xs uppercase tracking-wide text-white hover:bg-[#FF5A1F] transition-colors"
-            >
-              <Video className="h-3.5 w-3.5" />
-              Entrar na aula
-            </a>
-          ) : (
-            <div className="flex items-center gap-1.5 border border-white/10 px-3 py-2 font-mono text-xs uppercase tracking-wide text-white/30">
-              <Video className="h-3.5 w-3.5" />
-              Link disponível {linkAvailableTime(session.scheduled_at)}
-            </div>
-          )
+      {/* Actions */}
+      <div className="flex flex-col gap-2 shrink-0">
+        {!isPast && isLive && session.meeting_url && (
+          <a
+            href={session.meeting_url}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center gap-1.5 px-3 h-9 font-mono text-[11px] uppercase tracking-wider transition-colors"
+            style={{
+              backgroundColor: 'var(--ember)',
+              color: 'var(--void)',
+              borderRadius: 0,
+            }}
+          >
+            <Video className="h-3.5 w-3.5" />
+            Entrar
+          </a>
         )}
-
+        {!isPast && !isLive && (
+          <div
+            className="flex items-center gap-1.5 px-3 h-9 font-mono text-[11px] uppercase tracking-wider"
+            style={{ color: 'var(--bone-mute)', borderRadius: 0 }}
+          >
+            <Video className="h-3.5 w-3.5" />
+            {linkAvailableTime(session.scheduled_at)}
+          </div>
+        )}
+        {!isPast && (
+          <ICSDownloadButton session={session} />
+        )}
         {hasRecording && (
           <a
             href={session.recording_url!}
             target="_blank"
             rel="noopener noreferrer"
-            className="flex items-center gap-1.5 border border-white/10 px-3 py-2 font-mono text-xs uppercase tracking-wide text-white/60 hover:border-white/20 hover:text-white/80 transition-colors"
+            className="flex items-center gap-1.5 px-3 h-9 border font-mono text-[11px] uppercase tracking-wider transition-colors hover:border-white/20 hover:text-white/80"
+            style={{
+              borderColor: 'var(--hairline)',
+              color: 'var(--bone-mute)',
+              borderRadius: 0,
+            }}
           >
-            <Play className="h-3.5 w-3.5" />
-            Assistir gravação
-            <ExternalLink className="h-3 w-3 opacity-50" />
+            <Download className="h-3.5 w-3.5" />
+            Gravação
           </a>
         )}
-
-        {!isPast && <ICSDownloadButton session={session} />}
       </div>
     </div>
   )
@@ -133,29 +183,66 @@ export default function AgendaPage() {
   return (
     <div className="mx-auto max-w-3xl space-y-8">
       <div>
-        <h1 className="text-2xl font-bold text-white">Agenda</h1>
-        <p className="mt-1 text-sm text-white/50">Encontros ao vivo das suas turmas</p>
+        <p
+          className="font-mono text-[11px] uppercase tracking-[0.2em] mb-2"
+          style={{ color: 'var(--ember)' }}
+        >
+          Agenda
+        </p>
+        <h1
+          className="font-display italic text-[36px] leading-tight"
+          style={{ color: 'var(--bone)' }}
+        >
+          Encontros ao vivo
+        </h1>
+        <p
+          className="font-sans text-[16px] mt-2"
+          style={{ color: 'var(--bone-dim)' }}
+        >
+          Seus próximos encontros ao vivo
+        </p>
       </div>
 
       {upcoming.length > 0 ? (
         <div className="space-y-3">
-          <h2 className="font-mono text-xs uppercase tracking-widest text-white/40">
+          <p
+            className="font-mono text-[10px] uppercase tracking-[0.2em]"
+            style={{ color: 'var(--bone-mute)' }}
+          >
             Próximos encontros
-          </h2>
+          </p>
           {upcoming.map((s) => <SessionCard key={s.id} session={s} />)}
         </div>
       ) : (
-        <div className="flex flex-col items-center justify-center border border-white/10 bg-[#0C0C12] py-12 text-center">
-          <Calendar className="h-8 w-8 text-white/10" />
-          <p className="mt-3 text-sm text-white/30">Nenhum encontro agendado no momento.</p>
+        <div
+          className="flex flex-col items-center justify-center py-16 text-center border"
+          style={{
+            backgroundColor: 'var(--ink)',
+            borderColor: 'var(--hairline)',
+            borderRadius: 0,
+          }}
+        >
+          <Calendar
+            className="h-12 w-12"
+            style={{ color: 'rgba(132,132,140,0.30)' }}
+          />
+          <p
+            className="mt-4 font-sans text-[14px]"
+            style={{ color: 'var(--bone-mute)' }}
+          >
+            Nenhum encontro agendado
+          </p>
         </div>
       )}
 
       {past.length > 0 && (
         <div className="space-y-3">
-          <h2 className="font-mono text-xs uppercase tracking-widest text-white/40">
+          <p
+            className="font-mono text-[10px] uppercase tracking-[0.2em]"
+            style={{ color: 'var(--bone-mute)' }}
+          >
             Encontros anteriores
-          </h2>
+          </p>
           {past.map((s) => <SessionCard key={s.id} session={s} />)}
         </div>
       )}

@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
-import Link from 'next/link'
-import { CheckCircle2, Award, Download, AlertTriangle } from 'lucide-react'
+import Image from 'next/image'
+import { Download } from 'lucide-react'
 import { supabaseAdmin } from '@/lib/supabase/admin'
 
 type Props = {
@@ -44,81 +44,123 @@ export default async function CertificateVerificationPage({ params }: Props) {
   const cohortData = cert ? (Array.isArray(cert.cohorts) ? cert.cohorts[0] : cert.cohorts) : null
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-[#050507] px-4 py-16">
-      <div className="w-full max-w-lg">
-        {/* Cabeçalho */}
-        <div className="mb-8 text-center">
-          <Link href="/" className="font-mono text-xs uppercase tracking-widest text-white/30 hover:text-white/60 transition-colors">
-            joaoguirunas.com
-          </Link>
-        </div>
+    <div
+      className="flex min-h-screen items-center justify-center px-4 py-16"
+      style={{ backgroundColor: 'var(--void)' }}
+    >
+      <div className="w-full max-w-2xl">
+        {/* Card central */}
+        <div
+          className="border p-8"
+          style={{
+            backgroundColor: 'var(--ink)',
+            borderColor: 'var(--hairline)',
+            borderRadius: 0,
+          }}
+        >
+          {/* Branding */}
+          <div className="flex items-center gap-3 mb-6">
+            <Image
+              src="/images/brand/symbol-official.svg"
+              alt="João Guirunas Academy"
+              width={48}
+              height={48}
+              className="shrink-0"
+            />
+            <p
+              className="font-mono text-[11px] uppercase tracking-[0.2em]"
+              style={{ color: 'var(--bone-mute)' }}
+            >
+              João Guirunas Academy
+            </p>
+          </div>
 
-        {cert ? (
-          <div className="border border-white/10 bg-[#0C0C12]">
-            {/* Barra accent */}
-            <div className="h-1 bg-[#FF3A0E]" />
+          {/* Separador */}
+          <div className="h-px mb-8" style={{ backgroundColor: 'var(--hairline)' }} />
 
-            <div className="p-8">
-              {/* Status */}
-              <div className="mb-6 flex items-center gap-3">
-                <CheckCircle2 className="h-6 w-6 text-green-400" />
-                <div>
-                  <p className="font-mono text-xs uppercase tracking-widest text-green-400">
-                    Certificado válido
-                  </p>
-                  <p className="mt-0.5 text-xs text-white/30">
-                    Verificado em {formatDate(new Date().toISOString())}
-                  </p>
-                </div>
-              </div>
+          {cert ? (
+            <>
+              {/* Heading válido */}
+              <h1
+                className="font-display italic text-[36px] leading-tight mb-8"
+                style={{ color: 'var(--bone)' }}
+              >
+                Certificado Verificado
+              </h1>
 
               <div className="space-y-5">
+                {/* Nome do aluno */}
                 <div>
-                  <p className="font-mono text-[10px] uppercase tracking-widest text-white/30">
+                  <p
+                    className="font-mono text-[10px] uppercase tracking-[0.18em] mb-1"
+                    style={{ color: 'var(--bone-mute)' }}
+                  >
                     Concluinte
                   </p>
-                  <p className="mt-1 text-xl font-bold text-white">
+                  <p
+                    className="font-sans text-[20px] font-semibold"
+                    style={{ color: 'var(--bone)' }}
+                  >
                     {profile?.name ?? '—'}
                   </p>
                 </div>
 
-                <div className="h-px bg-white/10" />
-
+                {/* Curso + turma */}
                 <div>
-                  <p className="font-mono text-[10px] uppercase tracking-widest text-white/30">
+                  <p
+                    className="font-mono text-[10px] uppercase tracking-[0.18em] mb-1"
+                    style={{ color: 'var(--bone-mute)' }}
+                  >
                     Curso
                   </p>
-                  <p className="mt-1 text-base font-semibold text-white">
+                  <p
+                    className="font-mono text-[13px]"
+                    style={{ color: 'var(--bone-dim)' }}
+                  >
                     {courseData?.title ?? '—'}
                   </p>
-                </div>
-
-                <div>
-                  <p className="font-mono text-[10px] uppercase tracking-widest text-white/30">
-                    Turma
-                  </p>
-                  <p className="mt-1 text-sm text-white/70">
+                  <p
+                    className="font-mono text-[13px] mt-0.5"
+                    style={{ color: 'var(--bone-mute)' }}
+                  >
                     {cohortData?.name ?? '—'}
                   </p>
                 </div>
 
+                {/* Data */}
                 <div>
-                  <p className="font-mono text-[10px] uppercase tracking-widest text-white/30">
+                  <p
+                    className="font-mono text-[10px] uppercase tracking-[0.18em] mb-1"
+                    style={{ color: 'var(--bone-mute)' }}
+                  >
                     Data de emissão
                   </p>
-                  <p className="mt-1 text-sm text-white/70">
+                  <p className="font-mono text-[12px]" style={{ color: 'var(--bone-mute)' }}>
                     {formatDate(cert.issued_at)}
                   </p>
                 </div>
 
-                <div className="h-px bg-white/10" />
+                {/* Separador */}
+                <div className="h-px" style={{ backgroundColor: 'var(--hairline)' }} />
 
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="font-mono text-[10px] uppercase tracking-widest text-white/30">
-                      Código de verificação
-                    </p>
-                    <p className="mt-1 font-mono text-sm font-bold tracking-widest text-[#FF3A0E]">
+                {/* Badge + código + PDF */}
+                <div className="flex items-center justify-between flex-wrap gap-4">
+                  <div className="flex items-center gap-3">
+                    <span
+                      className="font-mono text-[10px] uppercase tracking-wider px-2 py-1 border"
+                      style={{
+                        color: '#4ade80',
+                        backgroundColor: 'rgba(74,222,128,0.10)',
+                        borderColor: 'rgba(74,222,128,0.30)',
+                        borderRadius: 0,
+                      }}
+                    >
+                      Válido
+                    </span>
+                    <p
+                      className="font-mono text-[11px] font-bold tracking-widest"
+                      style={{ color: 'var(--ember)' }}
+                    >
                       {cert.verification_code}
                     </p>
                   </div>
@@ -126,38 +168,59 @@ export default async function CertificateVerificationPage({ params }: Props) {
                   <a
                     href={`/api/certificado/${cert.verification_code}`}
                     download
-                    className="flex items-center gap-1.5 border border-white/10 px-3 py-2 font-mono text-xs uppercase tracking-wide text-white/50 transition-colors hover:border-white/20 hover:text-white/80"
+                    className="flex items-center gap-1.5 border px-3 py-2 font-mono text-[11px] uppercase tracking-wider transition-colors"
+                    style={{
+                      borderColor: 'var(--hairline)',
+                      color: 'var(--bone-mute)',
+                      borderRadius: 0,
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.borderColor = 'var(--hairline-strong)'
+                      e.currentTarget.style.color = 'var(--bone)'
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.borderColor = 'var(--hairline)'
+                      e.currentTarget.style.color = 'var(--bone-mute)'
+                    }}
                   >
                     <Download className="h-3 w-3" />
                     PDF
                   </a>
                 </div>
               </div>
-            </div>
-          </div>
-        ) : (
-          <div className="border border-[#FF3A0E]/30 bg-[#0C0C12]">
-            <div className="h-1 bg-[#FF3A0E]/40" />
-            <div className="flex flex-col items-center p-12 text-center">
-              <AlertTriangle className="h-10 w-10 text-[#FF3A0E]/60" />
-              <p className="mt-4 font-mono text-xs uppercase tracking-widest text-[#FF3A0E]">
-                Certificado não encontrado
-              </p>
-              <p className="mt-2 text-sm text-white/40">
-                O código{' '}
-                <span className="font-mono text-white/60">{code}</span>{' '}
-                não corresponde a nenhum certificado emitido.
-              </p>
-            </div>
-          </div>
-        )}
+            </>
+          ) : (
+            <>
+              {/* Heading inválido */}
+              <h1
+                className="font-display italic text-[36px] leading-tight mb-8"
+                style={{ color: 'rgba(255,58,14,0.70)' }}
+              >
+                Certificado Inválido
+              </h1>
 
-        {/* Rodapé */}
-        <div className="mt-6 flex items-center justify-center gap-2 text-center">
-          <Award className="h-3.5 w-3.5 text-white/20" />
-          <p className="font-mono text-[10px] uppercase tracking-widest text-white/20">
-            Certificação João Guirunas
-          </p>
+              <div className="space-y-4">
+                <span
+                  className="inline-block font-mono text-[10px] uppercase tracking-wider px-2 py-1 border"
+                  style={{
+                    color: 'var(--ember)',
+                    backgroundColor: 'rgba(255,58,14,0.10)',
+                    borderColor: 'rgba(255,58,14,0.30)',
+                    borderRadius: 0,
+                  }}
+                >
+                  Inválido
+                </span>
+                <p className="font-sans text-[14px]" style={{ color: 'var(--bone-mute)' }}>
+                  O código{' '}
+                  <span className="font-mono" style={{ color: 'var(--bone-dim)' }}>
+                    {code}
+                  </span>{' '}
+                  não corresponde a nenhum certificado emitido.
+                </p>
+              </div>
+            </>
+          )}
         </div>
       </div>
     </div>
