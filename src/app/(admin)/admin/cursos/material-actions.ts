@@ -5,6 +5,7 @@ import { z } from 'zod'
 import { supabaseAdmin } from '@/lib/supabase/admin'
 import { uploadMaterial, deleteMaterialFile, buildMaterialPath, extractExtFromMime } from '@/lib/storage/materials'
 import { requireAdmin } from '@/lib/auth/helpers'
+import { sendNewMaterialEmail } from '@/lib/email/send'
 import type { Database } from '@/types/database'
 
 type MaterialInsert = Database['public']['Tables']['materials']['Insert']
@@ -94,6 +95,64 @@ export async function uploadMaterialAction(formData: FormData): Promise<void> {
   }
 
   revalidatePath(`/admin/cursos`)
+
+  // Notify active members of all cohorts that include this lesson's course — fire-and-forget
+  notifyMembersNewMaterial(lessonId, title.trim()).catch(() => null)
+}
+
+async function notifyMembersNewMaterial(lessonId: string, materialTitle: string): Promise<void> {
+  // Get lesson + course info
+  const { data: lesson } = await supabaseAdmin
+    .from('lessons')
+    .select('title, module_id, modules(course_id, courses(title))')
+    .eq('id', lessonId)
+    .single()
+
+  if (!lesson) return
+
+  const moduleData = lesson.modules as { course_id: string; courses: { title: string } | null } | null
+  const courseId = moduleData?.course_id
+  const courseTitle = moduleData?.courses?.title
+  if (!courseId) return
+
+  // Find cohorts that include this course
+  const { data: cohortCourses } = await supabaseAdmin
+    .from('cohort_courses')
+    .select('cohort_id, cohorts(name)')
+    .eq('course_id', courseId)
+
+  if (!cohortCourses?.length) return
+
+  for (const row of cohortCourses) {
+    const cohortId = row.cohort_id
+    const cohortName = (row.cohorts as { name: string } | null)?.name ?? 'sua turma'
+
+    // Get active members of this cohort
+    const { data: members } = await supabaseAdmin
+      .from('cohort_members')
+      .select('user_id')
+      .eq('cohort_id', cohortId)
+      .eq('status', 'ACTIVE')
+
+    for (const member of members ?? []) {
+      const { data: authUser } = await supabaseAdmin.auth.admin.getUserById(member.user_id)
+      if (!authUser.user?.email) continue
+
+      const { data: profile } = await supabaseAdmin
+        .from('profiles')
+        .select('name')
+        .eq('id', member.user_id)
+        .single()
+
+      sendNewMaterialEmail(
+        authUser.user.email,
+        profile?.name ?? 'Aluno',
+        cohortName,
+        materialTitle,
+        lesson.title,
+      ).catch(() => null)
+    }
+  }
 }
 
 export async function addLinkMaterialAction(input: z.infer<typeof linkSchema>): Promise<void> {

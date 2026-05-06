@@ -111,6 +111,61 @@ export async function GET(req: NextRequest) {
     results.errors.push(`renewals: ${err instanceof Error ? err.message : String(err)}`)
   }
 
+  // ── 4. Live session reminders (24h before) ──────────────────────────────
+
+  try {
+    const windowStart = startOfDay(daysFromNow(1))
+    const windowEnd = endOfDay(daysFromNow(1))
+
+    const { data: sessions } = await supabaseAdmin
+      .from('live_sessions')
+      .select('id, title, scheduled_at, duration_minutes, meeting_url, cohort_id')
+      .gte('scheduled_at', windowStart)
+      .lte('scheduled_at', windowEnd)
+
+    for (const session of sessions ?? []) {
+      try {
+        const { data: members } = await supabaseAdmin
+          .from('cohort_members')
+          .select('user_id')
+          .eq('cohort_id', session.cohort_id)
+          .eq('status', 'ACTIVE')
+
+        const { data: cohort } = await supabaseAdmin
+          .from('cohorts')
+          .select('name')
+          .eq('id', session.cohort_id)
+          .single()
+
+        const cohortName = cohort?.name ?? 'sua turma'
+
+        for (const member of members ?? []) {
+          try {
+            const profile = await getUserProfile(member.user_id)
+            if (!profile?.email) continue
+
+            await sendLiveSessionReminderEmail(
+              profile.email,
+              profile.name,
+              cohortName,
+              session.title,
+              session.scheduled_at,
+              session.duration_minutes,
+              session.meeting_url,
+            )
+            results.liveReminders++
+          } catch (err) {
+            results.errors.push(`live-reminder-${member.user_id}: ${err instanceof Error ? err.message : String(err)}`)
+          }
+        }
+      } catch (err) {
+        results.errors.push(`live-session-${session.id}: ${err instanceof Error ? err.message : String(err)}`)
+      }
+    }
+  } catch (err) {
+    results.errors.push(`live-reminders: ${err instanceof Error ? err.message : String(err)}`)
+  }
+
   return NextResponse.json({
     ok: true,
     timestamp: new Date().toISOString(),
