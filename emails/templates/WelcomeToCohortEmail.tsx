@@ -1,5 +1,14 @@
 import {
-  Body, Button, Container, Head, Heading, Hr, Html, Preview, Section, Text,
+  Body,
+  Button,
+  Container,
+  Head,
+  Heading,
+  Hr,
+  Html,
+  Preview,
+  Section,
+  Text,
 } from '@react-email/components'
 
 interface Props {
@@ -19,30 +28,45 @@ export function WelcomeToCohortEmail({ name, cohortName, startDate, dashboardUrl
     <Html lang="pt-BR">
       <Head />
       <Preview>Bem-vindo à turma {cohortName}!</Preview>
-      <Body style={main}>
-        <Container style={container}>
-          <Heading style={h1}>Bem-vindo à turma!</Heading>
-          <Text style={text}>
-            Olá, {name}. Sua vaga em <strong>{cohortName}</strong> está confirmada.
-            {formattedStart ? ` As aulas começam em ${formattedStart}.` : ''}
-          </Text>
-          <Text style={text}>
-            Acesse a área do aluno para ver o conteúdo disponível, interagir com a comunidade e acompanhar sua evolução.
-          </Text>
-          <Section style={btnSection}>
-            <Button href={dashboardUrl} style={btnPrimary}>
-              Acessar minha turma
-            </Button>
+      <Body style={styles.main}>
+        <Container style={styles.container}>
+          {/* Header */}
+          <table cellPadding="0" cellSpacing="0" style={styles.headerTable}>
+            <tbody>
+              <tr>
+                <td style={styles.logoMark}>JG</td>
+                <td style={styles.logoLabel}>ACADEMY</td>
+              </tr>
+            </tbody>
+          </table>
+
+          {/* Card */}
+          <Section style={styles.card}>
+            <Text style={styles.monoLabel}>VAGA CONFIRMADA</Text>
+            <Heading style={styles.heading}>Bem-vindo à turma, {name}</Heading>
+            <Text style={styles.body}>
+              Sua vaga em <strong style={styles.strong}>{cohortName}</strong> está
+              confirmada.{formattedStart ? ` As aulas começam em ${formattedStart}.` : ''}
+            </Text>
+            <Text style={styles.body}>
+              Acesse a área do aluno para ver o conteúdo disponível, interagir com a
+              comunidade e acompanhar sua evolução.
+            </Text>
+            <Section style={styles.btnWrapper}>
+              <Button href={dashboardUrl} style={styles.buttonPrimary}>
+                ACESSAR MINHA TURMA
+              </Button>
+            </Section>
+            <Section style={styles.btnWrapperSecondary}>
+              <Button href={forumUrl} style={styles.buttonSecondary}>
+                VER COMUNIDADE
+              </Button>
+            </Section>
+            <Hr style={styles.hr} />
+            <Text style={styles.footer}>
+              Se tiver qualquer dúvida, responda este email.
+            </Text>
           </Section>
-          <Section style={btnSection}>
-            <Button href={forumUrl} style={btnSecondary}>
-              Ver comunidade
-            </Button>
-          </Section>
-          <Hr style={hr} />
-          <Text style={footer}>
-            Se tiver qualquer dúvida, responda este email.
-          </Text>
         </Container>
       </Body>
     </Html>
@@ -57,12 +81,109 @@ WelcomeToCohortEmail.PreviewProps = {
   forumUrl: 'http://localhost:3000/forum',
 } satisfies Props
 
-const main = { backgroundColor: '#050507', fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif' }
-const container = { margin: '0 auto', padding: '40px 20px', maxWidth: '560px' }
-const h1 = { color: '#ffffff', fontSize: '24px', fontWeight: '700', margin: '0 0 16px' }
-const text = { color: 'rgba(255,255,255,0.7)', fontSize: '15px', lineHeight: '24px', margin: '0 0 16px' }
-const btnSection = { margin: '12px 0' }
-const btnPrimary = { backgroundColor: '#ffffff', borderRadius: '8px', color: '#050507', fontSize: '14px', fontWeight: '600', padding: '12px 24px', textDecoration: 'none' }
-const btnSecondary = { backgroundColor: 'transparent', border: '1px solid rgba(255,255,255,0.2)', borderRadius: '8px', color: 'rgba(255,255,255,0.7)', fontSize: '14px', fontWeight: '600', padding: '12px 24px', textDecoration: 'none' }
-const hr = { borderColor: 'rgba(255,255,255,0.1)', margin: '24px 0' }
-const footer = { color: 'rgba(255,255,255,0.3)', fontSize: '12px', margin: '0' }
+const styles = {
+  main: {
+    backgroundColor: '#050507',
+    fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif',
+  },
+  container: {
+    margin: '0 auto',
+    padding: '40px 20px',
+    maxWidth: '560px',
+  },
+  headerTable: {
+    marginBottom: '24px',
+    borderCollapse: 'collapse' as const,
+  },
+  logoMark: {
+    color: '#ff3a0e',
+    fontFamily: '"Courier New", Courier, monospace',
+    fontSize: '18px',
+    fontWeight: '700',
+    paddingRight: '8px',
+    verticalAlign: 'middle',
+  },
+  logoLabel: {
+    color: 'rgba(241,241,243,0.4)',
+    fontFamily: '"Courier New", Courier, monospace',
+    fontSize: '9px',
+    letterSpacing: '0.2em',
+    textTransform: 'uppercase' as const,
+    verticalAlign: 'middle',
+  },
+  card: {
+    backgroundColor: '#0e0e11',
+    border: '1px solid rgba(255,255,255,0.07)',
+    padding: '40px',
+  },
+  monoLabel: {
+    color: '#ff3a0e',
+    fontFamily: '"Courier New", Courier, monospace',
+    fontSize: '10px',
+    letterSpacing: '0.18em',
+    textTransform: 'uppercase' as const,
+    margin: '0 0 20px',
+  },
+  heading: {
+    color: '#f1f1f3',
+    fontFamily: 'Georgia, "Times New Roman", serif',
+    fontSize: '36px',
+    fontWeight: '300',
+    fontStyle: 'italic',
+    lineHeight: '1.2',
+    margin: '0 0 20px',
+  },
+  body: {
+    color: '#f1f1f3',
+    fontSize: '15px',
+    lineHeight: '1.6',
+    margin: '0 0 16px',
+  },
+  strong: {
+    color: '#f1f1f3',
+    fontWeight: '600',
+  },
+  btnWrapper: {
+    margin: '24px 0 12px',
+  },
+  btnWrapperSecondary: {
+    margin: '0 0 8px',
+  },
+  buttonPrimary: {
+    backgroundColor: '#ff3a0e',
+    color: '#050507',
+    fontFamily: '"Courier New", Courier, monospace',
+    fontSize: '11px',
+    fontWeight: '600',
+    letterSpacing: '0.2em',
+    textTransform: 'uppercase' as const,
+    padding: '14px 28px',
+    borderRadius: '0',
+    textDecoration: 'none',
+    display: 'inline-block',
+  },
+  buttonSecondary: {
+    backgroundColor: 'transparent',
+    border: '1px solid rgba(255,255,255,0.07)',
+    color: 'rgba(241,241,243,0.55)',
+    fontFamily: '"Courier New", Courier, monospace',
+    fontSize: '11px',
+    fontWeight: '600',
+    letterSpacing: '0.2em',
+    textTransform: 'uppercase' as const,
+    padding: '14px 28px',
+    borderRadius: '0',
+    textDecoration: 'none',
+    display: 'inline-block',
+  },
+  hr: {
+    borderColor: 'rgba(255,255,255,0.07)',
+    margin: '24px 0',
+  },
+  footer: {
+    color: 'rgba(241,241,243,0.35)',
+    fontSize: '12px',
+    lineHeight: '1.5',
+    margin: '0',
+  },
+}
