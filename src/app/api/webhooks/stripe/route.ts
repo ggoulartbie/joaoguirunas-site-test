@@ -2,6 +2,12 @@ import { NextRequest, NextResponse } from 'next/server'
 import Stripe from 'stripe'
 import { stripe } from '@/lib/payment/stripe'
 import { supabaseAdmin } from '@/lib/supabase/admin'
+import {
+  sendPaymentApprovedEmail,
+  sendMembershipExtendedEmail,
+  sendAutoRenewalEmail,
+  sendPaymentFailedEmail,
+} from '@/lib/email/send'
 
 export const runtime = 'nodejs'
 
@@ -83,6 +89,17 @@ export async function POST(req: NextRequest) {
   return NextResponse.json({ received: true })
 }
 
+async function getUserEmailAndName(userId: string): Promise<{ email: string; name: string } | null> {
+  const [{ data: profile }, { data: authData }] = await Promise.all([
+    supabaseAdmin.from('profiles').select('name').eq('id', userId).single(),
+    supabaseAdmin.auth.admin.getUserById(userId),
+  ])
+
+  const email = authData?.user?.email
+  if (!email || !profile) return null
+  return { email, name: profile.name }
+}
+
 async function handleCheckoutCompleted(session: Stripe.Checkout.Session) {
   const { cohort_id, user_id, purchase_kind } = session.metadata ?? {}
 
@@ -92,7 +109,7 @@ async function handleCheckoutCompleted(session: Stripe.Checkout.Session) {
 
   const { data: cohort } = await supabaseAdmin
     .from('cohorts')
-    .select('id, access_duration_days, extension_duration_days')
+    .select('id, name, access_duration_days, extension_duration_days, filled_seats')
     .eq('id', cohort_id)
     .single()
 
@@ -113,7 +130,6 @@ async function handleCheckoutCompleted(session: Stripe.Checkout.Session) {
       .eq('id', user_id)
   }
 
-  // Criar ou atualizar cohort_member
   const { data: existingMember } = await supabaseAdmin
     .from('cohort_members')
     .select('id, expires_at')
@@ -146,14 +162,11 @@ async function handleCheckoutCompleted(session: Stripe.Checkout.Session) {
   if (existingMember) {
     await supabaseAdmin
       .from('cohort_members')
-      .update({
-        status: 'ACTIVE',
-        expires_at: newExpiresAt,
-      })
+      .update({ status: 'ACTIVE', expires_at: newExpiresAt })
       .eq('id', existingMember.id)
     memberId = existingMember.id
   } else {
-    const { data: newMember } = await supabaseAdmin
+    const { data: newMember, error } = await supabaseAdmin
       .from('cohort_members')
       .insert({
         cohort_id,
@@ -165,24 +178,15 @@ async function handleCheckoutCompleted(session: Stripe.Checkout.Session) {
       .select('id')
       .single()
 
-    if (!newMember) throw new Error('Failed to create cohort_member')
+    if (!newMember) throw new Error(`Failed to create cohort_member: ${error?.message}`)
     memberId = newMember.id
 
-    // Incrementar filled_seats: fallback manual (RPC increment_filled_seats opcional)
-    const { data: cohortSeats } = await supabaseAdmin
+    await supabaseAdmin
       .from('cohorts')
-      .select('filled_seats')
+      .update({ filled_seats: cohort.filled_seats + 1 })
       .eq('id', cohort_id)
-      .single()
-    if (cohortSeats) {
-      await supabaseAdmin
-        .from('cohorts')
-        .update({ filled_seats: cohortSeats.filled_seats + 1 })
-        .eq('id', cohort_id)
-    }
   }
 
-  // Criar payment
   await supabaseAdmin.from('payments').insert({
     user_id,
     cohort_id,
@@ -195,19 +199,35 @@ async function handleCheckoutCompleted(session: Stripe.Checkout.Session) {
     paid_at: new Date().toISOString(),
   })
 
-  // Aplicar extensões cruzadas
   await applyCrossExtensions(cohort_id, user_id)
+
+  // Disparar email adequado ao tipo de compra
+  const userInfo = await getUserEmailAndName(user_id)
+  if (userInfo) {
+    if (purchase_kind === 'ENTRY') {
+      await sendPaymentApprovedEmail(userInfo.email, userInfo.name, cohort.name).catch(console.error)
+    } else {
+      await sendMembershipExtendedEmail(
+        userInfo.email,
+        userInfo.name,
+        cohort.name,
+        newExpiresAt ?? new Date().toISOString(),
+      ).catch(console.error)
+    }
+  }
+}
+
+async function getSubscriptionIdFromInvoice(invoice: Stripe.Invoice): Promise<string | null> {
+  const parent = invoice.parent as { subscription_details?: { subscription?: string | Stripe.Subscription } } | null
+  const sub = parent?.subscription_details?.subscription
+  if (!sub) return null
+  return typeof sub === 'string' ? sub : sub.id
 }
 
 async function handleInvoicePaid(invoice: Stripe.Invoice) {
-  // In Stripe API 2026-04-22.dahlia, subscription moved to invoice.parent.subscription_details
-  const parent = invoice.parent as { subscription_details?: { subscription?: string | Stripe.Subscription } } | null
-  const sub = parent?.subscription_details?.subscription
-  const subscriptionId = typeof sub === 'string' ? sub : (sub as Stripe.Subscription | undefined)?.id ?? null
-
+  const subscriptionId = await getSubscriptionIdFromInvoice(invoice)
   if (!subscriptionId) return
 
-  // Buscar payment existente com este subscription id pra encontrar o user/cohort
   const { data: existingPayment } = await supabaseAdmin
     .from('payments')
     .select('user_id, cohort_id, membership_id')
@@ -220,13 +240,16 @@ async function handleInvoicePaid(invoice: Stripe.Invoice) {
 
   const { user_id, cohort_id, membership_id } = existingPayment
 
-  const { data: cohort } = await supabaseAdmin
-    .from('cohorts')
-    .select('extension_duration_days, access_duration_days')
-    .eq('id', cohort_id)
-    .single()
+  const [{ data: cohort }] = await Promise.all([
+    supabaseAdmin
+      .from('cohorts')
+      .select('name, extension_duration_days, access_duration_days')
+      .eq('id', cohort_id)
+      .single(),
+  ])
 
   const daysToAdd = cohort?.extension_duration_days ?? cohort?.access_duration_days ?? null
+  let newExpiresAt: string | null = null
 
   if (daysToAdd && membership_id) {
     const { data: member } = await supabaseAdmin
@@ -240,10 +263,11 @@ async function handleInvoicePaid(invoice: Stripe.Invoice) {
         ? new Date(member.expires_at)
         : new Date()
       base.setDate(base.getDate() + daysToAdd)
+      newExpiresAt = base.toISOString()
 
       await supabaseAdmin
         .from('cohort_members')
-        .update({ status: 'ACTIVE', expires_at: base.toISOString() })
+        .update({ status: 'ACTIVE', expires_at: newExpiresAt })
         .eq('id', membership_id)
     }
   }
@@ -260,18 +284,25 @@ async function handleInvoicePaid(invoice: Stripe.Invoice) {
   })
 
   await applyCrossExtensions(cohort_id, user_id)
+
+  const userInfo = await getUserEmailAndName(user_id)
+  if (userInfo && cohort?.name && newExpiresAt) {
+    await sendAutoRenewalEmail(
+      userInfo.email,
+      userInfo.name,
+      cohort.name,
+      newExpiresAt,
+    ).catch(console.error)
+  }
 }
 
 async function handleInvoicePaymentFailed(invoice: Stripe.Invoice) {
-  const parent = invoice.parent as { subscription_details?: { subscription?: string | Stripe.Subscription } } | null
-  const sub = parent?.subscription_details?.subscription
-  const subscriptionId = typeof sub === 'string' ? sub : (sub as Stripe.Subscription | undefined)?.id ?? null
-
+  const subscriptionId = await getSubscriptionIdFromInvoice(invoice)
   if (!subscriptionId) return
 
   const { data: existingPayment } = await supabaseAdmin
     .from('payments')
-    .select('membership_id')
+    .select('user_id, cohort_id, membership_id')
     .eq('stripe_subscription_id', subscriptionId)
     .order('created_at', { ascending: false })
     .limit(1)
@@ -283,6 +314,17 @@ async function handleInvoicePaymentFailed(invoice: Stripe.Invoice) {
     .from('cohort_members')
     .update({ status: 'PAST_DUE' })
     .eq('id', existingPayment.membership_id)
+
+  const { data: cohort } = await supabaseAdmin
+    .from('cohorts')
+    .select('name')
+    .eq('id', existingPayment.cohort_id)
+    .single()
+
+  const userInfo = await getUserEmailAndName(existingPayment.user_id)
+  if (userInfo && cohort?.name) {
+    await sendPaymentFailedEmail(userInfo.email, userInfo.name, cohort.name).catch(console.error)
+  }
 }
 
 async function handleChargeRefunded(charge: Stripe.Charge) {
@@ -294,7 +336,7 @@ async function handleChargeRefunded(charge: Stripe.Charge) {
 
   const { data: originalPayment } = await supabaseAdmin
     .from('payments')
-    .select('user_id, cohort_id, membership_id, amount_cents')
+    .select('user_id, cohort_id, membership_id')
     .eq('stripe_payment_intent_id', paymentIntentId)
     .maybeSingle()
 
@@ -325,7 +367,7 @@ async function applyCrossExtensions(sourceCohortId: string, userId: string) {
   for (const ext of crossExtensions) {
     const { data: targetMember } = await supabaseAdmin
       .from('cohort_members')
-      .select('id, expires_at, status')
+      .select('id, expires_at')
       .eq('cohort_id', ext.target_cohort_id)
       .eq('user_id', userId)
       .maybeSingle()
@@ -341,6 +383,6 @@ async function applyCrossExtensions(sourceCohortId: string, userId: string) {
         .update({ expires_at: base.toISOString(), status: 'ACTIVE' })
         .eq('id', targetMember.id)
     }
-    // Se não existe membro na cohort alvo, não cria — extensão cruzada só estende prazo existente
+    // Extensão cruzada só estende prazo existente, não cria membership nova
   }
 }
