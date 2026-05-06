@@ -41,44 +41,42 @@ export function LoginForm() {
     }
 
     const nextRaw = searchParams.get('next') || '/academy/dashboard'
-    const next = nextRaw.startsWith('/') && !nextRaw.startsWith('//') ? nextRaw : '/academy/dashboard'
+    const next =
+      nextRaw.startsWith('/') && !nextRaw.startsWith('//')
+        ? nextRaw
+        : '/academy/dashboard'
     router.push(next)
     router.refresh()
   }
 
   return (
-    <div
-      style={{
-        background: 'var(--ink)',
-        padding: '48px',
-        borderRadius: 0,
-        borderTop: '2px solid var(--ember)',
-      }}
-    >
+    <>
       <style>{`
         .rf-input {
           width: 100%;
           border: 1px solid var(--hairline-strong);
           background: var(--ink-2);
           border-radius: 0;
-          padding: 14px 18px;
+          padding: 14px 16px;
           color: var(--bone);
-          font-size: 0.875rem;
+          font-family: var(--type-sans);
+          font-size: 14px;
           outline: none;
           transition: border-color 0.2s, box-shadow 0.2s;
           box-sizing: border-box;
         }
         .rf-input::placeholder {
-          color: rgba(241,241,243,0.25);
+          color: var(--bone-mute);
+          opacity: 0.5;
         }
         .rf-input:focus {
           border-color: var(--ember);
-          box-shadow: 0 0 0 1px var(--ember);
+          box-shadow: 0 0 0 1px rgba(255,58,14,0.2);
         }
-        .rf-submit-btn {
+        .rf-btn {
           display: block;
           width: 100%;
-          min-height: 44px;
+          height: 44px;
           background: var(--ember);
           color: var(--void);
           font-family: var(--type-mono);
@@ -89,106 +87,174 @@ export function LoginForm() {
           border: none;
           border-radius: 0;
           cursor: pointer;
-          transition: filter 0.2s;
+          transition: background-color 0.2s;
           outline: none;
         }
-        .rf-submit-btn:focus-visible {
+        .rf-btn:hover:not(:disabled) {
+          background: var(--ember-glow);
+        }
+        .rf-btn:focus-visible {
           outline: 2px solid rgba(255,58,14,0.5);
           outline-offset: 2px;
         }
-        .rf-submit-btn:hover:not(:disabled) {
-          filter: brightness(1.1);
-        }
-        .rf-submit-btn:disabled {
+        .rf-btn:disabled {
           opacity: 0.45;
           cursor: not-allowed;
         }
       `}</style>
 
-      <form onSubmit={handleSubmit(onSubmit)} noValidate className="space-y-5">
-        <div className="space-y-1.5">
-          <label
-            className="text-sm"
-            htmlFor="email"
-            style={{ color: 'rgba(241,241,243,0.6)' }}
-          >
-            Email
-          </label>
-          <input
-            id="email"
-            type="email"
-            autoComplete="email"
-            className="rf-input"
-            placeholder="seu@email.com"
-            {...register('email')}
-          />
-          {errors.email && (
-            <p className="text-xs" style={{ color: 'var(--ember)' }}>{errors.email.message}</p>
-          )}
-        </div>
-
-        <div className="space-y-1.5">
-          <div className="flex items-center justify-between">
-            <label
-              className="text-sm"
-              htmlFor="password"
-              style={{ color: 'rgba(241,241,243,0.6)' }}
-            >
-              Senha
-            </label>
-            <Link
-              href="/academy/recuperar-senha"
-              className="text-xs transition-colors hover:text-white/70"
-              style={{ color: 'rgba(241,241,243,0.35)' }}
-            >
-              Esqueci minha senha
-            </Link>
-          </div>
-          <input
-            id="password"
-            type="password"
-            autoComplete="current-password"
-            className="rf-input"
-            placeholder="••••••••"
-            {...register('password')}
-          />
-          {errors.password && (
-            <p className="text-xs" style={{ color: 'var(--ember)' }}>{errors.password.message}</p>
-          )}
-        </div>
-
-        {serverError && (
-          <div
-            style={{
-              background: 'rgba(255,58,14,0.1)',
-              border: '1px solid rgba(255,58,14,0.2)',
-              padding: '10px 16px',
-              fontSize: 13,
-              color: 'var(--ember)',
-            }}
-          >
-            {serverError}
-          </div>
-        )}
-
-        <button type="submit" disabled={isSubmitting} className="rf-submit-btn">
-          {isSubmitting ? 'Entrando...' : 'Entrar'}
-        </button>
-      </form>
-
-      <p
-        className="mt-6 text-center text-sm"
-        style={{ color: 'rgba(241,241,243,0.35)' }}
+      <div
+        style={{
+          background: 'var(--ink)',
+          borderTop: '2px solid var(--ember)',
+          padding: '40px',
+          borderRadius: 0,
+        }}
       >
-        Não tem conta?{' '}
-        <Link
-          href="/academy/cadastro"
-          className="transition-colors hover:text-white"
-          style={{ color: 'rgba(241,241,243,0.65)' }}
+        <form onSubmit={handleSubmit(onSubmit)} noValidate className="space-y-5">
+          {/* Email */}
+          <div className="space-y-1.5">
+            <label
+              htmlFor="email"
+              style={{
+                display: 'block',
+                fontFamily: 'var(--type-sans)',
+                fontSize: '12px',
+                color: 'var(--bone-mute)',
+              }}
+            >
+              Email
+            </label>
+            <input
+              id="email"
+              type="email"
+              autoComplete="email"
+              className="rf-input"
+              placeholder="seu@email.com"
+              aria-describedby={errors.email ? 'email-error' : undefined}
+              {...register('email')}
+            />
+            {errors.email && (
+              <p
+                id="email-error"
+                role="alert"
+                style={{
+                  fontSize: '12px',
+                  color: 'var(--ember)',
+                  marginTop: '4px',
+                }}
+              >
+                {errors.email.message}
+              </p>
+            )}
+          </div>
+
+          {/* Senha */}
+          <div className="space-y-1.5">
+            <div className="flex items-center justify-between">
+              <label
+                htmlFor="password"
+                style={{
+                  fontFamily: 'var(--type-sans)',
+                  fontSize: '12px',
+                  color: 'var(--bone-mute)',
+                }}
+              >
+                Senha
+              </label>
+              <Link
+                href="/academy/recuperar-senha"
+                style={{
+                  fontFamily: 'var(--type-sans)',
+                  fontSize: '12px',
+                  color: 'var(--bone-mute)',
+                  transition: 'color 0.2s',
+                  textDecoration: 'none',
+                }}
+                onMouseEnter={(e) =>
+                  (e.currentTarget.style.color = 'var(--bone)')
+                }
+                onMouseLeave={(e) =>
+                  (e.currentTarget.style.color = 'var(--bone-mute)')
+                }
+              >
+                Esqueci minha senha
+              </Link>
+            </div>
+            <input
+              id="password"
+              type="password"
+              autoComplete="current-password"
+              className="rf-input"
+              placeholder="••••••••"
+              aria-describedby={errors.password ? 'password-error' : undefined}
+              {...register('password')}
+            />
+            {errors.password && (
+              <p
+                id="password-error"
+                role="alert"
+                style={{
+                  fontSize: '12px',
+                  color: 'var(--ember)',
+                  marginTop: '4px',
+                }}
+              >
+                {errors.password.message}
+              </p>
+            )}
+          </div>
+
+          {/* Erro do servidor */}
+          {serverError && (
+            <div
+              role="alert"
+              style={{
+                background: 'rgba(255,58,14,0.1)',
+                border: '1px solid rgba(255,58,14,0.2)',
+                padding: '12px 16px',
+                borderRadius: 0,
+                fontFamily: 'var(--type-sans)',
+                fontSize: '13px',
+                color: 'var(--ember)',
+              }}
+            >
+              {serverError}
+            </div>
+          )}
+
+          <button type="submit" disabled={isSubmitting} className="rf-btn">
+            {isSubmitting ? 'Entrando...' : 'Entrar'}
+          </button>
+        </form>
+
+        <p
+          className="mt-6 text-center"
+          style={{
+            fontFamily: 'var(--type-sans)',
+            fontSize: '14px',
+            color: 'var(--bone-dim)',
+          }}
         >
-          Cadastre-se
-        </Link>
-      </p>
-    </div>
+          Não tem conta?{' '}
+          <Link
+            href="/academy/cadastro"
+            style={{
+              color: 'var(--bone-dim)',
+              transition: 'color 0.2s',
+              textDecoration: 'none',
+            }}
+            onMouseEnter={(e) =>
+              (e.currentTarget.style.color = 'var(--bone)')
+            }
+            onMouseLeave={(e) =>
+              (e.currentTarget.style.color = 'var(--bone-dim)')
+            }
+          >
+            Cadastre-se
+          </Link>
+        </p>
+      </div>
+    </>
   )
 }
