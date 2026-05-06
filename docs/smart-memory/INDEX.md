@@ -1,7 +1,7 @@
 ---
 title: Smart Memory Index
 type: index
-updated: 2026-04-23T19:00
+updated: 2026-05-05
 tags: [index]
 ---
 
@@ -17,19 +17,25 @@ MOC raiz. Todo arquivo novo em `docs/smart-memory/` deve ser referenciado aqui.
 - [[project/conventions]] — convenções de código (fonte: sites-analyst)
 
 ## Stories
-- [[stories/BACKLOG]] — stories pendentes (Epic 1: cleanup pós-discovery — 1.1, 1.2, 1.3)
+- [[stories/BACKLOG]] — stories pendentes (Epics 1–6 do site + Epic Plataforma de Cursos F1–F8)
 - `stories/active/` — em desenvolvimento
 - `stories/done/` — concluídas
 
 ## Decisões Arquiteturais
+- [[decisions/ADR-001-plataforma-cursos-stack]] — stack e decisões consolidadas da plataforma de cursos
 - `decisions/` — ADRs numerados
 
 ## Operações
 - [[ops/delegation-log]] — histórico de delegações do lead
 - [[ops/teams-log]] — times formados e seus objetivos
+- [[ops/launch-readiness]] — relatório de prontidão de launch (features completas, concerns, env vars, infra checklist)
+- [[ops/smoke-test-script]] — roteiro de smoke test manual pós-deploy para João
 
 ## Agentes
-- [[agents/data-engineer/schema]] — schema atual
+- [[agents/data-engineer/schema]] — schema completo (21 tabelas, funções, índices)
+- [[agents/data-engineer/rls-policies]] — RLS policies por tabela + casos de teste
+- [[agents/data-engineer/storage]] — buckets de storage, paths, signed URLs
+- [[agents/data-engineer/migrations-log]] — log de migrations aplicadas
 - [[agents/qa/results]] — histórico de veredictos
 - [[agents/ux/components]] — specs de componentes
 - [[agents/ux/design-recommendations]] — recomendações P0/P1/P2 (accent, dead code, a11y)

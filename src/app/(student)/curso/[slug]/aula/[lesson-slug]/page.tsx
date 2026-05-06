@@ -3,43 +3,15 @@ import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { ArrowLeft, ArrowRight } from 'lucide-react'
 import { createClient } from '@/lib/supabase/server'
+import { supabaseAdmin } from '@/lib/supabase/admin'
 import { requireUser } from '@/lib/auth/helpers'
 import { renderContent } from '@/lib/content'
 import { VideoPlayer } from '@/components/student/VideoPlayer'
-import { LessonContent } from '@/components/editor/LessonContent'
 import { LockedContent } from '@/components/student/LockedContent'
 import { MarkCompleteButton } from '@/components/student/MarkCompleteButton'
 import { LessonTabs } from './LessonTabs'
-import { MOCK_COMMENTS } from '@/components/student/mock-data'
-import type { Database } from '@/types/database'
-
-type Material = Database['public']['Tables']['materials']['Row']
-
-// TODO F4.2: fetch real materials from supabase
-const MOCK_MATERIALS: Material[] = [
-  {
-    id: 'mat-1',
-    lesson_id: 'lesson-demo',
-    title: 'Slide da Aula — Frameworks de Decisão',
-    kind: 'PDF',
-    storage_path: 'materials/frameworks-decisao.pdf',
-    external_url: null,
-    size_bytes: Math.round(1024 * 1024 * 2.4),
-    sort_order: 1,
-    created_at: '2026-05-01T00:00:00Z',
-  },
-  {
-    id: 'mat-2',
-    lesson_id: 'lesson-demo',
-    title: 'Template de Decisão — Notion',
-    kind: 'LINK',
-    storage_path: null,
-    external_url: 'https://notion.so/template-exemplo',
-    size_bytes: null,
-    sort_order: 2,
-    created_at: '2026-05-01T00:00:00Z',
-  },
-]
+import type { CommentWithAuthor } from '@/types/student'
+import type { UserRole } from '@/types/student'
 
 type Props = {
   params: Promise<{ slug: string; 'lesson-slug': string }>
@@ -177,8 +149,50 @@ export default async function AulaPage({ params }: Props) {
         )
       : null
 
-  const lessonComments = MOCK_COMMENTS.filter((c) => c.lesson_id === lesson.id)
-  // TODO F4.1: replace with real comments query filtered by lesson.id
+  // Fetch real comments (access already confirmed — supabaseAdmin bypasses RLS)
+  const { data: rawComments } = await supabaseAdmin
+    .from('comments')
+    .select(`
+      id, lesson_id, content, created_at, updated_at, deleted_at,
+      is_pinned, parent_comment_id,
+      profiles(id, name, role)
+    `)
+    .eq('lesson_id', lesson.id)
+    .is('deleted_at', null)
+    .order('created_at', { ascending: true })
+
+  const comments: CommentWithAuthor[] = (rawComments ?? []).map((c) => {
+    const profile = Array.isArray(c.profiles) ? c.profiles[0] : c.profiles
+    return {
+      id: c.id,
+      lesson_id: c.lesson_id,
+      content: c.content,
+      created_at: c.created_at,
+      updated_at: c.updated_at,
+      deleted_at: c.deleted_at,
+      is_pinned: c.is_pinned,
+      parent_comment_id: c.parent_comment_id,
+      authorId: profile?.id ?? '',
+      authorName: profile?.name ?? 'Anônimo',
+      authorRole: (profile?.role ?? 'STUDENT') as UserRole,
+    }
+  })
+
+  // Fetch real materials for this lesson
+  const { data: rawMaterials } = await supabaseAdmin
+    .from('materials')
+    .select('id, title, kind, external_url, storage_path, size_bytes, sort_order, lesson_id, created_at')
+    .eq('lesson_id', lesson.id)
+    .order('sort_order', { ascending: true })
+
+  const materials = rawMaterials ?? []
+
+  // Fetch current user's profile name for comment ownership display
+  const { data: profile } = await supabaseAdmin
+    .from('profiles')
+    .select('name')
+    .eq('id', user.id)
+    .single()
 
   return (
     <div className="mx-auto max-w-4xl space-y-8">
@@ -256,9 +270,11 @@ export default async function AulaPage({ params }: Props) {
         activeTab="sobre"
         description={lesson.description ?? ''}
         descriptionContent={renderedContent}
-        materials={MOCK_MATERIALS}
-        comments={lessonComments}
+        materials={materials}
+        comments={comments}
         lessonId={lesson.id}
+        currentUserId={user.id}
+        currentUserName={profile?.name ?? ''}
       />
     </div>
   )

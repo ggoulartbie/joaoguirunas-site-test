@@ -143,18 +143,8 @@ export async function addMemberToCohort(cohortId: string, userId: string, expire
     })
     if (error) throw new Error(error.message)
 
-    // Increment filled_seats manually (RPC not in generated types yet)
-    const { data: cohortRow } = await supabaseAdmin
-      .from('cohorts')
-      .select('filled_seats')
-      .eq('id', cohortId)
-      .single()
-    if (cohortRow) {
-      await supabaseAdmin
-        .from('cohorts')
-        .update({ filled_seats: cohortRow.filled_seats + 1 })
-        .eq('id', cohortId)
-    }
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    await (supabaseAdmin.rpc as any)('increment_filled_seats', { p_cohort_id: cohortId })
   }
 
   revalidatePath(`/admin/turmas/${cohortId}`)

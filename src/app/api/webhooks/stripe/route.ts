@@ -109,7 +109,7 @@ async function handleCheckoutCompleted(session: Stripe.Checkout.Session) {
 
   const { data: cohort } = await supabaseAdmin
     .from('cohorts')
-    .select('id, name, access_duration_days, extension_duration_days, filled_seats')
+    .select('id, name, access_duration_days, extension_duration_days')
     .eq('id', cohort_id)
     .single()
 
@@ -181,10 +181,8 @@ async function handleCheckoutCompleted(session: Stripe.Checkout.Session) {
     if (!newMember) throw new Error(`Failed to create cohort_member: ${error?.message}`)
     memberId = newMember.id
 
-    await supabaseAdmin
-      .from('cohorts')
-      .update({ filled_seats: cohort.filled_seats + 1 })
-      .eq('id', cohort_id)
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    await (supabaseAdmin.rpc as any)('increment_filled_seats', { p_cohort_id: cohort_id })
   }
 
   await supabaseAdmin.from('payments').insert({

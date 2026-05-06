@@ -29,6 +29,8 @@ type LessonTabsProps = {
   materials: Material[]
   comments: Comment[]
   lessonId: string
+  currentUserId?: string
+  currentUserName?: string
 }
 
 export function LessonTabs({
@@ -40,6 +42,8 @@ export function LessonTabs({
   materials,
   comments,
   lessonId,
+  currentUserId,
+  currentUserName: _currentUserName,
 }: LessonTabsProps) {
   const [active, setActive] = useState<Tab>(initialTab)
 
@@ -91,7 +95,7 @@ export function LessonTabs({
         )}
 
         {active === 'comentarios' && (
-          <CommentSection lessonId={lessonId} initialComments={comments} />
+          <CommentSection lessonId={lessonId} initialComments={comments} currentUserId={currentUserId} />
         )}
       </div>
     </div>

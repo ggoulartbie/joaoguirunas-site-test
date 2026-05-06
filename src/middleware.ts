@@ -78,7 +78,26 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config = {
+  // Middleware ONLY runs on course platform routes.
+  // Institutional site routes (/, /mentoria, /agentes, etc.) are never matched.
   matcher: [
-    '/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)',
+    '/login',
+    '/cadastro',
+    '/recuperar-senha',
+    '/redefinir-senha',
+    '/auth/:path*',
+    '/turmas/:path*',
+    '/certificado/:path*',
+    '/403',
+    '/api/webhooks/:path*',
+    '/dashboard/:path*',
+    '/meus-cursos/:path*',
+    '/curso/:path*',
+    '/admin/:path*',
+    '/forum/:path*',
+    '/agenda/:path*',
+    '/certificados/:path*',
+    '/perfil/:path*',
+    '/checkout/:path*',
   ],
 }

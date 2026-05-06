@@ -1,9 +1,17 @@
 import type { Metadata } from 'next'
+import { supabaseAdmin } from '@/lib/supabase/admin'
 import { PaymentsClient } from './PaymentsClient'
 
 export const metadata: Metadata = { title: 'Pagamentos' }
 
-export default function AdminPagamentosPage() {
+export default async function AdminPagamentosPage() {
+  const { data: failedEvents } = await supabaseAdmin
+    .from('webhook_events')
+    .select('id, stripe_event_id, event_type, error_message, processed_at')
+    .eq('success', false)
+    .order('processed_at', { ascending: false })
+    .limit(50)
+
   return (
     <div className="space-y-6">
       <div>
@@ -14,7 +22,7 @@ export default function AdminPagamentosPage() {
           Histórico de transações, reembolsos e exportações
         </p>
       </div>
-      <PaymentsClient />
+      <PaymentsClient failedWebhookEvents={failedEvents ?? []} />
     </div>
   )
 }

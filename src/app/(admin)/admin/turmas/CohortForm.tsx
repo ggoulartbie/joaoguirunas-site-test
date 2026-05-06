@@ -1,6 +1,7 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useTransition } from 'react'
+import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import {
   MOCK_COURSES,
@@ -17,6 +18,7 @@ import {
   Save,
   ArrowLeft,
 } from 'lucide-react'
+import { createCohort, updateCohort, addMemberByCohortEmail } from './actions'
 
 type CohortCourse = Database['public']['Tables']['cohort_courses']['Row']
 type CrossExtension = Database['public']['Tables']['cohort_cross_extensions']['Row']
@@ -171,6 +173,10 @@ function formatBRL(cents: number) {
   return new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(cents / 100)
 }
 
+function parseBRL(v: string): number {
+  return Math.round(parseFloat(v.replace(/[^\d,]/g, '').replace(',', '.')) * 100) || 0
+}
+
 function formatDate(iso: string | null) {
   if (!iso) return '—'
   return new Date(iso).toLocaleDateString('pt-BR')
@@ -200,6 +206,9 @@ const MEMBER_STATUS_COLORS: Record<string, string> = {
 export function CohortForm(props: CohortFormProps) {
   const isEdit = props.mode === 'edit'
   const initial = isEdit ? props.cohort : null
+  const router = useRouter()
+  const [pending, startTransition] = useTransition()
+  const [saveError, setSaveError] = useState<string | null>(null)
 
   const [openSections, setOpenSections] = useState<Set<SectionId>>(
     new Set(['identidade'] as SectionId[])
@@ -275,6 +284,11 @@ export function CohortForm(props: CohortFormProps) {
   // Section 7 — Membros (read-only list + add modal state)
   const members = isEdit ? props.members : []
   const [showAddMember, setShowAddMember] = useState(false)
+  const [memberEmail, setMemberEmail] = useState('')
+  const [memberRole, setMemberRole] = useState('STUDENT')
+  const [memberExpiresAt, setMemberExpiresAt] = useState('')
+  const [memberError, setMemberError] = useState<string | null>(null)
+  const [memberPending, startMemberTransition] = useTransition()
 
   // Section 8 — Sessões ao vivo
   const liveSessions = isEdit ? props.liveSessions : []
@@ -385,9 +399,65 @@ export function CohortForm(props: CohortFormProps) {
     setExtensions((prev) => prev.filter((_, i) => i !== idx))
   }
 
+  function buildFormData() {
+    return {
+      name,
+      slug,
+      description: description || undefined,
+      cover_image_url: coverImageUrl || undefined,
+      status: status as 'DRAFT' | 'OPEN' | 'IN_PROGRESS' | 'CLOSED' | 'ARCHIVED',
+      start_date: startDate || undefined,
+      end_date: endDate || undefined,
+      total_seats: totalSeats ? parseInt(totalSeats, 10) : undefined,
+      access_duration_days: accessDurationDays ? parseInt(accessDurationDays, 10) : undefined,
+      group_url: groupUrl || undefined,
+      has_live_sessions: hasLiveSessions,
+      has_support: hasSupport,
+      is_purchasable: isPurchasable,
+      has_public_page: hasPublicPage,
+      entry_price_cents: entryPriceBRL ? parseBRL(entryPriceBRL) : undefined,
+      extension_price_cents: extensionPriceBRL ? parseBRL(extensionPriceBRL) : undefined,
+      max_installments_entry: parseInt(maxInstEntry, 10) || 1,
+      max_installments_extension: parseInt(maxInstExt, 10) || 1,
+      extension_duration_days: extDurationDays ? parseInt(extDurationDays, 10) : undefined,
+      allows_auto_renewal: allowsAutoRenewal,
+    }
+  }
+
   function handleSave() {
-    setSaved(true)
-    setTimeout(() => setSaved(false), 2500)
+    setSaveError(null)
+    startTransition(async () => {
+      try {
+        if (isEdit) {
+          await updateCohort(props.cohort.id, buildFormData())
+        } else {
+          await createCohort(buildFormData())
+        }
+        setSaved(true)
+        setTimeout(() => setSaved(false), 2500)
+        router.push('/admin/turmas')
+      } catch (err) {
+        setSaveError(err instanceof Error ? err.message : 'Erro ao salvar')
+      }
+    })
+  }
+
+  function handleAddMember() {
+    if (!isEdit || !memberEmail) return
+    setMemberError(null)
+    startMemberTransition(async () => {
+      try {
+        // Look up user by email via the action — action accepts userId, so we need to find by email first
+        // Since addMemberToCohort expects userId, we pass email as a search hint via a new action
+        await addMemberByCohortEmail(props.cohort.id, memberEmail, memberExpiresAt || undefined)
+        setShowAddMember(false)
+        setMemberEmail('')
+        setMemberExpiresAt('')
+        router.refresh()
+      } catch (err) {
+        setMemberError(err instanceof Error ? err.message : 'Erro ao adicionar membro')
+      }
+    })
   }
 
   const sectionIndexMap: Record<SectionId, number> = {
@@ -920,13 +990,17 @@ export function CohortForm(props: CohortFormProps) {
                     <div className="grid gap-3 md:grid-cols-3">
                       <div>
                         <FieldLabel>E-mail do aluno</FieldLabel>
-                        <TextInput value="" onChange={() => {}} placeholder="aluno@exemplo.com" />
+                        <TextInput
+                          value={memberEmail}
+                          onChange={setMemberEmail}
+                          placeholder="aluno@exemplo.com"
+                        />
                       </div>
                       <div>
                         <FieldLabel>Papel</FieldLabel>
                         <SelectInput
-                          value="STUDENT"
-                          onChange={() => {}}
+                          value={memberRole}
+                          onChange={setMemberRole}
                           options={[
                             { value: 'STUDENT', label: 'Aluno' },
                             { value: 'MONITOR', label: 'Monitor' },
@@ -936,21 +1010,25 @@ export function CohortForm(props: CohortFormProps) {
                       </div>
                       <div>
                         <FieldLabel>Expira em (vazio = vitalício)</FieldLabel>
-                        <TextInput type="date" value="" onChange={() => {}} />
+                        <TextInput type="date" value={memberExpiresAt} onChange={setMemberExpiresAt} />
                       </div>
                     </div>
+                    {memberError && (
+                      <p className="mt-2 font-mono text-xs text-red-400">{memberError}</p>
+                    )}
                     <div className="mt-3 flex gap-2">
                       <button
                         type="button"
-                        className="bg-[#FF3A0E] px-4 py-2 font-mono text-xs uppercase tracking-wider text-white"
-                        onClick={() => setShowAddMember(false)}
+                        disabled={memberPending || !memberEmail}
+                        className="bg-[#FF3A0E] px-4 py-2 font-mono text-xs uppercase tracking-wider text-white disabled:opacity-40"
+                        onClick={handleAddMember}
                       >
-                        Salvar
+                        {memberPending ? 'Adicionando...' : 'Adicionar'}
                       </button>
                       <button
                         type="button"
                         className="border border-white/10 px-4 py-2 font-mono text-xs uppercase tracking-wider text-white/40"
-                        onClick={() => setShowAddMember(false)}
+                        onClick={() => { setShowAddMember(false); setMemberError(null) }}
                       >
                         Cancelar
                       </button>
@@ -1281,30 +1359,36 @@ export function CohortForm(props: CohortFormProps) {
       </div>
 
       {/* Actions */}
-      <div className="flex items-center justify-between border-t border-white/10 pt-6">
-        <Link
-          href="/admin/turmas"
-          className="flex items-center gap-2 font-mono text-xs text-white/40 transition-colors hover:text-white/70"
-        >
-          <ArrowLeft className="h-3.5 w-3.5" />
-          Voltar para Turmas
-        </Link>
-
-        <div className="flex items-center gap-3">
-          {saved && (
-            <span className="flex items-center gap-1.5 font-mono text-xs text-emerald-400">
-              <Check className="h-3.5 w-3.5" />
-              Salvo
-            </span>
-          )}
-          <button
-            type="button"
-            onClick={handleSave}
-            className="flex items-center gap-2 bg-[#FF3A0E] px-6 py-2.5 font-mono text-xs font-semibold uppercase tracking-wider text-white transition-opacity hover:opacity-90"
+      <div className="space-y-3 border-t border-white/10 pt-6">
+        {saveError && (
+          <p className="font-mono text-xs text-red-400">{saveError}</p>
+        )}
+        <div className="flex items-center justify-between">
+          <Link
+            href="/admin/turmas"
+            className="flex items-center gap-2 font-mono text-xs text-white/40 transition-colors hover:text-white/70"
           >
-            <Save className="h-3.5 w-3.5" />
-            {isEdit ? 'Salvar alterações' : 'Criar turma'}
-          </button>
+            <ArrowLeft className="h-3.5 w-3.5" />
+            Voltar para Turmas
+          </Link>
+
+          <div className="flex items-center gap-3">
+            {saved && (
+              <span className="flex items-center gap-1.5 font-mono text-xs text-emerald-400">
+                <Check className="h-3.5 w-3.5" />
+                Salvo
+              </span>
+            )}
+            <button
+              type="button"
+              onClick={handleSave}
+              disabled={pending}
+              className="flex items-center gap-2 bg-[#FF3A0E] px-6 py-2.5 font-mono text-xs font-semibold uppercase tracking-wider text-white transition-opacity hover:opacity-90 disabled:opacity-40"
+            >
+              <Save className="h-3.5 w-3.5" />
+              {pending ? 'Salvando...' : isEdit ? 'Salvar alterações' : 'Criar turma'}
+            </button>
+          </div>
         </div>
       </div>
     </div>

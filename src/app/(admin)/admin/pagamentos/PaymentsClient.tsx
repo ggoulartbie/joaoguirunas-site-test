@@ -1,9 +1,10 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useTransition } from 'react'
 import { MOCK_PAYMENTS } from '@/components/admin/mock-data'
 import type { MockPayment } from '@/components/admin/mock-data'
-import { ExternalLink, X, AlertTriangle } from 'lucide-react'
+import { ExternalLink, X, AlertTriangle, RefreshCw } from 'lucide-react'
+import { retryWebhookEvent } from './actions'
 
 const STATUS_LABELS: Record<string, string> = {
   PENDING: 'Pendente',
@@ -147,7 +148,78 @@ function downloadCSV(payments: MockPayment[]) {
   URL.revokeObjectURL(url)
 }
 
-export function PaymentsClient() {
+type FailedEvent = {
+  id: string
+  stripe_event_id: string
+  event_type: string
+  error_message: string | null
+  processed_at: string
+}
+
+function FailedWebhooksPanel({ events }: { events: FailedEvent[] }) {
+  const [items, setItems] = useState(events)
+  const [retrying, setRetrying] = useState<string | null>(null)
+  const [errors, setErrors] = useState<Record<string, string>>({})
+  const [, startTransition] = useTransition()
+
+  if (items.length === 0) return null
+
+  function handleRetry(id: string) {
+    setRetrying(id)
+    setErrors((prev) => ({ ...prev, [id]: '' }))
+    startTransition(async () => {
+      try {
+        await retryWebhookEvent(id)
+        setItems((prev) => prev.filter((e) => e.id !== id))
+      } catch (err) {
+        setErrors((prev) => ({
+          ...prev,
+          [id]: err instanceof Error ? err.message : 'Erro desconhecido',
+        }))
+      } finally {
+        setRetrying(null)
+      }
+    })
+  }
+
+  return (
+    <div className="border border-red-400/20 bg-red-400/[0.03]">
+      <div className="flex items-center gap-2 border-b border-red-400/20 px-4 py-3">
+        <AlertTriangle className="h-3.5 w-3.5 text-red-400" />
+        <span className="font-mono text-xs font-semibold uppercase tracking-wider text-red-400">
+          Webhooks com falha ({items.length})
+        </span>
+      </div>
+      <div className="divide-y divide-white/5">
+        {items.map((ev) => (
+          <div key={ev.id} className="flex flex-wrap items-start justify-between gap-3 px-4 py-3">
+            <div className="min-w-0 flex-1 space-y-0.5">
+              <p className="font-mono text-xs text-white/70">{ev.event_type}</p>
+              <p className="font-mono text-[10px] text-white/30">{ev.stripe_event_id}</p>
+              {ev.error_message && (
+                <p className="font-mono text-[10px] text-red-400/70">{ev.error_message}</p>
+              )}
+              {errors[ev.id] && (
+                <p className="font-mono text-[10px] text-red-400">{errors[ev.id]}</p>
+              )}
+            </div>
+            <button
+              type="button"
+              disabled={retrying === ev.id}
+              onClick={() => handleRetry(ev.id)}
+              className="flex shrink-0 items-center gap-1.5 border border-white/10 px-3 py-1.5 font-mono text-[10px] uppercase tracking-wider text-white/40 transition-colors hover:border-white/20 hover:text-white/70 disabled:cursor-not-allowed disabled:opacity-40"
+            >
+              <RefreshCw className={`h-3 w-3 ${retrying === ev.id ? 'animate-spin' : ''}`} />
+              Reprocessar
+            </button>
+          </div>
+        ))}
+      </div>
+    </div>
+  )
+}
+
+export function PaymentsClient({ failedWebhookEvents }: { failedWebhookEvents: FailedEvent[] }) {
   const [statusFilter, setStatusFilter] = useState('all')
   const [refundTarget, setRefundTarget] = useState<MockPayment | null>(null)
 
@@ -162,6 +234,8 @@ export function PaymentsClient() {
 
   return (
     <>
+      <FailedWebhooksPanel events={failedWebhookEvents} />
+
       {refundTarget && (
         <RefundConfirmModal
           payment={refundTarget}

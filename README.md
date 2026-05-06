@@ -1,43 +1,92 @@
-# Astro Starter Kit: Minimal
+# joao-guirunas-site
 
-```sh
-pnpm create astro@latest -- --template minimal
+Site pessoal + Plataforma de Cursos (Next.js 15 + Supabase).
+
+---
+
+## Setup local
+
+```bash
+pnpm install
+cp .env.example .env.local
+# Preencha .env.local com as chaves reais (ver seção abaixo)
+pnpm dev
 ```
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
+---
 
-## 🚀 Project Structure
+## Setup Supabase
 
-Inside of your Astro project, you'll see the following folders and files:
+### Pré-requisitos
 
-```text
-/
-├── public/
-├── src/
-│   └── pages/
-│       └── index.astro
-└── package.json
+- Supabase CLI instalada (`brew install supabase/tap/supabase`)
+- Acesso ao projeto `mksmmpfyqowuzjcchhkl`
+
+### Vincular projeto remoto
+
+```bash
+supabase link --project-ref mksmmpfyqowuzjcchhkl
 ```
 
-Astro looks for `.astro` or `.md` files in the `src/pages/` directory. Each page is exposed as a route based on its file name.
+### Aplicar migrations
 
-There's nothing special about `src/components/`, but that's where we like to put any Astro/React/Vue/Svelte/Preact components.
+```bash
+# Aplicar todas as migrations no remoto
+supabase db push
 
-Any static assets, like images, can be placed in the `public/` directory.
+# Ver diff entre local e remoto (deve retornar vazio após push)
+supabase db diff
+```
 
-## 🧞 Commands
+### Popular dados demo
 
-All commands are run from the root of the project, from a terminal:
+```bash
+# Resetar banco e rodar seed.sql
+supabase db reset --linked
+```
 
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `pnpm install`             | Installs dependencies                            |
-| `pnpm dev`             | Starts local dev server at `localhost:4321`      |
-| `pnpm build`           | Build your production site to `./dist/`          |
-| `pnpm preview`         | Preview your build locally, before deploying     |
-| `pnpm astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `pnpm astro -- --help` | Get help using the Astro CLI                     |
+### Gerar tipos TypeScript
 
-## 👀 Want to learn more?
+Rode após **cada migration aplicada**:
 
-Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+```bash
+pnpm db:types
+# equivalente a:
+# supabase gen types typescript --project-id mksmmpfyqowuzjcchhkl > types/database.ts
+```
+
+### Chaves necessárias (`.env.local`)
+
+| Variável | Onde obter |
+|---|---|
+| `NEXT_PUBLIC_SUPABASE_URL` | Supabase → Settings → API |
+| `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Supabase → Settings → API → anon public |
+| `SUPABASE_SERVICE_ROLE_KEY` | Supabase → Settings → API → service_role (**nunca client-side**) |
+| `STRIPE_SECRET_KEY` | Stripe Dashboard → Developers → API Keys |
+| `STRIPE_PUBLISHABLE_KEY` | Stripe Dashboard → Developers → API Keys |
+| `STRIPE_WEBHOOK_SECRET` | Stripe Dashboard → Webhooks |
+| `VIMEO_ACCESS_TOKEN` | Vimeo → Settings → Apps |
+| `RESEND_API_KEY` | Resend Dashboard → API Keys |
+
+---
+
+## Estrutura de migrations
+
+```
+supabase/
+  migrations/          # SQL versionado — nunca editar arquivos existentes
+  seed.sql             # Dados demo para desenvolvimento
+  config.toml          # Configuração local do Supabase CLI
+```
+
+---
+
+## Scripts
+
+| Comando | Ação |
+|---|---|
+| `pnpm dev` | Dev server (Next.js Turbopack) |
+| `pnpm build` | Build de produção |
+| `pnpm lint` | ESLint |
+| `pnpm typecheck` | TypeScript sem emitir |
+| `pnpm db:types` | Regenerar tipos do schema Supabase |
