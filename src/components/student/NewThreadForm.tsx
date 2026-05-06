@@ -1,9 +1,10 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useTransition } from 'react'
 import { useRouter } from 'next/navigation'
 import { Send } from 'lucide-react'
 import type { ForumCategory } from '@/types/student'
+import { createThread } from '@/app/(student)/forum/actions'
 
 type Props = {
   categories: ForumCategory[]
@@ -14,21 +15,32 @@ export function NewThreadForm({ categories }: Props) {
   const [title, setTitle] = useState('')
   const [categoryId, setCategoryId] = useState('')
   const [content, setContent] = useState('')
-  const [submitting, setSubmitting] = useState(false)
+  const [error, setError] = useState<string | null>(null)
+  const [isPending, startTransition] = useTransition()
 
-  async function handleSubmit(e: React.FormEvent) {
+  function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
     if (!title.trim() || !categoryId || !content.trim()) return
 
-    setSubmitting(true)
-    // TODO F5.1: Server Action createForumThread(categoryId, title, content)
-    await new Promise((r) => setTimeout(r, 800))
-    setSubmitting(false)
-    router.push('/forum')
+    setError(null)
+    startTransition(async () => {
+      const result = await createThread(categoryId, title, content)
+      if (result.error) {
+        setError(result.error)
+      } else {
+        router.push('/forum')
+      }
+    })
   }
 
   return (
     <form onSubmit={handleSubmit} className="space-y-5">
+      {error && (
+        <div className="border border-red-500/30 bg-red-500/10 px-4 py-3 text-sm text-red-400">
+          {error}
+        </div>
+      )}
+
       {/* Categoria */}
       <div>
         <label className="mb-1.5 block font-mono text-[10px] uppercase tracking-widest text-white/50">
@@ -98,11 +110,11 @@ export function NewThreadForm({ categories }: Props) {
         </button>
         <button
           type="submit"
-          disabled={submitting || !title.trim() || !categoryId || !content.trim()}
+          disabled={isPending || !title.trim() || !categoryId || !content.trim()}
           className="flex items-center gap-2 bg-[#FF3A0E] px-5 py-2.5 font-mono text-xs uppercase tracking-wide text-white transition-colors hover:bg-[#FF5A1F] disabled:opacity-40 disabled:cursor-not-allowed"
         >
           <Send className="h-3.5 w-3.5" />
-          {submitting ? 'Publicando...' : 'Publicar tópico'}
+          {isPending ? 'Publicando...' : 'Publicar tópico'}
         </button>
       </div>
     </form>
