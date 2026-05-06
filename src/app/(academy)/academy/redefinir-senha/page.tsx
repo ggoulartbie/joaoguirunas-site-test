@@ -19,7 +19,7 @@ export default function RedefinirSenhaPage() {
           backgroundSize: '24px 24px',
         }}
       >
-        <div className="relative z-10 w-full max-w-sm px-6 py-16">
+        <div className="relative z-10 w-full max-w-md px-6 py-12">
           {/* Brand mark */}
           <div className="mb-10">
             <Image

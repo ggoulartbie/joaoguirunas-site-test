@@ -27,6 +27,7 @@ type FormData = z.infer<typeof schema>
 export function RedefinirSenhaForm() {
   const router = useRouter()
   const [serverError, setServerError] = useState<string | null>(null)
+  const [success, setSuccess] = useState(false)
 
   const {
     register,
@@ -45,43 +46,70 @@ export function RedefinirSenhaForm() {
       return
     }
 
-    router.push('/academy/dashboard')
-    router.refresh()
+    setSuccess(true)
+    setTimeout(() => {
+      router.push('/academy/dashboard')
+      router.refresh()
+    }, 1500)
+  }
+
+  if (success) {
+    return (
+      <div
+        style={{
+          background: 'rgba(34,197,94,0.08)',
+          border: '1px solid rgba(34,197,94,0.2)',
+          padding: '16px',
+          borderRadius: 0,
+        }}
+      >
+        <p
+          style={{
+            fontFamily: 'var(--type-sans)',
+            fontSize: '14px',
+            color: '#4ade80',
+          }}
+        >
+          Senha redefinida com sucesso. Redirecionando...
+        </p>
+      </div>
+    )
   }
 
   return (
     <div
       style={{
         background: 'var(--ink)',
-        padding: '48px',
-        borderRadius: 0,
         borderTop: '2px solid var(--ember)',
+        padding: '52px 48px',
+        borderRadius: 0,
       }}
     >
       <style>{`
-        .rf-input {
+        .rd-input {
           width: 100%;
-          border: 1px solid var(--hairline-strong);
-          background: var(--ink-2);
+          background: transparent;
+          border: 1px solid rgba(255,255,255,0.28);
           border-radius: 0;
-          padding: 14px 18px;
+          padding: 16px 18px;
           color: var(--bone);
-          font-size: 0.875rem;
+          font-family: var(--type-sans);
+          font-size: 14px;
           outline: none;
           transition: border-color 0.2s, box-shadow 0.2s;
           box-sizing: border-box;
         }
-        .rf-input::placeholder {
-          color: rgba(241,241,243,0.25);
+        .rd-input::placeholder {
+          color: rgba(241,241,243,0.35);
         }
-        .rf-input:focus {
+        .rd-input:focus {
           border-color: var(--ember);
-          box-shadow: 0 0 0 1px var(--ember);
+          box-shadow: 0 0 0 2px rgba(255,58,14,0.15);
         }
-        .rf-submit-btn {
+        .rd-submit-btn {
           display: block;
           width: 100%;
-          min-height: 44px;
+          height: 48px;
           background: var(--ember);
           color: var(--void);
           font-family: var(--type-mono);
@@ -95,14 +123,14 @@ export function RedefinirSenhaForm() {
           transition: filter 0.2s;
           outline: none;
         }
-        .rf-submit-btn:focus-visible {
+        .rd-submit-btn:focus-visible {
           outline: 2px solid rgba(255,58,14,0.5);
           outline-offset: 2px;
         }
-        .rf-submit-btn:hover:not(:disabled) {
+        .rd-submit-btn:hover:not(:disabled) {
           filter: brightness(1.1);
         }
-        .rf-submit-btn:disabled {
+        .rd-submit-btn:disabled {
           opacity: 0.45;
           cursor: not-allowed;
         }
@@ -111,9 +139,13 @@ export function RedefinirSenhaForm() {
       <form onSubmit={handleSubmit(onSubmit)} noValidate className="space-y-5">
         <div className="space-y-1.5">
           <label
-            className="text-sm"
             htmlFor="password"
-            style={{ color: 'rgba(241,241,243,0.6)' }}
+            style={{
+              display: 'block',
+              fontFamily: 'var(--type-sans)',
+              fontSize: '12px',
+              color: 'var(--bone-dim)',
+            }}
           >
             Nova senha
           </label>
@@ -121,7 +153,7 @@ export function RedefinirSenhaForm() {
             id="password"
             type="password"
             autoComplete="new-password"
-            className="rf-input"
+            className="rd-input"
             placeholder="Mínimo 8 caracteres"
             {...register('password')}
           />
@@ -132,9 +164,13 @@ export function RedefinirSenhaForm() {
 
         <div className="space-y-1.5">
           <label
-            className="text-sm"
             htmlFor="confirm"
-            style={{ color: 'rgba(241,241,243,0.6)' }}
+            style={{
+              display: 'block',
+              fontFamily: 'var(--type-sans)',
+              fontSize: '12px',
+              color: 'var(--bone-dim)',
+            }}
           >
             Confirmar nova senha
           </label>
@@ -142,7 +178,7 @@ export function RedefinirSenhaForm() {
             id="confirm"
             type="password"
             autoComplete="new-password"
-            className="rf-input"
+            className="rd-input"
             placeholder="Repita a senha"
             {...register('confirm')}
           />
@@ -159,29 +195,32 @@ export function RedefinirSenhaForm() {
               padding: '10px 16px',
               fontSize: 13,
               color: 'var(--ember)',
+              borderRadius: 0,
             }}
           >
             {serverError}
           </div>
         )}
 
-        <button type="submit" disabled={isSubmitting} className="rf-submit-btn">
+        <button type="submit" disabled={isSubmitting} className="rd-submit-btn">
           {isSubmitting ? 'Salvando...' : 'Salvar nova senha'}
         </button>
       </form>
 
-      <p
-        className="mt-6 text-center text-sm"
-        style={{ color: 'rgba(241,241,243,0.35)' }}
-      >
+      <p className="mt-6 text-center">
         <Link
           href="/academy/login"
-          className="transition-colors"
-          style={{ color: 'var(--bone-mute)' }}
+          style={{
+            fontFamily: 'var(--type-sans)',
+            fontSize: '14px',
+            color: 'var(--bone-mute)',
+            textDecoration: 'none',
+            transition: 'color 0.2s',
+          }}
           onMouseEnter={(e) => ((e.currentTarget as HTMLElement).style.color = 'var(--bone)')}
           onMouseLeave={(e) => ((e.currentTarget as HTMLElement).style.color = 'var(--bone-mute)')}
         >
-          Voltar para o login
+          Voltar ao login
         </Link>
       </p>
     </div>
