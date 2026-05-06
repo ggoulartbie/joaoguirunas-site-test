@@ -1,7 +1,9 @@
 import type { Metadata } from 'next'
 import { Calendar, Download, Video } from 'lucide-react'
-import { MOCK_LIVE_SESSIONS } from '@/components/student/mock-data'
 import { ICSDownloadButton } from '@/components/student/ICSDownloadButton'
+import { requireUser } from '@/lib/auth/helpers'
+import { supabaseAdmin } from '@/lib/supabase/admin'
+import { createClient } from '@/lib/supabase/server'
 import type { LiveSessionWithCohort } from '@/types/student'
 
 export const metadata: Metadata = { title: 'Agenda' }
@@ -37,10 +39,7 @@ function SessionCard({ session }: { session: LiveSessionWithCohort }) {
   return (
     <div
       className="group flex gap-4 items-start border border-[var(--hairline)] hover:border-[var(--hairline-strong)] p-5 transition-colors"
-      style={{
-        backgroundColor: 'var(--ink)',
-        borderRadius: 0,
-      }}
+      style={{ backgroundColor: 'var(--ink)', borderRadius: 0 }}
     >
       {/* Date column */}
       <div
@@ -50,10 +49,7 @@ function SessionCard({ session }: { session: LiveSessionWithCohort }) {
         <span className="font-mono font-bold text-[28px] leading-none" style={{ color: 'var(--bone)' }}>
           {formatDay(session.scheduled_at)}
         </span>
-        <span
-          className="font-mono text-[10px] uppercase tracking-wider mt-1"
-          style={{ color: 'var(--ember)' }}
-        >
+        <span className="font-mono text-[10px] uppercase tracking-wider mt-1" style={{ color: 'var(--ember)' }}>
           {formatMonth(session.scheduled_at)}
         </span>
       </div>
@@ -64,10 +60,7 @@ function SessionCard({ session }: { session: LiveSessionWithCohort }) {
           {isLive && (
             <span
               className="font-mono text-[10px] uppercase tracking-wider px-2 py-0.5 border border-[var(--ember)]/20 bg-[var(--ember)]/10"
-              style={{
-                color: 'var(--ember)',
-                borderRadius: 0,
-              }}
+              style={{ color: 'var(--ember)', borderRadius: 0 }}
             >
               Ao Vivo
             </span>
@@ -122,11 +115,7 @@ function SessionCard({ session }: { session: LiveSessionWithCohort }) {
             target="_blank"
             rel="noopener noreferrer"
             className="flex items-center gap-1.5 px-3 h-9 font-mono text-[11px] uppercase tracking-wider transition-colors"
-            style={{
-              backgroundColor: 'var(--ember)',
-              color: 'var(--void)',
-              borderRadius: 0,
-            }}
+            style={{ backgroundColor: 'var(--ember)', color: 'var(--void)', borderRadius: 0 }}
           >
             <Video className="h-3.5 w-3.5" />
             Entrar
@@ -150,11 +139,7 @@ function SessionCard({ session }: { session: LiveSessionWithCohort }) {
             target="_blank"
             rel="noopener noreferrer"
             className="flex items-center gap-1.5 px-3 h-9 border font-mono text-[11px] uppercase tracking-wider transition-colors hover:border-[var(--hairline-strong)] hover:text-[var(--bone-dim)]"
-            style={{
-              borderColor: 'var(--hairline)',
-              color: 'var(--bone-mute)',
-              borderRadius: 0,
-            }}
+            style={{ borderColor: 'var(--hairline)', color: 'var(--bone-mute)', borderRadius: 0 }}
           >
             <Download className="h-3.5 w-3.5" />
             Gravação
@@ -165,15 +150,55 @@ function SessionCard({ session }: { session: LiveSessionWithCohort }) {
   )
 }
 
-export default function AgendaPage() {
-  // TODO F5.2: substituir por getLiveSessions(userId) — filtra pelas cohorts do aluno
-  const sessions = [...MOCK_LIVE_SESSIONS].sort(
-    (a, b) => new Date(a.scheduled_at).getTime() - new Date(b.scheduled_at).getTime()
-  )
+export default async function AgendaPage() {
+  const profile = await requireUser()
+  const supabase = await createClient()
 
-  const now = new Date()
-  const upcoming = sessions.filter((s) => new Date(s.scheduled_at) >= now)
-  const past = sessions.filter((s) => new Date(s.scheduled_at) < now)
+  // Cohorts ativas do aluno
+  const { data: memberRows } = await supabase
+    .from('cohort_members')
+    .select('cohort_id, cohorts (name, slug)')
+    .eq('user_id', profile.id)
+    .eq('status', 'ACTIVE')
+
+  const members = memberRows ?? []
+  const cohortIds = members.map((m) => m.cohort_id)
+
+  // Live sessions das cohorts ativas
+  const { data: sessionRows } = cohortIds.length > 0
+    ? await supabaseAdmin
+        .from('live_sessions')
+        .select('id, title, description, scheduled_at, duration_minutes, cohort_id, meeting_url, recording_url')
+        .in('cohort_id', cohortIds)
+        .order('scheduled_at', { ascending: true })
+    : { data: [] }
+
+  const nowIso = new Date().toISOString()
+
+  const sessions: LiveSessionWithCohort[] = (sessionRows ?? []).map((s) => {
+    const member = members.find((m) => m.cohort_id === s.cohort_id)
+    const cohortObj = member && (Array.isArray(member.cohorts) ? member.cohorts[0] : member.cohorts)
+
+    // meeting_url só exposto se dentro da janela de 30min antes / 2h depois
+    const start = new Date(s.scheduled_at).getTime()
+    const nowMs = Date.now()
+    const inWindow = nowMs >= start - 30 * 60 * 1000 && nowMs <= start + 120 * 60 * 1000
+
+    return {
+      id: s.id,
+      title: s.title,
+      description: s.description ?? null,
+      scheduled_at: s.scheduled_at,
+      duration_minutes: s.duration_minutes,
+      meeting_url: inWindow ? (s.meeting_url ?? null) : null,
+      recording_url: s.recording_url ?? null,
+      cohortName: cohortObj?.name ?? '',
+      cohortSlug: cohortObj?.slug ?? '',
+    }
+  })
+
+  const upcoming = sessions.filter((s) => s.scheduled_at >= nowIso)
+  const past = sessions.filter((s) => s.scheduled_at < nowIso).reverse()
 
   return (
     <div
@@ -184,32 +209,20 @@ export default function AgendaPage() {
       }}
     >
       <div>
-        <p
-          className="font-mono text-[11px] uppercase tracking-[0.2em] mb-2"
-          style={{ color: 'var(--ember)' }}
-        >
+        <p className="font-mono text-[11px] uppercase tracking-[0.2em] mb-2" style={{ color: 'var(--ember)' }}>
           Agenda
         </p>
-        <h1
-          className="font-display italic text-[36px] leading-tight"
-          style={{ color: 'var(--bone)' }}
-        >
+        <h1 className="font-display italic text-[36px] leading-tight" style={{ color: 'var(--bone)' }}>
           Encontros ao vivo
         </h1>
-        <p
-          className="font-sans text-[16px] mt-2"
-          style={{ color: 'var(--bone-dim)' }}
-        >
+        <p className="font-sans text-[16px] mt-2" style={{ color: 'var(--bone-dim)' }}>
           Seus próximos encontros ao vivo
         </p>
       </div>
 
       {upcoming.length > 0 ? (
         <div className="space-y-3">
-          <p
-            className="font-mono text-[10px] uppercase tracking-[0.2em]"
-            style={{ color: 'var(--bone-mute)' }}
-          >
+          <p className="font-mono text-[10px] uppercase tracking-[0.2em]" style={{ color: 'var(--bone-mute)' }}>
             Próximos encontros
           </p>
           {upcoming.map((s) => <SessionCard key={s.id} session={s} />)}
@@ -217,20 +230,10 @@ export default function AgendaPage() {
       ) : (
         <div
           className="flex flex-col items-center justify-center py-16 text-center border"
-          style={{
-            backgroundColor: 'var(--ink)',
-            borderColor: 'var(--hairline)',
-            borderRadius: 0,
-          }}
+          style={{ backgroundColor: 'var(--ink)', borderColor: 'var(--hairline)', borderRadius: 0 }}
         >
-          <Calendar
-            className="h-12 w-12 opacity-30"
-            style={{ color: 'var(--bone-mute)' }}
-          />
-          <p
-            className="mt-4 font-sans text-[14px]"
-            style={{ color: 'var(--bone-mute)' }}
-          >
+          <Calendar className="h-12 w-12 opacity-30" style={{ color: 'var(--bone-mute)' }} />
+          <p className="mt-4 font-sans text-[14px]" style={{ color: 'var(--bone-mute)' }}>
             Nenhum encontro agendado
           </p>
         </div>
@@ -238,10 +241,7 @@ export default function AgendaPage() {
 
       {past.length > 0 && (
         <div className="space-y-3">
-          <p
-            className="font-mono text-[10px] uppercase tracking-[0.2em]"
-            style={{ color: 'var(--bone-mute)' }}
-          >
+          <p className="font-mono text-[10px] uppercase tracking-[0.2em]" style={{ color: 'var(--bone-mute)' }}>
             Encontros anteriores
           </p>
           {past.map((s) => <SessionCard key={s.id} session={s} />)}

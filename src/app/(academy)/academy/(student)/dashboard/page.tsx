@@ -3,7 +3,9 @@ import Link from 'next/link'
 import { Play, Calendar, ArrowRight, AlertTriangle } from 'lucide-react'
 import { ProgressBar } from '@/components/student/ProgressBar'
 import { ExpirationBadge } from '@/components/student/ExpirationBadge'
-import { MOCK_COHORTS } from '@/components/student/mock-data'
+import { requireUser } from '@/lib/auth/helpers'
+import { supabaseAdmin } from '@/lib/supabase/admin'
+import { createClient } from '@/lib/supabase/server'
 
 export const metadata: Metadata = { title: 'Dashboard' }
 
@@ -17,21 +19,163 @@ function formatDate(iso: string) {
   })
 }
 
-export default function DashboardPage() {
-  // TODO F3.2: substituir por getCurrentUser() + getUserCohorts()
-  const user = { name: 'João Guirunas', initials: 'JG' }
-  const cohorts = MOCK_COHORTS
+export default async function DashboardPage() {
+  const profile = await requireUser()
+  const supabase = await createClient()
 
-  const lastAccessed = cohorts.find((c) => c.lastAccessedLessonSlug)
-  const nextLive = cohorts
-    .filter((c) => c.nextLiveSessionAt)
-    .sort((a, b) => new Date(a.nextLiveSessionAt!).getTime() - new Date(b.nextLiveSessionAt!).getTime())[0]
+  // 1. Cohorts ativas do aluno
+  const { data: memberRows } = await supabase
+    .from('cohort_members')
+    .select(`
+      cohort_id, expires_at, status, auto_renew_enabled,
+      cohorts (id, name, slug, has_live_sessions)
+    `)
+    .eq('user_id', profile.id)
+    .eq('status', 'ACTIVE')
 
+  const members = memberRows ?? []
+  const cohortIds = members.map((m) => m.cohort_id)
+
+  // 2. Módulos liberados por cohort
+  const cohortCoursesResult = cohortIds.length > 0
+    ? await supabaseAdmin
+        .from('cohort_courses')
+        .select('cohort_id, course_id, included_module_ids')
+        .in('cohort_id', cohortIds)
+    : { data: [] as { cohort_id: string; course_id: string; included_module_ids: string[] | null }[] }
+
+  const cohortCourses = cohortCoursesResult.data ?? []
+
+  const moduleIdsByCohort: Record<string, string[]> = {}
+  for (const cc of cohortCourses) {
+    const existing = moduleIdsByCohort[cc.cohort_id] ?? []
+    moduleIdsByCohort[cc.cohort_id] = cc.included_module_ids
+      ? [...existing, ...cc.included_module_ids]
+      : existing
+  }
+
+  // 3. Lessons de todos os módulos liberados
+  const allModuleIds = [...new Set(Object.values(moduleIdsByCohort).flat())]
+  const { data: lessonRows } = allModuleIds.length > 0
+    ? await supabaseAdmin
+        .from('lessons')
+        .select('id, module_id, slug, title, modules!inner(course_id, courses!inner(slug))')
+        .in('module_id', allModuleIds)
+        .is('deleted_at', null)
+    : { data: [] }
+
+  const lessons = lessonRows ?? []
+  const allLessonIds = lessons.map((l) => l.id)
+
+  // 4. Progresso do aluno em todas as lessons
+  const { data: progressRows } = allLessonIds.length > 0
+    ? await supabaseAdmin
+        .from('lesson_progress')
+        .select('lesson_id, completed, seconds_watched, updated_at')
+        .eq('user_id', profile.id)
+        .in('lesson_id', allLessonIds)
+    : { data: [] }
+
+  const progressByLesson = new Map(
+    (progressRows ?? []).map((p) => [p.lesson_id, p])
+  )
+
+  const lessonsByModule = new Map<string, typeof lessons>()
+  for (const l of lessons) {
+    const arr = lessonsByModule.get(l.module_id) ?? []
+    arr.push(l)
+    lessonsByModule.set(l.module_id, arr)
+  }
+
+  // 5. Dados consolidados por cohort
+  type CohortView = {
+    id: string
+    name: string
+    slug: string
+    expires_at: string | null
+    progressPercent: number
+  }
+
+  const cohorts: CohortView[] = members.map((m) => {
+    const cohort = Array.isArray(m.cohorts) ? m.cohorts[0] : m.cohorts
+    const moduleIds = moduleIdsByCohort[m.cohort_id] ?? []
+    const cohortLessonIds = moduleIds.flatMap((mid) =>
+      (lessonsByModule.get(mid) ?? []).map((l) => l.id)
+    )
+    const total = cohortLessonIds.length
+    const completed = cohortLessonIds.filter((id) => progressByLesson.get(id)?.completed).length
+    const progressPercent = total > 0 ? Math.round((completed / total) * 100) : 0
+
+    return {
+      id: m.cohort_id,
+      name: cohort?.name ?? '',
+      slug: cohort?.slug ?? '',
+      expires_at: m.expires_at,
+      progressPercent,
+    }
+  })
+
+  // 6. "Continue de onde parou" — última lesson com progresso > 0 e não completada
+  type LastLesson = { lessonSlug: string; lessonTitle: string; courseSlug: string; cohortName: string }
+  let lastLesson: LastLesson | null = null
+
+  const lessonsWithProgress = lessons
+    .map((l) => ({ lesson: l, progress: progressByLesson.get(l.id) }))
+    .filter(({ progress }) => progress && !progress.completed && (progress.seconds_watched ?? 0) > 0)
+    .sort((a, b) => {
+      const tA = a.progress?.updated_at ? new Date(a.progress.updated_at).getTime() : 0
+      const tB = b.progress?.updated_at ? new Date(b.progress.updated_at).getTime() : 0
+      return tB - tA
+    })
+
+  const firstWithProgress = lessonsWithProgress[0]
+  if (firstWithProgress !== undefined) {
+    const { lesson } = firstWithProgress
+    const moduleRow = Array.isArray(lesson.modules) ? lesson.modules[0] : lesson.modules
+    const courseRow = moduleRow && (Array.isArray(moduleRow.courses) ? moduleRow.courses[0] : moduleRow.courses)
+    const ccForLesson = cohortCourses.find(
+      (cc) => moduleIdsByCohort[cc.cohort_id]?.includes(lesson.module_id)
+    )
+    const memberForLesson = members.find((m) => m.cohort_id === ccForLesson?.cohort_id)
+    const cohortObj = memberForLesson && (Array.isArray(memberForLesson.cohorts) ? memberForLesson.cohorts[0] : memberForLesson.cohorts)
+
+    lastLesson = {
+      lessonSlug: lesson.slug,
+      lessonTitle: lesson.title,
+      courseSlug: courseRow?.slug ?? '',
+      cohortName: cohortObj?.name ?? '',
+    }
+  }
+
+  // 7. Próxima live session
+  type NextLive = { title: string; scheduledAt: string; cohortName: string }
+  let nextLive: NextLive | null = null
+
+  if (cohortIds.length > 0) {
+    const { data: sessionRows } = await supabaseAdmin
+      .from('live_sessions')
+      .select('title, scheduled_at, cohort_id')
+      .in('cohort_id', cohortIds)
+      .gt('scheduled_at', new Date().toISOString())
+      .order('scheduled_at', { ascending: true })
+      .limit(1)
+
+    const firstSession = sessionRows?.[0]
+    if (firstSession !== undefined) {
+      const m = members.find((mem) => mem.cohort_id === firstSession.cohort_id)
+      const cohortObj = m && (Array.isArray(m.cohorts) ? m.cohorts[0] : m.cohorts)
+      nextLive = { title: firstSession.title, scheduledAt: firstSession.scheduled_at, cohortName: cohortObj?.name ?? '' }
+    }
+  }
+
+  // 8. Cohorts expirando em <= 30 dias
   const expiringCohorts = cohorts.filter((c) => {
     if (!c.expires_at) return false
     const days = Math.ceil((new Date(c.expires_at).getTime() - Date.now()) / 86400000)
     return days <= 30
   })
+
+  const displayName = profile.name || 'Aluno'
 
   return (
     <div
@@ -41,7 +185,6 @@ export default function DashboardPage() {
         backgroundSize: '24px 24px',
       }}
     >
-
       {/* Saudação */}
       <div>
         <p
@@ -59,7 +202,7 @@ export default function DashboardPage() {
             fontWeight: 'normal',
           }}
         >
-          {user.name}
+          {displayName}
         </h1>
       </div>
 
@@ -94,16 +237,13 @@ export default function DashboardPage() {
       {/* Grid principal */}
       <div className="grid gap-6 lg:grid-cols-3">
 
-        {/* Card — Continue de onde parou (lg:col-span-2) */}
+        {/* Card — Continue de onde parou */}
         <div className="lg:col-span-2">
-          {lastAccessed ? (
+          {lastLesson ? (
             <Link
-              href={`/curso/${lastAccessed.lastAccessedCourseSlug}/aula/${lastAccessed.lastAccessedLessonSlug}`}
+              href={`/academy/curso/${lastLesson.courseSlug}/aula/${lastLesson.lessonSlug}`}
               className="group block border border-[var(--hairline)] hover:border-[var(--hairline-strong)] p-6 transition-colors"
-              style={{
-                background: 'var(--ink)',
-                borderRadius: 0,
-              }}
+              style={{ background: 'var(--ink)', borderRadius: 0 }}
             >
               <p
                 className="text-xs uppercase tracking-widest"
@@ -120,13 +260,13 @@ export default function DashboardPage() {
                   color: 'var(--bone)',
                 }}
               >
-                {lastAccessed.lastAccessedLessonTitle}
+                {lastLesson.lessonTitle}
               </h2>
               <p
                 className="mt-1 text-sm"
                 style={{ fontFamily: 'var(--type-sans)', color: 'var(--bone-mute)' }}
               >
-                {lastAccessed.name}
+                {lastLesson.cohortName}
               </p>
               <div className="mt-5 flex items-center gap-4">
                 <div
@@ -146,11 +286,7 @@ export default function DashboardPage() {
           ) : (
             <div
               className="border p-6"
-              style={{
-                background: 'var(--ink)',
-                borderColor: 'var(--hairline)',
-                borderRadius: 0,
-              }}
+              style={{ background: 'var(--ink)', borderColor: 'var(--hairline)', borderRadius: 0 }}
             >
               <p
                 className="text-xs uppercase tracking-widest"
@@ -168,14 +304,10 @@ export default function DashboardPage() {
           )}
         </div>
 
-        {/* Card — Próximo encontro (lg:col-span-1) */}
+        {/* Card — Próximo encontro */}
         <div
           className="border p-6"
-          style={{
-            background: 'var(--ink)',
-            borderColor: 'var(--hairline)',
-            borderRadius: 0,
-          }}
+          style={{ background: 'var(--ink)', borderColor: 'var(--hairline)', borderRadius: 0 }}
         >
           <p
             className="text-xs uppercase tracking-widest"
@@ -183,19 +315,19 @@ export default function DashboardPage() {
           >
             Próximo encontro
           </p>
-          {nextLive?.nextLiveSessionAt ? (
+          {nextLive ? (
             <div className="mt-4">
               <div className="flex items-start gap-3">
                 <Calendar className="mt-0.5 h-4 w-4 shrink-0" style={{ color: 'var(--ember)' }} />
                 <div>
                   <p className="text-sm font-medium" style={{ color: 'var(--bone)' }}>
-                    {nextLive.name}
+                    {nextLive.cohortName}
                   </p>
                   <p
                     className="mt-1 text-xs"
                     style={{ fontFamily: 'var(--type-mono)', color: 'var(--bone-mute)' }}
                   >
-                    {formatDate(nextLive.nextLiveSessionAt)}
+                    {formatDate(nextLive.scheduledAt)}
                   </p>
                 </div>
               </div>
@@ -217,50 +349,65 @@ export default function DashboardPage() {
       </div>
 
       {/* Grid de turmas */}
-      <div>
-        <h2
-          className="text-xs uppercase tracking-widest"
-          style={{ fontFamily: 'var(--type-mono)', color: 'var(--bone-mute)' }}
-        >
-          Suas turmas
-        </h2>
-        <div className="mt-4 grid gap-4 sm:grid-cols-2">
-          {cohorts.map((cohort) => (
-            <Link
-              key={cohort.id}
-              href="/academy/meus-cursos"
-              className="group block border border-[var(--hairline)] hover:border-[var(--hairline-strong)] p-5 transition-colors"
-              style={{
-                background: 'var(--ink)',
-                borderRadius: 0,
-              }}
-            >
-              <div className="flex items-start justify-between gap-4">
-                <div className="min-w-0">
-                  <p
-                    className="truncate font-medium transition-colors group-hover:text-[var(--ember)]"
-                    style={{ color: 'var(--bone)' }}
+      {cohorts.length > 0 ? (
+        <div>
+          <h2
+            className="text-xs uppercase tracking-widest"
+            style={{ fontFamily: 'var(--type-mono)', color: 'var(--bone-mute)' }}
+          >
+            Suas turmas
+          </h2>
+          <div className="mt-4 grid gap-4 sm:grid-cols-2">
+            {cohorts.map((cohort) => (
+              <Link
+                key={cohort.id}
+                href="/academy/meus-cursos"
+                className="group block border border-[var(--hairline)] hover:border-[var(--hairline-strong)] p-5 transition-colors"
+                style={{ background: 'var(--ink)', borderRadius: 0 }}
+              >
+                <div className="flex items-start justify-between gap-4">
+                  <div className="min-w-0">
+                    <p
+                      className="truncate font-medium transition-colors group-hover:text-[var(--ember)]"
+                      style={{ color: 'var(--bone)' }}
+                    >
+                      {cohort.name}
+                    </p>
+                    {cohort.expires_at && (
+                      <ExpirationBadge expiresAt={cohort.expires_at} className="mt-2" />
+                    )}
+                  </div>
+                  <span
+                    className="shrink-0 font-bold"
+                    style={{ fontFamily: 'var(--type-mono)', color: 'var(--ember)' }}
                   >
-                    {cohort.name}
-                  </p>
-                  {cohort.expires_at && (
-                    <ExpirationBadge expiresAt={cohort.expires_at} className="mt-2" />
-                  )}
+                    {cohort.progressPercent}%
+                  </span>
                 </div>
-                <span
-                  className="shrink-0 font-bold"
-                  style={{ fontFamily: 'var(--type-mono)', color: 'var(--ember)' }}
-                >
-                  {cohort.progressPercent}%
-                </span>
-              </div>
-              <div className="mt-4">
-                <ProgressBar value={cohort.progressPercent} showLabel={false} />
-              </div>
-            </Link>
-          ))}
+                <div className="mt-4">
+                  <ProgressBar value={cohort.progressPercent} showLabel={false} />
+                </div>
+              </Link>
+            ))}
+          </div>
         </div>
-      </div>
+      ) : (
+        <div
+          className="flex flex-col items-center justify-center border py-16 text-center"
+          style={{ background: 'var(--ink)', borderColor: 'var(--hairline)' }}
+        >
+          <p className="text-sm" style={{ color: 'var(--bone-mute)' }}>
+            Nenhuma turma ativa encontrada.
+          </p>
+          <Link
+            href="/academy/turmas"
+            className="mt-4 font-mono text-xs uppercase tracking-widest transition-opacity hover:opacity-70"
+            style={{ color: 'var(--ember)' }}
+          >
+            Explorar turmas →
+          </Link>
+        </div>
+      )}
     </div>
   )
 }

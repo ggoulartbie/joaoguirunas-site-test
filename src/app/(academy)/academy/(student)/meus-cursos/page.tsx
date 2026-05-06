@@ -1,21 +1,165 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import { Lock, BookOpen } from 'lucide-react'
-import { MOCK_COURSES } from '@/components/student/mock-data'
+import { requireUser } from '@/lib/auth/helpers'
+import { supabaseAdmin } from '@/lib/supabase/admin'
+import { createClient } from '@/lib/supabase/server'
 
 export const metadata: Metadata = { title: 'Meus Cursos' }
 
-function formatDate(date: string | null): string {
-  if (!date) return ''
-  return new Intl.DateTimeFormat('pt-BR', { day: '2-digit', month: '2-digit', year: 'numeric' }).format(new Date(date))
-}
+export default async function MeusCursosPage() {
+  const profile = await requireUser()
+  const supabase = await createClient()
 
-export default function MeusCursosPage() {
-  // TODO F3.2: substituir por getUserCourses(userId) — união das cohorts ativas
-  const courses = MOCK_COURSES
+  // 1. Cohorts ativas do aluno
+  const { data: memberRows } = await supabase
+    .from('cohort_members')
+    .select('cohort_id, cohorts (id, name, slug)')
+    .eq('user_id', profile.id)
+    .eq('status', 'ACTIVE')
 
-  const available = courses.filter((c) => !c.isPartialAccess || c.accessibleModulesCount > 0)
-  const locked = courses.filter((c) => c.isPartialAccess && c.accessibleModulesCount === 0)
+  const members = memberRows ?? []
+  const cohortIds = members.map((m) => m.cohort_id)
+
+  // 2. cohort_courses: cursos + módulos liberados por cohort
+  const { data: cohortCoursesRows } = cohortIds.length > 0
+    ? await supabaseAdmin
+        .from('cohort_courses')
+        .select('cohort_id, course_id, included_module_ids')
+        .in('cohort_id', cohortIds)
+    : { data: [] }
+
+  const cohortCourses = cohortCoursesRows ?? []
+
+  if (cohortCourses.length === 0) {
+    return <EmptyState />
+  }
+
+  // 3. Fetch courses
+  const courseIds = [...new Set(cohortCourses.map((cc) => cc.course_id))]
+  const { data: courseRows } = await supabaseAdmin
+    .from('courses')
+    .select('id, slug, title, description, cover_image_url')
+    .in('id', courseIds)
+    .is('deleted_at', null)
+
+  const coursesById = new Map((courseRows ?? []).map((c) => [c.id, c]))
+
+  // 4. Todos os módulos dos cursos (para contagem total)
+  const { data: allModuleRows } = courseIds.length > 0
+    ? await supabaseAdmin
+        .from('modules')
+        .select('id, course_id')
+        .in('course_id', courseIds)
+        .is('deleted_at', null)
+    : { data: [] }
+
+  const allModuleIdsByCourse = new Map<string, string[]>()
+  for (const m of allModuleRows ?? []) {
+    const arr = allModuleIdsByCourse.get(m.course_id) ?? []
+    arr.push(m.id)
+    allModuleIdsByCourse.set(m.course_id, arr)
+  }
+
+  // 5. Lessons dos módulos liberados
+  const accessibleModuleIds = [...new Set(cohortCourses.flatMap((cc) => cc.included_module_ids ?? []))]
+  const { data: lessonRows } = accessibleModuleIds.length > 0
+    ? await supabaseAdmin
+        .from('lessons')
+        .select('id, module_id')
+        .in('module_id', accessibleModuleIds)
+        .is('deleted_at', null)
+    : { data: [] }
+
+  const lessonsByModule = new Map<string, string[]>()
+  for (const l of lessonRows ?? []) {
+    const arr = lessonsByModule.get(l.module_id) ?? []
+    arr.push(l.id)
+    lessonsByModule.set(l.module_id, arr)
+  }
+
+  // 6. Progresso do aluno
+  const allLessonIds = (lessonRows ?? []).map((l) => l.id)
+  const { data: progressRows } = allLessonIds.length > 0
+    ? await supabaseAdmin
+        .from('lesson_progress')
+        .select('lesson_id')
+        .eq('user_id', profile.id)
+        .in('lesson_id', allLessonIds)
+        .eq('completed', true)
+    : { data: [] }
+
+  const completedIds = new Set((progressRows ?? []).map((p) => p.lesson_id))
+
+  // 7. Constrói lista de cursos (union por cohort, sem duplicar)
+  type CourseView = {
+    id: string
+    slug: string
+    title: string
+    description: string | null
+    cover_image_url: string | null
+    cohortName: string
+    cohortSlug: string
+    progressPercent: number
+    totalLessons: number
+    completedLessons: number
+    isPartialAccess: boolean
+    accessibleModulesCount: number
+    totalModulesCount: number
+  }
+
+  const seenCourses = new Set<string>()
+  const available: CourseView[] = []
+  const locked: CourseView[] = []
+
+  for (const cc of cohortCourses) {
+    if (seenCourses.has(cc.course_id)) continue
+    seenCourses.add(cc.course_id)
+
+    const course = coursesById.get(cc.course_id)
+    if (!course) continue
+
+    const member = members.find((m) => m.cohort_id === cc.cohort_id)
+    const cohortObj = member && (Array.isArray(member.cohorts) ? member.cohorts[0] : member.cohorts)
+
+    const accessibleModIds = cc.included_module_ids ?? []
+    const totalModIds = allModuleIdsByCourse.get(cc.course_id) ?? []
+    const accessibleModulesCount = accessibleModIds.length
+    const totalModulesCount = totalModIds.length
+
+    const lessonIds = accessibleModIds.flatMap((mid) => lessonsByModule.get(mid) ?? [])
+    const totalLessons = lessonIds.length
+    const completedLessons = lessonIds.filter((id) => completedIds.has(id)).length
+    const progressPercent = totalLessons > 0 ? Math.round((completedLessons / totalLessons) * 100) : 0
+
+    const isPartialAccess = accessibleModulesCount < totalModulesCount
+
+    const view: CourseView = {
+      id: course.id,
+      slug: course.slug,
+      title: course.title,
+      description: course.description,
+      cover_image_url: course.cover_image_url,
+      cohortName: cohortObj?.name ?? '',
+      cohortSlug: cohortObj?.slug ?? '',
+      progressPercent,
+      totalLessons,
+      completedLessons,
+      isPartialAccess,
+      accessibleModulesCount,
+      totalModulesCount,
+    }
+
+    if (totalLessons > 0) {
+      available.push(view)
+    } else {
+      locked.push(view)
+    }
+  }
+
+  if (available.length === 0 && locked.length === 0) {
+    return <EmptyState />
+  }
 
   return (
     <div
@@ -67,9 +211,7 @@ export default function MeusCursosPage() {
       </div>
 
       {/* Grid de cursos acessíveis */}
-      {available.length === 0 ? (
-        <EmptyState />
-      ) : (
+      {available.length > 0 && (
         <div className="grid gap-px sm:grid-cols-2 xl:grid-cols-3" style={{ background: 'var(--hairline)' }}>
           {available.map((course) => {
             const isComplete = course.progressPercent === 100
@@ -78,33 +220,33 @@ export default function MeusCursosPage() {
             return (
               <Link
                 key={course.id}
-                href={`/curso/${course.slug}`}
+                href={`/academy/curso/${course.slug}`}
                 className="group flex flex-col border border-[var(--hairline)] hover:border-[var(--hairline-strong)] transition-colors"
-                style={{
-                  background: 'var(--ink)',
-                  overflow: 'hidden',
-                  textDecoration: 'none',
-                }}
+                style={{ background: 'var(--ink)', overflow: 'hidden', textDecoration: 'none' }}
               >
                 {/* Thumbnail */}
                 <div
                   style={{
                     aspectRatio: '16/9',
-                    background: 'var(--ink-2)',
+                    background: course.cover_image_url ? 'transparent' : 'var(--ink-2)',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
+                    backgroundImage: course.cover_image_url ? `url(${course.cover_image_url})` : undefined,
+                    backgroundSize: 'cover',
+                    backgroundPosition: 'center',
                   }}
                 >
-                  <BookOpen
-                    className="opacity-30"
-                    style={{ width: 32, height: 32, color: 'var(--bone-mute)' }}
-                  />
+                  {!course.cover_image_url && (
+                    <BookOpen
+                      className="opacity-30"
+                      style={{ width: 32, height: 32, color: 'var(--bone-mute)' }}
+                    />
+                  )}
                 </div>
 
                 {/* Body */}
                 <div style={{ padding: '20px', flex: 1, display: 'flex', flexDirection: 'column' }}>
-                  {/* Badge status */}
                   <span
                     style={{
                       display: 'inline-block',
@@ -123,7 +265,6 @@ export default function MeusCursosPage() {
                     {status}
                   </span>
 
-                  {/* Nome */}
                   <p
                     style={{
                       fontFamily: 'var(--type-sans)',
@@ -137,7 +278,6 @@ export default function MeusCursosPage() {
                     {course.title}
                   </p>
 
-                  {/* Descrição */}
                   {course.description && (
                     <p
                       style={{
@@ -156,16 +296,8 @@ export default function MeusCursosPage() {
                     </p>
                   )}
 
-                  {/* Acesso parcial */}
                   {course.isPartialAccess && (
-                    <div
-                      style={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: 6,
-                        marginTop: 10,
-                      }}
-                    >
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginTop: 10 }}>
                       <Lock style={{ width: 12, height: 12, color: 'var(--bone-mute)' }} />
                       <span
                         style={{
@@ -181,16 +313,8 @@ export default function MeusCursosPage() {
                     </div>
                   )}
 
-                  {/* Progress bar */}
                   <div style={{ marginTop: 'auto', paddingTop: 12 }}>
-                    <div
-                      style={{
-                        height: 2,
-                        background: 'var(--ink-3)',
-                        position: 'relative',
-                        overflow: 'hidden',
-                      }}
-                    >
+                    <div style={{ height: 2, background: 'var(--ink-3)', position: 'relative', overflow: 'hidden' }}>
                       <div
                         style={{
                           position: 'absolute',
@@ -202,13 +326,7 @@ export default function MeusCursosPage() {
                         }}
                       />
                     </div>
-                    <div
-                      style={{
-                        display: 'flex',
-                        justifyContent: 'flex-end',
-                        marginTop: 4,
-                      }}
-                    >
+                    <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: 4 }}>
                       <span
                         style={{
                           fontFamily: 'var(--type-mono)',
@@ -233,13 +351,7 @@ export default function MeusCursosPage() {
                     alignItems: 'center',
                   }}
                 >
-                  <span
-                    style={{
-                      fontFamily: 'var(--type-mono)',
-                      fontSize: 11,
-                      color: 'var(--bone-mute)',
-                    }}
-                  >
+                  <span style={{ fontFamily: 'var(--type-mono)', fontSize: 11, color: 'var(--bone-mute)' }}>
                     {course.completedLessons}/{course.totalLessons} aulas
                   </span>
                   <span
@@ -290,7 +402,6 @@ export default function MeusCursosPage() {
                   flexDirection: 'column',
                 }}
               >
-                {/* Thumbnail */}
                 <div
                   style={{
                     aspectRatio: '16/9',
@@ -302,8 +413,6 @@ export default function MeusCursosPage() {
                 >
                   <Lock className="opacity-30" style={{ width: 32, height: 32, color: 'var(--bone-mute)' }} />
                 </div>
-
-                {/* Body */}
                 <div style={{ padding: '20px', flex: 1 }}>
                   <span
                     style={{
@@ -319,15 +428,7 @@ export default function MeusCursosPage() {
                   >
                     Bloqueado
                   </span>
-                  <p
-                    style={{
-                      fontFamily: 'var(--type-sans)',
-                      fontWeight: 500,
-                      fontSize: 16,
-                      color: 'var(--bone)',
-                      marginTop: 8,
-                    }}
-                  >
+                  <p style={{ fontFamily: 'var(--type-sans)', fontWeight: 500, fontSize: 16, color: 'var(--bone)', marginTop: 8 }}>
                     {course.title}
                   </p>
                   {course.description && (
@@ -347,8 +448,6 @@ export default function MeusCursosPage() {
                     </p>
                   )}
                 </div>
-
-                {/* Footer */}
                 <div
                   style={{
                     borderTop: '1px solid var(--hairline)',
@@ -358,17 +457,11 @@ export default function MeusCursosPage() {
                     alignItems: 'center',
                   }}
                 >
-                  <span
-                    style={{
-                      fontFamily: 'var(--type-mono)',
-                      fontSize: 11,
-                      color: 'var(--bone-mute)',
-                    }}
-                  >
+                  <span style={{ fontFamily: 'var(--type-mono)', fontSize: 11, color: 'var(--bone-mute)' }}>
                     {course.cohortName}
                   </span>
                   <Link
-                    href={`/turmas/${course.cohortSlug}`}
+                    href={`/academy/turmas/${course.cohortSlug}`}
                     style={{
                       fontFamily: 'var(--type-mono)',
                       fontSize: 11,
@@ -408,18 +501,11 @@ function EmptyState() {
         className="opacity-30"
         style={{ width: 48, height: 48, color: 'var(--bone-mute)', marginBottom: 20 }}
       />
-      <p
-        style={{
-          fontFamily: 'var(--type-sans)',
-          fontSize: 16,
-          color: 'var(--bone-mute)',
-          marginBottom: 20,
-        }}
-      >
+      <p style={{ fontFamily: 'var(--type-sans)', fontSize: 16, color: 'var(--bone-mute)', marginBottom: 20 }}>
         Nenhum curso encontrado
       </p>
       <Link
-        href="/turmas"
+        href="/academy/turmas"
         style={{
           display: 'inline-flex',
           alignItems: 'center',

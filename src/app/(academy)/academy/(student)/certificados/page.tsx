@@ -1,7 +1,9 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import { Award, Download, ExternalLink } from 'lucide-react'
-import { MOCK_CERTIFICATES } from '@/components/student/mock-data'
+import { requireUser } from '@/lib/auth/helpers'
+import { supabaseAdmin } from '@/lib/supabase/admin'
+import type { CertificateView } from '@/types/student'
 
 export const metadata: Metadata = { title: 'Certificados' }
 
@@ -13,9 +15,34 @@ function formatDate(iso: string) {
   })
 }
 
-export default function CertificadosPage() {
-  // TODO F5.3: substituir por getUserCertificates(userId)
-  const certificates = MOCK_CERTIFICATES
+export default async function CertificadosPage() {
+  const profile = await requireUser()
+
+  // Certificados do aluno com joins para course e cohort
+  const { data: certRows } = await supabaseAdmin
+    .from('certificates')
+    .select(`
+      id, verification_code, issued_at, pdf_storage_path,
+      courses (title, slug),
+      cohorts (name)
+    `)
+    .eq('user_id', profile.id)
+    .order('issued_at', { ascending: false })
+
+  const certificates: CertificateView[] = (certRows ?? []).map((c) => {
+    const course = Array.isArray(c.courses) ? c.courses[0] : c.courses
+    const cohort = Array.isArray(c.cohorts) ? c.cohorts[0] : c.cohorts
+
+    return {
+      id: c.id,
+      verification_code: c.verification_code,
+      issued_at: c.issued_at,
+      pdf_storage_path: c.pdf_storage_path,
+      courseName: course?.title ?? '',
+      courseSlug: course?.slug ?? '',
+      cohortName: cohort?.name ?? '',
+    }
+  })
 
   return (
     <div className="mx-auto max-w-3xl space-y-8">
