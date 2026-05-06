@@ -264,7 +264,7 @@ export function UsersClient() {
       </div>
 
       {/* Table */}
-      <div className="border border-[rgba(255,255,255,0.07)]">
+      <div className="overflow-x-auto border border-[rgba(255,255,255,0.07)]">
         <table className="w-full">
           <thead>
             <tr className="bg-[var(--ink-2)]">

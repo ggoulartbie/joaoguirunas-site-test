@@ -3,12 +3,14 @@
 import { useState, useTransition } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
-import {
-  MOCK_COURSES,
-  MOCK_COHORTS,
-  type MockCohort,
-} from '@/components/admin/mock-data'
 import type { Database } from '@/types/database'
+
+type CourseForSelector = {
+  id: string
+  title: string
+  modules: { id: string; title: string; lessonCount: number }[]
+}
+type CohortForSelector = { id: string; name: string }
 import {
   ChevronDown,
   ChevronRight,
@@ -18,7 +20,7 @@ import {
   Save,
   ArrowLeft,
 } from 'lucide-react'
-import { createCohort, updateCohort, addMemberByCohortEmail, createCoupon } from './actions'
+import { createCohort, updateCohort, addMemberByCohortEmail, createCoupon, createLiveSession, deleteLiveSession } from './actions'
 
 type CohortCourse = Database['public']['Tables']['cohort_courses']['Row']
 type CrossExtension = Database['public']['Tables']['cohort_cross_extensions']['Row']
@@ -33,16 +35,20 @@ type Coupon = Database['public']['Tables']['coupons']['Row'] & {
   cohortName: string
 }
 
+type CohortRow = Database['public']['Tables']['cohorts']['Row']
+
 type CohortFormProps =
-  | { mode: 'create' }
+  | { mode: 'create'; courses: CourseForSelector[]; allCohorts: CohortForSelector[] }
   | {
       mode: 'edit'
-      cohort: MockCohort
+      cohort: CohortRow
       cohortCourses: CohortCourse[]
       crossExtensions: CrossExtension[]
       members: CohortMember[]
       liveSessions: LiveSession[]
       coupons: Coupon[]
+      courses: CourseForSelector[]
+      allCohorts: CohortForSelector[]
     }
 
 const SECTIONS = [
@@ -223,6 +229,8 @@ const MEMBER_STATUS_COLORS: Record<string, string> = {
 export function CohortForm(props: CohortFormProps) {
   const isEdit = props.mode === 'edit'
   const initial = isEdit ? props.cohort : null
+  const courses = props.courses
+  const allCohorts = props.allCohorts
   const router = useRouter()
   const [pending, startTransition] = useTransition()
   const [saveError, setSaveError] = useState<string | null>(null)
@@ -370,7 +378,7 @@ export function CohortForm(props: CohortFormProps) {
   function toggleModuleSelection(courseId: string, moduleId: string) {
     setSelectedCourses((prev) => {
       const next = { ...prev }
-      const course = MOCK_COURSES.find((c) => c.id === courseId)
+      const course = courses.find((c) => c.id === courseId)
       if (!course) return prev
 
       const allModuleIds = course.modules.map((m) => m.id)
@@ -697,7 +705,7 @@ export function CohortForm(props: CohortFormProps) {
               sub-itens desmarcados equivale a liberar todos os modulos do curso.
             </p>
             <div className="space-y-1">
-              {MOCK_COURSES.map((course) => {
+              {courses.map((course) => {
                 const isCourseSelected = course.id in selectedCourses
                 const isExpanded = expandedCourses.has(course.id)
 
@@ -941,7 +949,7 @@ export function CohortForm(props: CohortFormProps) {
                         }
                         options={[
                           { value: '', label: 'Selecionar...' },
-                          ...MOCK_COHORTS.filter((c) => c.id !== initial?.id).map((c) => ({
+                          ...allCohorts.filter((c) => c.id !== initial?.id).map((c) => ({
                             value: c.id,
                             label: c.name,
                           })),
@@ -1097,6 +1105,7 @@ export function CohortForm(props: CohortFormProps) {
                   </div>
                 )}
 
+                <div className="overflow-x-auto">
                 <table className="w-full" style={{ borderRadius: 0 }}>
                   <thead>
                     <tr className="border-b border-white/[0.07] bg-[var(--ink-2)]">
@@ -1146,6 +1155,7 @@ export function CohortForm(props: CohortFormProps) {
                     ))}
                   </tbody>
                 </table>
+                </div>
               </>
             )}
           </div>
@@ -1226,9 +1236,31 @@ export function CohortForm(props: CohortFormProps) {
                     <div className="mt-3 flex gap-2">
                       <button
                         type="button"
+                        disabled={!newSessionTitle || !newSessionDate}
                         style={{ borderRadius: 0 }}
-                        className="bg-[var(--ember)] px-4 py-2 font-mono text-[10px] uppercase tracking-widest text-[var(--void)]"
-                        onClick={() => setShowAddSession(false)}
+                        className="bg-[var(--ember)] px-4 py-2 font-mono text-[10px] uppercase tracking-widest text-[var(--void)] disabled:opacity-40"
+                        onClick={() => {
+                          if (!isEdit || !newSessionTitle || !newSessionDate) return
+                          startTransition(async () => {
+                            try {
+                              await createLiveSession({
+                                cohortId: props.cohort.id,
+                                title: newSessionTitle,
+                                scheduledAt: newSessionDate,
+                                durationMinutes: parseInt(newSessionDuration, 10) || 90,
+                                meetingUrl: newSessionUrl || undefined,
+                              })
+                              setShowAddSession(false)
+                              setNewSessionTitle('')
+                              setNewSessionDate('')
+                              setNewSessionDuration('90')
+                              setNewSessionUrl('')
+                              router.refresh()
+                            } catch {
+                              // ignore
+                            }
+                          })
+                        }}
                       >
                         Salvar
                       </button>
@@ -1256,6 +1288,13 @@ export function CohortForm(props: CohortFormProps) {
                       <button
                         type="button"
                         className="text-red-400/50 transition-colors hover:text-red-400"
+                        onClick={() => {
+                          if (!isEdit) return
+                          startTransition(async () => {
+                            await deleteLiveSession(ls.id, props.cohort.id)
+                            router.refresh()
+                          })
+                        }}
                       >
                         <Trash2 className="h-3.5 w-3.5" />
                       </button>
@@ -1373,6 +1412,7 @@ export function CohortForm(props: CohortFormProps) {
                   </div>
                 )}
 
+                <div className="overflow-x-auto">
                 <table className="w-full" style={{ borderRadius: 0 }}>
                   <thead>
                     <tr className="border-b border-white/[0.07] bg-[var(--ink-2)]">
@@ -1423,6 +1463,7 @@ export function CohortForm(props: CohortFormProps) {
                     ))}
                   </tbody>
                 </table>
+                </div>
               </>
             )}
           </div>
