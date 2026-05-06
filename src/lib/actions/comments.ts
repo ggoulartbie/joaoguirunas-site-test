@@ -5,6 +5,7 @@ import { revalidatePath } from 'next/cache'
 import { supabaseAdmin } from '@/lib/supabase/admin'
 import { requireUser } from '@/lib/auth/helpers'
 import { createClient } from '@/lib/supabase/server'
+import { sanitizeHtml } from '@/lib/content'
 
 const EDIT_WINDOW_MS = 15 * 60 * 1000
 
@@ -33,7 +34,7 @@ export async function addComment(
   const { error } = await supabaseAdmin.from('comments').insert({
     lesson_id: parsed.data.lessonId,
     author_id: user.id,
-    content: parsed.data.content,
+    content: sanitizeHtml(parsed.data.content),
     parent_comment_id: parsed.data.parentCommentId ?? null,
   })
 
@@ -71,7 +72,7 @@ export async function editComment(
 
   const { error } = await supabaseAdmin
     .from('comments')
-    .update({ content: parsed.data.content, updated_at: new Date().toISOString() })
+    .update({ content: sanitizeHtml(parsed.data.content), updated_at: new Date().toISOString() })
     .eq('id', parsed.data.commentId)
 
   if (error) return { success: false, error: 'Erro ao editar comentário' }
