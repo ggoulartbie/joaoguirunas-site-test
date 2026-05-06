@@ -1,21 +1,46 @@
 import type { Metadata } from 'next'
-import { User } from 'lucide-react'
+import { requireUser } from '@/lib/auth/helpers'
+import { supabaseAdmin } from '@/lib/supabase/admin'
+import { PerfilClient, type PerfilClientProps } from './PerfilClient'
 
 export const metadata: Metadata = { title: 'Perfil' }
 
-export default function PerfilPage() {
-  return (
-    <div className="mx-auto max-w-3xl">
-      <h1 className="text-2xl font-bold text-white">Perfil</h1>
-      <p className="mt-1 text-sm text-white/50">Dados, matrículas e pagamentos</p>
+export default async function PerfilPage() {
+  // requireUser redireciona para /login se não autenticado
+  const user = await requireUser()
 
-      {/* Placeholder — implementado na Fase 5 */}
-      <div className="mt-8 flex flex-col items-center justify-center border border-white/10 bg-[#0C0C12] py-20 text-center">
-        <User className="h-10 w-10 text-white/10" />
-        <p className="mt-4 font-mono text-xs uppercase tracking-widest text-white/20">
-          Em breve — Fase 5
-        </p>
-      </div>
-    </div>
+  // Queries paralelas
+  const [profileResult, membershipsResult, paymentsResult, authUserResult] = await Promise.all([
+    supabaseAdmin
+      .from('profiles')
+      .select('id, name, avatar_url, bio, role, stripe_customer_id, created_at')
+      .eq('id', user.id)
+      .single(),
+    supabaseAdmin
+      .from('cohort_members')
+      .select(`
+        id, cohort_id, status, expires_at, auto_renew_enabled,
+        next_renewal_at, joined_at, member_role,
+        cohorts(id, name, slug, extension_price_cents, extension_duration_days,
+                allows_auto_renewal, is_purchasable)
+      `)
+      .eq('user_id', user.id)
+      .order('joined_at', { ascending: false }),
+    supabaseAdmin
+      .from('payments')
+      .select('id, purchase_kind, amount_cents, status, paid_at, cohort_id, stripe_checkout_session_id, cohorts(name)')
+      .eq('user_id', user.id)
+      .order('created_at', { ascending: false })
+      .limit(50),
+    supabaseAdmin.auth.admin.getUserById(user.id),
+  ])
+
+  return (
+    <PerfilClient
+      serverProfile={profileResult.data}
+      serverEmail={authUserResult.data?.user?.email ?? ''}
+      serverMemberships={(membershipsResult.data ?? []) as PerfilClientProps['serverMemberships']}
+      serverPayments={(paymentsResult.data ?? []) as PerfilClientProps['serverPayments']}
+    />
   )
 }
