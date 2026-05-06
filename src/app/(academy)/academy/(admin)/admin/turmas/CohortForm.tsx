@@ -51,21 +51,33 @@ const SECTIONS = [
   { id: 'acesso', label: 'Acesso' },
   { id: 'cursos', label: 'Cursos Liberados' },
   { id: 'comercial', label: 'Comercial' },
-  { id: 'extensoes', label: 'Extensões Cruzadas' },
+  { id: 'extensoes', label: 'Extensoes Cruzadas' },
   { id: 'membros', label: 'Membros' },
-  { id: 'sessoes', label: 'Sessões ao Vivo' },
+  { id: 'sessoes', label: 'Sessoes ao Vivo' },
   { id: 'cupons', label: 'Cupons' },
 ] as const
 
 type SectionId = (typeof SECTIONS)[number]['id']
 
+const sectionIndexMap: Record<SectionId, number> = {
+  identidade: 1,
+  status: 2,
+  acesso: 3,
+  cursos: 4,
+  comercial: 5,
+  extensoes: 6,
+  membros: 7,
+  sessoes: 8,
+  cupons: 9,
+}
+
 function SectionHeader({
-  id,
+  idx,
   label,
   open,
   onToggle,
 }: {
-  id: string
+  idx: number
   label: string
   open: boolean
   onToggle: () => void
@@ -74,15 +86,15 @@ function SectionHeader({
     <button
       type="button"
       onClick={onToggle}
-      className="flex w-full items-center justify-between border-b border-white/10 px-1 py-3 text-left transition-colors hover:text-white"
+      className="flex w-full items-center justify-between border-b border-white/[0.07] px-4 py-3 text-left transition-colors hover:bg-white/[0.02]"
     >
-      <span className="font-mono text-xs font-semibold uppercase tracking-widest text-white/70">
-        {id.padStart(2, '0').slice(-2).toUpperCase()} — {label}
+      <span className="font-mono text-[10px] font-semibold uppercase tracking-widest text-[#84848c]">
+        {String(idx).padStart(2, '0')} — {label}
       </span>
       {open ? (
-        <ChevronDown className="h-4 w-4 text-white/40" />
+        <ChevronDown className="h-3.5 w-3.5 text-[#84848c]" />
       ) : (
-        <ChevronRight className="h-4 w-4 text-white/40" />
+        <ChevronRight className="h-3.5 w-3.5 text-[#84848c]" />
       )}
     </button>
   )
@@ -90,7 +102,7 @@ function SectionHeader({
 
 function FieldLabel({ children }: { children: React.ReactNode }) {
   return (
-    <label className="mb-1 block font-mono text-[10px] uppercase tracking-wider text-white/40">
+    <label className="mb-1.5 block font-mono text-[10px] uppercase tracking-widest text-[#84848c]">
       {children}
     </label>
   )
@@ -113,12 +125,13 @@ function TextInput({
       value={value}
       onChange={(e) => onChange(e.target.value)}
       placeholder={placeholder}
-      className="w-full border border-white/10 bg-white/[0.03] px-3 py-2 font-mono text-sm text-white/80 placeholder-white/20 focus:border-white/20 focus:outline-none"
+      style={{ borderRadius: 0 }}
+      className="w-full border border-white/[0.16] bg-[#16161a] px-3 py-2.5 font-mono text-sm text-[#f1f1f3] placeholder-[#84848c] focus:border-[#ff3a0e]/50 focus:outline-none"
     />
   )
 }
 
-function Toggle({
+function Checkbox({
   checked,
   onChange,
   label,
@@ -131,16 +144,19 @@ function Toggle({
     <label className="flex cursor-pointer items-center gap-3">
       <button
         type="button"
-        role="switch"
+        role="checkbox"
         aria-checked={checked}
         onClick={() => onChange(!checked)}
-        className={`relative h-5 w-9 transition-colors ${checked ? 'bg-[#FF3A0E]' : 'bg-white/10'}`}
+        style={{ borderRadius: 0 }}
+        className={`flex h-4 w-4 shrink-0 items-center justify-center border transition-colors ${
+          checked
+            ? 'border-[#ff3a0e] bg-[#ff3a0e]'
+            : 'border-white/[0.16] hover:border-white/[0.30]'
+        }`}
       >
-        <span
-          className={`absolute top-0.5 h-4 w-4 bg-white transition-transform ${checked ? 'translate-x-4' : 'translate-x-0.5'}`}
-        />
+        {checked && <Check className="h-2.5 w-2.5 text-[#050507]" />}
       </button>
-      <span className="font-mono text-xs text-white/60">{label}</span>
+      <span className="font-mono text-xs text-[#c5c5ca]">{label}</span>
     </label>
   )
 }
@@ -158,10 +174,11 @@ function SelectInput({
     <select
       value={value}
       onChange={(e) => onChange(e.target.value)}
-      className="w-full border border-white/10 bg-[#0C0C12] px-3 py-2 font-mono text-sm text-white/80 focus:border-white/20 focus:outline-none"
+      style={{ borderRadius: 0 }}
+      className="w-full border border-white/[0.16] bg-[#16161a] px-3 py-2.5 font-mono text-sm text-[#f1f1f3] focus:border-[#ff3a0e]/50 focus:outline-none"
     >
       {options.map((o) => (
-        <option key={o.value} value={o.value}>
+        <option key={o.value} value={o.value} className="bg-[#16161a]">
           {o.label}
         </option>
       ))}
@@ -197,8 +214,8 @@ const MEMBER_ROLE_LABELS: Record<string, string> = {
 }
 
 const MEMBER_STATUS_COLORS: Record<string, string> = {
-  ACTIVE: 'text-emerald-400',
-  EXPIRED: 'text-white/30',
+  ACTIVE: 'text-green-400',
+  EXPIRED: 'text-[#84848c]',
   REMOVED: 'text-red-400',
   PAST_DUE: 'text-amber-400',
 }
@@ -236,7 +253,6 @@ export function CohortForm(props: CohortFormProps) {
 
   // Section 4 — Cursos liberados
   const initialCohortCourses = isEdit ? props.cohortCourses : []
-  // selectedCourses: courseId -> Set<moduleId> | null (null = todos módulos)
   const [selectedCourses, setSelectedCourses] = useState<Record<string, Set<string> | null>>(() => {
     const map: Record<string, Set<string> | null> = {}
     for (const cc of initialCohortCourses) {
@@ -267,7 +283,7 @@ export function CohortForm(props: CohortFormProps) {
     initial?.allows_auto_renewal ?? false
   )
 
-  // Section 6 — Extensões cruzadas
+  // Section 6 — Extensoes cruzadas
   const initialExtensions = isEdit ? props.crossExtensions : []
   const [extensions, setExtensions] = useState<
     Array<{ id?: string; targetCohortId: string; daysGranted: string; description: string; isActive: boolean }>
@@ -281,7 +297,7 @@ export function CohortForm(props: CohortFormProps) {
     }))
   )
 
-  // Section 7 — Membros (read-only list + add modal state)
+  // Section 7 — Membros
   const members = isEdit ? props.members : []
   const [showAddMember, setShowAddMember] = useState(false)
   const [memberEmail, setMemberEmail] = useState('')
@@ -290,7 +306,7 @@ export function CohortForm(props: CohortFormProps) {
   const [memberError, setMemberError] = useState<string | null>(null)
   const [memberPending, startMemberTransition] = useTransition()
 
-  // Section 8 — Sessões ao vivo
+  // Section 8 — Sessoes ao vivo
   const liveSessions = isEdit ? props.liveSessions : []
   const [showAddSession, setShowAddSession] = useState(false)
   const [newSessionTitle, setNewSessionTitle] = useState('')
@@ -344,7 +360,7 @@ export function CohortForm(props: CohortFormProps) {
           return ne
         })
       } else {
-        next[courseId] = null // null = todos os módulos
+        next[courseId] = null
         setExpandedCourses((e) => new Set([...e, courseId]))
       }
       return next
@@ -361,13 +377,11 @@ export function CohortForm(props: CohortFormProps) {
       let current: Set<string> | null = next[courseId] ?? null
 
       if (current === null) {
-        // era "todos" → excluir este módulo
         current = new Set(allModuleIds.filter((id) => id !== moduleId))
       } else if (current.has(moduleId)) {
         current = new Set(current)
         current.delete(moduleId)
         if (current.size === 0) {
-          // nenhum módulo → desselecionar curso
           delete next[courseId]
           return next
         }
@@ -375,7 +389,7 @@ export function CohortForm(props: CohortFormProps) {
         current = new Set(current)
         current.add(moduleId)
         if (current.size === allModuleIds.length) {
-          current = null // todos selecionados → compactar
+          current = null
         }
       }
       next[courseId] = current
@@ -402,13 +416,11 @@ export function CohortForm(props: CohortFormProps) {
   }
 
   function buildFormData() {
-    // B7: build cohortCourses from selectedCourses state
     const cohortCoursesPayload = Object.entries(selectedCourses).map(([courseId, moduleSet]) => ({
       courseId,
       includedModuleIds: moduleSet === null ? [] : Array.from(moduleSet),
     }))
 
-    // B6: build crossExtensions from extensions state
     const crossExtensionsPayload = extensions
       .filter((e) => e.targetCohortId && e.daysGranted)
       .map((e) => ({
@@ -467,7 +479,6 @@ export function CohortForm(props: CohortFormProps) {
     setMemberError(null)
     startMemberTransition(async () => {
       try {
-        // B4: pass memberRole so the action respects the selected role
         await addMemberByCohortEmail(
           props.cohort.id,
           memberEmail,
@@ -492,7 +503,7 @@ export function CohortForm(props: CohortFormProps) {
       ? parseInt(newCouponValue, 10)
       : parseBRL(newCouponValue)
     if (!newCouponCode || !discountValue) {
-      setCouponError('Preencha o código e o valor do desconto')
+      setCouponError('Preencha o codigo e o valor do desconto')
       return
     }
     startCouponTransition(async () => {
@@ -516,18 +527,6 @@ export function CohortForm(props: CohortFormProps) {
     })
   }
 
-  const sectionIndexMap: Record<SectionId, number> = {
-    identidade: 1,
-    status: 2,
-    acesso: 3,
-    cursos: 4,
-    comercial: 5,
-    extensoes: 6,
-    membros: 7,
-    sessoes: 8,
-    cupons: 9,
-  }
-
   return (
     <div className="space-y-1">
       {/* Section nav */}
@@ -540,10 +539,11 @@ export function CohortForm(props: CohortFormProps) {
               if (!openSections.has(id)) toggleSection(id)
               document.getElementById(`section-${id}`)?.scrollIntoView({ behavior: 'smooth', block: 'start' })
             }}
-            className={`px-2.5 py-1 font-mono text-[10px] uppercase tracking-wider transition-colors ${
+            style={{ borderRadius: 0 }}
+            className={`px-2.5 py-1 font-mono text-[10px] uppercase tracking-widest transition-colors ${
               openSections.has(id)
-                ? 'bg-[#FF3A0E]/10 text-[#FF3A0E]'
-                : 'border border-white/10 text-white/30 hover:text-white/60'
+                ? 'bg-[#ff3a0e]/10 text-[#ff3a0e]'
+                : 'border border-white/[0.07] text-[#84848c] hover:border-white/[0.16] hover:text-[#c5c5ca]'
             }`}
           >
             {sectionIndexMap[id]}. {label}
@@ -552,15 +552,15 @@ export function CohortForm(props: CohortFormProps) {
       </div>
 
       {/* Section 1 — Identidade */}
-      <div id="section-identidade" className="border border-white/10 bg-white/[0.01]">
+      <div id="section-identidade" className="border border-white/[0.07]">
         <SectionHeader
-          id="01"
+          idx={1}
           label="Identidade"
           open={openSections.has('identidade')}
           onToggle={() => toggleSection('identidade')}
         />
         {openSections.has('identidade') && (
-          <div className="grid gap-4 p-5 md:grid-cols-2">
+          <div className="grid gap-4 bg-[#16161a]/30 p-5 md:grid-cols-2">
             <div>
               <FieldLabel>Nome da turma *</FieldLabel>
               <TextInput
@@ -578,13 +578,14 @@ export function CohortForm(props: CohortFormProps) {
               />
             </div>
             <div className="md:col-span-2">
-              <FieldLabel>Descrição</FieldLabel>
+              <FieldLabel>Descricao</FieldLabel>
               <textarea
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
                 rows={3}
                 placeholder="Descreva brevemente o que esta turma oferece..."
-                className="w-full border border-white/10 bg-white/[0.03] px-3 py-2 font-mono text-sm text-white/80 placeholder-white/20 focus:border-white/20 focus:outline-none"
+                style={{ borderRadius: 0 }}
+                className="w-full border border-white/[0.16] bg-[#16161a] px-3 py-2.5 font-mono text-sm text-[#f1f1f3] placeholder-[#84848c] focus:border-[#ff3a0e]/50 focus:outline-none"
               />
             </div>
             <div>
@@ -600,15 +601,15 @@ export function CohortForm(props: CohortFormProps) {
       </div>
 
       {/* Section 2 — Status e Datas */}
-      <div id="section-status" className="border border-white/10 bg-white/[0.01]">
+      <div id="section-status" className="border border-white/[0.07]">
         <SectionHeader
-          id="02"
+          idx={2}
           label="Status e Datas"
           open={openSections.has('status')}
           onToggle={() => toggleSection('status')}
         />
         {openSections.has('status') && (
-          <div className="grid gap-4 p-5 md:grid-cols-3">
+          <div className="grid gap-4 bg-[#16161a]/30 p-5 md:grid-cols-3">
             <div>
               <FieldLabel>Status *</FieldLabel>
               <SelectInput
@@ -618,7 +619,7 @@ export function CohortForm(props: CohortFormProps) {
               />
             </div>
             <div>
-              <FieldLabel>Data de início</FieldLabel>
+              <FieldLabel>Data de inicio</FieldLabel>
               <TextInput type="date" value={startDate} onChange={setStartDate} />
             </div>
             <div>
@@ -639,17 +640,17 @@ export function CohortForm(props: CohortFormProps) {
       </div>
 
       {/* Section 3 — Acesso */}
-      <div id="section-acesso" className="border border-white/10 bg-white/[0.01]">
+      <div id="section-acesso" className="border border-white/[0.07]">
         <SectionHeader
-          id="03"
+          idx={3}
           label="Acesso"
           open={openSections.has('acesso')}
           onToggle={() => toggleSection('acesso')}
         />
         {openSections.has('acesso') && (
-          <div className="grid gap-4 p-5 md:grid-cols-2">
+          <div className="grid gap-4 bg-[#16161a]/30 p-5 md:grid-cols-2">
             <div>
-              <FieldLabel>Duração do acesso (dias — vazio = vitalício)</FieldLabel>
+              <FieldLabel>Duracao do acesso (dias — vazio = vitalicio)</FieldLabel>
               <TextInput
                 type="number"
                 value={accessDurationDays}
@@ -665,13 +666,13 @@ export function CohortForm(props: CohortFormProps) {
                 placeholder="https://chat.whatsapp.com/..."
               />
             </div>
-            <div className="flex flex-col gap-3">
-              <Toggle
+            <div className="flex flex-col gap-4">
+              <Checkbox
                 checked={hasLiveSessions}
                 onChange={setHasLiveSessions}
-                label="Tem sessões ao vivo"
+                label="Tem sessoes ao vivo"
               />
-              <Toggle
+              <Checkbox
                 checked={hasSupport}
                 onChange={setHasSupport}
                 label="Tem suporte dedicado"
@@ -682,39 +683,39 @@ export function CohortForm(props: CohortFormProps) {
       </div>
 
       {/* Section 4 — Cursos liberados */}
-      <div id="section-cursos" className="border border-white/10 bg-white/[0.01]">
+      <div id="section-cursos" className="border border-white/[0.07]">
         <SectionHeader
-          id="04"
+          idx={4}
           label="Cursos Liberados"
           open={openSections.has('cursos')}
           onToggle={() => toggleSection('cursos')}
         />
         {openSections.has('cursos') && (
-          <div className="p-5">
-            <p className="mb-4 font-mono text-[10px] text-white/30">
-              Selecione cursos e, opcionalmente, quais módulos específicos liberar. Deixar
-              sub-itens desmarcados equivale a liberar todos os módulos do curso.
+          <div className="bg-[#16161a]/30 p-5">
+            <p className="mb-4 font-mono text-[10px] text-[#84848c]">
+              Selecione cursos e, opcionalmente, quais modulos especificos liberar. Deixar
+              sub-itens desmarcados equivale a liberar todos os modulos do curso.
             </p>
-            <div className="space-y-2">
+            <div className="space-y-1">
               {MOCK_COURSES.map((course) => {
                 const isCourseSelected = course.id in selectedCourses
                 const isExpanded = expandedCourses.has(course.id)
 
                 return (
-                  <div key={course.id} className="border border-white/5">
-                    {/* Course row */}
+                  <div key={course.id} className="border border-white/[0.07]">
                     <div className="flex items-center gap-3 px-4 py-3">
                       <button
                         type="button"
                         onClick={() => toggleCourseSelection(course.id)}
+                        style={{ borderRadius: 0 }}
                         className={`flex h-4 w-4 shrink-0 items-center justify-center border transition-colors ${
                           isCourseSelected
-                            ? 'border-[#FF3A0E] bg-[#FF3A0E]'
-                            : 'border-white/20 hover:border-white/40'
+                            ? 'border-[#ff3a0e] bg-[#ff3a0e]'
+                            : 'border-white/[0.16] hover:border-white/[0.30]'
                         }`}
                         aria-label={`Selecionar ${course.title}`}
                       >
-                        {isCourseSelected && <Check className="h-2.5 w-2.5 text-white" />}
+                        {isCourseSelected && <Check className="h-2.5 w-2.5 text-[#050507]" />}
                       </button>
 
                       <button
@@ -730,17 +731,17 @@ export function CohortForm(props: CohortFormProps) {
                         className="flex flex-1 items-center gap-2 text-left"
                       >
                         <span
-                          className={`font-mono text-sm ${isCourseSelected ? 'text-white/90' : 'text-white/50'}`}
+                          className={`font-mono text-sm ${isCourseSelected ? 'text-[#f1f1f3]' : 'text-[#84848c]'}`}
                         >
                           {course.title}
                         </span>
-                        <span className="font-mono text-[10px] text-white/20">
-                          {course.modules.length} módulo{course.modules.length !== 1 ? 's' : ''}
+                        <span className="font-mono text-[10px] text-[#84848c]">
+                          {course.modules.length} modulo{course.modules.length !== 1 ? 's' : ''}
                         </span>
                         {isExpanded ? (
-                          <ChevronDown className="ml-auto h-3 w-3 text-white/30" />
+                          <ChevronDown className="ml-auto h-3 w-3 text-[#84848c]" />
                         ) : (
-                          <ChevronRight className="ml-auto h-3 w-3 text-white/30" />
+                          <ChevronRight className="ml-auto h-3 w-3 text-[#84848c]" />
                         )}
                       </button>
 
@@ -751,7 +752,7 @@ export function CohortForm(props: CohortFormProps) {
                             onClick={() =>
                               setSelectedCourses((prev) => ({ ...prev, [course.id]: null }))
                             }
-                            className="font-mono text-[9px] uppercase tracking-wider text-white/30 hover:text-white/60"
+                            className="font-mono text-[9px] uppercase tracking-widest text-[#84848c] hover:text-[#c5c5ca]"
                           >
                             Todos
                           </button>
@@ -763,7 +764,7 @@ export function CohortForm(props: CohortFormProps) {
                                 [course.id]: new Set(),
                               }))
                             }
-                            className="font-mono text-[9px] uppercase tracking-wider text-white/30 hover:text-white/60"
+                            className="font-mono text-[9px] uppercase tracking-widest text-[#84848c] hover:text-[#c5c5ca]"
                           >
                             Limpar
                           </button>
@@ -771,15 +772,14 @@ export function CohortForm(props: CohortFormProps) {
                       )}
                     </div>
 
-                    {/* Modules */}
                     {isExpanded && (
-                      <div className="border-t border-white/5 bg-white/[0.01]">
+                      <div className="border-t border-white/[0.07] bg-[#0e0e11]">
                         {course.modules.map((mod) => {
                           const isModSel = isModuleSelected(course.id, mod.id)
                           return (
                             <div
                               key={mod.id}
-                              className="flex items-center gap-3 py-2.5 pl-10 pr-4"
+                              className="flex items-center gap-3 py-2.5 pl-11 pr-4"
                             >
                               <button
                                 type="button"
@@ -794,21 +794,22 @@ export function CohortForm(props: CohortFormProps) {
                                     toggleModuleSelection(course.id, mod.id)
                                   }
                                 }}
+                                style={{ borderRadius: 0 }}
                                 className={`flex h-3.5 w-3.5 shrink-0 items-center justify-center border transition-colors ${
                                   isModSel
-                                    ? 'border-[#FF3A0E]/70 bg-[#FF3A0E]/70'
-                                    : 'border-white/15 hover:border-white/30'
+                                    ? 'border-[#ff3a0e]/70 bg-[#ff3a0e]/70'
+                                    : 'border-white/[0.16] hover:border-white/[0.30]'
                                 }`}
-                                aria-label={`Selecionar módulo ${mod.title}`}
+                                aria-label={`Selecionar modulo ${mod.title}`}
                               >
-                                {isModSel && <Check className="h-2 w-2 text-white" />}
+                                {isModSel && <Check className="h-2 w-2 text-[#050507]" />}
                               </button>
                               <span
-                                className={`font-mono text-xs ${isModSel ? 'text-white/70' : 'text-white/30'}`}
+                                className={`font-mono text-xs ${isModSel ? 'text-[#c5c5ca]' : 'text-[#84848c]'}`}
                               >
                                 {mod.title}
                               </span>
-                              <span className="ml-auto font-mono text-[10px] text-white/20">
+                              <span className="ml-auto font-mono text-[10px] text-[#84848c]">
                                 {mod.lessonCount} aula{mod.lessonCount !== 1 ? 's' : ''}
                               </span>
                             </div>
@@ -822,7 +823,7 @@ export function CohortForm(props: CohortFormProps) {
             </div>
 
             {Object.keys(selectedCourses).length > 0 && (
-              <p className="mt-3 font-mono text-[10px] text-white/30">
+              <p className="mt-3 font-mono text-[10px] text-[#84848c]">
                 {Object.keys(selectedCourses).length} curso
                 {Object.keys(selectedCourses).length !== 1 ? 's' : ''} selecionado
                 {Object.keys(selectedCourses).length !== 1 ? 's' : ''}
@@ -833,36 +834,36 @@ export function CohortForm(props: CohortFormProps) {
       </div>
 
       {/* Section 5 — Comercial */}
-      <div id="section-comercial" className="border border-white/10 bg-white/[0.01]">
+      <div id="section-comercial" className="border border-white/[0.07]">
         <SectionHeader
-          id="05"
+          idx={5}
           label="Comercial"
           open={openSections.has('comercial')}
           onToggle={() => toggleSection('comercial')}
         />
         {openSections.has('comercial') && (
-          <div className="space-y-4 p-5">
-            <div className="flex flex-col gap-3">
-              <Toggle
+          <div className="space-y-5 bg-[#16161a]/30 p-5">
+            <div className="flex flex-col gap-4">
+              <Checkbox
                 checked={isPurchasable}
                 onChange={setIsPurchasable}
-                label="Turma vendável (gera Stripe Price)"
+                label="Turma vendavel (gera Stripe Price)"
               />
-              <Toggle
+              <Checkbox
                 checked={hasPublicPage}
                 onChange={setHasPublicPage}
-                label="Tem página pública (/turmas/[slug])"
+                label="Tem pagina publica (/turmas/[slug])"
               />
-              <Toggle
+              <Checkbox
                 checked={allowsAutoRenewal}
                 onChange={setAllowsAutoRenewal}
-                label="Permite renovação automática"
+                label="Permite renovacao automatica"
               />
             </div>
 
             <div className="grid gap-4 md:grid-cols-2">
               <div>
-                <FieldLabel>Preço de entrada (R$)</FieldLabel>
+                <FieldLabel>Preco de entrada (R$)</FieldLabel>
                 <TextInput
                   type="number"
                   value={entryPriceBRL}
@@ -871,7 +872,7 @@ export function CohortForm(props: CohortFormProps) {
                 />
               </div>
               <div>
-                <FieldLabel>Preço de extensão (R$)</FieldLabel>
+                <FieldLabel>Preco de extensao (R$)</FieldLabel>
                 <TextInput
                   type="number"
                   value={extensionPriceBRL}
@@ -880,7 +881,7 @@ export function CohortForm(props: CohortFormProps) {
                 />
               </div>
               <div>
-                <FieldLabel>Parcelas máximas — entrada</FieldLabel>
+                <FieldLabel>Parcelas maximas — entrada</FieldLabel>
                 <TextInput
                   type="number"
                   value={maxInstEntry}
@@ -889,7 +890,7 @@ export function CohortForm(props: CohortFormProps) {
                 />
               </div>
               <div>
-                <FieldLabel>Parcelas máximas — extensão</FieldLabel>
+                <FieldLabel>Parcelas maximas — extensao</FieldLabel>
                 <TextInput
                   type="number"
                   value={maxInstExt}
@@ -898,7 +899,7 @@ export function CohortForm(props: CohortFormProps) {
                 />
               </div>
               <div>
-                <FieldLabel>Dias adicionados por extensão</FieldLabel>
+                <FieldLabel>Dias adicionados por extensao</FieldLabel>
                 <TextInput
                   type="number"
                   value={extDurationDays}
@@ -911,23 +912,23 @@ export function CohortForm(props: CohortFormProps) {
         )}
       </div>
 
-      {/* Section 6 — Extensões cruzadas */}
-      <div id="section-extensoes" className="border border-white/10 bg-white/[0.01]">
+      {/* Section 6 — Extensoes cruzadas */}
+      <div id="section-extensoes" className="border border-white/[0.07]">
         <SectionHeader
-          id="06"
-          label="Extensões Cruzadas"
+          idx={6}
+          label="Extensoes Cruzadas"
           open={openSections.has('extensoes')}
           onToggle={() => toggleSection('extensoes')}
         />
         {openSections.has('extensoes') && (
-          <div className="p-5">
-            <p className="mb-4 font-mono text-[10px] text-white/30">
-              Quando alguém comprar esta turma, quantos dias são adicionados em outras turmas?
+          <div className="bg-[#16161a]/30 p-5">
+            <p className="mb-4 font-mono text-[10px] text-[#84848c]">
+              Quando alguem comprar esta turma, quantos dias sao adicionados em outras turmas?
             </p>
 
-            <div className="space-y-3">
+            <div className="space-y-2">
               {extensions.map((ext, idx) => (
-                <div key={idx} className="border border-white/5 p-4">
+                <div key={idx} className="border border-white/[0.07] p-4">
                   <div className="grid gap-3 md:grid-cols-3">
                     <div className="md:col-span-1">
                       <FieldLabel>Turma destino</FieldLabel>
@@ -961,7 +962,7 @@ export function CohortForm(props: CohortFormProps) {
                       />
                     </div>
                     <div className="flex items-end gap-2">
-                      <Toggle
+                      <Checkbox
                         checked={ext.isActive}
                         onChange={(v) =>
                           setExtensions((prev) =>
@@ -980,7 +981,7 @@ export function CohortForm(props: CohortFormProps) {
                       </button>
                     </div>
                     <div className="md:col-span-3">
-                      <FieldLabel>Descrição</FieldLabel>
+                      <FieldLabel>Descricao</FieldLabel>
                       <TextInput
                         value={ext.description}
                         onChange={(v) =>
@@ -999,39 +1000,41 @@ export function CohortForm(props: CohortFormProps) {
             <button
               type="button"
               onClick={addExtension}
-              className="mt-3 flex items-center gap-2 border border-white/10 px-3 py-2 font-mono text-xs text-white/40 transition-colors hover:border-white/20 hover:text-white/70"
+              style={{ borderRadius: 0 }}
+              className="mt-3 flex items-center gap-2 border border-white/[0.07] px-3 py-2 font-mono text-[10px] uppercase tracking-widest text-[#84848c] transition-colors hover:border-white/[0.16] hover:text-[#c5c5ca]"
             >
               <Plus className="h-3.5 w-3.5" />
-              Adicionar extensão cruzada
+              Adicionar extensao cruzada
             </button>
           </div>
         )}
       </div>
 
       {/* Section 7 — Membros */}
-      <div id="section-membros" className="border border-white/10 bg-white/[0.01]">
+      <div id="section-membros" className="border border-white/[0.07]">
         <SectionHeader
-          id="07"
+          idx={7}
           label="Membros"
           open={openSections.has('membros')}
           onToggle={() => toggleSection('membros')}
         />
         {openSections.has('membros') && (
-          <div className="p-5">
+          <div className="bg-[#16161a]/30 p-5">
             {!isEdit ? (
-              <p className="font-mono text-xs text-white/30">
+              <p className="font-mono text-xs text-[#84848c]">
                 Salve a turma primeiro para adicionar membros.
               </p>
             ) : (
               <>
                 <div className="mb-4 flex items-center justify-between">
-                  <span className="font-mono text-xs text-white/40">
+                  <span className="font-mono text-xs text-[#84848c]">
                     {members.length} membro{members.length !== 1 ? 's' : ''}
                   </span>
                   <button
                     type="button"
                     onClick={() => setShowAddMember(true)}
-                    className="flex items-center gap-1.5 border border-white/10 px-3 py-1.5 font-mono text-[10px] uppercase tracking-wider text-white/40 transition-colors hover:border-white/20 hover:text-white/70"
+                    style={{ borderRadius: 0 }}
+                    className="flex items-center gap-1.5 border border-white/[0.07] px-3 py-1.5 font-mono text-[10px] uppercase tracking-widest text-[#84848c] transition-colors hover:border-white/[0.16] hover:text-[#c5c5ca]"
                   >
                     <Plus className="h-3 w-3" />
                     Adicionar
@@ -1039,8 +1042,8 @@ export function CohortForm(props: CohortFormProps) {
                 </div>
 
                 {showAddMember && (
-                  <div className="mb-4 border border-white/10 p-4">
-                    <p className="mb-3 font-mono text-[10px] uppercase tracking-wider text-white/30">
+                  <div className="mb-4 border border-white/[0.07] p-4">
+                    <p className="mb-3 font-mono text-[10px] uppercase tracking-widest text-[#84848c]">
                       Adicionar membro manualmente
                     </p>
                     <div className="grid gap-3 md:grid-cols-3">
@@ -1065,7 +1068,7 @@ export function CohortForm(props: CohortFormProps) {
                         />
                       </div>
                       <div>
-                        <FieldLabel>Expira em (vazio = vitalício)</FieldLabel>
+                        <FieldLabel>Expira em (vazio = vitalicio)</FieldLabel>
                         <TextInput type="date" value={memberExpiresAt} onChange={setMemberExpiresAt} />
                       </div>
                     </div>
@@ -1076,14 +1079,16 @@ export function CohortForm(props: CohortFormProps) {
                       <button
                         type="button"
                         disabled={memberPending || !memberEmail}
-                        className="bg-[#FF3A0E] px-4 py-2 font-mono text-xs uppercase tracking-wider text-white disabled:opacity-40"
+                        style={{ borderRadius: 0 }}
+                        className="bg-[#ff3a0e] px-4 py-2 font-mono text-[10px] uppercase tracking-widest text-[#050507] disabled:opacity-40"
                         onClick={handleAddMember}
                       >
                         {memberPending ? 'Adicionando...' : 'Adicionar'}
                       </button>
                       <button
                         type="button"
-                        className="border border-white/10 px-4 py-2 font-mono text-xs uppercase tracking-wider text-white/40"
+                        style={{ borderRadius: 0 }}
+                        className="border border-white/[0.07] px-4 py-2 font-mono text-[10px] uppercase tracking-widest text-[#84848c] transition-colors hover:text-[#c5c5ca]"
                         onClick={() => { setShowAddMember(false); setMemberError(null) }}
                       >
                         Cancelar
@@ -1092,41 +1097,41 @@ export function CohortForm(props: CohortFormProps) {
                   </div>
                 )}
 
-                <table className="w-full">
+                <table className="w-full" style={{ borderRadius: 0 }}>
                   <thead>
-                    <tr className="border-b border-white/5">
-                      {['Aluno', 'Papel', 'Status', 'Expira em', 'Ações'].map((h) => (
+                    <tr className="border-b border-white/[0.07] bg-[#16161a]">
+                      {['Aluno', 'Papel', 'Status', 'Expira em', 'Acoes'].map((h) => (
                         <th
                           key={h}
-                          className="px-3 py-2 text-left font-mono text-[10px] uppercase tracking-wider text-white/30"
+                          className="px-3 py-2.5 text-left font-mono text-[10px] uppercase tracking-widest text-[#84848c]"
                         >
                           {h}
                         </th>
                       ))}
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-white/5">
+                  <tbody className="divide-y divide-white/[0.04]">
                     {members.map((m) => (
                       <tr key={m.id} className="hover:bg-white/[0.02]">
                         <td className="px-3 py-3">
                           <div className="flex flex-col">
-                            <span className="font-mono text-xs text-white/80">{m.userName}</span>
-                            <span className="font-mono text-[10px] text-white/30">{m.userEmail}</span>
+                            <span className="font-mono text-xs text-[#f1f1f3]">{m.userName}</span>
+                            <span className="font-mono text-[10px] text-[#84848c]">{m.userEmail}</span>
                           </div>
                         </td>
                         <td className="px-3 py-3">
-                          <span className="font-mono text-[10px] text-white/50">
+                          <span className="font-mono text-[10px] text-[#c5c5ca]">
                             {MEMBER_ROLE_LABELS[m.member_role] ?? m.member_role}
                           </span>
                         </td>
                         <td className="px-3 py-3">
                           <span
-                            className={`font-mono text-[10px] ${MEMBER_STATUS_COLORS[m.status] ?? 'text-white/40'}`}
+                            className={`font-mono text-[10px] ${MEMBER_STATUS_COLORS[m.status] ?? 'text-[#84848c]'}`}
                           >
                             {m.status}
                           </span>
                         </td>
-                        <td className="px-3 py-3 font-mono text-xs text-white/40">
+                        <td className="px-3 py-3 font-mono text-xs text-[#84848c]">
                           {formatDate(m.expires_at)}
                         </td>
                         <td className="px-3 py-3">
@@ -1147,30 +1152,31 @@ export function CohortForm(props: CohortFormProps) {
         )}
       </div>
 
-      {/* Section 8 — Sessões ao vivo */}
-      <div id="section-sessoes" className="border border-white/10 bg-white/[0.01]">
+      {/* Section 8 — Sessoes ao vivo */}
+      <div id="section-sessoes" className="border border-white/[0.07]">
         <SectionHeader
-          id="08"
-          label="Sessões ao Vivo"
+          idx={8}
+          label="Sessoes ao Vivo"
           open={openSections.has('sessoes')}
           onToggle={() => toggleSection('sessoes')}
         />
         {openSections.has('sessoes') && (
-          <div className="p-5">
+          <div className="bg-[#16161a]/30 p-5">
             {!isEdit ? (
-              <p className="font-mono text-xs text-white/30">
-                Salve a turma primeiro para agendar sessões.
+              <p className="font-mono text-xs text-[#84848c]">
+                Salve a turma primeiro para agendar sessoes.
               </p>
             ) : (
               <>
                 <div className="mb-4 flex items-center justify-between">
-                  <span className="font-mono text-xs text-white/40">
-                    {liveSessions.length} sessão{liveSessions.length !== 1 ? 'ões' : ''}
+                  <span className="font-mono text-xs text-[#84848c]">
+                    {liveSessions.length} sessao{liveSessions.length !== 1 ? 'es' : ''}
                   </span>
                   <button
                     type="button"
                     onClick={() => setShowAddSession(!showAddSession)}
-                    className="flex items-center gap-1.5 border border-white/10 px-3 py-1.5 font-mono text-[10px] uppercase tracking-wider text-white/40 transition-colors hover:border-white/20 hover:text-white/70"
+                    style={{ borderRadius: 0 }}
+                    className="flex items-center gap-1.5 border border-white/[0.07] px-3 py-1.5 font-mono text-[10px] uppercase tracking-widest text-[#84848c] transition-colors hover:border-white/[0.16] hover:text-[#c5c5ca]"
                   >
                     <Plus className="h-3 w-3" />
                     Agendar
@@ -1178,13 +1184,13 @@ export function CohortForm(props: CohortFormProps) {
                 </div>
 
                 {showAddSession && (
-                  <div className="mb-4 border border-white/10 p-4">
-                    <p className="mb-3 font-mono text-[10px] uppercase tracking-wider text-white/30">
-                      Nova sessão ao vivo
+                  <div className="mb-4 border border-white/[0.07] p-4">
+                    <p className="mb-3 font-mono text-[10px] uppercase tracking-widest text-[#84848c]">
+                      Nova sessao ao vivo
                     </p>
                     <div className="grid gap-3 md:grid-cols-2">
                       <div className="md:col-span-2">
-                        <FieldLabel>Título</FieldLabel>
+                        <FieldLabel>Titulo</FieldLabel>
                         <TextInput
                           value={newSessionTitle}
                           onChange={setNewSessionTitle}
@@ -1200,7 +1206,7 @@ export function CohortForm(props: CohortFormProps) {
                         />
                       </div>
                       <div>
-                        <FieldLabel>Duração (minutos)</FieldLabel>
+                        <FieldLabel>Duracao (minutos)</FieldLabel>
                         <TextInput
                           type="number"
                           value={newSessionDuration}
@@ -1209,7 +1215,7 @@ export function CohortForm(props: CohortFormProps) {
                         />
                       </div>
                       <div className="md:col-span-2">
-                        <FieldLabel>URL da reunião (liberada automaticamente 30min antes)</FieldLabel>
+                        <FieldLabel>URL da reuniao (liberada automaticamente 30min antes)</FieldLabel>
                         <TextInput
                           value={newSessionUrl}
                           onChange={setNewSessionUrl}
@@ -1220,14 +1226,16 @@ export function CohortForm(props: CohortFormProps) {
                     <div className="mt-3 flex gap-2">
                       <button
                         type="button"
-                        className="bg-[#FF3A0E] px-4 py-2 font-mono text-xs uppercase tracking-wider text-white"
+                        style={{ borderRadius: 0 }}
+                        className="bg-[#ff3a0e] px-4 py-2 font-mono text-[10px] uppercase tracking-widest text-[#050507]"
                         onClick={() => setShowAddSession(false)}
                       >
                         Salvar
                       </button>
                       <button
                         type="button"
-                        className="border border-white/10 px-4 py-2 font-mono text-xs uppercase tracking-wider text-white/40"
+                        style={{ borderRadius: 0 }}
+                        className="border border-white/[0.07] px-4 py-2 font-mono text-[10px] uppercase tracking-widest text-[#84848c] transition-colors hover:text-[#c5c5ca]"
                         onClick={() => setShowAddSession(false)}
                       >
                         Cancelar
@@ -1236,12 +1244,12 @@ export function CohortForm(props: CohortFormProps) {
                   </div>
                 )}
 
-                <div className="space-y-2">
+                <div className="space-y-1">
                   {liveSessions.map((ls) => (
-                    <div key={ls.id} className="flex items-center justify-between border border-white/5 px-4 py-3">
+                    <div key={ls.id} className="flex items-center justify-between border border-white/[0.07] px-4 py-3">
                       <div>
-                        <p className="font-mono text-xs text-white/80">{ls.title}</p>
-                        <p className="font-mono text-[10px] text-white/30">
+                        <p className="font-mono text-xs text-[#f1f1f3]">{ls.title}</p>
+                        <p className="font-mono text-[10px] text-[#84848c]">
                           {formatDate(ls.scheduled_at)} · {ls.duration_minutes} min
                         </p>
                       </div>
@@ -1261,29 +1269,30 @@ export function CohortForm(props: CohortFormProps) {
       </div>
 
       {/* Section 9 — Cupons */}
-      <div id="section-cupons" className="border border-white/10 bg-white/[0.01]">
+      <div id="section-cupons" className="border border-white/[0.07]">
         <SectionHeader
-          id="09"
+          idx={9}
           label="Cupons"
           open={openSections.has('cupons')}
           onToggle={() => toggleSection('cupons')}
         />
         {openSections.has('cupons') && (
-          <div className="p-5">
+          <div className="bg-[#16161a]/30 p-5">
             {!isEdit ? (
-              <p className="font-mono text-xs text-white/30">
+              <p className="font-mono text-xs text-[#84848c]">
                 Salve a turma primeiro para criar cupons.
               </p>
             ) : (
               <>
                 <div className="mb-4 flex items-center justify-between">
-                  <span className="font-mono text-xs text-white/40">
+                  <span className="font-mono text-xs text-[#84848c]">
                     {coupons.length} cupom{coupons.length !== 1 ? 'ns' : ''}
                   </span>
                   <button
                     type="button"
                     onClick={() => setShowAddCoupon(!showAddCoupon)}
-                    className="flex items-center gap-1.5 border border-white/10 px-3 py-1.5 font-mono text-[10px] uppercase tracking-wider text-white/40 transition-colors hover:border-white/20 hover:text-white/70"
+                    style={{ borderRadius: 0 }}
+                    className="flex items-center gap-1.5 border border-white/[0.07] px-3 py-1.5 font-mono text-[10px] uppercase tracking-widest text-[#84848c] transition-colors hover:border-white/[0.16] hover:text-[#c5c5ca]"
                   >
                     <Plus className="h-3 w-3" />
                     Novo Cupom
@@ -1291,13 +1300,13 @@ export function CohortForm(props: CohortFormProps) {
                 </div>
 
                 {showAddCoupon && (
-                  <div className="mb-4 border border-white/10 p-4">
-                    <p className="mb-3 font-mono text-[10px] uppercase tracking-wider text-white/30">
+                  <div className="mb-4 border border-white/[0.07] p-4">
+                    <p className="mb-3 font-mono text-[10px] uppercase tracking-widest text-[#84848c]">
                       Criar cupom
                     </p>
                     <div className="grid gap-3 md:grid-cols-3">
                       <div>
-                        <FieldLabel>Código</FieldLabel>
+                        <FieldLabel>Codigo</FieldLabel>
                         <TextInput
                           value={newCouponCode}
                           onChange={setNewCouponCode}
@@ -1317,7 +1326,7 @@ export function CohortForm(props: CohortFormProps) {
                       </div>
                       <div>
                         <FieldLabel>
-                          {newCouponKind === 'PERCENT' ? 'Percentual (0–100)' : 'Valor (R$)'}
+                          {newCouponKind === 'PERCENT' ? 'Percentual (0-100)' : 'Valor (R$)'}
                         </FieldLabel>
                         <TextInput
                           type="number"
@@ -1333,7 +1342,7 @@ export function CohortForm(props: CohortFormProps) {
                           onChange={setNewCouponAppliesTo}
                           options={[
                             { value: 'ENTRY', label: 'Entrada' },
-                            { value: 'EXTENSION', label: 'Extensão' },
+                            { value: 'EXTENSION', label: 'Extensao' },
                             { value: 'BOTH', label: 'Ambos' },
                           ]}
                         />
@@ -1346,14 +1355,16 @@ export function CohortForm(props: CohortFormProps) {
                       <button
                         type="button"
                         disabled={couponPending}
-                        className="bg-[#FF3A0E] px-4 py-2 font-mono text-xs uppercase tracking-wider text-white disabled:opacity-40"
+                        style={{ borderRadius: 0 }}
+                        className="bg-[#ff3a0e] px-4 py-2 font-mono text-[10px] uppercase tracking-widest text-[#050507] disabled:opacity-40"
                         onClick={handleSaveCoupon}
                       >
                         {couponPending ? 'Salvando...' : 'Salvar'}
                       </button>
                       <button
                         type="button"
-                        className="border border-white/10 px-4 py-2 font-mono text-xs uppercase tracking-wider text-white/40"
+                        style={{ borderRadius: 0 }}
+                        className="border border-white/[0.07] px-4 py-2 font-mono text-[10px] uppercase tracking-widest text-[#84848c] transition-colors hover:text-[#c5c5ca]"
                         onClick={() => { setShowAddCoupon(false); setCouponError(null) }}
                       >
                         Cancelar
@@ -1362,40 +1373,40 @@ export function CohortForm(props: CohortFormProps) {
                   </div>
                 )}
 
-                <table className="w-full">
+                <table className="w-full" style={{ borderRadius: 0 }}>
                   <thead>
-                    <tr className="border-b border-white/5">
-                      {['Código', 'Desconto', 'Aplica em', 'Usos', 'Status', 'Ações'].map((h) => (
+                    <tr className="border-b border-white/[0.07] bg-[#16161a]">
+                      {['Codigo', 'Desconto', 'Aplica em', 'Usos', 'Status', 'Acoes'].map((h) => (
                         <th
                           key={h}
-                          className="px-3 py-2 text-left font-mono text-[10px] uppercase tracking-wider text-white/30"
+                          className="px-3 py-2.5 text-left font-mono text-[10px] uppercase tracking-widest text-[#84848c]"
                         >
                           {h}
                         </th>
                       ))}
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-white/5">
+                  <tbody className="divide-y divide-white/[0.04]">
                     {coupons.map((c) => (
                       <tr key={c.id} className="hover:bg-white/[0.02]">
-                        <td className="px-3 py-3 font-mono text-xs font-medium text-white/80">
+                        <td className="px-3 py-3 font-mono text-xs font-medium text-[#f1f1f3]">
                           {c.code}
                         </td>
-                        <td className="px-3 py-3 font-mono text-xs text-white/60">
+                        <td className="px-3 py-3 font-mono text-xs text-[#c5c5ca]">
                           {c.discount_kind === 'PERCENT'
                             ? `${c.discount_value}%`
                             : formatBRL(c.discount_value)}
                         </td>
-                        <td className="px-3 py-3 font-mono text-[10px] text-white/40">
+                        <td className="px-3 py-3 font-mono text-[10px] text-[#84848c]">
                           {c.applies_to}
                         </td>
-                        <td className="px-3 py-3 font-mono text-xs text-white/40">
+                        <td className="px-3 py-3 font-mono text-xs text-[#84848c]">
                           {c.current_uses}
                           {c.max_uses ? ` / ${c.max_uses}` : ''}
                         </td>
                         <td className="px-3 py-3">
                           <span
-                            className={`font-mono text-[10px] ${c.is_active ? 'text-emerald-400' : 'text-white/30'}`}
+                            className={`font-mono text-[10px] ${c.is_active ? 'text-green-400' : 'text-[#84848c]'}`}
                           >
                             {c.is_active ? 'Ativo' : 'Inativo'}
                           </span>
@@ -1419,14 +1430,14 @@ export function CohortForm(props: CohortFormProps) {
       </div>
 
       {/* Actions */}
-      <div className="space-y-3 border-t border-white/10 pt-6">
+      <div className="space-y-3 border-t border-white/[0.07] pt-6">
         {saveError && (
           <p className="font-mono text-xs text-red-400">{saveError}</p>
         )}
         <div className="flex items-center justify-between">
           <Link
-            href="/admin/turmas"
-            className="flex items-center gap-2 font-mono text-xs text-white/40 transition-colors hover:text-white/70"
+            href="/academy/admin/turmas"
+            className="flex items-center gap-2 font-mono text-[10px] uppercase tracking-widest text-[#84848c] transition-colors hover:text-[#c5c5ca]"
           >
             <ArrowLeft className="h-3.5 w-3.5" />
             Voltar para Turmas
@@ -1434,7 +1445,7 @@ export function CohortForm(props: CohortFormProps) {
 
           <div className="flex items-center gap-3">
             {saved && (
-              <span className="flex items-center gap-1.5 font-mono text-xs text-emerald-400">
+              <span className="flex items-center gap-1.5 font-mono text-xs text-green-400">
                 <Check className="h-3.5 w-3.5" />
                 Salvo
               </span>
@@ -1443,10 +1454,11 @@ export function CohortForm(props: CohortFormProps) {
               type="button"
               onClick={handleSave}
               disabled={pending}
-              className="flex items-center gap-2 bg-[#FF3A0E] px-6 py-2.5 font-mono text-xs font-semibold uppercase tracking-wider text-white transition-opacity hover:opacity-90 disabled:opacity-40"
+              style={{ borderRadius: 0 }}
+              className="flex items-center gap-2 bg-[#ff3a0e] px-6 py-2.5 font-mono text-[10px] font-semibold uppercase tracking-widest text-[#050507] transition-opacity hover:opacity-90 disabled:opacity-40"
             >
               <Save className="h-3.5 w-3.5" />
-              {pending ? 'Salvando...' : isEdit ? 'Salvar alterações' : 'Criar turma'}
+              {pending ? 'Salvando...' : isEdit ? 'Salvar alteracoes' : 'Criar turma'}
             </button>
           </div>
         </div>

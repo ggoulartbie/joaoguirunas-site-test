@@ -13,11 +13,11 @@ const STATUS_LABELS: Record<string, string> = {
   REFUNDED: 'Reembolsado',
 }
 
-const STATUS_COLORS: Record<string, string> = {
-  PENDING: 'text-amber-400 bg-amber-400/10',
-  APPROVED: 'text-emerald-400 bg-emerald-400/10',
-  DECLINED: 'text-red-400 bg-red-400/10',
-  REFUNDED: 'text-white/40 bg-white/5',
+const STATUS_BADGE: Record<string, string> = {
+  PENDING: 'bg-amber-400/10 text-amber-400',
+  APPROVED: 'bg-emerald-400/10 text-emerald-400',
+  DECLINED: 'bg-[#ff3a0e]/10 text-[#ff3a0e]',
+  REFUNDED: 'bg-transparent text-[#84848c] border border-[rgba(255,255,255,0.07)]',
 }
 
 const KIND_LABELS: Record<string, string> = {
@@ -54,38 +54,38 @@ function RefundConfirmModal({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-4">
-      <div className="w-full max-w-md border border-red-400/20 bg-[#0C0C12]">
-        <div className="flex items-center justify-between border-b border-white/10 px-6 py-4">
+      <div className="w-full max-w-md border border-[#ff3a0e]/20 bg-[#0e0e11]">
+        <div className="flex items-center justify-between border-b border-[rgba(255,255,255,0.07)] px-6 py-4">
           <div className="flex items-center gap-2">
-            <AlertTriangle className="h-4 w-4 text-red-400" />
-            <h2 className="font-mono text-sm font-semibold uppercase tracking-wider text-white/90">
+            <AlertTriangle className="h-4 w-4 text-[#ff3a0e]" />
+            <h2 className="font-mono text-sm font-semibold uppercase tracking-wider text-[#f1f1f3]">
               Confirmar Reembolso
             </h2>
           </div>
-          <button onClick={onCancel} className="text-white/30 hover:text-white/70">
+          <button onClick={onCancel} className="text-[#84848c] hover:text-[#f1f1f3]">
             <X className="h-4 w-4" />
           </button>
         </div>
 
         <div className="p-6">
-          <div className="mb-4 space-y-2 border border-white/5 bg-white/[0.02] p-4">
+          <div className="mb-4 space-y-2 border border-[rgba(255,255,255,0.07)] bg-[#16161a] p-4">
             <div className="flex justify-between">
-              <span className="font-mono text-[10px] text-white/30">Aluno</span>
-              <span className="font-mono text-xs text-white/70">{payment.userName}</span>
+              <span className="font-mono text-[10px] text-[#84848c]">Aluno</span>
+              <span className="font-mono text-xs text-[#c5c5ca]">{payment.userName}</span>
             </div>
             <div className="flex justify-between">
-              <span className="font-mono text-[10px] text-white/30">Turma</span>
-              <span className="font-mono text-xs text-white/70">{payment.cohortName}</span>
+              <span className="font-mono text-[10px] text-[#84848c]">Turma</span>
+              <span className="font-mono text-xs text-[#c5c5ca]">{payment.cohortName}</span>
             </div>
             <div className="flex justify-between">
-              <span className="font-mono text-[10px] text-white/30">Valor</span>
-              <span className="font-mono text-sm font-semibold text-white">
+              <span className="font-mono text-[10px] text-[#84848c]">Valor</span>
+              <span className="font-mono text-sm font-bold text-[#f1f1f3]">
                 {formatBRL(payment.amount_cents)}
               </span>
             </div>
           </div>
 
-          <p className="mb-4 font-mono text-xs text-white/50">
+          <p className="mb-4 font-mono text-xs text-[#84848c]">
             Esta ação é irreversível. O reembolso será processado via Stripe e a matrícula do aluno
             será encerrada.
           </p>
@@ -95,9 +95,9 @@ function RefundConfirmModal({
               type="checkbox"
               checked={confirmed}
               onChange={(e) => setConfirmed(e.target.checked)}
-              className="mt-0.5 accent-red-400"
+              className="mt-0.5 accent-[#ff3a0e]"
             />
-            <span className="font-mono text-xs text-white/60">
+            <span className="font-mono text-xs text-[#c5c5ca]">
               Confirmo que li as informações acima e quero prosseguir com o reembolso
             </span>
           </label>
@@ -106,7 +106,7 @@ function RefundConfirmModal({
             <button
               type="button"
               onClick={onCancel}
-              className="flex-1 border border-white/10 py-2.5 font-mono text-xs uppercase tracking-wider text-white/40 transition-colors hover:text-white/70"
+              className="flex-1 border border-[rgba(255,255,255,0.07)] py-2.5 font-mono text-xs uppercase tracking-wider text-[#84848c] transition-colors hover:text-[#c5c5ca]"
             >
               Cancelar
             </button>
@@ -114,7 +114,7 @@ function RefundConfirmModal({
               type="button"
               disabled={!confirmed}
               onClick={onConfirm}
-              className="flex-1 bg-red-500 py-2.5 font-mono text-xs font-semibold uppercase tracking-wider text-white disabled:cursor-not-allowed disabled:opacity-40"
+              className="flex-1 bg-[#ff3a0e] py-2.5 font-mono text-xs font-semibold uppercase tracking-wider text-white disabled:cursor-not-allowed disabled:opacity-40"
             >
               Reembolsar
             </button>
@@ -183,31 +183,31 @@ function FailedWebhooksPanel({ events }: { events: FailedEvent[] }) {
   }
 
   return (
-    <div className="border border-red-400/20 bg-red-400/[0.03]">
-      <div className="flex items-center gap-2 border-b border-red-400/20 px-4 py-3">
-        <AlertTriangle className="h-3.5 w-3.5 text-red-400" />
-        <span className="font-mono text-xs font-semibold uppercase tracking-wider text-red-400">
+    <div className="border border-[#ff3a0e]/20 bg-[#ff3a0e]/[0.03]">
+      <div className="flex items-center gap-2 border-b border-[#ff3a0e]/20 px-4 py-3">
+        <AlertTriangle className="h-3.5 w-3.5 text-[#ff3a0e]" />
+        <span className="font-mono text-xs font-semibold uppercase tracking-wider text-[#ff3a0e]">
           Webhooks com falha ({items.length})
         </span>
       </div>
-      <div className="divide-y divide-white/5">
+      <div className="divide-y divide-[rgba(255,255,255,0.07)]">
         {items.map((ev) => (
           <div key={ev.id} className="flex flex-wrap items-start justify-between gap-3 px-4 py-3">
             <div className="min-w-0 flex-1 space-y-0.5">
-              <p className="font-mono text-xs text-white/70">{ev.event_type}</p>
-              <p className="font-mono text-[10px] text-white/30">{ev.stripe_event_id}</p>
+              <p className="font-mono text-xs text-[#c5c5ca]">{ev.event_type}</p>
+              <p className="font-mono text-[10px] text-[#84848c]">{ev.stripe_event_id}</p>
               {ev.error_message && (
-                <p className="font-mono text-[10px] text-red-400/70">{ev.error_message}</p>
+                <p className="font-mono text-[10px] text-[#ff3a0e]/70">{ev.error_message}</p>
               )}
               {errors[ev.id] && (
-                <p className="font-mono text-[10px] text-red-400">{errors[ev.id]}</p>
+                <p className="font-mono text-[10px] text-[#ff3a0e]">{errors[ev.id]}</p>
               )}
             </div>
             <button
               type="button"
               disabled={retrying === ev.id}
               onClick={() => handleRetry(ev.id)}
-              className="flex shrink-0 items-center gap-1.5 border border-white/10 px-3 py-1.5 font-mono text-[10px] uppercase tracking-wider text-white/40 transition-colors hover:border-white/20 hover:text-white/70 disabled:cursor-not-allowed disabled:opacity-40"
+              className="flex shrink-0 items-center gap-1.5 border border-[rgba(255,255,255,0.07)] px-3 py-1.5 font-mono text-[10px] uppercase tracking-wider text-[#84848c] transition-colors hover:border-[rgba(255,255,255,0.16)] hover:text-[#c5c5ca] disabled:cursor-not-allowed disabled:opacity-40"
             >
               <RefreshCw className={`h-3 w-3 ${retrying === ev.id ? 'animate-spin' : ''}`} />
               Reprocessar
@@ -247,7 +247,7 @@ export function PaymentsClient({ failedWebhookEvents }: { failedWebhookEvents: F
       {/* Toolbar */}
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div className="flex flex-wrap gap-2">
-          <span className="self-center font-mono text-[10px] uppercase tracking-wider text-white/30">
+          <span className="self-center font-mono text-[10px] uppercase tracking-wider text-[#84848c]">
             Status:
           </span>
           {['all', 'APPROVED', 'DECLINED', 'PENDING', 'REFUNDED'].map((s) => (
@@ -256,8 +256,8 @@ export function PaymentsClient({ failedWebhookEvents }: { failedWebhookEvents: F
               onClick={() => setStatusFilter(s)}
               className={`px-2.5 py-1 font-mono text-[10px] uppercase tracking-wider transition-colors ${
                 statusFilter === s
-                  ? 'bg-[#FF3A0E] text-white'
-                  : 'border border-white/10 text-white/40 hover:text-white/60'
+                  ? 'bg-[#ff3a0e] text-white'
+                  : 'border border-[rgba(255,255,255,0.07)] text-[#84848c] hover:text-[#c5c5ca]'
               }`}
             >
               {s === 'all' ? 'Todos' : STATUS_LABELS[s]}
@@ -268,61 +268,61 @@ export function PaymentsClient({ failedWebhookEvents }: { failedWebhookEvents: F
         <button
           type="button"
           onClick={() => downloadCSV(filtered)}
-          className="flex items-center gap-2 border border-white/10 px-3 py-1.5 font-mono text-[10px] uppercase tracking-wider text-white/40 transition-colors hover:border-white/20 hover:text-white/70"
+          className="flex items-center gap-2 border border-[rgba(255,255,255,0.07)] px-3 py-1.5 font-mono text-[10px] uppercase tracking-wider text-[#84848c] transition-colors hover:border-[rgba(255,255,255,0.16)] hover:text-[#c5c5ca]"
         >
           Exportar CSV
         </button>
       </div>
 
       {/* Table */}
-      <div className="overflow-x-auto border border-white/10">
+      <div className="overflow-x-auto border border-[rgba(255,255,255,0.07)]">
         <table className="w-full min-w-[700px]">
           <thead>
-            <tr className="border-b border-white/10 bg-white/[0.02]">
-              {['Aluno', 'Turma', 'Tipo', 'Valor', 'Status', 'Data', 'Ações'].map((h) => (
+            <tr className="bg-[#16161a]">
+              {['Usuário', 'Turma', 'Valor', 'Status', 'Data', 'Ação'].map((h) => (
                 <th
                   key={h}
-                  className="px-4 py-3 text-left font-mono text-[10px] uppercase tracking-wider text-white/30"
+                  className="px-4 py-3 text-left font-mono text-[10px] uppercase tracking-wide text-[#84848c]"
                 >
                   {h}
                 </th>
               ))}
             </tr>
           </thead>
-          <tbody className="divide-y divide-white/5">
+          <tbody>
             {filtered.map((payment) => (
-              <tr key={payment.id} className="hover:bg-white/[0.02]">
-                <td className="px-4 py-4">
+              <tr
+                key={payment.id}
+                className="border-b border-[rgba(255,255,255,0.07)] hover:bg-[#050507]/40"
+              >
+                <td className="px-4 py-3">
                   <div className="flex flex-col">
-                    <span className="font-mono text-xs text-white/80">{payment.userName}</span>
-                    <span className="font-mono text-[10px] text-white/30">{payment.userEmail}</span>
+                    <span className="font-mono text-xs text-[#f1f1f3]">{payment.userName}</span>
+                    <span className="font-mono text-[10px] text-[#84848c]">{payment.userEmail}</span>
                   </div>
                 </td>
-                <td className="px-4 py-4 font-mono text-xs text-white/60">{payment.cohortName}</td>
-                <td className="px-4 py-4 font-mono text-[10px] text-white/40">
-                  {KIND_LABELS[payment.purchase_kind] ?? payment.purchase_kind}
-                </td>
-                <td className="px-4 py-4 font-mono text-sm font-semibold text-white/80">
+                <td className="px-4 py-3 font-mono text-xs text-[#c5c5ca]">{payment.cohortName}</td>
+                <td className="px-4 py-3 font-mono text-sm font-bold text-[#f1f1f3]">
                   {formatBRL(payment.amount_cents)}
                 </td>
-                <td className="px-4 py-4">
+                <td className="px-4 py-3">
                   <span
-                    className={`px-2 py-1 font-mono text-[10px] uppercase tracking-wider ${STATUS_COLORS[payment.status] ?? 'text-white/40 bg-white/5'}`}
+                    className={`px-2 py-0.5 font-mono text-[10px] uppercase tracking-wide ${STATUS_BADGE[payment.status] ?? 'text-[#84848c]'}`}
                   >
                     {STATUS_LABELS[payment.status] ?? payment.status}
                   </span>
                 </td>
-                <td className="px-4 py-4 font-mono text-[10px] text-white/40">
+                <td className="px-4 py-3 font-mono text-[10px] text-[#84848c]">
                   {formatDateTime(payment.paid_at ?? payment.created_at)}
                 </td>
-                <td className="px-4 py-4">
+                <td className="px-4 py-3">
                   <div className="flex items-center gap-2">
                     {payment.stripe_checkout_session_id && (
                       <a
                         href={`https://dashboard.stripe.com/test/payments/${payment.stripe_payment_intent_id}`}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="p-1 text-white/20 transition-colors hover:text-white/60"
+                        className="p-1 text-[#84848c] transition-colors hover:text-[#c5c5ca]"
                         title="Ver no Stripe"
                       >
                         <ExternalLink className="h-3.5 w-3.5" />
@@ -332,7 +332,7 @@ export function PaymentsClient({ failedWebhookEvents }: { failedWebhookEvents: F
                       <button
                         type="button"
                         onClick={() => setRefundTarget(payment)}
-                        className="border border-red-400/20 px-2.5 py-1 font-mono text-[9px] uppercase tracking-wider text-red-400/70 transition-colors hover:border-red-400/40 hover:text-red-400"
+                        className="border border-[#ff3a0e]/20 px-2.5 py-1 font-mono text-[9px] uppercase tracking-wider text-[#ff3a0e]/70 transition-colors hover:border-[#ff3a0e]/40 hover:text-[#ff3a0e]"
                       >
                         Reembolsar
                       </button>
@@ -345,7 +345,7 @@ export function PaymentsClient({ failedWebhookEvents }: { failedWebhookEvents: F
         </table>
       </div>
 
-      <p className="font-mono text-[10px] text-white/20">
+      <p className="font-mono text-[10px] text-[#84848c]">
         {filtered.length} pagamento{filtered.length !== 1 ? 's' : ''} encontrado
         {filtered.length !== 1 ? 's' : ''}
       </p>

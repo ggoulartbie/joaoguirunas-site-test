@@ -79,32 +79,32 @@ export function ForumModerationClient({ initialThreads, initialReplies }: Props)
   return (
     <div className="space-y-4">
       {/* Tab nav */}
-      <div className="flex border-b border-white/10">
+      <div className="flex border-b border-[rgba(255,255,255,0.07)]">
         <button
           type="button"
           onClick={() => setTab('threads')}
           className={`flex items-center gap-2 px-5 py-3 font-mono text-xs uppercase tracking-wider transition-colors ${
             tab === 'threads'
-              ? 'border-b-2 border-[#FF3A0E] text-white'
-              : 'text-white/40 hover:text-white/70'
+              ? 'border-b-2 border-[#ff3a0e] text-[#f1f1f3]'
+              : 'text-[#84848c] hover:text-[#c5c5ca]'
           }`}
         >
           <MessageSquare className="h-3.5 w-3.5" />
           Tópicos
-          <span className="font-mono text-[9px] text-white/20">({threads.length})</span>
+          <span className="font-mono text-[9px] text-[#84848c]">({threads.length})</span>
         </button>
         <button
           type="button"
           onClick={() => setTab('replies')}
           className={`flex items-center gap-2 px-5 py-3 font-mono text-xs uppercase tracking-wider transition-colors ${
             tab === 'replies'
-              ? 'border-b-2 border-[#FF3A0E] text-white'
-              : 'text-white/40 hover:text-white/70'
+              ? 'border-b-2 border-[#ff3a0e] text-[#f1f1f3]'
+              : 'text-[#84848c] hover:text-[#c5c5ca]'
           }`}
         >
           <Reply className="h-3.5 w-3.5" />
           Respostas
-          <span className="font-mono text-[9px] text-white/20">({replies.length})</span>
+          <span className="font-mono text-[9px] text-[#84848c]">({replies.length})</span>
         </button>
       </div>
 
@@ -121,37 +121,40 @@ export function ForumModerationClient({ initialThreads, initialReplies }: Props)
 
       {/* Threads table */}
       {tab === 'threads' && (
-        <div className="overflow-x-auto border border-white/10">
+        <div className="overflow-x-auto border border-[rgba(255,255,255,0.07)]">
           {threads.length === 0 ? (
-            <p className="p-6 font-mono text-xs text-white/20">Nenhum tópico.</p>
+            <p className="p-6 font-mono text-xs text-[#84848c]">Nenhum tópico.</p>
           ) : (
             <table className="w-full text-left">
               <thead>
-                <tr className="border-b border-white/5">
-                  <th className="px-4 py-3 font-mono text-[10px] uppercase tracking-wider text-white/30">Título</th>
-                  <th className="px-4 py-3 font-mono text-[10px] uppercase tracking-wider text-white/30">Autor</th>
-                  <th className="px-4 py-3 font-mono text-[10px] uppercase tracking-wider text-white/30">Data</th>
-                  <th className="px-4 py-3 font-mono text-[10px] uppercase tracking-wider text-white/30">Status</th>
-                  <th className="px-4 py-3 font-mono text-[10px] uppercase tracking-wider text-white/30">Ação</th>
+                <tr className="bg-[#16161a]">
+                  <th className="px-4 py-3 font-mono text-[10px] uppercase tracking-wide text-[#84848c]">Título</th>
+                  <th className="px-4 py-3 font-mono text-[10px] uppercase tracking-wide text-[#84848c]">Autor</th>
+                  <th className="px-4 py-3 font-mono text-[10px] uppercase tracking-wide text-[#84848c]">Data</th>
+                  <th className="px-4 py-3 font-mono text-[10px] uppercase tracking-wide text-[#84848c]">Status</th>
+                  <th className="px-4 py-3 font-mono text-[10px] uppercase tracking-wide text-[#84848c]">Ação</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-white/5">
+              <tbody>
                 {threads.map((t) => (
-                  <tr key={t.id} className={t.deleted_at ? 'opacity-40' : ''}>
+                  <tr
+                    key={t.id}
+                    className={`border-b border-[rgba(255,255,255,0.07)] hover:bg-[#050507]/40 ${t.deleted_at ? 'opacity-40' : ''}`}
+                  >
                     <td className="px-4 py-3">
-                      <p className="max-w-xs truncate font-mono text-xs text-white/80">{t.title}</p>
-                      <p className="mt-0.5 max-w-xs truncate font-mono text-[10px] text-white/30">{t.content}</p>
+                      <p className="max-w-xs truncate font-mono text-xs text-[#f1f1f3]">{t.title}</p>
+                      <p className="mt-0.5 max-w-xs truncate font-mono text-[10px] text-[#84848c]">{t.content}</p>
                     </td>
-                    <td className="px-4 py-3 font-mono text-xs text-white/60">
+                    <td className="px-4 py-3 font-mono text-xs text-[#c5c5ca]">
                       {t.profiles?.name ?? t.author_id.slice(0, 8)}
                     </td>
-                    <td className="whitespace-nowrap px-4 py-3 font-mono text-[10px] text-white/30">
+                    <td className="whitespace-nowrap px-4 py-3 font-mono text-[10px] text-[#84848c]">
                       {formatDate(t.created_at)}
                     </td>
                     <td className="px-4 py-3">
                       <span
                         className={`font-mono text-[9px] uppercase tracking-wider ${
-                          t.deleted_at ? 'text-red-400' : 'text-emerald-400'
+                          t.deleted_at ? 'text-[#ff3a0e]' : 'text-emerald-400'
                         }`}
                       >
                         {t.deleted_at ? 'Oculto' : 'Visível'}
@@ -161,7 +164,7 @@ export function ForumModerationClient({ initialThreads, initialReplies }: Props)
                       <button
                         type="button"
                         onClick={() => handleThreadAction(t.id, t.deleted_at ? 'restore' : 'hide')}
-                        className="flex items-center gap-1.5 font-mono text-[10px] uppercase tracking-wider text-white/30 transition-colors hover:text-white/70"
+                        className="flex items-center gap-1.5 font-mono text-[10px] uppercase tracking-wider text-[#84848c] transition-colors hover:text-[#f1f1f3]"
                       >
                         {t.deleted_at ? (
                           <>
@@ -186,36 +189,39 @@ export function ForumModerationClient({ initialThreads, initialReplies }: Props)
 
       {/* Replies table */}
       {tab === 'replies' && (
-        <div className="overflow-x-auto border border-white/10">
+        <div className="overflow-x-auto border border-[rgba(255,255,255,0.07)]">
           {replies.length === 0 ? (
-            <p className="p-6 font-mono text-xs text-white/20">Nenhuma resposta.</p>
+            <p className="p-6 font-mono text-xs text-[#84848c]">Nenhuma resposta.</p>
           ) : (
             <table className="w-full text-left">
               <thead>
-                <tr className="border-b border-white/5">
-                  <th className="px-4 py-3 font-mono text-[10px] uppercase tracking-wider text-white/30">Conteúdo</th>
-                  <th className="px-4 py-3 font-mono text-[10px] uppercase tracking-wider text-white/30">Autor</th>
-                  <th className="px-4 py-3 font-mono text-[10px] uppercase tracking-wider text-white/30">Data</th>
-                  <th className="px-4 py-3 font-mono text-[10px] uppercase tracking-wider text-white/30">Status</th>
-                  <th className="px-4 py-3 font-mono text-[10px] uppercase tracking-wider text-white/30">Ação</th>
+                <tr className="bg-[#16161a]">
+                  <th className="px-4 py-3 font-mono text-[10px] uppercase tracking-wide text-[#84848c]">Conteúdo</th>
+                  <th className="px-4 py-3 font-mono text-[10px] uppercase tracking-wide text-[#84848c]">Autor</th>
+                  <th className="px-4 py-3 font-mono text-[10px] uppercase tracking-wide text-[#84848c]">Data</th>
+                  <th className="px-4 py-3 font-mono text-[10px] uppercase tracking-wide text-[#84848c]">Status</th>
+                  <th className="px-4 py-3 font-mono text-[10px] uppercase tracking-wide text-[#84848c]">Ação</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-white/5">
+              <tbody>
                 {replies.map((r) => (
-                  <tr key={r.id} className={r.deleted_at ? 'opacity-40' : ''}>
+                  <tr
+                    key={r.id}
+                    className={`border-b border-[rgba(255,255,255,0.07)] hover:bg-[#050507]/40 ${r.deleted_at ? 'opacity-40' : ''}`}
+                  >
                     <td className="px-4 py-3">
-                      <p className="max-w-sm truncate font-mono text-xs text-white/80">{r.content}</p>
+                      <p className="max-w-sm truncate font-mono text-xs text-[#f1f1f3]">{r.content}</p>
                     </td>
-                    <td className="px-4 py-3 font-mono text-xs text-white/60">
+                    <td className="px-4 py-3 font-mono text-xs text-[#c5c5ca]">
                       {r.profiles?.name ?? r.author_id.slice(0, 8)}
                     </td>
-                    <td className="whitespace-nowrap px-4 py-3 font-mono text-[10px] text-white/30">
+                    <td className="whitespace-nowrap px-4 py-3 font-mono text-[10px] text-[#84848c]">
                       {formatDate(r.created_at)}
                     </td>
                     <td className="px-4 py-3">
                       <span
                         className={`font-mono text-[9px] uppercase tracking-wider ${
-                          r.deleted_at ? 'text-red-400' : 'text-emerald-400'
+                          r.deleted_at ? 'text-[#ff3a0e]' : 'text-emerald-400'
                         }`}
                       >
                         {r.deleted_at ? 'Oculto' : 'Visível'}
@@ -225,7 +231,7 @@ export function ForumModerationClient({ initialThreads, initialReplies }: Props)
                       <button
                         type="button"
                         onClick={() => handleReplyAction(r.id, r.deleted_at ? 'restore' : 'hide')}
-                        className="flex items-center gap-1.5 font-mono text-[10px] uppercase tracking-wider text-white/30 transition-colors hover:text-white/70"
+                        className="flex items-center gap-1.5 font-mono text-[10px] uppercase tracking-wider text-[#84848c] transition-colors hover:text-[#f1f1f3]"
                       >
                         {r.deleted_at ? (
                           <>

@@ -7,18 +7,22 @@ export const metadata: Metadata = { title: 'Turmas' }
 export default function AdminTurmasPage() {
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
+      <div className="flex items-center justify-between border-b border-white/[0.07] pb-4">
         <div>
-          <h1 className="font-mono text-lg font-semibold uppercase tracking-widest text-white/90">
+          <h1
+            className="font-serif text-[28px] italic text-[#f1f1f3]"
+            style={{ fontFamily: 'var(--type-display, Georgia, serif)' }}
+          >
             Turmas
           </h1>
-          <p className="mt-1 font-mono text-xs text-white/30">
+          <p className="mt-1 font-mono text-[10px] uppercase tracking-widest text-[#84848c]">
             Gerencie cohorts — criação, edição e configuração
           </p>
         </div>
         <Link
-          href="/admin/turmas/nova"
-          className="flex items-center gap-2 bg-[#FF3A0E] px-4 py-2 font-mono text-xs font-semibold uppercase tracking-wider text-white transition-opacity hover:opacity-90"
+          href="/academy/admin/turmas/nova"
+          className="bg-[#ff3a0e] px-4 py-2 font-mono text-[10px] font-semibold uppercase tracking-widest text-[#050507] transition-opacity hover:opacity-90"
+          style={{ borderRadius: 0 }}
         >
           + Nova Turma
         </Link>

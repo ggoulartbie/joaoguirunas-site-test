@@ -1,4 +1,6 @@
 import type { Metadata } from 'next'
+import Link from 'next/link'
+import { ArrowLeft } from 'lucide-react'
 import { CohortForm } from '../CohortForm'
 import {
   MOCK_COHORTS,
@@ -22,7 +24,7 @@ export default async function EditarTurmaPage({
   if (!cohort) {
     return (
       <div className="flex items-center justify-center py-24">
-        <p className="font-mono text-sm text-white/30">Turma não encontrada</p>
+        <p className="font-mono text-sm text-[#84848c]">Turma nao encontrada</p>
       </div>
     )
   }
@@ -35,11 +37,25 @@ export default async function EditarTurmaPage({
 
   return (
     <div className="space-y-6">
-      <div>
-        <h1 className="font-mono text-lg font-semibold uppercase tracking-widest text-white/90">
-          Editar Turma
-        </h1>
-        <p className="mt-1 font-mono text-xs text-white/30">{cohort.name}</p>
+      <div className="flex items-center justify-between border-b border-white/[0.07] pb-4">
+        <div>
+          <h1
+            className="font-serif text-[28px] italic text-[#f1f1f3]"
+            style={{ fontFamily: 'var(--type-display, Georgia, serif)' }}
+          >
+            Editar Turma
+          </h1>
+          <p className="mt-1 font-mono text-[10px] uppercase tracking-widest text-[#84848c]">
+            {cohort.name}
+          </p>
+        </div>
+        <Link
+          href="/academy/admin/turmas"
+          className="flex items-center gap-2 font-mono text-[10px] uppercase tracking-widest text-[#84848c] transition-colors hover:text-[#c5c5ca]"
+        >
+          <ArrowLeft className="h-3.5 w-3.5" />
+          Voltar
+        </Link>
       </div>
       <CohortForm
         mode="edit"

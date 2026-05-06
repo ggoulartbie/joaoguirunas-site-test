@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import { MOCK_COMMENTS_QUEUE, MOCK_THREADS_QUEUE } from '@/components/admin/mock-data'
 import type { MockComment, MockThread } from '@/components/admin/mock-data'
-import { MessageSquare, Hash, Trash2, AlertOctagon, Check } from 'lucide-react'
+import { MessageSquare, Hash } from 'lucide-react'
 
 type Tab = 'comments' | 'threads'
 
@@ -31,53 +31,46 @@ function CommentCard({
   if (removed) return null
 
   return (
-    <div className="border border-white/10 bg-white/[0.02]">
-      <div className="flex items-start justify-between gap-4 p-4">
-        <div className="flex-1 space-y-2">
-          <div className="flex flex-wrap items-center gap-2">
-            <span className="font-mono text-xs font-medium text-white/80">
-              {comment.authorName}
-            </span>
-            <span className="font-mono text-[10px] text-white/30">em</span>
-            <span className="font-mono text-[10px] text-white/50">{comment.lessonTitle}</span>
-            <span className="font-mono text-[10px] text-white/20">·</span>
-            <span className="border border-white/10 px-1.5 py-0.5 font-mono text-[9px] text-white/30">
-              {comment.cohortName}
-            </span>
-          </div>
-          <p className="font-mono text-sm text-white/70 leading-relaxed">{comment.content}</p>
-          <p className="font-mono text-[10px] text-white/20">
-            {formatDateTime(comment.created_at)}
-          </p>
-        </div>
+    <div className="border border-[rgba(255,255,255,0.07)] bg-[#0e0e11] p-4">
+      <div className="mb-3 flex flex-wrap items-center gap-2">
+        <span className="font-mono text-xs font-medium text-[#f1f1f3]">{comment.authorName}</span>
+        <span className="font-mono text-[10px] text-[#84848c]">em</span>
+        <span className="font-mono text-[10px] text-[#c5c5ca]">{comment.lessonTitle}</span>
+        <span className="font-mono text-[10px] text-[#84848c]">·</span>
+        <span className="border border-[rgba(255,255,255,0.07)] px-1.5 py-0.5 font-mono text-[9px] text-[#84848c]">
+          {comment.cohortName}
+        </span>
+      </div>
 
-        <div className="flex shrink-0 flex-col gap-2">
+      <div className="mb-3 border-l-2 border-[#ff3a0e] bg-[#ff3a0e]/5 p-3">
+        <p className="font-mono text-sm leading-relaxed text-[#c5c5ca]">{comment.content}</p>
+      </div>
+
+      <div className="flex items-center justify-between">
+        <p className="font-mono text-[11px] uppercase tracking-wide text-[#84848c]">
+          {formatDateTime(comment.created_at)}
+        </p>
+        <div className="flex items-center gap-2">
+          <button
+            type="button"
+            onClick={() => { setRemoved(true) }}
+            className="border border-[rgba(255,255,255,0.07)] px-3 py-1 font-mono text-[11px] uppercase tracking-wide text-[#84848c] transition-colors hover:border-[rgba(255,255,255,0.16)] hover:text-[#c5c5ca]"
+          >
+            Ignorar
+          </button>
+          <button
+            type="button"
+            onClick={() => { setRemoved(true) }}
+            className="border border-emerald-400/20 bg-emerald-400/10 px-3 py-1 font-mono text-[11px] uppercase tracking-wide text-emerald-400 transition-colors hover:bg-emerald-400/20"
+          >
+            Aprovar
+          </button>
           <button
             type="button"
             onClick={() => { onRemove(comment.id); setRemoved(true) }}
-            className="flex items-center gap-1.5 border border-red-400/20 px-2.5 py-1.5 font-mono text-[9px] uppercase tracking-wider text-red-400/70 transition-colors hover:border-red-400/40 hover:text-red-400"
-            title="Remover"
+            className="border border-[#ff3a0e]/20 bg-[#ff3a0e]/10 px-3 py-1 font-mono text-[11px] uppercase tracking-wide text-[#ff3a0e] transition-colors hover:bg-[#ff3a0e]/20"
           >
-            <Trash2 className="h-3 w-3" />
             Remover
-          </button>
-          <button
-            type="button"
-            onClick={() => { onSpam(comment.id); setRemoved(true) }}
-            className="flex items-center gap-1.5 border border-amber-400/20 px-2.5 py-1.5 font-mono text-[9px] uppercase tracking-wider text-amber-400/70 transition-colors hover:border-amber-400/40 hover:text-amber-400"
-            title="Marcar como spam"
-          >
-            <AlertOctagon className="h-3 w-3" />
-            Spam
-          </button>
-          <button
-            type="button"
-            onClick={() => setRemoved(true)}
-            className="flex items-center gap-1.5 border border-emerald-400/20 px-2.5 py-1.5 font-mono text-[9px] uppercase tracking-wider text-emerald-400/70 transition-colors hover:border-emerald-400/40 hover:text-emerald-400"
-            title="Aprovar (manter)"
-          >
-            <Check className="h-3 w-3" />
-            OK
           </button>
         </div>
       </div>
@@ -99,55 +92,48 @@ function ThreadCard({
   if (removed) return null
 
   return (
-    <div className="border border-white/10 bg-white/[0.02]">
-      <div className="flex items-start justify-between gap-4 p-4">
-        <div className="flex-1 space-y-2">
-          <div className="flex flex-wrap items-center gap-2">
-            <span className="font-mono text-xs font-medium text-white/80">{thread.authorName}</span>
-            <span className="font-mono text-[10px] text-white/30">em</span>
-            <span className="border border-white/10 px-1.5 py-0.5 font-mono text-[9px] text-white/50">
-              #{thread.categoryName}
-            </span>
-          </div>
-          <p className="font-mono text-sm font-medium text-white/80">{thread.title}</p>
-          <p className="line-clamp-2 font-mono text-xs text-white/50 leading-relaxed">
-            {thread.content}
-          </p>
-          <div className="flex items-center gap-3">
-            <span className="font-mono text-[10px] text-white/20">
-              {formatDateTime(thread.created_at)}
-            </span>
-            <span className="font-mono text-[10px] text-white/20">·</span>
-            <span className="font-mono text-[10px] text-white/20">
-              {thread.view_count} visualizações · {thread.replyCount} respostas
-            </span>
-          </div>
-        </div>
+    <div className="border border-[rgba(255,255,255,0.07)] bg-[#0e0e11] p-4">
+      <div className="mb-3 flex flex-wrap items-center gap-2">
+        <span className="font-mono text-xs font-medium text-[#f1f1f3]">{thread.authorName}</span>
+        <span className="font-mono text-[10px] text-[#84848c]">em</span>
+        <span className="border border-[rgba(255,255,255,0.07)] px-1.5 py-0.5 font-mono text-[9px] text-[#84848c]">
+          #{thread.categoryName}
+        </span>
+      </div>
 
-        <div className="flex shrink-0 flex-col gap-2">
+      <p className="mb-2 font-mono text-sm font-medium text-[#f1f1f3]">{thread.title}</p>
+
+      <div className="mb-3 border-l-2 border-[#ff3a0e] bg-[#ff3a0e]/5 p-3">
+        <p className="line-clamp-2 font-mono text-xs leading-relaxed text-[#c5c5ca]">
+          {thread.content}
+        </p>
+      </div>
+
+      <div className="flex items-center justify-between">
+        <p className="font-mono text-[11px] uppercase tracking-wide text-[#84848c]">
+          {formatDateTime(thread.created_at)} · {thread.view_count} views · {thread.replyCount} resp.
+        </p>
+        <div className="flex items-center gap-2">
+          <button
+            type="button"
+            onClick={() => { setRemoved(true) }}
+            className="border border-[rgba(255,255,255,0.07)] px-3 py-1 font-mono text-[11px] uppercase tracking-wide text-[#84848c] transition-colors hover:border-[rgba(255,255,255,0.16)] hover:text-[#c5c5ca]"
+          >
+            Ignorar
+          </button>
+          <button
+            type="button"
+            onClick={() => { setRemoved(true) }}
+            className="border border-emerald-400/20 bg-emerald-400/10 px-3 py-1 font-mono text-[11px] uppercase tracking-wide text-emerald-400 transition-colors hover:bg-emerald-400/20"
+          >
+            Aprovar
+          </button>
           <button
             type="button"
             onClick={() => { onRemove(thread.id); setRemoved(true) }}
-            className="flex items-center gap-1.5 border border-red-400/20 px-2.5 py-1.5 font-mono text-[9px] uppercase tracking-wider text-red-400/70 transition-colors hover:border-red-400/40 hover:text-red-400"
+            className="border border-[#ff3a0e]/20 bg-[#ff3a0e]/10 px-3 py-1 font-mono text-[11px] uppercase tracking-wide text-[#ff3a0e] transition-colors hover:bg-[#ff3a0e]/20"
           >
-            <Trash2 className="h-3 w-3" />
             Remover
-          </button>
-          <button
-            type="button"
-            onClick={() => { onSpam(thread.id); setRemoved(true) }}
-            className="flex items-center gap-1.5 border border-amber-400/20 px-2.5 py-1.5 font-mono text-[9px] uppercase tracking-wider text-amber-400/70 transition-colors hover:border-amber-400/40 hover:text-amber-400"
-          >
-            <AlertOctagon className="h-3 w-3" />
-            Spam
-          </button>
-          <button
-            type="button"
-            onClick={() => setRemoved(true)}
-            className="flex items-center gap-1.5 border border-emerald-400/20 px-2.5 py-1.5 font-mono text-[9px] uppercase tracking-wider text-emerald-400/70 transition-colors hover:border-emerald-400/40 hover:text-emerald-400"
-          >
-            <Check className="h-3 w-3" />
-            OK
           </button>
         </div>
       </div>
@@ -179,20 +165,20 @@ export function ModerationClient() {
   return (
     <div className="space-y-4">
       {/* Tabs */}
-      <div className="flex gap-1 border-b border-white/10">
+      <div className="flex border-b border-[rgba(255,255,255,0.07)]">
         <button
           type="button"
           onClick={() => setActiveTab('comments')}
           className={`flex items-center gap-2 px-4 py-2.5 font-mono text-xs uppercase tracking-wider transition-colors ${
             activeTab === 'comments'
-              ? 'border-b-2 border-[#FF3A0E] text-[#FF3A0E]'
-              : 'text-white/40 hover:text-white/70'
+              ? 'border-b-2 border-[#ff3a0e] text-[#ff3a0e]'
+              : 'text-[#84848c] hover:text-[#c5c5ca]'
           }`}
         >
           <MessageSquare className="h-3.5 w-3.5" />
           Comentários
           {comments.length > 0 && (
-            <span className="flex h-4 min-w-4 items-center justify-center bg-[#FF3A0E] px-1 font-mono text-[9px] text-white">
+            <span className="flex h-4 min-w-4 items-center justify-center bg-[#ff3a0e] px-1 font-mono text-[9px] text-white">
               {comments.length}
             </span>
           )}
@@ -202,26 +188,25 @@ export function ModerationClient() {
           onClick={() => setActiveTab('threads')}
           className={`flex items-center gap-2 px-4 py-2.5 font-mono text-xs uppercase tracking-wider transition-colors ${
             activeTab === 'threads'
-              ? 'border-b-2 border-[#FF3A0E] text-[#FF3A0E]'
-              : 'text-white/40 hover:text-white/70'
+              ? 'border-b-2 border-[#ff3a0e] text-[#ff3a0e]'
+              : 'text-[#84848c] hover:text-[#c5c5ca]'
           }`}
         >
           <Hash className="h-3.5 w-3.5" />
           Tópicos do Fórum
           {threads.length > 0 && (
-            <span className="flex h-4 min-w-4 items-center justify-center bg-[#FF3A0E] px-1 font-mono text-[9px] text-white">
+            <span className="flex h-4 min-w-4 items-center justify-center bg-[#ff3a0e] px-1 font-mono text-[9px] text-white">
               {threads.length}
             </span>
           )}
         </button>
       </div>
 
-      {/* Content */}
       {activeTab === 'comments' && (
         <div className="space-y-3">
           {comments.length === 0 ? (
             <div className="py-12 text-center">
-              <p className="font-mono text-sm text-white/30">Nenhum comentário na fila</p>
+              <p className="font-mono text-sm text-[#84848c]">Nenhum comentário na fila</p>
             </div>
           ) : (
             comments.map((c) => (
@@ -240,7 +225,7 @@ export function ModerationClient() {
         <div className="space-y-3">
           {threads.length === 0 ? (
             <div className="py-12 text-center">
-              <p className="font-mono text-sm text-white/30">Nenhum tópico na fila</p>
+              <p className="font-mono text-sm text-[#84848c]">Nenhum tópico na fila</p>
             </div>
           ) : (
             threads.map((t) => (
