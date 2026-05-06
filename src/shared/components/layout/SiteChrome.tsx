@@ -19,6 +19,7 @@ const CHROME_EXCLUDED = [
   '/cadastro',
   '/recuperar-senha',
   '/redefinir-senha',
+  '/certificado',
 ];
 
 function hasChromeExcluded(pathname: string): boolean {
