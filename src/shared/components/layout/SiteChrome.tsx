@@ -4,11 +4,33 @@ import { usePathname } from 'next/navigation';
 import { Header } from './Header';
 import { Footer } from './Footer';
 
+// Rotas com layout próprio — não recebem Header/Footer global
+const CHROME_EXCLUDED = [
+  '/',
+  '/dashboard',
+  '/meus-cursos',
+  '/curso',
+  '/forum',
+  '/agenda',
+  '/certificados',
+  '/perfil',
+  '/admin',
+  '/login',
+  '/cadastro',
+  '/recuperar-senha',
+  '/redefinir-senha',
+];
+
+function hasChromeExcluded(pathname: string): boolean {
+  return CHROME_EXCLUDED.some(
+    (p) => pathname === p || pathname.startsWith(p + '/')
+  );
+}
+
 export function SiteChrome({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
-  const isHome = pathname === '/';
 
-  if (isHome) {
+  if (hasChromeExcluded(pathname)) {
     return <>{children}</>;
   }
 
