@@ -127,7 +127,7 @@ export default function ForumPage() {
                     </span>
                     <span className="text-xs text-white/40">
                       {thread.authorName}
-                      {badge?.label && (
+                      {badge && badge.label && (
                         <span className={`ml-1.5 px-1.5 py-0.5 font-mono text-[10px] uppercase tracking-wide ${badge.className}`}>
                           {badge.label}
                         </span>
