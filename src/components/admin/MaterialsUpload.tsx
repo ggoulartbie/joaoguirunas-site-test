@@ -98,7 +98,7 @@ export function MaterialsUpload({ lessonId, materials }: MaterialsUploadProps) {
           {materials.map((m) => (
             <li
               key={m.id}
-              className="flex items-center gap-3 rounded-lg border border-white/10 bg-white/5 px-4 py-2.5"
+              className="flex items-center gap-3 border border-white/[0.07] bg-white/[0.03] px-4 py-2.5"
             >
               <span className="text-xs text-white/40">{KIND_LABELS[m.kind]}</span>
               <span className="min-w-0 flex-1 truncate text-sm text-white">{m.title}</span>
@@ -129,10 +129,10 @@ export function MaterialsUpload({ lessonId, materials }: MaterialsUploadProps) {
           handleFiles(e.dataTransfer.files)
         }}
         onClick={() => fileInputRef.current?.click()}
-        className={`flex cursor-pointer flex-col items-center justify-center rounded-xl border-2 border-dashed px-6 py-8 transition-colors ${
+        className={`flex cursor-pointer flex-col items-center justify-center border-2 border-dashed px-6 py-8 transition-colors ${
           dragging
-            ? 'border-white/40 bg-white/10'
-            : 'border-white/10 bg-white/5 hover:border-white/20 hover:bg-white/[0.07]'
+            ? 'border-white/[0.30] bg-white/[0.07]'
+            : 'border-white/[0.07] bg-white/[0.03] hover:border-white/[0.16] hover:bg-white/[0.05]'
         }`}
       >
         <input
@@ -160,26 +160,26 @@ export function MaterialsUpload({ lessonId, materials }: MaterialsUploadProps) {
           + Adicionar link externo
         </button>
       ) : (
-        <div className="space-y-2 rounded-xl border border-white/10 bg-white/5 p-4">
+        <div className="space-y-2 border border-white/[0.07] bg-white/[0.03] p-4">
           <input
             type="text"
             placeholder="Título do link"
             value={linkTitle}
             onChange={(e) => setLinkTitle(e.target.value)}
-            className="w-full rounded-lg border border-white/10 bg-transparent px-3 py-2 text-sm text-white placeholder:text-white/30 focus:outline-none focus:ring-1 focus:ring-white/20"
+            className="w-full border border-white/[0.07] bg-transparent px-3 py-2 font-mono text-sm text-[#f1f1f3] placeholder:text-[#84848c] focus:border-white/[0.16] focus:outline-none"
           />
           <input
             type="url"
             placeholder="https://..."
             value={linkUrl}
             onChange={(e) => setLinkUrl(e.target.value)}
-            className="w-full rounded-lg border border-white/10 bg-transparent px-3 py-2 text-sm text-white placeholder:text-white/30 focus:outline-none focus:ring-1 focus:ring-white/20"
+            className="w-full border border-white/[0.07] bg-transparent px-3 py-2 font-mono text-sm text-[#f1f1f3] placeholder:text-[#84848c] focus:border-white/[0.16] focus:outline-none"
           />
           <div className="flex gap-2">
             <button
               onClick={handleAddLink}
               disabled={!linkTitle || !linkUrl}
-              className="rounded-lg bg-white px-4 py-1.5 text-sm font-medium text-black disabled:opacity-40"
+              className="bg-[#ff3a0e] px-4 py-1.5 font-mono text-[10px] uppercase tracking-widest text-[#050507] disabled:opacity-40"
             >
               Adicionar
             </button>
@@ -194,7 +194,7 @@ export function MaterialsUpload({ lessonId, materials }: MaterialsUploadProps) {
       )}
 
       {error && (
-        <p className="rounded-lg bg-red-500/10 px-4 py-2 text-sm text-red-400">{error}</p>
+        <p className="bg-[#ff3a0e]/10 px-4 py-2 font-mono text-[11px] text-[#ff3a0e]">{error}</p>
       )}
     </div>
   )

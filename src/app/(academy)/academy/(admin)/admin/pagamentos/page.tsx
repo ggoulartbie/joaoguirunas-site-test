@@ -16,7 +16,7 @@ export default async function AdminPagamentosPage() {
     <div className="space-y-6">
       <div>
         <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-[#84848c]">Admin / Pagamentos</p>
-        <h1 className="mt-1 font-mono text-[28px] italic text-[#f1f1f3]">Pagamentos</h1>
+        <h1 className="mt-1 font-serif text-[28px] italic font-light text-[#f1f1f3]">Pagamentos</h1>
         <p className="mt-1 font-mono text-xs text-[#84848c]">
           Histórico de transações, reembolsos e exportações
         </p>

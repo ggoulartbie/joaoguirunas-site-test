@@ -21,7 +21,7 @@ export default async function AdminForumPage() {
     <div className="space-y-6">
       <div>
         <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-[#84848c]">Admin / Fórum</p>
-        <h1 className="mt-1 font-mono text-[28px] italic text-[#f1f1f3]">Fórum — Moderação</h1>
+        <h1 className="mt-1 font-serif text-[28px] italic font-light text-[#f1f1f3]">Fórum — Moderação</h1>
         <p className="mt-1 font-mono text-xs text-[#84848c]">
           Tópicos e respostas — ocultar via soft delete
         </p>
