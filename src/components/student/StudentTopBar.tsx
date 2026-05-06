@@ -54,8 +54,8 @@ export function StudentTopBar({ notifications, userInitials, onMenuClick }: Prop
       </button>
 
       <span
-        className="font-mono text-xs uppercase tracking-widest"
-        style={{ color: 'rgba(241,241,243,0.35)' }}
+        className="text-xs uppercase tracking-widest"
+        style={{ fontFamily: 'var(--type-mono)', color: 'rgba(241,241,243,0.35)' }}
       >
         {label}
       </span>
@@ -66,11 +66,15 @@ export function StudentTopBar({ notifications, userInitials, onMenuClick }: Prop
         <Link
           href="/academy/perfil"
           aria-label="Ir para perfil"
-          className="flex h-8 w-8 items-center justify-center font-mono text-xs font-bold transition-colors hover:bg-white/15 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ember)] focus-visible:ring-offset-1 focus-visible:ring-offset-[#050507]"
+          className="flex h-8 w-8 items-center justify-center text-xs font-bold transition-colors hover:bg-white/15 focus-visible:outline-none"
           style={{
             background: 'var(--ink-3)',
             color: 'var(--bone)',
+            fontFamily: 'var(--type-mono)',
+            outline: 'none',
           }}
+          onFocus={(e) => { e.currentTarget.style.outline = '2px solid rgba(255,58,14,0.5)'; e.currentTarget.style.outlineOffset = '2px' }}
+          onBlur={(e) => { e.currentTarget.style.outline = '' }}
         >
           {userInitials}
         </Link>

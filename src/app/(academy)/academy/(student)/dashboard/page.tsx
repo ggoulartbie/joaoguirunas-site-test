@@ -37,10 +37,10 @@ export default function DashboardPage() {
     <div className="mx-auto max-w-5xl space-y-8">
       {/* Saudação */}
       <div>
-        <p className="font-mono text-xs uppercase tracking-widest" style={{ color: 'rgba(241,241,243,0.4)' }}>
+        <p className="text-xs uppercase tracking-widest" style={{ fontFamily: 'var(--type-mono)', color: 'rgba(241,241,243,0.4)' }}>
           Bem-vindo de volta
         </p>
-        <h1 className="mt-1 text-2xl font-bold text-white">{user.name}</h1>
+        <h1 className="mt-1 text-2xl font-bold text-white" style={{ fontFamily: 'var(--type-sans)' }}>{user.name}</h1>
       </div>
 
       {/* Avisos de expiração */}

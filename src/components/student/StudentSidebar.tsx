@@ -48,6 +48,13 @@ export function StudentSidebar({ mobileOpen = false, onClose }: Props) {
 
   const navContent = (
     <>
+      <style>{`
+        .kv-focus:focus-visible {
+          outline: 2px solid rgba(255,58,14,0.5);
+          outline-offset: -2px;
+        }
+      `}</style>
+
       {/* Logo */}
       <div
         className="flex h-16 items-center gap-3 px-6"
@@ -95,13 +102,13 @@ export function StudentSidebar({ mobileOpen = false, onClose }: Props) {
               onClick={onClose}
               aria-current={active ? 'page' : undefined}
               className={cn(
-                'flex items-center gap-3 px-3 py-2.5 font-mono text-xs uppercase tracking-wider transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-[var(--ember)]',
+                'kv-focus flex items-center gap-3 px-3 py-2.5 text-xs uppercase tracking-wider transition-colors focus-visible:outline-none',
                 !active && 'hover:bg-white/5'
               )}
               style={
                 active
-                  ? { background: 'rgba(255,58,14,0.1)', color: 'var(--ember)' }
-                  : { color: 'rgba(241,241,243,0.4)' }
+                  ? { background: 'rgba(255,58,14,0.1)', color: 'var(--ember)', fontFamily: 'var(--type-mono)' }
+                  : { color: 'rgba(241,241,243,0.4)', fontFamily: 'var(--type-mono)' }
               }
             >
               <Icon className="h-4 w-4 shrink-0" aria-hidden="true" />
@@ -117,8 +124,8 @@ export function StudentSidebar({ mobileOpen = false, onClose }: Props) {
         style={{ borderTop: '1px solid var(--hairline)' }}
       >
         <button
-          className="flex w-full items-center gap-3 px-3 py-2.5 font-mono text-xs uppercase tracking-wider transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-[var(--ember)]"
-          style={{ color: 'rgba(241,241,243,0.25)' }}
+          className="kv-focus flex w-full items-center gap-3 px-3 py-2.5 text-xs uppercase tracking-wider transition-colors hover:text-white/60 focus-visible:outline-none"
+          style={{ color: 'rgba(241,241,243,0.25)', fontFamily: 'var(--type-mono)' }}
           aria-label="Sair da conta"
         >
           <LogOut className="h-4 w-4 shrink-0" aria-hidden="true" />

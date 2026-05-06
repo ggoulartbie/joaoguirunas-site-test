@@ -7,7 +7,6 @@ import { z } from 'zod'
 import Link from 'next/link'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
-import { Button } from '@/shared/components/ui/button'
 
 const schema = z.object({
   email: z.string().email('Email inválido'),
@@ -77,17 +76,32 @@ export function LoginForm() {
           box-shadow: 0 0 0 1px var(--ember);
         }
         .rf-submit-btn {
-          font-size: 12px !important;
-          letter-spacing: 0.22em !important;
-          transition: filter 0.2s !important;
-          background: var(--ember) !important;
-          color: var(--void) !important;
-          font-family: var(--type-mono) !important;
-          text-transform: uppercase !important;
-          border-radius: 0 !important;
+          display: block;
+          width: 100%;
+          min-height: 44px;
+          background: var(--ember);
+          color: var(--void);
+          font-family: var(--type-mono);
+          font-size: 11px;
+          font-weight: 600;
+          letter-spacing: 0.22em;
+          text-transform: uppercase;
+          border: none;
+          border-radius: 0;
+          cursor: pointer;
+          transition: filter 0.2s;
+          outline: none;
+        }
+        .rf-submit-btn:focus-visible {
+          outline: 2px solid rgba(255,58,14,0.5);
+          outline-offset: 2px;
         }
         .rf-submit-btn:hover:not(:disabled) {
           filter: brightness(1.1);
+        }
+        .rf-submit-btn:disabled {
+          opacity: 0.45;
+          cursor: not-allowed;
         }
       `}</style>
 
@@ -157,13 +171,9 @@ export function LoginForm() {
           </div>
         )}
 
-        <Button
-          type="submit"
-          disabled={isSubmitting}
-          className="rf-submit-btn w-full disabled:opacity-50"
-        >
+        <button type="submit" disabled={isSubmitting} className="rf-submit-btn">
           {isSubmitting ? 'Entrando...' : 'Entrar'}
-        </Button>
+        </button>
       </form>
 
       <p
