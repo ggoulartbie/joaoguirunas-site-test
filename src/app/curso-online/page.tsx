@@ -1,8 +1,10 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
-import { Check, X, ArrowRight, Play, FileText, MessageSquare, Award } from 'lucide-react'
+import { Check, Play, FileText, MessageSquare, Award } from 'lucide-react'
 import { siteConfig } from '@/config/site'
-import { createPublicCheckoutSession } from '@/app/actions/checkoutPublic'
+import { CursoModulesTimeline } from './_components/CursoModulesTimeline'
+import { CursoFaqAccordion } from './_components/CursoFaqAccordion'
+import { CheckoutForm } from './_components/checkout-form'
 
 export const metadata: Metadata = {
   title: 'Curso Online | Claude Agents Team — R$ 499',
@@ -57,17 +59,18 @@ const KV_MONO: React.CSSProperties = {
 }
 
 const INCLUDED = [
-  { icon: Play, text: 'Acesso completo ao conteúdo em vídeo' },
+  { icon: Play, text: 'Aulas gravadas — assista no seu ritmo' },
   { icon: FileText, text: 'Materiais e templates de cada módulo' },
   { icon: MessageSquare, text: 'Fórum da comunidade — tire dúvidas' },
   { icon: Award, text: 'Certificado de conclusão' },
 ]
 
-const NOT_INCLUDED = [
-  'Encontros ao vivo em grupo',
-  'Sessões de mentoria individual',
-  'Bônus dos frameworks aceleradores (código Growth Sales)',
-  'Suporte prioritário via WhatsApp',
+const FOR_WHOM = [
+  'Profissionais que querem aprender no próprio ritmo, sem horário fixo',
+  'Fundadores e solopreneurs que precisam de autonomia para escalar',
+  'Devs e criadores de conteúdo que já usam IA mas querem orquestrar agentes de verdade',
+  'Pessoas fora de Florianópolis que não podem comparecer à mentoria presencial',
+  'Quem prefere consumir conteúdo em vídeo antes de investir numa mentoria intensiva',
 ]
 
 const TESTIMONIALS = [
@@ -88,10 +91,6 @@ const TESTIMONIALS = [
   },
 ]
 
-async function checkoutAction() {
-  'use server'
-  await createPublicCheckoutSession(COHORT_SLUG)
-}
 
 export default async function CursoOnlinePage() {
   return (
@@ -164,25 +163,16 @@ export default async function CursoOnlinePage() {
             style={{ color: 'rgba(255,255,255,0.55)' }}
           >
             Aprenda a criar e orquestrar agentes de IA com Claude Code no seu
-            próprio ritmo. Acesso completo ao conteúdo, materiais e certificado.
+            próprio ritmo. Aulas gravadas, materiais completos e certificado.
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-            <form action={checkoutAction} className="w-full sm:w-auto">
-              <button
-                type="submit"
-                className="inline-flex items-center justify-center gap-2 px-8 py-4 text-sm font-semibold uppercase transition-all hover:brightness-110 active:scale-[0.98] w-full sm:w-auto"
-                style={{ ...KV_MONO, background: '#FF3A0E', color: '#050507', fontSize: '12px' }}
-              >
-                Comprar agora — R$ 499
-                <ArrowRight size={14} aria-hidden="true" />
-              </button>
-            </form>
+            <CheckoutForm cohortSlug={COHORT_SLUG} />
             <a
-              href="#o-que-inclui"
+              href="#modulos"
               className="inline-flex items-center justify-center px-8 py-4 text-sm font-semibold uppercase transition-all hover:bg-white/[0.05] w-full sm:w-auto"
               style={{ ...KV_MONO, border: '1px solid rgba(255,255,255,0.14)', color: 'rgba(255,255,255,0.55)', fontSize: '12px' }}
             >
-              Ver o que está incluído
+              Ver os módulos
             </a>
           </div>
           <p
@@ -226,46 +216,51 @@ export default async function CursoOnlinePage() {
           </div>
         </section>
 
-        {/* ===== DIFERENCIAL HONESTO — O QUE NÃO ESTÁ INCLUÍDO ===== */}
-        <section className="relative z-10 py-16 sm:py-20" style={{ borderTop: '1px solid rgba(255,255,255,0.07)', background: 'rgba(255,255,255,0.015)' }}>
+        {/* ===== MÓDULOS ===== */}
+        <CursoModulesTimeline />
+
+        {/* ===== PARA QUEM É ===== */}
+        <section className="relative z-10 py-16 sm:py-20" style={{ borderTop: '1px solid rgba(255,255,255,0.07)' }}>
           <div className="mx-auto max-w-4xl px-5 sm:px-8">
-            <div className="grid gap-10 sm:grid-cols-2 items-start">
-              <div>
-                <p className="mb-4" style={{ ...KV_MONO, color: 'rgba(255,255,255,0.35)' }}>
-                  Não incluído neste plano
-                </p>
-                <h2
-                  className="mb-2 text-2xl sm:text-3xl"
-                  style={{ fontFamily: 'var(--font-display-serif)', fontWeight: 400, letterSpacing: '-0.02em', lineHeight: 1 }}
+            <p className="mb-4" style={{ ...KV_MONO, color: 'rgba(255, 58, 14, 0.85)' }}>
+              Para quem é
+            </p>
+            <h2
+              className="mb-10 text-3xl sm:text-4xl"
+              style={{ fontFamily: 'var(--font-display-serif)', fontWeight: 400, letterSpacing: '-0.03em', lineHeight: 0.95 }}
+            >
+              Este curso foi feito{' '}
+              <span className="italic" style={{ color: '#FF3A0E', fontWeight: 300 }}>para você se</span>
+            </h2>
+            <div className="space-y-3">
+              {FOR_WHOM.map((item) => (
+                <div
+                  key={item}
+                  className="flex items-start gap-4 p-4"
+                  style={{ border: '1px solid rgba(255,255,255,0.07)', background: 'rgba(255,255,255,0.02)' }}
                 >
-                  Transparência total
-                </h2>
-                <p className="text-sm leading-relaxed" style={{ color: 'rgba(255,255,255,0.45)' }}>
-                  O Curso Online não inclui os elementos ao vivo da Mentoria. Se precisas de acompanhamento presencial,{' '}
-                  <Link href="/mentoria" className="underline underline-offset-2" style={{ color: '#FF3A0E' }}>
-                    veja a Mentoria
-                  </Link>
-                  .
-                </p>
-              </div>
-              <div className="space-y-3">
-                {NOT_INCLUDED.map((item) => (
-                  <div
-                    key={item}
-                    className="flex items-center gap-3 py-3 px-4"
-                    style={{ border: '1px solid rgba(255,255,255,0.06)' }}
-                  >
-                    <X className="h-3.5 w-3.5 shrink-0" style={{ color: 'rgba(255,255,255,0.2)' }} aria-hidden="true" />
-                    <span className="text-sm" style={{ color: 'rgba(255,255,255,0.4)' }}>{item}</span>
-                  </div>
-                ))}
-              </div>
+                  <Check className="h-4 w-4 mt-0.5 shrink-0" style={{ color: '#FF3A0E' }} aria-hidden="true" />
+                  <span className="text-sm leading-relaxed" style={{ color: 'rgba(255,255,255,0.75)' }}>{item}</span>
+                </div>
+              ))}
+            </div>
+            <div
+              className="mt-8 p-5"
+              style={{ border: '1px solid rgba(255,58,14,0.2)', background: 'rgba(255,58,14,0.04)' }}
+            >
+              <p className="text-sm leading-relaxed" style={{ color: 'rgba(255,255,255,0.55)' }}>
+                Precisa de acompanhamento intensivo, acesso a encontros ao vivo e suporte prioritário?{' '}
+                <Link href="/mentoria" className="underline underline-offset-2" style={{ color: '#FF3A0E' }}>
+                  Veja a Mentoria
+                </Link>{' '}
+                — um programa presencial em Florianópolis com turmas de até 12 pessoas.
+              </p>
             </div>
           </div>
         </section>
 
         {/* ===== DEPOIMENTOS ===== */}
-        <section className="relative z-10 py-16 sm:py-20" style={{ borderTop: '1px solid rgba(255,255,255,0.07)' }}>
+        <section className="relative z-10 py-16 sm:py-20" style={{ borderTop: '1px solid rgba(255,255,255,0.07)', background: 'rgba(255,255,255,0.015)' }}>
           <div className="mx-auto max-w-4xl px-5 sm:px-8">
             <p className="mb-4" style={{ ...KV_MONO, color: 'rgba(255, 58, 14, 0.85)' }}>
               Quem já passou por aqui
@@ -297,8 +292,49 @@ export default async function CursoOnlinePage() {
           </div>
         </section>
 
+        {/* ===== GARANTIA ===== */}
+        <section className="relative z-10 py-16 sm:py-20" style={{ borderTop: '1px solid rgba(255,255,255,0.07)' }}>
+          <div className="mx-auto max-w-2xl px-5 sm:px-8 text-center">
+            <p className="mb-4" style={{ ...KV_MONO, color: 'rgba(255, 58, 14, 0.85)' }}>
+              Garantia
+            </p>
+            <h2
+              className="mb-6 text-3xl sm:text-4xl"
+              style={{ fontFamily: 'var(--font-display-serif)', fontWeight: 400, letterSpacing: '-0.03em', lineHeight: 0.95 }}
+            >
+              7 dias de{' '}
+              <span className="italic" style={{ color: '#FF3A0E', fontWeight: 300 }}>garantia total</span>
+            </h2>
+            <p className="text-sm leading-relaxed mb-6" style={{ color: 'rgba(255,255,255,0.55)' }}>
+              Se dentro de 7 dias após a compra você sentir que o curso não é para você, devolvemos 100% do valor pago. Sem burocracia, sem questionamentos.
+            </p>
+            <div
+              className="inline-flex items-center gap-3 px-6 py-3"
+              style={{ border: '1px solid rgba(255,58,14,0.25)', background: 'rgba(255,58,14,0.06)' }}
+            >
+              <span style={{ ...KV_MONO, color: '#FF3A0E', fontSize: '10px' }}>Risco zero para você</span>
+            </div>
+          </div>
+        </section>
+
+        {/* ===== FAQ ===== */}
+        <section id="faq" className="relative z-10 py-16 sm:py-20" style={{ borderTop: '1px solid rgba(255,255,255,0.07)', background: 'rgba(255,255,255,0.015)' }}>
+          <div className="mx-auto max-w-3xl px-5 sm:px-8">
+            <p className="mb-4 text-center" style={{ ...KV_MONO, color: 'rgba(255, 58, 14, 0.85)' }}>
+              FAQ
+            </p>
+            <h2
+              className="mb-10 text-center text-3xl sm:text-4xl"
+              style={{ fontFamily: 'var(--font-display-serif)', fontWeight: 400, letterSpacing: '-0.03em', lineHeight: 0.95 }}
+            >
+              Dúvidas Comuns
+            </h2>
+            <CursoFaqAccordion />
+          </div>
+        </section>
+
         {/* ===== PREÇO + CTA ===== */}
-        <section className="relative z-10 py-16 sm:py-24" style={{ borderTop: '1px solid rgba(255,255,255,0.07)' }}>
+        <section id="inscricao" className="relative z-10 py-16 sm:py-24" style={{ borderTop: '1px solid rgba(255,255,255,0.07)' }}>
           <div className="mx-auto max-w-2xl px-5 sm:px-8 text-center">
             <p className="mb-3" style={{ ...KV_MONO, color: 'rgba(255, 58, 14, 0.85)' }}>
               Investimento
@@ -320,18 +356,9 @@ export default async function CursoOnlinePage() {
                 </div>
               ))}
             </div>
-            <form action={checkoutAction} className="w-full sm:w-auto">
-              <button
-                type="submit"
-                className="inline-flex items-center justify-center gap-2 px-10 py-4 text-sm font-semibold uppercase transition-all hover:brightness-110 active:scale-[0.98] w-full sm:w-auto"
-                style={{ ...KV_MONO, background: '#FF3A0E', color: '#050507', fontSize: '12px' }}
-              >
-                Comprar agora — R$ 499
-                <ArrowRight size={14} aria-hidden="true" />
-              </button>
-            </form>
+            <CheckoutForm cohortSlug={COHORT_SLUG} label="Comprar agora — R$ 499" />
             <p className="mt-4 text-xs" style={{ ...KV_MONO, color: 'rgba(255,255,255,0.2)' }}>
-              Preferes acompanhamento ao vivo?{' '}
+              Preferes acompanhamento intensivo ao vivo?{' '}
               <Link href="/mentoria" className="underline underline-offset-2" style={{ color: 'rgba(255,255,255,0.4)' }}>
                 Ver a Mentoria →
               </Link>
