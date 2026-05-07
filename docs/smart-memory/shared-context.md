@@ -15,41 +15,49 @@ O lead (team-os) atualiza este arquivo a cada mudança de estado dos teammates.
 |---|---|---|---|
 | sites-data | ✅ concluído | F1.2–F1.8 + F9.x — todas as stories done | 2026-05-06 |
 | sites-dev-beta | ✅ concluído | Fix mock data → Supabase real (pagamentos + moderação + types) | 2026-05-07 |
-| sites-dev-alpha | ✅ concluído | F10.2 (badge admin) + F10.3 (/curso-online + home CTA) | 2026-05-06 |
+| sites-dev-alpha | ✅ concluído | Fix SEO canonical + OG tags /academy/turmas (7c39341) | 2026-05-07 |
 | sites-dev-delta | ✅ concluído | F10.4 — criar aluno manual + email convite | 2026-05-06 |
-| sites-dev-gamma | ⏳ pendente | F11.1 — migrar crons para Supabase pg_cron (backlog) | 2026-05-07 |
+| sites-dev-gamma | ✅ concluído | F11.1 — pg_cron + Edge Functions em produção (a0c1c8b) | 2026-05-07 |
 | sites-devops | ✅ concluído | F8.6 ✅ deploy no ar — joaoguirunas.com, webhook Stripe, todas env vars | 2026-05-07 |
-| sites-qa | ⏸️ bloqueado | F8.7 — aguarda criação de cohort `curso-online-padrao` em /academy/admin | 2026-05-07 |
+| sites-qa | ⚠️ CONCERNS preliminar | F8.7 — veredicto final aguarda ACs manuais de João | 2026-05-07 |
 
 ## Team ativo
 
 **Nome:** joao-guirunas-site-plataforma-cursos-completo
+**Status:** ⛔ encerrado por João em 2026-05-07
 **Objetivo:** Plataforma de cursos Fases 1–9 — 42 stories, do schema ao deploy
 **Início:** 2026-05-06T19:30:00-03:00
+**Encerramento:** 2026-05-07
 
 ## Último encerramento
 
 **Data:** 2026-05-07
-**Sessão:** Fixes pós-deploy — mock data, types regenerados, deploy em produção
+**Sessão:** Sprint plataforma-cursos-completo — encerramento
 **Trabalho realizado:**
-- PaymentsClient: mock → query Supabase real (payments + profiles + cohorts)
-- ModerationClient: mock → queries comments + forum_threads reais
-- types/database.ts regenerado (onboarding table + modules.cover_image_url)
-- Commit 0acc951 + push → Vercel redeploy automático
+- 70 stories done (Fases 1–11)
+- Produção live: joaoguirunas.com
+- F11.1 pg_cron + Edge Functions (cron-daily, cron-hourly) deployados no Supabase
+- Admin pagamentos + moderação: dados reais (sem mocks)
+- types/database.ts regenerado
+- SEO /academy/turmas: canonical + OG tags corrigidos
 
 ## ⚠️ Pendente para próxima sessão
 
 - **João**: Criar cohort `curso-online-padrao` em joaoguirunas.com/academy/admin/turmas/nova
   - slug: `curso-online-padrao`, preço: 49900 (centavos), status: OPEN, purchasable: ✅
   - Desbloqueia F8.7 smoke test (AC4)
-- **João**: Fornecer VIMEO_ACCESS_TOKEN (Vercel env var) para vídeos em produção
+- **João**: Verificar seed UUID `40000000-0000-0000-0000-000000000001` no Supabase prod (Table Editor → cohort_members)
+- **João**: Fornecer VIMEO_ACCESS_TOKEN (Vercel env var)
 - **João**: Fornecer SENTRY_DSN + SENTRY_AUTH_TOKEN
-- **F11.1**: Migrar crons para Supabase pg_cron — aguarda sinal para iniciar
-- **F8.7**: Smoke test — aguarda cohort em prod
+- **F8.7**: Smoke test ACs manuais — aguarda cohort + João disponível
 - **F8.5**: E2E Playwright — MVP debt, baixa prioridade
+- **Próximo ciclo**: João definir objetivo do novo time
 
 ## Decisões ativas
-<!-- Architect atualiza após cada ADR -->
+
+- Vercel Hobby plan — sem crons. Toda lógica agendada via Supabase pg_cron + Edge Functions.
+- Auth: sem signup público. Admin cria alunos manualmente ou via webhook Stripe.
+- Duas rotas de compra: /curso-online (público, sem auth) e /mentoria (lead gen).
 
 ## Blockers
-- sites-qa: aguarda cohort `curso-online-padrao` criada em produção por João
+<!-- Nenhum blocker de código — apenas operacionais aguardando João -->

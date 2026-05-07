@@ -1,7 +1,7 @@
 ---
 title: Smart Memory Index
 type: index
-updated: 2026-05-05
+updated: 2026-05-07
 tags: [index]
 ---
 
@@ -33,6 +33,7 @@ MOC raiz. Todo arquivo novo em `docs/smart-memory/` deve ser referenciado aqui.
 
 ## Runbooks
 - [[runbooks/go-live-checklist]] — gate formal F8.7 (13 ACs: auth, conteúdo bloqueado, compra real, cross-ext, refund, emails, performance, RLS, sentry, cron, backup)
+- [[runbooks/launch-2026-05-07]] — execução go-live em prod 2026-05-07 (pré-flight ✅; ACs manuais pendentes João)
 
 ## Agentes
 - [[agents/data-engineer/schema]] — schema completo (21 tabelas, funções, índices)

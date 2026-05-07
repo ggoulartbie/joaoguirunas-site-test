@@ -191,3 +191,27 @@ Registro de todos os Agent Teams formados neste projeto. Lead (team-os) atualiza
 **Início:** 2026-05-06T19:30:00-03:00
 **Encerrado:** —
 **Stories:** active: 7, backlog: 35, done: 24
+
+## 2026-05-07 — Team joao-guirunas-site-plataforma-cursos-completo (encerrado)
+
+**Objetivo:** Plataforma de cursos Fases 1–9 — 42 stories, do schema ao deploy
+**Lead:** team-os (skill)
+**Composição:**
+- sites-data — schema, migrations, RLS
+- sites-dev-alpha — frontend, UI components
+- sites-dev-beta — backend, APIs, fixes pós-deploy
+- sites-dev-delta — hardening, email, resiliência
+- sites-dev-gamma — fullstack, F10.5, F11.1 pg_cron
+- sites-devops — deploy, Vercel, Stripe webhook
+- sites-qa — QA gates, smoke test
+
+**Status:** encerrado
+**Início:** 2026-05-06T19:30:00-03:00
+**Encerrado:** 2026-05-07
+**Stories:** 70 done, 2 backlog (F8.5 E2E, F8.7 smoke manual)
+
+**Highlights:**
+- Plataforma de cursos completa do zero ao deploy
+- joaoguirunas.com em produção
+- pg_cron + Edge Functions substituem Vercel crons (Hobby plan)
+- Auth sem signup público + admin badge + /curso-online + checkout público
