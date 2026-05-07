@@ -804,6 +804,7 @@ export type Database = {
       modules: {
         Row: {
           course_id: string
+          cover_image_url: string | null
           created_at: string
           deleted_at: string | null
           description: string | null
@@ -815,6 +816,7 @@ export type Database = {
         }
         Insert: {
           course_id: string
+          cover_image_url?: string | null
           created_at?: string
           deleted_at?: string | null
           description?: string | null
@@ -826,6 +828,7 @@ export type Database = {
         }
         Update: {
           course_id?: string
+          cover_image_url?: string | null
           created_at?: string
           deleted_at?: string | null
           description?: string | null
@@ -885,6 +888,90 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      onboarding: {
+        Row: {
+          cidade: string | null
+          created_at: string
+          ctx_1: string | null
+          ctx_2: string | null
+          ctx_3: string | null
+          ctx_4: string | null
+          empresa: string | null
+          id: string
+          linkedin: string | null
+          nome: string
+          obj_1: string | null
+          obj_2: string | null
+          obj_3: string | null
+          obj_4: string | null
+          pdf_path: string | null
+          planejamento: string | null
+          profissao: string | null
+          proj_nome: string | null
+          proj_problema: string | null
+          proj_publico: string | null
+          proj_resultado: string | null
+          proj_tools: string | null
+          segmento: string | null
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          cidade?: string | null
+          created_at?: string
+          ctx_1?: string | null
+          ctx_2?: string | null
+          ctx_3?: string | null
+          ctx_4?: string | null
+          empresa?: string | null
+          id?: string
+          linkedin?: string | null
+          nome?: string
+          obj_1?: string | null
+          obj_2?: string | null
+          obj_3?: string | null
+          obj_4?: string | null
+          pdf_path?: string | null
+          planejamento?: string | null
+          profissao?: string | null
+          proj_nome?: string | null
+          proj_problema?: string | null
+          proj_publico?: string | null
+          proj_resultado?: string | null
+          proj_tools?: string | null
+          segmento?: string | null
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          cidade?: string | null
+          created_at?: string
+          ctx_1?: string | null
+          ctx_2?: string | null
+          ctx_3?: string | null
+          ctx_4?: string | null
+          empresa?: string | null
+          id?: string
+          linkedin?: string | null
+          nome?: string
+          obj_1?: string | null
+          obj_2?: string | null
+          obj_3?: string | null
+          obj_4?: string | null
+          pdf_path?: string | null
+          planejamento?: string | null
+          profissao?: string | null
+          proj_nome?: string | null
+          proj_problema?: string | null
+          proj_publico?: string | null
+          proj_resultado?: string | null
+          proj_tools?: string | null
+          segmento?: string | null
+          status?: string
+          updated_at?: string
+        }
+        Relationships: []
       }
       payments: {
         Row: {
@@ -1083,6 +1170,10 @@ export type Database = {
       has_access: {
         Args: { p_lesson_id: string; p_user_id: string }
         Returns: boolean
+      }
+      increment_filled_seats: {
+        Args: { p_cohort_id: string }
+        Returns: undefined
       }
       is_admin: { Args: never; Returns: boolean }
     }

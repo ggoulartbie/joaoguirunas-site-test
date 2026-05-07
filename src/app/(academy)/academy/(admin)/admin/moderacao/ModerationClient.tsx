@@ -1,9 +1,26 @@
 'use client'
 
 import { useState } from 'react'
-import { MOCK_COMMENTS_QUEUE, MOCK_THREADS_QUEUE } from '@/components/admin/mock-data'
-import type { MockComment, MockThread } from '@/components/admin/mock-data'
 import { MessageSquare, Hash } from 'lucide-react'
+
+export type CommentQueueItem = {
+  id: string
+  content: string
+  created_at: string
+  authorName: string
+  lessonTitle: string
+}
+
+export type ThreadQueueItem = {
+  id: string
+  title: string
+  content: string
+  created_at: string
+  view_count: number
+  replyCount: number
+  authorName: string
+  categoryName: string
+}
 
 type Tab = 'comments' | 'threads'
 
@@ -20,11 +37,9 @@ function formatDateTime(iso: string) {
 function CommentCard({
   comment,
   onRemove,
-  onSpam,
 }: {
-  comment: MockComment
+  comment: CommentQueueItem
   onRemove: (id: string) => void
-  onSpam: (id: string) => void
 }) {
   const [removed, setRemoved] = useState(false)
 
@@ -36,10 +51,6 @@ function CommentCard({
         <span className="font-mono text-xs font-medium text-[var(--bone)]">{comment.authorName}</span>
         <span className="font-mono text-[10px] text-[var(--bone-mute)]">em</span>
         <span className="font-mono text-[10px] text-[var(--bone-dim)]">{comment.lessonTitle}</span>
-        <span className="font-mono text-[10px] text-[var(--bone-mute)]">·</span>
-        <span className="border border-[rgba(255,255,255,0.07)] px-1.5 py-0.5 font-mono text-[9px] text-[var(--bone-mute)]">
-          {comment.cohortName}
-        </span>
       </div>
 
       <div className="mb-3 border-l-2 border-[var(--ember)] bg-[var(--ember)]/5 p-3">
@@ -53,14 +64,14 @@ function CommentCard({
         <div className="flex items-center gap-2">
           <button
             type="button"
-            onClick={() => { setRemoved(true) }}
+            onClick={() => setRemoved(true)}
             className="border border-[rgba(255,255,255,0.07)] px-3 py-1 font-mono text-[11px] uppercase tracking-wide text-[var(--bone-mute)] transition-colors hover:border-[rgba(255,255,255,0.16)] hover:text-[var(--bone-dim)]"
           >
             Ignorar
           </button>
           <button
             type="button"
-            onClick={() => { setRemoved(true) }}
+            onClick={() => setRemoved(true)}
             className="border border-emerald-400/20 bg-emerald-400/10 px-3 py-1 font-mono text-[11px] uppercase tracking-wide text-emerald-400 transition-colors hover:bg-emerald-400/20"
           >
             Aprovar
@@ -81,11 +92,9 @@ function CommentCard({
 function ThreadCard({
   thread,
   onRemove,
-  onSpam,
 }: {
-  thread: MockThread
+  thread: ThreadQueueItem
   onRemove: (id: string) => void
-  onSpam: (id: string) => void
 }) {
   const [removed, setRemoved] = useState(false)
 
@@ -116,14 +125,14 @@ function ThreadCard({
         <div className="flex items-center gap-2">
           <button
             type="button"
-            onClick={() => { setRemoved(true) }}
+            onClick={() => setRemoved(true)}
             className="border border-[rgba(255,255,255,0.07)] px-3 py-1 font-mono text-[11px] uppercase tracking-wide text-[var(--bone-mute)] transition-colors hover:border-[rgba(255,255,255,0.16)] hover:text-[var(--bone-dim)]"
           >
             Ignorar
           </button>
           <button
             type="button"
-            onClick={() => { setRemoved(true) }}
+            onClick={() => setRemoved(true)}
             className="border border-emerald-400/20 bg-emerald-400/10 px-3 py-1 font-mono text-[11px] uppercase tracking-wide text-emerald-400 transition-colors hover:bg-emerald-400/20"
           >
             Aprovar
@@ -141,24 +150,22 @@ function ThreadCard({
   )
 }
 
-export function ModerationClient() {
+export function ModerationClient({
+  initialComments,
+  initialThreads,
+}: {
+  initialComments: CommentQueueItem[]
+  initialThreads: ThreadQueueItem[]
+}) {
   const [activeTab, setActiveTab] = useState<Tab>('comments')
-  const [comments, setComments] = useState(MOCK_COMMENTS_QUEUE)
-  const [threads, setThreads] = useState(MOCK_THREADS_QUEUE)
+  const [comments, setComments] = useState(initialComments)
+  const [threads, setThreads] = useState(initialThreads)
 
   function removeComment(id: string) {
     setComments((prev) => prev.filter((c) => c.id !== id))
   }
 
-  function markCommentSpam(id: string) {
-    setComments((prev) => prev.filter((c) => c.id !== id))
-  }
-
   function removeThread(id: string) {
-    setThreads((prev) => prev.filter((t) => t.id !== id))
-  }
-
-  function markThreadSpam(id: string) {
     setThreads((prev) => prev.filter((t) => t.id !== id))
   }
 
@@ -210,12 +217,7 @@ export function ModerationClient() {
             </div>
           ) : (
             comments.map((c) => (
-              <CommentCard
-                key={c.id}
-                comment={c}
-                onRemove={removeComment}
-                onSpam={markCommentSpam}
-              />
+              <CommentCard key={c.id} comment={c} onRemove={removeComment} />
             ))
           )}
         </div>
@@ -229,12 +231,7 @@ export function ModerationClient() {
             </div>
           ) : (
             threads.map((t) => (
-              <ThreadCard
-                key={t.id}
-                thread={t}
-                onRemove={removeThread}
-                onSpam={markThreadSpam}
-              />
+              <ThreadCard key={t.id} thread={t} onRemove={removeThread} />
             ))
           )}
         </div>

@@ -1,10 +1,22 @@
 'use client'
 
 import { useState, useTransition } from 'react'
-import { MOCK_PAYMENTS } from '@/components/admin/mock-data'
-import type { MockPayment } from '@/components/admin/mock-data'
 import { ExternalLink, X, AlertTriangle, RefreshCw } from 'lucide-react'
 import { retryWebhookEvent } from './actions'
+
+export type PaymentRow = {
+  id: string
+  amount_cents: number
+  status: string
+  purchase_kind: string
+  payment_method: string | null
+  paid_at: string | null
+  created_at: string
+  stripe_checkout_session_id: string | null
+  stripe_payment_intent_id: string | null
+  userName: string
+  cohortName: string
+}
 
 const STATUS_LABELS: Record<string, string> = {
   PENDING: 'Pendente',
@@ -46,7 +58,7 @@ function RefundConfirmModal({
   onConfirm,
   onCancel,
 }: {
-  payment: MockPayment
+  payment: PaymentRow
   onConfirm: () => void
   onCancel: () => void
 }) {
@@ -125,12 +137,11 @@ function RefundConfirmModal({
   )
 }
 
-function downloadCSV(payments: MockPayment[]) {
-  const headers = ['ID', 'Aluno', 'E-mail', 'Turma', 'Tipo', 'Valor', 'Status', 'Método', 'Data']
+function downloadCSV(payments: PaymentRow[]) {
+  const headers = ['ID', 'Aluno', 'Turma', 'Tipo', 'Valor', 'Status', 'Método', 'Data']
   const rows = payments.map((p) => [
     p.id,
     p.userName,
-    p.userEmail,
     p.cohortName,
     KIND_LABELS[p.purchase_kind] ?? p.purchase_kind,
     formatBRL(p.amount_cents),
@@ -219,11 +230,17 @@ function FailedWebhooksPanel({ events }: { events: FailedEvent[] }) {
   )
 }
 
-export function PaymentsClient({ failedWebhookEvents }: { failedWebhookEvents: FailedEvent[] }) {
+export function PaymentsClient({
+  initialPayments,
+  failedWebhookEvents,
+}: {
+  initialPayments: PaymentRow[]
+  failedWebhookEvents: FailedEvent[]
+}) {
   const [statusFilter, setStatusFilter] = useState('all')
-  const [refundTarget, setRefundTarget] = useState<MockPayment | null>(null)
+  const [refundTarget, setRefundTarget] = useState<PaymentRow | null>(null)
 
-  const filtered = MOCK_PAYMENTS.filter((p) => {
+  const filtered = initialPayments.filter((p) => {
     if (statusFilter !== 'all' && p.status !== statusFilter) return false
     return true
   })
@@ -295,12 +312,7 @@ export function PaymentsClient({ failedWebhookEvents }: { failedWebhookEvents: F
                 key={payment.id}
                 className="border-b border-[rgba(255,255,255,0.07)] hover:bg-[var(--void)]/40"
               >
-                <td className="px-4 py-3">
-                  <div className="flex flex-col">
-                    <span className="font-mono text-xs text-[var(--bone)]">{payment.userName}</span>
-                    <span className="font-mono text-[10px] text-[var(--bone-mute)]">{payment.userEmail}</span>
-                  </div>
-                </td>
+                <td className="px-4 py-3 font-mono text-xs text-[var(--bone)]">{payment.userName}</td>
                 <td className="px-4 py-3 font-mono text-xs text-[var(--bone-dim)]">{payment.cohortName}</td>
                 <td className="px-4 py-3 font-mono text-sm font-bold text-[var(--bone)]">
                   {formatBRL(payment.amount_cents)}
@@ -319,7 +331,7 @@ export function PaymentsClient({ failedWebhookEvents }: { failedWebhookEvents: F
                   <div className="flex items-center gap-2">
                     {payment.stripe_checkout_session_id && (
                       <a
-                        href={`https://dashboard.stripe.com/test/payments/${payment.stripe_payment_intent_id}`}
+                        href={`https://dashboard.stripe.com/payments/${payment.stripe_payment_intent_id}`}
                         target="_blank"
                         rel="noopener noreferrer"
                         className="p-1 text-[var(--bone-mute)] transition-colors hover:text-[var(--bone-dim)]"
@@ -341,6 +353,13 @@ export function PaymentsClient({ failedWebhookEvents }: { failedWebhookEvents: F
                 </td>
               </tr>
             ))}
+            {filtered.length === 0 && (
+              <tr>
+                <td colSpan={6} className="px-4 py-12 text-center font-mono text-sm text-[var(--bone-mute)]">
+                  Nenhum pagamento encontrado
+                </td>
+              </tr>
+            )}
           </tbody>
         </table>
       </div>
