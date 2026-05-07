@@ -4,10 +4,26 @@ import Image from 'next/image'
 import { BookOpen } from 'lucide-react'
 import { createClient } from '@/lib/supabase/server'
 import { supabaseAdmin } from '@/lib/supabase/admin'
+import { siteConfig } from '@/config/site'
 
 export const metadata: Metadata = {
-  title: 'Turmas disponíveis',
-  description: 'Conheça as turmas abertas e garanta sua vaga.',
+  title: 'Turmas · João Guirunas',
+  description:
+    'Turmas abertas do Academy de João Guirunas. Aprenda IA aplicada a negócios com vagas limitadas e conteúdo de quem opera no dia a dia.',
+  alternates: { canonical: '/academy/turmas' },
+  openGraph: {
+    title: 'Turmas · João Guirunas',
+    description:
+      'Turmas abertas do Academy de João Guirunas. Aprenda IA aplicada a negócios com vagas limitadas e conteúdo de quem opera no dia a dia.',
+    url: `${siteConfig.url}/academy/turmas`,
+    images: [{ url: '/images/og-default.png', width: 1200, height: 630 }],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Turmas · João Guirunas',
+    description:
+      'Turmas abertas do Academy de João Guirunas. Aprenda IA aplicada a negócios com vagas limitadas e conteúdo de quem opera no dia a dia.',
+  },
 }
 
 const PURCHASABLE_STATUSES = ['OPEN', 'IN_PROGRESS'] as const
