@@ -1,7 +1,7 @@
 ---
 title: Shared Context
 type: status-board
-updated: 2026-05-06
+updated: 2026-05-07
 tags: [ops]
 ---
 
@@ -14,12 +14,12 @@ O lead (team-os) atualiza este arquivo a cada mudança de estado dos teammates.
 | Teammate | Status | Task atual | Desde |
 |---|---|---|---|
 | sites-data | ✅ concluído | F1.2–F1.8 + F9.x — todas as stories done | 2026-05-06 |
-| sites-dev-beta | 🟢 ativo | F10.1 — auth sem signup + routing → /academy/aluno | 2026-05-06 |
-| sites-dev-alpha | 🟢 ativo | F10.2 (badge admin) + F10.3 (/curso-online + home CTA) | 2026-05-06 |
-| sites-dev-delta | 🟢 ativo | F10.4 — criar aluno manual + email convite (F6.1–F6.4 ✅) | 2026-05-06 |
-| sites-dev-gamma | 🟢 ativo | F10.5 — verificar webhook Stripe autocria conta | 2026-05-06 |
-| sites-devops | ⏸️ bloqueado | F8.4 ✅ done — F8.6 deploy (Vercel MCP + git CLI) aguarda QA PASS | 2026-05-06 |
-| sites-qa | ⏸️ bloqueado | F8.7 AC1 ✅ runbook pronto — aguarda F8.6 (produção) para veredicto final | 2026-05-06 |
+| sites-dev-beta | ✅ concluído | Fix mock data → Supabase real (pagamentos + moderação + types) | 2026-05-07 |
+| sites-dev-alpha | ✅ concluído | F10.2 (badge admin) + F10.3 (/curso-online + home CTA) | 2026-05-06 |
+| sites-dev-delta | ✅ concluído | F10.4 — criar aluno manual + email convite | 2026-05-06 |
+| sites-dev-gamma | ⏳ pendente | F11.1 — migrar crons para Supabase pg_cron (backlog) | 2026-05-07 |
+| sites-devops | ✅ concluído | F8.6 ✅ deploy no ar — joaoguirunas.com, webhook Stripe, todas env vars | 2026-05-07 |
+| sites-qa | ⏸️ bloqueado | F8.7 — aguarda criação de cohort `curso-online-padrao` em /academy/admin | 2026-05-07 |
 
 ## Team ativo
 
@@ -29,22 +29,27 @@ O lead (team-os) atualiza este arquivo a cada mudança de estado dos teammates.
 
 ## Último encerramento
 
-**Data:** 2026-05-06
-**Sessão:** Mentoria Onboarding Tool — formulário presencial com Supabase + PDF upload
+**Data:** 2026-05-07
+**Sessão:** Fixes pós-deploy — mock data, types regenerados, deploy em produção
 **Trabalho realizado:**
-- Tabela `onboarding` + bucket `onboarding-pdfs` criados via migrations
-- `/mentoria/onboarding` — lista single-line com CRUD, copy prompt, PDF ↗
-- `/mentoria/onboarding/[id]` — formulário com auto-save, ✓ por campo, nav com Planejamento último
-- PDF upload via signed URL (fix do limite 1MB do Next.js server actions)
+- PaymentsClient: mock → query Supabase real (payments + profiles + cohorts)
+- ModerationClient: mock → queries comments + forum_threads reais
+- types/database.ts regenerado (onboarding table + modules.cover_image_url)
+- Commit 0acc951 + push → Vercel redeploy automático
 
 ## ⚠️ Pendente para próxima sessão
 
-- **git commit + push** de todos os arquivos modificados (nenhum commit desta sessão ainda)
-  - Novo: `OnboardingListClient.tsx`, `[id]/OnboardingFormClient.tsx`, `[id]/page.tsx`, `onboarding.ts`, 2 migrations
-  - Modificados (plataforma-cursos): academy pages, AdminSidebar, MaterialsUpload
+- **João**: Criar cohort `curso-online-padrao` em joaoguirunas.com/academy/admin/turmas/nova
+  - slug: `curso-online-padrao`, preço: 49900 (centavos), status: OPEN, purchasable: ✅
+  - Desbloqueia F8.7 smoke test (AC4)
+- **João**: Fornecer VIMEO_ACCESS_TOKEN (Vercel env var) para vídeos em produção
+- **João**: Fornecer SENTRY_DSN + SENTRY_AUTH_TOKEN
+- **F11.1**: Migrar crons para Supabase pg_cron — aguarda sinal para iniciar
+- **F8.7**: Smoke test — aguarda cohort em prod
+- **F8.5**: E2E Playwright — MVP debt, baixa prioridade
 
 ## Decisões ativas
 <!-- Architect atualiza após cada ADR -->
 
 ## Blockers
-<!-- Lead registra quando teammate está travado -->
+- sites-qa: aguarda cohort `curso-online-padrao` criada em produção por João
