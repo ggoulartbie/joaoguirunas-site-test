@@ -7,9 +7,14 @@ export const runtime = 'nodejs'
 export const maxDuration = 60
 
 export async function GET(req: NextRequest) {
+  // Migrated to Supabase pg_cron + Edge Function (cron-daily).
+  // Kept as emergency fallback — disabled unless CRON_FALLBACK_ENABLED=true.
+  if (process.env.CRON_FALLBACK_ENABLED !== 'true') {
+    return NextResponse.json({ disabled: true, reason: 'Migrated to Supabase Edge Functions' }, { status: 200 })
+  }
+
   const APP_URL = process.env.NEXT_PUBLIC_APP_URL ?? ''
 
-  // Vercel Cron authentication
   const authHeader = req.headers.get('authorization')
   if (authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
