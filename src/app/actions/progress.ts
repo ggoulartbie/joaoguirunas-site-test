@@ -50,11 +50,32 @@ export async function markLessonComplete(lessonId: string): Promise<void> {
       { onConflict: 'user_id,lesson_id' }
     )
 
-  // Auto-issue certificate if this completes 100% of the course.
-  // Resolve course + active cohort via supabaseAdmin (service role, no RLS).
   triggerCertificateCheck(user.id, lessonId).catch((err) => Sentry.captureException(err, {
     tags: { action: 'markLessonComplete', lesson_id: lessonId },
   }))
+}
+
+export async function toggleLessonComplete(lessonId: string, completed: boolean): Promise<void> {
+  const user = await requireUser()
+  const supabase = await createClient()
+
+  await supabase
+    .from('lesson_progress')
+    .upsert(
+      {
+        user_id: user.id,
+        lesson_id: lessonId,
+        completed,
+        completed_at: completed ? new Date().toISOString() : null,
+      },
+      { onConflict: 'user_id,lesson_id' }
+    )
+
+  if (completed) {
+    triggerCertificateCheck(user.id, lessonId).catch((err) => Sentry.captureException(err, {
+      tags: { action: 'toggleLessonComplete', lesson_id: lessonId },
+    }))
+  }
 }
 
 async function triggerCertificateCheck(userId: string, lessonId: string): Promise<void> {
