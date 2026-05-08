@@ -5,18 +5,19 @@ import { Check, Play, FileText, MessageSquare, Award } from 'lucide-react'
 import { siteConfig } from '@/config/site'
 import { ALL_AGENTES, SQUADS, TOTAL_AGENTES } from '@/data/agentes'
 import { SolarSystemBackground } from '@/app/agentes/_components/SolarSystemBackground'
-import { PricingCalculator } from '@/app/mentoria/pricing-calculator'
-import { CursoSquadSection } from './_components/CursoSquadSection'
+import { CursoSquadsSticky } from './_components/CursoSquadsSticky'
 import { CursoFaqAccordion } from './_components/CursoFaqAccordion'
 import { CheckoutForm } from './_components/checkout-form'
+import { CursoOnlineTimeline } from './_components/CursoOnlineTimeline'
+import { CursoPricingCalculator } from './_components/CursoPricingCalculator'
 
 export const metadata: Metadata = {
-  title: 'Curso Online | Claude Agents Team — R$ 799',
+  title: 'Curso Online | Claude Agents Team — R$ 797',
   description:
     'Acesso por 6 meses ao conteúdo em vídeo, materiais, fórum e certificado. Aprenda a criar e orquestrar agentes de IA com Claude Code no seu próprio ritmo.',
   alternates: { canonical: '/curso-online' },
   openGraph: {
-    title: 'Curso Online | Claude Agents Team — R$ 799 | João Guirunas',
+    title: 'Curso Online | Claude Agents Team — R$ 797 | João Guirunas',
     description:
       'Acesso por 6 meses ao conteúdo em vídeo, materiais, fórum e certificado. Aprenda a criar e orquestrar agentes de IA com Claude Code no seu próprio ritmo.',
     url: `${siteConfig.url}/curso-online`,
@@ -24,7 +25,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Curso Online | Claude Agents Team — R$ 799',
+    title: 'Curso Online | Claude Agents Team — R$ 797',
     description:
       'Acesso por 6 meses ao conteúdo em vídeo, materiais, fórum e certificado. Aprenda a criar e orquestrar agentes de IA com Claude Code no seu próprio ritmo.',
   },
@@ -47,7 +48,7 @@ const jsonLd = {
   url: `${siteConfig.url}/curso-online`,
   offers: {
     '@type': 'Offer',
-    price: '799',
+    price: '797',
     priceCurrency: 'BRL',
     availability: 'https://schema.org/InStock',
     url: `${siteConfig.url}/academy/checkout/${COHORT_SLUG}`,
@@ -101,38 +102,6 @@ const TESTIMONIALS = [
   },
 ]
 
-const MODULOS = [
-  {
-    num: 1,
-    title: 'Centro de Treinamento de Agentes',
-    description: 'Crie e personalize seu primeiro agente do zero. Aprenda a definir persona, especialidade e instruções.',
-    tags: ['Agentes', 'Personalização', 'CTA'],
-  },
-  {
-    num: 2,
-    title: 'Abertura — Desbloqueio e Crenças Limitantes',
-    description: 'Trabalho de desbloqueio com a Claudia — respiração, ancoragem e identificação das crenças que sabotam o avanço.',
-    tags: ['Desbloqueio', 'Mindset', 'Claudia'],
-  },
-  {
-    num: 3,
-    title: 'O que é possível',
-    description: 'Veja o que é possível construir com agentes de IA hoje. Sites, squads de conteúdo, automações de vendas, sistemas de atendimento.',
-    tags: ['Demos', 'Cases Reais', 'IA Agêntica'],
-  },
-  {
-    num: 4,
-    title: 'Fundamentos do Claude Code',
-    description: 'O que é Claude Code, como ele pensa, o que diferencia ele de um ChatGPT. Agentes, ferramentas, MCP, contexto.',
-    tags: ['Claude Code', 'MCP', 'Agentes'],
-  },
-  {
-    num: 5,
-    title: 'Setup e Instalação',
-    description: 'Instale tudo: Claude Code, extensões, chaves de API, MCP servers. Saia com o ambiente 100% pronto para trabalhar.',
-    tags: ['Setup', 'Instalação', 'Ambiente'],
-  },
-]
 
 const FACILITADORES = [
   {
@@ -218,7 +187,7 @@ export default function CursoOnlinePage() {
 
                 {/* CTAs */}
                 <div className="flex flex-col sm:flex-row gap-3">
-                  <CheckoutForm cohortSlug={COHORT_SLUG} label="Comprar — R$ 799" />
+                  <CheckoutForm cohortSlug={COHORT_SLUG} label="Comprar — R$ 797" />
                   <a
                     href="#squad-dev"
                     className="inline-flex items-center justify-center gap-2 px-6 py-3 uppercase transition-all hover:bg-white/[0.05]"
@@ -263,12 +232,7 @@ export default function CursoOnlinePage() {
 
         {/* ===== AGENTES POR SQUAD ===== */}
         <div id="squads" className="relative z-10" style={{ background: 'rgba(5,5,7,0.6)' }}>
-          {SQUADS.map((squad) => {
-            const agentes = ALL_AGENTES.filter((a) => a.squad === squad.id)
-            return (
-              <CursoSquadSection key={squad.id} squad={squad} agentes={agentes} />
-            )
-          })}
+          <CursoSquadsSticky squads={SQUADS} agentes={ALL_AGENTES} />
         </div>
 
         {/* ===== FACILITADORES ===== */}
@@ -341,57 +305,14 @@ export default function CursoOnlinePage() {
           </div>
         </section>
 
-        {/* ===== MÓDULOS ===== */}
-        <section
-          id="modulos"
-          className="relative z-10 py-16 sm:py-24"
-          style={{ borderTop: '1px solid rgba(255,255,255,0.07)', background: 'rgba(8,8,12,0.92)' }}
-        >
-          <div className="mx-auto max-w-6xl px-5 sm:px-8">
-            <div className="mb-10 sm:mb-14">
-              <p className="mb-4" style={{ ...MONO, color: 'rgba(255, 58, 14, 0.85)' }}>
-                Módulos
-              </p>
-              <h2 className="text-3xl sm:text-4xl" style={{ ...KV_DISPLAY, lineHeight: 0.95 }}>
-                O que você{' '}
-                <span className="italic" style={{ color: '#FF3A0E', fontWeight: 300 }}>vai aprender</span>
-              </h2>
-            </div>
-            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-              {MODULOS.map((m) => (
-                <div
-                  key={m.num}
-                  className="relative p-5 sm:p-6 group hover:border-[#FF3A0E]/20 transition-colors"
-                  style={{ border: '1px solid rgba(255,255,255,0.07)', background: 'rgba(255,255,255,0.02)' }}
-                >
-                  <span
-                    className="block mb-3 text-[#FF3A0E]/60"
-                    style={{ ...MONO, fontSize: '10px' }}
-                  >
-                    Módulo {m.num}
-                  </span>
-                  <h3 className="text-base sm:text-lg font-semibold text-white mb-2 leading-snug">{m.title}</h3>
-                  <p className="text-xs sm:text-sm text-white/55 leading-relaxed mb-4">{m.description}</p>
-                  <div className="flex flex-wrap gap-1.5">
-                    {m.tags.map((tag) => (
-                      <span
-                        key={tag}
-                        className="text-[10px] px-2 py-0.5 border border-white/[0.08] text-white/40"
-                        style={{ fontFamily: 'var(--font-mono)', letterSpacing: '0.06em' }}
-                      >
-                        {tag}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
+        {/* ===== TIMELINE DE MÓDULOS ===== */}
+        <div className="relative z-10">
+          <CursoOnlineTimeline />
+        </div>
 
         {/* ===== CALCULADORA DE PRECIFICAÇÃO ===== */}
         <div className="relative z-10">
-          <PricingCalculator />
+          <CursoPricingCalculator />
         </div>
 
         {/* ===== O QUE ESTÁ INCLUÍDO ===== */}
@@ -574,7 +495,7 @@ export default function CursoOnlinePage() {
               6x de R$ 133,17
             </div>
             <p className="mb-1 text-base sm:text-lg" style={{ color: 'rgba(255,255,255,0.35)' }}>
-              ou R$ 799 à vista
+              ou R$ 797 à vista
             </p>
             <p className="mb-8 text-sm" style={{ color: 'rgba(255,255,255,0.4)' }}>
               Acesso por 6 meses · Renovação disponível
@@ -587,7 +508,7 @@ export default function CursoOnlinePage() {
                 </div>
               ))}
             </div>
-            <CheckoutForm cohortSlug={COHORT_SLUG} label="Comprar agora — R$ 799" />
+            <CheckoutForm cohortSlug={COHORT_SLUG} label="Comprar agora — R$ 797" />
             <p className="mt-4 text-xs" style={{ ...MONO, color: 'rgba(255,255,255,0.2)' }}>
               Preferes acompanhamento intensivo ao vivo?{' '}
               <Link href="/mentoria" className="underline underline-offset-2" style={{ color: 'rgba(255,255,255,0.4)' }}>

@@ -24,7 +24,7 @@ interface CheckoutFormProps {
   label?: string
 }
 
-export function CheckoutForm({ cohortSlug, label = 'Comprar agora — R$ 499' }: CheckoutFormProps) {
+export function CheckoutForm({ cohortSlug, label = 'Comprar agora — R$ 797' }: CheckoutFormProps) {
   const [state, formAction, isPending] = useActionState(checkoutAction, null)
 
   return (

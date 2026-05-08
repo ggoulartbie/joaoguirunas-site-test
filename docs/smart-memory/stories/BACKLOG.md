@@ -1,7 +1,7 @@
 ---
 title: Story Backlog
 type: backlog
-updated: 2026-05-05
+updated: 2026-05-08
 tags: [story]
 ---
 
@@ -151,9 +151,22 @@ Plataforma multi-curso com cohorts como unidade central. Decisões consolidadas 
 | [[backlog/F8.2-emails-restantes-lembretes\|F8.2]] | Emails restantes (session lembrete, novo material) | S | backlog | sites-dev-alpha |
 | [[backlog/F8.3-mobile-acessibilidade\|F8.3]] | Responsividade mobile + acessibilidade WCAG AA | L | backlog | sites-dev-alpha |
 | [[backlog/F8.4-observabilidade-sentry-analytics\|F8.4]] | Sentry + Vercel Analytics | S | backlog | sites-devops |
-| [[backlog/F8.5-e2e-playwright-tests\|F8.5]] | Testes E2E com Playwright | L | backlog | sites-qa |
-| [[backlog/F8.6-deploy-vercel-producao\|F8.6]] | Deploy Vercel + produção | M | backlog | sites-devops |
-| [[backlog/F8.7-smoke-test-pre-lancamento\|F8.7]] | Smoke test pré-lançamento + go-live checklist | S | backlog | sites-qa |
+| [[done/F8.5-e2e-playwright-tests\|F8.5]] | Testes E2E com Playwright | L | done | sites-qa |
+| [[done/F8.6-deploy-vercel-producao\|F8.6]] | Deploy Vercel + produção | M | done | sites-devops |
+| [[done/F8.7-smoke-test-pre-lancamento\|F8.7]] | Smoke test pré-lançamento + go-live checklist | S | done | sites-qa |
+
+## Fase F9 — Curso Online + Admin Hardening
+
+| Story | Título | Complexidade | Status | Agente |
+|---|---|---|---|---|
+| [[backlog/F9.1-refactor-curso-online-estrutura-mentoria\|F9.1]] | Refactor /curso-online com estrutura visual da /mentoria | M | backlog | sites-dev-alpha |
+| [[backlog/F9.2-auditar-checkout-stripe-curso-online\|F9.2]] | Auditar checkout Stripe da /curso-online (cohort, action, redirect, webhook) | M | backlog | sites-dev-beta |
+| [[backlog/F9.3-validar-acesso-admin-middleware\|F9.3]] | Validar gate de acesso /academy/admin (middleware + RBAC) | S | backlog | sites-dev-delta |
+| [[backlog/F9.4-bug-hunt-academy-admin\|F9.4]] | Bug hunt sweep nas páginas /academy/admin/* | L | backlog | sites-dev-delta |
+| [[backlog/F9.5-auditar-apis-admin\|F9.5]] | Auditar APIs em /api/admin/* | S | backlog | sites-dev-beta |
+| [[backlog/F9.6-admin-editor-encontros-ao-vivo\|F9.6]] | Editor completo de Encontros ao Vivo no admin de turmas | M | active | sites-dev-delta |
+
+Objetivo: refinar a página /curso-online (espelhando /mentoria sem elementos presenciais/ao vivo/bônus) e endurecer a área administrativa antes do lançamento. Stories F9.3–F9.5 podem rodar em paralelo. F9.1 e F9.2 são independentes mas relacionadas (F9.2 garante que o CTA de F9.1 funciona). F9.6 completa o CRUD de live_sessions no admin (faltam UPDATE, description, recording_url, UX).
 
 ## Notas de orquestração
 

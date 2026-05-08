@@ -215,3 +215,22 @@ Registro de todos os Agent Teams formados neste projeto. Lead (team-os) atualiza
 - joaoguirunas.com em produção
 - pg_cron + Edge Functions substituem Vercel crons (Hobby plan)
 - Auth sem signup público + admin badge + /curso-online + checkout público
+
+---
+
+## 2026-05-08 — Team fix-checkout-encontros
+
+**Objetivo:** Corrigir bug de checkout no /curso-online (sem turma disponível) + adicionar editor de encontros ao vivo com link meet/zoom no admin
+
+**Lead:** team-os (skill)
+
+**Composição:**
+- sites-architect — story F9.6 + validação F9.2
+- sites-dev-beta — fix checkout (F9.2)
+- sites-dev-gamma — CRUD encontros ao vivo no admin (F9.6)
+- sites-qa — gate de qualidade
+- sites-devops — PR + push
+
+**Status:** ativo
+**Início:** 2026-05-08T08:34:00-03:00
+**Stories:** [[../stories/BACKLOG]]

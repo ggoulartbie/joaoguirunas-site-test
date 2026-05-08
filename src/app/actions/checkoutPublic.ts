@@ -38,16 +38,22 @@ export async function createPublicCheckoutSession(cohortSlug: string) {
   const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? 'http://localhost:3000'
 
   const adapter = new StripeAdapter()
-  const session = await adapter.createCheckoutSession({
-    priceId: cohort.stripe_price_entry_id,
-    customerId: null,
-    customerEmail: null,
-    cohortId: cohort.id,
-    cohortSlug: cohort.slug,
-    purchaseKind: 'ENTRY',
-    successUrl: `${appUrl}/academy/checkout/sucesso?session_id={CHECKOUT_SESSION_ID}`,
-    cancelUrl: `${appUrl}/curso-online`,
-  })
+  let session: { id: string; url: string }
+  try {
+    session = await adapter.createCheckoutSession({
+      priceId: cohort.stripe_price_entry_id,
+      customerId: null,
+      customerEmail: null,
+      cohortId: cohort.id,
+      cohortSlug: cohort.slug,
+      purchaseKind: 'ENTRY',
+      successUrl: `${appUrl}/academy/checkout/sucesso?session_id={CHECKOUT_SESSION_ID}`,
+      cancelUrl: `${appUrl}/curso-online`,
+    })
+  } catch (err) {
+    console.error('[checkoutPublic] Stripe error:', err)
+    return { error: 'Erro ao processar pagamento. Tente novamente.' }
+  }
 
   redirect(session.url)
 }

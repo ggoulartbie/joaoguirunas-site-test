@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import Image from 'next/image';
-import { MentoriaHeaderButton } from './MentoriaHeaderButton';
+import { NavLinks } from './NavLinks';
 import { Logo } from '@/shared/components/ui/Logo';
 
 export function Header() {
@@ -34,9 +34,7 @@ export function Header() {
             <Logo variant="alltype" height={22} />
           </Link>
 
-          <div className="flex items-center gap-3 sm:gap-4">
-            <MentoriaHeaderButton />
-          </div>
+          <NavLinks />
         </div>
       </div>
     </header>

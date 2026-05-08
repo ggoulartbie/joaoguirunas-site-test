@@ -5,6 +5,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { RefreshCw, ExternalLink, Check, Camera, Loader2 } from 'lucide-react'
 import { enableAutoRenewal, disableAutoRenewal } from '@/app/actions/autoRenewal'
+import { updateProfile, changePassword } from '@/app/actions/profile'
 import { createClient } from '@/lib/supabase/client'
 
 type MembershipStatus = 'ACTIVE' | 'EXPIRED' | 'REMOVED' | 'PAST_DUE'
@@ -293,8 +294,10 @@ function EditProfileForm({
   const [confirmPassword, setConfirmPassword] = useState('')
   const [profileSaved, setProfileSaved] = useState(false)
   const [profileError, setProfileError] = useState('')
+  const [profilePending, startProfileTransition] = useTransition()
   const [passwordSaved, setPasswordSaved] = useState(false)
   const [passwordError, setPasswordError] = useState('')
+  const [passwordPending, startPasswordTransition] = useTransition()
 
   function handleSaveProfile() {
     if (!name.trim()) {
@@ -302,8 +305,15 @@ function EditProfileForm({
       return
     }
     setProfileError('')
-    setProfileSaved(true)
-    setTimeout(() => setProfileSaved(false), 2500)
+    startProfileTransition(async () => {
+      const result = await updateProfile(name, bio)
+      if (result.error) {
+        setProfileError(result.error)
+      } else {
+        setProfileSaved(true)
+        setTimeout(() => setProfileSaved(false), 2500)
+      }
+    })
   }
 
   function handleChangePassword() {
@@ -320,11 +330,18 @@ function EditProfileForm({
       return
     }
     setPasswordError('')
-    setPasswordSaved(true)
-    setCurrentPassword('')
-    setNewPassword('')
-    setConfirmPassword('')
-    setTimeout(() => setPasswordSaved(false), 2500)
+    startPasswordTransition(async () => {
+      const result = await changePassword(newPassword)
+      if (result.error) {
+        setPasswordError(result.error)
+      } else {
+        setPasswordSaved(true)
+        setCurrentPassword('')
+        setNewPassword('')
+        setConfirmPassword('')
+        setTimeout(() => setPasswordSaved(false), 2500)
+      }
+    })
   }
 
   const inputClass =
@@ -372,9 +389,10 @@ function EditProfileForm({
         <button
           type="button"
           onClick={handleSaveProfile}
-          className="mt-2 bg-[var(--ember)] px-5 py-2.5 font-mono text-xs uppercase tracking-wider text-[var(--void)]"
+          disabled={profilePending}
+          className="mt-2 bg-[var(--ember)] px-5 py-2.5 font-mono text-xs uppercase tracking-wider text-[var(--void)] disabled:opacity-60"
         >
-          Salvar perfil
+          {profilePending ? 'Salvando…' : 'Salvar perfil'}
         </button>
       </div>
 
@@ -433,9 +451,10 @@ function EditProfileForm({
           <button
             type="button"
             onClick={handleChangePassword}
-            className="bg-[var(--ember)] px-5 py-2.5 font-mono text-xs uppercase tracking-wider text-[var(--void)]"
+            disabled={passwordPending}
+            className="bg-[var(--ember)] px-5 py-2.5 font-mono text-xs uppercase tracking-wider text-[var(--void)] disabled:opacity-60"
           >
-            Alterar senha
+            {passwordPending ? 'Alterando…' : 'Alterar senha'}
           </button>
         </div>
       </div>
@@ -517,7 +536,7 @@ function MembershipsSection({ memberships: initialMemberships }: { memberships: 
 
                   {m.isPurchasable && m.extensionPriceCents && (
                     <Link
-                      href={`/checkout/${m.cohortSlug}`}
+                      href={`/academy/checkout/${m.cohortSlug}`}
                       className="shrink-0 bg-[var(--ember)] px-3 py-1.5 font-mono text-[10px] uppercase tracking-wider text-[var(--void)] transition-opacity hover:opacity-90"
                     >
                       Estender por {formatBRL(m.extensionPriceCents)}
@@ -576,7 +595,7 @@ function MembershipsSection({ memberships: initialMemberships }: { memberships: 
                 </div>
                 {m.isPurchasable && m.extensionPriceCents && (
                   <Link
-                    href={`/checkout/${m.cohortSlug}`}
+                    href={`/academy/checkout/${m.cohortSlug}`}
                     className="flex items-center gap-1.5 border border-[rgba(255,255,255,0.16)] px-3 py-1.5 font-mono text-[10px] uppercase tracking-wider text-[var(--bone-mute)] transition-colors hover:border-[rgba(255,255,255,0.3)] hover:text-[var(--bone-dim)]"
                   >
                     <RefreshCw className="h-3 w-3" />

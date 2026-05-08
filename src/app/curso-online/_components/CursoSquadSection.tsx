@@ -43,7 +43,7 @@ export function CursoSquadSection({ squad, agentes }: CursoSquadSectionProps) {
 
   const beltX = useTransform(
     scrollYProgress,
-    [0.08, 0.88],
+    [0.0, 1.0],
     prefersReduced ? [0, 0] : [vw, -totalWidth],
   );
 
@@ -95,7 +95,7 @@ export function CursoSquadSection({ squad, agentes }: CursoSquadSectionProps) {
       </div>
 
       {/* ── DESKTOP: sticky + belt scroll-driven ── */}
-      <div className="hidden lg:block min-h-[90vh]">
+      <div className="hidden lg:block min-h-[55vh]">
         <div className="sticky top-[8vh] pb-16">
           <motion.div
             className="mx-auto max-w-7xl px-5 sm:px-6 lg:px-12 pt-16 pb-10"

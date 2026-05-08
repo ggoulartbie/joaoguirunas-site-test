@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { requireAdmin } from '@/lib/auth/helpers'
+import { getCurrentUser } from '@/lib/auth/helpers'
 import { syncCohortWithStripe } from '@/lib/payment/sync'
 import { supabaseAdmin } from '@/lib/supabase/admin'
 
@@ -7,10 +7,12 @@ export async function POST(
   _req: NextRequest,
   { params }: { params: Promise<{ id: string }> },
 ) {
-  try {
-    await requireAdmin()
-  } catch {
+  const profile = await getCurrentUser()
+  if (!profile) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+  }
+  if (profile.role !== 'ADMIN') {
+    return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
   }
 
   const { id } = await params
@@ -33,9 +35,7 @@ export async function POST(
     await syncCohortWithStripe(id)
     return NextResponse.json({ ok: true, cohort_id: id })
   } catch (err) {
-    return NextResponse.json(
-      { error: err instanceof Error ? err.message : 'Sync failed' },
-      { status: 500 },
-    )
+    console.error('[resync-stripe] sync failed:', err)
+    return NextResponse.json({ error: 'Sync failed' }, { status: 500 })
   }
 }

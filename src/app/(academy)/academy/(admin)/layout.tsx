@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import { AdminSidebar } from '@/components/admin/AdminSidebar'
 import { AdminTopBar } from '@/components/admin/AdminTopBar'
+import { requireAdmin } from '@/lib/auth/helpers'
 
 export const metadata: Metadata = {
   title: {
@@ -9,11 +10,12 @@ export const metadata: Metadata = {
   },
 }
 
-export default function AdminLayout({
+export default async function AdminLayout({
   children,
 }: {
   children: React.ReactNode
 }) {
+  await requireAdmin()
   return (
     <div className="flex min-h-screen bg-[var(--void)]">
       <AdminSidebar />

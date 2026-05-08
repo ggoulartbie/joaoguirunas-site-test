@@ -53,7 +53,7 @@ values (
   false,
   true,
   true,
-  79900,
+  79700,
   6,
   null
 )

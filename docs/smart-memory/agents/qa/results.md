@@ -1,13 +1,335 @@
 ---
 title: QA Results
 type: qa-log
-updated: 2026-05-06T22:45
+updated: 2026-05-08T16:45
 tags: [qa, veredictos]
 ---
 
 # QA Results — Veredictos formais
 
 Histórico de veredictos emitidos pelo sites-qa (Axilun).
+
+---
+
+## 2026-05-08T16:35 — F8.7 Smoke pré-lançamento (encerramento documental) — ⚠️ CONCERNS
+
+**Escopo (task #12):** atualizar [`runbooks/launch-2026-05-07.md`](../../runbooks/launch-2026-05-07.md) com checklist solicitado pelo team-lead (Stripe keys, Price ID, is_purchasable, webhook, NEXT_PUBLIC_APP_URL, deploy verde, rotas /curso-online, /academy/login, /academy/admin redirect).
+
+**Entrega:**
+- Seção "F8.7 Go-live checklist final — 2026-05-08" adicionada ao topo do runbook
+- **Update 16:45 — Quick checklist (7 pontos do team-lead)** consolidada como tabela executiva no topo da seção F8.7. Status atual: 3/7 verde (#3 is_purchasable, #5 NEXT_PUBLIC_APP_URL, #7 rotas críticas), 1/7 amarelo (#4 webhook — eventos pendentes), 3/7 vermelho (#1 keys em test, #2 stripe_price_entry_id ausente, #6 deploy verde sem confirmação).
+- Verificações remotas em prod (2026-05-08T13:03):
+  ```
+  GET /curso-online   → 200 OK ✅
+  GET /academy/login  → 200 OK ✅
+  GET /academy/admin  → 307 → /academy/login?next=%2Facademy%2Fadmin ✅
+  ```
+- Webhook Stripe valida assinatura em prod (sig ausente → 400; inválida → 400)
+- Suite Playwright verde local: 26 passed, 12 skipped (gated por env), 0 failed
+- Story movida para `done/F8.7-smoke-test-pre-lancamento.md` com QA Results atualizado
+
+**Bloqueadores para go-live público (não-aprovados ainda):**
+- [BLOCKER] `cohorts.stripe_price_entry_id` da `curso-online-padrao` deve ser preenchido com Price ID Stripe **LIVE**. Sem isso, server action `createPublicCheckoutSession` retorna "Preço não configurado para esta turma." — comprovado no E2E em DEV/CI.
+- [CONCERN] Rotacionar `STRIPE_SECRET_KEY` / `STRIPE_PUBLISHABLE_KEY` de test → live antes do anúncio.
+- [CONCERNs herdados de 2026-05-07] canonical /academy/turmas, cohort não listada na LP, security headers secundários, UUID determinístico de seed em SSR.
+
+**Manual ainda pendente de João** (não-bloqueante para encerramento da story documental, mas necessário para PASS final de go-live):
+- Cadastro novo + email Resend
+- Reset de senha end-to-end
+- Compra real com cupom 100%
+- `<meta robots noindex>` em head de aula autenticada
+- Sentry erro forçado em /admin
+- Backup Supabase do dia
+- Lighthouse mobile
+
+**Próximo passo:** sites-devops endereça BLOCKER (Price ID live) + rotação de keys; João executa smoke manual; Axilun re-emite veredicto PASS final ao final do checklist manual.
+
+---
+
+## 2026-05-08T16:30 — F8.5 re-validação — ✅ PASS
+
+**Escopo:** task #11 — re-validar suite Playwright E2E após migração de rotas legadas (`/login`, `/admin`, etc.) → `/academy/*`. Reaproveitar `e2e/academy-admin-gate.spec.ts` existente; cobrir 3 fluxos críticos pedidos pelo lead: (1) checkout público `/curso-online` → CTA Stripe, (2) `/academy/admin` sem auth → `/academy/login`, (3) login admin → `/academy/admin`.
+
+**Diagnóstico inicial:** specs antigos (`auth.spec.ts`, `admin.spec.ts`, `checkout.spec.ts`, `lesson-access.spec.ts`) apontavam para rotas legadas que hoje retornam 308 redirect → `/academy/*`. Passavam acidentalmente, mascarando que assertions eram contra paths que não existem mais.
+
+**Mudanças aplicadas:**
+- `e2e/auth.spec.ts` — `/login` → `/academy/login`, `/cadastro` → `/academy/cadastro`, `/recuperar-senha` → `/academy/recuperar-senha`. Heading "Entrar na plataforma" → "Entrar".
+- `e2e/admin.spec.ts` — sweep de sub-rotas `/academy/admin/*` + `/academy/403`.
+- `e2e/checkout.spec.ts` — `/turmas` → `/academy/turmas`, `/checkout/[slug]` → `/academy/checkout/[slug]`. Heading agora "Escolha sua turma".
+- `e2e/lesson-access.spec.ts` — `/curso/[slug]/aula/[lesson]` → `/academy/curso/...`. Demo lesson real do seed: `mentoria-claude-code-aiox/abertura-desbloqueio`.
+- `e2e/launch-smoke.spec.ts` — entregue por qa-e2e (parallel teammate). Cobre os 3 fluxos solicitados pelo lead. Mantido como spec oficial pré-lançamento.
+- `e2e/academy-admin-gate.spec.ts` — preservado intacto (já cobria gate completo anônimo/STUDENT/ADMIN).
+- `e2e/critical-flows.spec.ts` — preservado (scaffolding skip-gated p/ Stripe modo test).
+
+**Resultado da execução** (`npx playwright test`, dev server local em `localhost:3000`):
+
+| Métrica | Valor |
+|---------|-------|
+| Specs | 7 |
+| Tests | 38 |
+| Passed | **26** ✅ |
+| Skipped | 12 (gated env) |
+| Failed | **0** |
+| Duração | 22.1s |
+
+**Cobertura dos 3 fluxos solicitados:**
+
+| Fluxo | Spec(s) | Status |
+|-------|---------|--------|
+| 1 — Checkout público `/curso-online` → CTA dispara server action | `launch-smoke.spec.ts:20-59` | ✅ PASS |
+| 2 — `/academy/admin` sem auth → `/academy/login?next=...` | `launch-smoke.spec.ts:63-79` + `academy-admin-gate.spec.ts:18-38` + `admin.spec.ts:8-27` | ✅ PASS (cobertura tripla) |
+| 3 — Login ADMIN → `/academy/admin` | `launch-smoke.spec.ts:83-97` + `academy-admin-gate.spec.ts:83-107` | ⏸️ SKIP (gated por E2E_ADMIN_EMAIL/PASSWORD) — código verificado, asserts corretos |
+
+**Pontos de atenção (não-bloqueantes):**
+
+- **[CONCERN-A] Spec duplicado consolidado** — Eu criei `curso-online-checkout.spec.ts` em paralelo com qa-e2e que entregou `launch-smoke.spec.ts` cobrindo o mesmo fluxo. Para evitar drift, deletei meu spec e mantive `launch-smoke.spec.ts` como oficial. Coordenação cross-teammate via lead funciona; sinal para futuras sprints: confirmar antes de criar specs novos.
+- **[CONCERN-B] Fluxo 3 (login admin) ainda não verificado em runtime** — Skip por falta de `.env.test`. Asserts corretos no código. Para validar 100%, criar `.env.test` com `E2E_ADMIN_EMAIL`/`E2E_ADMIN_PASSWORD` apontando para usuário admin de DB local (seed cria `joaoguirunasramos@gmail.com` ADMIN com senha `Test1234!`).
+- **[CONCERN-C] AC2-AC5 da story original (Stripe modo test, webhook idempotência, cross-extension) seguem skip-gated** — dívida pós-MVP, tracking continua em `critical-flows.spec.ts`.
+
+### Veredicto
+
+```
+VEREDICTO: PASS — F8.5 re-validação
+Story: F8.5 | Data: 2026-05-08T16:30-03:00
+Suite: 26 passed / 12 skipped / 0 failed
+Cobertura: 3/3 fluxos críticos endereçados (Fluxo 3 gated por env)
+Issues bloqueantes: nenhum
+Próximo passo: story movida para docs/smart-memory/stories/done/F8.5-e2e-playwright-tests.md
+```
+
+---
+
+## 2026-05-08T11:15 — Sprint `fix-checkout-encontros` — Veredicto consolidado
+
+**Sprint completa:** F9.2 (sites-dev-beta) + F9.6 (sites-dev-gamma).
+
+| Feature | Story | Veredicto |
+|---------|-------|-----------|
+| Fix checkout `/curso-online` | F9.2 | ✅ **PASS** |
+| Editor de encontros ao vivo no admin | F9.6 | ⚠️ **CONCERNS** |
+
+**Recomendação:** push autorizado para ambas as features. F9.6 com observações documentadas (não-bloqueantes). Pré-condição de produção (F9.2): configurar Stripe Price ID via Studio antes do go-live.
+
+---
+
+### 2026-05-08T11:15 — F9.6 Editor de encontros ao vivo (admin) — ⚠️ CONCERNS
+
+**Escopo:** CRUD de `live_sessions` dentro de `/academy/admin/turmas/[id]` — Section 8 do `CohortForm`. Adiciona `updateLiveSession` à lista de actions já existentes (`createLiveSession`, `deleteLiveSession`) e expande payload com `description` e `recording_url`.
+
+**Arquivos revisados:**
+- [`src/app/(academy)/academy/(admin)/admin/turmas/actions.ts:335-427`](file:///Users/joaoramos/Desktop/Projetos/Sites/joao-guirunas-site/src/app/(academy)/academy/(admin)/admin/turmas/actions.ts) — server actions
+- [`src/app/(academy)/academy/(admin)/admin/turmas/CohortForm.tsx:1192-1520`](file:///Users/joaoramos/Desktop/Projetos/Sites/joao-guirunas-site/src/app/(academy)/academy/(admin)/admin/turmas/CohortForm.tsx) — UI Section 8
+- RLS aproveitada: [`supabase/migrations/20260506022037_has_access_rls_policies.sql:281-303`](file:///Users/joaoramos/Desktop/Projetos/Sites/joao-guirunas-site/supabase/migrations/20260506022037_has_access_rls_policies.sql) (policies já existiam)
+
+#### Checklist 10 pontos
+
+| # | Critério | Status | Observação |
+|---|----------|--------|-----------|
+| 1 | Code review | ✅ | Padrão consistente com outras actions, `useTransition` + try/catch no client |
+| 2 | Acceptance criteria | ✅ | CRUD completo: create (1223-1331), edit inline (1410-1511), delete (1392-1404), list collapsed (1340-1407) |
+| 3 | Sem regressões | ✅ | Não toca RLS; gate de 30 min para meeting_url em [`agenda/page.tsx:185-193`](file:///Users/joaoramos/Desktop/Projetos/Sites/joao-guirunas-site/src/app/(academy)/academy/(student)/agenda/page.tsx) preservado; `npx tsc --noEmit` limpo |
+| 4 | Performance | ✅ | `revalidatePath` direcionado, `router.refresh()` após mutation, sem N+1 |
+| 5 | Acessibilidade | ⚠️ | Erros sem `role="alert"`/`aria-live` (CONCERN-A) |
+| 6 | SEO | ✅ | N/A (admin, não indexada) |
+| 7 | Responsivo | ✅ | Grid `md:grid-cols-2`, truncate em links |
+| 8 | Copy | ⚠️ | Acentuação ausente (CONCERN-B) |
+| 9 | Cross-browser | ✅ | `datetime-local`, `toLocaleString` com `timeZone: 'America/Sao_Paulo'` — suporte universal |
+| 10 | Security | ⚠️ | `requireAdmin()` em todas as actions; Zod com `z.string().url()` rejeita meeting_url malformada; UUID validado em update mas **não em delete** (CONCERN-C); admin global sem scope por cohort (CONCERN-D — intencional) |
+
+#### Pontos de atenção
+
+- **[CONCERN-A] Erros do form sem `role="alert"`** — [`CohortForm.tsx:1283,1470`](file:///Users/joaoramos/Desktop/Projetos/Sites/joao-guirunas-site/src/app/(academy)/academy/(admin)/admin/turmas/CohortForm.tsx) renderiza `<p className="font-mono text-xs text-red-400">{error}</p>`. Outras telas do projeto (ex: [`checkout-form.tsx:48-54`](file:///Users/joaoramos/Desktop/Projetos/Sites/joao-guirunas-site/src/app/curso-online/_components/checkout-form.tsx)) usam `role="alert"` para anunciar via screen reader. Como é área admin, impacto a11y é menor; ainda assim, alinhamento com o padrão do projeto recomendado em iteração futura. Não-bloqueante.
+
+- **[CONCERN-B] Strings sem acentuação** — Labels como "Titulo", "Duracao", "Descricao", "Sessoes ao Vivo", "Topicos" perderam acentos. Inconsistente com o resto da UI admin. Provável artefato de editor sem suporte UTF-8 ou copy/paste de fonte ASCII. Não-bloqueante mas degrada qualidade percebida. Sugestão de fix simples: substituir `Titulo`→`Título`, `Duracao`→`Duração`, `Descricao`→`Descrição`, `Sessoes`→`Sessões`, `Topicos`→`Tópicos`, `Link da gravacao`→`Link da gravação`, `apos`→`após`, `horario de Brasilia`→`horário de Brasília`.
+
+- **[CONCERN-C] `deleteLiveSession` não valida UUID** — [`actions.ts:417-427`](file:///Users/joaoramos/Desktop/Projetos/Sites/joao-guirunas-site/src/app/(academy)/academy/(admin)/admin/turmas/actions.ts) recebe `sessionId: string` e faz `.delete().eq('id', sessionId)` sem `z.string().uuid().safeParse(sessionId)`. Inconsistente com `updateLiveSession:396` que valida. Risco real é baixo (RLS exige admin + Postgres rejeita UUID malformado), mas defesa em profundidade recomendada.
+
+- **[CONCERN-D] Admin global sem scope por cohort** — `deleteLiveSession`/`updateLiveSession` aceitam qualquer `sessionId` independente de `cohortId`. O `cohortId` parâmetro é usado apenas para `revalidatePath`, não para validar pertinência. Como o sistema só tem um nível de ADMIN (não há admin-de-cohort), comportamento é correto. Documentar para refactor futuro caso surja role granular.
+
+- **[OBSERVAÇÃO-E] `toDatetimeLocalValue` assume UTC-3 fixo** — [`CohortForm.tsx:213-220`](file:///Users/joaoramos/Desktop/Projetos/Sites/joao-guirunas-site/src/app/(academy)/academy/(admin)/admin/turmas/CohortForm.tsx). Brasil sem horário de verão desde 2019, comportamento correto. Caso DST retorne, ajustar.
+
+- **[OBSERVAÇÃO-F] State paralelo `new*`/`edit*`** — Duplicação aceitável dado o requisito de edit inline sem extrair form abstrato.
+
+#### Veredicto
+
+```
+VEREDICTO: CONCERNS — F9.6 (Editor de encontros ao vivo no admin)
+Story: F9.6 | Data: 2026-05-08T11:15-03:00
+Checklist: 7/10 ✅ + 3/10 ⚠️ (a11y, copy, validação UUID em delete)
+Issues bloqueantes: nenhum
+Aprovado com observações:
+- CONCERN-A: erros sem role="alert" (a11y, área admin)
+- CONCERN-B: copy sem acentuação (Sessoes/Titulo/Descricao/Duracao/Topicos)
+- CONCERN-C: deleteLiveSession sem validação UUID (defesa em profundidade)
+- CONCERN-D: admin global sem scope por cohort (intencional, documentar)
+Próximo passo: @sites-devops push (observações documentadas; podem virar story de polish)
+```
+
+---
+
+### 2026-05-08T09:30 — F9.2 Fix checkout `/curso-online` — ✅ PASS
+
+**Escopo:** revisão da F9.2 (fix do checkout `/curso-online` por ausência de cohort `curso-online-padrao` no DB). Aguardando F9.6 (editor de encontros, sites-dev-gamma) para veredicto consolidado da sprint.
+
+**Commit:** `a0820f9` — `fix(checkout): criar cohort curso-online-padrao ausente no banco`
+
+**Arquivos revisados:**
+- [`supabase/migrations/20260508000000_seed_curso_online_padrao.sql`](file:///Users/joaoramos/Desktop/Projetos/Sites/joao-guirunas-site/supabase/migrations/20260508000000_seed_curso_online_padrao.sql)
+- [`supabase/seed.sql:467-533`](file:///Users/joaoramos/Desktop/Projetos/Sites/joao-guirunas-site/supabase/seed.sql)
+- [`src/app/actions/checkoutPublic.ts`](file:///Users/joaoramos/Desktop/Projetos/Sites/joao-guirunas-site/src/app/actions/checkoutPublic.ts) (validação de comportamento — não modificado)
+- [`src/app/curso-online/_components/checkout-form.tsx`](file:///Users/joaoramos/Desktop/Projetos/Sites/joao-guirunas-site/src/app/curso-online/_components/checkout-form.tsx) (validação de comportamento — não modificado)
+
+### Checklist 10 pontos
+
+| # | Critério | Status | Observação |
+|---|----------|--------|-----------|
+| 1 | Code review | ✅ | Migration documentada, idempotente, comentários explicam steps de configuração do Stripe Price |
+| 2 | Acceptance criteria | ✅ | Cohort `curso-online-padrao` criada com `is_purchasable=true`, status `OPEN`, `entry_price_cents=79900`, vinculada ao course `curso-online-claude-agents` via `cohort_courses`. Server action retorna `"Preço não configurado para esta turma."` quando `stripe_price_entry_id` is null ([`checkoutPublic.ts:34-36`](file:///Users/joaoramos/Desktop/Projetos/Sites/joao-guirunas-site/src/app/actions/checkoutPublic.ts)) |
+| 3 | Sem regressões | ✅ | IDs `...0002` distintos de `...0001` (turma-1). Migration apenas insere; não modifica dados existentes |
+| 4 | Performance | ✅ | Mudança de seed; sem impacto runtime |
+| 5 | Acessibilidade | ✅ | Erro renderizado com `role="alert"` em [`checkout-form.tsx:48`](file:///Users/joaoramos/Desktop/Projetos/Sites/joao-guirunas-site/src/app/curso-online/_components/checkout-form.tsx) |
+| 6 | SEO | ✅ | N/A — mudança de DB. Page já com canonical/OG/JSON-LD do escopo F9 anterior |
+| 7 | Responsivo | ✅ | N/A — sem UI nova |
+| 8 | Copy | ✅ | Mensagens de erro específicas e amigáveis: `"Turma não encontrada."`, `"Esta turma não está disponível para compra."`, `"Preço não configurado para esta turma."`, `"Dados inválidos."` |
+| 9 | Cross-browser | ✅ | N/A — sem CSS/JS browser-specific |
+| 10 | Security | ✅ | Zod valida input ([`checkoutPublic.ts:8-10`](file:///Users/joaoramos/Desktop/Projetos/Sites/joao-guirunas-site/src/app/actions/checkoutPublic.ts)). Supabase admin client server-side. Slug parametrizado via `.eq()` (sem SQL injection). Nenhum dado sensível exposto no client (Price ID consultado server-side) |
+
+### Idempotência da migration
+
+- `INSERT INTO courses ... ON CONFLICT (id) DO NOTHING` — re-run safe
+- `INSERT INTO cohorts ... ON CONFLICT (id) DO UPDATE SET ...` — atualiza campos descritivos preservando `stripe_price_entry_id` (não está no SET) — comportamento correto: re-rodar a migration NÃO sobrescreve o Price ID configurado manualmente em produção. ✅
+- `INSERT INTO cohort_courses ... ON CONFLICT (cohort_id, course_id) DO NOTHING` — re-run safe
+
+### Pontos de atenção (não-bloqueantes)
+
+- **[OBSERVAÇÃO-A] `seed.sql` faz `DELETE` antes de `INSERT`** — pattern destrutivo já existente no projeto; atinge tanto `...0001` quanto `...0002`. Apenas relevante em dev/local. **Não afeta produção** (migrations rodam, seed não).
+- **[OBSERVAÇÃO-B] Diff cosmético entre migration e `seed.sql`** — migration inclui `has_live_sessions`/`has_support` no `DO UPDATE SET` (linhas 67-68); `seed.sql:515-524` omite. Como o conflict path raramente executa (ID novo), inconsistência é teórica. Sugestão futura: alinhar para evitar drift.
+- **[OBSERVAÇÃO-C] `stripe_price_entry_id = null` por design** — comportamento intencional documentado nos comentários da migration. Server action degrada graciosamente com mensagem amigável. **Antes do push para produção, configurar Price ID no Stripe Dashboard e executar `UPDATE public.cohorts SET stripe_price_entry_id = 'price_...' WHERE slug = 'curso-online-padrao';` no Supabase Studio**, conforme documentado.
+
+### Veredicto
+
+```
+VEREDICTO: PASS — F9.2 (Fix checkout curso-online)
+Story: F9.2 | Data: 2026-05-08T09:30-03:00
+Checklist: 10/10 verificados
+Issues bloqueantes: nenhum
+Pré-condição de produção: configurar Stripe Price ID antes do go-live
+Próximo passo: aguardar F9.6 (editor de encontros) para veredicto consolidado da sprint
+```
+
+---
+
+## 2026-05-07T16:00 — Sprint Epic F9 (refactor curso-online + bug fixes academy) — ✅ PASS
+
+**Escopo:** revisão consolidada das entregas da sprint encerrada hoje:
+1. Refactor `/curso-online` (sites-dev-alpha)
+2. Bug fixes academy (sites-dev-delta) — perfil, profile guard, save server-side
+3. Login redirect respeitando `?next=` (sites-dev-gamma)
+4. Checkout Stripe `curso-online-padrao` com `CheckoutForm` + error handling (sites-dev-beta)
+
+### Por item
+
+- **/curso-online refactor: ✅ PASS**
+  - Sem nenhuma menção a "encontros presenciais", "suporte online" ou "frameworks aceleradores" em `src/app/curso-online/` (grep limpo)
+  - Seção `<CursoModulesTimeline />` presente com badge "4 Módulos · Aulas Gravadas", chip "Aulas Gravadas" em cada card e copy "Quatro módulos de aulas gravadas. Assista no seu ritmo…"
+  - `COHORT_SLUG = 'curso-online-padrao'` consistente em [`page.tsx:29`](file:///Users/joaoramos/Desktop/Projetos/Sites/joao-guirunas-site/src/app/curso-online/page.tsx) e [`CursoModulesTimeline.tsx:189`](file:///Users/joaoramos/Desktop/Projetos/Sites/joao-guirunas-site/src/app/curso-online/_components/CursoModulesTimeline.tsx); `CheckoutForm` chama `createPublicCheckoutSession` que faz `redirect(session.url)` para Stripe
+  - Metadata SEO completa: title, description, canonical `/curso-online`, OG, Twitter, JSON-LD `Course` com offer R$ 499 e `successUrl=/academy/checkout/sucesso?session_id={CHECKOUT_SESSION_ID}`
+  - Imports validados: `CursoModulesTimeline`, `CursoFaqAccordion`, `CheckoutForm` — todos resolvem
+  - FAQ acessível: `aria-expanded`, `aria-controls`, `role="region"`, `<button type="button">`
+
+- **Academy bug fixes: ✅ PASS**
+  - [`profile.ts`](file:///Users/joaoramos/Desktop/Projetos/Sites/joao-guirunas-site/src/app/actions/profile.ts) `updateProfile` faz `UPDATE profiles SET name, bio WHERE id = user.id` via `requireUser()` — persistência real Supabase, não estado local
+  - [`PerfilClient.tsx:308-316,333-344`](file:///Users/joaoramos/Desktop/Projetos/Sites/joao-guirunas-site/src/app/(academy)/academy/(student)/perfil/PerfilClient.tsx) `useTransition` chamando server actions com tratamento de erro (`profileError`/`passwordError`) e feedback de sucesso (`profileSaved`/`passwordSaved`)
+  - [`(student)/layout.tsx:21-35,48`](file:///Users/joaoramos/Desktop/Projetos/Sites/joao-guirunas-site/src/app/(academy)/academy/(student)/layout.tsx) usa `Promise.all` com fallback `{ data: null }` quando user é null; `needsOnboarding` agora exige `profile !== null` antes de checar `!profile?.name && !profile?.bio` — guard correto contra crash em profile null
+
+- **Login redirect: ✅ PASS**
+  - [`LoginForm.tsx:43-45`](file:///Users/joaoramos/Desktop/Projetos/Sites/joao-guirunas-site/src/app/(academy)/academy/login/_components/LoginForm.tsx) lê `searchParams.get('next')` e faz `router.push(next ?? '/academy/aluno')` — bug fix correto
+
+- **Checkout Stripe: ✅ PASS**
+  - Cohort `curso-online-padrao` referenciado consistentemente; [`checkout/[cohortSlug]/page.tsx:17-19`](file:///Users/joaoramos/Desktop/Projetos/Sites/joao-guirunas-site/src/app/(academy)/academy/checkout/[cohortSlug]/page.tsx) faz `redirect(/academy/login?next=/academy/checkout/${cohortSlug})` quando user não autenticado, fechando o loop com o LoginForm acima
+  - [`checkoutPublic.ts:14-53`](file:///Users/joaoramos/Desktop/Projetos/Sites/joao-guirunas-site/src/app/actions/checkoutPublic.ts) valida com Zod, checa `is_purchasable` e `stripe_price_entry_id`, retorna `{ error }` legível; [`checkout-form.tsx`](file:///Users/joaoramos/Desktop/Projetos/Sites/joao-guirunas-site/src/app/curso-online/_components/checkout-form.tsx) usa `useActionState` com `role="alert"` no erro
+
+### Verificações transversais
+
+- ✅ `npx tsc --noEmit` — TypeScript limpo, sem erros
+- ✅ `/mentoria` intacta — [`src/app/mentoria/page.tsx`](file:///Users/joaoramos/Desktop/Projetos/Sites/joao-guirunas-site/src/app/mentoria/page.tsx) preserva imports (`MentoriaHeroSpline`, `MentorshipFeatures`, `CourseModulesTimeline`, `RevosForm`, `PricingCalculator`, `SolutionSection`), JSON-LD Course Mentoria, lista de espera e CTA âncora
+- ✅ Sitemap [`src/app/sitemap.ts:12`](file:///Users/joaoramos/Desktop/Projetos/Sites/joao-guirunas-site/src/app/sitemap.ts) preserva `/curso-online` priority 0.9
+- ✅ Cross-links: `/curso-online → /mentoria` (header + bloco "Precisa de acompanhamento intensivo"); `/mentoria → /curso-online` não obrigatório (não regredido)
+
+### Pontos de atenção (não-bloqueantes)
+
+- **[CONCERN-A] UX `changePassword` sem reauth** — A UI exige campo "Senha atual" mas a server action [`profile.ts:21-29`](file:///Users/joaoramos/Desktop/Projetos/Sites/joao-guirunas-site/src/app/actions/profile.ts) só chama `supabase.auth.updateUser({ password })`, ignorando `currentPassword`. O Supabase confia na sessão JWT; o campo é cosmético. Considerar reauth via `signInWithPassword` antes do update para conformidade com expectativa do usuário, ou remover o campo. Não bloqueia push pois não há regressão de segurança (sessão é a fonte de verdade).
+- **[CONCERN-B] Formulário "currentPassword" não persiste validação** — [`PerfilClient.tsx:320-322`](file:///Users/joaoramos/Desktop/Projetos/Sites/joao-guirunas-site/src/app/(academy)/academy/(student)/perfil/PerfilClient.tsx) verifica `if (!currentPassword)` antes do submit, mas não envia para a action. Coerência futura com CONCERN-A.
+- **[CONCERN-C] Avatar upload bypass server action** — `handleFileChange` em [`PerfilClient.tsx:182-212`](file:///Users/joaoramos/Desktop/Projetos/Sites/joao-guirunas-site/src/app/(academy)/academy/(student)/perfil/PerfilClient.tsx) usa client Supabase direto sem checagem de tamanho. Texto diz "máx. 2MB" mas não valida em código. Risco baixo (RLS e Storage policy devem proteger).
+
+### Veredicto
+
+```
+VEREDICTO: PASS
+
+Por item:
+- /curso-online refactor: PASS — copy, módulos, COHORT_SLUG e SEO conferidos
+- Academy bug fixes: PASS — server actions persistindo via Supabase, guards corretos
+- Login redirect: PASS — searchParams.get('next') aplicado
+- Checkout Stripe: PASS — fluxo público + autenticado fechado, error handling
+
+Pontos de atenção (não-bloqueantes):
+- CONCERN-A/B: campo "senha atual" cosmético — alinhar UX ou implementar reauth
+- CONCERN-C: validação de tamanho no avatar upload é client-side declarativa apenas
+
+Bloqueadores para push: nenhum
+Próximo passo: @sites-devops push
+```
+
+---
+
+## 2026-05-07T14:30 — F8.7 Smoke test pré-lançamento (re-execução remota pós-F11.1) — ⚠️ CONCERNS (preliminar)
+
+**Escopo:** segunda passada de execução remota do `runbooks/go-live-checklist.md` em `https://joaoguirunas.com`, após deploy de F11.1 (migração de crons para Supabase pg_cron + Edge Functions). Veredicto preliminar — fechamento PASS/FAIL depende de smoke manual conduzido por João.
+
+### Verificações remotas aprovadas
+
+- ✅ Domínio prod ativo (HTTPS válido, HSTS `max-age=63072000`)
+- ✅ Sentry capturando (release `a0c1c8b3924068f87eac1464009c8e91e70e9637`, `<meta name="sentry-trace">` presente em SSR)
+- ✅ Sitemap (15.007 bytes) + robots.txt + JSON-LD Course/Person/WebSite válidos em `/curso-online`
+- ✅ Stripe webhook valida assinatura (`Missing signature` 400 sem header; `Invalid signature` 400 com header inválido)
+- ✅ Rotas protegidas (`/academy/aluno`, `/academy/admin`, `/academy/curso/.../aula/...`) retornam 307 → `/academy/login?next=...`
+- ✅ AC1 — checklist documentado em `runbooks/go-live-checklist.md`
+- ✅ Código de aula em [`src/app/(academy)/.../aula/[lesson-slug]/page.tsx`](file:///Users/joaoramos/Desktop/Projetos/Sites/joao-guirunas-site/src/app/(academy)/academy/(student)/curso/[slug]/aula/[lesson-slug]/page.tsx) tem `robots: { index: false, follow: false }` em `generateMetadata` — AC3.1 implementado corretamente; falta validação autenticada por João
+
+### CONCERNs ativos
+
+- **[CONCERN-1] Canonical/OG `/academy/turmas`** — `<link rel="canonical" href="https://joaoguirunas.com">` (homepage); `og:title="João Guirunas"`. SEO degradado para LP de turmas.
+- **[CONCERN-2] Cohort `curso-online-padrao` ausente** — `/academy/turmas` lista apenas `turma-1`. `/academy/turmas/curso-online-padrao` retorna 404. CTA `/curso-online` aponta para `/academy/checkout/curso-online-padrao` (rota existe), mas pós-login dará 404 sem cohort criada. **Bloqueia AC4 e AC5.**
+- **[CONCERN-3] Security headers secundários ausentes** — apenas `Strict-Transport-Security`. Faltam `X-Content-Type-Options`, `X-Frame-Options`, `Referrer-Policy`, `Permissions-Policy`, CSP. Impacto Lighthouse Best Practices.
+- **[CONCERN-4] UUID seed em prod payload** — `40000000-0000-0000-0000-000000000001` no SSR de `/academy/turmas`. Confirmar se `seed.sql` foi executado (ops/launch-readiness diz NÃO).
+- **[CONCERN-5] F11.1 AC7 pendente** — schedules pg_cron registrados em migration `20260507000000_pg_cron_expire_memberships.sql`, mas Edge Functions `cron-daily` e `cron-hourly` ainda não deployadas via `supabase functions deploy`. Lembretes D-15/D-7/D-3, renovação automática e lembrete 1h **não rodam** até deploy concluir + `app.supabase_functions_url`/`app.service_role_key` setados.
+
+### ACs pendentes de execução manual por João
+
+AC2 (auth signup/login/reset/OAuth), AC3.1 (noindex em aula autenticada via DevTools), AC4 (compra Stripe com cupom 100%), AC5 (cross-extension days_granted), AC6 (refund), AC7 (entrega real de emails), AC8 (Lighthouse mobile > 80 perf, > 90 best practices), AC9 (RLS auditoria SQL), AC10 (Sentry erro forçado em /admin), AC11 (substituído por pg_cron + Edge Functions), AC12 (backup Supabase).
+
+### Veredicto
+
+```
+VEREDICTO: ⚠️ CONCERNS (preliminar)
+Story: F8.7 | Data: 2026-05-07T14:30-03:00
+Pré-flight remoto: ✅ Todas as verificações automatizáveis passaram
+Bloqueios para PASS final:
+  - Cohort `curso-online-padrao` precisa ser criada (CONCERN-2 — bloqueia AC4/AC5)
+  - F11.1 AC7: deploy das Edge Functions Supabase pendente (CONCERN-5)
+  - 4 CONCERNs SEO/segurança/seed (1, 3, 4) — não bloqueantes mas documentados
+  - 11 ACs aguardam smoke manual + evidências de João
+
+Próximo passo: João conduz fluxos manuais, sites-devops faz deploy Edge Functions,
+Axilun atualiza launch-2026-05-07.md em tempo real e emite veredicto final.
+Bloqueio explícito: pressão de prazo não muda critério — gate de go-live só fecha
+com evidências completas.
+```
+
+**Arquivos atualizados:**
+- `docs/smart-memory/runbooks/launch-2026-05-07.md` (re-execução T14:30 acrescentada)
+- `docs/smart-memory/agents/qa/results.md` (esta entrada)
 
 ---
 

@@ -11,6 +11,7 @@ import {
   sendAutoRenewalEmail,
   sendPaymentFailedEmail,
 } from '@/lib/email/send'
+import { getPaymentAdapter } from '@/lib/payment'
 
 async function getUserEmailAndName(userId: string): Promise<{ email: string; name: string } | null> {
   const [{ data: profile }, { data: authData }] = await Promise.all([
@@ -351,6 +352,44 @@ export async function retryWebhookEvent(eventId: string) {
     .eq('id', eventId)
 
   if (!success) throw new Error(errorMessage ?? 'Falha ao reprocessar evento')
+
+  revalidatePath('/academy/admin/pagamentos')
+}
+
+export async function refundPayment(paymentId: string) {
+  await requireAdmin()
+
+  const { data: payment, error: fetchErr } = await supabaseAdmin
+    .from('payments')
+    .select('id, stripe_payment_intent_id, status, amount_cents, user_id, cohort_id')
+    .eq('id', paymentId)
+    .single()
+
+  if (fetchErr || !payment) throw new Error('Pagamento não encontrado')
+  if (payment.status !== 'APPROVED') throw new Error('Apenas pagamentos aprovados podem ser reembolsados')
+  if (!payment.stripe_payment_intent_id) throw new Error('Pagamento sem payment_intent_id — não pode ser reembolsado via Stripe')
+
+  const adapter = getPaymentAdapter()
+
+  try {
+    await adapter.refundPayment({ paymentIntentId: payment.stripe_payment_intent_id })
+  } catch (err) {
+    Sentry.captureException(err, { tags: { action: 'refundPayment', paymentId } })
+    throw new Error(err instanceof Error ? err.message : 'Falha ao processar reembolso no Stripe')
+  }
+
+  await supabaseAdmin
+    .from('payments')
+    .update({ status: 'REFUNDED' })
+    .eq('id', paymentId)
+
+  if (payment.cohort_id) {
+    await supabaseAdmin
+      .from('cohort_members')
+      .update({ status: 'REMOVED' })
+      .eq('user_id', payment.user_id)
+      .eq('cohort_id', payment.cohort_id)
+  }
 
   revalidatePath('/academy/admin/pagamentos')
 }

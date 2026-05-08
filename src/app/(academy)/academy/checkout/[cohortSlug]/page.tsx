@@ -25,7 +25,7 @@ export default async function CheckoutPage({ params }: Props) {
     .single()
 
   if (!cohort || !cohort.is_purchasable) {
-    redirect('/turmas')
+    redirect('/academy/turmas')
   }
 
   const { data: existingMember } = await supabaseAdmin

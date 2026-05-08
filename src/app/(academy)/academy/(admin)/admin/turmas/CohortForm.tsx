@@ -20,7 +20,7 @@ import {
   Save,
   ArrowLeft,
 } from 'lucide-react'
-import { createCohort, updateCohort, addMemberByCohortEmail, createCoupon, createLiveSession, deleteLiveSession } from './actions'
+import { createCohort, updateCohort, addMemberByCohortEmail, createCoupon, createLiveSession, updateLiveSession, deleteLiveSession } from './actions'
 
 type CohortCourse = Database['public']['Tables']['cohort_courses']['Row']
 type CrossExtension = Database['public']['Tables']['cohort_cross_extensions']['Row']
@@ -205,6 +205,20 @@ function formatDate(iso: string | null) {
   return new Date(iso).toLocaleDateString('pt-BR')
 }
 
+function formatDateTimeBR(iso: string | null) {
+  if (!iso) return '—'
+  return new Date(iso).toLocaleString('pt-BR', { timeZone: 'America/Sao_Paulo', dateStyle: 'short', timeStyle: 'short' })
+}
+
+function toDatetimeLocalValue(iso: string | null) {
+  if (!iso) return ''
+  // Converts ISO UTC to datetime-local string in Sao Paulo time
+  const d = new Date(iso)
+  const tzOffset = -3 * 60 // BRT = UTC-3
+  const local = new Date(d.getTime() + tzOffset * 60000 - d.getTimezoneOffset() * 60000)
+  return local.toISOString().slice(0, 16)
+}
+
 const STATUS_OPTIONS = [
   { value: 'DRAFT', label: 'Rascunho' },
   { value: 'OPEN', label: 'Aberta' },
@@ -321,6 +335,19 @@ export function CohortForm(props: CohortFormProps) {
   const [newSessionDate, setNewSessionDate] = useState('')
   const [newSessionDuration, setNewSessionDuration] = useState('90')
   const [newSessionUrl, setNewSessionUrl] = useState('')
+  const [newSessionDescription, setNewSessionDescription] = useState('')
+  const [newSessionRecordingUrl, setNewSessionRecordingUrl] = useState('')
+  const [sessionError, setSessionError] = useState<string | null>(null)
+  const [sessionPending, startSessionTransition] = useTransition()
+  const [editingSessionId, setEditingSessionId] = useState<string | null>(null)
+  const [editSessionTitle, setEditSessionTitle] = useState('')
+  const [editSessionDate, setEditSessionDate] = useState('')
+  const [editSessionDuration, setEditSessionDuration] = useState('90')
+  const [editSessionUrl, setEditSessionUrl] = useState('')
+  const [editSessionDescription, setEditSessionDescription] = useState('')
+  const [editSessionRecordingUrl, setEditSessionRecordingUrl] = useState('')
+  const [editSessionError, setEditSessionError] = useState<string | null>(null)
+  const [editSessionPending, startEditSessionTransition] = useTransition()
 
   // Section 9 — Cupons
   const coupons = isEdit ? props.coupons : []
@@ -1180,27 +1207,27 @@ export function CohortForm(props: CohortFormProps) {
               <>
                 <div className="mb-4 flex items-center justify-between">
                   <span className="font-mono text-xs text-[var(--bone-mute)]">
-                    {liveSessions.length} sessao{liveSessions.length !== 1 ? 'es' : ''}
+                    {liveSessions.length} encontro{liveSessions.length !== 1 ? 's' : ''}
                   </span>
                   <button
                     type="button"
-                    onClick={() => setShowAddSession(!showAddSession)}
+                    onClick={() => { setShowAddSession(!showAddSession); setSessionError(null) }}
                     style={{ borderRadius: 0 }}
                     className="flex items-center gap-1.5 border border-white/[0.07] px-3 py-1.5 font-mono text-[10px] uppercase tracking-widest text-[var(--bone-mute)] transition-colors hover:border-white/[0.16] hover:text-[var(--bone-dim)]"
                   >
                     <Plus className="h-3 w-3" />
-                    Agendar
+                    Adicionar Encontro
                   </button>
                 </div>
 
                 {showAddSession && (
                   <div className="mb-4 border border-white/[0.07] p-4">
                     <p className="mb-3 font-mono text-[10px] uppercase tracking-widest text-[var(--bone-mute)]">
-                      Nova sessao ao vivo
+                      Novo encontro ao vivo
                     </p>
                     <div className="grid gap-3 md:grid-cols-2">
                       <div className="md:col-span-2">
-                        <FieldLabel>Titulo</FieldLabel>
+                        <FieldLabel>Titulo *</FieldLabel>
                         <TextInput
                           value={newSessionTitle}
                           onChange={setNewSessionTitle}
@@ -1208,7 +1235,7 @@ export function CohortForm(props: CohortFormProps) {
                         />
                       </div>
                       <div>
-                        <FieldLabel>Data e hora</FieldLabel>
+                        <FieldLabel>Data e hora * (horario de Brasilia)</FieldLabel>
                         <TextInput
                           type="datetime-local"
                           value={newSessionDate}
@@ -1225,50 +1252,77 @@ export function CohortForm(props: CohortFormProps) {
                         />
                       </div>
                       <div className="md:col-span-2">
-                        <FieldLabel>URL da reuniao (liberada automaticamente 30min antes)</FieldLabel>
+                        <FieldLabel>Link do encontro (Google Meet, Zoom etc.)</FieldLabel>
                         <TextInput
                           value={newSessionUrl}
                           onChange={setNewSessionUrl}
                           placeholder="https://meet.google.com/..."
                         />
                       </div>
+                      <div className="md:col-span-2">
+                        <FieldLabel>Link da gravacao (preencher apos o encontro)</FieldLabel>
+                        <TextInput
+                          value={newSessionRecordingUrl}
+                          onChange={setNewSessionRecordingUrl}
+                          placeholder="https://youtube.com/watch?v=..."
+                        />
+                      </div>
+                      <div className="md:col-span-2">
+                        <FieldLabel>Descricao (opcional)</FieldLabel>
+                        <textarea
+                          value={newSessionDescription}
+                          onChange={(e) => setNewSessionDescription(e.target.value)}
+                          rows={2}
+                          placeholder="Topicos que serao abordados neste encontro..."
+                          style={{ borderRadius: 0 }}
+                          className="w-full border border-white/[0.16] bg-[var(--ink-2)] px-3 py-2.5 font-mono text-sm text-[var(--bone)] placeholder-[var(--bone-mute)] focus:border-[var(--ember)]/50 focus:outline-none"
+                        />
+                      </div>
                     </div>
+                    {sessionError && (
+                      <p className="mt-2 font-mono text-xs text-red-400">{sessionError}</p>
+                    )}
                     <div className="mt-3 flex gap-2">
                       <button
                         type="button"
-                        disabled={!newSessionTitle || !newSessionDate}
+                        disabled={sessionPending || !newSessionTitle || !newSessionDate}
                         style={{ borderRadius: 0 }}
                         className="bg-[var(--ember)] px-4 py-2 font-mono text-[10px] uppercase tracking-widest text-[var(--void)] disabled:opacity-40"
                         onClick={() => {
                           if (!isEdit || !newSessionTitle || !newSessionDate) return
-                          startTransition(async () => {
+                          setSessionError(null)
+                          startSessionTransition(async () => {
                             try {
                               await createLiveSession({
                                 cohortId: props.cohort.id,
                                 title: newSessionTitle,
-                                scheduledAt: newSessionDate,
+                                description: newSessionDescription || undefined,
+                                scheduledAt: new Date(newSessionDate).toISOString(),
                                 durationMinutes: parseInt(newSessionDuration, 10) || 90,
                                 meetingUrl: newSessionUrl || undefined,
+                                recordingUrl: newSessionRecordingUrl || undefined,
                               })
                               setShowAddSession(false)
                               setNewSessionTitle('')
                               setNewSessionDate('')
                               setNewSessionDuration('90')
                               setNewSessionUrl('')
+                              setNewSessionDescription('')
+                              setNewSessionRecordingUrl('')
                               router.refresh()
-                            } catch {
-                              // ignore
+                            } catch (err) {
+                              setSessionError(err instanceof Error ? err.message : 'Erro ao criar encontro')
                             }
                           })
                         }}
                       >
-                        Salvar
+                        {sessionPending ? 'Salvando...' : 'Salvar'}
                       </button>
                       <button
                         type="button"
                         style={{ borderRadius: 0 }}
                         className="border border-white/[0.07] px-4 py-2 font-mono text-[10px] uppercase tracking-widest text-[var(--bone-mute)] transition-colors hover:text-[var(--bone-dim)]"
-                        onClick={() => setShowAddSession(false)}
+                        onClick={() => { setShowAddSession(false); setSessionError(null) }}
                       >
                         Cancelar
                       </button>
@@ -1277,29 +1331,209 @@ export function CohortForm(props: CohortFormProps) {
                 )}
 
                 <div className="space-y-1">
-                  {liveSessions.map((ls) => (
-                    <div key={ls.id} className="flex items-center justify-between border border-white/[0.07] px-4 py-3">
-                      <div>
-                        <p className="font-mono text-xs text-[var(--bone)]">{ls.title}</p>
-                        <p className="font-mono text-[10px] text-[var(--bone-mute)]">
-                          {formatDate(ls.scheduled_at)} · {ls.duration_minutes} min
-                        </p>
+                  {liveSessions.map((ls, idx) => {
+                    const isEditing = editingSessionId === ls.id
+                    const isPast = new Date(ls.scheduled_at) < new Date()
+                    const prevWasFuture = idx > 0 && new Date(liveSessions[idx - 1]!.scheduled_at) >= new Date()
+                    const showPastDivider = isPast && prevWasFuture
+
+                    let sessionBadge: { label: string; className: string }
+                    if (!isPast) {
+                      sessionBadge = { label: 'Agendado', className: 'text-green-400' }
+                    } else if (ls.recording_url) {
+                      sessionBadge = { label: 'Realizado', className: 'text-blue-400' }
+                    } else {
+                      sessionBadge = { label: 'Encerrado', className: 'text-[var(--bone-mute)]' }
+                    }
+
+                    return (
+                      <div key={ls.id}>
+                        {showPastDivider && (
+                          <div className="my-3 flex items-center gap-2">
+                            <div className="flex-1 border-t border-white/[0.07]" />
+                            <span className="font-mono text-[9px] uppercase tracking-widest text-[var(--bone-mute)]">Passados</span>
+                            <div className="flex-1 border-t border-white/[0.07]" />
+                          </div>
+                        )}
+                      <div className="border border-white/[0.07]">
+                        {/* Row — collapsed view */}
+                        {!isEditing && (
+                          <div className="flex items-center justify-between px-4 py-3">
+                            <div className="min-w-0 flex-1">
+                              <div className="flex items-center gap-2">
+                                <p className="truncate font-mono text-xs text-[var(--bone)]">{ls.title}</p>
+                                <span className={`shrink-0 font-mono text-[9px] uppercase tracking-widest ${sessionBadge.className}`}>
+                                  {sessionBadge.label}
+                                </span>
+                              </div>
+                              <div className="mt-0.5 flex flex-wrap gap-x-3 gap-y-0.5">
+                                <span className="font-mono text-[10px] text-[var(--bone-mute)]">
+                                  {formatDateTimeBR(ls.scheduled_at)} · {ls.duration_minutes} min
+                                </span>
+                                {ls.meeting_url && (
+                                  <a
+                                    href={ls.meeting_url}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="font-mono text-[10px] text-[var(--ember)]/70 transition-colors hover:text-[var(--ember)] truncate max-w-[200px]"
+                                  >
+                                    Link do encontro
+                                  </a>
+                                )}
+                                {ls.recording_url && (
+                                  <a
+                                    href={ls.recording_url}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="font-mono text-[10px] text-blue-400/70 transition-colors hover:text-blue-400"
+                                  >
+                                    Gravacao
+                                  </a>
+                                )}
+                              </div>
+                            </div>
+                            <div className="ml-4 flex shrink-0 items-center gap-3">
+                              <button
+                                type="button"
+                                className="font-mono text-[10px] uppercase tracking-widest text-[var(--bone-mute)] transition-colors hover:text-[var(--bone-dim)]"
+                                onClick={() => {
+                                  setEditingSessionId(ls.id)
+                                  setEditSessionTitle(ls.title)
+                                  setEditSessionDate(toDatetimeLocalValue(ls.scheduled_at))
+                                  setEditSessionDuration(String(ls.duration_minutes))
+                                  setEditSessionUrl(ls.meeting_url ?? '')
+                                  setEditSessionRecordingUrl(ls.recording_url ?? '')
+                                  setEditSessionDescription(ls.description ?? '')
+                                  setEditSessionError(null)
+                                }}
+                              >
+                                Editar
+                              </button>
+                              <button
+                                type="button"
+                                className="text-red-400/50 transition-colors hover:text-red-400"
+                                onClick={() => {
+                                  if (!isEdit) return
+                                  if (!confirm(`Excluir o encontro "${ls.title}"? Esta ação não pode ser desfeita.`)) return
+                                  startTransition(async () => {
+                                    await deleteLiveSession(ls.id, props.cohort.id)
+                                    router.refresh()
+                                  })
+                                }}
+                              >
+                                <Trash2 className="h-3.5 w-3.5" />
+                              </button>
+                            </div>
+                          </div>
+                        )}
+
+                        {/* Inline edit form */}
+                        {isEditing && (
+                          <div className="bg-[var(--ink-2)]/50 p-4">
+                            <p className="mb-3 font-mono text-[10px] uppercase tracking-widest text-[var(--bone-mute)]">
+                              Editando encontro
+                            </p>
+                            <div className="grid gap-3 md:grid-cols-2">
+                              <div className="md:col-span-2">
+                                <FieldLabel>Titulo *</FieldLabel>
+                                <TextInput
+                                  value={editSessionTitle}
+                                  onChange={setEditSessionTitle}
+                                  placeholder="Aula ao Vivo — Closures"
+                                />
+                              </div>
+                              <div>
+                                <FieldLabel>Data e hora * (horario de Brasilia)</FieldLabel>
+                                <TextInput
+                                  type="datetime-local"
+                                  value={editSessionDate}
+                                  onChange={setEditSessionDate}
+                                />
+                              </div>
+                              <div>
+                                <FieldLabel>Duracao (minutos)</FieldLabel>
+                                <TextInput
+                                  type="number"
+                                  value={editSessionDuration}
+                                  onChange={setEditSessionDuration}
+                                  placeholder="90"
+                                />
+                              </div>
+                              <div className="md:col-span-2">
+                                <FieldLabel>Link do encontro (Google Meet, Zoom etc.)</FieldLabel>
+                                <TextInput
+                                  value={editSessionUrl}
+                                  onChange={setEditSessionUrl}
+                                  placeholder="https://meet.google.com/..."
+                                />
+                              </div>
+                              <div className="md:col-span-2">
+                                <FieldLabel>Link da gravacao (preencher apos o encontro)</FieldLabel>
+                                <TextInput
+                                  value={editSessionRecordingUrl}
+                                  onChange={setEditSessionRecordingUrl}
+                                  placeholder="https://youtube.com/watch?v=..."
+                                />
+                              </div>
+                              <div className="md:col-span-2">
+                                <FieldLabel>Descricao (opcional)</FieldLabel>
+                                <textarea
+                                  value={editSessionDescription}
+                                  onChange={(e) => setEditSessionDescription(e.target.value)}
+                                  rows={2}
+                                  placeholder="Topicos que serao abordados neste encontro..."
+                                  style={{ borderRadius: 0 }}
+                                  className="w-full border border-white/[0.16] bg-[var(--ink-2)] px-3 py-2.5 font-mono text-sm text-[var(--bone)] placeholder-[var(--bone-mute)] focus:border-[var(--ember)]/50 focus:outline-none"
+                                />
+                              </div>
+                            </div>
+                            {editSessionError && (
+                              <p className="mt-2 font-mono text-xs text-red-400">{editSessionError}</p>
+                            )}
+                            <div className="mt-3 flex gap-2">
+                              <button
+                                type="button"
+                                disabled={editSessionPending || !editSessionTitle || !editSessionDate}
+                                style={{ borderRadius: 0 }}
+                                className="bg-[var(--ember)] px-4 py-2 font-mono text-[10px] uppercase tracking-widest text-[var(--void)] disabled:opacity-40"
+                                onClick={() => {
+                                  if (!isEdit || !editSessionTitle || !editSessionDate) return
+                                  setEditSessionError(null)
+                                  startEditSessionTransition(async () => {
+                                    try {
+                                      await updateLiveSession(ls.id, props.cohort.id, {
+                                        title: editSessionTitle,
+                                        description: editSessionDescription || undefined,
+                                        scheduledAt: new Date(editSessionDate).toISOString(),
+                                        durationMinutes: parseInt(editSessionDuration, 10) || 90,
+                                        meetingUrl: editSessionUrl || undefined,
+                                        recordingUrl: editSessionRecordingUrl || undefined,
+                                      })
+                                      setEditingSessionId(null)
+                                      router.refresh()
+                                    } catch (err) {
+                                      setEditSessionError(err instanceof Error ? err.message : 'Erro ao atualizar encontro')
+                                    }
+                                  })
+                                }}
+                              >
+                                {editSessionPending ? 'Salvando...' : 'Salvar alteracoes'}
+                              </button>
+                              <button
+                                type="button"
+                                style={{ borderRadius: 0 }}
+                                className="border border-white/[0.07] px-4 py-2 font-mono text-[10px] uppercase tracking-widest text-[var(--bone-mute)] transition-colors hover:text-[var(--bone-dim)]"
+                                onClick={() => { setEditingSessionId(null); setEditSessionError(null) }}
+                              >
+                                Cancelar
+                              </button>
+                            </div>
+                          </div>
+                        )}
                       </div>
-                      <button
-                        type="button"
-                        className="text-red-400/50 transition-colors hover:text-red-400"
-                        onClick={() => {
-                          if (!isEdit) return
-                          startTransition(async () => {
-                            await deleteLiveSession(ls.id, props.cohort.id)
-                            router.refresh()
-                          })
-                        }}
-                      >
-                        <Trash2 className="h-3.5 w-3.5" />
-                      </button>
-                    </div>
-                  ))}
+                      </div>
+                    )
+                  })}
                 </div>
               </>
             )}

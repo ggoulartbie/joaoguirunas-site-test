@@ -5,7 +5,7 @@ import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 import Link from 'next/link'
-import { useRouter } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
 
 const schema = z.object({
@@ -17,6 +17,7 @@ type FormData = z.infer<typeof schema>
 
 export function LoginForm() {
   const router = useRouter()
+  const searchParams = useSearchParams()
   const [serverError, setServerError] = useState<string | null>(null)
 
   const {
@@ -29,7 +30,7 @@ export function LoginForm() {
     setServerError(null)
     const supabase = createClient()
 
-    const { error } = await supabase.auth.signInWithPassword({
+    const { error, data: authData } = await supabase.auth.signInWithPassword({
       email: data.email,
       password: data.password,
     })
@@ -39,7 +40,23 @@ export function LoginForm() {
       return
     }
 
-    router.push('/academy/aluno')
+    // Determinar destino: se ADMIN → /academy/admin, senão usar ?next ou fallback
+    const { data: profile } = await supabase
+      .from('profiles')
+      .select('role')
+      .eq('id', authData.user!.id)
+      .single()
+
+    if (profile?.role === 'ADMIN') {
+      router.push('/academy/admin')
+      router.refresh()
+      return
+    }
+
+    const raw = searchParams.get('next') ?? ''
+    // Sanitizar: aceitar apenas paths internos que não contenham /login
+    const next = raw.startsWith('/') && !raw.includes('/login') ? raw : '/academy/aluno'
+    router.push(next)
     router.refresh()
   }
 
