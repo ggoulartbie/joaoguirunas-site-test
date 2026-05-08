@@ -27,39 +27,41 @@ export function MarkCompleteButton({ lessonId, initialCompleted }: Props) {
 
   return (
     <div
-      className="flex items-center justify-between p-4"
+      className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 px-6 py-5"
       style={{
-        background: 'var(--ink)',
-        border: '1px solid var(--hairline)',
+        background: completed ? 'rgba(255,58,14,0.06)' : 'var(--ink)',
+        border: `1px solid ${completed ? 'rgba(255,58,14,0.25)' : 'var(--hairline)'}`,
+        transition: 'background 0.3s, border-color 0.3s',
       }}
     >
-      <span className="text-sm" style={{ color: 'var(--bone-dim)' }}>
-        {completed ? 'Aula concluída' : 'Concluiu esta aula?'}
-      </span>
+      <div className="flex flex-col gap-0.5">
+        <span
+          className="text-sm font-medium"
+          style={{ color: completed ? 'var(--ember)' : 'var(--bone)' }}
+        >
+          {completed ? 'Aula concluída' : 'Concluiu esta aula?'}
+        </span>
+        <span className="text-xs" style={{ color: 'var(--bone-mute)' }}>
+          {completed ? 'Clique para desmarcar' : 'Marque para registrar seu progresso'}
+        </span>
+      </div>
+
       <button
         onClick={handleClick}
         disabled={loading}
         aria-label={completed ? 'Desmarcar aula como concluída' : 'Marcar aula como concluída'}
-        className="flex items-center gap-2 border px-4 py-2 font-mono text-xs uppercase tracking-wide transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ember)] focus-visible:ring-offset-1 focus-visible:ring-offset-[var(--void)]"
+        className="flex items-center justify-center gap-2.5 px-6 py-2.5 font-mono text-xs uppercase tracking-widest transition-all hover:opacity-80 active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ember)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--void)] sm:flex-shrink-0"
         style={
           completed
-            ? {
-                background: 'var(--ember)',
-                borderColor: 'var(--ember)',
-                color: 'var(--bone)',
-              }
-            : {
-                background: 'transparent',
-                borderColor: 'var(--ember)',
-                color: 'var(--ember)',
-              }
+            ? { background: 'var(--ember)', border: '1px solid var(--ember)', color: 'var(--void)' }
+            : { background: 'transparent', border: '1px solid var(--ember)', color: 'var(--ember)' }
         }
       >
         {completed
-          ? <CheckCircle className="h-3.5 w-3.5" aria-hidden="true" />
-          : <Circle className="h-3.5 w-3.5" aria-hidden="true" />
+          ? <CheckCircle className="h-4 w-4" aria-hidden="true" />
+          : <Circle className="h-4 w-4" aria-hidden="true" />
         }
-        {loading ? 'Salvando...' : completed ? 'Concluída' : 'Marcar como concluída'}
+        {loading ? 'Salvando…' : completed ? 'Concluída' : 'Marcar como concluída'}
       </button>
     </div>
   )
