@@ -43,6 +43,7 @@ export class StripeAdapter implements PaymentAdapter {
 
     const sessionParams: Stripe.Checkout.SessionCreateParams = {
       mode: 'payment',
+      payment_method_types: ['card'],
       line_items: [{ price: params.priceId, quantity: 1 }],
       success_url: params.successUrl,
       cancel_url: params.cancelUrl,
