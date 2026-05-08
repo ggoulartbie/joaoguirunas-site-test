@@ -53,10 +53,16 @@ where module_id in (
 );
 
 delete from public.modules
-where course_id = '10000000-0000-0000-0000-000000000001';
+where course_id in (
+  '10000000-0000-0000-0000-000000000001',
+  '10000000-0000-0000-0000-000000000002'
+);
 
 delete from public.courses
-where id = '10000000-0000-0000-0000-000000000001';
+where id in (
+  '10000000-0000-0000-0000-000000000001',
+  '10000000-0000-0000-0000-000000000002'
+);
 
 -- ============================================================
 -- AUTH USERS
@@ -457,6 +463,74 @@ values (
   90
 )
 on conflict (id) do nothing;
+
+-- ============================================================
+-- COURSE: curso-online-claude-agents
+-- Produto distinto da mentoria presencial
+-- ============================================================
+
+insert into public.courses (id, slug, title, description, published, sort_order)
+values (
+  '10000000-0000-0000-0000-000000000002',
+  'curso-online-claude-agents',
+  'Curso Online — Claude Agents Team',
+  'Acesso por 6 meses ao conteúdo em vídeo, materiais, fórum e certificado. Aprenda a criar e orquestrar agentes de IA com Claude Code no seu próprio ritmo.',
+  true,
+  2
+)
+on conflict (id) do nothing;
+
+-- ============================================================
+-- COHORT: curso-online-padrao
+--
+-- ATENÇÃO: stripe_price_entry_id deve ser preenchido com o
+-- Price ID real do Stripe Dashboard antes de ir para produção.
+-- ============================================================
+
+insert into public.cohorts (
+  id, slug, name, description,
+  status,
+  total_seats, access_duration_days,
+  has_live_sessions, has_support,
+  is_purchasable, has_public_page,
+  entry_price_cents, max_installments_entry,
+  stripe_price_entry_id
+)
+values (
+  '40000000-0000-0000-0000-000000000002',
+  'curso-online-padrao',
+  'Curso Online — Claude Agents Team',
+  'Acesso por 6 meses ao conteúdo em vídeo, materiais, fórum e certificado. Aprenda a criar e orquestrar agentes de IA com Claude Code no seu próprio ritmo.',
+  'OPEN',
+  null,
+  180,
+  false,
+  false,
+  true,
+  true,
+  79900,
+  6,
+  null
+)
+on conflict (id) do update set
+  slug                   = excluded.slug,
+  name                   = excluded.name,
+  description            = excluded.description,
+  status                 = excluded.status,
+  access_duration_days   = excluded.access_duration_days,
+  is_purchasable         = excluded.is_purchasable,
+  has_public_page        = excluded.has_public_page,
+  entry_price_cents      = excluded.entry_price_cents,
+  max_installments_entry = excluded.max_installments_entry;
+
+insert into public.cohort_courses (cohort_id, course_id, included_module_ids, sort_order)
+values (
+  '40000000-0000-0000-0000-000000000002',
+  '10000000-0000-0000-0000-000000000002',
+  '{}',
+  1
+)
+on conflict (cohort_id, course_id) do nothing;
 
 -- ============================================================
 -- FORUM CATEGORIES
