@@ -69,6 +69,18 @@ export default async function TurmaSlugPage({ params }: Props) {
   const cohort = cohortResult.data
   const { data: { user } } = await supabase.auth.getUser()
 
+  // Verificar se o usuário já está matriculado
+  const isEnrolled = user
+    ? await supabase
+        .from('cohort_members')
+        .select('id')
+        .eq('cohort_id', cohort.id)
+        .eq('user_id', user.id)
+        .eq('status', 'ACTIVE')
+        .maybeSingle()
+        .then(({ data }) => !!data)
+    : false
+
   const coursesResult = await supabaseAdmin
     .from('cohort_courses')
     .select('courses(id, title, description, cover_image_url)')
@@ -197,19 +209,35 @@ export default async function TurmaSlugPage({ params }: Props) {
             >
               ← Turmas
             </Link>
-            <Link
-              href="/academy/login"
-              style={{
-                fontFamily: 'var(--type-mono)',
-                fontSize: 10,
-                letterSpacing: '0.18em',
-                textTransform: 'uppercase',
-                color: 'var(--bone-dim)',
-                textDecoration: 'none',
-              }}
-            >
-              Entrar →
-            </Link>
+            {user ? (
+              <Link
+                href="/academy/meus-cursos"
+                style={{
+                  fontFamily: 'var(--type-mono)',
+                  fontSize: 10,
+                  letterSpacing: '0.18em',
+                  textTransform: 'uppercase',
+                  color: 'var(--bone-dim)',
+                  textDecoration: 'none',
+                }}
+              >
+                Meus Cursos →
+              </Link>
+            ) : (
+              <Link
+                href="/academy/login"
+                style={{
+                  fontFamily: 'var(--type-mono)',
+                  fontSize: 10,
+                  letterSpacing: '0.18em',
+                  textTransform: 'uppercase',
+                  color: 'var(--bone-dim)',
+                  textDecoration: 'none',
+                }}
+              >
+                Entrar →
+              </Link>
+            )}
           </div>
         </div>
       </nav>
@@ -653,7 +681,26 @@ export default async function TurmaSlugPage({ params }: Props) {
               )}
 
               {/* CTA button */}
-              {sold ? (
+              {isEnrolled ? (
+                <Link
+                  href="/academy/meus-cursos"
+                  className="block w-full text-center transition-colors"
+                  style={{
+                    background: 'transparent',
+                    border: '1px solid var(--ember)',
+                    color: 'var(--ember)',
+                    fontFamily: 'var(--type-mono)',
+                    fontSize: 11,
+                    letterSpacing: '0.18em',
+                    textTransform: 'uppercase',
+                    padding: '14px 0',
+                    fontWeight: 500,
+                    textDecoration: 'none',
+                  }}
+                >
+                  Acessar turma →
+                </Link>
+              ) : sold ? (
                 <button
                   disabled
                   style={{
@@ -703,8 +750,8 @@ export default async function TurmaSlugPage({ params }: Props) {
                 </p>
               )}
 
-              {/* Login hint */}
-              {!user && cohort.is_purchasable && !sold && (
+              {/* Login hint — só para não matriculados */}
+              {!user && !isEnrolled && cohort.is_purchasable && !sold && (
                 <p
                   style={{
                     textAlign: 'center',
