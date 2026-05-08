@@ -4,6 +4,7 @@ import Link from 'next/link'
 import { Check, Play, FileText, MessageSquare, Award } from 'lucide-react'
 import { siteConfig } from '@/config/site'
 import { ALL_AGENTES, SQUADS, TOTAL_AGENTES } from '@/data/agentes'
+import { SolarSystemBackground } from '@/app/agentes/_components/SolarSystemBackground'
 import { SplineScene } from '@/shared/components/ui/SplineScene'
 import { CursoSquadsSticky } from './_components/CursoSquadsSticky'
 import { CursoFaqAccordion } from './_components/CursoFaqAccordion'
@@ -128,22 +129,25 @@ export default function CursoOnlinePage() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
 
-      <div style={{ background: '#050507', minHeight: '100vh', color: '#f1f1f3' }}>
+      {/* Planetas — fora do wrapper z-10 */}
+      <SolarSystemBackground />
+
+      <div style={{ background: 'transparent', minHeight: '100vh', color: '#f1f1f3' }}>
 
         {/* ===== HERO ===== */}
         <section id="hero" className="relative w-full -mt-16">
-          <div className="relative min-h-[560px] sm:min-h-[92vh] overflow-hidden" style={{ background: 'linear-gradient(135deg, transparent 0%, rgba(0,0,0,0.55) 100%), linear-gradient(to bottom, #050507, #0e0e11)' }}>
+          <div className="relative min-h-[560px] sm:min-h-[92vh] overflow-hidden">
 
-            {/* Spline robot — direita, desktop */}
-            <div className="hidden sm:block absolute right-0 top-0 bottom-0 w-[55%] pointer-events-none">
+            {/* Robô Spline — direita, desktop, sobre os planetas */}
+            <div className="hidden sm:block absolute right-0 top-0 bottom-0 w-[55%] pointer-events-none z-[3]">
               <SplineScene
                 scene="https://prod.spline.design/g1zMCtoiElqpnybf/scene.splinecode"
                 className="w-full h-full"
               />
             </div>
 
-            {/* Fade esquerda sobre o Spline */}
-            <div className="hidden sm:block absolute inset-y-0 left-0 w-[45%] pointer-events-none z-[2]" style={{ background: 'linear-gradient(to right, #050507 60%, transparent)' }} />
+            {/* Fade esquerda — separa conteúdo do robô */}
+            <div className="hidden sm:block absolute inset-y-0 left-0 w-[40%] pointer-events-none z-[4]" style={{ background: 'linear-gradient(to right, #050507 55%, transparent)' }} />
 
             <div className="relative z-10 flex flex-col h-full min-h-[560px] sm:min-h-[92vh] items-start justify-center px-6 sm:px-10 lg:px-16">
               <div className="sm:max-w-xl lg:max-w-2xl w-full pt-28 sm:pt-0 pb-8 sm:pb-0">
