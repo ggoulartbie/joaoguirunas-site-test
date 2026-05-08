@@ -339,20 +339,79 @@ export async function createLiveSession(data: {
   scheduledAt: string
   durationMinutes: number
   meetingUrl?: string
+  recordingUrl?: string
 }) {
   await requireAdmin()
 
+  const schema = z.object({
+    cohortId: z.string().uuid(),
+    title: z.string().min(1).max(300),
+    description: z.string().optional(),
+    scheduledAt: z.string().min(1),
+    durationMinutes: z.number().int().positive().default(90),
+    meetingUrl: z.string().url().optional().or(z.literal('')),
+    recordingUrl: z.string().url().optional().or(z.literal('')),
+  })
+
+  const parsed = schema.safeParse(data)
+  if (!parsed.success) throw new Error(parsed.error.issues.map((i) => i.message).join(', '))
+
   const { error } = await supabaseAdmin.from('live_sessions').insert({
-    cohort_id: data.cohortId,
-    title: data.title,
-    description: data.description ?? null,
-    scheduled_at: data.scheduledAt,
-    duration_minutes: data.durationMinutes,
-    meeting_url: data.meetingUrl ?? null,
+    cohort_id: parsed.data.cohortId,
+    title: parsed.data.title,
+    description: parsed.data.description ?? null,
+    scheduled_at: parsed.data.scheduledAt,
+    duration_minutes: parsed.data.durationMinutes,
+    meeting_url: parsed.data.meetingUrl || null,
+    recording_url: parsed.data.recordingUrl || null,
   })
 
   if (error) throw new Error(error.message)
   revalidatePath(`/academy/admin/turmas/${data.cohortId}`)
+}
+
+export async function updateLiveSession(
+  sessionId: string,
+  cohortId: string,
+  data: {
+    title: string
+    description?: string
+    scheduledAt: string
+    durationMinutes: number
+    meetingUrl?: string
+    recordingUrl?: string
+  }
+) {
+  await requireAdmin()
+
+  const schema = z.object({
+    title: z.string().min(1).max(300),
+    description: z.string().optional(),
+    scheduledAt: z.string().min(1),
+    durationMinutes: z.number().int().positive().default(90),
+    meetingUrl: z.string().url().optional().or(z.literal('')),
+    recordingUrl: z.string().url().optional().or(z.literal('')),
+  })
+
+  if (!z.string().uuid().safeParse(sessionId).success) throw new Error('ID inválido')
+
+  const parsed = schema.safeParse(data)
+  if (!parsed.success) throw new Error(parsed.error.issues.map((i) => i.message).join(', '))
+
+  const { error } = await supabaseAdmin
+    .from('live_sessions')
+    .update({
+      title: parsed.data.title,
+      description: parsed.data.description ?? null,
+      scheduled_at: parsed.data.scheduledAt,
+      duration_minutes: parsed.data.durationMinutes,
+      meeting_url: parsed.data.meetingUrl || null,
+      recording_url: parsed.data.recordingUrl || null,
+    })
+    .eq('id', sessionId)
+
+  if (error) throw new Error(error.message)
+  revalidatePath(`/academy/admin/turmas/${cohortId}`)
 }
 
 export async function deleteLiveSession(sessionId: string, cohortId: string) {

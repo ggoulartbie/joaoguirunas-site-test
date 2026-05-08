@@ -45,7 +45,7 @@ export default async function StudentLayout({
       .slice(0, 2)
       .toUpperCase() ?? 'JG'
 
-  const needsOnboarding = user !== null && !profile?.name && !profile?.bio
+  const needsOnboarding = user !== null && profile !== null && !profile?.name && !profile?.bio
   const isAdmin = profile?.role === 'ADMIN'
 
   return (

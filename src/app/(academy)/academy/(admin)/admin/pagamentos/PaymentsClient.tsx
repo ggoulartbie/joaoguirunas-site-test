@@ -2,7 +2,7 @@
 
 import { useState, useTransition } from 'react'
 import { ExternalLink, X, AlertTriangle, RefreshCw } from 'lucide-react'
-import { retryWebhookEvent } from './actions'
+import { retryWebhookEvent, refundPayment } from './actions'
 
 export type PaymentRow = {
   id: string
@@ -57,10 +57,14 @@ function RefundConfirmModal({
   payment,
   onConfirm,
   onCancel,
+  isPending,
+  error,
 }: {
   payment: PaymentRow
   onConfirm: () => void
   onCancel: () => void
+  isPending?: boolean
+  error?: string | null
 }) {
   const [confirmed, setConfirmed] = useState(false)
 
@@ -102,6 +106,12 @@ function RefundConfirmModal({
             será encerrada.
           </p>
 
+          {error && (
+            <div className="mb-4 border border-[var(--ember)]/40 bg-[var(--ember)]/10 px-4 py-2 font-mono text-xs text-[var(--ember)]">
+              {error}
+            </div>
+          )}
+
           <label className="mb-5 flex cursor-pointer items-start gap-3">
             <input
               type="checkbox"
@@ -118,17 +128,18 @@ function RefundConfirmModal({
             <button
               type="button"
               onClick={onCancel}
-              className="flex-1 border border-[rgba(255,255,255,0.07)] py-2.5 font-mono text-xs uppercase tracking-wider text-[var(--bone-mute)] transition-colors hover:text-[var(--bone-dim)]"
+              disabled={isPending}
+              className="flex-1 border border-[rgba(255,255,255,0.07)] py-2.5 font-mono text-xs uppercase tracking-wider text-[var(--bone-mute)] transition-colors hover:text-[var(--bone-dim)] disabled:cursor-not-allowed disabled:opacity-40"
             >
               Cancelar
             </button>
             <button
               type="button"
-              disabled={!confirmed}
+              disabled={!confirmed || isPending}
               onClick={onConfirm}
               className="flex-1 bg-[var(--ember)] py-2.5 font-mono text-xs font-semibold uppercase tracking-wider text-white disabled:cursor-not-allowed disabled:opacity-40"
             >
-              Reembolsar
+              {isPending ? 'Processando...' : 'Reembolsar'}
             </button>
           </div>
         </div>
@@ -238,15 +249,31 @@ export function PaymentsClient({
   failedWebhookEvents: FailedEvent[]
 }) {
   const [statusFilter, setStatusFilter] = useState('all')
+  const [payments, setPayments] = useState(initialPayments)
   const [refundTarget, setRefundTarget] = useState<PaymentRow | null>(null)
+  const [refundError, setRefundError] = useState<string | null>(null)
+  const [isPending, startTransition] = useTransition()
 
-  const filtered = initialPayments.filter((p) => {
+  const filtered = payments.filter((p) => {
     if (statusFilter !== 'all' && p.status !== statusFilter) return false
     return true
   })
 
   function handleRefundConfirm() {
-    setRefundTarget(null)
+    if (!refundTarget) return
+    setRefundError(null)
+    const targetId = refundTarget.id
+    startTransition(async () => {
+      try {
+        await refundPayment(targetId)
+        setPayments((prev) =>
+          prev.map((p) => (p.id === targetId ? { ...p, status: 'REFUNDED' } : p))
+        )
+        setRefundTarget(null)
+      } catch (err) {
+        setRefundError(err instanceof Error ? err.message : 'Erro desconhecido ao processar reembolso')
+      }
+    })
   }
 
   return (
@@ -254,11 +281,15 @@ export function PaymentsClient({
       <FailedWebhooksPanel events={failedWebhookEvents} />
 
       {refundTarget && (
-        <RefundConfirmModal
-          payment={refundTarget}
-          onConfirm={handleRefundConfirm}
-          onCancel={() => setRefundTarget(null)}
-        />
+        <>
+          <RefundConfirmModal
+            payment={refundTarget}
+            onConfirm={handleRefundConfirm}
+            onCancel={() => { setRefundTarget(null); setRefundError(null) }}
+            isPending={isPending}
+            error={refundError}
+          />
+        </>
       )}
 
       {/* Toolbar */}

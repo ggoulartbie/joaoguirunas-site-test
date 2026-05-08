@@ -1,7 +1,7 @@
 ---
 title: Smart Memory Index
 type: index
-updated: 2026-05-07
+updated: 2026-05-08
 tags: [index]
 ---
 
@@ -33,7 +33,7 @@ MOC raiz. Todo arquivo novo em `docs/smart-memory/` deve ser referenciado aqui.
 
 ## Runbooks
 - [[runbooks/go-live-checklist]] — gate formal F8.7 (13 ACs: auth, conteúdo bloqueado, compra real, cross-ext, refund, emails, performance, RLS, sentry, cron, backup)
-- [[runbooks/launch-2026-05-07]] — execução go-live em prod 2026-05-07 (pré-flight ✅; ACs manuais pendentes João)
+- [[runbooks/launch-2026-05-07]] — execução go-live em prod 2026-05-07 (pré-flight ✅; checklist final F8.7 2026-05-08 com BLOCKER de Stripe Price ID + CONCERNs documentados)
 
 ## Agentes
 - [[agents/data-engineer/schema]] — schema completo (21 tabelas, funções, índices)
@@ -43,8 +43,10 @@ MOC raiz. Todo arquivo novo em `docs/smart-memory/` deve ser referenciado aqui.
 - [[agents/qa/results]] — histórico de veredictos
 - [[agents/ux/components]] — specs de componentes
 - [[agents/ux/design-recommendations]] — recomendações P0/P1/P2 (accent, dead code, a11y)
+- [[agents/ux/curso-online-agents-redesign]] — spec redesign seção agentes /curso-online (cards 110px, sem blur, sem link, min-h 80vh)
 - `agents/research/` — research reports
 - [[agents/research/seo-audit]] — auditoria SEO completa (titles, headings, schema, CWV, sitemap) — 2026-04-23
+- [[agents/research/api-admin-inventory]] — inventário e audit das APIs em /api/admin/ — 2026-05-07
 
 ## Status
 - [[shared-context]] — status board em tempo real

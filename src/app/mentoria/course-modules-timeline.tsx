@@ -187,7 +187,7 @@ const PHASES: Phase[] = [
       {
         num: 14,
         type: 'QA',
-        date: '09 de junho · Terça-feira · 19h–20:30h',
+        date: 'Presencial · Data a definir',
         title: 'Apresentação de Projetos + Encerramento',
         description: '3 projetos selecionados pela turma, 30 minutos cada para apresentar o que foi construído. Networking, feedback ao vivo e celebração do que você conseguiu em 4 semanas. Você sai com certificação e com uma rede de pessoas que fizeram o mesmo percurso.',
         tags: ['Apresentações', 'Projetos', 'Certificação', 'Networking'],

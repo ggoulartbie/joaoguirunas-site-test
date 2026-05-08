@@ -204,18 +204,18 @@ const PHASES: Phase[] = [
   {
     id: 'encerramento',
     label: 'Encerramento',
-    date: '09 de junho',
+    date: 'Presencial · Data a definir',
     accent: true,
-    description: 'Apresente o projeto que você construiu ao longo da mentoria e receba seu certificado de conclusão ao vivo.',
+    description: 'Apresente o projeto que você construiu ao longo da mentoria e receba seu certificado de conclusão presencialmente.',
     image: '/images/cta-team.png',
     modules: [
       {
         num: 14,
         live: true,
         title: 'Apresentação de Projetos',
-        description: 'Cada mentorado apresenta seu projeto ao vivo por 30 minutos para a turma. Feedback direto do João e da comunidade. Certificado de conclusão emitido ao final da sessão.',
-        date: '09 de junho · Terça · 19h–20:30h',
-        tags: ['3 projetos × 30 min', 'Ao Vivo', 'Certificação'],
+        description: 'Cada mentorado apresenta seu projeto presencialmente por 30 minutos para a turma. Feedback direto do João e da comunidade. Certificado de conclusão emitido ao final da sessão.',
+        date: 'Presencial · Data a definir',
+        tags: ['3 projetos × 30 min', 'Presencial', 'Certificação'],
       },
     ],
   },
@@ -359,7 +359,7 @@ Este documento será entregue ao mentorado como material de referência e acompa
 
 ## 4. PROGRAMA COMPLETO DA MENTORIA (base de referência)
 
-### DIA PRESENCIAL — 12 de maio de 2025 · Terça · 13h–18h
+### DIA PRESENCIAL — 12 de maio de 2026 · Terça · 13h–18h
 
 Sessão intensiva presencial com João Guirunas e Claudia Guirunas. O mentorado sai com ambiente configurado, fundamentos sólidos e o primeiro agente Claude funcionando.
 
@@ -408,7 +408,7 @@ Backend completo: banco PostgreSQL, autenticação, RLS, edge functions. Squad e
 | 12 | Orquestrador Comercial | Sistema completo de automação comercial GrowthSales.ai — código pronto para usar |
 | 13 | Gestão de Projetos com IA | Framework de gestão com agentes Claude — código e método completos |
 
-### ENCERRAMENTO — 9 de junho de 2025 · Terça · 19h–20:30h
+### ENCERRAMENTO — Presencial · Data a definir
 
 Apresentação ao vivo do projeto desenvolvido durante a mentoria. Cada mentorado apresenta por 30 minutos. Certificado de conclusão emitido ao final.
 
@@ -442,7 +442,7 @@ Gere uma **apresentação completa em Markdown** pronta para converter em PDF. U
 - Título: "Onboarding — Mentoria Claude Code + IA"
 - Subtítulo: Nome completo de ${nome}${cargo ? `, ${cargo}` : ''}${empresa ? ` · ${empresa}` : ''}
 - Projeto: "${projeto}"
-- Data de início: **12 de maio de 2025**
+- Data de início: **12 de maio de 2026**
 - Mentor: João Guirunas · joaoguirunas.com
 - Linha de rodapé discreta: "Documento confidencial — uso exclusivo do mentorado"
 

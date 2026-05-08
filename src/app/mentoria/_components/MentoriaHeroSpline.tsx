@@ -232,7 +232,7 @@ export function MentoriaHeroSpline() {
         >
           <Icon name="clock" size="16" className="text-[#FF3A0E]" /> Próxima turma:{' '}
           <span className="text-white font-semibold">12 de maio</span>{' '}
-          <span className="opacity-40">|</span> Restam 4 vagas
+          <span className="opacity-40">|</span> Turma esgotada
         </p>
       </div>
     </section>

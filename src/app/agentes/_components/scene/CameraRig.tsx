@@ -31,7 +31,7 @@ export const CAMERA_PATH: Array<[number, number, number, number, number, number,
   [0.65, 100,  2, 22,  100,   0, 0],   // Social centered
   [0.78, 135,  2, 22,  150,   0, 0],   // Traffic entering
   [0.88, 150,  2, 22,  150,   0, 0],   // Traffic centered
-  [1.00, 150, 10, 60,  150,   0, 0],   // CTA — pull back at traffic
+  [1.00, 170,  2, 22,  160,   0, 0],   // Continue forward past traffic — no pull-back
 ];
 
 // Mobile: portrait viewport (narrow) — z=36 keeps planet fully in frame without horizontal clipping
@@ -45,7 +45,7 @@ const CAMERA_PATH_MOBILE: Array<[number, number, number, number, number, number,
   [0.65, 100,  2, 36,  100,   0, 0],
   [0.78, 135,  2, 36,  150,   0, 0],
   [0.88, 150,  2, 36,  150,   0, 0],
-  [1.00, 150,  8, 75,  150,   0, 0],
+  [1.00, 170,  2, 36,  160,   0, 0],
 ];
 
 interface CameraRigProps {
