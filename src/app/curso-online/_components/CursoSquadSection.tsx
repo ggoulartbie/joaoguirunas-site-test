@@ -2,8 +2,8 @@
 
 import { useEffect, useRef, useState } from 'react';
 import { motion, useReducedMotion, useScroll, useTransform } from 'framer-motion';
-import { AgentBelt, BELT_CARD_W, BELT_GAP } from '@/app/agentes/_components/AgentBelt';
-import { AgentCard } from '@/app/agentes/_components/AgentCard';
+import { AgentBeltCompact, BELT_CARD_W_COMPACT, BELT_GAP_COMPACT } from '@/app/agentes/_components/AgentBelt';
+import { AgentCardCompact } from '@/app/agentes/_components/AgentCard';
 import type { Agente, Squad } from '@/data/agentes';
 
 const KV_DISPLAY: React.CSSProperties = {
@@ -39,7 +39,7 @@ export function CursoSquadSection({ squad, agentes }: CursoSquadSectionProps) {
     offset: ['start end', 'end start'],
   });
 
-  const totalWidth = agentes.length * (BELT_CARD_W + BELT_GAP);
+  const totalWidth = agentes.length * (BELT_CARD_W_COMPACT + BELT_GAP_COMPACT);
 
   const beltX = useTransform(
     scrollYProgress,
@@ -88,14 +88,14 @@ export function CursoSquadSection({ squad, agentes }: CursoSquadSectionProps) {
 
           <div className="grid grid-cols-2 gap-2.5">
             {agentes.map((a) => (
-              <AgentCard key={a.id} agente={a} squad={squad} />
+              <AgentCardCompact key={a.id} agente={a} squad={squad} />
             ))}
           </div>
         </div>
       </div>
 
       {/* ── DESKTOP: sticky + belt scroll-driven ── */}
-      <div className="hidden lg:block min-h-[150vh]">
+      <div className="hidden lg:block min-h-[90vh]">
         <div className="sticky top-[8vh] pb-16">
           <motion.div
             className="mx-auto max-w-7xl px-5 sm:px-6 lg:px-12 pt-16 pb-10"
@@ -127,7 +127,7 @@ export function CursoSquadSection({ squad, agentes }: CursoSquadSectionProps) {
             </div>
           </motion.div>
 
-          <AgentBelt agentes={agentes} squad={squad} x={beltX} opacity={headerOpacity} />
+          <AgentBeltCompact agentes={agentes} squad={squad} x={beltX} opacity={headerOpacity} />
         </div>
       </div>
     </section>

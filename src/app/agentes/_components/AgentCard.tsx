@@ -2,6 +2,88 @@ import Link from 'next/link';
 import Image from 'next/image';
 import type { Agente, Squad } from '@/data/agentes';
 
+export function AgentCardCompact({ agente, squad }: { agente: Agente; squad: Squad }) {
+  return (
+    <div
+      className="flex flex-col border border-white/[0.10]"
+      style={{
+        '--accent': squad.accent,
+        background: 'rgba(2,2,10,0.45)',
+      } as React.CSSProperties}
+    >
+      <div
+        className="relative aspect-square w-full overflow-hidden"
+        style={{
+          background: `linear-gradient(135deg, ${squad.accent}22 0%, ${squad.accent}08 50%, #0e0e11 100%)`,
+        }}
+      >
+        <Image
+          src={`/agentes/${agente.slug}.png`}
+          alt={agente.codename || agente.name}
+          fill
+          className="object-cover object-top"
+          sizes="(max-width: 768px) 120px, 120px"
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
+
+        {/* Squad badge top-left */}
+        <div className="absolute top-1 left-1">
+          <span
+            className="inline-flex items-center gap-1 px-1 py-0.5"
+            style={{
+              background: 'rgba(0,0,0,0.4)',
+              border: `1px solid ${squad.accent}55`,
+              fontFamily: 'var(--font-mono)',
+              fontSize: '0.55rem',
+              letterSpacing: '0.10em',
+            }}
+          >
+            <span className="w-1 h-1 rounded-full" style={{ background: squad.accent }} />
+            <span className="text-white/90 uppercase">{squad.label}</span>
+          </span>
+        </div>
+
+        {/* Model badge top-right */}
+        <div className="absolute top-1 right-1">
+          <span
+            className="inline-block px-1 py-0.5 text-white/60"
+            style={{
+              background: 'rgba(0,0,0,0.4)',
+              border: '1px solid rgba(255,255,255,0.10)',
+              fontFamily: 'var(--font-mono)',
+              fontSize: '0.55rem',
+              letterSpacing: '0.10em',
+            }}
+          >
+            {agente.model}
+          </span>
+        </div>
+
+        <div
+          className="absolute bottom-0 left-0 right-0 h-10"
+          style={{ background: 'linear-gradient(to top, rgba(2,2,10,0.85), transparent)' }}
+        />
+      </div>
+
+      {/* Body — só nome/codename */}
+      <div className="p-1.5 flex flex-col gap-0.5">
+        <h3
+          className="text-[11px] text-white leading-tight"
+          style={{ fontFamily: 'var(--font-display-serif)', fontWeight: 400, letterSpacing: '-0.01em' }}
+        >
+          {agente.codename || agente.name}
+        </h3>
+        <p
+          className="text-white/50 text-[9px]"
+          style={{ fontFamily: 'var(--font-mono)', fontSize: '0.6rem', letterSpacing: '0.10em' }}
+        >
+          {agente.id}
+        </p>
+      </div>
+    </div>
+  );
+}
+
 interface AgentCardProps {
   agente: Agente;
   squad: Squad;

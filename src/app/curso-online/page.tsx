@@ -11,22 +11,22 @@ import { CursoFaqAccordion } from './_components/CursoFaqAccordion'
 import { CheckoutForm } from './_components/checkout-form'
 
 export const metadata: Metadata = {
-  title: 'Curso Online | Claude Agents Team — R$ 499',
+  title: 'Curso Online | Claude Agents Team — R$ 799',
   description:
-    'Acesso completo ao conteúdo em vídeo, materiais, fórum e certificado. Aprenda a criar e orquestrar agentes de IA com Claude Code no seu próprio ritmo.',
+    'Acesso por 6 meses ao conteúdo em vídeo, materiais, fórum e certificado. Aprenda a criar e orquestrar agentes de IA com Claude Code no seu próprio ritmo.',
   alternates: { canonical: '/curso-online' },
   openGraph: {
-    title: 'Curso Online | Claude Agents Team — R$ 499 | João Guirunas',
+    title: 'Curso Online | Claude Agents Team — R$ 799 | João Guirunas',
     description:
-      'Acesso completo ao conteúdo em vídeo, materiais, fórum e certificado. Aprenda a criar e orquestrar agentes de IA com Claude Code no seu próprio ritmo.',
+      'Acesso por 6 meses ao conteúdo em vídeo, materiais, fórum e certificado. Aprenda a criar e orquestrar agentes de IA com Claude Code no seu próprio ritmo.',
     url: `${siteConfig.url}/curso-online`,
     images: [{ url: '/images/og-default.png', width: 1200, height: 630 }],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Curso Online | Claude Agents Team — R$ 499',
+    title: 'Curso Online | Claude Agents Team — R$ 799',
     description:
-      'Acesso completo ao conteúdo em vídeo, materiais, fórum e certificado. Aprenda a criar e orquestrar agentes de IA com Claude Code no seu próprio ritmo.',
+      'Acesso por 6 meses ao conteúdo em vídeo, materiais, fórum e certificado. Aprenda a criar e orquestrar agentes de IA com Claude Code no seu próprio ritmo.',
   },
 }
 
@@ -47,7 +47,7 @@ const jsonLd = {
   url: `${siteConfig.url}/curso-online`,
   offers: {
     '@type': 'Offer',
-    price: '499',
+    price: '799',
     priceCurrency: 'BRL',
     availability: 'https://schema.org/InStock',
     url: `${siteConfig.url}/academy/checkout/${COHORT_SLUG}`,
@@ -218,7 +218,7 @@ export default function CursoOnlinePage() {
 
                 {/* CTAs */}
                 <div className="flex flex-col sm:flex-row gap-3">
-                  <CheckoutForm cohortSlug={COHORT_SLUG} label="Comprar — R$ 499" />
+                  <CheckoutForm cohortSlug={COHORT_SLUG} label="Comprar — R$ 799" />
                   <a
                     href="#squad-dev"
                     className="inline-flex items-center justify-center gap-2 px-6 py-3 uppercase transition-all hover:bg-white/[0.05]"
@@ -240,7 +240,7 @@ export default function CursoOnlinePage() {
         {/* ===== STATS BAR ===== */}
         <div
           className="relative z-10"
-          style={{ borderTop: '1px solid rgba(255,255,255,0.07)', borderBottom: '1px solid rgba(255,255,255,0.07)', background: 'rgba(5,5,7,0.85)', backdropFilter: 'blur(12px)' }}
+          style={{ borderTop: '1px solid rgba(255,255,255,0.07)', borderBottom: '1px solid rgba(255,255,255,0.07)', background: 'rgba(5,5,7,0.85)' }}
         >
           <div className="mx-auto max-w-4xl px-5 sm:px-8 py-4 flex items-center justify-center gap-8 sm:gap-16">
             {[
@@ -262,7 +262,7 @@ export default function CursoOnlinePage() {
         </div>
 
         {/* ===== AGENTES POR SQUAD ===== */}
-        <div id="squads" className="relative z-10" style={{ background: 'rgba(5,5,7,0.6)', backdropFilter: 'blur(4px)' }}>
+        <div id="squads" className="relative z-10" style={{ background: 'rgba(5,5,7,0.6)' }}>
           {SQUADS.map((squad) => {
             const agentes = ALL_AGENTES.filter((a) => a.squad === squad.id)
             return (
@@ -571,10 +571,13 @@ export default function CursoOnlinePage() {
               className="mb-2 text-6xl sm:text-7xl"
               style={{ ...KV_DISPLAY, letterSpacing: '-0.04em', lineHeight: 1 }}
             >
-              R$ 499
+              6x de R$ 133,17
             </div>
+            <p className="mb-1 text-base sm:text-lg" style={{ color: 'rgba(255,255,255,0.35)' }}>
+              ou R$ 799 à vista
+            </p>
             <p className="mb-8 text-sm" style={{ color: 'rgba(255,255,255,0.4)' }}>
-              Pagamento único · Acesso por 12 meses
+              Acesso por 6 meses · Renovação disponível
             </p>
             <div className="mb-6 space-y-2">
               {INCLUDED.map(({ text }) => (
@@ -584,7 +587,7 @@ export default function CursoOnlinePage() {
                 </div>
               ))}
             </div>
-            <CheckoutForm cohortSlug={COHORT_SLUG} label="Comprar agora — R$ 499" />
+            <CheckoutForm cohortSlug={COHORT_SLUG} label="Comprar agora — R$ 799" />
             <p className="mt-4 text-xs" style={{ ...MONO, color: 'rgba(255,255,255,0.2)' }}>
               Preferes acompanhamento intensivo ao vivo?{' '}
               <Link href="/mentoria" className="underline underline-offset-2" style={{ color: 'rgba(255,255,255,0.4)' }}>
