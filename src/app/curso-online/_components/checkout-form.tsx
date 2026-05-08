@@ -42,13 +42,16 @@ export function CheckoutForm({ cohortSlug, label = 'Comprar agora — R$ 499' }:
         </button>
       </form>
       {state?.error && (
-        <p
-          className="mt-3 text-xs"
-          style={{ ...KV_MONO, color: 'rgba(255, 80, 50, 0.9)' }}
+        <div
+          className="mt-4 flex items-start gap-3 px-4 py-3"
+          style={{ background: 'rgba(255,58,14,0.1)', border: '1px solid rgba(255,58,14,0.3)' }}
           role="alert"
         >
-          {state.error}
-        </p>
+          <span style={{ color: '#FF3A0E', flexShrink: 0 }}>⚠</span>
+          <p className="text-sm" style={{ color: 'rgba(255,255,255,0.8)', lineHeight: 1.5 }}>
+            {state.error}
+          </p>
+        </div>
       )}
     </div>
   )
