@@ -227,6 +227,11 @@ const STATUS_OPTIONS = [
   { value: 'ARCHIVED', label: 'Arquivada' },
 ]
 
+const PAYMENT_PROVIDER_OPTIONS = [
+  { value: 'STRIPE', label: 'Stripe' },
+  { value: 'INFINITEPAY', label: 'InfinitePay' },
+]
+
 const MEMBER_ROLE_LABELS: Record<string, string> = {
   STUDENT: 'Aluno',
   MONITOR: 'Monitor',
@@ -288,6 +293,8 @@ export function CohortForm(props: CohortFormProps) {
   )
 
   // Section 5 — Comercial
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const [paymentProvider, setPaymentProvider] = useState<string>((initial as any)?.payment_provider ?? 'STRIPE')
   const [isPurchasable, setIsPurchasable] = useState(initial?.is_purchasable ?? false)
   const [hasPublicPage, setHasPublicPage] = useState(initial?.has_public_page ?? false)
   const [entryPriceBRL, setEntryPriceBRL] = useState(
@@ -490,6 +497,7 @@ export function CohortForm(props: CohortFormProps) {
       extension_duration_days: extDurationDays ? parseInt(extDurationDays, 10) : undefined,
       allows_auto_renewal: allowsAutoRenewal,
       stripe_price_entry_id: stripePriceEntryId || undefined,
+      payment_provider: paymentProvider as 'STRIPE' | 'INFINITEPAY',
       cohortCourses: cohortCoursesPayload,
       crossExtensions: crossExtensionsPayload,
     }
@@ -958,6 +966,20 @@ export function CohortForm(props: CohortFormProps) {
               <p className="mt-1 font-mono text-[10px] text-[var(--bone-mute)]">
                 ID do price one-time no Stripe para checkout de entrada
               </p>
+            </div>
+
+            <div>
+              <FieldLabel>Provider de Pagamento</FieldLabel>
+              <SelectInput
+                value={paymentProvider}
+                onChange={setPaymentProvider}
+                options={PAYMENT_PROVIDER_OPTIONS}
+              />
+              {paymentProvider === 'INFINITEPAY' && (
+                <p className="mt-1 font-mono text-[10px] text-amber-400">
+                  Certifique-se de configurar INFINITEPAY_BEARER_TOKEN nas env vars
+                </p>
+              )}
             </div>
           </div>
         )}
