@@ -78,7 +78,7 @@ const squads: Squad[] = [
   },
 ];
 
-const AGENT_COST = 797;
+const AGENT_COST = 499;
 const INSTALLMENTS = 6;
 
 const checklist = [
@@ -88,7 +88,6 @@ const checklist = [
   'Fórum da comunidade — tire dúvidas',
   'Certificado de conclusão',
   'Atualizações futuras do conteúdo',
-  '2 bônus — Orquestrador Comercial + Gestão',
 ];
 
 const COHORT_SLUG = 'curso-online-padrao';
@@ -444,7 +443,7 @@ export function CursoPricingCalculator() {
                   ))}
                 </ul>
 
-                <CheckoutForm cohortSlug={COHORT_SLUG} label="Comprar agora — R$ 797" />
+                <CheckoutForm cohortSlug={COHORT_SLUG} label="Comprar agora — R$ 499" />
               </div>
             </div>
           </motion.div>

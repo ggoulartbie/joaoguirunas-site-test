@@ -15,7 +15,7 @@ const faqItems: FaqItem[] = [
   { q: 'Por quanto tempo tenho acesso?', a: 'O acesso é por 12 meses a partir da data de compra. Todo o conteúdo e os materiais ficam disponíveis nesse período.' },
   { q: 'Vou conseguir criar minha própria squad do zero?', a: 'Sim. Esse é o objetivo central do curso. Ao concluir os módulos, você terá autonomia para criar, configurar e orquestrar agentes para qualquer necessidade.' },
   { q: 'Posso usar os agentes comercialmente?', a: 'Sim, 100%. Tudo que você construir é seu para usar como quiser — em projetos comerciais, para clientes ou para sua empresa.' },
-  { q: 'Qual a diferença entre o Curso Online e a Mentoria?', a: 'O Curso Online é assíncrono: aulas gravadas no seu ritmo, sem horário fixo. A Mentoria é um programa intensivo presencial em Florianópolis com encontros ao vivo, turmas de até 12 pessoas e suporte direto durante 4 semanas.' },
+  { q: 'Qual a diferença entre o Curso Online e a Mentoria?', a: 'O Curso Online é 100% assíncrono: aulas gravadas no seu ritmo, sem horário fixo. A Mentoria é um programa intensivo com encontros ao vivo, turmas de até 12 pessoas e suporte direto dos facilitadores durante 4 semanas.' },
   { q: 'E se eu não gostar?', a: 'Você tem 7 dias de garantia total. Se dentro desse período sentir que o curso não é para você, devolvemos 100% do valor pago sem questionamentos.' },
 ]
 

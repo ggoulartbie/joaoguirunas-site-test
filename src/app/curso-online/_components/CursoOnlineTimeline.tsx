@@ -296,7 +296,7 @@ export function CursoOnlineTimeline() {
             <span className="text-[var(--color-accent)]">no Seu Ritmo</span>
           </h2>
           <p className="mt-4 text-sm sm:text-base text-white/60 max-w-2xl mx-auto leading-relaxed">
-            Aulas em vídeo para assistir quando e onde quiser. Todo o conteúdo da mentoria presencial, disponível por 6 meses com acesso à plataforma e ao fórum da comunidade.
+            Aulas em vídeo para assistir quando e onde quiser. Todo o conteúdo disponível por 6 meses com acesso à plataforma, materiais por módulo e fórum da comunidade.
           </p>
 
           <div className="mt-8 flex flex-wrap justify-center gap-3">
@@ -345,7 +345,7 @@ export function CursoOnlineTimeline() {
           transition={{ duration: 0.5 }}
           className="mt-10 sm:mt-14 text-center"
         >
-          <CheckoutForm cohortSlug={COHORT_SLUG} label="Comprar — R$ 797" />
+          <CheckoutForm cohortSlug={COHORT_SLUG} label="Comprar — R$ 499" />
         </motion.div>
       </div>
     </section>
