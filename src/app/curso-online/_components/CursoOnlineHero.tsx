@@ -67,7 +67,7 @@ export function CursoOnlineHero({ cohortSlug }: CursoOnlineHeroProps) {
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4 items-start">
-            <CheckoutForm cohortSlug={cohortSlug} label="Comprar — R$ 499" />
+            <CheckoutForm cohortSlug={cohortSlug} label="Comprar — R$ 797" />
             <a
               href="#modulos"
               className="inline-flex items-center justify-center gap-2 px-6 py-4 uppercase transition-all hover:bg-white/[0.05]"

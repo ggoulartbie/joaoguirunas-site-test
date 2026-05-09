@@ -345,7 +345,7 @@ export function CursoOnlineTimeline() {
           transition={{ duration: 0.5 }}
           className="mt-10 sm:mt-14 text-center"
         >
-          <CheckoutForm cohortSlug={COHORT_SLUG} label="Comprar — R$ 499" />
+          <CheckoutForm cohortSlug={COHORT_SLUG} label="Comprar — R$ 797" />
         </motion.div>
       </div>
     </section>

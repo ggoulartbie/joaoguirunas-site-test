@@ -14,12 +14,12 @@ import { CursoFaqAccordion } from './_components/CursoFaqAccordion'
 import { CheckoutForm } from './_components/checkout-form'
 
 export const metadata: Metadata = {
-  title: 'Curso Online | Claude Agents Team — R$ 499',
+  title: 'Curso Online | Claude Agents Team — R$ 797',
   description:
     'Acesso por 6 meses ao conteúdo em vídeo, materiais, fórum e certificado. Aprenda a criar e orquestrar agentes de IA com Claude Code no seu próprio ritmo.',
   alternates: { canonical: '/curso-online' },
   openGraph: {
-    title: 'Curso Online | Claude Agents Team — R$ 499 | João Guirunas',
+    title: 'Curso Online | Claude Agents Team — R$ 797 | João Guirunas',
     description:
       'Acesso por 6 meses ao conteúdo em vídeo, materiais, fórum e certificado. Aprenda a criar e orquestrar agentes de IA com Claude Code no seu próprio ritmo.',
     url: `${siteConfig.url}/curso-online`,
@@ -27,7 +27,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Curso Online | Claude Agents Team — R$ 499',
+    title: 'Curso Online | Claude Agents Team — R$ 797',
     description:
       'Acesso por 6 meses ao conteúdo em vídeo, materiais, fórum e certificado. Aprenda a criar e orquestrar agentes de IA com Claude Code no seu próprio ritmo.',
   },
@@ -50,7 +50,7 @@ const jsonLd = {
   url: `${siteConfig.url}/curso-online`,
   offers: {
     '@type': 'Offer',
-    price: '499',
+    price: '797',
     priceCurrency: 'BRL',
     availability: 'https://schema.org/InStock',
     url: `${siteConfig.url}/academy/checkout/${COHORT_SLUG}`,
@@ -234,7 +234,7 @@ export default function CursoOnlinePage() {
             >
               Acesso completo por{' '}
               <span className="text-[#FF3A0E] italic" style={{ fontWeight: 300 }}>
-                R$ 499
+                R$ 797
               </span>
             </h2>
             <p className="text-white/55 text-sm sm:text-base max-w-lg mx-auto leading-relaxed mt-4 mb-8">
@@ -256,7 +256,7 @@ export default function CursoOnlinePage() {
             </div>
 
             <div className="flex justify-center">
-              <CheckoutForm cohortSlug={COHORT_SLUG} label="Comprar agora — R$ 499" />
+              <CheckoutForm cohortSlug={COHORT_SLUG} label="Comprar agora — R$ 797" />
             </div>
 
             <p className="mt-6 text-xs" style={{ ...KV_MONO, color: 'rgba(255,255,255,0.25)' }}>
@@ -336,7 +336,7 @@ export default function CursoOnlinePage() {
             Acesso imediato às aulas gravadas. Comece hoje, no seu ritmo.
           </p>
           <div className="flex justify-center">
-            <CheckoutForm cohortSlug={COHORT_SLUG} label="Comprar agora — R$ 499" />
+            <CheckoutForm cohortSlug={COHORT_SLUG} label="Comprar agora — R$ 797" />
           </div>
           <p className="mt-6 text-xs sm:text-sm text-white/60">
             7 dias de garantia total &middot; Acesso por 6 meses &middot; Cancelamento simplificado
