@@ -193,7 +193,7 @@ export async function updateCohort(cohortId: string, data: z.infer<typeof cohort
   // B6: replace cross extension rules
   await saveCrossExtensions(cohortId, parsed.data.crossExtensions)
 
-  if (parsed.data.is_purchasable) {
+  if (parsed.data.is_purchasable && parsed.data.payment_provider !== 'INFINITEPAY') {
     await syncCohortWithStripe(cohortId)
   }
 

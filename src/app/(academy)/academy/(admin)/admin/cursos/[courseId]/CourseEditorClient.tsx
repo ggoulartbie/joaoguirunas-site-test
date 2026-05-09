@@ -26,6 +26,7 @@ import {
   reorderModules,
   createLesson,
   deleteLesson,
+  updateModule,
 } from '../actions'
 import type { Database } from '@/types/database'
 import Link from 'next/link'
@@ -58,6 +59,8 @@ function SortableModule({
   onDelete: (id: string) => void
 }) {
   const [open, setOpen] = useState(true)
+  const [editingTitle, setEditingTitle] = useState(false)
+  const [titleDraft, setTitleDraft] = useState(mod.title)
   const [addingLesson, setAddingLesson] = useState(false)
   const [lessonTitle, setLessonTitle] = useState('')
   const [lessonSlug, setLessonSlug] = useState('')
@@ -109,17 +112,41 @@ function SortableModule({
             ? <ChevronDown className="h-3.5 w-3.5 text-[var(--bone-mute)]" />
             : <ChevronRight className="h-3.5 w-3.5 text-[var(--bone-mute)]" />
           }
-          <span className="font-mono text-xs font-medium text-[var(--bone)]">{mod.title}</span>
+          {editingTitle ? (
+            <input
+              autoFocus
+              value={titleDraft}
+              onChange={(e) => setTitleDraft(e.target.value)}
+              onBlur={() => {
+                const trimmed = titleDraft.trim()
+                if (trimmed && trimmed !== mod.title) {
+                  startTransition(async () => {
+                    await updateModule(mod.id, courseId, { title: trimmed, slug: slugify(trimmed) })
+                  })
+                }
+                setEditingTitle(false)
+              }}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter') e.currentTarget.blur()
+                if (e.key === 'Escape') { setTitleDraft(mod.title); setEditingTitle(false) }
+              }}
+              onClick={(e) => e.stopPropagation()}
+              className="flex-1 bg-transparent font-mono text-xs font-medium text-[var(--bone)] outline-none border-b border-[var(--ember)]"
+            />
+          ) : (
+            <span className="font-mono text-xs font-medium text-[var(--bone)]">{mod.title}</span>
+          )}
           <span className="font-mono text-[10px] text-[var(--bone-mute)]">
             {mod.lessons.length} aula{mod.lessons.length !== 1 ? 's' : ''}
           </span>
         </button>
-        <Link
-          href={`/admin/cursos/${courseId}/modulos/${mod.id}`}
+        <button
+          type="button"
+          onClick={() => setEditingTitle(true)}
           className="p-1 text-[var(--bone-mute)] transition-colors hover:text-[var(--bone)]"
         >
           <Pencil className="h-3.5 w-3.5" />
-        </Link>
+        </button>
         <button
           type="button"
           onClick={() => {
