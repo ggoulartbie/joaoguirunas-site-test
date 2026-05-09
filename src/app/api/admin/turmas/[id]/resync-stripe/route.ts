@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
+import { z } from 'zod'
 import { getCurrentUser } from '@/lib/auth/helpers'
 import { syncCohortWithStripe } from '@/lib/payment/sync'
 import { supabaseAdmin } from '@/lib/supabase/admin'
@@ -16,6 +17,10 @@ export async function POST(
   }
 
   const { id } = await params
+
+  if (!z.string().uuid().safeParse(id).success) {
+    return NextResponse.json({ error: 'Invalid id' }, { status: 400 })
+  }
 
   const { data: cohort } = await supabaseAdmin
     .from('cohorts')

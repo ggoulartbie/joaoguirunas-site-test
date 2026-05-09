@@ -9,6 +9,23 @@ tags: [ops]
 
 Registro de todos os Agent Teams formados neste projeto. Lead (team-os) atualiza a cada `*dispatch` e `*close`.
 
+## 2026-05-08 — Team joao-guirunas-site-refactor-checkout-academy
+
+**Objetivo:** Refactor /curso-online com estrutura visual da /mentoria + auditoria completa do checkout Stripe e do academy
+**Lead:** team-os (skill)
+**Composição:**
+- sites-architect — quebrar "auditoria completa academy" em stories novas (F9.7+)
+- sites-dev-alpha — implementar F9.1 (refactor /curso-online)
+- sites-dev-beta — auditoria backend academy + verificação F9.2
+- sites-qa — QA formal F9.2 (já implementada) + gate F9.1
+- sites-devops — push + PR quando stories passarem gate
+
+**Status:** ativo
+**Início:** 2026-05-08T23:17:00-03:00
+**Stories:** F9.1 (backlog), F9.2 (validated/sem QA), F9.7+ (a criar)
+
+---
+
 ## 2026-05-06 — Sessão inline — Mentoria Onboarding Tool
 
 **Objetivo:** Construir ferramenta de onboarding presencial para mentorados — formulário com auto-save no Supabase, lista com CRUD, upload de PDF no Storage
@@ -234,3 +251,17 @@ Registro de todos os Agent Teams formados neste projeto. Lead (team-os) atualiza
 **Status:** ativo
 **Início:** 2026-05-08T08:34:00-03:00
 **Stories:** [[../stories/BACKLOG]]
+
+## 2026-05-08 — Team joao-guirunas-site-academy-audit
+
+**Objetivo:** Auditoria completa do fluxo /academy — compra em curso-online não dispara matrícula, sem e-mails, sem acesso ao conteúdo
+**Lead:** team-os (skill)
+**Composição:**
+- sites-dev-beta — audit backend: webhook Stripe, sync.ts, e-mail dispatch
+- sites-dev-gamma — audit cross-layer: curso-online → checkout → DB → academy
+- sites-data — audit schema/RLS: tabelas de matrícula, policies de INSERT
+- sites-qa — veredicto formal + síntese de bugs
+
+**Status:** ativo
+**Início:** 2026-05-08T23:09:00
+**Stories:** auditoria inline (sem stories em backlog)

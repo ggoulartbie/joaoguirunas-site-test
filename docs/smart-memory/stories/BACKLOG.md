@@ -5,6 +5,7 @@ updated: 2026-05-08
 tags: [story]
 ---
 
+
 # Backlog de Stories
 
 | Story | Título | Complexidade | Status | Agente |
@@ -164,9 +165,26 @@ Plataforma multi-curso com cohorts como unidade central. Decisões consolidadas 
 | [[backlog/F9.3-validar-acesso-admin-middleware\|F9.3]] | Validar gate de acesso /academy/admin (middleware + RBAC) | S | backlog | sites-dev-delta |
 | [[backlog/F9.4-bug-hunt-academy-admin\|F9.4]] | Bug hunt sweep nas páginas /academy/admin/* | L | backlog | sites-dev-delta |
 | [[backlog/F9.5-auditar-apis-admin\|F9.5]] | Auditar APIs em /api/admin/* | S | backlog | sites-dev-beta |
-| [[backlog/F9.6-admin-editor-encontros-ao-vivo\|F9.6]] | Editor completo de Encontros ao Vivo no admin de turmas | M | active | sites-dev-delta |
+| [[backlog/F9.6-admin-editor-encontros-ao-vivo\|F9.6]] | Editor completo de Encontros ao Vivo no admin de turmas | M | done | Kronilux |
+| [[backlog/F9.7-auditar-fluxo-certificados\|F9.7]] | Auditar fluxo de certificados (emissão, download PDF, verificação pública) | M | backlog | sites-dev-alpha |
+| [[backlog/F9.8-auditar-videoplayer-progresso\|F9.8]] | Auditar VideoPlayer + flow de progresso (saveProgress, markComplete, edge cases) | M | backlog | sites-dev-alpha |
+| [[backlog/F9.9-auditar-has-access-rpc\|F9.9]] | Auditar has_access RPC + gates de acesso a aulas e módulos | M | backlog | sites-data |
+| [[backlog/F9.10-auditar-dashboard-meus-cursos-agenda\|F9.10]] | Auditar dashboard + meus-cursos + agenda do aluno (queries cross-cohort, expiração, livestreams) | M | backlog | sites-dev-alpha |
+| [[backlog/F9.11-auditar-comments-forum-permissions\|F9.11]] | Auditar comments + fórum (permissions, RLS bypass via supabaseAdmin, moderação) | M | backlog | sites-dev-alpha |
+| [[backlog/F9.12-auditar-area-aluno-bug-hunt\|F9.12]] | Auditar área do aluno — bug hunt + a11y sweep | L | validated | sites-qa |
+| [[backlog/F9.13-auditar-server-actions-aluno-rls\|F9.13]] | Auditar Server Actions do aluno + integridade RLS | M | validated | sites-dev-beta |
+| [[backlog/F9.14-auditar-fluxos-auth\|F9.14]] | Auditar fluxos auth (login, cadastro, recuperar/redefinir senha) | M | validated | sites-dev-beta |
+| [[backlog/F9.15-auditar-apis-publicas-jobs\|F9.15]] | Auditar APIs públicas e jobs (webhooks, crons, certificado) | M | validated | sites-dev-beta |
+| [[backlog/F9.16-auditar-components-student\|F9.16]] | Auditar components student críticos (VideoPlayer, Materials, Comments) | M | validated | sites-dev-alpha |
+| [[backlog/F9.17-payments-unique-stripe-session\|F9.17]] | UNIQUE constraint em payments(stripe_checkout_session_id) + ON CONFLICT no webhook | S | validated | sites-data + sites-dev-beta |
 
 Objetivo: refinar a página /curso-online (espelhando /mentoria sem elementos presenciais/ao vivo/bônus) e endurecer a área administrativa antes do lançamento. Stories F9.3–F9.5 podem rodar em paralelo. F9.1 e F9.2 são independentes mas relacionadas (F9.2 garante que o CTA de F9.1 funciona). F9.6 completa o CRUD de live_sessions no admin (faltam UPDATE, description, recording_url, UX).
+
+**Auditoria granular técnica (F9.7–F9.11)**: stories focadas em comportamento e regras de negócio, técnicas e específicas (referenciam linhas exatas de código). F9.7 corrige TODO crítico em `/api/certificado/[code]` (rota retorna mock em produção). F9.8 audita race conditions e edge cases do VideoPlayer (95% threshold, double-tab, swap provider). F9.9 audita o RPC `has_access` e o fallback `hasGlobalAccess` — barreira de autorização cross-cohort. F9.10 valida queries cross-cohort em dashboard/meus-cursos/agenda (incluindo janela de meeting_url). F9.11 audita permissões e moderação em comments + fórum, justificando bypasses via `supabaseAdmin`. Já em curso: sites-qa (F9.7-relacionado) e sites-dev-beta (F9.9/F9.10).
+
+**Auditoria de cobertura ampla (F9.12–F9.16)**: stories complementares cobrindo segurança/funcionalidade transversal. F9.4 cobriu admin pages, F9.5 cobriu APIs admin, F9.2 cobriu checkout. F9.12 estende o bug hunt para o lado student. F9.13 audita Server Actions e RLS. F9.14 audita os 4 fluxos auth. F9.15 audita webhooks/crons/certificado público. F9.16 audita components críticos (XSS, signed URL TTL, video_id leak). Podem rodar em paralelo entre si — sem dependências. Foco: auditoria + fixes P0/P1, sem features novas. Reservadas para o próximo ciclo.
+
+**F9.17 — UNIQUE constraint em payments**: gap identificado por Rex-S durante a auditoria. Migration + ON CONFLICT no webhook. Idempotência ao nível DB.
 
 ## Notas de orquestração
 

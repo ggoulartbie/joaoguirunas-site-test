@@ -7,6 +7,7 @@ import { cn } from '@/lib/utils'
 import { updateLesson, uploadMaterial, deleteMaterial } from '../../../actions'
 import { ContentEditor } from '@/components/editor/ContentEditor'
 import { LessonContent } from '@/components/editor/LessonContent'
+import { extractYouTubeId } from '@/components/student/VideoPlayer'
 import type { Database } from '@/types/database'
 import type { RenderedContent } from '@/lib/content'
 
@@ -212,11 +213,13 @@ export function LessonEditorClient({
                 </select>
               </div>
               <div className="space-y-1.5 sm:col-span-2">
-                <label className="font-mono text-[10px] uppercase tracking-widest text-[var(--bone-mute)]">ID do Vídeo</label>
+                <label className="font-mono text-[10px] uppercase tracking-widest text-[var(--bone-mute)]">
+                  {videoProvider === 'YOUTUBE' ? 'URL do YouTube' : 'ID do Vídeo'}
+                </label>
                 <input
                   value={videoId}
                   onChange={(e) => setVideoId(e.target.value)}
-                  placeholder="Ex.: 123456789 (Vimeo)"
+                  placeholder={videoProvider === 'YOUTUBE' ? 'https://www.youtube.com/watch?v=...' : 'Ex.: 123456789 (Vimeo)'}
                   className={inputClass}
                   style={{ borderRadius: 0 }}
                 />
@@ -232,6 +235,22 @@ export function LessonEditorClient({
                 />
               </div>
             )}
+            {videoProvider === 'YOUTUBE' && (() => {
+              const ytId = extractYouTubeId(videoId)
+              if (!ytId) return videoId ? (
+                <p className="mt-2 font-mono text-[10px] text-red-400">URL do YouTube inválida</p>
+              ) : null
+              return (
+                <div className="mt-2 aspect-video w-full max-w-md overflow-hidden border border-[rgba(255,255,255,0.07)]">
+                  <iframe
+                    src={`https://www.youtube-nocookie.com/embed/${ytId}?rel=0&modestbranding=1`}
+                    className="h-full w-full"
+                    allow="autoplay; fullscreen"
+                    allowFullScreen
+                  />
+                </div>
+              )
+            })()}
           </section>
         )}
 

@@ -2,6 +2,7 @@
 
 import { revalidatePath } from 'next/cache'
 import { supabaseAdmin } from '@/lib/supabase/admin'
+import { requireAdmin } from '@/lib/auth/helpers'
 import type { Database } from '@/types/database'
 
 type CourseInsert = Database['public']['Tables']['courses']['Insert']
@@ -14,6 +15,7 @@ type LessonUpdate = Database['public']['Tables']['lessons']['Update']
 // ── Courses ──────────────────────────────────────────────────────────────────
 
 export async function createCourse(data: Pick<CourseInsert, 'title' | 'slug' | 'description' | 'cover_image_url'>) {
+  await requireAdmin()
   const { data: course, error } = await supabaseAdmin
     .from('courses')
     .insert({ ...data, published: false, sort_order: 0 })
@@ -26,6 +28,7 @@ export async function createCourse(data: Pick<CourseInsert, 'title' | 'slug' | '
 }
 
 export async function updateCourse(id: string, data: CourseUpdate) {
+  await requireAdmin()
   const { error } = await supabaseAdmin
     .from('courses')
     .update(data)
@@ -37,6 +40,7 @@ export async function updateCourse(id: string, data: CourseUpdate) {
 }
 
 export async function toggleCoursePublished(id: string, published: boolean) {
+  await requireAdmin()
   const { error } = await supabaseAdmin
     .from('courses')
     .update({ published })
@@ -47,6 +51,7 @@ export async function toggleCoursePublished(id: string, published: boolean) {
 }
 
 export async function deleteCourse(id: string) {
+  await requireAdmin()
   const { error } = await supabaseAdmin
     .from('courses')
     .update({ deleted_at: new Date().toISOString() })
@@ -59,6 +64,7 @@ export async function deleteCourse(id: string) {
 // ── Modules ───────────────────────────────────────────────────────────────────
 
 export async function createModule(data: Pick<ModuleInsert, 'course_id' | 'title' | 'slug' | 'description'>) {
+  await requireAdmin()
   const { data: existing } = await supabaseAdmin
     .from('modules')
     .select('sort_order')
@@ -82,6 +88,7 @@ export async function createModule(data: Pick<ModuleInsert, 'course_id' | 'title
 }
 
 export async function updateModule(id: string, courseId: string, data: ModuleUpdate) {
+  await requireAdmin()
   const { error } = await supabaseAdmin
     .from('modules')
     .update(data)
@@ -92,6 +99,7 @@ export async function updateModule(id: string, courseId: string, data: ModuleUpd
 }
 
 export async function deleteModule(id: string, courseId: string) {
+  await requireAdmin()
   const { error } = await supabaseAdmin
     .from('modules')
     .update({ deleted_at: new Date().toISOString() })
@@ -102,6 +110,7 @@ export async function deleteModule(id: string, courseId: string) {
 }
 
 export async function reorderModules(courseId: string, orderedIds: string[]) {
+  await requireAdmin()
   const updates = orderedIds.map((id, index) =>
     supabaseAdmin.from('modules').update({ sort_order: index }).eq('id', id)
   )
@@ -112,6 +121,7 @@ export async function reorderModules(courseId: string, orderedIds: string[]) {
 // ── Lessons ───────────────────────────────────────────────────────────────────
 
 export async function createLesson(data: Pick<LessonInsert, 'module_id' | 'title' | 'slug' | 'kind'> & { courseId: string }) {
+  await requireAdmin()
   const { courseId, ...lessonData } = data
 
   const { data: existing } = await supabaseAdmin
@@ -137,6 +147,7 @@ export async function createLesson(data: Pick<LessonInsert, 'module_id' | 'title
 }
 
 export async function updateLesson(id: string, courseId: string, data: LessonUpdate) {
+  await requireAdmin()
   const { error } = await supabaseAdmin
     .from('lessons')
     .update(data)
@@ -148,6 +159,7 @@ export async function updateLesson(id: string, courseId: string, data: LessonUpd
 }
 
 export async function deleteLesson(id: string, courseId: string) {
+  await requireAdmin()
   const { error } = await supabaseAdmin
     .from('lessons')
     .update({ deleted_at: new Date().toISOString() })
@@ -158,6 +170,7 @@ export async function deleteLesson(id: string, courseId: string) {
 }
 
 export async function reorderLessons(moduleId: string, courseId: string, orderedIds: string[]) {
+  await requireAdmin()
   const updates = orderedIds.map((id, index) =>
     supabaseAdmin.from('lessons').update({ sort_order: index }).eq('id', id)
   )
@@ -168,6 +181,7 @@ export async function reorderLessons(moduleId: string, courseId: string, ordered
 // ── Materials ─────────────────────────────────────────────────────────────────
 
 export async function uploadMaterial(lessonId: string, courseId: string, formData: FormData) {
+  await requireAdmin()
   const file = formData.get('file') as File
   if (!file) throw new Error('Nenhum arquivo enviado')
 
@@ -195,6 +209,7 @@ export async function uploadMaterial(lessonId: string, courseId: string, formDat
 }
 
 export async function deleteMaterial(materialId: string, storagePath: string, courseId: string) {
+  await requireAdmin()
   await supabaseAdmin.storage.from('materials').remove([storagePath])
   const { error } = await supabaseAdmin.from('materials').delete().eq('id', materialId)
   if (error) throw new Error(error.message)

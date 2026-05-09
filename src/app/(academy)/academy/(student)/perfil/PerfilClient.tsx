@@ -331,7 +331,7 @@ function EditProfileForm({
     }
     setPasswordError('')
     startPasswordTransition(async () => {
-      const result = await changePassword(newPassword)
+      const result = await changePassword(currentPassword, newPassword)
       if (result.error) {
         setPasswordError(result.error)
       } else {

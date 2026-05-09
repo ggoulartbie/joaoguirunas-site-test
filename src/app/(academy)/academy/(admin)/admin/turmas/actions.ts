@@ -45,6 +45,7 @@ const cohortSchema = z.object({
   max_installments_extension: z.number().int().min(1).max(12).default(1),
   extension_duration_days: z.number().int().positive().optional(),
   allows_auto_renewal: z.boolean().default(false),
+  stripe_price_entry_id: z.string().optional(),
   // B7: course selections
   cohortCourses: z.array(cohortCourseSchema).default([]),
   // B6: cross extension rules
@@ -117,6 +118,7 @@ export async function createCohort(data: z.infer<typeof cohortSchema>) {
     max_installments_extension: parsed.data.max_installments_extension,
     extension_duration_days: parsed.data.extension_duration_days ?? null,
     allows_auto_renewal: parsed.data.allows_auto_renewal,
+    stripe_price_entry_id: parsed.data.stripe_price_entry_id ?? null,
   }
 
   const { data: cohort, error } = await supabaseAdmin
@@ -172,6 +174,7 @@ export async function updateCohort(cohortId: string, data: z.infer<typeof cohort
     max_installments_extension: parsed.data.max_installments_extension,
     extension_duration_days: parsed.data.extension_duration_days ?? null,
     allows_auto_renewal: parsed.data.allows_auto_renewal,
+    stripe_price_entry_id: parsed.data.stripe_price_entry_id ?? null,
   }
 
   const { error } = await supabaseAdmin

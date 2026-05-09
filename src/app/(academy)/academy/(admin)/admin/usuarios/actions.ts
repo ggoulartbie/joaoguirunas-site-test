@@ -9,6 +9,7 @@ import { sendWelcomeInviteEmail } from '@/lib/email/send'
 export async function updateUserRole(userId: string, role: string) {
   await requireAdmin()
 
+  if (!z.string().uuid().safeParse(userId).success) throw new Error('User ID inválido')
   const parsed = z.enum(['STUDENT', 'MENTOR', 'SUPPORT', 'ADMIN']).safeParse(role)
   if (!parsed.success) throw new Error('Role inválida')
 
@@ -24,7 +25,7 @@ export async function updateUserRole(userId: string, role: string) {
 export async function banUser(userId: string) {
   await requireAdmin()
 
-  // Supabase Auth ban — prevents login
+  if (!z.string().uuid().safeParse(userId).success) throw new Error('User ID inválido')
   const { error } = await supabaseAdmin.auth.admin.updateUserById(userId, {
     ban_duration: '876000h', // 100 years
   })
@@ -36,6 +37,7 @@ export async function banUser(userId: string) {
 export async function unbanUser(userId: string) {
   await requireAdmin()
 
+  if (!z.string().uuid().safeParse(userId).success) throw new Error('User ID inválido')
   const { error } = await supabaseAdmin.auth.admin.updateUserById(userId, {
     ban_duration: 'none',
   })
@@ -97,6 +99,8 @@ export async function extendMembership(memberId: string, newExpiresAt: string) {
   await requireAdmin()
 
   if (!z.string().uuid().safeParse(memberId).success) throw new Error('Member ID inválido')
+  if (!z.string().datetime().safeParse(newExpiresAt).success) throw new Error('Data de expiração inválida (ISO 8601 esperado)')
+  if (new Date(newExpiresAt) <= new Date()) throw new Error('Data de expiração deve ser no futuro')
 
   const { error } = await supabaseAdmin
     .from('cohort_members')

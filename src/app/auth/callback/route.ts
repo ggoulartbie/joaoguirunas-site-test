@@ -6,7 +6,9 @@ import { sendWelcomeEmail } from '@/lib/email/send'
 export async function GET(request: Request) {
   const { searchParams, origin } = new URL(request.url)
   const code = searchParams.get('code')
-  const next = searchParams.get('next') ?? '/academy/aluno'
+  const rawNext = searchParams.get('next') ?? ''
+  // Prevent open redirect: only allow internal paths starting with /academy/
+  const next = rawNext.startsWith('/academy/') && !rawNext.includes('//') ? rawNext : '/academy/aluno'
 
   if (code) {
     const supabase = await createClient()

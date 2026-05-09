@@ -23,6 +23,23 @@ O lead (team-os) atualiza este arquivo a cada mudança de estado dos teammates.
 
 ## Team ativo
 
+**Nome:** joao-guirunas-site-refactor-checkout-academy
+**Status:** 🟢 ativo desde 2026-05-08
+**Objetivo:** Refactor /curso-online + auditoria completa checkout Stripe e academy
+**Início:** 2026-05-08T23:17:00-03:00
+
+| Teammate | Status | Task atual |
+|---|---|---|
+| sites-architect | 🔄 em andamento | Criar stories F9.7+ para auditoria completa academy |
+| sites-dev-alpha | 🔄 em andamento | F9.1 — refactor /curso-online |
+| sites-dev-beta | 🔄 em andamento | Auditoria backend academy + verificação F9.2 |
+| sites-qa | 🔄 em andamento | QA formal F9.2 (sem QA ainda) |
+| sites-devops | ⏳ aguardando | Push + PR após QA gate |
+
+---
+
+## Team anterior
+
 **Nome:** joao-guirunas-site-plataforma-cursos-completo
 **Status:** ⛔ encerrado por João em 2026-05-07
 **Objetivo:** Plataforma de cursos Fases 1–9 — 42 stories, do schema ao deploy
@@ -44,7 +61,7 @@ O lead (team-os) atualiza este arquivo a cada mudança de estado dos teammates.
 ## ⚠️ Pendente para próxima sessão
 
 - **João**: Criar cohort `curso-online-padrao` em joaoguirunas.com/academy/admin/turmas/nova
-  - slug: `curso-online-padrao`, preço: 49900 (centavos), status: OPEN, purchasable: ✅
+  - slug: `curso-online-padrao`, preço: 79700 (centavos = R$ 797), status: OPEN, purchasable: ✅
   - Desbloqueia F8.7 smoke test (AC4)
 - **João**: Verificar seed UUID `40000000-0000-0000-0000-000000000001` no Supabase prod (Table Editor → cohort_members)
 - **João**: Fornecer VIMEO_ACCESS_TOKEN (Vercel env var)

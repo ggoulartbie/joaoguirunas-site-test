@@ -145,10 +145,12 @@ export async function syncCouponWithStripe(couponId: string): Promise<void> {
     // Cupom foi deletado no Stripe — recria abaixo
   }
 
+  const isPercent = coupon.discount_kind === 'PERCENT'
   const createParams: Parameters<typeof stripe.coupons.create>[0] = {
     name: coupon.code,
-    currency: 'brl',
-    ...(coupon.discount_kind === 'PERCENT'
+    // currency only applies to fixed (amount_off) coupons — Stripe rejects it for percent_off
+    ...(!isPercent ? { currency: 'brl' } : {}),
+    ...(isPercent
       ? { percent_off: coupon.discount_value }
       : { amount_off: coupon.discount_value }),
     ...(coupon.valid_until ? { redeem_by: Math.floor(new Date(coupon.valid_until).getTime() / 1000) } : {}),

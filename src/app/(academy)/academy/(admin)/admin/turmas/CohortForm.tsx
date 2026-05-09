@@ -304,6 +304,9 @@ export function CohortForm(props: CohortFormProps) {
   const [allowsAutoRenewal, setAllowsAutoRenewal] = useState(
     initial?.allows_auto_renewal ?? false
   )
+  const [stripePriceEntryId, setStripePriceEntryId] = useState(
+    initial?.stripe_price_entry_id ?? ''
+  )
 
   // Section 6 — Extensoes cruzadas
   const initialExtensions = isEdit ? props.crossExtensions : []
@@ -486,6 +489,7 @@ export function CohortForm(props: CohortFormProps) {
       max_installments_extension: parseInt(maxInstExt, 10) || 1,
       extension_duration_days: extDurationDays ? parseInt(extDurationDays, 10) : undefined,
       allows_auto_renewal: allowsAutoRenewal,
+      stripe_price_entry_id: stripePriceEntryId || undefined,
       cohortCourses: cohortCoursesPayload,
       crossExtensions: crossExtensionsPayload,
     }
@@ -942,6 +946,18 @@ export function CohortForm(props: CohortFormProps) {
                   placeholder="180"
                 />
               </div>
+            </div>
+
+            <div>
+              <FieldLabel>Stripe Price ID (entrada)</FieldLabel>
+              <TextInput
+                value={stripePriceEntryId}
+                onChange={setStripePriceEntryId}
+                placeholder="price_1ABC..."
+              />
+              <p className="mt-1 font-mono text-[10px] text-[var(--bone-mute)]">
+                ID do price one-time no Stripe para checkout de entrada
+              </p>
             </div>
           </div>
         )}

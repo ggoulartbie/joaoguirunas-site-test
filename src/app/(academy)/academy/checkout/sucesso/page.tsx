@@ -12,16 +12,29 @@ export default async function CheckoutSucessoPage({ searchParams }: Props) {
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
 
-  if (!user) {
+  // Public checkout: no active session yet — webhook creates the account asynchronously.
+  // Show a confirmation page directing user to check email instead of redirecting to login.
+  const isPublicCheckout = !user && !!session_id
+
+  if (!user && !session_id) {
     redirect('/academy/login')
   }
 
-  const nextSteps = [
-    'Verifique seu email — enviamos as instruções de acesso',
+  const nextStepsAuthenticated = [
+    'Verifique seu email — enviamos a confirmação do pagamento',
     'Acesse a área do aluno para ver o conteúdo disponível',
     'Entre na comunidade exclusiva da turma',
     'Configure seu perfil e preferências',
   ]
+
+  const nextStepsPublic = [
+    'Verifique seu email — enviamos o link de acesso',
+    'Clique no link para ativar sua conta e acessar o curso',
+    'O link é válido para login imediato, sem precisar criar senha',
+    'Não encontrou o email? Verifique a pasta de spam',
+  ]
+
+  const nextSteps = isPublicCheckout ? nextStepsPublic : nextStepsAuthenticated
 
   return (
     <div
@@ -67,14 +80,16 @@ export default async function CheckoutSucessoPage({ searchParams }: Props) {
             color: 'var(--bone)',
           }}
         >
-          Tudo certo!
+          {isPublicCheckout ? 'Pagamento confirmado!' : 'Tudo certo!'}
         </h1>
 
         <p
-          className="text-lg mb-8"
+          className="text-sm mb-8 leading-relaxed"
           style={{ color: 'var(--bone-dim)' }}
         >
-          Bem-vindo à turma. Seu acesso está confirmado.
+          {isPublicCheckout
+            ? 'Enviamos o link de acesso para o seu email. Clique no link para ativar sua conta.'
+            : 'Bem-vindo à turma. Seu acesso está confirmado.'}
         </p>
 
         {/* Next steps */}
@@ -106,29 +121,46 @@ export default async function CheckoutSucessoPage({ searchParams }: Props) {
         </div>
 
         {/* CTA */}
-        <Link
-          href="/academy/meus-cursos"
-          className="flex items-center justify-center w-full h-12 text-xs tracking-widest uppercase font-bold mb-4 transition-opacity hover:opacity-90"
-          style={{
-            backgroundColor: 'var(--ember)',
-            color: 'var(--void)',
-            fontFamily: 'var(--type-mono)',
-            borderRadius: 0,
-          }}
-        >
-          Acessar minha área
-        </Link>
+        {isPublicCheckout ? (
+          <Link
+            href="/academy/login"
+            className="flex items-center justify-center w-full h-12 text-xs tracking-widest uppercase font-bold mb-4 transition-opacity hover:opacity-90"
+            style={{
+              backgroundColor: 'var(--ember)',
+              color: 'var(--void)',
+              fontFamily: 'var(--type-mono)',
+              borderRadius: 0,
+            }}
+          >
+            Ir para o login
+          </Link>
+        ) : (
+          <>
+            <Link
+              href="/academy/meus-cursos"
+              className="flex items-center justify-center w-full h-12 text-xs tracking-widest uppercase font-bold mb-4 transition-opacity hover:opacity-90"
+              style={{
+                backgroundColor: 'var(--ember)',
+                color: 'var(--void)',
+                fontFamily: 'var(--type-mono)',
+                borderRadius: 0,
+              }}
+            >
+              Acessar minha área
+            </Link>
 
-        <Link
-          href="/academy/certificados"
-          className="text-xs tracking-wider uppercase transition-colors hover:text-[var(--bone)]"
-          style={{
-            fontFamily: 'var(--type-mono)',
-            color: 'var(--bone-mute)',
-          }}
-        >
-          Ver certificados
-        </Link>
+            <Link
+              href="/academy/certificados"
+              className="text-xs tracking-wider uppercase transition-colors hover:text-[var(--bone)]"
+              style={{
+                fontFamily: 'var(--type-mono)',
+                color: 'var(--bone-mute)',
+              }}
+            >
+              Ver certificados
+            </Link>
+          </>
+        )}
       </div>
 
       <style>{`

@@ -24,7 +24,8 @@ const getMetrics = unstable_cache(
     const now = new Date()
     const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1).toISOString()
     const cutoff24h = new Date(now.getTime() - 24 * 60 * 60 * 1000).toISOString()
-    const cutoff7days = new Date(now.getTime() + 7 * 24 * 60 * 60 * 1000).toISOString()
+    // upper bound for expiring-soon query — NOT a cutoff in the past
+    const sevenDaysFromNow = new Date(now.getTime() + 7 * 24 * 60 * 60 * 1000).toISOString()
 
     const [
       { data: allPayments },
@@ -35,10 +36,12 @@ const getMetrics = unstable_cache(
       { data: newComments },
       { data: newThreads },
     ] = await Promise.all([
+      // TODO: replace with RPC aggregate (sum) to avoid PostgREST 1000-row truncation
       supabaseAdmin
         .from('payments')
         .select('amount_cents')
-        .eq('status', 'APPROVED'),
+        .eq('status', 'APPROVED')
+        .limit(10000),
       supabaseAdmin
         .from('payments')
         .select('amount_cents')
@@ -58,7 +61,7 @@ const getMetrics = unstable_cache(
         .select('id, expires_at, profiles!inner(name), cohorts!inner(name)')
         .eq('status', 'ACTIVE')
         .not('expires_at', 'is', null)
-        .lte('expires_at', cutoff7days)
+        .lte('expires_at', sevenDaysFromNow)
         .gte('expires_at', now.toISOString())
         .order('expires_at', { ascending: true })
         .limit(50),

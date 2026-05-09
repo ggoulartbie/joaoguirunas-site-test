@@ -5,6 +5,7 @@ import { z } from 'zod'
 import { createClient } from '@/lib/supabase/server'
 import { supabaseAdmin } from '@/lib/supabase/admin'
 import { requireUser } from '@/lib/auth/helpers'
+import { sanitizeHtml } from '@/lib/content'
 
 async function requireActiveMember(): Promise<string> {
   const user = await requireUser()
@@ -63,7 +64,7 @@ export async function createThread(
       author_id: userId,
       title,
       slug: uniqueSlug,
-      content,
+      content: sanitizeHtml(parsed.data.content),
     })
 
   if (error) return { error: error.message }
@@ -99,7 +100,7 @@ export async function createReply(
     .insert({
       thread_id: threadId,
       author_id: userId,
-      content,
+      content: sanitizeHtml(parsed.data.content),
       parent_reply_id: parentReplyId ?? null,
     })
 

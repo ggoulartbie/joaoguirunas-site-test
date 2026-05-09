@@ -1,13 +1,189 @@
 ---
 title: QA Results
 type: qa-log
-updated: 2026-05-08T16:45
+updated: 2026-05-09T05:00
 tags: [qa, veredictos]
 ---
 
 # QA Results — Veredictos formais
 
 Histórico de veredictos emitidos pelo sites-qa (Axilun).
+
+---
+
+## 2026-05-09T05:00 — F9.1 Re-veredicto após fix preço + FAQ + tipografia — ✅ PASS (com 6 CONCERNs não-bloqueantes)
+
+> Re-veredicto da [F9.1](../../stories/done/F9.1-refactor-curso-online-estrutura-mentoria.md). Substitui o veredicto FAIL de 2026-05-09T04:30. Trigger: lead confirmou preço oficial R$ 797 + Nova-S aplicou correções nos commits 3044a23 e d498109.
+
+**HEAD auditado:** d498109 (sobre 3044a23 sobre f5d5b3b).
+
+**Resultado por AC:**
+
+| AC | Status |
+|----|--------|
+| AC1 sequência + Fraunces + #FF3A0E | ✅ PASS — H2 do Timeline e Pricing migrados para Fraunces (`var(--font-display-serif)`) |
+| AC2 zero presencial/Florianópolis/turmas ao vivo | ✅ PASS |
+| AC3 seção suporte online removida | ✅ PASS |
+| AC4 bônus aceleradores removidos + NOT_INCLUDED atualizado | ✅ PASS |
+| **AC5 R$ 797 (recalibrado) + COHORT_SLUG + CheckoutForm** | ✅ PASS — 0 R$ 499; 12 R$ 797 consistentes; `COHORT_SLUG = 'curso-online-padrao'` e `<form action={checkoutAction}>` intactos |
+| AC6 CursoOnlineTimeline presente | ✅ PASS |
+| AC7 certificado, fórum, materiais preservados | ✅ PASS |
+| AC8 build + typecheck | ✅ PASS — `pnpm typecheck` limpo, `pnpm build` gerou `/curso-online` como rota estática |
+
+**Críticos resolvidos:**
+- ✅ Preço alinhado com decisão do lead (R$ 797 — `shared-context.md`, runbook F9.2, migration F9.2 todos coerentes)
+- ✅ FAQ "12 meses" → "6 meses" em `CursoFaqAccordion.tsx:15` (coerente com `entry_access_duration_days = 180`)
+- ✅ Tipografia H2 do Timeline e Pricing: TASAOrbiter → Fraunces
+
+**Nota AC5:** o AC original dizia "R$ 499 preservado". Lead confirmou que o preço oficial é R$ 797 — re-veredicto verifica R$ 797. Texto literal do AC fica histórico.
+
+**6 CONCERNs não-bloqueantes:**
+1. Contagem de módulos divergente (Hero "11", Timeline "5 + 4 Semanas" com 9 itens, Pricing "13")
+2. Timeline pula `num: 8` e `num: 9` (lista 0,1,2,3,4,5,6,7,10)
+3. Headline "5 Módulos + 4 Semanas" ambígua
+4. Pricing/Timeline ainda usam `'Roboto Mono', var(--font-bb-mono)` em badges (vs `var(--font-mono)` KV_MONO em outras partes)
+5. `CursoOnlineHero.tsx` `'use client'` desnecessário (conteúdo estático)
+6. Módulo 0 "Desbloqueio com Claudia" pode sugerir acompanhamento ao vivo
+
+**Recomendação:** push liberado. CONCERN-1/2/3 podem virar story de polish "Alinhar contagem e numeração de módulos". CONCERN-4/5/6 são micro-tarefas opcionais.
+
+---
+
+## 2026-05-09T04:30 — F9.1 Refactor /curso-online estrutura mentoria — ❌ FAIL
+
+> Story em [`stories/done/F9.1-refactor-curso-online-estrutura-mentoria.md`](../../stories/done/F9.1-refactor-curso-online-estrutura-mentoria.md). Auditoria do commit `f5d5b3b` (Nova-S, sites-dev-alpha).
+
+**Resultado por AC:**
+
+| AC | Status |
+|----|--------|
+| AC1 sequência + Fraunces + #FF3A0E | ✅ PASS |
+| AC2 zero presencial/Florianópolis/turmas ao vivo | ✅ PASS |
+| AC3 seção suporte online removida | ✅ PASS |
+| AC4 bônus aceleradores removidos + NOT_INCLUDED atualizado | ✅ PASS |
+| **AC5 R$ 499 + COHORT_SLUG + CheckoutForm** | ❌ **FAIL** |
+| AC6 CursoOnlineTimeline presente | ✅ PASS |
+| AC7 certificado, fórum, materiais preservados | ✅ PASS |
+| AC8 build + typecheck | ✅ PASS |
+
+**Issues bloqueantes:**
+
+1. **[CRITICAL — AC5] Preço R$ 797 em 11 locais** (story exige R$ 499 literalmente, e commit message do Nova-S afirma "Preço atualizado para R$499" — mas código contradiz). Inclui metadata, JSON-LD `offers.price`, Hero, Timeline, Pricing (`AGENT_COST = 797`), 4 CheckoutForm labels, h2 do bloco Inscrição. Pendência: lead decidir oficialmente entre R$ 499 (AC literal) ou R$ 797 (shared-context + migration F9.2 + runbook).
+
+2. **[CRITICAL — AC2/AC1 indireto] FAQ diz "12 meses de acesso"** mas migration tem `entry_access_duration_days = 180` (=6 meses) e 9 outras fontes na página dizem 6 meses. Risco de chargeback. Fix em `CursoFaqAccordion.tsx:15`.
+
+**6 CONCERNs não-bloqueantes:** contagem inconsistente de módulos (11 vs 13 vs 5+9), pula módulos 8 e 9 na timeline, headline ambígua "5 Módulos + 4 Semanas", tipografia mista (`TASAOrbiter` em Timeline/Pricing vs Fraunces no resto), `'use client'` desnecessário no Hero estático, módulo 0 com Claudia pode sugerir acompanhamento ao vivo.
+
+**Recomendação:** push bloqueado. Devolução a Nova-S (sites-dev-alpha) para fix dos 2 críticos. Lead precisa decidir preço oficial antes. Após fix, re-veredicto rápido — estrutura/build/tokens estão sólidos.
+
+---
+
+## 2026-05-09T04:00 — F9.2 Re-verificação AC6 (runbook criado) — ✅ PASS (com 1 CONCERN não-bloqueante)
+
+> Re-veredicto da [F9.2](../../stories/backlog/F9.2-auditar-checkout-stripe-curso-online.md). Substitui o veredicto preliminar de 2026-05-08T17:30 (CONCERNS). Trigger: Rex-S criou o runbook ausente.
+
+**Escopo da re-verificação:** AC6 — `docs/smart-memory/runbooks/checkout-curso-online.md`.
+
+**Resultado AC6:** ✅ PASS. Runbook completo cobre todos os requisitos:
+
+| Requisito de AC6 | Cobertura no runbook | Status |
+|---|---|---|
+| Env vars (`STRIPE_SECRET_KEY`, `STRIPE_WEBHOOK_SECRET`, `NEXT_PUBLIC_APP_URL`, `SUPABASE_SERVICE_ROLE_KEY`) | Tabela com 8 vars (4 exigidas + 4 complementares: Resend, Supabase URL/anon) | ✅ |
+| Passos de smoke test | 7 passos do clique em "Comprar" até confirmação em `/academy/aluno`, com cartão de teste Stripe | ✅ |
+| Reprocessar webhook | 3 caminhos documentados: Admin UI (`/academy/admin/pagamentos > Reprocessar` — verificado em `PaymentsClient.tsx:235`), Stripe Dashboard (Resend), SQL fallback | ✅ |
+
+**Bonus além do exigido (qualidade superior ao mínimo):**
+- Tabela de edge cases (6 cenários — cohort sem price, is_purchasable=false, webhook duplicado, comprador existente, pagamento recusado, falha de email)
+- Documentação completa do CONCERN-1 (inconsistência de preço) com plano de remediação em 5 passos
+- Diagrama ASCII do fluxo /curso-online → checkout → webhook → cohort_member → magic link
+- SQL de emergência com cohort UUID correto (`40000000-0000-0000-0000-000000000002` — verificado em `20260508000000_seed_curso_online_padrao.sql:45`)
+
+**Resultado consolidado dos 6 ACs:**
+
+| AC | Status agora |
+|----|--------|
+| AC1 | ⚠️ CONCERN (operacional — UPDATE manual do `stripe_price_entry_id` em prod fica com João) |
+| AC2 | ✅ PASS |
+| AC3 | ✅ PASS |
+| AC4 | ✅ PASS |
+| AC5 | ✅ PASS |
+| AC6 | ✅ PASS (era FAIL — agora cumprido) |
+
+**VEREDICTO: ✅ PASS** (com 1 CONCERN não-bloqueante para código).
+
+**CONCERN-1 remanescente (operacional, não-código):** AC1 fica em estado "validado em dev, pendente evidência em prod". Antes de divulgar publicamente o checkout, João precisa:
+1. Criar Price no Stripe Dashboard (R$ 797 one-time, BRL — ou valor final que decidir)
+2. Executar `UPDATE public.cohorts SET stripe_price_entry_id = 'price_...' WHERE slug = 'curso-online-padrao';`
+3. Anexar evidência da query confirmatória à story
+
+**CONCERN-2 não-bloqueante (CONCERN-3 do veredicto anterior):** `INSERT` em `payments` no `handlePublicCheckoutCompleted:370-380` sem `ON CONFLICT (stripe_checkout_session_id)`. Risco residual: dois event_ids distintos do Stripe para a mesma session duplicam o registro de payment (membership já protegido). Defesa em profundidade — não bloqueia. Recomendação: criar story F9.x para adicionar índice único.
+
+**CONCERN-3 não-bloqueante (CONCERN-1 do veredicto anterior):** Inconsistência de preço entre 4 fontes (migration 79700, seed.sql 79900, shared-context.md 49900, LP `R$ 499`). Runbook documenta a divergência; remediação fica pendente da decisão de João sobre o preço oficial. Não bloqueia push.
+
+**Recomendação ao team-lead:**
+- ✅ Push liberado — código e runbook completos
+- ✅ F9.2 promovida de CONCERNS → PASS
+- ⏳ Antes de anunciar o curso publicamente: CONCERN-1 (Price ID em prod) deve ser resolvido por João + alinhar preço definitivo entre 4 fontes (CONCERN-3)
+- 📌 Sugestão: criar story F9.x dedicada ao CONCERN-2 (ON CONFLICT em payments) — defesa em profundidade
+
+---
+
+## 2026-05-09T03:15 — F9.12 Bug hunt + a11y sweep área do aluno — ❌ FAIL
+
+> Story originalmente F9.7 — renumerada para F9.12 durante o ciclo (lead reorganizou backlog).
+
+**Escopo:** sweep estático de `/academy/(student)/*` (dashboard, meus-cursos, curso, aula, perfil, agenda, certificados, forum) e components críticos. Story em [`stories/backlog/F9.12-auditar-area-aluno-bug-hunt.md`](../../stories/backlog/F9.12-auditar-area-aluno-bug-hunt.md). Relatório completo em [`research/student-bug-hunt.md`](../research/student-bug-hunt.md).
+
+**Resultado por AC:**
+
+| AC | Status |
+|----|--------|
+| AC1 (sem 500 / sem hidration broken) | ⚠️ CONCERN — falta `error.tsx` boundaries |
+| AC2 (sem vazamentos / sem console.log / sem any) | ⚠️ CONCERN — falta UI degradada para fetch errors |
+| AC3 (a11y mínimo) | ⚠️ CONCERN — B-08, B-11, contraste não medido |
+| AC4 (cross-module nav) | ❌ FAIL — B-04: nav pode levar para módulo bloqueado |
+| AC5 (documento bug-hunt) | ✅ PASS |
+| AC6 (P0/P1 corrigidos) | ❌ FAIL — sites-qa read-only, bugs DOCUMENTADOS mas não corrigidos |
+
+**14 bugs identificados:**
+
+| Severidade | Qtd | IDs |
+|------------|-----|-----|
+| P0 | 1 | **B-01: `changePassword` não revalida senha atual** (vulnerabilidade de segurança) |
+| P1 | 5 | B-02 (Stripe link `/test/`), B-03 (LockedContent → /turmas inexistente), B-04 (cross-module nav → bloqueado), B-05+B-06 (N+1 forum) |
+| P2 | 4 | B-07, B-08, B-09, B-14 |
+| P3 | 4 | B-10, B-11, B-12, B-13 |
+
+**Bloqueante (P0 segurança):** B-01 — `src/app/actions/profile.ts:21-29` chama `supabase.auth.updateUser({ password })` sem revalidar a senha atual. Atacante com sessão Supabase ativa pode trocar senha sem conhecer a antiga.
+
+**Recomendação:** abrir story F9.12-fix dedicada a sites-dev para corrigir B-01 imediatamente. P1s entram em follow-up. Fix sugerido para B-01 incluído na story F9.12 QA Results.
+
+---
+
+## 2026-05-08T17:30 — F9.2 Auditar checkout Stripe curso-online — ⚠️ CONCERNS
+
+**Escopo:** auditoria pós-implementação de Rex-S. Story em [`stories/backlog/F9.2-auditar-checkout-stripe-curso-online.md`](../../stories/backlog/F9.2-auditar-checkout-stripe-curso-online.md). Verificação dos 6 ACs.
+
+**Resultado por AC:**
+
+| AC | Status | Resumo |
+|----|--------|--------|
+| AC1 | ⚠️ CONCERN | Migration cria cohort, mas `stripe_price_entry_id` fica null por design (UPDATE manual pendente em prod) + inconsistência de preço entre migration (79700), seed.sql (79900), shared-context (49900) e LP (R$ 797) |
+| AC2 | ✅ PASS | `src/app/actions/checkoutPublic.ts` valida e redireciona corretamente |
+| AC3 | ✅ PASS | Webhook idempotente via UNIQUE em `webhook_events.stripe_event_id` + double-check em `cohort_members` |
+| AC4 | ✅ PASS | `findOrCreateUser` + trigger `handle_new_user` (role STUDENT) + magic link |
+| AC5 | ✅ PASS | Edge cases cobertos com mensagens amigáveis |
+| AC6 | ❌ FAIL | `docs/smart-memory/runbooks/checkout-curso-online.md` **não existe** |
+
+**Bloqueante para PASS:**
+1. Criar runbook `checkout-curso-online.md` (env vars, smoke test, replay de webhook)
+2. Anexar evidência (query/screenshot) de cohort em prod com Price ID Stripe live
+
+**Observacionais (não bloqueiam push):**
+- Alinhar preço (79700/79900/49900) — recomendado: 79700 (R$ 797) em todas as fontes
+- `INSERT` em `payments` no `handlePublicCheckoutCompleted` sem `ON CONFLICT` — risco residual de duplicação caso Stripe gere dois event_ids distintos para mesma session (rotina protege via `webhook_events`, mas defesa em profundidade seria índice único em `stripe_checkout_session_id`)
+
+**Recomendação ao team-lead:** push da implementação atual liberado (código sólido). Antes de divulgar publicamente: AC6 PASS + AC1 com evidência.
 
 ---
 

@@ -108,28 +108,43 @@ async function getUserEmailAndName(userId: string): Promise<{ email: string; nam
 
 // Finds an existing Supabase user by email or creates a new one.
 // Returns { userId, isNew }.
+// Strategy: attempt createUser first; if email already registered, paginate listUsers to find the id.
+// Avoids the O(N) full scan of the original by trying create first (fast path for new users).
 async function findOrCreateUser(
   email: string,
   name: string,
 ): Promise<{ userId: string; isNew: boolean }> {
-  const { data: listResult } = await supabaseAdmin.auth.admin.listUsers({ perPage: 1000 })
-  const existing = listResult?.users.find((u) => u.email === email)
-
-  if (existing) {
-    return { userId: existing.id, isNew: false }
-  }
-
-  const { data: created, error } = await supabaseAdmin.auth.admin.createUser({
+  const { data: created, error: createErr } = await supabaseAdmin.auth.admin.createUser({
     email,
     user_metadata: { name },
     email_confirm: true,
   })
 
-  if (error || !created.user) {
-    throw new Error(`Failed to create user for ${email}: ${error?.message}`)
+  if (!createErr) {
+    if (!created.user) throw new Error(`Failed to create user for ${email}: no user returned`)
+    return { userId: created.user.id, isNew: true }
   }
 
-  return { userId: created.user.id, isNew: true }
+  const isAlreadyRegistered =
+    createErr.message?.toLowerCase().includes('already been registered') ||
+    (createErr as { code?: string }).code === 'email_exists'
+
+  if (!isAlreadyRegistered) {
+    throw new Error(`Failed to create user for ${email}: ${createErr.message}`)
+  }
+
+  // User exists — paginate listUsers to find by email (SDK lacks getUserByEmail)
+  let page = 1
+  while (true) {
+    const { data: listResult } = await supabaseAdmin.auth.admin.listUsers({ page, perPage: 100 })
+    const users = listResult?.users ?? []
+    const found = users.find((u) => u.email === email)
+    if (found) return { userId: found.id, isNew: false }
+    if (users.length < 100) break
+    page++
+  }
+
+  throw new Error(`User ${email} reported as existing but could not be located`)
 }
 
 // Generates a Supabase magic link for the user.
@@ -246,7 +261,8 @@ async function handleCheckoutCompleted(session: Stripe.Checkout.Session) {
     await (supabaseAdmin.rpc as any)('increment_filled_seats', { p_cohort_id: cohort_id })
   }
 
-  await supabaseAdmin.from('payments').insert({
+  // onConflict: DB UNIQUE partial index on stripe_checkout_session_id (F9.17) — duplicate webhook → ignored
+  await supabaseAdmin.from('payments').upsert({
     user_id,
     cohort_id,
     purchase_kind: purchase_kind as 'ENTRY' | 'EXTENSION',
@@ -256,7 +272,7 @@ async function handleCheckoutCompleted(session: Stripe.Checkout.Session) {
     amount_cents: amountCents,
     status: 'APPROVED',
     paid_at: new Date().toISOString(),
-  })
+  }, { onConflict: 'stripe_checkout_session_id', ignoreDuplicates: true })
 
   await applyCrossExtensions(cohort_id, user_id)
 
@@ -367,7 +383,8 @@ async function handlePublicCheckoutCompleted(
     ? session.payment_intent
     : session.payment_intent?.id ?? null
 
-  await supabaseAdmin.from('payments').insert({
+  // onConflict: DB UNIQUE partial index on stripe_checkout_session_id (F9.17) — duplicate webhook → ignored
+  await supabaseAdmin.from('payments').upsert({
     user_id: userId,
     cohort_id: cohort.id,
     purchase_kind: 'ENTRY',
@@ -377,7 +394,7 @@ async function handlePublicCheckoutCompleted(
     amount_cents: session.amount_total ?? 0,
     status: 'APPROVED',
     paid_at: new Date().toISOString(),
-  })
+  }, { onConflict: 'stripe_checkout_session_id', ignoreDuplicates: true })
 
   await applyCrossExtensions(cohort.id, userId)
 
@@ -454,6 +471,7 @@ async function handleInvoicePaid(invoice: Stripe.Invoice) {
     }
   }
 
+  // No stripe_checkout_session_id on invoice payments — partial index (F9.17) doesn't apply; insert is correct
   await supabaseAdmin.from('payments').insert({
     user_id,
     cohort_id,
@@ -525,6 +543,7 @@ async function handleChargeRefunded(charge: Stripe.Charge) {
   if (!originalPayment) return
 
   // Criar registro de refund — NÃO remove membership (admin decide)
+  // No stripe_checkout_session_id on refunds — partial index (F9.17) doesn't apply; insert is correct
   await supabaseAdmin.from('payments').insert({
     user_id: originalPayment.user_id,
     cohort_id: originalPayment.cohort_id,
