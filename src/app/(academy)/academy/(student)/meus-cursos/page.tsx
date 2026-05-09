@@ -91,7 +91,7 @@ export default async function MeusCursosPage() {
 
   const completedIds = new Set((progressRows ?? []).map((p) => p.lesson_id))
 
-  // 7. Constrói lista de cursos (union por cohort, sem duplicar)
+  // 7. Constrói lista de cursos (union de módulos quando aluno tem múltiplas cohorts no mesmo curso)
   type CourseView = {
     id: string
     slug: string
@@ -108,22 +108,33 @@ export default async function MeusCursosPage() {
     totalModulesCount: number
   }
 
-  const seenCourses = new Set<string>()
+  // Consolidar módulos liberados por curso através de todas as cohorts do aluno.
+  // Um aluno com 2 cohorts no mesmo curso recebe a union dos included_module_ids.
+  const modulesByCourse = new Map<string, { moduleIds: Set<string>; firstCohortId: string }>()
+  for (const cc of cohortCourses) {
+    const entry = modulesByCourse.get(cc.course_id)
+    if (entry) {
+      for (const mid of cc.included_module_ids ?? []) entry.moduleIds.add(mid)
+    } else {
+      modulesByCourse.set(cc.course_id, {
+        moduleIds: new Set(cc.included_module_ids ?? []),
+        firstCohortId: cc.cohort_id,
+      })
+    }
+  }
+
   const available: CourseView[] = []
   const locked: CourseView[] = []
 
-  for (const cc of cohortCourses) {
-    if (seenCourses.has(cc.course_id)) continue
-    seenCourses.add(cc.course_id)
-
-    const course = coursesById.get(cc.course_id)
+  for (const [courseId, { moduleIds, firstCohortId }] of modulesByCourse) {
+    const course = coursesById.get(courseId)
     if (!course) continue
 
-    const member = members.find((m) => m.cohort_id === cc.cohort_id)
+    const member = members.find((m) => m.cohort_id === firstCohortId)
     const cohortObj = member && (Array.isArray(member.cohorts) ? member.cohorts[0] : member.cohorts)
 
-    const accessibleModIds = cc.included_module_ids ?? []
-    const totalModIds = allModuleIdsByCourse.get(cc.course_id) ?? []
+    const accessibleModIds = [...moduleIds]
+    const totalModIds = allModuleIdsByCourse.get(courseId) ?? []
     const accessibleModulesCount = accessibleModIds.length
     const totalModulesCount = totalModIds.length
 
