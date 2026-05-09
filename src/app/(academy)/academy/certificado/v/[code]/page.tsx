@@ -32,6 +32,7 @@ export default async function CertificateVerificationPage({ params }: Props) {
       id,
       verification_code,
       issued_at,
+      revoked_at,
       profiles(name),
       courses(title),
       cohorts(name)
@@ -39,6 +40,7 @@ export default async function CertificateVerificationPage({ params }: Props) {
     .eq('verification_code', code.toUpperCase())
     .maybeSingle()
 
+  const isRevoked = !!cert?.revoked_at
   const profile = cert ? (Array.isArray(cert.profiles) ? cert.profiles[0] : cert.profiles) : null
   const courseData = cert ? (Array.isArray(cert.courses) ? cert.courses[0] : cert.courses) : null
   const cohortData = cert ? (Array.isArray(cert.cohorts) ? cert.cohorts[0] : cert.cohorts) : null
@@ -78,7 +80,32 @@ export default async function CertificateVerificationPage({ params }: Props) {
           {/* Separador */}
           <div className="h-px mb-8" style={{ backgroundColor: 'var(--hairline)' }} />
 
-          {cert ? (
+          {cert && isRevoked ? (
+            <>
+              <h1
+                className="font-display italic text-[36px] leading-tight mb-8"
+                style={{ color: 'rgba(255,58,14,0.70)' }}
+              >
+                Certificado Revogado
+              </h1>
+              <div className="space-y-4">
+                <span
+                  className="inline-block font-mono text-[10px] uppercase tracking-wider px-2 py-1 border"
+                  style={{
+                    color: 'var(--ember)',
+                    backgroundColor: 'rgba(255,58,14,0.10)',
+                    borderColor: 'rgba(255,58,14,0.30)',
+                    borderRadius: 0,
+                  }}
+                >
+                  Revogado
+                </span>
+                <p className="font-sans text-[14px]" style={{ color: 'var(--bone-mute)' }}>
+                  Este certificado foi revogado e não é mais válido.
+                </p>
+              </div>
+            </>
+          ) : cert ? (
             <>
               {/* Heading válido */}
               <h1

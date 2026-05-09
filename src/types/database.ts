@@ -22,6 +22,7 @@ export type Database = {
           issued_at: string
           membership_id: string | null
           pdf_storage_path: string | null
+          revoked_at: string | null
           user_id: string
           verification_code: string
         }
@@ -32,6 +33,7 @@ export type Database = {
           issued_at?: string
           membership_id?: string | null
           pdf_storage_path?: string | null
+          revoked_at?: string | null
           user_id: string
           verification_code: string
         }
@@ -42,6 +44,7 @@ export type Database = {
           issued_at?: string
           membership_id?: string | null
           pdf_storage_path?: string | null
+          revoked_at?: string | null
           user_id?: string
           verification_code?: string
         }

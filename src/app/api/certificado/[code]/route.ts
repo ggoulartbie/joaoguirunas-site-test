@@ -1,6 +1,7 @@
 import { renderToBuffer } from '@react-pdf/renderer'
 import { NextRequest, NextResponse } from 'next/server'
 import { CertificatePDF } from '@/components/student/CertificatePDF'
+import { supabaseAdmin } from '@/lib/supabase/admin'
 import React from 'react'
 
 type Params = { params: Promise<{ code: string }> }
@@ -14,22 +15,42 @@ export async function GET(_req: NextRequest, { params }: Params) {
     return NextResponse.json({ error: 'Invalid code' }, { status: 400 })
   }
 
-  // TODO F5.3: buscar certificado real via supabaseAdmin
-  // const cert = await supabaseAdmin.from('certificates').select('...').eq('verification_code', code).single()
-  // if (!cert.data) return NextResponse.json({ error: 'not found' }, { status: 404 })
+  const { data: row } = await supabaseAdmin
+    .from('certificates')
+    .select(`
+      verification_code,
+      issued_at,
+      revoked_at,
+      profiles ( name ),
+      courses ( title ),
+      cohorts ( name )
+    `)
+    .eq('verification_code', safeCode.toUpperCase())
+    .maybeSingle()
 
-  // Mock para desenvolvimento
-  const cert = {
-    name: 'João Guirunas',
-    courseName: 'Estratégia com IA',
-    cohortName: 'Mentoria — Turma Maio 2026',
-    issuedAt: new Date('2026-05-05'),
-    verificationCode: safeCode,
+  if (!row) {
+    return NextResponse.json({ error: 'Certificado não encontrado' }, { status: 404 })
+  }
+
+  if (row.revoked_at) {
+    return NextResponse.json({ error: 'Certificado revogado' }, { status: 410 })
+  }
+
+  const profile = Array.isArray(row.profiles) ? row.profiles[0] : row.profiles
+  const course = Array.isArray(row.courses) ? row.courses[0] : row.courses
+  const cohort = Array.isArray(row.cohorts) ? row.cohorts[0] : row.cohorts
+
+  const certData = {
+    name: profile?.name ?? 'Aluno',
+    courseName: course?.title ?? 'Curso',
+    cohortName: cohort?.name ?? 'Turma',
+    issuedAt: new Date(row.issued_at),
+    verificationCode: row.verification_code,
     appUrl: process.env.NEXT_PUBLIC_APP_URL ?? 'https://joaoguirunas.com',
   }
 
   // renderToBuffer espera ReactElement com Document como root — CertificatePDF já wrappa Document
-  const element = React.createElement(CertificatePDF, cert)
+  const element = React.createElement(CertificatePDF, certData)
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const buffer = await renderToBuffer(element as any)
 

@@ -98,17 +98,15 @@ export default async function CertificadosPage() {
               </p>
 
               <div className="mt-4 flex items-center gap-3">
-                {cert.pdf_storage_path && (
-                  <a
-                    href={`/api/certificado/${cert.verification_code}`}
-                    download
-                    className="flex items-center gap-1.5 border border-[color:var(--hairline)] px-3 py-2 font-mono text-[11px] uppercase tracking-wider text-[color:var(--bone-mute)] transition-colors hover:border-[color:var(--hairline-strong)] hover:text-[color:var(--bone)]"
-                    style={{ borderRadius: 0 }}
-                  >
-                    <Download className="h-3 w-3" />
-                    Baixar PDF
-                  </a>
-                )}
+                <a
+                  href={`/api/certificado/${cert.verification_code}`}
+                  download
+                  className="flex items-center gap-1.5 border border-[color:var(--hairline)] px-3 py-2 font-mono text-[11px] uppercase tracking-wider text-[color:var(--bone-mute)] transition-colors hover:border-[color:var(--hairline-strong)] hover:text-[color:var(--bone)]"
+                  style={{ borderRadius: 0 }}
+                >
+                  <Download className="h-3 w-3" />
+                  Baixar PDF
+                </a>
                 <Link
                   href={`/academy/certificado/v/${cert.verification_code}`}
                   target="_blank"

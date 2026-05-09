@@ -34,6 +34,7 @@ MOC raiz. Todo arquivo novo em `docs/smart-memory/` deve ser referenciado aqui.
 ## Runbooks
 - [[runbooks/go-live-checklist]] — gate formal F8.7 (13 ACs: auth, conteúdo bloqueado, compra real, cross-ext, refund, emails, performance, RLS, sentry, cron, backup)
 - [[runbooks/launch-2026-05-07]] — execução go-live em prod 2026-05-07 (pré-flight ✅; checklist final F8.7 2026-05-08 com BLOCKER de Stripe Price ID + CONCERNs documentados)
+- [[runbooks/certificados]] — reemissão manual, revogação, env vars, decisão rate limit P-02
 
 ## Agentes
 - [[agents/data-engineer/schema]] — schema completo (21 tabelas, funções, índices)
