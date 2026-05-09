@@ -43,7 +43,7 @@ export async function POST(req: NextRequest) {
     console.error('[infinitepay webhook] processing error:', err)
   })
 
-  return NextResponse.json({ received: true })
+  return NextResponse.json({ success: true, message: null })
 }
 
 async function processWebhook(params: {
