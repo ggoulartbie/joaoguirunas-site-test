@@ -103,6 +103,7 @@ export const MOCK_COHORTS: MockCohort[] = [
     stripe_price_entry_id: null,
     stripe_price_extension_id: null,
     payment_provider: 'STRIPE',
+    infinitepay_handle: null,
     created_at: '2026-01-10T00:00:00Z',
     updated_at: '2026-05-01T00:00:00Z',
   },
@@ -132,6 +133,7 @@ export const MOCK_COHORTS: MockCohort[] = [
     stripe_price_entry_id: 'price_test_entry',
     stripe_price_extension_id: 'price_test_ext',
     payment_provider: 'STRIPE',
+    infinitepay_handle: null,
     created_at: '2026-01-15T00:00:00Z',
     updated_at: '2026-04-20T00:00:00Z',
   },
@@ -161,6 +163,7 @@ export const MOCK_COHORTS: MockCohort[] = [
     stripe_price_entry_id: null,
     stripe_price_extension_id: null,
     payment_provider: 'STRIPE',
+    infinitepay_handle: null,
     created_at: '2025-12-01T00:00:00Z',
     updated_at: '2026-03-01T00:00:00Z',
   },
@@ -192,8 +195,8 @@ export const MOCK_COHORT_MEMBERS: (CohortMember & { userName: string; userEmail:
 ]
 
 export const MOCK_LIVE_SESSIONS: (LiveSession & { cohortName: string })[] = [
-  { id: 'ls-1', cohort_id: 'cohort-1', title: 'Aula ao Vivo — Closures Avançados', description: 'Revisão e exercícios ao vivo.', scheduled_at: '2026-05-12T18:00:00Z', duration_minutes: 90, meeting_url: 'https://meet.google.com/xxx', recording_url: null, lesson_id: null, created_at: '2026-05-01T00:00:00Z', cohortName: 'Mentoria Maio 2026' },
-  { id: 'ls-2', cohort_id: 'cohort-1', title: 'Mentoria Individual — Semana 2', description: null, scheduled_at: '2026-05-19T19:00:00Z', duration_minutes: 60, meeting_url: null, recording_url: null, lesson_id: null, created_at: '2026-05-01T00:00:00Z', cohortName: 'Mentoria Maio 2026' },
+  { id: 'ls-1', cohort_id: 'cohort-1', title: 'Aula ao Vivo — Closures Avançados', description: 'Revisão e exercícios ao vivo.', scheduled_at: '2026-05-12T18:00:00Z', duration_minutes: 90, meeting_url: 'https://meet.google.com/xxx', recording_url: null, lesson_id: null, created_at: '2026-05-01T00:00:00Z', reminder_1h_sent_at: null, cohortName: 'Mentoria Maio 2026' },
+  { id: 'ls-2', cohort_id: 'cohort-1', title: 'Mentoria Individual — Semana 2', description: null, scheduled_at: '2026-05-19T19:00:00Z', duration_minutes: 60, meeting_url: null, recording_url: null, lesson_id: null, created_at: '2026-05-01T00:00:00Z', reminder_1h_sent_at: null, cohortName: 'Mentoria Maio 2026' },
 ]
 
 export const MOCK_COUPONS: (Coupon & { cohortName: string })[] = [
@@ -210,10 +213,14 @@ export const MOCK_PROFILES: MockProfile[] = [
 ]
 
 export const MOCK_PAYMENTS: MockPayment[] = [
-  { id: 'pay-1', user_id: 'user-1', cohort_id: 'cohort-1', purchase_kind: 'ENTRY', membership_id: 'mem-1', stripe_checkout_session_id: 'cs_test_1', stripe_payment_intent_id: 'pi_test_1', stripe_subscription_id: null, amount_cents: 870000, coupon_id: null, status: 'APPROVED', payment_method: 'card', payment_provider: 'STRIPE', infinitepay_order_nsu: null, infinitepay_invoice_slug: null, created_at: '2026-05-04T14:00:00Z', paid_at: '2026-05-04T14:01:00Z', userName: 'Ana Lima', cohortName: 'Mentoria Maio 2026', userEmail: 'ana@exemplo.com' },
-  { id: 'pay-2', user_id: 'user-2', cohort_id: 'cohort-1', purchase_kind: 'ENTRY', membership_id: 'mem-2', stripe_checkout_session_id: 'cs_test_2', stripe_payment_intent_id: 'pi_test_2', stripe_subscription_id: null, amount_cents: 870000, coupon_id: null, status: 'APPROVED', payment_method: 'card', payment_provider: 'STRIPE', infinitepay_order_nsu: null, infinitepay_invoice_slug: null, created_at: '2026-05-04T15:00:00Z', paid_at: '2026-05-04T15:02:00Z', userName: 'Bruno Costa', cohortName: 'Mentoria Maio 2026', userEmail: 'bruno@exemplo.com' },
-  { id: 'pay-3', user_id: 'user-3', cohort_id: 'cohort-2', purchase_kind: 'ENTRY', membership_id: 'mem-3', stripe_checkout_session_id: 'cs_test_3', stripe_payment_intent_id: 'pi_test_3', stripe_subscription_id: null, amount_cents: 49900, coupon_id: null, status: 'APPROVED', payment_method: 'card', payment_provider: 'STRIPE', infinitepay_order_nsu: null, infinitepay_invoice_slug: null, created_at: '2026-02-10T10:00:00Z', paid_at: '2026-02-10T10:01:00Z', userName: 'Carlos Dias', cohortName: 'Online Padrão', userEmail: 'carlos@exemplo.com' },
-  { id: 'pay-4', user_id: 'user-2', cohort_id: 'cohort-2', purchase_kind: 'EXTENSION', membership_id: 'mem-2', stripe_checkout_session_id: 'cs_test_4', stripe_payment_intent_id: 'pi_test_4', stripe_subscription_id: null, amount_cents: 29900, coupon_id: null, status: 'DECLINED', payment_method: 'card', payment_provider: 'STRIPE', infinitepay_order_nsu: null, infinitepay_invoice_slug: null, created_at: '2026-04-28T09:00:00Z', paid_at: null, userName: 'Bruno Costa', cohortName: 'Online Padrão', userEmail: 'bruno@exemplo.com' },
+  { id: 'pay-1', user_id: 'user-1', cohort_id: 'cohort-1', purchase_kind: 'ENTRY', membership_id: 'mem-1', stripe_checkout_session_id: 'cs_test_1', stripe_payment_intent_id: 'pi_test_1', stripe_subscription_id: null, amount_cents: 870000, coupon_id: null, status: 'APPROVED', payment_method: 'card', payment_provider: 'STRIPE',
+    infinitepay_order_nsu: null, infinitepay_invoice_slug: null, created_at: '2026-05-04T14:00:00Z', paid_at: '2026-05-04T14:01:00Z', userName: 'Ana Lima', cohortName: 'Mentoria Maio 2026', userEmail: 'ana@exemplo.com' },
+  { id: 'pay-2', user_id: 'user-2', cohort_id: 'cohort-1', purchase_kind: 'ENTRY', membership_id: 'mem-2', stripe_checkout_session_id: 'cs_test_2', stripe_payment_intent_id: 'pi_test_2', stripe_subscription_id: null, amount_cents: 870000, coupon_id: null, status: 'APPROVED', payment_method: 'card', payment_provider: 'STRIPE',
+    infinitepay_order_nsu: null, infinitepay_invoice_slug: null, created_at: '2026-05-04T15:00:00Z', paid_at: '2026-05-04T15:02:00Z', userName: 'Bruno Costa', cohortName: 'Mentoria Maio 2026', userEmail: 'bruno@exemplo.com' },
+  { id: 'pay-3', user_id: 'user-3', cohort_id: 'cohort-2', purchase_kind: 'ENTRY', membership_id: 'mem-3', stripe_checkout_session_id: 'cs_test_3', stripe_payment_intent_id: 'pi_test_3', stripe_subscription_id: null, amount_cents: 49900, coupon_id: null, status: 'APPROVED', payment_method: 'card', payment_provider: 'STRIPE',
+    infinitepay_order_nsu: null, infinitepay_invoice_slug: null, created_at: '2026-02-10T10:00:00Z', paid_at: '2026-02-10T10:01:00Z', userName: 'Carlos Dias', cohortName: 'Online Padrão', userEmail: 'carlos@exemplo.com' },
+  { id: 'pay-4', user_id: 'user-2', cohort_id: 'cohort-2', purchase_kind: 'EXTENSION', membership_id: 'mem-2', stripe_checkout_session_id: 'cs_test_4', stripe_payment_intent_id: 'pi_test_4', stripe_subscription_id: null, amount_cents: 29900, coupon_id: null, status: 'DECLINED', payment_method: 'card', payment_provider: 'STRIPE',
+    infinitepay_order_nsu: null, infinitepay_invoice_slug: null, created_at: '2026-04-28T09:00:00Z', paid_at: null, userName: 'Bruno Costa', cohortName: 'Online Padrão', userEmail: 'bruno@exemplo.com' },
 ]
 
 export const MOCK_COMMENTS_QUEUE: MockComment[] = [

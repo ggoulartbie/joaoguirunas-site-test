@@ -12,6 +12,31 @@ export type Database = {
   __InternalSupabase: {
     PostgrestVersion: "14.5"
   }
+  graphql_public: {
+    Tables: {
+      [_ in never]: never
+    }
+    Views: {
+      [_ in never]: never
+    }
+    Functions: {
+      graphql: {
+        Args: {
+          extensions?: Json
+          operationName?: string
+          query?: string
+          variables?: Json
+        }
+        Returns: Json
+      }
+    }
+    Enums: {
+      [_ in never]: never
+    }
+    CompositeTypes: {
+      [_ in never]: never
+    }
+  }
   public: {
     Tables: {
       certificates: {
@@ -228,6 +253,7 @@ export type Database = {
           has_public_page: boolean
           has_support: boolean
           id: string
+          infinitepay_handle: string | null
           is_purchasable: boolean
           max_installments_entry: number
           max_installments_extension: number
@@ -257,6 +283,7 @@ export type Database = {
           has_public_page?: boolean
           has_support?: boolean
           id?: string
+          infinitepay_handle?: string | null
           is_purchasable?: boolean
           max_installments_entry?: number
           max_installments_extension?: number
@@ -286,6 +313,7 @@ export type Database = {
           has_public_page?: boolean
           has_support?: boolean
           id?: string
+          infinitepay_handle?: string | null
           is_purchasable?: boolean
           max_installments_entry?: number
           max_installments_extension?: number
@@ -719,6 +747,7 @@ export type Database = {
           lesson_id: string | null
           meeting_url: string | null
           recording_url: string | null
+          reminder_1h_sent_at: string | null
           scheduled_at: string
           title: string
         }
@@ -731,6 +760,7 @@ export type Database = {
           lesson_id?: string | null
           meeting_url?: string | null
           recording_url?: string | null
+          reminder_1h_sent_at?: string | null
           scheduled_at: string
           title: string
         }
@@ -743,6 +773,7 @@ export type Database = {
           lesson_id?: string | null
           meeting_url?: string | null
           recording_url?: string | null
+          reminder_1h_sent_at?: string | null
           scheduled_at?: string
           title?: string
         }
@@ -897,82 +928,85 @@ export type Database = {
       }
       onboarding: {
         Row: {
-          id: string
-          created_at: string
-          updated_at: string
-          nome: string
-          profissao: string | null
-          empresa: string | null
-          segmento: string | null
           cidade: string | null
-          linkedin: string | null
-          obj_1: string | null
-          obj_2: string | null
-          obj_3: string | null
-          obj_4: string | null
+          created_at: string
           ctx_1: string | null
           ctx_2: string | null
           ctx_3: string | null
           ctx_4: string | null
+          empresa: string | null
+          id: string
+          linkedin: string | null
+          nome: string
+          obj_1: string | null
+          obj_2: string | null
+          obj_3: string | null
+          obj_4: string | null
+          pdf_path: string | null
+          planejamento: string | null
+          profissao: string | null
           proj_nome: string | null
           proj_problema: string | null
           proj_publico: string | null
-          proj_tools: string | null
           proj_resultado: string | null
-          planejamento: string | null
+          proj_tools: string | null
+          segmento: string | null
           status: string
+          updated_at: string
         }
         Insert: {
-          id?: string
-          created_at?: string
-          updated_at?: string
-          nome?: string
-          profissao?: string | null
-          empresa?: string | null
-          segmento?: string | null
           cidade?: string | null
-          linkedin?: string | null
-          obj_1?: string | null
-          obj_2?: string | null
-          obj_3?: string | null
-          obj_4?: string | null
+          created_at?: string
           ctx_1?: string | null
           ctx_2?: string | null
           ctx_3?: string | null
           ctx_4?: string | null
+          empresa?: string | null
+          id?: string
+          linkedin?: string | null
+          nome?: string
+          obj_1?: string | null
+          obj_2?: string | null
+          obj_3?: string | null
+          obj_4?: string | null
+          pdf_path?: string | null
+          planejamento?: string | null
+          profissao?: string | null
           proj_nome?: string | null
           proj_problema?: string | null
           proj_publico?: string | null
-          proj_tools?: string | null
           proj_resultado?: string | null
-          planejamento?: string | null
+          proj_tools?: string | null
+          segmento?: string | null
           status?: string
+          updated_at?: string
         }
         Update: {
-          id?: string
-          created_at?: string
-          updated_at?: string
-          nome?: string
-          profissao?: string | null
-          empresa?: string | null
-          segmento?: string | null
           cidade?: string | null
-          linkedin?: string | null
-          obj_1?: string | null
-          obj_2?: string | null
-          obj_3?: string | null
-          obj_4?: string | null
+          created_at?: string
           ctx_1?: string | null
           ctx_2?: string | null
           ctx_3?: string | null
           ctx_4?: string | null
+          empresa?: string | null
+          id?: string
+          linkedin?: string | null
+          nome?: string
+          obj_1?: string | null
+          obj_2?: string | null
+          obj_3?: string | null
+          obj_4?: string | null
+          pdf_path?: string | null
+          planejamento?: string | null
+          profissao?: string | null
           proj_nome?: string | null
           proj_problema?: string | null
           proj_publico?: string | null
-          proj_tools?: string | null
           proj_resultado?: string | null
-          planejamento?: string | null
+          proj_tools?: string | null
+          segmento?: string | null
           status?: string
+          updated_at?: string
         }
         Relationships: []
       }
@@ -1183,6 +1217,10 @@ export type Database = {
         Args: { p_lesson_id: string; p_user_id: string }
         Returns: boolean
       }
+      increment_filled_seats: {
+        Args: { p_cohort_id: string }
+        Returns: undefined
+      }
       is_admin: { Args: never; Returns: boolean }
     }
     Enums: {
@@ -1312,8 +1350,10 @@ export type CompositeTypes<
     : never
 
 export const Constants = {
+  graphql_public: {
+    Enums: {},
+  },
   public: {
     Enums: {},
   },
 } as const
-

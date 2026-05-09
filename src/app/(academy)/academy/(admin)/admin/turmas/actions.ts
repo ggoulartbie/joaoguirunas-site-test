@@ -47,6 +47,7 @@ const cohortSchema = z.object({
   allows_auto_renewal: z.boolean().default(false),
   stripe_price_entry_id: z.string().optional(),
   payment_provider: z.enum(['STRIPE', 'INFINITEPAY']).default('STRIPE'),
+  infinitepay_handle: z.string().optional(),
   // B7: course selections
   cohortCourses: z.array(cohortCourseSchema).default([]),
   // B6: cross extension rules
@@ -125,7 +126,7 @@ export async function createCohort(data: z.infer<typeof cohortSchema>) {
   const { data: cohort, error } = await supabaseAdmin
     .from('cohorts')
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    .insert({ ...insertData, payment_provider: parsed.data.payment_provider } as any)
+    .insert({ ...insertData, payment_provider: parsed.data.payment_provider, infinitepay_handle: parsed.data.infinitepay_handle ?? null } as any)
     .select('id')
     .single()
 
@@ -182,7 +183,7 @@ export async function updateCohort(cohortId: string, data: z.infer<typeof cohort
   const { error } = await supabaseAdmin
     .from('cohorts')
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    .update({ ...updateData, payment_provider: parsed.data.payment_provider } as any)
+    .update({ ...updateData, payment_provider: parsed.data.payment_provider, infinitepay_handle: parsed.data.infinitepay_handle ?? null } as any)
     .eq('id', cohortId)
 
   if (error) throw new Error(error.message)

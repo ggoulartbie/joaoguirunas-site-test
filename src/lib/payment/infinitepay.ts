@@ -32,11 +32,8 @@ interface PaymentCheckResponse {
   receipt_url?: string
 }
 
-function getHandle(): string {
-  return process.env.INFINITEPAY_HANDLE ?? 'growthsales'
-}
-
 export async function createCheckoutLink(params: {
+  handle: string
   orderNsu: string
   amountCents: number
   description: string
@@ -45,7 +42,7 @@ export async function createCheckoutLink(params: {
   customer?: { name?: string; email?: string }
 }): Promise<string> {
   const payload: CreateLinkPayload = {
-    handle: getHandle(),
+    handle: params.handle,
     items: [
       {
         quantity: 1,
@@ -76,12 +73,13 @@ export async function createCheckoutLink(params: {
 }
 
 export async function verifyPayment(params: {
+  handle: string
   orderNsu: string
   transactionNsu: string
   invoiceSlug: string
 }): Promise<PaymentCheckResponse> {
   const payload: PaymentCheckPayload = {
-    handle: getHandle(),
+    handle: params.handle,
     order_nsu: params.orderNsu,
     transaction_nsu: params.transactionNsu,
     slug: params.invoiceSlug,

@@ -295,6 +295,8 @@ export function CohortForm(props: CohortFormProps) {
   // Section 5 — Comercial
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [paymentProvider, setPaymentProvider] = useState<string>((initial as any)?.payment_provider ?? 'STRIPE')
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const [infinitepayHandle, setInfinitepayHandle] = useState<string>((initial as any)?.infinitepay_handle ?? '')
   const [isPurchasable, setIsPurchasable] = useState(initial?.is_purchasable ?? false)
   const [hasPublicPage, setHasPublicPage] = useState(initial?.has_public_page ?? false)
   const [entryPriceBRL, setEntryPriceBRL] = useState(
@@ -498,6 +500,7 @@ export function CohortForm(props: CohortFormProps) {
       allows_auto_renewal: allowsAutoRenewal,
       stripe_price_entry_id: stripePriceEntryId || undefined,
       payment_provider: paymentProvider as 'STRIPE' | 'INFINITEPAY',
+      infinitepay_handle: infinitepayHandle || undefined,
       cohortCourses: cohortCoursesPayload,
       crossExtensions: crossExtensionsPayload,
     }
@@ -976,9 +979,20 @@ export function CohortForm(props: CohortFormProps) {
                 options={PAYMENT_PROVIDER_OPTIONS}
               />
               {paymentProvider === 'INFINITEPAY' && (
-                <p className="mt-1 font-mono text-[10px] text-amber-400">
-                  Certifique-se de configurar INFINITEPAY_BEARER_TOKEN nas env vars
-                </p>
+                <div className="mt-3">
+                  <FieldLabel>Handle InfinitePay (InfiniteTag)</FieldLabel>
+                  <input
+                    type="text"
+                    value={infinitepayHandle}
+                    onChange={(e) => setInfinitepayHandle(e.target.value)}
+                    placeholder="growthsales"
+                    className="w-full bg-[var(--ink-2)] px-3 py-2 font-mono text-xs text-[var(--bone)] outline-none border border-[rgba(255,255,255,0.07)] focus:border-[var(--ember)]"
+                    style={{ borderRadius: 0 }}
+                  />
+                  <p className="mt-1 font-mono text-[10px] text-[var(--bone-mute)]">
+                    Sua InfiniteTag sem o $ (ex: growthsales)
+                  </p>
+                </div>
               )}
             </div>
           </div>

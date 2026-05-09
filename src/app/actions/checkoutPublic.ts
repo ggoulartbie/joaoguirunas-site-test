@@ -23,7 +23,7 @@ export async function createPublicCheckoutSession(cohortSlug: string, email?: st
 
   const { data: cohort } = await supabaseAdmin
     .from('cohorts')
-    .select('id, slug, name, is_purchasable, stripe_price_entry_id, entry_price_cents, access_duration_days, payment_provider')
+    .select('id, slug, name, is_purchasable, stripe_price_entry_id, entry_price_cents, access_duration_days, payment_provider, infinitepay_handle')
     .eq('slug', cohortSlug)
     .single()
 
@@ -87,10 +87,16 @@ export async function createPublicCheckoutSession(cohortSlug: string, email?: st
       return { error: 'Erro ao processar pagamento. Tente novamente.' }
     }
 
+    const handle = (cohort as { infinitepay_handle?: string | null }).infinitepay_handle
+    if (!handle) {
+      return { error: 'Handle InfinitePay não configurado para esta turma. Configure em Admin → Turmas.' }
+    }
+
     const { createCheckoutLink } = await import('@/lib/payment/infinitepay')
     let checkoutUrl: string
     try {
       checkoutUrl = await createCheckoutLink({
+        handle,
         orderNsu,
         amountCents: cohort.entry_price_cents,
         description: `Acesso ao curso — ${cohort.name}`,

@@ -68,23 +68,24 @@ async function processWebhook(params: {
     return
   }
 
-  // 2. Verify payment with InfinitePay API (confirmation before granting access)
-  const check = await verifyPayment({ orderNsu: order_nsu, transactionNsu: transaction_nsu, invoiceSlug: invoice_slug })
-
-  if (!check.paid) {
-    console.warn(`[infinitepay webhook] payment_check returned paid=false for order_nsu=${order_nsu}`)
-    return
-  }
-
-  // 3. Fetch cohort for access duration
+  // 2. Fetch cohort (needed for handle + access duration)
   const { data: cohort } = await supabaseAdmin
     .from('cohorts')
-    .select('id, name, access_duration_days, start_date')
+    .select('id, name, access_duration_days, start_date, infinitepay_handle')
     .eq('id', payment.cohort_id)
     .single()
 
   if (!cohort) {
     throw new Error(`Cohort ${payment.cohort_id} not found for InfinitePay order ${order_nsu}`)
+  }
+
+  // 3. Verify payment with InfinitePay API (confirmation before granting access)
+  const handle = (cohort as { infinitepay_handle?: string | null }).infinitepay_handle ?? 'growthsales'
+  const check = await verifyPayment({ handle, orderNsu: order_nsu, transactionNsu: transaction_nsu, invoiceSlug: invoice_slug })
+
+  if (!check.paid) {
+    console.warn(`[infinitepay webhook] payment_check returned paid=false for order_nsu=${order_nsu}`)
+    return
   }
 
   // 4. Calculate expires_at
