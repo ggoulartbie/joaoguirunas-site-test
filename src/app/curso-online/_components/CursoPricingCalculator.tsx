@@ -257,7 +257,7 @@ export function CursoPricingCalculator() {
               Calculadora de Custos
             </span>
           </div>
-          <h2 className="text-2xl font-bold text-white sm:text-3xl lg:text-4xl leading-tight tracking-tight" style={{ fontFamily: "'TASAOrbiter', var(--font-bb-display), sans-serif" }}>
+          <h2 className="text-2xl text-white sm:text-3xl lg:text-4xl leading-tight" style={{ fontFamily: 'var(--font-display-serif)', fontWeight: 400, letterSpacing: '-0.03em' }}>
             Compare o Custo Anual de uma Equipe Tradicional{' '}
             <span className="text-[var(--color-accent)]">vs Claude Code Agents</span>
           </h2>

@@ -290,7 +290,7 @@ export function CursoOnlineTimeline() {
           </div>
           <h2
             className="text-2xl sm:text-3xl lg:text-4xl font-bold text-white leading-tight tracking-tight"
-            style={{ fontFamily: "'TASAOrbiter', var(--font-bb-display), sans-serif" }}
+            style={{ fontFamily: 'var(--font-display-serif)', fontWeight: 400, letterSpacing: '-0.03em' }}
           >
             Do Zero ao Time Completo{' '}
             <span className="text-[var(--color-accent)]">no Seu Ritmo</span>

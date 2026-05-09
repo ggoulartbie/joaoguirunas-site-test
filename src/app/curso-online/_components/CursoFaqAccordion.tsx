@@ -12,7 +12,7 @@ const faqItems: FaqItem[] = [
   { q: 'Qual computador eu preciso?', a: 'Mac, Windows ou Linux com no mínimo 8GB de RAM (recomendamos 16GB). Você vai instalar softwares, então precisa ter permissões de administrador.' },
   { q: 'Preciso de software pago?', a: 'Sim, você precisa de uma assinatura ativa do Claude Pro (US$ 20/mês). As outras ferramentas usadas no curso têm planos gratuitos suficientes para o aprendizado.' },
   { q: 'As aulas são ao vivo?', a: 'Não. Todo o conteúdo é gravado — você assiste no seu próprio ritmo, pause, retome e reassista quantas vezes quiser durante o período de acesso.' },
-  { q: 'Por quanto tempo tenho acesso?', a: 'O acesso é por 12 meses a partir da data de compra. Todo o conteúdo e os materiais ficam disponíveis nesse período.' },
+  { q: 'Por quanto tempo tenho acesso?', a: 'O acesso é por 6 meses a partir da data de compra. Todo o conteúdo e os materiais ficam disponíveis nesse período.' },
   { q: 'Vou conseguir criar minha própria squad do zero?', a: 'Sim. Esse é o objetivo central do curso. Ao concluir os módulos, você terá autonomia para criar, configurar e orquestrar agentes para qualquer necessidade.' },
   { q: 'Posso usar os agentes comercialmente?', a: 'Sim, 100%. Tudo que você construir é seu para usar como quiser — em projetos comerciais, para clientes ou para sua empresa.' },
   { q: 'Qual a diferença entre o Curso Online e a Mentoria?', a: 'O Curso Online é 100% assíncrono: aulas gravadas no seu ritmo, sem horário fixo. A Mentoria é um programa intensivo com encontros ao vivo, turmas de até 12 pessoas e suporte direto dos facilitadores durante 4 semanas.' },
