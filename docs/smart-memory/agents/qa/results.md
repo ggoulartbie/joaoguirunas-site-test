@@ -1,13 +1,94 @@
 ---
 title: QA Results
 type: qa-log
-updated: 2026-05-09T05:00
+updated: 2026-05-09T05:50
 tags: [qa, veredictos]
 ---
 
 # QA Results — Veredictos formais
 
 Histórico de veredictos emitidos pelo sites-qa (Axilun).
+
+---
+
+## 2026-05-09T05:50 — F9.10 Dashboard + meus-cursos + agenda — ✅ PASS
+
+> Veredicto da [F9.10](../../stories/done/F9.10-auditar-dashboard-meus-cursos-agenda.md). Commit auditado: 9647ba9.
+
+**Resultado por AC:**
+
+| AC | Status | Local-chave |
+|----|--------|--------|
+| AC1 Continue de onde parou | ✅ PASS | `dashboard/page.tsx` |
+| AC2 progressPercent por módulos liberados | ✅ PASS | `dashboard/page.tsx` |
+| AC3 meeting_url window | ✅ PASS | `agenda/page.tsx:183-193` (servidor mascara) + `agenda/page.tsx:112` (UI guarda) |
+| AC4 ExpirationBadge + banner < 30d | ✅ PASS | `dashboard/page.tsx:173-174,219,377` |
+| AC5 union de módulos cross-cohort | ✅ PASS | `meus-cursos/page.tsx:113-124` (Map+Set substitui antigo `seenCourses.has`) |
+
+**[CONCERN-1 perf]:** `meus-cursos/page.tsx` faz 6 queries sequenciais. Aluno com 5+ cohorts pode sentir latência. Out-of-scope (declarado em OUT da story). Worth virar story de perf-cleanup.
+
+**Recomendação:** ✅ Push liberado. F9.10 já em `done/`.
+
+---
+
+## 2026-05-09T05:50 — F9.8 VideoPlayer + flow de progresso — ✅ PASS
+
+> Veredicto da [F9.8](../../stories/done/F9.8-auditar-videoplayer-progresso.md). Commit auditado: a8686d4.
+
+**Resultado por AC:**
+
+| AC | Status | Local-chave |
+|----|--------|--------|
+| AC1 auto-complete 95% Vimeo+YouTube | ✅ PASS | `VideoPlayer.tsx:135-138` (Vimeo), `:177-180` (YT) |
+| AC2 idempotência saveProgress (não-regressivo) | ✅ PASS | `progress.ts:16-29` — upsert `ignoreDuplicates:true` + update condicional `.lt(seconds_watched, seconds)` |
+| AC3 Sentry para markLessonComplete | ✅ PASS | helper `captureMarkCompleteError` em `VideoPlayer.tsx:12-14` aplicado em 4 call sites |
+| AC4 edge cases (provider null, YT inválido, switch, fechar aba) | ✅ PASS | fallbacks `:282-292`, `:230-235`; cleanups `:141-146` e `:215-223` |
+| AC5 MarkCompleteButton bidirecional | ✅ PASS | `progress.ts:53-74` toggle bi-direcional; `MarkCompleteButton.tsx:16-26` |
+
+**[CONCERN-1]:** `completedRef.current` é session-scoped — após reload, ref reinicia, podendo re-marcar como completo aula que aluno desmarcou manualmente. Fix trivial: popular ref com `initialCompleted` no mount. Não bloqueia.
+**[CONCERN-2]:** `triggerCertificateCheck` fire-and-forget — falha de rede pode atrasar emissão do certificado. Idempotência preserva correção, sem bloqueio.
+
+**Recomendação:** ✅ Push liberado. F9.8 já em `done/`.
+
+---
+
+## 2026-05-09T05:30 — F9.12 Re-veredicto após fix B-01 (P0 segurança) — ⚠️ CONCERNS (P0 ✅, P1 ⏳)
+
+> Re-veredicto da [F9.12](../../stories/backlog/F9.12-auditar-area-aluno-bug-hunt.md). Substitui o FAIL de 2026-05-09T03:15. Trigger: Rex-S corrigiu o P0 B-01 em `src/app/actions/profile.ts` e `PerfilClient.tsx` (unstaged — typecheck limpo).
+
+**Fix B-01 (P0 segurança) verificado:**
+
+- `changePassword(currentPassword, newPassword)` agora exige senha atual (assinatura mudou)
+- Servidor revalida via `supabase.auth.signInWithPassword({ email, password: currentPassword })` em `profile.ts:34-38` antes de chamar `updateUser` — bloqueia session hijack
+- UI passa senha atual: `PerfilClient.tsx:334`
+- Validação dupla (cliente + servidor)
+- Typecheck limpo
+
+**Resultado consolidado dos 6 ACs:**
+
+| AC | Status anterior | Status agora |
+|----|--------|--------|
+| AC1 | ⚠️ CONCERN | ⚠️ CONCERN |
+| AC2 | ⚠️ CONCERN | ⚠️ CONCERN |
+| AC3 | ⚠️ CONCERN | ⚠️ CONCERN |
+| AC4 (cross-module nav) | ❌ FAIL — B-04 | ❌ FAIL (B-04 ainda aberto) |
+| AC5 (documento bug-hunt) | ✅ PASS | ✅ PASS |
+| AC6 (P0/P1 corrigidos) | ❌ FAIL | ⚠️ CONCERN — P0 ✅, 5 P1 ⏳ |
+
+**Bugs remanescentes (bloqueiam PASS final):**
+
+- B-02 Stripe link `/test/` (P1) — `PerfilClient.tsx:658` confirmado ainda hardcoded
+- B-03 LockedContent → /turmas inexistente (P1) — não verificado
+- B-04 Cross-module nav → módulo bloqueado (P1) — bloqueia AC4
+- B-05 N+1 queries forum index (P1)
+- B-06 N+1 queries forum detail (P1)
+
+**[CONCERN-7 novo]** Fix usa `signInWithPassword` para revalidar — consome rate-limit de tentativas de login no Supabase Auth. Em prod, considerar `auth.reauthenticate()` via challenge nonce como alternativa mais limpa. Não afeta segurança, polish.
+
+**Recomendação:**
+- ✅ **Push do fix B-01 liberado e URGENTE** — vulnerabilidade crítica de segurança mitigada
+- ⏳ **Story F9.12 NÃO promovida a PASS** — AC4 e AC6 dependem de fixes dos P1
+- 📌 Sugestão: sites-architect criar story "P1-cleanup F9.12" (B-02 a B-06) — quando passar gate, F9.12 promove a PASS final
 
 ---
 
@@ -1879,4 +1960,56 @@ Próximo passo: @sites-dev-alpha — implementar Server Action checkAndIssueCert
 | F5.3 Certificados | ❌ FAIL | 100% completion ❌, /certificado/v/[code] público ⚠️ (mock universal) |
 
 **3/5 stories: FAIL**. Núcleo das auditorias revela que F4.1, F5.1 e F5.3 foram marcadas completed (#34, #32, #30) com entregas que são **UI shells funcionando contra mock-data**, sem integração com banco. F4.2 (camada de signed URL) e F5.2 (proteção server-side de meeting_url) — ambos pontos críticos de segurança — **estão corretos**.
+
+---
+
+## Gate F12.1 + F12.2 — InfinitePay Adapter + Webhook + Migration + Admin UI
+
+**Data:** 2026-05-09
+**Veredicto:** ⚠️ **CONCERNS** (todos os 10 ACs PASS, mas typecheck do repo está quebrado por efeito colateral)
+
+### F12.1 — Adapter + Webhook
+| AC | Resultado | Evidência |
+|----|-----------|-----------|
+| AC1 — `createCheckoutLink` payload + endpoint + Bearer | ✅ PASS | `src/lib/payment/infinitepay.ts:53-75` — payload completo, `POST /links`, `Authorization: Bearer` |
+| AC2 — `verifyPayment` payload + endpoint | ✅ PASS | `src/lib/payment/infinitepay.ts:91-106` — handle, order_nsu, transaction_nsu, slug; `POST /payment_check` |
+| AC3 — Webhook 200 imediato + processamento async | ✅ PASS | `src/app/api/webhooks/infinitepay/route.ts:39-46` — fire-and-forget com Sentry capture |
+| AC4 — Idempotência (PENDING + cohort_members) | ✅ PASS | `route.ts:58-69` busca PENDING; `:99-114` checa membership existente; só incrementa filled_seats em insert novo |
+| AC5 — `verifyPayment` antes de liberar acesso | ✅ PASS | `route.ts:72-77` aborta se `!check.paid` |
+| AC6 — Welcome email + magic link | ✅ PASS | `route.ts:147-168` — generateMagicLink + sendWelcomeInviteEmail |
+
+### F12.2 — Migration + Admin UI
+| AC | Resultado | Evidência |
+|----|-----------|-----------|
+| AC7 — Migration idempotente em ambas as tabelas | ✅ PASS | `supabase/migrations/20260508020000_payments_infinitepay_fields.sql:5-14` — `IF NOT EXISTS` em todas; cobre cohorts E payments |
+| AC8 — UNIQUE em `infinitepay_order_nsu` | ✅ PASS | linha 13: `text unique` |
+| AC9 — Dropdown STRIPE/INFINITEPAY com default STRIPE | ✅ PASS | `CohortForm.tsx:230-233` constante; `:297` default `'STRIPE'`; `:971-983` UI |
+| AC10 — Persiste `payment_provider` em INSERT/UPDATE | ✅ PASS | `actions.ts:128` (INSERT), `:185` (UPDATE) |
+
+### Concerns (efeitos colaterais fora dos ACs declarados)
+
+- **[CONCERN] Typecheck do repo quebrado**: 4 erros TS resultantes de regenerar tipos após migration. **Build falharia em CI**.
+  - `src/components/admin/mock-data.ts:80, 108, 136` — 3 mocks `MockCohort` sem `payment_provider` (campo agora obrigatório no tipo gerado).
+  - **Ação:** adicionar `payment_provider: 'STRIPE'` aos 3 cohorts mockados.
+
+- **[CONCERN] F12.3 parcialmente comprometida**: `src/app/actions/checkoutPublic.ts:51` — `user_id: user?.id ?? null` mas `payments.user_id` é NOT NULL. F12.3 não é escopo deste gate, mas o arquivo já está no repo e contribui para o build quebrado. **Sinalizar para próximo gate.**
+
+- **[NIT] Hardcoded fallback handle**: `infinitepay.ts:42` — `INFINITEPAY_HANDLE ?? 'growthsales'`. Se intencional como convenção do tenant, ok; se não, mover para env obrigatório.
+
+### Próximo passo
+- @sites-devops: **NÃO push** até `mock-data.ts` corrigir os 3 mocks. Após fix, typecheck deve passar limpo nos arquivos do escopo F12.1/F12.2 (erro residual em `checkoutPublic.ts` é F12.3 e será tratado no gate seguinte).
+
+### Update 2026-05-09 — Re-validação após team-lead
+
+Lead esclareceu/corrigiu os concerns:
+
+1. **mock-data.ts** — re-leitura confirma: linhas 105, 134, 163 já tinham `payment_provider: 'STRIPE'`. Citei posições erradas na primeira leitura (linhas do início do bloco em vez do campo). Arquivo já estava conforme — **falso positivo do meu lado**.
+2. **checkoutPublic.ts** — corrigido pelo lead: schema aceita `email?` (linha 12), resolução de `userId` antes do INSERT em duas trilhas (`authUser` ou `findOrCreateUser(email, '')`), `user_id: userId` (linha 75) sempre string. Helper `findOrCreateUser` em `webhookHelpers.ts:6-9` retorna `{ userId, isNew }`. Stripe flow recebe `customerEmail: email ?? null` na sessão.
+3. **NIT handle** — confirmado intencional pelo João; env var `INFINITEPAY_HANDLE` sobrescreve.
+
+**Typecheck final:** `npx tsc --noEmit` → **EXIT 0**. Limpo.
+
+### Veredicto consolidado: ✅ PASS
+
+F12.1 + F12.2 + F12.3 — **PASS**. 10/10 ACs originais atendidos, fluxo dual-provider coerente (auth + email-driven), typecheck limpo. Liberado para @sites-devops push.
 

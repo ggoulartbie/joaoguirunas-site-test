@@ -187,9 +187,9 @@ async function replayEvent(event: Stripe.Event) {
         .order('created_at', { ascending: false })
         .limit(1)
         .maybeSingle()
-      if (!existingPayment) return
+      if (!existingPayment || !existingPayment.user_id) return
 
-      const { user_id, cohort_id, membership_id } = existingPayment
+      const { user_id, cohort_id, membership_id } = existingPayment as typeof existingPayment & { user_id: string }
       const { data: cohort } = await supabaseAdmin
         .from('cohorts')
         .select('name, extension_duration_days, access_duration_days')
@@ -269,9 +269,11 @@ async function replayEvent(event: Stripe.Event) {
         .eq('id', existingPayment.cohort_id)
         .single()
 
-      const userInfo = await getUserEmailAndName(existingPayment.user_id)
-      if (userInfo && cohort?.name) {
-        await sendPaymentFailedEmail(userInfo.email, userInfo.name, cohort.name).catch(console.error)
+      if (existingPayment.user_id) {
+        const userInfo = await getUserEmailAndName(existingPayment.user_id)
+        if (userInfo && cohort?.name) {
+          await sendPaymentFailedEmail(userInfo.email, userInfo.name, cohort.name).catch(console.error)
+        }
       }
       break
     }
@@ -383,7 +385,7 @@ export async function refundPayment(paymentId: string) {
     .update({ status: 'REFUNDED' })
     .eq('id', paymentId)
 
-  if (payment.cohort_id) {
+  if (payment.cohort_id && payment.user_id) {
     await supabaseAdmin
       .from('cohort_members')
       .update({ status: 'REMOVED' })

@@ -177,6 +177,7 @@ Plataforma multi-curso com cohorts como unidade central. Decisões consolidadas 
 | [[backlog/F9.15-auditar-apis-publicas-jobs\|F9.15]] | Auditar APIs públicas e jobs (webhooks, crons, certificado) | M | validated | sites-dev-beta |
 | [[backlog/F9.16-auditar-components-student\|F9.16]] | Auditar components student críticos (VideoPlayer, Materials, Comments) | M | validated | sites-dev-alpha |
 | [[backlog/F9.17-payments-unique-stripe-session\|F9.17]] | UNIQUE constraint em payments(stripe_checkout_session_id) + ON CONFLICT no webhook | S | validated | sites-data + sites-dev-beta |
+| [[backlog/F9.18-p1-cleanup-area-aluno\|F9.18]] | P1-cleanup F9.12 — bugs B-02 a B-06 (Stripe link, /turmas link, cross-module nav, N+1 fórum) | M | validated | sites-dev-alpha + sites-dev-beta |
 
 Objetivo: refinar a página /curso-online (espelhando /mentoria sem elementos presenciais/ao vivo/bônus) e endurecer a área administrativa antes do lançamento. Stories F9.3–F9.5 podem rodar em paralelo. F9.1 e F9.2 são independentes mas relacionadas (F9.2 garante que o CTA de F9.1 funciona). F9.6 completa o CRUD de live_sessions no admin (faltam UPDATE, description, recording_url, UX).
 
@@ -185,6 +186,22 @@ Objetivo: refinar a página /curso-online (espelhando /mentoria sem elementos pr
 **Auditoria de cobertura ampla (F9.12–F9.16)**: stories complementares cobrindo segurança/funcionalidade transversal. F9.4 cobriu admin pages, F9.5 cobriu APIs admin, F9.2 cobriu checkout. F9.12 estende o bug hunt para o lado student. F9.13 audita Server Actions e RLS. F9.14 audita os 4 fluxos auth. F9.15 audita webhooks/crons/certificado público. F9.16 audita components críticos (XSS, signed URL TTL, video_id leak). Podem rodar em paralelo entre si — sem dependências. Foco: auditoria + fixes P0/P1, sem features novas. Reservadas para o próximo ciclo.
 
 **F9.17 — UNIQUE constraint em payments**: gap identificado por Rex-S durante a auditoria. Migration + ON CONFLICT no webhook. Idempotência ao nível DB.
+
+**F9.18 — P1-cleanup F9.12**: 5 bugs P1 abertos pelo sites-qa durante o bug-hunt da área do aluno (F9.12). B-02 (Stripe `/test/` em prod) e B-03 (link `/turmas/` inexistente) são fixes pequenos de UI. B-04 (cross-module nav sem gate `has_access`) bloqueia AC4 da F9.12. B-05/B-06 (N+1 no fórum) são performance — index e detail. Coordena sites-dev-alpha (UI/nav) e sites-dev-beta (queries).
+
+## Fase F12 — InfinitePay (segundo provider de pagamento)
+
+| Story | Título | Complexidade | Status | Agente |
+|---|---|---|---|---|
+| [[backlog/F12.1-infinitepay-adapter-webhook\|F12.1]] | InfinitePayAdapter + webhook handler (createCheckoutLink, payment_check, idempotência via order_nsu) | M | validated | sites-dev-beta |
+| [[backlog/F12.2-infinitepay-migration-admin-ui-dual-provider\|F12.2]] | Migration cohorts.payment_provider + admin UI dual-provider (CohortForm) | M | validated | sites-data + sites-dev-alpha |
+| [[backlog/F12.3-checkout-router-por-provider\|F12.3]] | Router de checkout por provider (Stripe vs InfinitePay) em checkoutPublic + página de sucesso | S | validated | sites-dev-beta |
+
+**Objetivo:** habilitar InfinitePay como segundo provider de pagamento, configurável por cohort. Default permanece Stripe (backwards-compatible). InfinitePay não tem assinatura HMAC — segurança via `payment_check` server-to-server. Idempotência via `order_nsu` (UUID gerado server-side, igual a `payments.id`).
+
+**Dependências:** F12.1 (adapter + webhook + coluna `infinitepay_order_nsu` em payments) deve completar antes ou em paralelo a F12.3 (router). F12.2 (migration `payment_provider` + UI) precisa estar antes de F12.3 (que lê a coluna). F12.1 e F12.2 podem rodar em paralelo. F12.3 depende das duas.
+
+**Numeração:** epic F12 escolhido por ser o próximo livre (F1–F11 já em uso, F10/F11 em done).
 
 ## Notas de orquestração
 

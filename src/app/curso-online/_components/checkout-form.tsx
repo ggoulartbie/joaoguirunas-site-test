@@ -16,7 +16,8 @@ type ActionState = { error: string } | null
 
 async function checkoutAction(_prev: ActionState, formData: FormData): Promise<ActionState> {
   const slug = formData.get('cohortSlug') as string
-  return await createPublicCheckoutSession(slug)
+  const email = (formData.get('email') as string | null) ?? undefined
+  return await createPublicCheckoutSession(slug, email)
 }
 
 interface CheckoutFormProps {
@@ -28,9 +29,24 @@ export function CheckoutForm({ cohortSlug, label = 'Comprar agora — R$ 797' }:
   const [state, formAction, isPending] = useActionState(checkoutAction, null)
 
   return (
-    <div>
-      <form action={formAction} className="w-full sm:w-auto">
+    <div className="w-full sm:w-auto">
+      <form action={formAction} className="flex flex-col gap-3 w-full sm:w-auto">
         <input type="hidden" name="cohortSlug" value={cohortSlug} />
+        <input
+          type="email"
+          name="email"
+          required
+          placeholder="seu@email.com"
+          className="w-full px-4 py-3 text-sm outline-none"
+          style={{
+            background: 'rgba(255,255,255,0.06)',
+            border: '1px solid rgba(255,255,255,0.15)',
+            color: '#fff',
+            fontFamily: 'var(--font-mono)',
+            fontSize: '13px',
+            borderRadius: 0,
+          }}
+        />
         <button
           type="submit"
           disabled={isPending}

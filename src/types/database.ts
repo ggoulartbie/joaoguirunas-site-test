@@ -232,6 +232,7 @@ export type Database = {
           max_installments_entry: number
           max_installments_extension: number
           name: string
+          payment_provider: string
           slug: string
           start_date: string | null
           status: string
@@ -260,6 +261,7 @@ export type Database = {
           max_installments_entry?: number
           max_installments_extension?: number
           name: string
+          payment_provider?: string
           slug: string
           start_date?: string | null
           status?: string
@@ -288,6 +290,7 @@ export type Database = {
           max_installments_entry?: number
           max_installments_extension?: number
           name?: string
+          payment_provider?: string
           slug?: string
           start_date?: string | null
           status?: string
@@ -980,15 +983,18 @@ export type Database = {
           coupon_id: string | null
           created_at: string
           id: string
+          infinitepay_invoice_slug: string | null
+          infinitepay_order_nsu: string | null
           membership_id: string | null
           paid_at: string | null
           payment_method: string | null
+          payment_provider: string
           purchase_kind: string
           status: string
           stripe_checkout_session_id: string | null
           stripe_payment_intent_id: string | null
           stripe_subscription_id: string | null
-          user_id: string
+          user_id: string | null
         }
         Insert: {
           amount_cents: number
@@ -996,15 +1002,18 @@ export type Database = {
           coupon_id?: string | null
           created_at?: string
           id?: string
+          infinitepay_invoice_slug?: string | null
+          infinitepay_order_nsu?: string | null
           membership_id?: string | null
           paid_at?: string | null
           payment_method?: string | null
+          payment_provider?: string
           purchase_kind: string
           status?: string
           stripe_checkout_session_id?: string | null
           stripe_payment_intent_id?: string | null
           stripe_subscription_id?: string | null
-          user_id: string
+          user_id?: string | null
         }
         Update: {
           amount_cents?: number
@@ -1012,15 +1021,18 @@ export type Database = {
           coupon_id?: string | null
           created_at?: string
           id?: string
+          infinitepay_invoice_slug?: string | null
+          infinitepay_order_nsu?: string | null
           membership_id?: string | null
           paid_at?: string | null
           payment_method?: string | null
+          payment_provider?: string
           purchase_kind?: string
           status?: string
           stripe_checkout_session_id?: string | null
           stripe_payment_intent_id?: string | null
           stripe_subscription_id?: string | null
-          user_id?: string
+          user_id?: string | null
         }
         Relationships: [
           {

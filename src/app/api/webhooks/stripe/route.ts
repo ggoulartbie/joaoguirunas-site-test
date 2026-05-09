@@ -3,6 +3,7 @@ import Stripe from 'stripe'
 import * as Sentry from '@sentry/nextjs'
 import { stripe } from '@/lib/payment/stripe'
 import { supabaseAdmin } from '@/lib/supabase/admin'
+import { generateMagicLink } from '@/lib/payment/webhookHelpers'
 import {
   sendPaymentApprovedEmail,
   sendMembershipExtendedEmail,
@@ -145,26 +146,6 @@ async function findOrCreateUser(
   }
 
   throw new Error(`User ${email} reported as existing but could not be located`)
-}
-
-// Generates a Supabase magic link for the user.
-async function generateMagicLink(email: string): Promise<string | null> {
-  const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? 'http://localhost:3000'
-
-  const { data, error } = await supabaseAdmin.auth.admin.generateLink({
-    type: 'magiclink',
-    email,
-    options: {
-      redirectTo: `${appUrl}/academy/meus-cursos`,
-    },
-  })
-
-  if (error || !data.properties?.action_link) {
-    console.error('Failed to generate magic link:', error?.message)
-    return null
-  }
-
-  return data.properties.action_link
 }
 
 async function handleCheckoutCompleted(session: Stripe.Checkout.Session) {
@@ -435,9 +416,9 @@ async function handleInvoicePaid(invoice: Stripe.Invoice) {
     .limit(1)
     .maybeSingle()
 
-  if (!existingPayment) return
+  if (!existingPayment || !existingPayment.user_id) return
 
-  const { user_id, cohort_id, membership_id } = existingPayment
+  const { user_id, cohort_id, membership_id } = existingPayment as typeof existingPayment & { user_id: string }
 
   const [{ data: cohort }] = await Promise.all([
     supabaseAdmin
@@ -521,9 +502,11 @@ async function handleInvoicePaymentFailed(invoice: Stripe.Invoice) {
     .eq('id', existingPayment.cohort_id)
     .single()
 
-  const userInfo = await getUserEmailAndName(existingPayment.user_id)
-  if (userInfo && cohort?.name) {
-    await sendPaymentFailedEmail(userInfo.email, userInfo.name, cohort.name).catch(console.error)
+  if (existingPayment.user_id) {
+    const userInfo = await getUserEmailAndName(existingPayment.user_id)
+    if (userInfo && cohort?.name) {
+      await sendPaymentFailedEmail(userInfo.email, userInfo.name, cohort.name).catch(console.error)
+    }
   }
 }
 

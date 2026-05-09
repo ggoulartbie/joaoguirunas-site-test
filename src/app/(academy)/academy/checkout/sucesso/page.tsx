@@ -3,20 +3,20 @@ import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
 
 interface Props {
-  searchParams: Promise<{ session_id?: string }>
+  searchParams: Promise<{ session_id?: string; order_nsu?: string }>
 }
 
 export default async function CheckoutSucessoPage({ searchParams }: Props) {
-  const { session_id } = await searchParams
+  const { session_id, order_nsu } = await searchParams
 
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
 
   // Public checkout: no active session yet — webhook creates the account asynchronously.
-  // Show a confirmation page directing user to check email instead of redirecting to login.
-  const isPublicCheckout = !user && !!session_id
+  // Covers both Stripe (session_id) and InfinitePay (order_nsu) flows.
+  const isPublicCheckout = !user && !!(session_id || order_nsu)
 
-  if (!user && !session_id) {
+  if (!user && !session_id && !order_nsu) {
     redirect('/academy/login')
   }
 

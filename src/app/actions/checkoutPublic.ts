@@ -3,23 +3,27 @@
 import { redirect } from 'next/navigation'
 import { z } from 'zod'
 import { supabaseAdmin } from '@/lib/supabase/admin'
+import { createClient } from '@/lib/supabase/server'
 import { StripeAdapter } from '@/lib/payment/stripe'
+import { findOrCreateUser } from '@/lib/payment/webhookHelpers'
 
 const schema = z.object({
   cohortSlug: z.string().min(1),
+  email: z.string().email().optional(),
 })
 
 // Checkout público: não requer autenticação.
-// O webhook cria a conta Supabase automaticamente após o pagamento.
-export async function createPublicCheckoutSession(cohortSlug: string) {
-  const parsed = schema.safeParse({ cohortSlug })
+// Para InfinitePay, o email é obrigatório para criar/encontrar o user antes do redirect.
+// Para Stripe, o webhook cria a conta após o pagamento via metadata da sessão.
+export async function createPublicCheckoutSession(cohortSlug: string, email?: string) {
+  const parsed = schema.safeParse({ cohortSlug, email })
   if (!parsed.success) {
     return { error: 'Dados inválidos.' }
   }
 
   const { data: cohort } = await supabaseAdmin
     .from('cohorts')
-    .select('id, slug, name, is_purchasable, stripe_price_entry_id')
+    .select('id, slug, name, is_purchasable, stripe_price_entry_id, entry_price_cents, access_duration_days, payment_provider')
     .eq('slug', cohortSlug)
     .single()
 
@@ -31,11 +35,81 @@ export async function createPublicCheckoutSession(cohortSlug: string) {
     return { error: 'Esta turma não está disponível para compra.' }
   }
 
+  const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? 'https://joaoguirunas.com'
+
+  if (cohort.payment_provider === 'INFINITEPAY') {
+    if (!cohort.entry_price_cents) {
+      return { error: 'Preço não configurado para esta turma.' }
+    }
+
+    // Resolve user_id — required before creating PENDING payment (payments.user_id NOT NULL)
+    const supabase = await createClient()
+    const { data: { user: authUser } } = await supabase.auth.getUser()
+
+    let userId: string
+    let customerEmail: string
+
+    if (authUser) {
+      userId = authUser.id
+      customerEmail = authUser.email ?? email ?? ''
+    } else {
+      if (!email) {
+        return { error: 'Informe seu email para continuar.' }
+      }
+      try {
+        const { userId: resolvedId } = await findOrCreateUser(email, '')
+        userId = resolvedId
+        customerEmail = email
+      } catch (err) {
+        console.error('[checkoutPublic] findOrCreateUser error:', err)
+        return { error: 'Erro ao processar sua conta. Tente novamente.' }
+      }
+    }
+
+    const orderNsu = crypto.randomUUID()
+
+    const { data: payment, error: paymentError } = await supabaseAdmin
+      .from('payments')
+      .insert({
+        cohort_id: cohort.id,
+        user_id: userId,
+        amount_cents: cohort.entry_price_cents,
+        status: 'PENDING',
+        payment_provider: 'INFINITEPAY',
+        purchase_kind: 'ENTRY',
+        infinitepay_order_nsu: orderNsu,
+      })
+      .select('id')
+      .single()
+
+    if (paymentError || !payment) {
+      console.error('[checkoutPublic] InfinitePay PENDING insert error:', paymentError)
+      return { error: 'Erro ao processar pagamento. Tente novamente.' }
+    }
+
+    const { createCheckoutLink } = await import('@/lib/payment/infinitepay')
+    let checkoutUrl: string
+    try {
+      checkoutUrl = await createCheckoutLink({
+        orderNsu,
+        amountCents: cohort.entry_price_cents,
+        description: `Acesso ao curso — ${cohort.name}`,
+        redirectUrl: `${appUrl}/academy/checkout/sucesso`,
+        webhookUrl: `${appUrl}/api/webhooks/infinitepay`,
+        customer: customerEmail ? { email: customerEmail } : undefined,
+      })
+    } catch (err) {
+      console.error('[checkoutPublic] InfinitePay createLink error:', err)
+      return { error: 'Erro ao processar pagamento. Tente novamente.' }
+    }
+
+    redirect(checkoutUrl)
+  }
+
+  // Stripe flow
   if (!cohort.stripe_price_entry_id) {
     return { error: 'Preço não configurado para esta turma.' }
   }
-
-  const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? 'http://localhost:3000'
 
   const adapter = new StripeAdapter()
   let session: { id: string; url: string }
@@ -43,7 +117,7 @@ export async function createPublicCheckoutSession(cohortSlug: string) {
     session = await adapter.createCheckoutSession({
       priceId: cohort.stripe_price_entry_id,
       customerId: null,
-      customerEmail: null,
+      customerEmail: email ?? null,
       cohortId: cohort.id,
       cohortSlug: cohort.slug,
       purchaseKind: 'ENTRY',
