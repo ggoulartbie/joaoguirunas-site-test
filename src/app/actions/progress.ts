@@ -10,20 +10,15 @@ export async function saveProgress(lessonId: string, seconds: number): Promise<v
   const user = await requireUser()
   const supabase = await createClient()
 
+  // Insert row if not exists, then advance seconds only if the new value is greater.
+  // Two-step: upsert with ignoreDuplicates=true (no-op on conflict) to ensure row exists,
+  // then conditional update. This prevents regression when two tabs are open simultaneously.
   await supabase
     .from('lesson_progress')
     .upsert(
-      {
-        user_id: user.id,
-        lesson_id: lessonId,
-        seconds_watched: seconds,
-      },
-      {
-        onConflict: 'user_id,lesson_id',
-        ignoreDuplicates: false,
-      }
+      { user_id: user.id, lesson_id: lessonId, seconds_watched: seconds },
+      { onConflict: 'user_id,lesson_id', ignoreDuplicates: true }
     )
-    .select()
 
   // Only advance — never regress seconds (e.g. if two tabs are open)
   await supabase
