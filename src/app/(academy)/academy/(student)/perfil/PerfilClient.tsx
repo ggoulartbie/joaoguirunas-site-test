@@ -655,7 +655,11 @@ function PaymentsSection({ payments }: { payments: Payment[] }) {
                 <td className="px-4 py-3">
                   {p.stripeCheckoutSessionId && (
                     <a
-                      href="https://dashboard.stripe.com/test/payments"
+                      href={
+                        process.env.NODE_ENV === 'production'
+                          ? 'https://dashboard.stripe.com/payments'
+                          : 'https://dashboard.stripe.com/test/payments'
+                      }
                       target="_blank"
                       rel="noopener noreferrer"
                       className="text-[var(--bone-mute)] transition-colors hover:text-[var(--bone-dim)]"

@@ -87,20 +87,46 @@ export default async function AulaPage({ params }: Props) {
 
   const hasAccess = access === true
 
-  // --- Cross-module navigation: fetch ALL lessons in course ---
+  // --- Resolve accessible module IDs for this user ---
+  const module = Array.isArray(lesson.modules) ? lesson.modules[0] : lesson.modules
+  const course = module && (Array.isArray(module.courses) ? module.courses[0] : module.courses)
+  const courseId = module?.course_id ?? ''
+
+  const { data: memberRows } = await supabase
+    .from('cohort_members')
+    .select('cohort_id')
+    .eq('user_id', user.id)
+    .eq('status', 'ACTIVE')
+
+  const cohortIds = (memberRows ?? []).map((m) => m.cohort_id)
+
+  const { data: cohortCoursesRows } = cohortIds.length > 0
+    ? await supabaseAdmin
+        .from('cohort_courses')
+        .select('included_module_ids')
+        .in('cohort_id', cohortIds)
+        .eq('course_id', courseId)
+    : { data: [] }
+
+  const accessibleModuleIds = new Set(
+    (cohortCoursesRows ?? []).flatMap((cc) => cc.included_module_ids ?? [])
+  )
+
+  // --- Cross-module navigation: fetch ALL lessons in course, filter to accessible modules ---
   const { data: allModulesRaw } = await supabaseAdmin
     .from('modules')
     .select(`
       id, title, sort_order,
       lessons!inner (id, slug, title, sort_order, deleted_at)
     `)
-    .eq('course_id', lesson.modules.course_id)
+    .eq('course_id', courseId)
     .is('lessons.deleted_at', null)
     .order('sort_order', { ascending: true })
     .order('sort_order', { foreignTable: 'lessons', ascending: true })
 
-  // Flatten all lessons with module metadata
+  // Flatten lessons — only from accessible modules (gate for navigation)
   const allLessons = (allModulesRaw ?? []).flatMap((m) => {
+    if (accessibleModuleIds.size > 0 && !accessibleModuleIds.has(m.id)) return []
     const lessons = Array.isArray(m.lessons) ? m.lessons : [m.lessons]
     return lessons.map((l) => ({
       ...l,
@@ -181,8 +207,6 @@ export default async function AulaPage({ params }: Props) {
     : null
 
   // Determine blocking cohort for LockedContent CTA
-  const module = Array.isArray(lesson.modules) ? lesson.modules[0] : lesson.modules
-  const course = module && (Array.isArray(module.courses) ? module.courses[0] : module.courses)
   const cohortCourses = course?.cohort_courses ?? []
   const firstCohort =
     Array.isArray(cohortCourses) && cohortCourses.length > 0

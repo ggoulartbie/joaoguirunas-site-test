@@ -7,7 +7,7 @@ type Props = {
   cohortDescription: string | null
 }
 
-export function LockedContent({ cohortName, cohortSlug, cohortDescription }: Props) {
+export function LockedContent({ cohortName, cohortSlug: _cohortSlug, cohortDescription }: Props) {
   return (
     <div className="flex flex-col items-center border border-white/10 bg-[var(--ink)] px-8 py-16 text-center">
       <div className="flex h-16 w-16 items-center justify-center border border-white/10 bg-[var(--void)]">
@@ -23,10 +23,10 @@ export function LockedContent({ cohortName, cohortSlug, cohortDescription }: Pro
       </p>
 
       <Link
-        href={`/turmas/${cohortSlug}`}
+        href="/curso-online"
         className="mt-8 flex items-center gap-2 bg-[var(--ember)] px-5 py-3 font-mono text-xs uppercase tracking-wider text-white transition-colors hover:bg-[var(--ember-glow)]"
       >
-        Ver detalhes da turma
+        Acesse nossos cursos disponíveis
         <ArrowRight className="h-3.5 w-3.5" />
       </Link>
     </div>
