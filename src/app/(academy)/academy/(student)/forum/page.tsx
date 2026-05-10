@@ -39,32 +39,41 @@ export default async function ForumPage({
     redirect('/academy/meus-cursos?erro=forum-acesso')
   }
 
+  // Query 1: categorias + count de threads (agregado, sem N+1)
   const { data: categoriesRaw } = await supabaseAdmin
     .from('forum_categories')
-    .select('id, slug, name, color, sort_order, is_active')
+    .select('id, slug, name, color, sort_order, is_active, forum_threads(count)')
     .eq('is_active', true)
+    .is('forum_threads.deleted_at', null)
     .order('sort_order', { ascending: true })
 
-  const categories = await Promise.all(
-    (categoriesRaw ?? []).map(async (cat) => {
-      const { count } = await supabaseAdmin
-        .from('forum_threads')
-        .select('id', { count: 'exact', head: true })
-        .eq('category_id', cat.id)
-        .is('deleted_at', null)
-      return { ...cat, threadCount: count ?? 0 }
-    })
-  )
+  type CategoryWithCount = NonNullable<typeof categoriesRaw>[number]
+  const categories = (categoriesRaw ?? []).map((cat: CategoryWithCount) => {
+    const countArr = cat.forum_threads as unknown as { count: number }[] | null
+    return {
+      id: cat.id,
+      slug: cat.slug,
+      name: cat.name,
+      color: cat.color,
+      sort_order: cat.sort_order,
+      is_active: cat.is_active,
+      threadCount: countArr?.[0]?.count ?? 0,
+    }
+  })
 
+  // Query 2: threads com replies e votes embutidos (sem N+1 por thread)
   let threadsQuery = supabaseAdmin
     .from('forum_threads')
     .select(`
       id, slug, title, created_at, last_activity_at,
       is_pinned, is_resolved,
       forum_categories(slug, name),
-      profiles(name, role)
+      profiles(name, role),
+      forum_replies(count),
+      votes(count)
     `)
     .is('deleted_at', null)
+    .is('forum_replies.deleted_at', null)
     .order('is_pinned', { ascending: false })
     .order('last_activity_at', { ascending: false })
     .limit(20)
@@ -80,40 +89,28 @@ export default async function ForumPage({
 
   type ThreadRow = NonNullable<typeof threadsRaw>[number]
 
-  const threads = await Promise.all(
-    (threadsRaw ?? []).map(async (t: ThreadRow) => {
-      const [{ count: replyCount }, { count: voteCount }] = await Promise.all([
-        supabaseAdmin
-          .from('forum_replies')
-          .select('id', { count: 'exact', head: true })
-          .eq('thread_id', t.id)
-          .is('deleted_at', null),
-        supabaseAdmin
-          .from('votes')
-          .select('id', { count: 'exact', head: true })
-          .eq('thread_id', t.id),
-      ])
+  const threads = (threadsRaw ?? []).map((t: ThreadRow) => {
+    const cat = t.forum_categories as { slug: string; name: string } | null
+    const author = t.profiles as { name: string; role: string } | null
+    const repliesArr = t.forum_replies as unknown as { count: number }[] | null
+    const votesArr = t.votes as unknown as { count: number }[] | null
 
-      const cat = t.forum_categories as { slug: string; name: string } | null
-      const author = t.profiles as { name: string; role: string } | null
-
-      return {
-        id: t.id,
-        slug: t.slug,
-        title: t.title,
-        created_at: t.created_at,
-        last_activity_at: t.last_activity_at,
-        is_pinned: t.is_pinned,
-        is_resolved: t.is_resolved,
-        categorySlug: cat?.slug ?? '',
-        categoryName: cat?.name ?? '',
-        authorName: author?.name ?? 'Desconhecido',
-        authorRole: (author?.role ?? 'STUDENT') as string,
-        replyCount: replyCount ?? 0,
-        voteCount: voteCount ?? 0,
-      }
-    })
-  )
+    return {
+      id: t.id,
+      slug: t.slug,
+      title: t.title,
+      created_at: t.created_at,
+      last_activity_at: t.last_activity_at,
+      is_pinned: t.is_pinned,
+      is_resolved: t.is_resolved,
+      categorySlug: cat?.slug ?? '',
+      categoryName: cat?.name ?? '',
+      authorName: author?.name ?? 'Desconhecido',
+      authorRole: (author?.role ?? 'STUDENT') as string,
+      replyCount: repliesArr?.[0]?.count ?? 0,
+      voteCount: votesArr?.[0]?.count ?? 0,
+    }
+  })
 
   return (
     <div className="mx-auto max-w-3xl space-y-8">

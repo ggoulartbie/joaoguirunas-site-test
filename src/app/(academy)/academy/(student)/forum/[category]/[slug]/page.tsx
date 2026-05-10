@@ -99,11 +99,13 @@ export default async function ForumThreadPage({ params }: Props) {
     voteCount: voteCount ?? 0,
   }
 
+  // Single query: replies + votes count embutido (sem N+1 por reply)
   const { data: repliesRaw } = await supabaseAdmin
     .from('forum_replies')
     .select(`
       id, thread_id, content, created_at, is_accepted_answer, parent_reply_id, deleted_at,
-      profiles(name, role)
+      profiles(name, role),
+      votes(count)
     `)
     .eq('thread_id', threadRaw.id)
     .is('deleted_at', null)
@@ -111,29 +113,23 @@ export default async function ForumThreadPage({ params }: Props) {
 
   type ReplyRow = NonNullable<typeof repliesRaw>[number]
 
-  const replies: ForumReplyWithMeta[] = await Promise.all(
-    (repliesRaw ?? []).map(async (r: ReplyRow) => {
-      const { count: rc } = await supabaseAdmin
-        .from('votes')
-        .select('id', { count: 'exact', head: true })
-        .eq('reply_id', r.id)
+  const replies: ForumReplyWithMeta[] = (repliesRaw ?? []).map((r: ReplyRow) => {
+    const author = r.profiles as { name: string; role: string } | null
+    const votesArr = r.votes as unknown as { count: number }[] | null
 
-      const author = r.profiles as { name: string; role: string } | null
-
-      return {
-        id: r.id,
-        thread_id: r.thread_id,
-        content: r.content,
-        created_at: r.created_at,
-        is_accepted_answer: r.is_accepted_answer,
-        parent_reply_id: r.parent_reply_id,
-        deleted_at: r.deleted_at,
-        authorName: author?.name ?? 'Desconhecido',
-        authorRole: (author?.role ?? 'STUDENT') as 'STUDENT' | 'MENTOR' | 'SUPPORT' | 'ADMIN',
-        voteCount: rc ?? 0,
-      }
-    })
-  )
+    return {
+      id: r.id,
+      thread_id: r.thread_id,
+      content: r.content,
+      created_at: r.created_at,
+      is_accepted_answer: r.is_accepted_answer,
+      parent_reply_id: r.parent_reply_id,
+      deleted_at: r.deleted_at,
+      authorName: author?.name ?? 'Desconhecido',
+      authorRole: (author?.role ?? 'STUDENT') as 'STUDENT' | 'MENTOR' | 'SUPPORT' | 'ADMIN',
+      voteCount: votesArr?.[0]?.count ?? 0,
+    }
+  })
 
   const topLevelReplies = replies.filter((r) => r.parent_reply_id === null)
   const nestedReplies = replies.filter((r) => r.parent_reply_id !== null)
