@@ -136,7 +136,7 @@ export default function CursoOnlinePage() {
         <SectionDots />
 
         {/* ===== HERO ===== */}
-        <CursoOnlineHero cohortSlug={COHORT_SLUG} />
+        <CursoOnlineHero />
 
       {/* ===== SOLUÇÃO ===== */}
       <SolutionSection />
@@ -342,7 +342,13 @@ export default function CursoOnlinePage() {
             Acesso imediato às aulas gravadas. Comece hoje, no seu ritmo.
           </p>
           <div className="flex justify-center">
-            <CheckoutForm cohortSlug={COHORT_SLUG} label="Comprar agora — R$ 797" />
+            <a
+              href="#inscricao"
+              className="inline-flex items-center justify-center gap-2 px-8 py-4 text-sm font-semibold uppercase transition-all hover:brightness-110 active:scale-[0.98]"
+              style={{ background: '#FF3A0E', color: '#050507', fontFamily: 'var(--font-mono)', fontSize: '12px', letterSpacing: '0.16em' }}
+            >
+              Comprar agora — R$ 797
+            </a>
           </div>
           <p className="mt-6 text-xs sm:text-sm text-white/60">
             7 dias de garantia total &middot; Acesso por 6 meses &middot; Cancelamento simplificado

@@ -2,7 +2,7 @@
 
 import { useRef } from 'react';
 import { motion, useInView } from 'framer-motion';
-import { CheckoutForm } from './checkout-form';
+;
 
 type ItemType = 'Video' | 'Bonus';
 
@@ -19,7 +19,6 @@ interface Phase {
   items: TimelineItem[];
 }
 
-const COHORT_SLUG = 'curso-online-padrao';
 
 const PHASES: Phase[] = [
   {
@@ -338,7 +337,13 @@ export function CursoOnlineTimeline() {
           transition={{ duration: 0.5 }}
           className="mt-10 sm:mt-14 text-center"
         >
-          <CheckoutForm cohortSlug={COHORT_SLUG} label="Comprar — R$ 797" />
+          <a
+            href="#inscricao"
+            className="inline-flex items-center justify-center gap-2 px-8 py-4 text-sm font-semibold uppercase transition-all hover:brightness-110 active:scale-[0.98]"
+            style={{ background: '#FF3A0E', color: '#050507', fontFamily: 'var(--font-mono)', fontSize: '12px', letterSpacing: '0.16em' }}
+          >
+            Comprar — R$ 797
+          </a>
         </motion.div>
       </div>
     </section>

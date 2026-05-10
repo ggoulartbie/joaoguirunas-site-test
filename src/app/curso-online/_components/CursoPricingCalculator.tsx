@@ -20,7 +20,6 @@ import {
   BookOpen,
   Users2,
 } from 'lucide-react';
-import { CheckoutForm } from './checkout-form';
 
 const cn = (...classes: (string | undefined | false)[]) =>
   classes.filter(Boolean).join(' ');
@@ -90,7 +89,6 @@ const checklist = [
   'Atualizações futuras do conteúdo',
 ];
 
-const COHORT_SLUG = 'curso-online-padrao';
 
 function AnimatedNumber({
   value,
@@ -443,7 +441,13 @@ export function CursoPricingCalculator() {
                   ))}
                 </ul>
 
-                <CheckoutForm cohortSlug={COHORT_SLUG} label="Comprar agora — R$ 797" />
+                <a
+                  href="#inscricao"
+                  className="inline-flex w-full items-center justify-center gap-2 px-8 py-4 text-sm font-semibold uppercase transition-all hover:brightness-110 active:scale-[0.98]"
+                  style={{ background: '#FF3A0E', color: '#050507', fontFamily: 'var(--font-mono)', fontSize: '12px', letterSpacing: '0.16em' }}
+                >
+                  Comprar agora — R$ 797
+                </a>
               </div>
             </div>
           </motion.div>

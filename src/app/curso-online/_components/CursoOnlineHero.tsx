@@ -1,7 +1,6 @@
 'use client';
 
 import React from 'react';
-import { CheckoutForm } from './checkout-form';
 
 const KV_DISPLAY: React.CSSProperties = {
   fontFamily: 'var(--font-display-serif)',
@@ -17,11 +16,7 @@ const KV_MONO: React.CSSProperties = {
   fontWeight: 500,
 };
 
-interface CursoOnlineHeroProps {
-  cohortSlug: string;
-}
-
-export function CursoOnlineHero({ cohortSlug }: CursoOnlineHeroProps) {
+export function CursoOnlineHero() {
   return (
     <section
       id="hero"
@@ -67,7 +62,13 @@ export function CursoOnlineHero({ cohortSlug }: CursoOnlineHeroProps) {
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4 items-start">
-            <CheckoutForm cohortSlug={cohortSlug} label="Comprar — R$ 797" />
+            <a
+              href="#inscricao"
+              className="inline-flex items-center justify-center gap-2 px-8 py-4 text-sm font-semibold uppercase transition-all hover:brightness-110 active:scale-[0.98]"
+              style={{ background: '#FF3A0E', color: '#050507', fontFamily: 'var(--font-mono)', fontSize: '12px', letterSpacing: '0.16em' }}
+            >
+              Comprar — R$ 797
+            </a>
           </div>
 
           <div className="mt-10 flex flex-wrap gap-6">
