@@ -132,7 +132,7 @@ export function CursoOnlineDiferenciais() {
   const { scrollRef: carouselRef, activeIndex } = useCarouselDots(features.length);
 
   return (
-    <section id="diferenciais" className="py-16 sm:py-24 overflow-hidden" style={{ background: 'rgba(8,8,12,0.82)' }}>
+    <section id="diferenciais" className="py-16 sm:py-24 overflow-hidden">
       <div className="mx-auto max-w-6xl px-5 sm:px-6 lg:px-8">
         <motion.div
           ref={headerRef}

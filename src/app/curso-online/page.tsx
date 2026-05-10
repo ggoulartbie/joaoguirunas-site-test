@@ -148,7 +148,7 @@ export default function CursoOnlinePage() {
       <CursoOnlineTimeline />
 
       {/* ===== FACILITADORES ===== */}
-      <section id="facilitadores" className="py-16 sm:py-24" style={{ background: 'rgba(14,14,17,0.85)' }}>
+      <section id="facilitadores" className="py-16 sm:py-24">
         <div className="mx-auto max-w-6xl px-5 sm:px-6 lg:px-[140px]">
           <div className="text-center mb-12 sm:mb-16">
             <SectionBadge label="Quem Facilita" />
@@ -221,7 +221,7 @@ export default function CursoOnlinePage() {
       <section
         id="inscricao"
         className="relative py-16 sm:py-24 overflow-hidden"
-        style={{ background: 'rgba(5,5,7,0.85)', borderTop: '1px solid rgba(255,255,255,0.07)' }}
+        style={{ borderTop: '1px solid rgba(255,255,255,0.07)' }}
       >
         <div
           className="absolute inset-0 opacity-[0.03]"
@@ -305,7 +305,7 @@ export default function CursoOnlinePage() {
       <section
         id="faq"
         className="py-16 sm:py-24"
-        style={{ background: 'rgba(5,5,7,0.85)', borderTop: '1px solid rgba(255,255,255,0.07)' }}
+        style={{ borderTop: '1px solid rgba(255,255,255,0.07)' }}
       >
         <div className="mx-auto max-w-4xl px-5 sm:px-6 lg:px-8">
           <div className="text-center mb-10 sm:mb-16">
@@ -325,7 +325,7 @@ export default function CursoOnlinePage() {
       {/* ===== CTA FINAL ===== */}
       <section
         className="py-12 sm:py-16"
-        style={{ background: 'rgba(5,5,7,0.85)', borderTop: '1px solid rgba(255,255,255,0.07)' }}
+        style={{ borderTop: '1px solid rgba(255,255,255,0.07)' }}
       >
         <div className="mx-auto max-w-4xl px-5 sm:px-6 lg:px-8 text-center">
           <h3
