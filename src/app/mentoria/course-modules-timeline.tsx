@@ -25,7 +25,7 @@ const PHASES: Phase[] = [
     label: 'Pré-Mentoria',
     items: [
       {
-        type: 'Presencial',
+        type: 'QA',
         title: 'Design Thinking — Planejamento de Projeto',
         description: 'Sessão individual de 1h com Claudia Guirunas, CEO da GrowthSales.ai, antes do dia presencial. Juntos vocês mapeiam o seu projeto, definem o problema a resolver e estruturam o escopo do que será construído durante a mentoria. Você chega no dia presencial com clareza de onde quer chegar.',
         tags: ['Individual', '1:1', 'Claudia Guirunas', 'Planejamento'],
@@ -39,7 +39,7 @@ const PHASES: Phase[] = [
       {
         num: 0,
         type: 'Presencial',
-        date: '12 de maio · Terça-feira · 13h–18h',
+        date: '15 de junho · Segunda-feira · 13h–18h',
         title: 'Abertura — Desbloqueio e Crenças Limitantes',
         description: 'A maioria das pessoas chega travada por uma crença simples: "isso não é pra mim". Aqui quebramos isso. Trabalho de desbloqueio com a Claudia — respiração, ancoragem e identificação das crenças que sabotam o avanço antes mesmo de começar.',
         tags: ['Desbloqueio', 'Mindset', 'Claudia'],
@@ -47,7 +47,7 @@ const PHASES: Phase[] = [
       {
         num: 1,
         type: 'Presencial',
-        date: '12 de maio · Terça-feira · 13h–18h',
+        date: '15 de junho · Segunda-feira · 13h–18h',
         title: 'O que é possível',
         description: 'Você vai ver, ao vivo, o que é possível construir com agentes de IA hoje. Sites, squads de conteúdo, automações de vendas, sistemas de atendimento. Não teoria — demonstrações reais rodando na frente de você.',
         tags: ['Demos', 'Cases Reais', 'IA Agêntica'],
@@ -55,7 +55,7 @@ const PHASES: Phase[] = [
       {
         num: 2,
         type: 'Presencial',
-        date: '12 de maio · Terça-feira · 13h–18h',
+        date: '15 de junho · Segunda-feira · 13h–18h',
         title: 'Fundamentos do Claude Code',
         description: 'O que é Claude Code, como ele pensa, o que diferencia ele de um ChatGPT. Você entende a lógica por trás: agentes, ferramentas, MCP, contexto. Com essa base, tudo o que vem depois faz sentido — e você para de tratar a IA como uma caixa-preta.',
         tags: ['Claude Code', 'MCP', 'Agentes'],
@@ -63,7 +63,7 @@ const PHASES: Phase[] = [
       {
         num: 3,
         type: 'Presencial',
-        date: '12 de maio · Terça-feira · 13h–18h',
+        date: '15 de junho · Segunda-feira · 13h–18h',
         title: 'Setup e Instalação',
         description: 'Ninguém sai sem ambiente funcionando. Instalamos tudo junto: Claude Code, extensões, chaves de API, MCP servers. Você sai do dia presencial com o ambiente 100% pronto para trabalhar.',
         tags: ['Setup', 'Instalação', 'Ambiente'],
@@ -71,7 +71,7 @@ const PHASES: Phase[] = [
       {
         num: 4,
         type: 'Presencial',
-        date: '12 de maio · Terça-feira · 13h–18h',
+        date: '15 de junho · Segunda-feira · 13h–18h',
         title: 'Centro de Treinamento de Agentes',
         description: 'Você cria seu primeiro agente ao vivo. Aprende a dar personalidade, especialidade e instruções para ele. No final deste bloco, você já tem um agente personalizado funcionando — não um exemplo, o seu mesmo.',
         tags: ['Primeiro Agente', 'Personalização', 'CTA'],
@@ -90,9 +90,17 @@ const PHASES: Phase[] = [
       },
       {
         type: 'QA',
-        date: '14 de maio · Quinta-feira · 19h–20:30h',
-        title: 'Encontro de Dúvidas',
+        date: '17 de junho · Terça-feira · 19h–20:30h',
+        title: 'Encontro de Dúvidas 1',
         description: 'Sessão ao vivo com o time de suporte. Você traz o que travou na semana e resolvemos juntos. Cada pergunta é respondida em grupo — porque a dúvida de um quase sempre é a dúvida de vários.',
+        tags: ['Suporte', 'Ao Vivo', 'Grupo'],
+        duration: '1:30h',
+      },
+      {
+        type: 'QA',
+        date: '19 de junho · Quinta-feira · 19h–20:30h',
+        title: 'Encontro de Dúvidas 2',
+        description: 'Segunda sessão da semana para consolidar o que foi visto e tirar dúvidas técnicas antes de avançar.',
         tags: ['Suporte', 'Ao Vivo', 'Grupo'],
         duration: '1:30h',
       },
@@ -110,7 +118,7 @@ const PHASES: Phase[] = [
       },
       {
         type: 'QA',
-        date: '19 de maio · Terça-feira · 19h–20:30h',
+        date: '24 de junho · Terça-feira · 19h–20:30h',
         title: 'Encontro de Dúvidas 1',
         description: 'Sessão ao vivo com o time de suporte técnico. Dúvidas sobre o squad de sites, Github, Vercel ou qualquer coisa da semana.',
         tags: ['Suporte', 'Ao Vivo', 'Grupo'],
@@ -118,7 +126,7 @@ const PHASES: Phase[] = [
       },
       {
         type: 'QA',
-        date: '21 de maio · Quinta-feira · 19h–20:30h',
+        date: '26 de junho · Quinta-feira · 19h–20:30h',
         title: 'Encontro de Dúvidas 2',
         description: 'Segunda sessão da semana. Semana 2 tem suporte dobrado porque é onde a maioria tem mais dúvidas práticas de configuração.',
         tags: ['Suporte', 'Ao Vivo', 'Grupo'],
@@ -138,9 +146,17 @@ const PHASES: Phase[] = [
       },
       {
         type: 'QA',
-        date: '26 de maio · Terça-feira · 19h–20:30h',
-        title: 'Encontro de Dúvidas',
+        date: '01 de julho · Terça-feira · 19h–20:30h',
+        title: 'Encontro de Dúvidas 1',
         description: 'Sessão ao vivo com o time de suporte. Dúvidas sobre integrações de APIs, criação de conteúdo com IA ou qualquer ponto da semana.',
+        tags: ['Suporte', 'Ao Vivo', 'Grupo'],
+        duration: '1:30h',
+      },
+      {
+        type: 'QA',
+        date: '03 de julho · Quinta-feira · 19h–20:30h',
+        title: 'Encontro de Dúvidas 2',
+        description: 'Segunda sessão da semana para consolidar o social media squad e preparar as integrações de APIs.',
         tags: ['Suporte', 'Ao Vivo', 'Grupo'],
         duration: '1:30h',
       },
@@ -158,7 +174,7 @@ const PHASES: Phase[] = [
       },
       {
         type: 'QA',
-        date: '02 de junho · Terça-feira · 19h–20:30h',
+        date: '08 de julho · Terça-feira · 19h–20:30h',
         title: 'Encontro de Dúvidas 1',
         description: 'Sessão ao vivo com o time de suporte. Dúvidas sobre Supabase, banco de dados, autenticação ou o squad de dev.',
         tags: ['Suporte', 'Ao Vivo', 'Grupo'],
@@ -166,7 +182,7 @@ const PHASES: Phase[] = [
       },
       {
         type: 'QA',
-        date: '04 de junho · Quinta-feira · 19h–20:30h',
+        date: '10 de julho · Quinta-feira · 19h–20:30h',
         title: 'Encontro de Dúvidas 2',
         description: 'Segunda sessão da semana. Semana 4 também tem suporte dobrado — é a mais técnica e queremos que você saia sem nenhum ponto em aberto.',
         tags: ['Suporte', 'Ao Vivo', 'Grupo'],

@@ -43,7 +43,7 @@ const PHASES: Phase[] = [
   {
     id: 'presencial',
     label: 'Dia Presencial',
-    date: '12 de maio · Terça · 13h–18h',
+    date: '15 de junho · Segunda · 13h–18h',
     accent: true,
     bannerHeight: 440,
     description: 'Um dia intensivo para resetar sua mentalidade sobre IA, dominar as ferramentas na prática e criar o seu primeiro agente Claude do zero.',
@@ -84,7 +84,7 @@ const PHASES: Phase[] = [
   {
     id: 'semana-1',
     label: 'Semana 1',
-    date: '13–17 de maio',
+    date: '16–20 de junho',
     description: 'Aprenda a criar sistemas de design completos com IA — tokens, componentes e guias de estilo gerados em minutos, sem precisar de um designer.',
     image: '/images/bg-designer.png',
     modules: [
@@ -96,9 +96,16 @@ const PHASES: Phase[] = [
       },
       {
         live: true,
-        title: 'Encontro de Dúvidas',
+        title: 'Encontro de Dúvidas 1',
         description: 'Sessão ao vivo para tirar dúvidas sobre o conteúdo da semana, compartilhar o que foi construído e receber feedback direto do João.',
-        date: '14 de maio · Quinta · 19h–20:30h',
+        date: '17 de junho · Terça · 19h–20:30h',
+        tags: ['Suporte', 'Ao Vivo'],
+      },
+      {
+        live: true,
+        title: 'Encontro de Dúvidas 2',
+        description: 'Segunda sessão ao vivo da semana para consolidar aprendizados e resolver bloqueios.',
+        date: '19 de junho · Quinta · 19h–20:30h',
         tags: ['Suporte', 'Ao Vivo'],
       },
     ],
@@ -106,7 +113,7 @@ const PHASES: Phase[] = [
   {
     id: 'semana-2',
     label: 'Semana 2',
-    date: '18–22 de maio',
+    date: '23–27 de junho',
     description: 'Construa e publique sites profissionais do zero com agentes Claude, conectando GitHub ao Vercel com deploy automático.',
     image: '/images/bg-github.png',
     modules: [
@@ -120,14 +127,14 @@ const PHASES: Phase[] = [
         live: true,
         title: 'Encontro de Dúvidas 1',
         description: 'Sessão ao vivo para tirar dúvidas sobre o conteúdo da semana e avançar no projeto.',
-        date: '19 de maio · Terça · 19h–20:30h',
+        date: '24 de junho · Terça · 19h–20:30h',
         tags: ['Suporte', 'Ao Vivo'],
       },
       {
         live: true,
         title: 'Encontro de Dúvidas 2',
         description: 'Segunda sessão ao vivo da semana para consolidar aprendizados e resolver bloqueios.',
-        date: '21 de maio · Quinta · 19h–20:30h',
+        date: '26 de junho · Quinta · 19h–20:30h',
         tags: ['Suporte', 'Ao Vivo'],
       },
     ],
@@ -135,7 +142,7 @@ const PHASES: Phase[] = [
   {
     id: 'semana-3',
     label: 'Semana 3',
-    date: '25–29 de maio',
+    date: '30 de junho–04 de julho',
     description: 'Automatize sua presença nas redes sociais com agentes que criam, editam e publicam conteúdo por você.',
     image: '/images/bg-marketing.png',
     modules: [
@@ -147,9 +154,16 @@ const PHASES: Phase[] = [
       },
       {
         live: true,
-        title: 'Encontro de Dúvidas',
+        title: 'Encontro de Dúvidas 1',
         description: 'Sessão ao vivo para tirar dúvidas sobre automação de social media e avançar na integração dos agentes.',
-        date: '26 de maio · Terça · 19h–20:30h',
+        date: '01 de julho · Terça · 19h–20:30h',
+        tags: ['Suporte', 'Ao Vivo'],
+      },
+      {
+        live: true,
+        title: 'Encontro de Dúvidas 2',
+        description: 'Segunda sessão ao vivo da semana para consolidar aprendizados e resolver bloqueios.',
+        date: '03 de julho · Quinta · 19h–20:30h',
         tags: ['Suporte', 'Ao Vivo'],
       },
     ],
@@ -157,7 +171,7 @@ const PHASES: Phase[] = [
   {
     id: 'semana-4',
     label: 'Semana 4',
-    date: '01–05 de junho',
+    date: '07–11 de julho',
     description: 'Integre banco de dados, autenticação e APIs usando Supabase — o backend completo do seu projeto final.',
     image: '/images/bg-supabase.png',
     modules: [
@@ -171,14 +185,14 @@ const PHASES: Phase[] = [
         live: true,
         title: 'Encontro de Dúvidas 1',
         description: 'Sessão ao vivo para tirar dúvidas sobre Supabase e integrações de backend.',
-        date: '02 de junho · Terça · 19h–20:30h',
+        date: '08 de julho · Terça · 19h–20:30h',
         tags: ['Suporte', 'Ao Vivo'],
       },
       {
         live: true,
         title: 'Encontro de Dúvidas 2',
         description: 'Sessão de preparação final — ajuste do projeto e alinhamento para a apresentação.',
-        date: '04 de junho · Quinta · 19h–20:30h',
+        date: '10 de julho · Quinta · 19h–20:30h',
         tags: ['Suporte', 'Ao Vivo'],
       },
     ],
@@ -208,7 +222,7 @@ const PHASES: Phase[] = [
   {
     id: 'encerramento',
     label: 'Encerramento',
-    date: '09 de junho',
+    date: '15 de julho',
     accent: true,
     description: 'Apresente o projeto que você construiu ao longo da mentoria e receba seu certificado de conclusão ao vivo.',
     image: '/images/cta-team.png',
@@ -218,7 +232,7 @@ const PHASES: Phase[] = [
         live: true,
         title: 'Apresentação de Projetos',
         description: 'Cada mentorado apresenta seu projeto ao vivo por 30 minutos para a turma. Feedback direto do João e da comunidade. Certificado de conclusão emitido ao final da sessão.',
-        date: '09 de junho · Terça · 19h–20:30h',
+        date: '15 de julho · Terça · 19h–20:30h',
         tags: ['3 projetos × 30 min', 'Ao Vivo', 'Certificação'],
       },
     ],
@@ -414,7 +428,7 @@ Este documento será entregue ao mentorado como material de referência e acompa
 
 ## 4. PROGRAMA COMPLETO DA MENTORIA (base de referência)
 
-### DIA PRESENCIAL — 12 de maio de 2025 · Terça · 13h–18h
+### DIA PRESENCIAL — 15 de junho de 2026 · Segunda · 13h–18h
 
 Sessão intensiva presencial com João Guirunas e Claudia Guirunas. O mentorado sai com ambiente configurado, fundamentos sólidos e o primeiro agente Claude funcionando.
 
@@ -426,35 +440,37 @@ Sessão intensiva presencial com João Guirunas e Claudia Guirunas. O mentorado 
 | 3 | Setup e Instalação completos | API Key Anthropic, terminal, ferramentas essenciais — tudo configurado no dia |
 | 4 | Centro de Treinamento de Agentes | Criação do primeiro agente Claude com persona, autoridades e skills definidos |
 
-### SEMANA 1 — 13 a 17 de maio
+### SEMANA 1 — 16 a 20 de junho
 
 **Foco:** Claude Design — Design System com IA
 Crie um design system completo (paleta, tipografia, componentes, tokens) sem precisar de Figma ou designer.
 
-- Encontro de Dúvidas ao vivo: 14/05 (Quinta) · 19h–20:30h
+- Encontro de Dúvidas 1 ao vivo: 17/06 (Terça) · 19h–20:30h
+- Encontro de Dúvidas 2 ao vivo: 19/06 (Quinta) · 19h–20:30h
 
-### SEMANA 2 — 18 a 22 de maio
+### SEMANA 2 — 23 a 27 de junho
 
 **Foco:** Squad de Sites — GitHub + Vercel
 Construa e publique sites profissionais do zero com agentes Claude, versionamento no GitHub e deploy automático.
 
-- Encontro de Dúvidas 1 ao vivo: 19/05 (Terça) · 19h–20:30h
-- Encontro de Dúvidas 2 ao vivo: 21/05 (Quinta) · 19h–20:30h
+- Encontro de Dúvidas 1 ao vivo: 24/06 (Terça) · 19h–20:30h
+- Encontro de Dúvidas 2 ao vivo: 26/06 (Quinta) · 19h–20:30h
 
-### SEMANA 3 — 25 a 29 de maio
+### SEMANA 3 — 30 de junho a 04 de julho
 
 **Foco:** Squad de Social Media automatizado
 Agentes que criam imagens (Freepik), gravam vozes (Eleven Labs), geram vídeos (Heygen) e publicam via Meta API.
 
-- Encontro de Dúvidas ao vivo: 26/05 (Terça) · 19h–20:30h
+- Encontro de Dúvidas 1 ao vivo: 01/07 (Terça) · 19h–20:30h
+- Encontro de Dúvidas 2 ao vivo: 03/07 (Quinta) · 19h–20:30h
 
-### SEMANA 4 — 1 a 5 de junho
+### SEMANA 4 — 7 a 11 de julho
 
 **Foco:** Squad de Dev — Supabase
 Backend completo: banco PostgreSQL, autenticação, RLS, edge functions. Squad especializada em frontend, backend e DevOps.
 
-- Encontro de Dúvidas 1 ao vivo: 02/06 (Terça) · 19h–20:30h
-- Encontro de Dúvidas 2 ao vivo: 04/06 (Quinta) · 19h–20:30h
+- Encontro de Dúvidas 1 ao vivo: 08/07 (Terça) · 19h–20:30h
+- Encontro de Dúvidas 2 ao vivo: 10/07 (Quinta) · 19h–20:30h
 
 ### BÔNUS ONLINE — Sempre disponível
 
@@ -463,7 +479,7 @@ Backend completo: banco PostgreSQL, autenticação, RLS, edge functions. Squad e
 | 12 | Orquestrador Comercial | Sistema completo de automação comercial GrowthSales.ai — código pronto para usar |
 | 13 | Gestão de Projetos com IA | Framework de gestão com agentes Claude — código e método completos |
 
-### ENCERRAMENTO — 9 de junho de 2025 · Terça · 19h–20:30h
+### ENCERRAMENTO — 15 de julho de 2026 · Terça · 19h–20:30h
 
 Apresentação ao vivo do projeto desenvolvido durante a mentoria. Cada mentorado apresenta por 30 minutos. Certificado de conclusão emitido ao final.
 
@@ -504,7 +520,7 @@ Gere uma **apresentação completa em Markdown** pronta para converter em PDF. U
 - Título: "Onboarding — Mentoria Claude Code + IA"
 - Subtítulo: Nome completo de ${nome}${cargo ? `, ${cargo}` : ''}${empresa ? ` · ${empresa}` : ''}
 - Projeto: "${projeto}"
-- Data de início: **12 de maio de 2025**
+- Data de início: **15 de junho de 2026**
 - Mentor: João Guirunas · joaoguirunas.com
 - Linha de rodapé discreta: "Documento confidencial — uso exclusivo do mentorado"
 
