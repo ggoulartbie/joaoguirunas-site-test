@@ -22,6 +22,18 @@ interface Phase {
 
 const PHASES: Phase[] = [
   {
+    label: 'Pré-Mentoria',
+    items: [
+      {
+        type: 'Presencial',
+        title: 'Design Thinking — Planejamento de Projeto',
+        description: 'Sessão individual de 1h com Claudia Guirunas, CEO da GrowthSales.ai, antes do dia presencial. Juntos vocês mapeiam o seu projeto, definem o problema a resolver e estruturam o escopo do que será construído durante a mentoria. Você chega no dia presencial com clareza de onde quer chegar.',
+        tags: ['Individual', '1:1', 'Claudia Guirunas', 'Planejamento'],
+        duration: '1h',
+      },
+    ],
+  },
+  {
     label: 'Dia Presencial',
     items: [
       {
@@ -468,7 +480,7 @@ export function CourseModulesTimeline() {
                 fontWeight: 600,
               }}
             >
-              1 Dia Presencial + 4 Semanas
+              Sessão 1:1 + 1 Dia Presencial + 4 Semanas
             </span>
           </div>
           <h2
