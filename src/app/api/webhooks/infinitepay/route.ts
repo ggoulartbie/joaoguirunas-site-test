@@ -124,7 +124,7 @@ async function processWebhook(params: {
   }
 
   // AC5: validação server-to-server — NUNCA confiar só no payload
-  const check = await infinitePay.verifyPayment({ transactionNsu: transaction_nsu, invoiceSlug: invoice_slug })
+  const check = await infinitePay.verifyPayment({ transactionNsu: transaction_nsu, invoiceSlug: invoice_slug, orderNsu: order_nsu })
 
   if (!check.paid) {
     console.warn(`[infinitepay webhook] payment_check returned paid=false for order_nsu=${order_nsu}`)

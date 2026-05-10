@@ -15,6 +15,7 @@ export interface CreateCheckoutLinkParams {
 export interface VerifyPaymentParams {
   transactionNsu: string
   invoiceSlug: string
+  orderNsu: string
 }
 
 export interface VerifyPaymentResult {
@@ -22,29 +23,23 @@ export interface VerifyPaymentResult {
   paidAmount: number
 }
 
-function getConfig(): { bearerToken: string; handle: string } {
-  const bearerToken = process.env.INFINITEPAY_BEARER_TOKEN
+function getHandle(): string {
   const handle = process.env.INFINITEPAY_HANDLE
-  if (!bearerToken || !handle) {
-    throw new Error('INFINITEPAY_BEARER_TOKEN and INFINITEPAY_HANDLE must be configured')
-  }
-  return { bearerToken, handle }
+  if (!handle) throw new Error('INFINITEPAY_HANDLE must be configured')
+  return handle
 }
 
 export class InfinitePayAdapter {
   async createCheckoutLink(params: CreateCheckoutLinkParams): Promise<{ url: string }> {
-    const { bearerToken, handle } = getConfig()
+    const handle = getHandle()
 
     const res = await fetch(`${INFINITEPAY_API}/links`, {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${bearerToken}`,
-      },
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         handle,
         order_nsu: params.orderId,
-        items: [{ quantity: 1, price: params.amountCents, description: params.cohortSlug }],
+        itens: [{ quantity: 1, price: params.amountCents, description: params.cohortSlug }],
         redirect_url: params.redirectUrl,
         webhook_url: params.webhookUrl,
         customer: { email: params.customerEmail, name: params.customerName },
@@ -62,16 +57,14 @@ export class InfinitePayAdapter {
   }
 
   async verifyPayment(params: VerifyPaymentParams): Promise<VerifyPaymentResult> {
-    const { bearerToken, handle } = getConfig()
+    const handle = getHandle()
 
     const res = await fetch(`${INFINITEPAY_API}/payment_check`, {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${bearerToken}`,
-      },
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         handle,
+        order_nsu: params.orderNsu,
         transaction_nsu: params.transactionNsu,
         slug: params.invoiceSlug,
       }),
