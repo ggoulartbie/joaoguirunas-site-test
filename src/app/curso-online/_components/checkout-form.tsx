@@ -14,8 +14,8 @@ const PhoneField = dynamic(() => import('./PhoneField').then((m) => m.PhoneField
       disabled
       className="w-full px-4 py-3 outline-none"
       style={{
-        background: 'rgba(255,255,255,0.06)',
-        border: '1px solid rgba(255,255,255,0.15)',
+        background: '#0A0A10',
+        border: '1px solid rgba(255,255,255,0.14)',
         color: '#fff',
         fontFamily: 'var(--font-mono)',
         fontSize: '13px',
@@ -34,8 +34,8 @@ const KV_MONO: React.CSSProperties = {
 }
 
 const inputStyle: React.CSSProperties = {
-  background: 'rgba(255,255,255,0.06)',
-  border: '1px solid rgba(255,255,255,0.15)',
+  background: '#0A0A10',
+  border: '1px solid rgba(255,255,255,0.14)',
   color: '#fff',
   fontFamily: 'var(--font-mono)',
   fontSize: '13px',
@@ -61,8 +61,8 @@ export function CheckoutForm({ cohortSlug, label = 'Comprar agora — R$ 797' }:
   const [state, formAction, isPending] = useActionState(checkoutAction, null)
 
   return (
-    <div className="w-full sm:w-auto">
-      <form action={formAction} className="flex flex-col gap-3 w-full sm:w-auto">
+    <div className="w-full">
+      <form action={formAction} className="flex flex-col gap-3 w-full">
         <input type="hidden" name="cohortSlug" value={cohortSlug} />
         <input
           type="text"
@@ -86,7 +86,7 @@ export function CheckoutForm({ cohortSlug, label = 'Comprar agora — R$ 797' }:
         <button
           type="submit"
           disabled={isPending}
-          className="inline-flex items-center justify-center gap-2 px-8 py-4 text-sm font-semibold uppercase transition-all hover:brightness-110 active:scale-[0.98] disabled:opacity-60 w-full sm:w-auto"
+          className="inline-flex items-center justify-center gap-2 px-8 py-4 text-sm font-semibold uppercase transition-all hover:brightness-110 active:scale-[0.98] disabled:opacity-60 w-full"
           style={{ ...KV_MONO, background: '#FF3A0E', color: '#050507', fontSize: '12px' }}
         >
           {isPending ? 'Aguarde...' : label}

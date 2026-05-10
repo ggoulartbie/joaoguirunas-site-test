@@ -220,83 +220,93 @@ export default function CursoOnlinePage() {
       {/* ===== INSCRIÇÃO / CTA ===== */}
       <section
         id="inscricao"
-        className="relative py-16 sm:py-24 overflow-hidden"
-        style={{ borderTop: '1px solid rgba(255,255,255,0.07)' }}
+        className="py-16 sm:py-24"
+        style={{ background: '#050507', borderTop: '1px solid rgba(255,255,255,0.07)' }}
       >
-        <div
-          className="absolute inset-0 opacity-[0.03]"
-          aria-hidden="true"
-          style={{
-            backgroundImage: 'radial-gradient(circle at 1px 1px, rgba(255,255,255,0.5) 1px, transparent 0)',
-            backgroundSize: '32px 32px',
-          }}
-        />
-        <div className="relative z-10 mx-auto max-w-3xl px-5 sm:px-6 lg:px-8">
-          <div className="text-center mb-10">
-            <SectionBadge label="Investimento" />
-            <h2
-              className="text-3xl sm:text-4xl lg:text-5xl text-white mb-3"
-              style={{ ...KV_DISPLAY, lineHeight: 0.95 }}
-            >
-              Acesso completo por{' '}
-              <span className="text-[#FF3A0E] italic" style={{ fontWeight: 300 }}>
-                R$ 797
-              </span>
-            </h2>
-            <p className="text-white/55 text-sm sm:text-base max-w-lg mx-auto leading-relaxed mt-4 mb-8">
-              Aulas gravadas, materiais por módulo, fórum da comunidade e certificado de conclusão. 6 meses de acesso, começando agora.
-            </p>
+        <div className="mx-auto max-w-5xl px-5 sm:px-6 lg:px-8">
+          <div className="lg:grid lg:grid-cols-[1fr_400px] lg:gap-16 lg:items-start">
 
-            <div className="mb-8 space-y-3 max-w-sm mx-auto">
-              {INCLUDED.map(({ icon: Icon, text }) => (
-                <div key={text} className="flex items-center gap-3">
-                  <div
-                    className="flex h-8 w-8 shrink-0 items-center justify-center"
-                    style={{ background: 'rgba(255,58,14,0.12)', border: '1px solid rgba(255,58,14,0.2)' }}
-                  >
-                    <Icon className="h-3.5 w-3.5" style={{ color: '#FF3A0E' }} aria-hidden="true" />
+            {/* ── Esquerda: info ── */}
+            <div>
+              <SectionBadge label="Investimento" />
+              <h2
+                className="text-3xl sm:text-4xl lg:text-5xl text-white mb-4"
+                style={{ ...KV_DISPLAY, lineHeight: 0.95 }}
+              >
+                Acesso completo por{' '}
+                <span className="text-[#FF3A0E] italic" style={{ fontWeight: 300 }}>R$ 797</span>
+              </h2>
+              <p className="text-white/55 text-sm sm:text-base leading-relaxed mb-8 max-w-md">
+                Aulas gravadas, materiais por módulo, fórum da comunidade e certificado de conclusão. 6 meses de acesso, começando agora.
+              </p>
+
+              <div className="space-y-3 mb-10">
+                {INCLUDED.map(({ icon: Icon, text }) => (
+                  <div key={text} className="flex items-center gap-3">
+                    <div
+                      className="flex h-8 w-8 shrink-0 items-center justify-center"
+                      style={{ background: 'rgba(255,58,14,0.12)', border: '1px solid rgba(255,58,14,0.2)' }}
+                    >
+                      <Icon className="h-3.5 w-3.5" style={{ color: '#FF3A0E' }} aria-hidden="true" />
+                    </div>
+                    <span className="text-sm" style={{ color: 'rgba(255,255,255,0.75)' }}>{text}</span>
                   </div>
-                  <span className="text-sm text-left" style={{ color: 'rgba(255,255,255,0.75)' }}>{text}</span>
+                ))}
+              </div>
+
+              {/* Não incluso */}
+              <div>
+                <p className="mb-4" style={{ ...KV_MONO, color: 'rgba(255,255,255,0.3)' }}>Não incluso</p>
+                <div className="space-y-2">
+                  {NOT_INCLUDED.map((text) => (
+                    <div
+                      key={text}
+                      className="flex items-center gap-3 px-4 py-3"
+                      style={{ border: '1px solid rgba(255,255,255,0.05)', background: 'rgba(255,255,255,0.02)' }}
+                    >
+                      <X className="h-3.5 w-3.5 shrink-0" style={{ color: 'rgba(255,255,255,0.2)' }} aria-hidden="true" />
+                      <span className="text-sm" style={{ color: 'rgba(255,255,255,0.35)' }}>{text}</span>
+                    </div>
+                  ))}
                 </div>
-              ))}
+                <p className="mt-6 text-xs" style={{ ...KV_MONO, color: 'rgba(255,255,255,0.25)' }}>
+                  Quer acompanhamento ao vivo?{' '}
+                  <Link href="/mentoria" className="underline underline-offset-2" style={{ color: 'rgba(255,255,255,0.5)' }}>
+                    Ver a Mentoria →
+                  </Link>
+                </p>
+              </div>
             </div>
 
-            <div className="flex justify-center">
-              <CheckoutForm cohortSlug={COHORT_SLUG} label="Comprar agora — R$ 797" />
-            </div>
-
-            <p className="mt-6 text-xs" style={{ ...KV_MONO, color: 'rgba(255,255,255,0.25)' }}>
-              Prefere acompanhamento intensivo ao vivo?{' '}
-              <Link href="/mentoria" className="underline underline-offset-2" style={{ color: 'rgba(255,255,255,0.5)' }}>
-                Ver a Mentoria →
-              </Link>
-            </p>
-          </div>
-
-          {/* O que não está incluso */}
-          <div className="mt-12">
-            <p className="mb-4 text-center" style={{ ...KV_MONO, color: 'rgba(255,255,255,0.3)' }}>
-              Não incluso
-            </p>
-            <h3
-              className="mb-6 text-center text-xl sm:text-2xl"
-              style={{ ...KV_DISPLAY, lineHeight: 0.95, color: 'rgba(255,255,255,0.4)' }}
+            {/* ── Direita: card do form ── */}
+            <div
+              className="mt-12 lg:mt-0 sticky top-24"
+              style={{ background: '#0D0D14', border: '1px solid rgba(255,255,255,0.1)' }}
             >
-              O que este curso{' '}
-              <span className="italic" style={{ fontWeight: 300 }}>não oferece</span>
-            </h3>
-            <div className="grid gap-3 sm:grid-cols-2">
-              {NOT_INCLUDED.map((text) => (
-                <div
-                  key={text}
-                  className="flex items-center gap-4 p-4"
-                  style={{ border: '1px solid rgba(255,255,255,0.04)', background: 'rgba(255,255,255,0.01)' }}
-                >
-                  <X className="h-4 w-4 shrink-0" style={{ color: 'rgba(255,255,255,0.2)' }} aria-hidden="true" />
-                  <span className="text-sm" style={{ color: 'rgba(255,255,255,0.35)' }}>{text}</span>
+              <div className="p-6 sm:p-8" style={{ borderBottom: '1px solid rgba(255,255,255,0.07)' }}>
+                <p className="mb-1" style={{ ...KV_MONO, color: '#FF3A0E', fontSize: '10px' }}>Acesso imediato</p>
+                <div className="flex items-baseline gap-2">
+                  <span className="text-3xl sm:text-4xl font-bold text-white">R$ 797</span>
+                  <span className="text-white/40 text-sm">à vista</span>
                 </div>
-              ))}
+                <p className="text-white/40 text-xs mt-1">
+                  ou 6× de R$ {Math.ceil(797 / 6).toLocaleString('pt-BR', { minimumFractionDigits: 2 })} no cartão
+                </p>
+              </div>
+
+              <div className="p-6 sm:p-8">
+                <CheckoutForm cohortSlug={COHORT_SLUG} label="Comprar agora" />
+                <div className="mt-5 flex flex-wrap gap-x-4 gap-y-2">
+                  {['7 dias de garantia', 'Acesso por 6 meses', 'Cancelamento fácil'].map((g) => (
+                    <span key={g} className="text-xs flex items-center gap-1.5" style={{ color: 'rgba(255,255,255,0.35)', ...KV_MONO, fontSize: '9px' }}>
+                      <span style={{ width: 4, height: 4, borderRadius: '50%', background: 'rgba(255,58,14,0.6)', display: 'inline-block', flexShrink: 0 }} />
+                      {g}
+                    </span>
+                  ))}
+                </div>
+              </div>
             </div>
+
           </div>
         </div>
       </section>

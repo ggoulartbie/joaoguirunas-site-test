@@ -37,8 +37,8 @@ function applyMask(value: string, mask: string): string {
 }
 
 const wrapperStyle: React.CSSProperties = {
-  background: 'rgba(255,255,255,0.06)',
-  border: '1px solid rgba(255,255,255,0.15)',
+  background: '#0A0A10',
+  border: '1px solid rgba(255,255,255,0.14)',
   display: 'flex',
   alignItems: 'stretch',
 }
