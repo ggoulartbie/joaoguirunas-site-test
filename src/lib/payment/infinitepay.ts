@@ -42,7 +42,7 @@ export class InfinitePayAdapter {
       body: JSON.stringify({
         handle,
         order_nsu: params.orderId,
-        itens: [{ quantity: 1, price: params.amountCents, description: params.cohortName }],
+        items: [{ quantity: 1, price: params.amountCents, description: params.cohortName }],
         redirect_url: params.redirectUrl,
         webhook_url: params.webhookUrl,
         customer: {
