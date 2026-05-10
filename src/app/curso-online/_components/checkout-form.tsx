@@ -17,7 +17,8 @@ type ActionState = { error: string } | null
 async function checkoutAction(_prev: ActionState, formData: FormData): Promise<ActionState> {
   const slug = formData.get('cohortSlug') as string
   const email = (formData.get('email') as string | null) ?? undefined
-  return await createPublicCheckoutSession(slug, email)
+  const phone = (formData.get('phone') as string | null) ?? undefined
+  return await createPublicCheckoutSession(slug, email, phone)
 }
 
 interface CheckoutFormProps {
@@ -37,6 +38,21 @@ export function CheckoutForm({ cohortSlug, label = 'Comprar agora — R$ 797' }:
           name="email"
           required
           placeholder="seu@email.com"
+          className="w-full px-4 py-3 text-sm outline-none"
+          style={{
+            background: 'rgba(255,255,255,0.06)',
+            border: '1px solid rgba(255,255,255,0.15)',
+            color: '#fff',
+            fontFamily: 'var(--font-mono)',
+            fontSize: '13px',
+            borderRadius: 0,
+          }}
+        />
+        <input
+          type="tel"
+          name="phone"
+          required
+          placeholder="WhatsApp (11) 99999-9999"
           className="w-full px-4 py-3 text-sm outline-none"
           style={{
             background: 'rgba(255,255,255,0.06)',

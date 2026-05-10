@@ -10,13 +10,36 @@ import { findOrCreateUser } from '@/lib/payment/webhookHelpers'
 const schema = z.object({
   cohortSlug: z.string().min(1),
   email: z.string().email().optional(),
+  phone: z.string().optional(),
 })
+
+async function fireCrmWebhook(payload: {
+  email: string
+  phone?: string
+  cohortSlug: string
+  cohortName: string
+}) {
+  const url = process.env.CRM_WEBHOOK_URL
+  if (!url) return
+  fetch(url, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      email: payload.email,
+      phone: payload.phone ?? '',
+      cohort_slug: payload.cohortSlug,
+      cohort_name: payload.cohortName,
+      source: 'checkout',
+      timestamp: new Date().toISOString(),
+    }),
+  }).catch(() => {})
+}
 
 // Checkout público: não requer autenticação.
 // Para InfinitePay, o email é obrigatório para criar/encontrar o user antes do redirect.
 // Para Stripe, o webhook cria a conta após o pagamento via metadata da sessão.
-export async function createPublicCheckoutSession(cohortSlug: string, email?: string) {
-  const parsed = schema.safeParse({ cohortSlug, email })
+export async function createPublicCheckoutSession(cohortSlug: string, email?: string, phone?: string) {
+  const parsed = schema.safeParse({ cohortSlug, email, phone })
   if (!parsed.success) {
     return { error: 'Dados inválidos.' }
   }
@@ -65,6 +88,8 @@ export async function createPublicCheckoutSession(cohortSlug: string, email?: st
         return { error: 'Erro ao processar sua conta. Tente novamente.' }
       }
     }
+
+    fireCrmWebhook({ email: customerEmail, phone: parsed.data.phone, cohortSlug, cohortName: cohort.name })
 
     const orderNsu = crypto.randomUUID()
 
@@ -115,6 +140,10 @@ export async function createPublicCheckoutSession(cohortSlug: string, email?: st
   // Stripe flow
   if (!cohort.stripe_price_entry_id) {
     return { error: 'Preço não configurado para esta turma.' }
+  }
+
+  if (email) {
+    fireCrmWebhook({ email, phone: parsed.data.phone, cohortSlug, cohortName: cohort.name })
   }
 
   const adapter = new StripeAdapter()
