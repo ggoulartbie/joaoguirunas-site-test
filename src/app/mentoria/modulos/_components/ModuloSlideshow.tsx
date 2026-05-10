@@ -64,6 +64,8 @@ export function ModuloSlideshow({ slug, slides }: ModuloSlideshowProps) {
 
   const slide = slides[current]!;
   const slideNumber = String(current + 1).padStart(2, '0');
+  const slideTotal  = String(slides.length).padStart(2, '0');
+  const progressPct = slides.length > 1 ? (current / (slides.length - 1)) * 100 : 100;
 
   return (
     <div
@@ -130,6 +132,15 @@ export function ModuloSlideshow({ slug, slides }: ModuloSlideshowProps) {
         ))}
       </div>
 
+      {/* ── Slide progress bar — fills proportionally as slides advance ── */}
+      <div className="flex-shrink-0" style={{ height: '2px', background: 'rgba(255,255,255,0.07)', position: 'relative' }}>
+        <motion.div
+          animate={{ width: `${progressPct}%` }}
+          transition={{ duration: 0.35, ease: [0.4, 0, 0.2, 1] }}
+          style={{ position: 'absolute', left: 0, top: 0, height: '100%', background: ACCENT }}
+        />
+      </div>
+
       {/* ── Slide content ── */}
       <div className="relative flex-1 flex items-center overflow-hidden">
         <AnimatePresence mode="wait">
@@ -163,15 +174,18 @@ export function ModuloSlideshow({ slug, slides }: ModuloSlideshowProps) {
             </span>
 
             <div className="w-full max-w-5xl mx-auto" style={{ position: 'relative', zIndex: 1 }}>
+              {/* Prominent slide counter */}
+              <div className="mb-8 flex items-baseline gap-1" style={{ fontFamily: MONO }}>
+                <span style={{ fontSize: '2rem', fontWeight: 700, color: ACCENT, letterSpacing: '-0.02em', lineHeight: 1 }}>
+                  {slideNumber}
+                </span>
+                <span style={{ fontSize: '0.75rem', color: 'rgba(255,255,255,0.25)', letterSpacing: '0.1em' }}>
+                  / {slideTotal}
+                </span>
+              </div>
+
               {/* Desktop: 2-column asymmetric grid; mobile: single column */}
-              <div
-                style={{
-                  display: 'grid',
-                  gridTemplateColumns: '1fr',
-                  gap: '2rem',
-                }}
-                className="md:!grid md:[grid-template-columns:2fr_3fr] md:![gap:4rem]"
-              >
+              <div className="grid grid-cols-1 gap-8 md:grid-cols-[2fr_3fr] md:gap-16">
                 {/* Left column: label + title + accent-line */}
                 <div>
                   <motion.p
@@ -276,12 +290,6 @@ export function ModuloSlideshow({ slug, slides }: ModuloSlideshowProps) {
               }}
             />
           ))}
-          <span
-            className="ml-3"
-            style={{ fontFamily: MONO, fontSize: '10px', letterSpacing: '0.15em', color: 'rgba(255,255,255,0.25)' }}
-          >
-            {current + 1} / {slides.length}
-          </span>
         </div>
 
         {/* Navigation */}
