@@ -121,7 +121,7 @@ export async function createPublicCheckoutSession(cohortSlug: string, email?: st
 
     if (paymentError || !payment) {
       console.error('[checkoutPublic] InfinitePay PENDING insert error:', paymentError)
-      return { error: 'Erro ao processar pagamento. Tente novamente.' }
+      return { error: `Erro ao registrar pedido: ${paymentError?.message ?? 'desconhecido'}` }
     }
 
     const { InfinitePayAdapter } = await import('@/lib/payment/infinitepay')
@@ -139,8 +139,9 @@ export async function createPublicCheckoutSession(cohortSlug: string, email?: st
       })
       checkoutUrl = result.url
     } catch (err) {
+      const msg = err instanceof Error ? err.message : String(err)
       console.error('[checkoutPublic] InfinitePay createLink error:', err)
-      return { error: 'Erro ao processar pagamento. Tente novamente.' }
+      return { error: `InfinitePay: ${msg}` }
     }
 
     redirect(checkoutUrl)
@@ -175,8 +176,9 @@ export async function createPublicCheckoutSession(cohortSlug: string, email?: st
       cancelUrl: `${appUrl}/curso-online`,
     })
   } catch (err) {
+    const msg = err instanceof Error ? err.message : String(err)
     console.error('[checkoutPublic] Stripe error:', err)
-    return { error: 'Erro ao processar pagamento. Tente novamente.' }
+    return { error: `Stripe: ${msg}` }
   }
 
   redirect(session.url)
