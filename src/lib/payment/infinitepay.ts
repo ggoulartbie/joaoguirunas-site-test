@@ -27,7 +27,7 @@ export interface VerifyPaymentResult {
 }
 
 function getHandle(): string {
-  const handle = process.env.INFINITEPAY_HANDLE
+  const handle = process.env.INFINITEPAY_HANDLE?.trim()
   if (!handle) throw new Error('INFINITEPAY_HANDLE must be configured')
   return handle
 }
