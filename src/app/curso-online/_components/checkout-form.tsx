@@ -1,9 +1,29 @@
 'use client'
 
 import { useActionState } from 'react'
+import dynamic from 'next/dynamic'
 import { ArrowRight } from 'lucide-react'
 import { createPublicCheckoutSession } from '@/app/actions/checkoutPublic'
-import { PhoneField } from './PhoneField'
+
+const PhoneField = dynamic(() => import('./PhoneField').then((m) => m.PhoneField), {
+  ssr: false,
+  loading: () => (
+    <input
+      type="tel"
+      placeholder="WhatsApp com DDD"
+      disabled
+      className="w-full px-4 py-3 outline-none"
+      style={{
+        background: 'rgba(255,255,255,0.06)',
+        border: '1px solid rgba(255,255,255,0.15)',
+        color: '#fff',
+        fontFamily: 'var(--font-mono)',
+        fontSize: '13px',
+        borderRadius: 0,
+      }}
+    />
+  ),
+})
 
 const KV_MONO: React.CSSProperties = {
   fontFamily: 'var(--font-mono)',

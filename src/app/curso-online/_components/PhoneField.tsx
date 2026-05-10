@@ -21,12 +21,15 @@ const COUNTRIES = [
 
 function applyMask(value: string, mask: string): string {
   const digits = value.replace(/\D/g, '')
+  if (!digits) return ''
   let result = ''
   let di = 0
-  for (let i = 0; i < mask.length && di < digits.length; i++) {
+  for (let i = 0; i < mask.length; i++) {
+    if (di >= digits.length) break
     if (mask[i] === '#') {
       result += digits[di++]
     } else {
+      // separator between groups — always include if we still have digits ahead
       result += mask[i]
     }
   }
