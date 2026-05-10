@@ -135,14 +135,15 @@ async function processWebhook(params: {
     return
   }
 
-  // Guarda underpayment — não provisionar se valor confirmado for menor que o esperado
   const verifiedAmount = check.paidAmount || paid_amount || amount
   if (payment.amount_cents !== null && verifiedAmount < payment.amount_cents) {
-    console.warn(`[infinitepay webhook] underpayment: verified=${verifiedAmount} < expected=${payment.amount_cents} for order_nsu=${order_nsu}`)
-    await supabaseAdmin
-      .from('payments')
-      .update({ status: 'DECLINED' })
-      .eq('id', payment.id)
+    console.error(`[infinitepay webhook] underpayment: paid=${verifiedAmount} expected=${payment.amount_cents} order_nsu=${order_nsu}`)
+    Sentry.captureMessage('infinitepay underpayment', {
+      level: 'warning',
+      tags: { webhook: 'infinitepay', order_nsu },
+      extra: { paid: verifiedAmount, expected: payment.amount_cents },
+    })
+    await supabaseAdmin.from('payments').update({ status: 'DECLINED' }).eq('id', payment.id)
     return
   }
 
@@ -160,7 +161,11 @@ async function processWebhook(params: {
 
   if (!payment.user_id) {
     if (!params.customer_email) {
-      console.error(`[infinitepay webhook] payment ${payment.id} has null user_id and no customer_email — cannot provision access`)
+      Sentry.captureMessage('infinitepay payment approved without user provisioning', {
+        level: 'warning',
+        tags: { webhook: 'infinitepay', order_nsu },
+        extra: { payment_id: payment.id, reason: 'null user_id and no customer_email' },
+      })
       await supabaseAdmin
         .from('payments')
         .update({
