@@ -226,7 +226,8 @@ export function CursoPricingCalculator() {
     <section
       ref={sectionRef}
       id="investimento"
-      className="py-16 sm:py-24 bg-[#08080C] relative overflow-hidden"
+      className="py-16 sm:py-24 relative overflow-hidden"
+      style={{ background: 'rgba(8,8,12,0.82)' }}
     >
       <div
         className="absolute inset-0 opacity-[0.03]"
