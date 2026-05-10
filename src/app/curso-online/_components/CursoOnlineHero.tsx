@@ -26,7 +26,7 @@ export function CursoOnlineHero({ cohortSlug }: CursoOnlineHeroProps) {
     <section
       id="hero"
       className="relative w-full -mt-16 min-h-[92vh] flex items-center"
-      style={{ background: 'radial-gradient(ellipse at 60% 40%, rgba(255,58,14,0.06) 0%, transparent 60%), #050507' }}
+      style={{ background: 'radial-gradient(ellipse at 60% 40%, rgba(255,58,14,0.06) 0%, transparent 60%)' }}
     >
       <div
         className="absolute inset-0 opacity-[0.03]"
