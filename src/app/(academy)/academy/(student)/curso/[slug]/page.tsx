@@ -139,8 +139,10 @@ export default async function CursoPage({ params }: Props) {
     (cohortCourseRows ?? []).flatMap((r) => r.included_module_ids ?? [])
   )
 
-  // If cohort_courses is empty, assume full access (direct enrollment or admin)
-  const hasGlobalAccess = (cohortCourseRows ?? []).length === 0
+  // AC5: hasGlobalAccess only when the student HAS an active cohort but that cohort has
+  // no module restrictions configured (cohort_courses empty for this course).
+  // A student with no active cohort at all must NOT receive global access.
+  const hasGlobalAccess = userCohortIds.length > 0 && (cohortCourseRows ?? []).length === 0
 
   // 7. Compute progress stats
   const totalLessons = allLessonIds.length

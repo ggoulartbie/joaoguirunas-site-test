@@ -22,6 +22,7 @@ export type Database = {
           issued_at: string
           membership_id: string | null
           pdf_storage_path: string | null
+          revoked_at: string | null
           user_id: string
           verification_code: string
         }
@@ -32,6 +33,7 @@ export type Database = {
           issued_at?: string
           membership_id?: string | null
           pdf_storage_path?: string | null
+          revoked_at?: string | null
           user_id: string
           verification_code: string
         }
@@ -42,6 +44,7 @@ export type Database = {
           issued_at?: string
           membership_id?: string | null
           pdf_storage_path?: string | null
+          revoked_at?: string | null
           user_id?: string
           verification_code?: string
         }
@@ -225,10 +228,12 @@ export type Database = {
           has_public_page: boolean
           has_support: boolean
           id: string
+          infinitepay_handle: string | null
           is_purchasable: boolean
           max_installments_entry: number
           max_installments_extension: number
           name: string
+          payment_provider: string
           slug: string
           start_date: string | null
           status: string
@@ -253,10 +258,12 @@ export type Database = {
           has_public_page?: boolean
           has_support?: boolean
           id?: string
+          infinitepay_handle?: string | null
           is_purchasable?: boolean
           max_installments_entry?: number
           max_installments_extension?: number
           name: string
+          payment_provider?: string
           slug: string
           start_date?: string | null
           status?: string
@@ -281,10 +288,12 @@ export type Database = {
           has_public_page?: boolean
           has_support?: boolean
           id?: string
+          infinitepay_handle?: string | null
           is_purchasable?: boolean
           max_installments_entry?: number
           max_installments_extension?: number
           name?: string
+          payment_provider?: string
           slug?: string
           start_date?: string | null
           status?: string
@@ -713,6 +722,7 @@ export type Database = {
           lesson_id: string | null
           meeting_url: string | null
           recording_url: string | null
+          reminder_1h_sent_at: string | null
           scheduled_at: string
           title: string
         }
@@ -725,6 +735,7 @@ export type Database = {
           lesson_id?: string | null
           meeting_url?: string | null
           recording_url?: string | null
+          reminder_1h_sent_at?: string | null
           scheduled_at: string
           title: string
         }
@@ -737,6 +748,7 @@ export type Database = {
           lesson_id?: string | null
           meeting_url?: string | null
           recording_url?: string | null
+          reminder_1h_sent_at?: string | null
           scheduled_at?: string
           title?: string
         }
@@ -980,15 +992,18 @@ export type Database = {
           coupon_id: string | null
           created_at: string
           id: string
+          infinitepay_invoice_slug: string | null
+          infinitepay_order_nsu: string | null
           membership_id: string | null
           paid_at: string | null
           payment_method: string | null
+          payment_provider: string
           purchase_kind: string
           status: string
           stripe_checkout_session_id: string | null
           stripe_payment_intent_id: string | null
           stripe_subscription_id: string | null
-          user_id: string
+          user_id: string | null
         }
         Insert: {
           amount_cents: number
@@ -996,15 +1011,18 @@ export type Database = {
           coupon_id?: string | null
           created_at?: string
           id?: string
+          infinitepay_invoice_slug?: string | null
+          infinitepay_order_nsu?: string | null
           membership_id?: string | null
           paid_at?: string | null
           payment_method?: string | null
+          payment_provider?: string
           purchase_kind: string
           status?: string
           stripe_checkout_session_id?: string | null
           stripe_payment_intent_id?: string | null
           stripe_subscription_id?: string | null
-          user_id: string
+          user_id?: string | null
         }
         Update: {
           amount_cents?: number
@@ -1012,15 +1030,18 @@ export type Database = {
           coupon_id?: string | null
           created_at?: string
           id?: string
+          infinitepay_invoice_slug?: string | null
+          infinitepay_order_nsu?: string | null
           membership_id?: string | null
           paid_at?: string | null
           payment_method?: string | null
+          payment_provider?: string
           purchase_kind?: string
           status?: string
           stripe_checkout_session_id?: string | null
           stripe_payment_intent_id?: string | null
           stripe_subscription_id?: string | null
-          user_id?: string
+          user_id?: string | null
         }
         Relationships: [
           {
@@ -1083,6 +1104,24 @@ export type Database = {
           role?: string
           stripe_customer_id?: string | null
           updated_at?: string
+        }
+        Relationships: []
+      }
+      settings: {
+        Row: {
+          key: string
+          updated_at: string | null
+          value: string | null
+        }
+        Insert: {
+          key: string
+          updated_at?: string | null
+          value?: string | null
+        }
+        Update: {
+          key?: string
+          updated_at?: string | null
+          value?: string | null
         }
         Relationships: []
       }
