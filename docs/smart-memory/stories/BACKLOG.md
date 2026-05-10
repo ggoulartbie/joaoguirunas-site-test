@@ -215,3 +215,17 @@ Objetivo: refinar a página /curso-online (espelhando /mentoria sem elementos pr
   - Admin Frontend → F6 (sites-dev-delta)
   - Payment Engineer → F7 (sites-dev-gamma)
   - DevOps → F8.4, F8.6 (sites-devops); QA → F8.5 (sites-qa)
+
+## Follow-ups pós-ciclo F9+F12 (2026-05-10)
+
+### F12.4 — Hardening InfinitePay (pre-launch blocker)
+- **CONCERN-1:** gate `paid_amount >= amount_cents` em `route.ts:138-139` (✅ já fixado em commit 55e1339)
+- **CONCERN-4:** Sentry alert no branch `null user_id + null customer_email` (✅ já fixado em commit 55e1339)
+- Status: resolvido no follow-up push
+
+### F12.5 (opcional) — Cleanup tipos InfinitePay
+- CONCERN-2: coluna `infinitepay_order_nsu TEXT` → migrar para UUID em próxima migration
+- CONCERN-5: regenerar `database.types.ts` para cobrir `increment_filled_seats` RPC e remover `as any`
+
+### F9.x cleanup (baixa prioridade)
+- Follow-ups documentação de F9.13 (cobertura de testes), F9.14 (OAuth whitelist no Dashboard), F9.15 (crons Supabase Edge Functions — já migrados em F11.1)

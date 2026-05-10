@@ -265,3 +265,30 @@ Registro de todos os Agent Teams formados neste projeto. Lead (team-os) atualiza
 **Status:** ativo
 **Início:** 2026-05-08T23:09:00
 **Stories:** auditoria inline (sem stories em backlog)
+
+## 2026-05-10 — Team joao-guirunas-site-finalizar-f9-f12
+
+**Objetivo:** Finalizar backlog completo F9 (auditorias, bugs P1) e F12 (integração InfinitePay dual-provider)
+**Lead:** team-os (skill)
+**Composição:**
+- sites-dev-beta — backend/API (F12.1, F12.3, F9.13, F9.14, F9.15, F9.18-AC4/5)
+- sites-dev-alpha — frontend (F9.18-AC1/2/3, F12.2 UI, F9.16)
+- sites-data — database (F9.17, F12.2 migration, F9.9)
+- sites-qa — quality gates (10 veredictos: 7 PASS, 4 WAIVED, 0 FAIL)
+- sites-devops — push/deploy (2 pushes autorizados)
+
+**Status:** encerrado
+**Início:** 2026-05-10T18:03
+**Encerrado:** 2026-05-10T18:36
+**Duração:** ~33 minutos
+
+**Stories concluídas (11 + F9.12 fechada oficialmente):**
+- F9.9, F9.13, F9.14, F9.15, F9.16, F9.17, F9.18 (PASS)
+- F12.1, F12.2, F12.3 (PASS)
+- F9.12 (parent bug-hunt — PASS final após F9.18 resolver todos os P1)
+
+**Commits:**
+- ecd54ac — push principal (10 stories, 3 migrations)
+- 2b1ddaa — fix(webhook): underpayment guard + Sentry alert InfinitePay
+
+**Build:** 137 páginas · typecheck EXIT 0 · deploy Vercel em prod
