@@ -147,6 +147,7 @@ export async function createPublicCheckoutSession(cohortSlug: string, email?: st
       const result = await ipAdapter.createCheckoutLink({
         cohortSlug,
         cohortName: cohort.name,
+        handle: cohort.infinitepay_handle ?? undefined,
         amountCents: cohort.entry_price_cents,
         customerEmail,
         customerName: name,

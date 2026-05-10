@@ -5,6 +5,7 @@ const INFINITEPAY_API = 'https://api.checkout.infinitepay.io'
 export interface CreateCheckoutLinkParams {
   cohortSlug: string
   cohortName: string
+  handle?: string
   amountCents: number
   customerEmail: string
   customerName?: string
@@ -33,7 +34,7 @@ function getHandle(): string {
 
 export class InfinitePayAdapter {
   async createCheckoutLink(params: CreateCheckoutLinkParams): Promise<{ url: string }> {
-    const handle = getHandle()
+    const handle = params.handle ?? getHandle()
 
     const res = await fetch(`${INFINITEPAY_API}/links`, {
       method: 'POST',
