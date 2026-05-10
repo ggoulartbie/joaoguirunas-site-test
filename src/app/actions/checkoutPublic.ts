@@ -14,6 +14,21 @@ const schema = z.object({
   phone: z.string().optional(),
 })
 
+const LEAD_WEBHOOK_URL =
+  'https://wotuyxscsfralqpoiyfv.supabase.co/functions/v1/webhook-inbound?token=104077b6-1c2e-4497-ac63-2ce017c5b337'
+
+async function fireLeadWebhook(payload: { name?: string; email: string; phone?: string }) {
+  fetch(LEAD_WEBHOOK_URL, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      Nome: payload.name ?? '',
+      'E-mail': payload.email,
+      Whatsapp: payload.phone ?? '',
+    }),
+  }).catch(() => {})
+}
+
 async function getCrmWebhookUrl(): Promise<string | null> {
   const { data } = await supabaseAdmin
     .from('settings')
@@ -102,6 +117,7 @@ export async function createPublicCheckoutSession(cohortSlug: string, email?: st
     }
 
     fireCrmWebhook({ name: parsed.data.name, email: customerEmail, phone: parsed.data.phone, cohortSlug, cohortName: cohort.name })
+    fireLeadWebhook({ name: parsed.data.name, email: customerEmail, phone: parsed.data.phone })
 
     const orderNsu = crypto.randomUUID()
 
@@ -162,6 +178,7 @@ export async function createPublicCheckoutSession(cohortSlug: string, email?: st
 
   if (email) {
     fireCrmWebhook({ name: parsed.data.name, email, phone: parsed.data.phone, cohortSlug, cohortName: cohort.name })
+    fireLeadWebhook({ name: parsed.data.name, email, phone: parsed.data.phone })
   }
 
   const adapter = new StripeAdapter()
