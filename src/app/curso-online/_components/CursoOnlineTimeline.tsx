@@ -26,13 +26,6 @@ const PHASES: Phase[] = [
     label: 'Fundamentos',
     items: [
       {
-        num: 0,
-        type: 'Video',
-        title: 'Abertura — Desbloqueio e Crenças Limitantes',
-        description: 'A maioria das pessoas chega travada por uma crença simples: "isso não é pra mim". Aqui quebramos isso. Trabalho de desbloqueio com a Claudia — respiração, ancoragem e identificação das crenças que sabotam o avanço antes mesmo de começar.',
-        tags: ['Desbloqueio', 'Mindset', 'Claudia'],
-      },
-      {
         num: 1,
         type: 'Video',
         title: 'O que é possível',

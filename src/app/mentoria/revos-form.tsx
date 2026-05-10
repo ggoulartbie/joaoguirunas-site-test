@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react'
 
 const FORM_ID = 'a11d7cc4-17b8-400e-94e4-0f27ca47e9a4'
 const DIV_ID = `lp-form-${FORM_ID}`
-const SCRIPT_SRC = `https://revos.growthsales.ai/embed.js?form_id=${FORM_ID}`
+const SCRIPT_SRC = `https://crm.joaoguirunas.com/embed.js?form_id=${FORM_ID}`
 
 type LoadState = 'loading' | 'loaded' | 'blocked'
 
@@ -56,7 +56,7 @@ export function RevosForm() {
             Formulário bloqueado por extensão do navegador. Desative o ad-blocker nesta página e recarregue.
           </p>
           <a
-            href="https://revos.growthsales.ai"
+            href="https://crm.joaoguirunas.com"
             target="_blank"
             rel="noopener noreferrer"
             className="text-[var(--color-accent)] text-sm underline underline-offset-4"
