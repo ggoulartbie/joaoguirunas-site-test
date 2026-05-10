@@ -39,7 +39,7 @@ export async function createCheckoutLink(params: {
   description: string
   redirectUrl: string
   webhookUrl: string
-  customer?: { name?: string; email?: string }
+  customer?: { name?: string; email?: string; phone_number?: string }
 }): Promise<string> {
   const payload: CreateLinkPayload = {
     handle: params.handle,

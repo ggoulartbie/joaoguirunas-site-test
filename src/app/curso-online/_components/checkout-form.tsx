@@ -3,6 +3,7 @@
 import { useActionState } from 'react'
 import { ArrowRight } from 'lucide-react'
 import { createPublicCheckoutSession } from '@/app/actions/checkoutPublic'
+import { PhoneField } from './PhoneField'
 
 const KV_MONO: React.CSSProperties = {
   fontFamily: 'var(--font-mono)',
@@ -61,15 +62,7 @@ export function CheckoutForm({ cohortSlug, label = 'Comprar agora — R$ 797' }:
           className="w-full px-4 py-3 outline-none"
           style={inputStyle}
         />
-        <input
-          type="tel"
-          name="phone"
-          required
-          placeholder="WhatsApp com DDD"
-          autoComplete="tel"
-          className="w-full px-4 py-3 outline-none"
-          style={inputStyle}
-        />
+        <PhoneField name="phone" required />
         <button
           type="submit"
           disabled={isPending}

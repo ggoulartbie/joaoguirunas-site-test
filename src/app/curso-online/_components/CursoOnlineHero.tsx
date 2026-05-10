@@ -68,16 +68,6 @@ export function CursoOnlineHero({ cohortSlug }: CursoOnlineHeroProps) {
 
           <div className="flex flex-col sm:flex-row gap-4 items-start">
             <CheckoutForm cohortSlug={cohortSlug} label="Comprar — R$ 797" />
-            <a
-              href="#modulos"
-              className="inline-flex items-center justify-center gap-2 px-6 py-4 uppercase transition-all hover:bg-white/[0.05]"
-              style={{ ...KV_MONO, border: '1px solid rgba(255,255,255,0.14)', color: 'rgba(255,255,255,0.55)' }}
-            >
-              Ver os módulos
-              <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19 9l-7 7-7-7" />
-              </svg>
-            </a>
           </div>
 
           <div className="mt-10 flex flex-wrap gap-6">
