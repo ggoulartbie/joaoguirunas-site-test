@@ -12,13 +12,23 @@ const KV_MONO: React.CSSProperties = {
   fontWeight: 500,
 }
 
+const inputStyle: React.CSSProperties = {
+  background: 'rgba(255,255,255,0.06)',
+  border: '1px solid rgba(255,255,255,0.15)',
+  color: '#fff',
+  fontFamily: 'var(--font-mono)',
+  fontSize: '13px',
+  borderRadius: 0,
+}
+
 type ActionState = { error: string } | null
 
 async function checkoutAction(_prev: ActionState, formData: FormData): Promise<ActionState> {
   const slug = formData.get('cohortSlug') as string
+  const name  = (formData.get('name')  as string | null) ?? undefined
   const email = (formData.get('email') as string | null) ?? undefined
   const phone = (formData.get('phone') as string | null) ?? undefined
-  return await createPublicCheckoutSession(slug, email, phone)
+  return await createPublicCheckoutSession(slug, email, phone, name)
 }
 
 interface CheckoutFormProps {
@@ -34,34 +44,31 @@ export function CheckoutForm({ cohortSlug, label = 'Comprar agora — R$ 797' }:
       <form action={formAction} className="flex flex-col gap-3 w-full sm:w-auto">
         <input type="hidden" name="cohortSlug" value={cohortSlug} />
         <input
+          type="text"
+          name="name"
+          required
+          placeholder="Seu nome"
+          autoComplete="name"
+          className="w-full px-4 py-3 outline-none"
+          style={inputStyle}
+        />
+        <input
           type="email"
           name="email"
           required
           placeholder="seu@email.com"
-          className="w-full px-4 py-3 text-sm outline-none"
-          style={{
-            background: 'rgba(255,255,255,0.06)',
-            border: '1px solid rgba(255,255,255,0.15)',
-            color: '#fff',
-            fontFamily: 'var(--font-mono)',
-            fontSize: '13px',
-            borderRadius: 0,
-          }}
+          autoComplete="email"
+          className="w-full px-4 py-3 outline-none"
+          style={inputStyle}
         />
         <input
           type="tel"
           name="phone"
           required
-          placeholder="WhatsApp (11) 99999-9999"
-          className="w-full px-4 py-3 text-sm outline-none"
-          style={{
-            background: 'rgba(255,255,255,0.06)',
-            border: '1px solid rgba(255,255,255,0.15)',
-            color: '#fff',
-            fontFamily: 'var(--font-mono)',
-            fontSize: '13px',
-            borderRadius: 0,
-          }}
+          placeholder="WhatsApp com DDD"
+          autoComplete="tel"
+          className="w-full px-4 py-3 outline-none"
+          style={inputStyle}
         />
         <button
           type="submit"

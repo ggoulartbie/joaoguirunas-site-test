@@ -9,11 +9,13 @@ import { findOrCreateUser } from '@/lib/payment/webhookHelpers'
 
 const schema = z.object({
   cohortSlug: z.string().min(1),
+  name: z.string().optional(),
   email: z.string().email().optional(),
   phone: z.string().optional(),
 })
 
 async function fireCrmWebhook(payload: {
+  name?: string
   email: string
   phone?: string
   cohortSlug: string
@@ -25,6 +27,7 @@ async function fireCrmWebhook(payload: {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
+      name: payload.name ?? '',
       email: payload.email,
       phone: payload.phone ?? '',
       cohort_slug: payload.cohortSlug,
@@ -38,8 +41,8 @@ async function fireCrmWebhook(payload: {
 // Checkout público: não requer autenticação.
 // Para InfinitePay, o email é obrigatório para criar/encontrar o user antes do redirect.
 // Para Stripe, o webhook cria a conta após o pagamento via metadata da sessão.
-export async function createPublicCheckoutSession(cohortSlug: string, email?: string, phone?: string) {
-  const parsed = schema.safeParse({ cohortSlug, email, phone })
+export async function createPublicCheckoutSession(cohortSlug: string, email?: string, phone?: string, name?: string) {
+  const parsed = schema.safeParse({ cohortSlug, name, email, phone })
   if (!parsed.success) {
     return { error: 'Dados inválidos.' }
   }
@@ -80,7 +83,7 @@ export async function createPublicCheckoutSession(cohortSlug: string, email?: st
         return { error: 'Informe seu email para continuar.' }
       }
       try {
-        const { userId: resolvedId } = await findOrCreateUser(email, '')
+        const { userId: resolvedId } = await findOrCreateUser(email, name ?? '')
         userId = resolvedId
         customerEmail = email
       } catch (err) {
@@ -89,7 +92,7 @@ export async function createPublicCheckoutSession(cohortSlug: string, email?: st
       }
     }
 
-    fireCrmWebhook({ email: customerEmail, phone: parsed.data.phone, cohortSlug, cohortName: cohort.name })
+    fireCrmWebhook({ name: parsed.data.name, email: customerEmail, phone: parsed.data.phone, cohortSlug, cohortName: cohort.name })
 
     const orderNsu = crypto.randomUUID()
 
@@ -127,7 +130,9 @@ export async function createPublicCheckoutSession(cohortSlug: string, email?: st
         description: `Acesso ao curso — ${cohort.name}`,
         redirectUrl: `${appUrl}/academy/checkout/sucesso`,
         webhookUrl: `${appUrl}/api/webhooks/infinitepay`,
-        customer: customerEmail ? { email: customerEmail } : undefined,
+        customer: (name || customerEmail || phone)
+          ? { name: name || undefined, email: customerEmail || undefined, phone_number: phone || undefined }
+          : undefined,
       })
     } catch (err) {
       console.error('[checkoutPublic] InfinitePay createLink error:', err)
@@ -143,7 +148,7 @@ export async function createPublicCheckoutSession(cohortSlug: string, email?: st
   }
 
   if (email) {
-    fireCrmWebhook({ email, phone: parsed.data.phone, cohortSlug, cohortName: cohort.name })
+    fireCrmWebhook({ name: parsed.data.name, email, phone: parsed.data.phone, cohortSlug, cohortName: cohort.name })
   }
 
   const adapter = new StripeAdapter()
