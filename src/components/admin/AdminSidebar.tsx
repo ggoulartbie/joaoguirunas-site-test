@@ -15,6 +15,7 @@ import {
   BookOpen,
   Shield,
   ExternalLink,
+  Settings,
 } from 'lucide-react'
 
 const navGroups = [
@@ -43,6 +44,12 @@ const navGroups = [
     label: 'Usuários',
     items: [
       { href: '/academy/admin/usuarios', label: 'Usuários', icon: Users },
+    ],
+  },
+  {
+    label: 'Sistema',
+    items: [
+      { href: '/academy/admin/configuracoes', label: 'Configurações', icon: Settings },
     ],
   },
 ]

@@ -14,6 +14,15 @@ const schema = z.object({
   phone: z.string().optional(),
 })
 
+async function getCrmWebhookUrl(): Promise<string | null> {
+  const { data } = await supabaseAdmin
+    .from('settings')
+    .select('value')
+    .eq('key', 'crm_webhook_url')
+    .maybeSingle()
+  return data?.value || process.env.CRM_WEBHOOK_URL || null
+}
+
 async function fireCrmWebhook(payload: {
   name?: string
   email: string
@@ -21,7 +30,7 @@ async function fireCrmWebhook(payload: {
   cohortSlug: string
   cohortName: string
 }) {
-  const url = process.env.CRM_WEBHOOK_URL
+  const url = await getCrmWebhookUrl()
   if (!url) return
   fetch(url, {
     method: 'POST',
