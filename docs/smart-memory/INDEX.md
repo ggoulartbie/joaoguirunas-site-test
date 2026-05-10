@@ -10,6 +10,7 @@ tags: [index]
 MOC raiz. Todo arquivo novo em `docs/smart-memory/` deve ser referenciado aqui.
 
 ## Projeto
+- [[project/brand-assets]] — logos SVG em docs/brand/ (Alltype, Horizontal, Logo, Vertical)
 - [[project/overview]] — contexto e objetivo
 - [[project/tech-stack]] — stack (fonte: sites-analyst)
 - [[project/architecture]] — padrão arquitetural Next.js App Router + SkillPage template (fonte: sites-architect)

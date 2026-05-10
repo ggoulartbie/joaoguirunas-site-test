@@ -27,6 +27,7 @@ import {
   createLesson,
   deleteLesson,
   updateModule,
+  reorderLessons,
 } from '../actions'
 import type { Database } from '@/types/database'
 import Link from 'next/link'
@@ -47,6 +48,66 @@ const KIND_LABELS: Record<string, string> = {
 const inputClass =
   'w-full border border-[rgba(255,255,255,0.16)] bg-[var(--ink-2)] px-3 py-3 font-mono text-sm text-[var(--bone)] placeholder-[var(--bone-mute)] outline-none focus:border-[var(--ember)] transition-colors'
 
+// ── Sortable Lesson Row ───────────────────────────────────────────────────────
+
+function SortableLesson({
+  lesson,
+  courseId,
+  onDelete,
+}: {
+  lesson: LessonRow
+  courseId: string
+  onDelete: () => void
+}) {
+  const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({ id: lesson.id })
+  const style = { transform: CSS.Transform.toString(transform), transition }
+
+  return (
+    <div
+      ref={setNodeRef}
+      style={style}
+      className={cn(
+        'flex items-center gap-3 px-4 py-2.5 transition-colors hover:bg-[var(--ink-3)]',
+        isDragging && 'opacity-50'
+      )}
+    >
+      <button
+        type="button"
+        {...attributes}
+        {...listeners}
+        className="cursor-grab text-[var(--bone-mute)] opacity-30 transition-opacity hover:opacity-80 active:cursor-grabbing"
+      >
+        <GripVertical className="h-3.5 w-3.5" />
+      </button>
+      <span
+        className={cn(
+          'shrink-0 border border-[rgba(255,255,255,0.07)] px-1.5 py-0.5 font-mono text-[9px] uppercase tracking-wider',
+          lesson.kind === 'VIDEO' || lesson.kind === 'LIVE' || lesson.kind === 'CODE'
+            ? 'text-[var(--bone-dim)]'
+            : 'text-[var(--bone-mute)]'
+        )}
+        style={{ borderRadius: 0 }}
+      >
+        {KIND_LABELS[lesson.kind] ?? lesson.kind}
+      </span>
+      <span className="flex-1 font-[--type-sans] text-xs text-[var(--bone-dim)]">{lesson.title}</span>
+      <Link
+        href={`/academy/admin/cursos/${courseId}/aulas/${lesson.id}`}
+        className="p-1 text-[var(--bone-mute)] transition-colors hover:text-[var(--bone)]"
+      >
+        <Pencil className="h-3 w-3" />
+      </Link>
+      <button
+        type="button"
+        onClick={onDelete}
+        className="p-1 text-[var(--bone-mute)] transition-colors hover:text-[var(--ember)]"
+      >
+        <Trash2 className="h-3 w-3" />
+      </button>
+    </div>
+  )
+}
+
 // ── Sortable Module Row ───────────────────────────────────────────────────────
 
 function SortableModule({
@@ -66,8 +127,21 @@ function SortableModule({
   const [lessonSlug, setLessonSlug] = useState('')
   const [lessonKind, setLessonKind] = useState<string>('VIDEO')
   const [pending, startTransition] = useTransition()
+  const [lessonError, setLessonError] = useState<string | null>(null)
+  const [lessons, setLessons] = useState(mod.lessons)
+  const lessonSensors = useSensors(useSensor(PointerSensor))
 
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({ id: mod.id })
+
+  function handleLessonDragEnd(event: DragEndEvent) {
+    const { active, over } = event
+    if (!over || active.id === over.id) return
+    const oldIndex = lessons.findIndex((l) => l.id === active.id)
+    const newIndex = lessons.findIndex((l) => l.id === over.id)
+    const reordered = arrayMove(lessons, oldIndex, newIndex)
+    setLessons(reordered)
+    startTransition(() => reorderLessons(mod.id, courseId, reordered.map((l) => l.id)))
+  }
   const style = { transform: CSS.Transform.toString(transform), transition }
 
   function slugify(str: string) {
@@ -76,11 +150,16 @@ function SortableModule({
 
   function handleAddLesson(e: React.FormEvent) {
     e.preventDefault()
+    setLessonError(null)
     startTransition(async () => {
-      await createLesson({ module_id: mod.id, title: lessonTitle, slug: lessonSlug, kind: lessonKind, courseId })
-      setLessonTitle('')
-      setLessonSlug('')
-      setAddingLesson(false)
+      try {
+        await createLesson({ module_id: mod.id, title: lessonTitle, slug: lessonSlug, kind: lessonKind, courseId })
+        setLessonTitle('')
+        setLessonSlug('')
+        setAddingLesson(false)
+      } catch (err) {
+        setLessonError(err instanceof Error ? err.message : 'Erro ao criar aula')
+      }
     })
   }
 
@@ -161,40 +240,23 @@ function SortableModule({
       {/* Lessons list */}
       {open && (
         <div className="border-t border-[rgba(255,255,255,0.07)] pb-1">
-          {mod.lessons.map((lesson) => (
-            <div
-              key={lesson.id}
-              className="flex items-center gap-3 px-4 py-2.5 transition-colors hover:bg-[var(--ink-3)]"
-            >
-              <span className={cn(
-                'shrink-0 border border-[rgba(255,255,255,0.07)] px-1.5 py-0.5 font-mono text-[9px] uppercase tracking-wider',
-                lesson.kind === 'VIDEO' ? 'text-[var(--bone-dim)]' :
-                lesson.kind === 'LIVE' ? 'text-[var(--bone-dim)]' :
-                lesson.kind === 'CODE' ? 'text-[var(--bone-dim)]' :
-                'text-[var(--bone-mute)]'
-              )} style={{ borderRadius: 0 }}>
-                {KIND_LABELS[lesson.kind] ?? lesson.kind}
-              </span>
-              <span className="flex-1 font-[--type-sans] text-xs text-[var(--bone-dim)]">{lesson.title}</span>
-              <Link
-                href={`/academy/admin/cursos/${courseId}/aulas/${lesson.id}`}
-                className="p-1 text-[var(--bone-mute)] transition-colors hover:text-[var(--bone)]"
-              >
-                <Pencil className="h-3 w-3" />
-              </Link>
-              <button
-                type="button"
-                onClick={() => {
-                  if (confirm(`Remover aula "${lesson.title}"?`)) {
-                    startTransition(() => deleteLesson(lesson.id, courseId))
-                  }
-                }}
-                className="p-1 text-[var(--bone-mute)] transition-colors hover:text-[var(--ember)]"
-              >
-                <Trash2 className="h-3 w-3" />
-              </button>
-            </div>
-          ))}
+          <DndContext sensors={lessonSensors} collisionDetection={closestCenter} onDragEnd={handleLessonDragEnd}>
+            <SortableContext items={lessons.map((l) => l.id)} strategy={verticalListSortingStrategy}>
+              {lessons.map((lesson) => (
+                <SortableLesson
+                  key={lesson.id}
+                  lesson={lesson}
+                  courseId={courseId}
+                  onDelete={() => {
+                    if (confirm(`Remover aula "${lesson.title}"?`)) {
+                      setLessons((prev) => prev.filter((l) => l.id !== lesson.id))
+                      startTransition(() => deleteLesson(lesson.id, courseId))
+                    }
+                  }}
+                />
+              ))}
+            </SortableContext>
+          </DndContext>
 
           {/* Add lesson inline form */}
           {addingLesson ? (
@@ -241,6 +303,9 @@ function SortableModule({
               >
                 Cancelar
               </button>
+              {lessonError && (
+                <p className="w-full font-mono text-[10px] text-red-400">{lessonError}</p>
+              )}
             </form>
           ) : (
             <button
@@ -271,6 +336,8 @@ export function CourseEditorClient({
   const [title, setTitle] = useState(course.title)
   const [description, setDescription] = useState(course.description ?? '')
   const [saving, startSave] = useTransition()
+  const [courseError, setCourseError] = useState<string | null>(null)
+  const [courseSaved, setCourseSaved] = useState(false)
   const [addingModule, setAddingModule] = useState(false)
   const [modTitle, setModTitle] = useState('')
   const [modSlug, setModSlug] = useState('')
@@ -293,7 +360,17 @@ export function CourseEditorClient({
 
   function handleSaveCourse(e: React.FormEvent) {
     e.preventDefault()
-    startSave(() => updateCourse(course.id, { title, description: description || null }))
+    setCourseError(null)
+    setCourseSaved(false)
+    startSave(async () => {
+      try {
+        await updateCourse(course.id, { title, description: description || null })
+        setCourseSaved(true)
+        setTimeout(() => setCourseSaved(false), 2000)
+      } catch (err) {
+        setCourseError(err instanceof Error ? err.message : 'Erro ao salvar curso')
+      }
+    })
   }
 
   function handleDeleteModule(id: string) {
@@ -382,7 +459,11 @@ export function CourseEditorClient({
               />
             </div>
           </div>
-          <div className="flex justify-end border-t border-[rgba(255,255,255,0.07)] pt-4">
+          <div className="flex items-center justify-between border-t border-[rgba(255,255,255,0.07)] pt-4">
+            <div>
+              {courseError && <p className="font-mono text-[10px] text-red-400">{courseError}</p>}
+              {courseSaved && <p className="font-mono text-[10px] text-emerald-400">Salvo</p>}
+            </div>
             <button
               type="submit"
               disabled={saving}

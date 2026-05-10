@@ -11,14 +11,17 @@ type CohortInsert = Database['public']['Tables']['cohorts']['Insert']
 type CohortUpdate = Database['public']['Tables']['cohorts']['Update']
 type CouponInsert = Database['public']['Tables']['coupons']['Insert']
 
+const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i
+const uuidField = () => z.string().regex(UUID_RE, 'ID inválido')
+
 // Represents a course selection: courseId → array of specific moduleIds (empty = all modules)
 const cohortCourseSchema = z.object({
-  courseId: z.string().uuid(),
-  includedModuleIds: z.array(z.string().uuid()).default([]),
+  courseId: uuidField(),
+  includedModuleIds: z.array(uuidField()).default([]),
 })
 
 const cohortCrossExtensionSchema = z.object({
-  targetCohortId: z.string().uuid(),
+  targetCohortId: uuidField(),
   daysGranted: z.number().int().positive(),
   description: z.string().optional(),
   isActive: z.boolean().default(true),
@@ -138,7 +141,7 @@ export async function createCohort(data: z.infer<typeof cohortSchema>) {
   // B6: persist cross extension rules
   await saveCrossExtensions(cohort.id, parsed.data.crossExtensions)
 
-  if (parsed.data.is_purchasable) {
+  if (parsed.data.is_purchasable && parsed.data.payment_provider !== 'INFINITEPAY') {
     await syncCohortWithStripe(cohort.id)
   }
 
@@ -149,7 +152,7 @@ export async function createCohort(data: z.infer<typeof cohortSchema>) {
 export async function updateCohort(cohortId: string, data: z.infer<typeof cohortSchema>) {
   await requireAdmin()
 
-  if (!z.string().uuid().safeParse(cohortId).success) throw new Error('ID inválido')
+  if (!UUID_RE.test(cohortId)) throw new Error('ID inválido')
 
   const parsed = cohortSchema.safeParse(data)
   if (!parsed.success) {
@@ -400,7 +403,7 @@ export async function updateLiveSession(
     recordingUrl: z.string().url().optional().or(z.literal('')),
   })
 
-  if (!z.string().uuid().safeParse(sessionId).success) throw new Error('ID inválido')
+  if (!UUID_RE.test(sessionId)) throw new Error('ID inválido')
 
   const parsed = schema.safeParse(data)
   if (!parsed.success) throw new Error(parsed.error.issues.map((i) => i.message).join(', '))
