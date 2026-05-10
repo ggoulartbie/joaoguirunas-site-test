@@ -124,25 +124,20 @@ export async function createPublicCheckoutSession(cohortSlug: string, email?: st
       return { error: 'Erro ao processar pagamento. Tente novamente.' }
     }
 
-    const handle = (cohort as { infinitepay_handle?: string | null }).infinitepay_handle
-    if (!handle) {
-      return { error: 'Handle InfinitePay não configurado para esta turma. Configure em Admin → Turmas.' }
-    }
-
-    const { createCheckoutLink } = await import('@/lib/payment/infinitepay')
+    const { InfinitePayAdapter } = await import('@/lib/payment/infinitepay')
+    const ipAdapter = new InfinitePayAdapter()
     let checkoutUrl: string
     try {
-      checkoutUrl = await createCheckoutLink({
-        handle,
-        orderNsu,
+      const result = await ipAdapter.createCheckoutLink({
+        cohortSlug,
         amountCents: cohort.entry_price_cents,
-        description: `Acesso ao curso — ${cohort.name}`,
+        customerEmail,
+        customerName: name,
+        orderId: orderNsu,
         redirectUrl: `${appUrl}/academy/checkout/sucesso`,
         webhookUrl: `${appUrl}/api/webhooks/infinitepay`,
-        customer: (name || customerEmail || phone)
-          ? { name: name || undefined, email: customerEmail || undefined, phone_number: phone || undefined }
-          : undefined,
       })
+      checkoutUrl = result.url
     } catch (err) {
       console.error('[checkoutPublic] InfinitePay createLink error:', err)
       return { error: 'Erro ao processar pagamento. Tente novamente.' }
