@@ -134,7 +134,7 @@ export async function createPublicCheckoutSession(cohortSlug: string, email?: st
         customerEmail,
         customerName: name,
         orderId: orderNsu,
-        redirectUrl: `${appUrl}/academy/checkout/sucesso`,
+        redirectUrl: `${appUrl}/academy/checkout/sucesso?provider=infinitepay&order_nsu=${orderNsu}`,
         webhookUrl: `${appUrl}/api/webhooks/infinitepay`,
       })
       checkoutUrl = result.url
@@ -144,6 +144,12 @@ export async function createPublicCheckoutSession(cohortSlug: string, email?: st
     }
 
     redirect(checkoutUrl)
+  }
+
+  // Defesa em profundidade: provider inválido
+  if (cohort.payment_provider !== 'STRIPE') {
+    console.error(`[checkoutPublic] unknown payment_provider: ${cohort.payment_provider}`)
+    return { error: 'Provider de pagamento inválido.' }
   }
 
   // Stripe flow

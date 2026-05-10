@@ -1,24 +1,41 @@
 import Link from 'next/link'
 import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
+import { supabaseAdmin } from '@/lib/supabase/admin'
 
 interface Props {
-  searchParams: Promise<{ session_id?: string; order_nsu?: string }>
+  searchParams: Promise<{ session_id?: string; order_nsu?: string; provider?: string }>
 }
 
 export default async function CheckoutSucessoPage({ searchParams }: Props) {
-  const { session_id, order_nsu } = await searchParams
+  const { session_id, order_nsu, provider } = await searchParams
 
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
 
+  const isInfinitePay = provider === 'infinitepay'
+
   // Public checkout: no active session yet — webhook creates the account asynchronously.
-  // Covers both Stripe (session_id) and InfinitePay (order_nsu) flows.
   const isPublicCheckout = !user && !!(session_id || order_nsu)
 
   if (!user && !session_id && !order_nsu) {
     redirect('/academy/login')
   }
+
+  // Para InfinitePay, tenta buscar o payment para exibir dados confirmados.
+  // Falha graciosamente se order_nsu for inválido ou pagamento ainda estiver PENDING.
+  let infinitePayConfirmed = false
+  if (isInfinitePay && order_nsu) {
+    const { data: payment } = await supabaseAdmin
+      .from('payments')
+      .select('status')
+      .eq('infinitepay_order_nsu', order_nsu)
+      .maybeSingle()
+    infinitePayConfirmed = payment?.status === 'APPROVED'
+  }
+
+  // Se InfinitePay mas payment não aprovado ainda, mostra mensagem de processamento
+  const isInfinitePayPending = isInfinitePay && order_nsu && !infinitePayConfirmed
 
   const nextStepsAuthenticated = [
     'Verifique seu email — enviamos a confirmação do pagamento',
@@ -34,7 +51,30 @@ export default async function CheckoutSucessoPage({ searchParams }: Props) {
     'Não encontrou o email? Verifique a pasta de spam',
   ]
 
-  const nextSteps = isPublicCheckout ? nextStepsPublic : nextStepsAuthenticated
+  const nextStepsPending = [
+    'Seu pagamento está sendo processado',
+    'Você receberá um email com o link de acesso em instantes',
+    'Não feche esta página — pode levar até 1 minuto',
+    'Não encontrou o email? Verifique a pasta de spam',
+  ]
+
+  const nextSteps = isInfinitePayPending
+    ? nextStepsPending
+    : isPublicCheckout
+      ? nextStepsPublic
+      : nextStepsAuthenticated
+
+  const heading = isInfinitePayPending
+    ? 'Processando...'
+    : isPublicCheckout
+      ? 'Pagamento confirmado!'
+      : 'Tudo certo!'
+
+  const subtitle = isInfinitePayPending
+    ? 'Seu pagamento está sendo processado. Você receberá um email com o link de acesso.'
+    : isPublicCheckout
+      ? 'Enviamos o link de acesso para o seu email. Clique no link para ativar sua conta.'
+      : 'Bem-vindo à turma. Seu acesso está confirmado.'
 
   return (
     <div
@@ -63,12 +103,21 @@ export default async function CheckoutSucessoPage({ searchParams }: Props) {
             style={{ animation: 'scale-in 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) both' }}
           >
             <circle cx="32" cy="32" r="30" stroke="var(--ember)" strokeWidth="2" />
-            <path
-              d="M20 33l8 8 16-18"
-              stroke="var(--ember)"
-              strokeWidth="2.5"
-              strokeLinecap="square"
-            />
+            {isInfinitePayPending ? (
+              <path
+                d="M22 32h20M32 22v20"
+                stroke="var(--ember)"
+                strokeWidth="2.5"
+                strokeLinecap="square"
+              />
+            ) : (
+              <path
+                d="M20 33l8 8 16-18"
+                stroke="var(--ember)"
+                strokeWidth="2.5"
+                strokeLinecap="square"
+              />
+            )}
           </svg>
         </div>
 
@@ -80,16 +129,14 @@ export default async function CheckoutSucessoPage({ searchParams }: Props) {
             color: 'var(--bone)',
           }}
         >
-          {isPublicCheckout ? 'Pagamento confirmado!' : 'Tudo certo!'}
+          {heading}
         </h1>
 
         <p
           className="text-sm mb-8 leading-relaxed"
           style={{ color: 'var(--bone-dim)' }}
         >
-          {isPublicCheckout
-            ? 'Enviamos o link de acesso para o seu email. Clique no link para ativar sua conta.'
-            : 'Bem-vindo à turma. Seu acesso está confirmado.'}
+          {subtitle}
         </p>
 
         {/* Next steps */}
@@ -121,7 +168,7 @@ export default async function CheckoutSucessoPage({ searchParams }: Props) {
         </div>
 
         {/* CTA */}
-        {isPublicCheckout ? (
+        {isPublicCheckout || isInfinitePayPending ? (
           <Link
             href="/academy/login"
             className="flex items-center justify-center w-full h-12 text-xs tracking-widest uppercase font-bold mb-4 transition-opacity hover:opacity-90"
