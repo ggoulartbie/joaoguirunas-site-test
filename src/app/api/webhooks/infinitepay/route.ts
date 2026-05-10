@@ -135,8 +135,16 @@ async function processWebhook(params: {
     return
   }
 
-  // Guarda valor verificado; se paid_amount < amount_cents registrado, log mas continua (InfinitePay decide)
+  // Guarda underpayment — não provisionar se valor confirmado for menor que o esperado
   const verifiedAmount = check.paidAmount || paid_amount || amount
+  if (payment.amount_cents !== null && verifiedAmount < payment.amount_cents) {
+    console.warn(`[infinitepay webhook] underpayment: verified=${verifiedAmount} < expected=${payment.amount_cents} for order_nsu=${order_nsu}`)
+    await supabaseAdmin
+      .from('payments')
+      .update({ status: 'DECLINED' })
+      .eq('id', payment.id)
+    return
+  }
 
   // 3. Calcula expires_at
   let newExpiresAt: string | null = null
