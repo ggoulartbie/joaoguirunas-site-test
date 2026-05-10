@@ -109,16 +109,24 @@ export default async function MeusCursosPage() {
   }
 
   // Consolidar módulos liberados por curso através de todas as cohorts do aluno.
-  // Um aluno com 2 cohorts no mesmo curso recebe a union dos included_module_ids.
-  const modulesByCourse = new Map<string, { moduleIds: Set<string>; firstCohortId: string }>()
+  // included_module_ids = null → acesso total ao curso (sem restrição de módulos)
+  // included_module_ids = [] → nenhum módulo liberado explicitamente
+  // included_module_ids = [...] → só esses módulos
+  const modulesByCourse = new Map<string, { moduleIds: Set<string>; firstCohortId: string; fullAccess: boolean }>()
   for (const cc of cohortCourses) {
+    const isFullAccess = cc.included_module_ids === null
     const entry = modulesByCourse.get(cc.course_id)
     if (entry) {
-      for (const mid of cc.included_module_ids ?? []) entry.moduleIds.add(mid)
+      if (isFullAccess) {
+        entry.fullAccess = true
+      } else {
+        for (const mid of cc.included_module_ids ?? []) entry.moduleIds.add(mid)
+      }
     } else {
       modulesByCourse.set(cc.course_id, {
-        moduleIds: new Set(cc.included_module_ids ?? []),
+        moduleIds: new Set(isFullAccess ? [] : (cc.included_module_ids ?? [])),
         firstCohortId: cc.cohort_id,
+        fullAccess: isFullAccess,
       })
     }
   }
@@ -126,15 +134,15 @@ export default async function MeusCursosPage() {
   const available: CourseView[] = []
   const locked: CourseView[] = []
 
-  for (const [courseId, { moduleIds, firstCohortId }] of modulesByCourse) {
+  for (const [courseId, { moduleIds, firstCohortId, fullAccess }] of modulesByCourse) {
     const course = coursesById.get(courseId)
     if (!course) continue
 
     const member = members.find((m) => m.cohort_id === firstCohortId)
     const cohortObj = member && (Array.isArray(member.cohorts) ? member.cohorts[0] : member.cohorts)
 
-    const accessibleModIds = [...moduleIds]
     const totalModIds = allModuleIdsByCourse.get(courseId) ?? []
+    const accessibleModIds = fullAccess ? totalModIds : [...moduleIds]
     const accessibleModulesCount = accessibleModIds.length
     const totalModulesCount = totalModIds.length
 
