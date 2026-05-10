@@ -205,7 +205,7 @@ function TimelineCard({
         transition={{ duration: 0.5, delay: globalIndex * 0.06 + 0.1 }}
         className="group relative flex-1 pb-8 sm:pb-12"
       >
-        <div className="relative border border-white/[0.06] bg-white/[0.02] p-6 sm:p-8 transition-all duration-300 hover:border-[var(--color-accent)]/20 hover:bg-white/[0.04]">
+        <div className="relative border border-white/[0.10] bg-black/50 p-6 sm:p-8 transition-all duration-300 hover:border-[var(--color-accent)]/20 hover:bg-black/60">
           <div
             className="pointer-events-none absolute -inset-px opacity-0 transition-opacity duration-300 group-hover:opacity-100"
             style={{ background: 'radial-gradient(400px at 50% 0%, rgba(255,68,0,0.06), transparent)' }}

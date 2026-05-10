@@ -27,7 +27,7 @@ const FeatureCard: React.FC<FeatureCardProps> = ({ icon, title, highlights, inde
       onMouseLeave={() => setIsHovered(false)}
       className="relative group h-full"
     >
-      <div className="relative h-full min-h-[320px] border border-white/[0.08] bg-white/[0.02] backdrop-blur-md p-6 sm:p-8 transition-all duration-300 hover:border-[#FF3A0E]/40 hover:bg-white/[0.04]">
+      <div className="relative h-full min-h-[320px] border border-white/[0.10] bg-black/50 backdrop-blur-md p-6 sm:p-8 transition-all duration-300 hover:border-[#FF3A0E]/40 hover:bg-black/60">
         {isHovered && (
           <motion.div
             initial={{ opacity: 0 }}

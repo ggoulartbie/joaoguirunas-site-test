@@ -144,8 +144,8 @@ function ProfessionalRow({
       className={cn(
         'w-full flex items-center gap-2 sm:gap-3 px-3 sm:px-4 py-2.5 sm:py-3 border transition-all duration-200 cursor-pointer select-none',
         checked
-          ? 'border-white/[0.10] bg-white/[0.06]'
-          : 'border-white/[0.05] bg-white/[0.02] hover:bg-white/[0.05]',
+          ? 'border-white/[0.15] bg-black/50'
+          : 'border-white/[0.08] bg-black/40 hover:bg-black/55',
       )}
     >
       <span
@@ -317,7 +317,7 @@ export function CursoPricingCalculator() {
               ))}
             </div>
 
-            <div className="mt-6 border border-white/[0.08] bg-white/[0.05] px-3 sm:px-5 py-3 sm:py-4 flex items-center justify-between">
+            <div className="mt-6 border border-white/[0.12] bg-black/50 px-3 sm:px-5 py-3 sm:py-4 flex items-center justify-between">
               <span className="text-white/60 text-sm font-medium uppercase tracking-wider">
                 Custo Anual
               </span>
