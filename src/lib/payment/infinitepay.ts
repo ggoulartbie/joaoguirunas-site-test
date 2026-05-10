@@ -4,9 +4,11 @@ const INFINITEPAY_API = 'https://api.checkout.infinitepay.io'
 
 export interface CreateCheckoutLinkParams {
   cohortSlug: string
+  cohortName: string
   amountCents: number
   customerEmail: string
   customerName?: string
+  customerPhone?: string
   orderId: string
   redirectUrl: string
   webhookUrl: string
@@ -39,10 +41,14 @@ export class InfinitePayAdapter {
       body: JSON.stringify({
         handle,
         order_nsu: params.orderId,
-        itens: [{ quantity: 1, price: params.amountCents, description: params.cohortSlug }],
+        itens: [{ quantity: 1, price: params.amountCents, description: params.cohortName }],
         redirect_url: params.redirectUrl,
         webhook_url: params.webhookUrl,
-        customer: { email: params.customerEmail, name: params.customerName },
+        customer: {
+          email: params.customerEmail,
+          name: params.customerName,
+          phone_number: params.customerPhone,
+        },
       }),
     })
 

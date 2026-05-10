@@ -130,9 +130,11 @@ export async function createPublicCheckoutSession(cohortSlug: string, email?: st
     try {
       const result = await ipAdapter.createCheckoutLink({
         cohortSlug,
+        cohortName: cohort.name,
         amountCents: cohort.entry_price_cents,
         customerEmail,
         customerName: name,
+        customerPhone: parsed.data.phone,
         orderId: orderNsu,
         redirectUrl: `${appUrl}/academy/checkout/sucesso?provider=infinitepay&order_nsu=${orderNsu}`,
         webhookUrl: `${appUrl}/api/webhooks/infinitepay`,
