@@ -1,28 +1,38 @@
 import { NextResponse, type NextRequest } from 'next/server'
 import { createServerClient } from '@supabase/ssr'
 
-const PUBLIC_PATHS = [
+// Rotas que bypass completo do middleware (sem session refresh necessário)
+const BYPASS_PATHS = [
+  '/_next',
+  '/favicon',
+]
+
+// Rotas públicas que precisam de session refresh mas não redirecionam para login
+const PUBLIC_WITH_REFRESH_PATHS = [
   '/academy/login',
   '/academy/recuperar-senha',
   '/academy/redefinir-senha',
   '/academy/auth',
   '/turmas',
+  '/academy/turmas',
   '/academy/checkout',
   '/certificado',
   '/academy/403',
-  '/_next',
-  '/favicon',
   '/api/webhooks',
 ]
 
-function isPublic(pathname: string) {
-  return PUBLIC_PATHS.some((p) => pathname.startsWith(p))
+function isBypass(pathname: string) {
+  return BYPASS_PATHS.some((p) => pathname.startsWith(p))
+}
+
+function isPublicWithRefresh(pathname: string) {
+  return PUBLIC_WITH_REFRESH_PATHS.some((p) => pathname.startsWith(p))
 }
 
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl
 
-  if (isPublic(pathname)) {
+  if (isBypass(pathname)) {
     return NextResponse.next()
   }
 
@@ -71,7 +81,7 @@ export async function middleware(request: NextRequest) {
     data: { user },
   } = await supabase.auth.getUser()
 
-  if (!user) {
+  if (!user && !isPublicWithRefresh(pathname)) {
     const loginUrl = request.nextUrl.clone()
     loginUrl.pathname = '/academy/login'
     loginUrl.searchParams.set('next', pathname)
@@ -79,7 +89,7 @@ export async function middleware(request: NextRequest) {
   }
 
   // rotas /academy/admin/* exigem role ADMIN — verificado no servidor
-  if (pathname.startsWith('/academy/admin')) {
+  if (user && pathname.startsWith('/academy/admin')) {
     const { data: profile } = await supabase
       .from('profiles')
       .select('role')
@@ -104,6 +114,7 @@ export const config = {
     '/academy/redefinir-senha',
     '/academy/auth/:path*',
     '/turmas/:path*',
+    '/academy/turmas/:path*',
     '/certificado/:path*',
     '/academy/403',
     '/api/webhooks/:path*',
