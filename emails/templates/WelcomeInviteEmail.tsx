@@ -39,14 +39,14 @@ export function WelcomeInviteEmail({ name, cohortName, activateUrl }: Props) {
             <Text style={styles.body}>
               Você foi adicionado à turma{' '}
               <strong style={styles.strong}>{cohortName}</strong>. Clique no botão abaixo
-              para activar sua conta e começar.
+              para ativar sua conta e começar.
             </Text>
             <Text style={styles.body}>
               O link é de uso único e expira em 24 horas.
             </Text>
             <Section style={styles.btnWrapper}>
               <Button href={activateUrl} style={styles.buttonPrimary}>
-                ACTIVAR MINHA CONTA
+                ATIVAR MINHA CONTA
               </Button>
             </Section>
             <Hr style={styles.hr} />

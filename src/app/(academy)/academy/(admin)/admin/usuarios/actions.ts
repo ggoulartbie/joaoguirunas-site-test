@@ -174,7 +174,7 @@ export async function createStudentManually(data: z.infer<typeof createStudentSc
     email_confirm: true,
     user_metadata: { name: parsed.data.name },
   })
-  if (authErr || !authData.user) throw new Error(authErr?.message ?? 'Erro ao criar utilizador')
+  if (authErr || !authData.user) throw new Error(authErr?.message ?? 'Erro ao criar usuário')
 
   const userId = authData.user.id
 
@@ -185,7 +185,7 @@ export async function createStudentManually(data: z.infer<typeof createStudentSc
     .eq('id', userId)
   if (profileErr) {
     await supabaseAdmin.auth.admin.deleteUser(userId)
-    throw new Error('Erro ao actualizar perfil: ' + profileErr.message)
+    throw new Error('Erro ao atualizar perfil: ' + profileErr.message)
   }
 
   // Create cohort_member

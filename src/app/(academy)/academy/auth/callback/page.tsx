@@ -36,7 +36,7 @@ export default function AuthCallbackPage() {
   return (
     <div className="flex min-h-screen items-center justify-center bg-[var(--ink)]">
       <p className="font-mono text-xs uppercase tracking-widest text-[var(--bone-mute)]">
-        Activando conta…
+        Ativando conta…
       </p>
     </div>
   )
