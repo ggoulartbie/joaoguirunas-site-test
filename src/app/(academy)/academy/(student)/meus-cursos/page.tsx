@@ -109,12 +109,11 @@ export default async function MeusCursosPage() {
   }
 
   // Consolidar módulos liberados por curso através de todas as cohorts do aluno.
-  // included_module_ids = null → acesso total ao curso (sem restrição de módulos)
-  // included_module_ids = [] → nenhum módulo liberado explicitamente
+  // included_module_ids = null ou [] → acesso total (admin salva [] quando "todos os módulos")
   // included_module_ids = [...] → só esses módulos
   const modulesByCourse = new Map<string, { moduleIds: Set<string>; firstCohortId: string; fullAccess: boolean }>()
   for (const cc of cohortCourses) {
-    const isFullAccess = cc.included_module_ids === null
+    const isFullAccess = cc.included_module_ids === null || cc.included_module_ids.length === 0
     const entry = modulesByCourse.get(cc.course_id)
     if (entry) {
       if (isFullAccess) {
