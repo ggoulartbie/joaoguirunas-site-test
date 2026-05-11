@@ -1104,6 +1104,7 @@ export type Database = {
           avatar_url: string | null
           bio: string | null
           created_at: string
+          has_set_password: boolean
           id: string
           name: string
           role: string
@@ -1114,6 +1115,7 @@ export type Database = {
           avatar_url?: string | null
           bio?: string | null
           created_at?: string
+          has_set_password?: boolean
           id: string
           name: string
           role?: string
@@ -1124,6 +1126,7 @@ export type Database = {
           avatar_url?: string | null
           bio?: string | null
           created_at?: string
+          has_set_password?: boolean
           id?: string
           name?: string
           role?: string

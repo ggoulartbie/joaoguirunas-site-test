@@ -184,10 +184,10 @@ export async function createStudentManually(data: z.infer<typeof createStudentSc
     app_metadata: { has_password: false },
   })
 
-  // Trigger already inserted the profile — update name and role to match the form values.
+  // Trigger already inserted the profile — update name, role and flag de senha.
   const { error: profileErr } = await supabaseAdmin
     .from('profiles')
-    .update({ name: parsed.data.name, role: parsed.data.role })
+    .update({ name: parsed.data.name, role: parsed.data.role, has_set_password: false })
     .eq('id', userId)
   if (profileErr) {
     await supabaseAdmin.auth.admin.deleteUser(userId)

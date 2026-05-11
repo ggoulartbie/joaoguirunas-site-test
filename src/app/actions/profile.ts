@@ -29,10 +29,12 @@ export async function changePassword(
   const { data: { user } } = await supabase.auth.getUser()
   if (!user?.email) return { error: 'Sessão inválida.' }
 
-  // Verificar diretamente se encrypted_password está preenchido na tabela auth.users
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const { data: hasPasswordData } = await (supabaseAdmin.rpc as any)('user_has_password', { p_user_id: user.id })
-  const hasPassword = hasPasswordData !== false
+  const { data: profileData } = await supabaseAdmin
+    .from('profiles')
+    .select('has_set_password')
+    .eq('id', user.id)
+    .single()
+  const hasPassword = profileData?.has_set_password !== false
 
   if (hasPassword) {
     if (!currentPassword) return { error: 'Informe a senha atual.' }
@@ -46,11 +48,11 @@ export async function changePassword(
   const { error } = await supabase.auth.updateUser({ password: newPassword })
   if (error) return { error: 'Erro ao alterar senha. Tente novamente.' }
 
-  // Marcar que o usuário agora tem senha definida
   if (!hasPassword) {
-    await supabaseAdmin.auth.admin.updateUserById(user.id, {
-      app_metadata: { has_password: true },
-    })
+    await supabaseAdmin
+      .from('profiles')
+      .update({ has_set_password: true })
+      .eq('id', user.id)
   }
 
   return {}
