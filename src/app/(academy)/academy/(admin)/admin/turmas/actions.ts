@@ -323,7 +323,10 @@ export async function createCoupon(data: {
 
   if (error || !coupon) throw new Error(error?.message ?? 'Erro ao criar cupom')
 
-  await syncCouponWithStripe(coupon.id)
+  const { data: couponCohort } = await supabaseAdmin.from('cohorts').select('payment_provider').eq('id', parsed.data.cohortId).single()
+  if (!couponCohort || couponCohort.payment_provider !== 'INFINITEPAY') {
+    await syncCouponWithStripe(coupon.id)
+  }
   revalidatePath(`/academy/admin/turmas/${data.cohortId}`)
 }
 
@@ -455,6 +458,9 @@ export async function deactivateCoupon(couponId: string) {
 
   if (error) throw new Error(error.message)
 
-  await syncCouponWithStripe(couponId)
+  const { data: deactivateCohort } = await supabaseAdmin.from('cohorts').select('payment_provider').eq('id', coupon.cohort_id).single()
+  if (!deactivateCohort || deactivateCohort.payment_provider !== 'INFINITEPAY') {
+    await syncCouponWithStripe(couponId)
+  }
   revalidatePath(`/academy/admin/turmas/${coupon.cohort_id}`)
 }
