@@ -173,11 +173,16 @@ export async function createStudentManually(data: z.infer<typeof createStudentSc
     email: parsed.data.email,
     email_confirm: true,
     user_metadata: { name: parsed.data.name },
-    app_metadata: { has_password: false },
   })
   if (authErr || !authData.user) throw new Error(authErr?.message ?? 'Erro ao criar usuário')
 
   const userId = authData.user.id
+
+  // Garantir app_metadata.has_password=false via updateUserById — mais confiável que
+  // passar pelo createUser, que pode mesclar de forma inesperada dependendo da versão.
+  await supabaseAdmin.auth.admin.updateUserById(userId, {
+    app_metadata: { has_password: false },
+  })
 
   // Trigger already inserted the profile — update name and role to match the form values.
   const { error: profileErr } = await supabaseAdmin
