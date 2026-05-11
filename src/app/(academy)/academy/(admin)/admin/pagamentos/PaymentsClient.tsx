@@ -2,7 +2,7 @@
 
 import { useState, useTransition } from 'react'
 import { ExternalLink, X, AlertTriangle, RefreshCw } from 'lucide-react'
-import { retryWebhookEvent, refundPayment } from './actions'
+import { retryWebhookEvent, refundPayment, deletePayment } from './actions'
 
 export type PaymentRow = {
   id: string
@@ -148,6 +148,83 @@ function RefundConfirmModal({
   )
 }
 
+function DeleteConfirmModal({
+  payment,
+  onConfirm,
+  onCancel,
+  isPending,
+  error,
+}: {
+  payment: PaymentRow
+  onConfirm: () => void
+  onCancel: () => void
+  isPending?: boolean
+  error?: string | null
+}) {
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-4">
+      <div className="w-full max-w-md border border-[rgba(255,255,255,0.07)] bg-[var(--ink)]">
+        <div className="flex items-center justify-between border-b border-[rgba(255,255,255,0.07)] px-6 py-4">
+          <h2 className="font-mono text-sm font-semibold uppercase tracking-wider text-[var(--bone)]">
+            Excluir Pagamento
+          </h2>
+          <button onClick={onCancel} className="text-[var(--bone-mute)] hover:text-[var(--bone)]">
+            <X className="h-4 w-4" />
+          </button>
+        </div>
+
+        <div className="p-6">
+          <div className="mb-4 space-y-2 border border-[rgba(255,255,255,0.07)] bg-[var(--ink-2)] p-4">
+            <div className="flex justify-between">
+              <span className="font-mono text-[10px] text-[var(--bone-mute)]">Aluno</span>
+              <span className="font-mono text-xs text-[var(--bone-dim)]">{payment.userName}</span>
+            </div>
+            <div className="flex justify-between">
+              <span className="font-mono text-[10px] text-[var(--bone-mute)]">Turma</span>
+              <span className="font-mono text-xs text-[var(--bone-dim)]">{payment.cohortName}</span>
+            </div>
+            <div className="flex justify-between">
+              <span className="font-mono text-[10px] text-[var(--bone-mute)]">Valor</span>
+              <span className="font-mono text-sm font-bold text-[var(--bone)]">
+                {formatBRL(payment.amount_cents)}
+              </span>
+            </div>
+          </div>
+
+          <p className="mb-5 font-mono text-xs text-[var(--bone-mute)]">
+            O registro será removido permanentemente. Esta ação não pode ser desfeita.
+          </p>
+
+          {error && (
+            <div className="mb-4 border border-[var(--ember)]/40 bg-[var(--ember)]/10 px-4 py-2 font-mono text-xs text-[var(--ember)]">
+              {error}
+            </div>
+          )}
+
+          <div className="flex gap-3">
+            <button
+              type="button"
+              onClick={onCancel}
+              disabled={isPending}
+              className="flex-1 border border-[rgba(255,255,255,0.07)] py-2.5 font-mono text-xs uppercase tracking-wider text-[var(--bone-mute)] transition-colors hover:text-[var(--bone-dim)] disabled:cursor-not-allowed disabled:opacity-40"
+            >
+              Cancelar
+            </button>
+            <button
+              type="button"
+              disabled={isPending}
+              onClick={onConfirm}
+              className="flex-1 bg-[var(--ember)] py-2.5 font-mono text-xs font-semibold uppercase tracking-wider text-white disabled:cursor-not-allowed disabled:opacity-40"
+            >
+              {isPending ? 'Excluindo...' : 'Excluir'}
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  )
+}
+
 function downloadCSV(payments: PaymentRow[]) {
   const headers = ['ID', 'Aluno', 'Turma', 'Tipo', 'Valor', 'Status', 'Método', 'Data']
   const rows = payments.map((p) => [
@@ -252,6 +329,9 @@ export function PaymentsClient({
   const [payments, setPayments] = useState(initialPayments)
   const [refundTarget, setRefundTarget] = useState<PaymentRow | null>(null)
   const [refundError, setRefundError] = useState<string | null>(null)
+  const [deleteTarget, setDeleteTarget] = useState<PaymentRow | null>(null)
+  const [deleteError, setDeleteError] = useState<string | null>(null)
+  const [successToast, setSuccessToast] = useState<string | null>(null)
   const [isPending, startTransition] = useTransition()
 
   const filtered = payments.filter((p) => {
@@ -276,6 +356,23 @@ export function PaymentsClient({
     })
   }
 
+  function handleDeleteConfirm() {
+    if (!deleteTarget) return
+    setDeleteError(null)
+    const targetId = deleteTarget.id
+    startTransition(async () => {
+      try {
+        await deletePayment(targetId)
+        setPayments((prev) => prev.filter((p) => p.id !== targetId))
+        setDeleteTarget(null)
+        setSuccessToast('Pagamento excluído com sucesso')
+        setTimeout(() => setSuccessToast(null), 4000)
+      } catch (err) {
+        setDeleteError(err instanceof Error ? err.message : 'Erro desconhecido ao excluir pagamento')
+      }
+    })
+  }
+
   return (
     <>
       <FailedWebhooksPanel events={failedWebhookEvents} />
@@ -290,6 +387,22 @@ export function PaymentsClient({
             error={refundError}
           />
         </>
+      )}
+
+      {deleteTarget && (
+        <DeleteConfirmModal
+          payment={deleteTarget}
+          onConfirm={handleDeleteConfirm}
+          onCancel={() => { setDeleteTarget(null); setDeleteError(null) }}
+          isPending={isPending}
+          error={deleteError}
+        />
+      )}
+
+      {successToast && (
+        <div className="fixed bottom-6 right-6 z-50 border border-emerald-500/30 bg-[var(--ink)] px-5 py-3 font-mono text-xs text-emerald-400 shadow-lg">
+          {successToast}
+        </div>
       )}
 
       {/* Toolbar */}
@@ -378,6 +491,15 @@ export function PaymentsClient({
                         className="border border-[var(--ember)]/20 px-2.5 py-1 font-mono text-[9px] uppercase tracking-wider text-[var(--ember)]/70 transition-colors hover:border-[var(--ember)]/40 hover:text-[var(--ember)]"
                       >
                         Reembolsar
+                      </button>
+                    )}
+                    {payment.status === 'PENDING' && (
+                      <button
+                        type="button"
+                        onClick={() => setDeleteTarget(payment)}
+                        className="border border-[rgba(255,255,255,0.07)] px-2.5 py-1 font-mono text-[9px] uppercase tracking-wider text-[var(--bone-mute)] transition-colors hover:border-[rgba(255,255,255,0.16)] hover:text-[var(--bone-dim)]"
+                      >
+                        Excluir
                       </button>
                     )}
                   </div>
