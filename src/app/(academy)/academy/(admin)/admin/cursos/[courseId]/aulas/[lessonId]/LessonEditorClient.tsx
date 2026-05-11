@@ -44,10 +44,12 @@ export function LessonEditorClient({
   lesson,
   initialMaterials,
   courseId,
+  vimeoDomain = '',
 }: {
   lesson: LessonRow
   initialMaterials: MaterialRow[]
   courseId: string
+  vimeoDomain?: string
 }) {
   const router = useRouter()
   const fileRef = useRef<HTMLInputElement>(null)
@@ -228,7 +230,7 @@ export function LessonEditorClient({
             {videoId && videoProvider === 'VIMEO' && (
               <div className="mt-2 aspect-video w-full max-w-md overflow-hidden border border-[rgba(255,255,255,0.07)]">
                 <iframe
-                  src={`https://player.vimeo.com/video/${videoId}?dnt=1&title=0&byline=0`}
+                  src={`https://player.vimeo.com/video/${videoId}?dnt=1&title=0&byline=0${vimeoDomain ? `&domain=${vimeoDomain}` : ''}`}
                   className="h-full w-full"
                   allow="autoplay; fullscreen"
                   allowFullScreen

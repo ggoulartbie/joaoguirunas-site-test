@@ -32,6 +32,7 @@ export default async function EditAulaPage({
       lesson={lesson}
       initialMaterials={materials ?? []}
       courseId={courseId}
+      vimeoDomain={process.env.VIMEO_DOMAIN_WHITELIST ?? ''}
     />
   )
 }

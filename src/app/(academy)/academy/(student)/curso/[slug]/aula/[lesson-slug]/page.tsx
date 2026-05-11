@@ -331,6 +331,7 @@ export default async function AulaPage({ params }: Props) {
                 videoId={lesson.video_id}
                 provider={lesson.video_provider}
                 initialSeconds={progress?.seconds_watched ?? 0}
+                vimeoDomain={process.env.VIMEO_DOMAIN_WHITELIST ?? ''}
               />
             ) : (
               <div className="flex h-full items-center justify-center">

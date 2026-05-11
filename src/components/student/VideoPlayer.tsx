@@ -61,6 +61,7 @@ interface VideoPlayerProps {
   provider: string | null
   initialSeconds?: number
   className?: string
+  vimeoDomain?: string
 }
 
 export function VideoPlayer({
@@ -69,6 +70,7 @@ export function VideoPlayer({
   provider,
   initialSeconds = 0,
   className,
+  vimeoDomain,
 }: VideoPlayerProps) {
   const vimeoContainerRef = useRef<HTMLDivElement>(null)
   const ytContainerRef = useRef<HTMLDivElement>(null)
@@ -109,6 +111,7 @@ export function VideoPlayer({
       title: false,
       byline: false,
       portrait: false,
+      ...(vimeoDomain ? { domain: vimeoDomain } : {}),
     })
 
     vimeoPlayerRef.current = player
