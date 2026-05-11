@@ -1,6 +1,5 @@
 import 'server-only'
-// DOMPurify runs server-side via isomorphic-dompurify — never shipped to the client bundle
-import DOMPurify from 'isomorphic-dompurify'
+import sanitize from 'sanitize-html'
 
 const ALLOWED_TAGS = [
   'h1', 'h2', 'h3', 'h4', 'h5', 'h6',
@@ -23,11 +22,9 @@ const ALLOWED_ATTR = [
 ]
 
 export function sanitizeHtml(dirty: string): string {
-  return DOMPurify.sanitize(dirty, {
-    ALLOWED_TAGS,
-    ALLOWED_ATTR,
-    // Prevent JS protocol injection in href/src
-    FORCE_BODY: true,
-    RETURN_DOM: false,
+  return sanitize(dirty, {
+    allowedTags: ALLOWED_TAGS,
+    allowedAttributes: { '*': ALLOWED_ATTR },
+    allowedSchemes: ['http', 'https', 'mailto'],
   })
 }
