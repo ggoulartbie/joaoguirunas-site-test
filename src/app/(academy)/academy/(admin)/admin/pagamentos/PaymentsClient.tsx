@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useTransition } from 'react'
-import { ExternalLink, X, AlertTriangle, RefreshCw } from 'lucide-react'
+import { ExternalLink, X, AlertTriangle, RefreshCw, Trash2 } from 'lucide-react'
 import { retryWebhookEvent, refundPayment, deletePayment } from './actions'
 
 export type PaymentRow = {
@@ -361,15 +361,15 @@ export function PaymentsClient({
     setDeleteError(null)
     const targetId = deleteTarget.id
     startTransition(async () => {
-      try {
-        await deletePayment(targetId)
-        setPayments((prev) => prev.filter((p) => p.id !== targetId))
-        setDeleteTarget(null)
-        setSuccessToast('Pagamento excluído com sucesso')
-        setTimeout(() => setSuccessToast(null), 4000)
-      } catch (err) {
-        setDeleteError(err instanceof Error ? err.message : 'Erro desconhecido ao excluir pagamento')
+      const result = await deletePayment(targetId)
+      if (result.error) {
+        setDeleteError(result.error)
+        return
       }
+      setPayments((prev) => prev.filter((p) => p.id !== targetId))
+      setDeleteTarget(null)
+      setSuccessToast('Pagamento excluído com sucesso')
+      setTimeout(() => setSuccessToast(null), 4000)
     })
   }
 
@@ -497,8 +497,9 @@ export function PaymentsClient({
                       <button
                         type="button"
                         onClick={() => setDeleteTarget(payment)}
-                        className="border border-[rgba(255,255,255,0.07)] px-2.5 py-1 font-mono text-[9px] uppercase tracking-wider text-[var(--bone-mute)] transition-colors hover:border-[rgba(255,255,255,0.16)] hover:text-[var(--bone-dim)]"
+                        className="flex items-center gap-1.5 border border-red-500/20 px-2.5 py-1 font-mono text-[9px] uppercase tracking-wider text-red-400/70 transition-colors hover:border-red-500/40 hover:text-red-400"
                       >
+                        <Trash2 className="h-3 w-3" />
                         Excluir
                       </button>
                     )}

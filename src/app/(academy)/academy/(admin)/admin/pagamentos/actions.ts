@@ -358,17 +358,17 @@ export async function retryWebhookEvent(eventId: string) {
   revalidatePath('/academy/admin/pagamentos')
 }
 
-export async function deletePayment(paymentId: string) {
+export async function deletePayment(paymentId: string): Promise<{ error?: string; success?: boolean }> {
   await requireAdmin()
 
-  const { data: payment, error: fetchErr } = await supabaseAdmin
+  const { data: payment } = await supabaseAdmin
     .from('payments')
     .select('id, status')
     .eq('id', paymentId)
     .single()
 
-  if (fetchErr || !payment) throw new Error('Pagamento não encontrado')
-  if (payment.status !== 'PENDING') throw new Error('Apenas pagamentos pendentes podem ser excluídos')
+  if (!payment) return { success: true }
+  if (payment.status !== 'PENDING') return { error: 'Apenas pagamentos pendentes podem ser excluídos' }
 
   const { error } = await supabaseAdmin
     .from('payments')
@@ -376,9 +376,10 @@ export async function deletePayment(paymentId: string) {
     .eq('id', paymentId)
     .eq('status', 'PENDING')
 
-  if (error) throw new Error('Falha ao excluir pagamento')
+  if (error) return { error: 'Falha ao excluir pagamento' }
 
   revalidatePath('/academy/admin/pagamentos')
+  return { success: true }
 }
 
 export async function refundPayment(paymentId: string) {
