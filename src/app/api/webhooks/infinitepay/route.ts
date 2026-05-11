@@ -8,6 +8,32 @@ import type { Json } from '@/types/database'
 
 export const runtime = 'nodejs'
 
+async function fireStageCrmWebhook(
+  key: 'crm_webhook_payment_approved' | 'crm_webhook_payment_declined',
+  payload: { email?: string; name?: string; cohortName?: string; orderNsu: string; paidAmount?: number }
+) {
+  const { data } = await supabaseAdmin
+    .from('settings')
+    .select('value')
+    .eq('key', key)
+    .maybeSingle()
+  const url = data?.value
+  if (!url) return
+  fetch(url, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      stage: key === 'crm_webhook_payment_approved' ? 'payment_approved' : 'payment_declined',
+      email: payload.email ?? '',
+      name: payload.name ?? '',
+      cohort_name: payload.cohortName ?? '',
+      order_nsu: payload.orderNsu,
+      paid_amount_cents: payload.paidAmount ?? 0,
+      timestamp: new Date().toISOString(),
+    }),
+  }).catch(() => {})
+}
+
 interface InfinitePayWebhookPayload {
   invoice_slug: string
   amount: number
@@ -132,6 +158,7 @@ async function processWebhook(params: {
       .from('payments')
       .update({ status: 'DECLINED' })
       .eq('id', payment.id)
+    fireStageCrmWebhook('crm_webhook_payment_declined', { orderNsu: order_nsu })
     return
   }
 
@@ -144,6 +171,7 @@ async function processWebhook(params: {
       extra: { paid: verifiedAmount, expected: payment.amount_cents },
     })
     await supabaseAdmin.from('payments').update({ status: 'DECLINED' }).eq('id', payment.id)
+    fireStageCrmWebhook('crm_webhook_payment_declined', { orderNsu: order_nsu })
     return
   }
 
@@ -261,4 +289,12 @@ async function processWebhook(params: {
 
     await sendWelcomeInviteEmail(email, name, cohort.name, accessUrl, subject).catch(console.error)
   }
+
+  fireStageCrmWebhook('crm_webhook_payment_approved', {
+    email: email ?? undefined,
+    name,
+    cohortName: cohort.name,
+    orderNsu: order_nsu,
+    paidAmount: verifiedAmount,
+  })
 }

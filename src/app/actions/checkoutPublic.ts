@@ -73,7 +73,7 @@ export async function createPublicCheckoutSession(cohortSlug: string, email?: st
 
   const { data: cohort } = await supabaseAdmin
     .from('cohorts')
-    .select('id, slug, name, is_purchasable, stripe_price_entry_id, entry_price_cents, access_duration_days, payment_provider, infinitepay_handle')
+    .select('id, slug, name, is_purchasable, stripe_price_entry_id, entry_price_cents, access_duration_days, payment_provider, infinitepay_handle, infinitepay_checkout_url')
     .eq('slug', cohortSlug)
     .single()
 
@@ -114,6 +114,12 @@ export async function createPublicCheckoutSession(cohortSlug: string, email?: st
         console.error('[checkoutPublic] findOrCreateUser error:', err)
         return { error: 'Erro ao processar sua conta. Tente novamente.' }
       }
+    }
+
+    if (cohort.infinitepay_checkout_url) {
+      fireCrmWebhook({ name: parsed.data.name, email: customerEmail, phone: parsed.data.phone, cohortSlug, cohortName: cohort.name })
+      fireLeadWebhook({ name: parsed.data.name, email: customerEmail, phone: parsed.data.phone })
+      redirect(cohort.infinitepay_checkout_url)
     }
 
     fireCrmWebhook({ name: parsed.data.name, email: customerEmail, phone: parsed.data.phone, cohortSlug, cohortName: cohort.name })
