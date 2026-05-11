@@ -265,7 +265,7 @@ export async function removeMemberFromCohort(memberId: string) {
 
   const { data: member } = await supabaseAdmin
     .from('cohort_members')
-    .select('cohort_id')
+    .select('cohort_id, status')
     .eq('id', memberId)
     .single()
 
@@ -275,6 +275,12 @@ export async function removeMemberFromCohort(memberId: string) {
     .eq('id', memberId)
 
   if (error) throw new Error(error.message)
+
+  // Só decrementa filled_seats se o membro estava ACTIVE
+  if (member?.status === 'ACTIVE') {
+    await supabaseAdmin.rpc('decrement_filled_seats', { p_cohort_id: member.cohort_id })
+  }
+
   if (member) revalidatePath(`/academy/admin/turmas/${member.cohort_id}`)
 }
 
