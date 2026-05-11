@@ -208,12 +208,14 @@ export async function createStudentManually(data: z.infer<typeof createStudentSc
     .eq('id', cohort.id)
 
   // Generate magic link for account activation
+  const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? 'https://joaoguirunas.com'
   const { data: linkData, error: linkErr } = await supabaseAdmin.auth.admin.generateLink({
     type: 'magiclink',
     email: parsed.data.email,
+    options: { redirectTo: `${appUrl}/academy/auth/callback` },
   })
   const activateUrl = linkErr || !linkData?.properties?.action_link
-    ? `${process.env.NEXT_PUBLIC_APP_URL ?? 'https://joaoguirunas.com'}/academy/login`
+    ? `${appUrl}/academy/login`
     : linkData.properties.action_link
 
   // Send invite email (non-blocking — don't fail the action if email fails)
