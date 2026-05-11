@@ -20,7 +20,7 @@ import {
   Save,
   ArrowLeft,
 } from 'lucide-react'
-import { createCohort, updateCohort, addMembersByIds, createCoupon, createLiveSession, updateLiveSession, deleteLiveSession } from './actions'
+import { createCohort, updateCohort, addMembersByIds, removeMemberFromCohort, createCoupon, createLiveSession, updateLiveSession, deleteLiveSession } from './actions'
 
 type CohortCourse = Database['public']['Tables']['cohort_courses']['Row']
 type CrossExtension = Database['public']['Tables']['cohort_cross_extensions']['Row']
@@ -1361,6 +1361,11 @@ export function CohortForm(props: CohortFormProps) {
                           <button
                             type="button"
                             className="font-mono text-[10px] text-red-400/50 transition-colors hover:text-red-400"
+                            onClick={async () => {
+                              if (!confirm(`Remover ${m.userName} da turma?`)) return
+                              await removeMemberFromCohort(m.id)
+                              router.refresh()
+                            }}
                           >
                             Remover
                           </button>
