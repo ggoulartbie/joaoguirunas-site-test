@@ -10,7 +10,7 @@ export default async function PerfilPage() {
   const user = await requireUser()
 
   // Queries paralelas
-  const [profileResult, membershipsResult, paymentsResult, authUserResult] = await Promise.all([
+  const [profileResult, membershipsResult, paymentsResult, authUserResult, hasPasswordResult] = await Promise.all([
     supabaseAdmin
       .from('profiles')
       .select('id, name, avatar_url, bio, role, stripe_customer_id, created_at')
@@ -33,9 +33,12 @@ export default async function PerfilPage() {
       .order('created_at', { ascending: false })
       .limit(50),
     supabaseAdmin.auth.admin.getUserById(user.id),
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    (supabaseAdmin.rpc as any)('user_has_password', { p_user_id: user.id }),
   ])
 
-  const hasPassword = authUserResult.data?.user?.app_metadata?.has_password !== false
+  // null/undefined (ex: RPC ainda não aplicada) → assumir que tem senha, por segurança
+  const hasPassword = hasPasswordResult.data !== false
 
   return (
     <PerfilClient

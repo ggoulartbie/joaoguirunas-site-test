@@ -29,9 +29,10 @@ export async function changePassword(
   const { data: { user } } = await supabase.auth.getUser()
   if (!user?.email) return { error: 'Sessão inválida.' }
 
-  // Fonte autoritativa de has_password vem do app_metadata (só admin escreve lá)
-  const { data: adminUser } = await supabaseAdmin.auth.admin.getUserById(user.id)
-  const hasPassword = adminUser?.user?.app_metadata?.has_password !== false
+  // Verificar diretamente se encrypted_password está preenchido na tabela auth.users
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const { data: hasPasswordData } = await (supabaseAdmin.rpc as any)('user_has_password', { p_user_id: user.id })
+  const hasPassword = hasPasswordData !== false
 
   if (hasPassword) {
     if (!currentPassword) return { error: 'Informe a senha atual.' }
