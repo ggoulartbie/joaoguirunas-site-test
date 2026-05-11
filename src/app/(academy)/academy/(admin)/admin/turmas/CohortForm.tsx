@@ -297,6 +297,8 @@ export function CohortForm(props: CohortFormProps) {
   const [paymentProvider, setPaymentProvider] = useState<string>((initial as any)?.payment_provider ?? 'STRIPE')
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [infinitepayHandle, setInfinitepayHandle] = useState<string>((initial as any)?.infinitepay_handle ?? '')
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const [infinitepayCheckoutUrl, setInfinitepayCheckoutUrl] = useState<string>((initial as any)?.infinitepay_checkout_url ?? '')
   const [isPurchasable, setIsPurchasable] = useState(initial?.is_purchasable ?? false)
   const [hasPublicPage, setHasPublicPage] = useState(initial?.has_public_page ?? false)
   const [entryPriceBRL, setEntryPriceBRL] = useState(
@@ -501,6 +503,7 @@ export function CohortForm(props: CohortFormProps) {
       stripe_price_entry_id: stripePriceEntryId || undefined,
       payment_provider: paymentProvider as 'STRIPE' | 'INFINITEPAY',
       infinitepay_handle: infinitepayHandle || undefined,
+      infinitepay_checkout_url: infinitepayCheckoutUrl || undefined,
       cohortCourses: cohortCoursesPayload,
       crossExtensions: crossExtensionsPayload,
     }
@@ -991,6 +994,22 @@ export function CohortForm(props: CohortFormProps) {
                   />
                   <p className="mt-1 font-mono text-[10px] text-[var(--bone-mute)]">
                     Sua InfiniteTag sem o $ (ex: growthsales)
+                  </p>
+                </div>
+              )}
+              {paymentProvider === 'INFINITEPAY' && (
+                <div className="mt-3">
+                  <FieldLabel>URL de Checkout (link estático InfinitePay)</FieldLabel>
+                  <input
+                    type="url"
+                    value={infinitepayCheckoutUrl}
+                    onChange={(e) => setInfinitepayCheckoutUrl(e.target.value)}
+                    placeholder="https://checkout.infinitepay.io/growthsales/..."
+                    className="w-full bg-[var(--ink-2)] px-3 py-2 font-mono text-xs text-[var(--bone)] outline-none border border-[rgba(255,255,255,0.07)] focus:border-[var(--ember)]"
+                    style={{ borderRadius: 0 }}
+                  />
+                  <p className="mt-1 font-mono text-[10px] text-[var(--bone-mute)]">
+                    Cole aqui o link criado manualmente no painel InfinitePay. Quando preenchido, o checkout redireciona diretamente para este link.
                   </p>
                 </div>
               )}

@@ -253,6 +253,7 @@ export type Database = {
           has_public_page: boolean
           has_support: boolean
           id: string
+          infinitepay_checkout_url: string | null
           infinitepay_handle: string | null
           is_purchasable: boolean
           max_installments_entry: number
@@ -283,6 +284,7 @@ export type Database = {
           has_public_page?: boolean
           has_support?: boolean
           id?: string
+          infinitepay_checkout_url?: string | null
           infinitepay_handle?: string | null
           is_purchasable?: boolean
           max_installments_entry?: number
@@ -313,6 +315,7 @@ export type Database = {
           has_public_page?: boolean
           has_support?: boolean
           id?: string
+          infinitepay_checkout_url?: string | null
           infinitepay_handle?: string | null
           is_purchasable?: boolean
           max_installments_entry?: number

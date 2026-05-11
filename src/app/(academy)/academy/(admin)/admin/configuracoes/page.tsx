@@ -5,7 +5,11 @@ import { ConfiguracoesClient } from './ConfiguracoesClient'
 export const metadata: Metadata = { title: 'Configurações' }
 
 export default async function ConfiguracoesPage() {
-  const crmWebhookUrl = await getSetting('crm_webhook_url')
+  const [crmWebhookUrl, crmWebhookPaymentApproved, crmWebhookPaymentDeclined] = await Promise.all([
+    getSetting('crm_webhook_url'),
+    getSetting('crm_webhook_payment_approved'),
+    getSetting('crm_webhook_payment_declined'),
+  ])
 
   return (
     <div className="mx-auto max-w-3xl space-y-8">
@@ -18,7 +22,11 @@ export default async function ConfiguracoesPage() {
         </h1>
       </div>
 
-      <ConfiguracoesClient currentUrl={crmWebhookUrl} />
+      <ConfiguracoesClient
+        currentUrl={crmWebhookUrl}
+        currentPaymentApprovedUrl={crmWebhookPaymentApproved}
+        currentPaymentDeclinedUrl={crmWebhookPaymentDeclined}
+      />
     </div>
   )
 }
