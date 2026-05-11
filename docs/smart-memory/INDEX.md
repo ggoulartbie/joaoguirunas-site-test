@@ -31,6 +31,7 @@ MOC raiz. Todo arquivo novo em `docs/smart-memory/` deve ser referenciado aqui.
 - [[ops/teams-log]] — times formados e seus objetivos
 - [[ops/launch-readiness]] — relatório de prontidão de launch (features completas, concerns, env vars, infra checklist)
 - [[ops/smoke-test-script]] — roteiro de smoke test manual pós-deploy para João
+- [[ops/infinitepay-setup-guide]] — guia de configuração InfinitePay: env vars via CLI, turma de teste R$1, webhook, checklist E2E e troubleshooting
 
 ## Runbooks
 - [[runbooks/go-live-checklist]] — gate formal F8.7 (13 ACs: auth, conteúdo bloqueado, compra real, cross-ext, refund, emails, performance, RLS, sentry, cron, backup)
