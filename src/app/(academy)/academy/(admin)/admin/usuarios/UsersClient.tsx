@@ -1,7 +1,8 @@
 'use client'
 
 import { useState, useTransition } from 'react'
-import { ChevronDown, X } from 'lucide-react'
+import { useRouter } from 'next/navigation'
+import { ChevronDown, X, Trash2 } from 'lucide-react'
 import {
   updateUserRole,
   banUser,
@@ -9,6 +10,7 @@ import {
   grantCohortAccess,
   extendMembership,
   createStudentManually,
+  deleteUser,
 } from './actions'
 
 type Membership = {
@@ -78,16 +80,92 @@ function RoleBadge({ role }: { role: string }) {
   )
 }
 
+function DeleteConfirmModal({
+  userName,
+  isPending,
+  onCancel,
+  onConfirm,
+}: {
+  userName: string
+  isPending: boolean
+  onCancel: () => void
+  onConfirm: () => void
+}) {
+  const [input, setInput] = useState('')
+  const canConfirm = input === 'EXCLUIR'
+
+  return (
+    <div className="fixed inset-0 z-[60] flex items-center justify-center bg-black/80 p-4">
+      <div className="w-full max-w-md border border-red-500/30 bg-[var(--ink)]">
+        <div className="flex items-center justify-between border-b border-red-500/20 px-6 py-4">
+          <h3 className="font-mono text-sm font-semibold uppercase tracking-wider text-red-400">
+            Excluir conta permanentemente
+          </h3>
+          <button
+            onClick={onCancel}
+            className="text-[var(--bone-mute)] transition-colors hover:text-[var(--bone)]"
+          >
+            <X className="h-4 w-4" />
+          </button>
+        </div>
+        <div className="space-y-4 p-6">
+          <p className="font-mono text-xs leading-relaxed text-[var(--bone-dim)]">
+            Esta ação é irreversível. Todos os dados vinculados à conta de{' '}
+            <span className="text-[var(--bone)]">{userName}</span> serão removidos permanentemente
+            (perfil, progresso, comentários, certificados, notificações).
+          </p>
+          <p className="font-mono text-[10px] text-[var(--bone-mute)]">
+            Histórico de pagamentos será mantido por compliance fiscal.
+          </p>
+          <div>
+            <label className="mb-1.5 block font-mono text-[10px] uppercase tracking-wider text-[var(--bone-mute)]">
+              Digite <span className="text-red-400">EXCLUIR</span> para confirmar
+            </label>
+            <input
+              type="text"
+              value={input}
+              onChange={(e) => setInput(e.target.value)}
+              autoComplete="off"
+              className="w-full border border-[rgba(255,255,255,0.16)] bg-[var(--ink-2)] px-3 py-2 font-mono text-xs text-[var(--bone)] focus:outline-none focus:border-red-500/50"
+            />
+          </div>
+          <div className="flex items-center justify-end gap-3 pt-1">
+            <button
+              type="button"
+              onClick={onCancel}
+              className="font-mono text-[10px] uppercase tracking-wider text-[var(--bone-mute)] hover:text-[var(--bone-dim)]"
+            >
+              Cancelar
+            </button>
+            <button
+              type="button"
+              disabled={!canConfirm || isPending}
+              onClick={onConfirm}
+              className="bg-red-600 px-4 py-2 font-mono text-[10px] uppercase tracking-wider text-white transition-colors hover:bg-red-700 disabled:opacity-40"
+            >
+              {isPending ? 'Excluindo...' : 'Excluir permanentemente'}
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  )
+}
+
 function UserProfileModal({
   user,
   cohorts,
+  currentAdminId,
   onClose,
   onUpdate,
+  onDeleted,
 }: {
   user: UserRow
   cohorts: CohortOption[]
+  currentAdminId: string
   onClose: () => void
   onUpdate: (updated: Partial<UserRow>) => void
+  onDeleted: () => void
 }) {
   const [role, setRole] = useState(user.role)
   const [grantCohortId, setGrantCohortId] = useState('')
@@ -95,6 +173,8 @@ function UserProfileModal({
   const [extendDates, setExtendDates] = useState<Record<string, string>>({})
   const [error, setError] = useState<string | null>(null)
   const [isPending, startTransition] = useTransition()
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false)
+  const [isDeleting, startDeleteTransition] = useTransition()
 
   function handleError(e: unknown) {
     setError(e instanceof Error ? e.message : 'Erro desconhecido')
@@ -168,7 +248,28 @@ function UserProfileModal({
     })
   }
 
+  function handleDelete() {
+    startDeleteTransition(async () => {
+      const result = await deleteUser(user.id)
+      if ('error' in result) {
+        setError(result.error)
+        setShowDeleteConfirm(false)
+        return
+      }
+      onDeleted()
+    })
+  }
+
   return (
+    <>
+    {showDeleteConfirm && (
+      <DeleteConfirmModal
+        userName={user.name}
+        isPending={isDeleting}
+        onCancel={() => setShowDeleteConfirm(false)}
+        onConfirm={handleDelete}
+      />
+    )}
     <div className="fixed inset-0 z-50 flex items-start justify-center overflow-y-auto bg-black/70 p-4 pt-16">
       <div className="w-full max-w-2xl border border-[rgba(255,255,255,0.07)] bg-[var(--ink)]">
         <div className="flex items-center justify-between border-b border-[rgba(255,255,255,0.07)] px-6 py-4">
@@ -356,11 +457,23 @@ function UserProfileModal({
                   Banir conta
                 </button>
               )}
+              {currentAdminId !== user.id && (
+                <button
+                  type="button"
+                  disabled={isPending || isDeleting}
+                  onClick={() => setShowDeleteConfirm(true)}
+                  className="ml-auto flex items-center gap-1.5 border border-red-500/30 px-3 py-1.5 font-mono text-[10px] uppercase tracking-wider text-red-400 transition-colors hover:bg-red-500/10 disabled:opacity-40"
+                >
+                  <Trash2 className="h-3 w-3" />
+                  Excluir conta
+                </button>
+              )}
             </div>
           </div>
         </div>
       </div>
     </div>
+    </>
   )
 }
 
@@ -543,22 +656,44 @@ function CreateStudentModal({
 export function UsersClient({
   initialUsers,
   cohorts,
+  currentAdminId,
 }: {
   initialUsers: UserRow[]
   cohorts: CohortOption[]
+  currentAdminId: string
 }) {
+  const router = useRouter()
   const [users, setUsers] = useState<UserRow[]>(initialUsers)
   const [search, setSearch] = useState('')
   const [roleFilter, setRoleFilter] = useState('all')
   const [cohortFilter, setCohortFilter] = useState('all')
   const [selectedUser, setSelectedUser] = useState<UserRow | null>(null)
   const [showCreateModal, setShowCreateModal] = useState(false)
+  const [successToast, setSuccessToast] = useState<string | null>(null)
+  const [errorToast, setErrorToast] = useState<string | null>(null)
+
+  function showSuccess(msg: string) {
+    setSuccessToast(msg)
+    setTimeout(() => setSuccessToast(null), 4000)
+  }
+
+  function showError(msg: string) {
+    setErrorToast(msg)
+    setTimeout(() => setErrorToast(null), 5000)
+  }
 
   function handleUserUpdate(userId: string, updated: Partial<UserRow>) {
     setUsers((prev) =>
       prev.map((u) => (u.id === userId ? { ...u, ...updated } : u))
     )
     setSelectedUser((prev) => (prev?.id === userId ? { ...prev, ...updated } : prev))
+  }
+
+  function handleUserDeleted(userId: string) {
+    setUsers((prev) => prev.filter((u) => u.id !== userId))
+    setSelectedUser(null)
+    showSuccess('Conta excluída com sucesso')
+    router.refresh()
   }
 
   const filtered = users.filter((u) => {
@@ -586,8 +721,10 @@ export function UsersClient({
         <UserProfileModal
           user={selectedUser}
           cohorts={cohorts}
+          currentAdminId={currentAdminId}
           onClose={() => setSelectedUser(null)}
           onUpdate={(updated) => handleUserUpdate(selectedUser.id, updated)}
+          onDeleted={() => handleUserDeleted(selectedUser.id)}
         />
       )}
       {showCreateModal && (
@@ -599,6 +736,17 @@ export function UsersClient({
             setShowCreateModal(false)
           }}
         />
+      )}
+
+      {successToast && (
+        <div className="fixed bottom-6 right-6 z-[70] border border-emerald-400/30 bg-[var(--ink)] px-5 py-3 font-mono text-xs text-emerald-400 shadow-lg">
+          {successToast}
+        </div>
+      )}
+      {errorToast && (
+        <div className="fixed bottom-6 right-6 z-[70] border border-red-500/30 bg-[var(--ink)] px-5 py-3 font-mono text-xs text-red-400 shadow-lg">
+          {errorToast}
+        </div>
       )}
 
       {/* Toolbar */}

@@ -1,10 +1,13 @@
 import type { Metadata } from 'next'
 import { supabaseAdmin } from '@/lib/supabase/admin'
+import { requireAdmin } from '@/lib/auth/helpers'
 import { UsersClient } from './UsersClient'
 
 export const metadata: Metadata = { title: 'Usuários' }
 
 export default async function AdminUsuariosPage() {
+  const adminProfile = await requireAdmin()
+
   const [{ data: profiles }, { data: cohorts }] = await Promise.all([
     supabaseAdmin
       .from('profiles')
@@ -70,7 +73,7 @@ export default async function AdminUsuariosPage() {
           Gerencie perfis, matrículas e acessos
         </p>
       </div>
-      <UsersClient initialUsers={users} cohorts={cohorts ?? []} />
+      <UsersClient initialUsers={users} cohorts={cohorts ?? []} currentAdminId={adminProfile.id} />
     </div>
   )
 }

@@ -3,7 +3,7 @@
 import { revalidatePath } from 'next/cache'
 import { z } from 'zod'
 import { supabaseAdmin } from '@/lib/supabase/admin'
-import { requireAdmin } from '@/lib/auth/helpers'
+import { requireAdmin, getCurrentUser } from '@/lib/auth/helpers'
 import { sendWelcomeInviteEmail } from '@/lib/email/send'
 
 export async function updateUserRole(userId: string, role: string) {
@@ -109,6 +109,30 @@ export async function extendMembership(memberId: string, newExpiresAt: string) {
 
   if (error) throw new Error(error.message)
   revalidatePath('/academy/admin/usuarios')
+}
+
+export async function deleteUser(userId: string): Promise<{ success: true } | { error: string }> {
+  const admin = await getCurrentUser()
+  if (!admin || admin.role !== 'ADMIN') return { error: 'Não autorizado' }
+  if (!z.string().uuid().safeParse(userId).success) return { error: 'User ID inválido' }
+  if (admin.id === userId) return { error: 'Não é possível excluir a própria conta' }
+
+  try {
+    const { error } = await supabaseAdmin.auth.admin.deleteUser(userId)
+    if (error) {
+      // Supabase returns 404-like error when user doesn't exist — treat as success (idempotent)
+      if (error.message?.toLowerCase().includes('not found') || error.status === 404) {
+        return { success: true }
+      }
+      return { error: error.message }
+    }
+    revalidatePath('/academy/admin/usuarios')
+    return { success: true }
+  } catch (err) {
+    const message = err instanceof Error ? err.message : String(err)
+    console.error('[deleteUser] failed:', message)
+    return { error: message }
+  }
 }
 
 const createStudentSchema = z.object({
