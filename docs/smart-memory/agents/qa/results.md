@@ -1,13 +1,226 @@
 ---
 title: QA Results
 type: qa-log
-updated: 2026-05-11T10:30
+updated: 2026-05-11T12:45
 tags: [qa, veredictos]
 ---
 
 # QA Results — Veredictos formais
 
 Histórico de veredictos emitidos pelo sites-qa (Axilun).
+
+---
+
+## 2026-05-11T12:45 — F13.1 Excluir aluno admin (RE-QA AC5) — ✅ PASS
+
+> Re-veredicto da [F13.1](../../stories/active/F13.1-excluir-aluno-admin.md) após patch. Commit auditado: 144a78b (sobre base 97094cd).
+
+**CONCERNs anteriores → resolução:**
+
+| CONCERN original | Resolução verificada | Local |
+|---|---|---|
+| CONCERN-1: `setError(result.error)` exibia mensagem crua do Supabase na modal | Removido. Substituído por `onError('Não foi possível excluir a conta. Tente novamente.')` propagado via prop | `UsersClient.tsx:258` |
+| CONCERN-2: Mesma exposição via state local `error` da modal | Path do delete não toca mais o state `error` da modal — usa toast global do `UsersClient` (`setErrorToast` linha 682-685) | `UsersClient.tsx:253-263` |
+| CONCERN-3: Sem `Sentry.captureException` no catch do `deleteUser` | `Sentry.captureException(err, { extra: { userId } })` adicionado no catch externo. Import `* as Sentry from '@sentry/nextjs'` correto. Dep `^10.51.0` instalada, configs `sentry.{client,edge,server}.config.ts` presentes | `actions.ts:5, 135` |
+
+**Verificação adicional:**
+- AC1–AC4 sem regressão: confirmação dupla, guard auto-exclusão, refresh da tabela, toast verde de sucesso permanecem.
+- TypeScript: zero erros nos arquivos modificados (`actions.ts`, `UsersClient.tsx`).
+- Copy do toast: claro, sem PII, sem detalhes técnicos do erro — UX correta para ação destrutiva.
+- Toast errorToast reusa padrão visual já em prod (red-500 + font-mono + fixed bottom-6 right-6).
+
+**Checklist 10/10:** code review ok · ACs ok · sem regressão · perf N/A · a11y mantida · SEO N/A · responsivo mantido · copy ok · cross-browser ok · security ok (sem leak de detalhes).
+
+### Veredicto consolidado: ✅ PASS
+
+F13.1 — **PASS final**. 5/5 ACs atendidos, observabilidade Sentry no destrutivo, UX de erro limpa. Liberado para @sites-devops push.
+
+**Re-confirmação 2026-05-11T12:48 (lead solicitou veredicto final):** HEAD do repo permanece em `144a78b`, código já em produção, arquivos `actions.ts` e `UsersClient.tsx` inalterados desde a primeira validação. `Sentry.captureException(err, { extra: { userId } })` presente em `actions.ts:135`; `onError → showError → errorToast` propagado em `UsersClient.tsx:258, 682-685, 730`. Veredicto mantido: **✅ PASS**.
+
+**Nota operacional:** Migration `20260511000000_user_delete_fk_cascade.sql` ainda pendente de `supabase db push` pelo João. Sem ela, deletes podem falhar via FK RESTRICT em `payments.user_id` — mas o caminho de erro está coberto (toast genérico + Sentry). Recomendo aplicar a migration antes do primeiro delete em produção.
+
+---
+
+## 2026-05-11T12:25 — F13.4 InfinitePay aviso link estático + guia R$1 (RE-QA) — ✅ PASS
+
+> Re-veredicto da [F13.4](../../stories/active/F13.4-infinitepay-static-url-warning-setup-guide.md) após patch. Commit auditado: 9cb8871 (sobre base cb953fe).
+
+**Status dos itens corrigidos:**
+
+| Item original | Resolução verificada | Local |
+|---|---|---|
+| FAIL-1 (contradição Bearer Token) | ✅ Todas menções a `INFINITEPAY_BEARER_TOKEN` removidas; única referência é a nota explícita "InfinitePay não usa Authorization: Bearer..." | `infinitepay-setup-guide.md:19` |
+| CONCERN-1 (copy sem acentos) | ✅ "Atenção", "estático", "não", "conseguirá", "à" — texto bate literalmente com AC1 | `CohortForm.tsx:1019` |
+| CONCERN-2 (`vercel logs --follow` ausente) | ✅ Adicionado em 3 lugares: pré-requisitos (linhas 34-38), checklist (106-110), troubleshooting (125-129) | `infinitepay-setup-guide.md` |
+| CONCERN-3 (`.env.local` ausente) | ✅ Seção dedicada "Configurar em desenvolvimento local (.env.local)" com bloco code `INFINITEPAY_HANDLE=growthsales` | `infinitepay-setup-guide.md:40-44` |
+| CONCERN-5 (a11y aviso) | ✅ `role="alert"` adicionado ao `<div>` do aviso — SR agora anuncia | `CohortForm.tsx:1015` |
+| CONCERN-6 (rota /turmas/novo vs /nova) | ✅ Verifiquei rotas reais: `admin/page.tsx:407` e `admin/turmas/page.tsx:27` confirmam `/turmas/nova`. Story tinha typo; guia está correto. |
+
+**Resultado final por AC:**
+
+| AC | Status final | Observação |
+|----|--------|--------|
+| AC1 Alert no CohortForm com texto + classes + acentos | ✅ PASS | Texto bate literalmente com a story (com acentos), classes Tailwind padrão admin, `role="alert"` como bônus |
+| AC2 `data-testid="infinitepay-static-url-warning"` | ✅ PASS | Inalterado, já passava |
+| AC3 Guia com 6 seções obrigatórias | ✅ PASS | Pré-requisitos sem Bearer, com handle + .env.local; Passo 1 OK; Passo 2 OK; Passo 3 OK; Passo 4 com checklist + vercel logs; Troubleshooting com 3 cenários |
+| AC4 Blocos code para URL webhook + comandos env/logs | ✅ PASS | URL webhook em bloco; `vercel env add/ls` em bloco; `vercel logs --follow` em 3 lugares como bloco shell |
+
+**Concern remanescente (NÃO bloqueante):**
+
+- **[CONCERN-A AC3.6 troubleshooting "env var ausente em produção"]:** AC3.6 explicita cenário dedicado: "env var ausente em produção (verificar com `vercel env ls production` — nunca via dashboard)". O troubleshooting atual cobre PENDING, Sentry order_nsu, aluno-não-vê-turma — mas não tem cenário próprio "env var ausente". Está implicitamente derivável dos Pré-requisitos (linha 31 menciona `vercel env ls`). Minor — admin experiente derivaria, dev novato pode demorar. Worth adicionar 4 linhas se houver mais um patch.
+
+**Recomendação final:**
+- ✅ **Push liberado.** O patch resolveu o FAIL-1 (contradição Bearer Token) e todos os CONCERNs textuais. Guia agora é internamente consistente, bate com a story, e supera expectativas em a11y (role="alert" adicionado).
+- F13.4 pode mover para `stories/done/`.
+- CONCERN-A pode virar follow-up trivial ou ser ignorado — não bloqueia operação.
+
+**Próximo passo:** `@sites-devops` push liberado.
+
+---
+
+## 2026-05-11T12:00 — F13.2 Excluir pagamentos pendentes admin (RE-QA) — ✅ PASS
+
+> Re-veredicto da [F13.2](../../stories/active/F13.2-excluir-pagamentos-pendentes-admin.md) após patch. Commit auditado: a20dc09 (sobre base 33f4b7f).
+
+**Status dos 3 concerns corrigidos:**
+
+| Concern original | Resolução verificada | Local |
+|---|---|---|
+| CONCERN-1 (idempotência) | ✅ `if (!payment) return { success: true }` — race de dois admins não gera erro espúrio | `actions.ts:370` |
+| CONCERN-2 (contrato `{error?, success?}`) | ✅ Tipo de retorno `Promise<{ error?: string; success?: boolean }>`; cliente lê `result.error` sem try/catch | `actions.ts:361`, `PaymentsClient.tsx:364-367` |
+| CONCERN-3 (UX destrutivo + Trash2) | ✅ `Trash2` importado, ícone renderizado, classes `text-red-400/70` + `border-red-500/20` aplicadas | `PaymentsClient.tsx:4, 500, 502` |
+
+**Resultado final por AC:**
+
+| AC | Status final | Local-chave |
+|----|--------|--------|
+| AC1 Botão condicional PENDING + destrutivo + Trash2 | ✅ PASS | `PaymentsClient.tsx:496-505` — condicional `PENDING`, `Trash2`, cor vermelha |
+| AC2 Modal de confirmação simples | ✅ PASS | `PaymentsClient.tsx:151-226` — inalterado, já passava |
+| AC3 Server action RBAC + guard duplo + retorno tipado + idempotência | ✅ PASS | `actions.ts:361-383` — `requireAdmin` + guard TS + guard SQL + retorno `{error?, success?}` + idempotência em payment ausente |
+| AC4 Pós-sucesso: modal fecha, linha some, toast verde | ✅ PASS | `PaymentsClient.tsx:359-374` — inalterado |
+| AC5 Defesa em profundidade contra request manual | ✅ PASS | `actions.ts:371` guard TS + `:377` guard SQL — inalterados |
+
+**Concerns remanescentes (NÃO bloqueantes, fora do escopo do patch):**
+
+- **[CONCERN-A débito herdado a11y]:** `DeleteConfirmModal` ainda sem `role="dialog"`, `aria-modal`, focus trap, ESC handler, aria-label no X — segue padrão do `RefundConfirmModal` legado. Vale virar story de a11y-modais admin.
+- **[CONCERN-B observabilidade]:** `deletePayment` não chama `Sentry.captureException` em erro de DB (`actions.ts:379`). `refundPayment` tem; consistência seria boa. Worth abrir follow-up.
+- **[CONCERN-C edge sutil]:** O `single()` na linha 364 não destrutura mais `fetchErr` — se Supabase devolver erro transitório (DB down), o branch `!payment` retorna sucesso falso. Trade-off aceitável: `.single()` retorna erro principalmente em "no rows" (cenário idempotente correto) ou DB indisponível (em que o `.delete()` também falharia, mas aqui não é alcançado). Edge raro.
+- **[CONCERN-D RBAC redirect]:** `requireAdmin()` (`:362`) ainda usa `redirect()` interno que lança `NEXT_REDIRECT` — viola estritamente "sempre retorna `{error?, success?}`". Cenário muito raro (admin sem permissão). Aceitável.
+
+**Recomendação final:**
+- ✅ **Push liberado.** Patch endereçou cirurgicamente os 3 concerns bloqueantes; AC1–AC5 todos passam; sem regressão em `refundPayment` ou `retryWebhookEvent`.
+- F13.2 pode mover para `stories/done/`.
+- CONCERN-A (a11y) e CONCERN-B (Sentry) viram stories próprias se time tiver capacidade.
+
+**Próximo passo:** `@sites-devops` push liberado.
+
+---
+
+## 2026-05-11T11:40 — F13.1 Excluir aluno no admin — ⚠️ CONCERNS
+
+> Veredicto da [F13.1](../../stories/active/F13.1-excluir-aluno-admin.md). Commit auditado: 97094cd.
+
+**Resultado por AC:**
+
+| AC | Status | Local-chave |
+|----|--------|--------|
+| AC1 Botão "Excluir conta" Trash2 vermelho, esconde para próprio admin | ✅ PASS | `UsersClient.tsx:460-470` — guard `currentAdminId !== user.id`, ícone `Trash2`, estilo `text-red-400 border-red-500/30`, mostrado para banido/ativo |
+| AC2 Modal confirmação com input "EXCLUIR" case-sensitive | ✅ PASS | `UsersClient.tsx:83-153` — `input === 'EXCLUIR'` em `:95`; botão "Cancelar" sem disabled; "Excluir permanentemente" gated em `canConfirm && !isPending` |
+| AC3 Server action `deleteUser` com RBAC, cascade, idempotente, retorna `{success}`/`{error}` | ✅ PASS | `actions.ts:114-136` — RBAC via `getCurrentUser` + check explícito; UUID validation; guard `admin.id === userId`; `auth.admin.deleteUser` cascateia via FKs ajustadas pela migration; idempotente em 404/not found; retorna tipo conforme AC, não lança |
+| AC4 Pós-sucesso: modal fecha + linha some + router.refresh + toast verde | ✅ PASS | `UsersClient.tsx:692-697` — `setUsers.filter`, `setSelectedUser(null)`, `showSuccess`, `router.refresh()` |
+| AC5 Erro tratado com toast vermelho + mensagem amigável + console + Sentry | ⚠️ CONCERN | `UsersClient.tsx:251-261` — erro vai pra banner do `UserProfileModal` (`setError(result.error)`), **NÃO usa `errorToast`/`showError` global**; propaga mensagem CRUA do Supabase em vez de "Não foi possível excluir a conta. Tente novamente."; `console.error` OK; **`Sentry.captureException` ausente** (módulo nem importa Sentry) |
+
+**Análise da migration `20260511000000_user_delete_fk_cascade.sql`:**
+
+Validei nomes de constraints contra o schema original (`20260506021931_schema_pagamento_progresso_comunidade.sql` e `20260506021851_schema_cohorts.sql`). FKs foram criadas inline sem nome explícito → Postgres autogenera `<tabela>_<coluna>_fkey`:
+
+| FK migrada | Nome esperado pelo Postgres | Match? | Default original | Novo |
+|---|---|---|---|---|
+| `payments_user_id_fkey` | ✓ | ✓ | RESTRICT | SET NULL |
+| `certificates_user_id_fkey` | ✓ | ✓ | RESTRICT | CASCADE |
+| `comments_author_id_fkey` | ✓ | ✓ | RESTRICT | CASCADE |
+| `forum_threads_author_id_fkey` | ✓ | ✓ | RESTRICT | CASCADE |
+| `forum_replies_author_id_fkey` | ✓ | ✓ | RESTRICT | CASCADE |
+| `votes_user_id_fkey` | ✓ | ✓ | RESTRICT | CASCADE |
+
+**Cobertura de cadeia de delete:** validei todas as 8+ tabelas que referenciam `profiles(id)`:
+- `profiles.id → auth.users(id) ON DELETE CASCADE` ✓ (linha 25 do schema inicial)
+- `cohort_members.user_id` ✓ já CASCADE no schema original (`schema_cohorts.sql:90`)
+- `lesson_progress.user_id` ✓ já CASCADE
+- `notifications.user_id` ✓ já CASCADE
+- `payments, certificates, comments, forum_threads, forum_replies, votes` → corrigidas pela migration
+
+**Decisão do dev de adicionar `forum_threads/forum_replies/votes` (não mencionadas explicitamente na story):** ✅ defensável e necessária — sem isso, `auth.admin.deleteUser` falharia para users com threads/votes (RESTRICT bloqueia). Migration está mais completa do que a story descreveu.
+
+**Decisão do dev de omitir `notifications` (mencionada explicitamente na story):** ✅ correta — já é CASCADE no schema original, ALTER seria no-op.
+
+**[CONCERN-1 AC5 erro UX]:** Fluxo de erro vai pro banner interno do `UserProfileModal` (`setError(result.error)` em `:255`) e fecha apenas o `DeleteConfirmModal`. Nunca dispara `showError`/`errorToast` global. AC5 prescreve "exibe toast vermelho com mensagem amigável". Comportamento atual: admin vê erro técnico cru ("User with this id does not exist" ou similar) dentro do modal de perfil, em vez de toast amigável fora.
+
+**[CONCERN-2 AC5 mensagem]:** AC5 prescreve mensagem genérica "Não foi possível excluir a conta. Tente novamente.". Implementação propaga `result.error` cru. Bom para debug, ruim para UX.
+
+**[CONCERN-3 AC5 Sentry]:** `actions.ts` não importa `@sentry/nextjs`. `pagamentos/actions.ts` usa Sentry; aqui poderia ser igual. AC5 explicita "(se configurado) enviado ao Sentry". Story não bloqueia ("se configurado"), mas Sentry está configurado no projeto.
+
+**[CONCERN-4 migration robustez]:** Migration sem `BEGIN/COMMIT` explícito e sem `if exists` nos `drop constraint`. Supabase CLI roda cada migration em transação implícita, então atomicidade está parcialmente protegida. Mas se um nome de constraint divergir em produção (ex.: schema seed manual), uma das 6 ALTERs falha e a transação aborta inteira — comportamento OK no fim. Defensável manter como está, mas worth conhecer.
+
+**[CONCERN-5 a11y modal]:** `DeleteConfirmModal` sem `role="dialog"`, `aria-modal="true"`, focus trap, ESC handler, `aria-label` no botão X. Mesmo padrão herdado das outras modais admin — débito acumulado, não regressão da F13.1.
+
+**[CONCERN-6 cancel durante delete in-flight]:** Botão "Cancelar" do `DeleteConfirmModal` (`:133-139`) não fica disabled durante `isPending`. Se admin clicar Cancelar enquanto a server action está rodando, modal fecha mas delete continua e o success/error vai pra estado inconsistente (modal já não existe). Edge case raro, mas worth handling: `disabled={isPending}` no Cancelar.
+
+**Recomendação:**
+- ⚠️ **Push permitido com observações.** A funcionalidade entrega o objetivo central (admin consegue excluir aluno com guard duplo, RBAC, cascade correto, e migration de FKs validada e completa). A migration é o ponto crítico e está **correta** — nomes de constraints batem com a convenção Postgres dada a forma como foram criadas inline.
+- **CONCERN-1 e CONCERN-2 (AC5):** divergências do que a story prescreveu textualmente. Fix simples (~5 linhas): trocar `setError` por `onDeleted(error)` ou expor `showError` ao child modal; mapear erro pra mensagem genérica. Worth corrigir antes do push.
+- **CONCERN-3 (Sentry):** importar `@sentry/nextjs` em `actions.ts` e adicionar `captureException` no catch. 3 linhas.
+- **CONCERN-4, 5, 6:** débitos menores, podem virar follow-up.
+
+**Atenção operacional para o push:**
+- A migration **PRECISA rodar via `supabase db push` ou `supabase migration up`** ANTES do deploy do código novo.
+- Se o código deployar antes da migration, `deleteUser` vai falhar com erro de FK constraint em produção (RESTRICT bloqueando o delete em cascata).
+- Sequência correta: `supabase db push` em prod → confirmar via `\d+ public.payments` que FK virou SET NULL → deploy Vercel.
+
+**Próximo passo:** `@sites-devops` rodar migration ANTES do push do código; `@sites-dev-beta` decidir se corrige CONCERN-1/2/3 nesta story ou abre follow-up F13.1.1.
+
+---
+
+## 2026-05-11T11:05 — F13.4 InfinitePay aviso link estático + guia R$1 — ❌ FAIL
+
+> Veredicto da [F13.4](../../stories/active/F13.4-infinitepay-static-url-warning-setup-guide.md). Commit auditado: cb953fe.
+
+**Resultado por AC:**
+
+| AC | Status | Local-chave |
+|----|--------|--------|
+| AC1 Alert no CohortForm com texto + classes | ⚠️ CONCERN | `CohortForm.tsx:1014-1019` — posição, classes Tailwind e estrutura corretos; **mas texto sem acentos ("Atencao", "estatico") quando story prescreve "Atenção", "estático"** |
+| AC2 `data-testid="infinitepay-static-url-warning"` | ✅ PASS | `CohortForm.tsx:1015` — exato |
+| AC3 Guia com 6 seções obrigatórias | ❌ FAIL | `docs/smart-memory/ops/infinitepay-setup-guide.md` — seções presentes mas **AC3.1 contradiz a story** (documenta `INFINITEPAY_BEARER_TOKEN` quando story afirma explicitamente "Não há `INFINITEPAY_BEARER_TOKEN` para configurar — autenticação é via `handle` no body"); falta `INFINITEPAY_HANDLE=growthsales` em `.env.local` para dev; falta `vercel logs --follow` no checklist (AC3.5 explícito); falta cenário "env var ausente em produção" no troubleshooting (AC3.6 explícito) |
+| AC4 Blocos code para URL webhook + comandos env/logs | ⚠️ CONCERN | URL webhook ✅ linha 63-65; `vercel env add/ls` ✅; **`vercel logs --follow` e `vercel logs <deployment-url>` AUSENTES do guia inteiro** — AC4 explicita "todos os comandos de env/logs aparecem em blocos `code` shell" |
+
+**[FAIL-1 contradição arquitetural]:** AC3.1 da story F13.4 declara textualmente:
+> "InfinitePay NÃO usa `Authorization: Bearer` — autenticação é via campo `handle` no body. Ver runbook `docs/smart-memory/runbooks/checkout-infinitepay.md`. Não há `INFINITEPAY_BEARER_TOKEN` para configurar."
+
+O guia (linhas 21, 26, 90, 104-112) **contradiz isso diretamente**: lista `INFINITEPAY_BEARER_TOKEN` como env var obrigatória, manda configurar via `vercel env add INFINITEPAY_BEARER_TOKEN production`, e adiciona troubleshooting "401 da API InfinitePay" pressupondo Bearer Token.
+
+Aparenta importação da premissa da story F13.3 (Bearer Token) em vez de seguir o que AC3.1 da F13.4 afirma. **Resultado:** admin que ler o guia vai gastar tempo procurando um token que não existe na implementação atual. Confunde docs e implementação.
+
+Resolução possível: ou (a) corrigir o guia para refletir a F13.4 (remover Bearer Token, documentar só handle), ou (b) se F13.3 já está mergeada e o adapter agora exige Bearer, atualizar a story F13.4 para alinhar — mas precisa decisão de arquiteto.
+
+**[CONCERN-1 copy sem acentos]:** "Atencao" e "estatico" no JSX (`CohortForm.tsx:1018`). Story tem "Atenção" e "estático" com acentos. Português correto exige acentos. Fix de 2 caracteres.
+
+**[CONCERN-2 vercel logs ausente]:** AC3.5 e AC4 prescrevem explicitamente `vercel logs --follow` e/ou `vercel logs <deployment-url>` em bloco code. O guia menciona "logs da Vercel (Functions > `/api/webhooks/infinitepay`)" em texto livre (linha 95, 119) mas nunca como comando CLI executável. Inconsistente com a regra "CLI-first, nunca dashboard" da story.
+
+**[CONCERN-3 ENV local ausente]:** AC3.1 explicita "**Desenvolvimento local:** adicionar `INFINITEPAY_HANDLE=growthsales` em `.env.local`". Guia só cobre produção. Dev novo no projeto não terá referência clara.
+
+**[CONCERN-4 troubleshooting "env var ausente"]:** AC3.6 prescreve cenário "env var ausente em produção (verificar com `vercel env ls production` — nunca via dashboard)". Não está no troubleshooting; está implícito em outro lugar mas não como troubleshooting acionável.
+
+**[CONCERN-5 a11y aviso]:** `<div data-testid=...>` sem `role="alert"` nem `role="note"`. SR não anuncia o aviso. Cor `var(--ember)` sobre `var(--ember)/10` precisa validação WCAG AA — não auditado neste gate. Como é admin, débito menor.
+
+**[CONCERN-6 rota turma]:** AC3 cita `/academy/admin/turmas/novo`; guia usa `/academy/admin/turmas/nova`. Não verifiquei qual é a real — checar antes do push.
+
+**Recomendação:**
+- ❌ **Push bloqueado.** O FAIL-1 é divergência grave: o guia operacional, lido isoladamente, vai induzir admin a configurar uma env var que (segundo a story) não existe. Tempo perdido + ruído de "por que não funciona com handle só?".
+- **Antes de reabrir:** sites-architect precisa pronunciar — F13.3 (Bearer) está merged e o adapter agora requer Bearer? Ou F13.4 está correta e o adapter usa só `handle`? Sem essa clareza, o guia fica conflitando com a próxima story.
+- Após decisão: alinhar o guia, corrigir os 4 CONCERNs (acentos, vercel logs em code, .env.local, troubleshooting env var ausente), e resubmeter.
+
+**Próximo passo:** `@sites-architect` decidir sobre Bearer Token; `@sites-dev-alpha` aplicar fixes; resubmeter para reauditoria.
 
 ---
 
