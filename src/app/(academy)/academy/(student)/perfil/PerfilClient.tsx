@@ -283,9 +283,11 @@ function ProfileHeader({
 function EditProfileForm({
   profile,
   email,
+  hasPassword,
 }: {
   profile: ServerProfile
   email: string
+  hasPassword: boolean
 }) {
   const [name, setName] = useState(profile?.name ?? '')
   const [bio, setBio] = useState(profile?.bio ?? '')
@@ -317,7 +319,7 @@ function EditProfileForm({
   }
 
   function handleChangePassword() {
-    if (!currentPassword) {
+    if (hasPassword && !currentPassword) {
       setPasswordError('Informe a senha atual.')
       return
     }
@@ -331,7 +333,7 @@ function EditProfileForm({
     }
     setPasswordError('')
     startPasswordTransition(async () => {
-      const result = await changePassword(currentPassword, newPassword)
+      const result = await changePassword(hasPassword ? currentPassword : null, newPassword)
       if (result.error) {
         setPasswordError(result.error)
       } else {
@@ -397,9 +399,16 @@ function EditProfileForm({
       </div>
 
       <div className="mt-6 border-t border-[rgba(255,255,255,0.07)] pt-6">
-        <SectionDividerLabel>Alterar senha</SectionDividerLabel>
+        <SectionDividerLabel>{hasPassword ? 'Alterar senha' : 'Definir senha'}</SectionDividerLabel>
+
+        {!hasPassword && (
+          <p className="mt-2 font-mono text-[11px] text-[var(--bone-mute)]">
+            Sua conta foi criada por convite. Defina uma senha para acessar com email e senha.
+          </p>
+        )}
 
         <div className="mt-4 space-y-4">
+          {hasPassword && (
           <div>
             <MonoLabel>Senha atual</MonoLabel>
             <input
@@ -410,6 +419,7 @@ function EditProfileForm({
               className={inputClass}
             />
           </div>
+          )}
 
           <div>
             <MonoLabel>Nova senha</MonoLabel>
@@ -443,7 +453,7 @@ function EditProfileForm({
             <div className="border border-green-500/20 bg-green-500/10 p-3">
               <p className="flex items-center gap-2 font-mono text-[12px] text-green-400">
                 <Check className="h-3.5 w-3.5" />
-                Senha alterada com sucesso.
+                {hasPassword ? 'Senha alterada com sucesso.' : 'Senha definida com sucesso.'}
               </p>
             </div>
           )}
@@ -454,7 +464,7 @@ function EditProfileForm({
             disabled={passwordPending}
             className="bg-[var(--ember)] px-5 py-2.5 font-mono text-xs uppercase tracking-wider text-[var(--void)] disabled:opacity-60"
           >
-            {passwordPending ? 'Alterando…' : 'Alterar senha'}
+            {passwordPending ? 'Salvando…' : hasPassword ? 'Alterar senha' : 'Definir senha'}
           </button>
         </div>
       </div>
@@ -683,6 +693,7 @@ export type PerfilClientProps = {
   serverEmail?: string
   serverMemberships?: ServerMembership[]
   serverPayments?: ServerPayment[]
+  hasPassword?: boolean
 }
 
 export function PerfilClient({
@@ -690,6 +701,7 @@ export function PerfilClient({
   serverEmail = '',
   serverMemberships = [],
   serverPayments = [],
+  hasPassword = true,
 }: PerfilClientProps) {
   const [avatarUrl, setAvatarUrl] = useState<string | null>(serverProfile?.avatar_url ?? null)
   const memberships = serverMemberships.map(toMembership)
@@ -703,7 +715,7 @@ export function PerfilClient({
         avatarUrl={avatarUrl}
         onAvatarChange={setAvatarUrl}
       />
-      <EditProfileForm profile={serverProfile ?? null} email={serverEmail} />
+      <EditProfileForm profile={serverProfile ?? null} email={serverEmail} hasPassword={hasPassword} />
       <MembershipsSection memberships={memberships} />
       <PaymentsSection payments={payments} />
     </div>

@@ -1,6 +1,7 @@
 'use server'
 
 import { createClient } from '@/lib/supabase/server'
+import { supabaseAdmin } from '@/lib/supabase/admin'
 import { requireUser } from '@/lib/auth/helpers'
 
 export async function updateProfile(name: string, bio: string): Promise<{ error?: string }> {
@@ -19,25 +20,37 @@ export async function updateProfile(name: string, bio: string): Promise<{ error?
 }
 
 export async function changePassword(
-  currentPassword: string,
+  currentPassword: string | null,
   newPassword: string,
 ): Promise<{ error?: string }> {
-  if (!currentPassword) return { error: 'Senha atual é obrigatória.' }
   if (newPassword.length < 8) return { error: 'Nova senha deve ter ao menos 8 caracteres.' }
 
   const supabase = await createClient()
-
-  // Verify current password before allowing change — prevents session hijack
   const { data: { user } } = await supabase.auth.getUser()
   if (!user?.email) return { error: 'Sessão inválida.' }
 
-  const { error: signInError } = await supabase.auth.signInWithPassword({
-    email: user.email,
-    password: currentPassword,
-  })
-  if (signInError) return { error: 'Senha atual incorreta.' }
+  // Fonte autoritativa de has_password vem do app_metadata (só admin escreve lá)
+  const { data: adminUser } = await supabaseAdmin.auth.admin.getUserById(user.id)
+  const hasPassword = adminUser?.user?.app_metadata?.has_password !== false
+
+  if (hasPassword) {
+    if (!currentPassword) return { error: 'Informe a senha atual.' }
+    const { error: signInError } = await supabase.auth.signInWithPassword({
+      email: user.email,
+      password: currentPassword,
+    })
+    if (signInError) return { error: 'Senha atual incorreta.' }
+  }
 
   const { error } = await supabase.auth.updateUser({ password: newPassword })
   if (error) return { error: 'Erro ao alterar senha. Tente novamente.' }
+
+  // Marcar que o usuário agora tem senha definida
+  if (!hasPassword) {
+    await supabaseAdmin.auth.admin.updateUserById(user.id, {
+      app_metadata: { has_password: true },
+    })
+  }
+
   return {}
 }

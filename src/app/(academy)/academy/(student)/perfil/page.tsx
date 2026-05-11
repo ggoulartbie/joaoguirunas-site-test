@@ -35,12 +35,15 @@ export default async function PerfilPage() {
     supabaseAdmin.auth.admin.getUserById(user.id),
   ])
 
+  const hasPassword = authUserResult.data?.user?.app_metadata?.has_password !== false
+
   return (
     <PerfilClient
       serverProfile={profileResult.data}
       serverEmail={authUserResult.data?.user?.email ?? ''}
       serverMemberships={(membershipsResult.data ?? []) as PerfilClientProps['serverMemberships']}
       serverPayments={(paymentsResult.data ?? []) as PerfilClientProps['serverPayments']}
+      hasPassword={hasPassword}
     />
   )
 }

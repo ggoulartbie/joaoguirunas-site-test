@@ -173,6 +173,7 @@ export async function createStudentManually(data: z.infer<typeof createStudentSc
     email: parsed.data.email,
     email_confirm: true,
     user_metadata: { name: parsed.data.name },
+    app_metadata: { has_password: false },
   })
   if (authErr || !authData.user) throw new Error(authErr?.message ?? 'Erro ao criar usuário')
 
