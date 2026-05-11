@@ -57,8 +57,6 @@ const ALL_AGENTS: SlideAgent[] = [
   { slug: 'traffic-tiktok',    codename: 'Tokris',   accent: TRF,   title: 'TikTok Ads' },
 ];
 
-const SOCIAL_SQUAD: SlideAgent[] = ALL_AGENTS.filter((a) => a.accent === SOC);
-
 const SITES_SQUAD: SlideAgent[] = [
   { slug: 'sites-architect',  codename: 'Zaelion',  accent: SITES, title: 'Architect' },
   { slug: 'sites-dev-alpha',  codename: 'Novael',   accent: SITES, title: 'Frontend Developer' },
@@ -66,19 +64,6 @@ const SITES_SQUAD: SlideAgent[] = [
   { slug: 'sites-ux',         codename: 'Velani',   accent: SITES, title: 'UX Specialist' },
   { slug: 'sites-devops',     codename: 'Graveli',  accent: SITES, title: 'DevOps Guardian' },
   { slug: 'sites-qa',         codename: 'Axilun',   accent: SITES, title: 'QA Master' },
-];
-
-const DESIGN_SQUAD: SlideAgent[] = [
-  { slug: 'sites-ux',        codename: 'Velani',   accent: SITES, title: 'UX Specialist' },
-  { slug: 'social-design',   codename: 'Aevon',    accent: SOC,   title: 'Graphic Designer' },
-  { slug: 'sites-architect', codename: 'Zaelion',  accent: SITES, title: 'Architect' },
-  { slug: 'sites-dev-alpha', codename: 'Novael',   accent: SITES, title: 'Frontend Developer' },
-];
-
-const MEDIA_SQUAD: SlideAgent[] = [
-  { slug: 'social-strategist', codename: 'Verak', accent: SOC, title: 'Strategist' },
-  { slug: 'social-content',    codename: 'Lyrix', accent: SOC, title: 'Content Creator' },
-  { slug: 'social-video',      codename: 'Fluxx', accent: SOC, title: 'Video Editor' },
 ];
 
 const slides = [
@@ -108,7 +93,7 @@ const slides = [
     label: 'Brandbook · GrowthSales.ai',
     title: 'Brandbook de R$ 60k entregue em 2 dias.',
     body: 'Com o Diretor de Criação Claude Design, tokens, paletas, tipografia, componentes e brandbook foram construídos do zero. O que uma agência levaria semanas e cobrava R$ 60k — feito em 2 dias por um squad de agentes de design.',
-    agents: DESIGN_SQUAD,
+    screenshot: '/mentoria/brandbook.png',
   },
   {
     label: 'Novo Site · GrowthSales.ai',
@@ -121,7 +106,6 @@ const slides = [
     label: 'Área de Mídia · João Guirunas',
     title: 'Strategy Room Live — onde o squad opera.',
     body: 'O Portal de Social Media reúne posicionamento, design system, estratégia e campanhas num único ambiente. Carrossel e Reels produzidos e publicados toda semana — sem o João precisar planejar manualmente nada.',
-    agents: MEDIA_SQUAD,
     stats: [
       { label: 'Seguidores', value: '4.626' },
       { label: 'ER Médio', value: '12,0%' },
@@ -129,13 +113,6 @@ const slides = [
       { label: 'Regime', value: 'One-shot' },
     ],
     screenshot: '/mentoria/strategy-room.png',
-  },
-  {
-    label: 'Squad de Social Media · Portal',
-    title: 'Carrossel. Reels. Toda semana. Sem falhar.',
-    body: 'Estratégia, Redação, Fotografia, Design e Edição de vídeo — cinco agentes trabalhando em paralelo dentro do Portal de Social Media. Uma operação completa, sem contratar ninguém, sem reuniões de alinhamento.',
-    note: 'Você vai ver o squad funcionando ao vivo e vai entender como montar o seu.',
-    agents: SOCIAL_SQUAD,
   },
 ];
 
