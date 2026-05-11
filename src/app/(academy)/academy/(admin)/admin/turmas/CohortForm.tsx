@@ -1012,10 +1012,11 @@ export function CohortForm(props: CohortFormProps) {
                     Cole aqui o link criado manualmente no painel InfinitePay. Quando preenchido, o checkout redireciona diretamente para este link.
                   </p>
                   <div
+                    role="alert"
                     data-testid="infinitepay-static-url-warning"
                     className="mt-2 border border-[var(--ember)] bg-[var(--ember)]/10 p-3 font-mono text-[10px] text-[var(--bone)]"
                   >
-                    <span className="font-semibold">Atencao:</span> Link estatico nao rastreia pagamentos automaticamente. O webhook nao conseguira associar o pagamento ao aluno. Use apenas se o checkout for externo a plataforma.
+                    <span className="font-semibold">Atenção:</span> Link estático não rastreia pagamentos automaticamente. O webhook não conseguirá associar o pagamento ao aluno. Use apenas se o checkout for externo à plataforma.
                   </div>
                 </div>
               )}

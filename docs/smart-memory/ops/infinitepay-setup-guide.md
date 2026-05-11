@@ -7,8 +7,8 @@ related:
   - "[[../stories/done/F12.1-infinitepay-adapter-webhook]]"
   - "[[../stories/done/F12.2-infinitepay-migration-admin-ui-dual-provider]]"
   - "[[../stories/done/F12.3-checkout-router-por-provider]]"
-  - "[[../stories/active/F13.3-infinitepay-bearer-token]]"
   - "[[../stories/active/F13.4-infinitepay-static-url-warning-setup-guide]]"
+  - "[[../runbooks/checkout-infinitepay]]"
 ---
 
 # InfinitePay — Guia de Configuração e Turma de Teste R$1
@@ -16,20 +16,31 @@ related:
 ## Pré-requisitos
 
 - Conta InfinitePay ativa com InfiniteTag configurada (ex.: `growthsales`).
-- Variáveis de ambiente em produção (Vercel) configuradas:
-  - `INFINITEPAY_HANDLE` — sua InfiniteTag sem o `$` (ex.: `growthsales`)
-  - `INFINITEPAY_BEARER_TOKEN` — token Bearer gerado no painel InfinitePay (ver [[../stories/active/F13.3-infinitepay-bearer-token]])
-- Para configurar as env vars **via CLI** (nunca pelo painel Vercel para evitar exposição de secrets):
+- **InfinitePay não usa `Authorization: Bearer`** — autenticação é via campo `handle` no body das requests. Não há `INFINITEPAY_BEARER_TOKEN` para configurar. Ver detalhes em [[../runbooks/checkout-infinitepay]].
+- Única variável de ambiente necessária: `INFINITEPAY_HANDLE`.
+
+### Configurar em produção (via CLI)
 
 ```bash
 vercel env add INFINITEPAY_HANDLE production
-vercel env add INFINITEPAY_BEARER_TOKEN production
 ```
 
-Confirme que as variáveis estão ativas:
+Confirmar que está ativa:
 
 ```bash
 vercel env ls
+```
+
+Acompanhar logs em produção:
+
+```bash
+vercel logs --follow
+```
+
+### Configurar em desenvolvimento local (`.env.local`)
+
+```
+INFINITEPAY_HANDLE=growthsales
 ```
 
 ---
@@ -87,12 +98,17 @@ https://joaoguirunas.com/api/webhooks/infinitepay
 
 - [ ] Turma `turma-teste-r1` criada com `payment_provider = INFINITEPAY` e `infinitepay_checkout_url` vazio.
 - [ ] Webhook cadastrado no painel InfinitePay com URL `https://joaoguirunas.com/api/webhooks/infinitepay`.
-- [ ] Variáveis `INFINITEPAY_HANDLE` e `INFINITEPAY_BEARER_TOKEN` ativas em producao (verificar via `vercel env ls`).
+- [ ] Variável `INFINITEPAY_HANDLE` ativa em producao (verificar via `vercel env ls`).
 - [ ] Pagamento de R$1,00 realizado no checkout InfinitePay.
 - [ ] Redirect de sucesso retornou para `/academy/checkout/sucesso`.
 - [ ] Payment em `/academy/admin/pagamentos` com status `APPROVED`.
 - [ ] `order_nsu` do InfinitePay bate com o `id` do payment no Supabase.
-- [ ] Webhook recebido — confirmar nos logs da Vercel (Functions > `/api/webhooks/infinitepay`).
+- [ ] Webhook recebido — confirmar nos logs da Vercel:
+
+```bash
+vercel logs --follow
+```
+
 - [ ] `cohort_members.status = ACTIVE` para o aluno na turma `turma-teste-r1`.
 - [ ] Aluno ve a turma em `/academy/meus-cursos` apos login.
 - [ ] Email transacional de confirmacao de pagamento enviado (verificar inbox ou logs Resend).
@@ -101,22 +117,17 @@ https://joaoguirunas.com/api/webhooks/infinitepay
 
 ## Troubleshooting comum
 
-### 401 da API InfinitePay ao criar checkout link
-
-O `INFINITEPAY_BEARER_TOKEN` esta ausente, expirado ou incorreto. Verificar o guia [[../stories/active/F13.3-infinitepay-bearer-token]] e reconfigurar via CLI:
-
-```bash
-vercel env rm INFINITEPAY_BEARER_TOKEN production
-vercel env add INFINITEPAY_BEARER_TOKEN production
-vercel --prod deploy
-```
-
 ### Pagamento ficou `PENDING` e nao avancou para `APPROVED`
 
 O webhook nao chegou ou falhou. Verificar:
 
 1. URL do webhook no painel InfinitePay esta correta: `https://joaoguirunas.com/api/webhooks/infinitepay`.
-2. Logs da Vercel (Functions > `/api/webhooks/infinitepay`) para ver se o request chegou e qual erro retornou.
+2. Logs da Vercel em tempo real:
+
+```bash
+vercel logs --follow
+```
+
 3. Tabela `webhook_events` no Supabase — verificar coluna `success` e `error_message` para o evento correspondente.
 4. Se o evento falhou, usar o botao "Reprocessar" em `/academy/admin/pagamentos` na secao de webhooks com falha.
 
