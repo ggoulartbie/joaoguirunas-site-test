@@ -1,15 +1,31 @@
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
+import Image from 'next/image';
 import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
 import { MODULOS_PRESENCIAIS } from './ModuloLayout';
+
+export interface SlideAgent {
+  slug: string;
+  codename: string;
+  accent: string;
+  title?: string;
+}
 
 export interface Slide {
   label: string;
   title: string;
   body: string;
   note?: string;
+  /** Grid of agent mini-cards shown on the right column */
+  agents?: SlideAgent[];
+  /** When true + agents set, renders a full-width scrolling belt below the body */
+  belt?: boolean;
+  /** Client names rendered as accent pill list below body */
+  clients?: string[];
+  /** Metrics grid shown below body */
+  stats?: { label: string; value: string }[];
 }
 
 interface ModuloSlideshowProps {
@@ -23,12 +39,91 @@ const SERIF    = 'var(--font-display-serif)';
 const DISPLAY  = 'var(--font-display)';
 
 const slideVariants = {
-  enter:  { opacity: 0, y: 32, filter: 'blur(6px)' },
+  enter:  { opacity: 0, y: 28, filter: 'blur(6px)' },
   center: { opacity: 1, y: 0,  filter: 'blur(0px)' },
-  exit:   { opacity: 0, y: -20, filter: 'blur(4px)' },
+  exit:   { opacity: 0, y: -16, filter: 'blur(4px)' },
 };
 
 const slideTransition = { duration: 0.45, ease: [0.22, 1, 0.36, 1] as [number, number, number, number] };
+
+/* ── Agent mini card ── */
+function AgentMiniCard({ agent }: { agent: SlideAgent }) {
+  return (
+    <div
+      className="relative overflow-hidden flex-shrink-0"
+      style={{
+        width: 78,
+        height: 104,
+        border: `1px solid ${agent.accent}28`,
+        background: `linear-gradient(160deg, ${agent.accent}14 0%, #050507 70%)`,
+      }}
+    >
+      <Image
+        src={`/agentes/${agent.slug}.png`}
+        alt={agent.codename}
+        fill
+        className="object-cover object-top"
+        sizes="78px"
+      />
+      <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to top, rgba(0,0,0,0.8) 0%, transparent 55%)' }} />
+      <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, padding: '5px 6px' }}>
+        <div style={{ height: 1, background: agent.accent, opacity: 0.55, marginBottom: 4 }} />
+        <p style={{ fontFamily: MONO, fontSize: '7.5px', letterSpacing: '0.06em', color: 'rgba(255,255,255,0.75)', lineHeight: 1.2 }}>
+          {agent.codename}
+        </p>
+        {agent.title && (
+          <p style={{ fontFamily: MONO, fontSize: '6.5px', letterSpacing: '0.05em', color: 'rgba(255,255,255,0.35)', lineHeight: 1.2, marginTop: 1 }}>
+            {agent.title}
+          </p>
+        )}
+      </div>
+    </div>
+  );
+}
+
+/* ── Scrolling agent belt ── */
+function AgentBelt({ agents }: { agents: SlideAgent[] }) {
+  const cardW = 78;
+  const gap = 10;
+  const totalW = agents.length * (cardW + gap);
+
+  return (
+    <div
+      className="overflow-hidden w-full"
+      style={{ WebkitMaskImage: 'linear-gradient(to right, transparent 0%, black 7%, black 93%, transparent 100%)' }}
+    >
+      <motion.div
+        className="flex items-end"
+        style={{ gap, width: totalW * 2 }}
+        animate={{ x: [0, -totalW] }}
+        transition={{ duration: 40, repeat: Infinity, ease: 'linear' }}
+      >
+        {[...agents, ...agents].map((a, i) => (
+          <AgentMiniCard key={`${a.slug}-${i}`} agent={a} />
+        ))}
+      </motion.div>
+    </div>
+  );
+}
+
+/* ── Agent grid ── */
+function AgentGrid({ agents }: { agents: SlideAgent[] }) {
+  const cols = agents.length <= 4 ? 2 : 3;
+  return (
+    <div
+      style={{
+        display: 'grid',
+        gridTemplateColumns: `repeat(${cols}, 78px)`,
+        gap: 8,
+        alignContent: 'start',
+      }}
+    >
+      {agents.map((a) => (
+        <AgentMiniCard key={a.slug} agent={a} />
+      ))}
+    </div>
+  );
+}
 
 export function ModuloSlideshow({ slug, slides }: ModuloSlideshowProps) {
   const [current, setCurrent] = useState(0);
@@ -40,8 +135,8 @@ export function ModuloSlideshow({ slug, slides }: ModuloSlideshowProps) {
   const isFirst = current === 0;
   const isLast  = current === slides.length - 1;
 
-  const goTo = useCallback((index: number) => setCurrent(index), []);
-  const goNext = useCallback(() => { if (!isLast) goTo(current + 1); }, [current, isLast, goTo]);
+  const goTo   = useCallback((i: number) => setCurrent(i), []);
+  const goNext = useCallback(() => { if (!isLast)  goTo(current + 1); }, [current, isLast, goTo]);
   const goPrev = useCallback(() => { if (!isFirst) goTo(current - 1); }, [current, isFirst, goTo]);
 
   useEffect(() => {
@@ -58,26 +153,24 @@ export function ModuloSlideshow({ slug, slides }: ModuloSlideshowProps) {
   const slideTotal  = String(slides.length).padStart(2, '0');
   const progressPct = slides.length > 1 ? (current / (slides.length - 1)) * 100 : 100;
 
+  const hasBelt    = !!(slide.belt && slide.agents?.length);
+  const hasGrid    = !!(slide.agents?.length && !slide.belt);
+  const hasClients = !!(slide.clients?.length);
+  const hasStats   = !!(slide.stats?.length);
+
   return (
     <div
       className="relative flex flex-col"
-      style={{
-        height: '100dvh',
-        background: '#050507',
-        color: '#fff',
-        overflow: 'hidden',
-      }}
+      style={{ height: '100dvh', background: '#050507', color: '#fff', overflow: 'hidden' }}
     >
-      {/* ── Subtle ambient glow ── */}
+      {/* Ambient glow */}
       <div
         aria-hidden="true"
         style={{
-          position: 'absolute',
-          inset: 0,
-          pointerEvents: 'none',
+          position: 'absolute', inset: 0, pointerEvents: 'none',
           background:
-            'radial-gradient(ellipse 55% 45% at 8% 55%, rgba(255,58,14,0.05) 0%, transparent 65%),' +
-            'radial-gradient(ellipse 35% 55% at 92% 15%, rgba(255,255,255,0.02) 0%, transparent 55%)',
+            'radial-gradient(ellipse 55% 45% at 8% 55%, rgba(255,58,14,0.04) 0%, transparent 65%),' +
+            'radial-gradient(ellipse 35% 55% at 92% 15%, rgba(255,255,255,0.015) 0%, transparent 55%)',
         }}
       />
 
@@ -96,17 +189,13 @@ export function ModuloSlideshow({ slug, slides }: ModuloSlideshowProps) {
           </svg>
           Dia Presencial
         </Link>
-
         <div className="flex items-center gap-3">
           <span style={{ fontFamily: MONO, fontSize: '10px', letterSpacing: '0.18em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.2)' }}>
             Módulo {String(modulo.number).padStart(2, '0')}
           </span>
           <span
             className="border px-2.5 py-1"
-            style={{
-              fontFamily: MONO, fontSize: '9px', letterSpacing: '0.16em', textTransform: 'uppercase',
-              color: ACCENT, borderColor: 'rgba(255,58,14,0.3)', background: 'rgba(255,58,14,0.06)',
-            }}
+            style={{ fontFamily: MONO, fontSize: '9px', letterSpacing: '0.16em', textTransform: 'uppercase', color: ACCENT, borderColor: 'rgba(255,58,14,0.3)', background: 'rgba(255,58,14,0.06)' }}
           >
             {modulo.type}
           </span>
@@ -123,11 +212,7 @@ export function ModuloSlideshow({ slug, slides }: ModuloSlideshowProps) {
             className="flex-1 transition-opacity hover:opacity-70"
             style={{
               height: '2px',
-              background: m.number < modulo.number
-                ? 'rgba(255,58,14,0.5)'
-                : m.slug === slug
-                ? ACCENT
-                : 'rgba(255,255,255,0.08)',
+              background: m.number < modulo.number ? 'rgba(255,58,14,0.5)' : m.slug === slug ? ACCENT : 'rgba(255,255,255,0.08)',
             }}
           />
         ))}
@@ -153,27 +238,25 @@ export function ModuloSlideshow({ slug, slides }: ModuloSlideshowProps) {
             exit="exit"
             transition={slideTransition}
             className="absolute inset-0 flex items-center"
-            style={{ padding: '2rem 2.5rem', paddingBottom: '3.5rem' }}
+            style={{ padding: hasBelt ? '2rem 2.5rem 1.5rem' : '2rem 2.5rem', paddingBottom: hasBelt ? '1rem' : '3.5rem' }}
           >
-            <div className="w-full max-w-5xl mx-auto">
+            <div className="w-full max-w-5xl mx-auto flex flex-col h-full justify-center" style={{ gap: hasBelt ? '0' : undefined }}>
 
-              {/* ── Counter + label row ── */}
+              {/* Counter + label */}
               <motion.div
                 initial={{ opacity: 0, y: 8 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.05, duration: 0.4 }}
-                className="flex items-center gap-3 mb-10"
+                transition={{ delay: 0.05 }}
+                className="flex items-center gap-3 mb-8"
               >
-                <span style={{ fontFamily: MONO, fontSize: '11px', fontWeight: 700, color: ACCENT, letterSpacing: '-0.01em' }}>
+                <span style={{ fontFamily: MONO, fontSize: '11px', fontWeight: 700, color: ACCENT }}>
                   {slideNumber}
                 </span>
-                <span style={{ color: 'rgba(255,255,255,0.15)', fontSize: '10px', fontFamily: MONO }}>
-                  /
-                </span>
-                <span style={{ fontFamily: MONO, fontSize: '11px', color: 'rgba(255,255,255,0.2)', letterSpacing: '0.02em' }}>
+                <span style={{ color: 'rgba(255,255,255,0.15)', fontFamily: MONO, fontSize: '10px' }}>/</span>
+                <span style={{ fontFamily: MONO, fontSize: '11px', color: 'rgba(255,255,255,0.2)' }}>
                   {slideTotal}
                 </span>
-                <span style={{ width: '1px', height: '14px', background: 'rgba(255,255,255,0.12)', display: 'inline-block', marginLeft: '2px' }} />
+                <span style={{ width: 1, height: 14, background: 'rgba(255,255,255,0.12)', display: 'inline-block', margin: '0 2px' }} />
                 <motion.span
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
@@ -184,69 +267,153 @@ export function ModuloSlideshow({ slug, slides }: ModuloSlideshowProps) {
                 </motion.span>
               </motion.div>
 
-              {/* ── Title — full width, dominant ── */}
-              <motion.h1
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.1, duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-                style={{
-                  fontFamily: SERIF,
-                  fontSize: 'clamp(2.4rem, 5.5vw, 5.2rem)',
-                  fontWeight: 300,
-                  lineHeight: 1.1,
-                  letterSpacing: '-0.025em',
-                  color: '#fff',
-                  marginBottom: '2.5rem',
-                  maxWidth: '44rem',
-                }}
-              >
-                {slide.title}
-              </motion.h1>
+              {/* Main content row: text + optional agent grid */}
+              <div className={hasGrid ? 'flex gap-12 lg:gap-20 items-start' : 'flex flex-col'}>
 
-              {/* ── Accent line ── */}
-              <motion.div
-                initial={{ scaleX: 0, originX: 0 }}
-                animate={{ scaleX: 1 }}
-                transition={{ delay: 0.22, duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-                style={{ width: '2.5rem', height: '2px', background: ACCENT, marginBottom: '2.5rem' }}
-              />
-
-              {/* ── Body + Note ── */}
-              <div className="grid grid-cols-1 gap-6 lg:grid-cols-2 lg:gap-20">
-                <motion.p
-                  initial={{ opacity: 0, y: 12 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.28, duration: 0.45 }}
-                  style={{
-                    fontFamily: DISPLAY,
-                    fontSize: 'clamp(0.95rem, 1.5vw, 1.1rem)',
-                    lineHeight: 1.8,
-                    color: 'rgba(255,255,255,0.62)',
-                  }}
-                >
-                  {slide.body}
-                </motion.p>
-
-                {slide.note && (
-                  <motion.div
-                    initial={{ opacity: 0, x: 12 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: 0.38, duration: 0.45 }}
-                    className="border-l pl-6 self-start"
-                    style={{ borderColor: 'rgba(255,58,14,0.35)' }}
+                {/* Left: title + accent + body + note */}
+                <div className="flex-1 min-w-0">
+                  <motion.h1
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.1, duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+                    style={{
+                      fontFamily: SERIF,
+                      fontSize: hasBelt
+                        ? 'clamp(2rem, 4.5vw, 4rem)'
+                        : hasGrid
+                        ? 'clamp(2rem, 4vw, 3.8rem)'
+                        : 'clamp(2.4rem, 5.5vw, 5.2rem)',
+                      fontWeight: 300,
+                      lineHeight: 1.1,
+                      letterSpacing: '-0.025em',
+                      color: '#fff',
+                      marginBottom: '2rem',
+                      maxWidth: hasGrid ? '34rem' : '44rem',
+                    }}
                   >
-                    <p style={{
-                      fontFamily: DISPLAY,
-                      fontSize: '0.9rem',
-                      color: 'rgba(255,255,255,0.4)',
-                      lineHeight: 1.7,
-                      fontStyle: 'italic',
-                    }}>
-                      {slide.note}
-                    </p>
+                    {slide.title}
+                  </motion.h1>
+
+                  <motion.div
+                    initial={{ scaleX: 0, originX: 0 }}
+                    animate={{ scaleX: 1 }}
+                    transition={{ delay: 0.22, duration: 0.45 }}
+                    style={{ width: '2.5rem', height: '2px', background: ACCENT, marginBottom: '2rem' }}
+                  />
+
+                  {!hasGrid ? (
+                    <div className="flex flex-col gap-6">
+                      <div className="grid grid-cols-1 gap-6 lg:grid-cols-2 lg:gap-20">
+                        <motion.p
+                          initial={{ opacity: 0, y: 10 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          transition={{ delay: 0.28 }}
+                          style={{ fontFamily: DISPLAY, fontSize: 'clamp(0.9rem, 1.4vw, 1.05rem)', lineHeight: 1.8, color: 'rgba(255,255,255,0.6)' }}
+                        >
+                          {slide.body}
+                        </motion.p>
+                        {slide.note && !hasClients && (
+                          <motion.div
+                            initial={{ opacity: 0, x: 10 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            transition={{ delay: 0.38 }}
+                            className="border-l pl-6 self-start"
+                            style={{ borderColor: 'rgba(255,58,14,0.35)' }}
+                          >
+                            <p style={{ fontFamily: DISPLAY, fontSize: '0.88rem', color: 'rgba(255,255,255,0.38)', lineHeight: 1.7, fontStyle: 'italic' }}>
+                              {slide.note}
+                            </p>
+                          </motion.div>
+                        )}
+                      </div>
+                      {hasClients && (
+                        <motion.div
+                          initial={{ opacity: 0, y: 10 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          transition={{ delay: 0.4 }}
+                          className="flex flex-wrap gap-2"
+                        >
+                          {slide.clients!.map((c) => (
+                            <span
+                              key={c}
+                              style={{
+                                fontFamily: MONO,
+                                fontSize: '10px',
+                                letterSpacing: '0.12em',
+                                textTransform: 'uppercase',
+                                color: 'rgba(255,255,255,0.55)',
+                                border: '1px solid rgba(255,255,255,0.12)',
+                                padding: '4px 10px',
+                                background: 'rgba(255,255,255,0.03)',
+                              }}
+                            >
+                              {c}
+                            </span>
+                          ))}
+                        </motion.div>
+                      )}
+                      {hasStats && (
+                        <motion.div
+                          initial={{ opacity: 0, y: 10 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          transition={{ delay: 0.4 }}
+                          className="flex gap-8 flex-wrap"
+                          style={{ borderTop: '1px solid rgba(255,255,255,0.07)', paddingTop: '1.25rem' }}
+                        >
+                          {slide.stats!.map((s) => (
+                            <div key={s.label}>
+                              <p style={{ fontFamily: MONO, fontSize: '8.5px', letterSpacing: '0.18em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.3)', marginBottom: '4px' }}>
+                                {s.label}
+                              </p>
+                              <p style={{ fontFamily: SERIF, fontSize: 'clamp(1.4rem, 2.5vw, 2rem)', fontWeight: 300, color: ACCENT, letterSpacing: '-0.02em', lineHeight: 1 }}>
+                                {s.value}
+                              </p>
+                            </div>
+                          ))}
+                        </motion.div>
+                      )}
+                    </div>
+                  ) : (
+                    <motion.p
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: 0.28 }}
+                      style={{ fontFamily: DISPLAY, fontSize: 'clamp(0.9rem, 1.4vw, 1.05rem)', lineHeight: 1.8, color: 'rgba(255,255,255,0.6)', maxWidth: '30rem' }}
+                    >
+                      {slide.body}
+                      {slide.note && (
+                        <span style={{ display: 'block', marginTop: '1rem', paddingLeft: '1rem', borderLeft: '2px solid rgba(255,58,14,0.35)', color: 'rgba(255,255,255,0.35)', fontStyle: 'italic', fontSize: '0.85em' }}>
+                          {slide.note}
+                        </span>
+                      )}
+                    </motion.p>
+                  )}
+                </div>
+
+                {/* Right: agent grid */}
+                {hasGrid && (
+                  <motion.div
+                    initial={{ opacity: 0, x: 20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: 0.32, duration: 0.5 }}
+                    className="flex-shrink-0"
+                  >
+                    <AgentGrid agents={slide.agents!} />
                   </motion.div>
                 )}
               </div>
+
+              {/* Agent belt below — for intro slides */}
+              {hasBelt && (
+                <motion.div
+                  initial={{ opacity: 0, y: 16 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.35, duration: 0.5 }}
+                  className="mt-8"
+                >
+                  <AgentBelt agents={slide.agents!} />
+                </motion.div>
+              )}
             </div>
           </motion.div>
         </AnimatePresence>
@@ -257,7 +424,6 @@ export function ModuloSlideshow({ slug, slides }: ModuloSlideshowProps) {
         className="relative flex-shrink-0 flex items-center justify-between px-6 py-4 md:px-10 md:py-5"
         style={{ borderTop: '1px solid rgba(255,255,255,0.06)' }}
       >
-        {/* Slide dots */}
         <div className="flex items-center gap-1.5" role="region" aria-label="Navegação de slides">
           {slides.map((_, i) => (
             <button
@@ -270,17 +436,13 @@ export function ModuloSlideshow({ slug, slides }: ModuloSlideshowProps) {
                 width: i === current ? '18px' : '5px',
                 height: '5px',
                 background: i === current ? ACCENT : 'rgba(255,255,255,0.18)',
-                border: 'none',
-                cursor: 'pointer',
-                padding: 0,
+                border: 'none', cursor: 'pointer', padding: 0,
               }}
             />
           ))}
         </div>
 
-        {/* Navigation */}
         <div className="flex items-center gap-3">
-          {/* Prev */}
           {!isFirst ? (
             <button
               onClick={goPrev}
@@ -305,15 +467,11 @@ export function ModuloSlideshow({ slug, slides }: ModuloSlideshowProps) {
             </Link>
           ) : null}
 
-          {/* Next */}
           {!isLast ? (
             <button
               onClick={goNext}
               className="flex items-center gap-3 px-5 py-2.5"
-              style={{
-                fontFamily: MONO, fontSize: '10px', letterSpacing: '0.18em', textTransform: 'uppercase',
-                background: ACCENT, color: '#050507', border: 'none', cursor: 'pointer', fontWeight: 700,
-              }}
+              style={{ fontFamily: MONO, fontSize: '10px', letterSpacing: '0.18em', textTransform: 'uppercase', background: ACCENT, color: '#050507', border: 'none', cursor: 'pointer', fontWeight: 700 }}
               onMouseEnter={(e) => { e.currentTarget.style.opacity = '0.88'; }}
               onMouseLeave={(e) => { e.currentTarget.style.opacity = '1'; }}
             >
@@ -326,10 +484,7 @@ export function ModuloSlideshow({ slug, slides }: ModuloSlideshowProps) {
             <Link
               href={next.href}
               className="flex items-center gap-3 px-5 py-2.5 transition-opacity hover:opacity-85"
-              style={{
-                fontFamily: MONO, fontSize: '10px', letterSpacing: '0.18em', textTransform: 'uppercase',
-                background: ACCENT, color: '#050507', fontWeight: 700,
-              }}
+              style={{ fontFamily: MONO, fontSize: '10px', letterSpacing: '0.18em', textTransform: 'uppercase', background: ACCENT, color: '#050507', fontWeight: 700 }}
             >
               Módulo {next.number}
               <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
@@ -340,10 +495,7 @@ export function ModuloSlideshow({ slug, slides }: ModuloSlideshowProps) {
             <Link
               href="/mentoria#inscricao"
               className="flex items-center gap-3 px-5 py-2.5 transition-opacity hover:opacity-85"
-              style={{
-                fontFamily: MONO, fontSize: '10px', letterSpacing: '0.18em', textTransform: 'uppercase',
-                background: ACCENT, color: '#050507', fontWeight: 700,
-              }}
+              style={{ fontFamily: MONO, fontSize: '10px', letterSpacing: '0.18em', textTransform: 'uppercase', background: ACCENT, color: '#050507', fontWeight: 700 }}
             >
               Garantir vaga
               <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
@@ -354,7 +506,7 @@ export function ModuloSlideshow({ slug, slides }: ModuloSlideshowProps) {
         </div>
       </div>
 
-      {/* ── Keyboard hint ── */}
+      {/* Keyboard hint */}
       <div
         className="absolute bottom-[4.5rem] left-1/2 -translate-x-1/2 pointer-events-none"
         style={{ fontFamily: MONO, fontSize: '9px', letterSpacing: '0.14em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.1)' }}
