@@ -46,12 +46,34 @@ export default async function DashboardPage() {
 
   const cohortCourses = cohortCoursesResult.data ?? []
 
+  // Fetch all modules for courses where included_module_ids=[] (full access)
+  const fullAccessCourseIds = [...new Set(
+    cohortCourses
+      .filter((cc) => cc.included_module_ids === null || cc.included_module_ids.length === 0)
+      .map((cc) => cc.course_id)
+  )]
+  const { data: fullAccessModuleRows } = fullAccessCourseIds.length > 0
+    ? await supabaseAdmin
+        .from('modules')
+        .select('id, course_id')
+        .in('course_id', fullAccessCourseIds)
+        .is('deleted_at', null)
+    : { data: [] as { id: string; course_id: string }[] }
+
+  const allModuleIdsByCourse = new Map<string, string[]>()
+  for (const m of fullAccessModuleRows ?? []) {
+    const arr = allModuleIdsByCourse.get(m.course_id) ?? []
+    arr.push(m.id)
+    allModuleIdsByCourse.set(m.course_id, arr)
+  }
+
   const moduleIdsByCohort: Record<string, string[]> = {}
   for (const cc of cohortCourses) {
     const existing = moduleIdsByCohort[cc.cohort_id] ?? []
-    moduleIdsByCohort[cc.cohort_id] = cc.included_module_ids
-      ? [...existing, ...cc.included_module_ids]
-      : existing
+    const isFullAccess = cc.included_module_ids === null || cc.included_module_ids.length === 0
+    moduleIdsByCohort[cc.cohort_id] = isFullAccess
+      ? [...existing, ...(allModuleIdsByCourse.get(cc.course_id) ?? [])]
+      : [...existing, ...(cc.included_module_ids ?? [])]
   }
 
   // 3. Lessons de todos os módulos liberados

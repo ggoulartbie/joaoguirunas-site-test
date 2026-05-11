@@ -1,7 +1,7 @@
 ---
 title: Story Backlog
 type: backlog
-updated: 2026-05-08
+updated: 2026-05-11
 tags: [story]
 ---
 
@@ -188,6 +188,21 @@ Objetivo: refinar a página /curso-online (espelhando /mentoria sem elementos pr
 **F9.17 — UNIQUE constraint em payments**: gap identificado por Rex-S durante a auditoria. Migration + ON CONFLICT no webhook. Idempotência ao nível DB.
 
 **F9.18 — P1-cleanup F9.12**: 5 bugs P1 abertos pelo sites-qa durante o bug-hunt da área do aluno (F9.12). B-02 (Stripe `/test/` em prod) e B-03 (link `/turmas/` inexistente) são fixes pequenos de UI. B-04 (cross-module nav sem gate `has_access`) bloqueia AC4 da F9.12. B-05/B-06 (N+1 no fórum) são performance — index e detail. Coordena sites-dev-alpha (UI/nav) e sites-dev-beta (queries).
+
+## Fase F13 — Admin Destructive Actions + InfinitePay Hardening Operacional
+
+| Story | Título | Complexidade | Status | Agente |
+|---|---|---|---|---|
+| [[backlog/F13.1-excluir-aluno-admin\|F13.1]] | Excluir aluno no admin (auth.admin.deleteUser + confirmação dupla) | M | backlog | sites-dev-delta |
+| [[backlog/F13.2-excluir-pagamentos-pendentes-admin\|F13.2]] | Excluir pagamentos pendentes no admin (guard status=PENDING) | S | backlog | sites-dev-delta |
+| [[backlog/F13.4-infinitepay-static-url-warning-setup-guide\|F13.4]] | Aviso link estático no CohortForm + guia turma de teste R$1 | S | backlog | sites-dev-alpha |
+
+**Objetivo:** completar o admin com ações destrutivas faltantes (Pipeline A) e endurecer operação InfinitePay (Pipeline B). F13.1 adiciona delete de conta na `UserProfileModal` (complementa o ban/unban). F13.2 adiciona delete de pagamentos PENDING na tabela (complementa o refund de APPROVED). F13.4 alerta admin sobre trade-off do link estático em `CohortForm` (não rastreia pagamento via webhook) e cria guia operacional `docs/smart-memory/ops/infinitepay-setup-guide.md` para criar turma de teste R$1 end-to-end. Stories independentes entre si, podem rodar em paralelo.
+
+**Pipeline A (F13.1/F13.2):** research do analyst-1.
+**Pipeline B (F13.4):** research do analyst-2 (decisão do lead 2026-05-11). O GAP 1 reportado ("Bearer Token não implementado") foi descartado — adapter já está correto, autenticando via campo `handle` no body conforme runbook `checkout-infinitepay.md`. A nota incorreta originou de QA results em `docs/smart-memory/agents/qa/results.md` (F12.1).
+
+**Não-objetivos:** soft delete, bulk delete, audit log, cancelamento de sessão Stripe/InfinitePay remota, alterações no adapter `infinitepay.ts` (já correto), criação programática de turma de teste.
 
 ## Fase F12 — InfinitePay (segundo provider de pagamento)
 

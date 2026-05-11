@@ -62,7 +62,11 @@ export default async function MeusCursosPage() {
   }
 
   // 5. Lessons dos módulos liberados
-  const accessibleModuleIds = [...new Set(cohortCourses.flatMap((cc) => cc.included_module_ids ?? []))]
+  // included_module_ids=[] significa acesso total → expandir para todos os módulos do curso
+  const accessibleModuleIds = [...new Set(cohortCourses.flatMap((cc) => {
+    const isFullAccess = cc.included_module_ids === null || cc.included_module_ids.length === 0
+    return isFullAccess ? (allModuleIdsByCourse.get(cc.course_id) ?? []) : (cc.included_module_ids ?? [])
+  }))]
   const { data: lessonRows } = accessibleModuleIds.length > 0
     ? await supabaseAdmin
         .from('lessons')

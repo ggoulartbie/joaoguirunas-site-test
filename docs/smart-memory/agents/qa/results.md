@@ -1,13 +1,47 @@
 ---
 title: QA Results
 type: qa-log
-updated: 2026-05-09T05:50
+updated: 2026-05-11T10:30
 tags: [qa, veredictos]
 ---
 
 # QA Results — Veredictos formais
 
 Histórico de veredictos emitidos pelo sites-qa (Axilun).
+
+---
+
+## 2026-05-11T10:30 — F13.2 Excluir pagamentos pendentes admin — ⚠️ CONCERNS
+
+> Veredicto da [F13.2](../../stories/active/F13.2-excluir-pagamentos-pendentes-admin.md). Commit auditado: 33f4b7f.
+
+**Resultado por AC:**
+
+| AC | Status | Local-chave |
+|----|--------|--------|
+| AC1 Botão condicional PENDING-only + estilo destrutivo + ícone Trash2 | ⚠️ CONCERN | `PaymentsClient.tsx:496-504` — condicional correto, mas falta ícone `Trash2` e cor vermelha (borda neutra + `bone-mute`); story prescreveu `Trash2` explícito |
+| AC2 Modal de confirmação simples sem input | ✅ PASS | `PaymentsClient.tsx:151-226` — `DeleteConfirmModal`; texto difere do exato da story mas equivalente |
+| AC3 Server action `deletePayment` com guard duplo | ⚠️ CONCERN | `actions.ts:361-382` — RBAC, guard TS e guard SQL OK; mas **lança `throw new Error` em vez de retornar `{error}` / `{success}`** (AC3 prescreve retorno tipado); **não-idempotente** (linha 370 lança quando payment não existe, contradiz "se já não existir, retornar success" do Contexto Técnico) |
+| AC4 Pós-sucesso: modal fecha + linha some + toast verde | ✅ PASS | `PaymentsClient.tsx:359-374` (state + `revalidatePath`); toast em `:402-406` com timeout 4s |
+| AC5 Defesa em profundidade contra request manual | ✅ PASS | Guard TS `actions.ts:371` + guard SQL `:373-378` impedem delete de não-PENDING mesmo via chamada direta |
+
+**[CONCERN-1 contrato]:** AC3 prescreve retorno `{ error: string }` ou `{ success: true }`. Implementação usa `throw new Error(...)`. Funciona porque `handleDeleteConfirm` faz `try/catch` (`PaymentsClient.tsx:363-373`), mas viola contrato textual e dificulta consumo programático. Refactor trivial.
+
+**[CONCERN-2 idempotência]:** Contexto Técnico declara explicitamente "se a linha já não existir, retornar `{ success: true }`". `actions.ts:370` lança `'Pagamento não encontrado'` quando `!payment`. Cenário: dois admins clicando "Excluir" na mesma linha → segundo recebe erro espúrio em ação já bem-sucedida.
+
+**[CONCERN-3 UX visual]:** Botão "Excluir" usa estilo neutro idêntico a links secundários (`border-rgba/0.07`, `text-bone-mute`). Story pediu "estilo destrutivo (vermelho), ícone Trash2". Falta sinalização visual de risco — admin pode confundir com ação inócua. Ícone `Trash2` do `lucide-react` nem importado.
+
+**[CONCERN-4 a11y modal — débito herdado]:** `DeleteConfirmModal` (e `RefundConfirmModal` legado) sem `role="dialog"`, `aria-modal="true"`, focus trap, ESC handler, `aria-label` no X. Não é regressão (segue padrão pré-existente), mas o admin/* acumula débito. Worth virar story de a11y-modais.
+
+**[CONCERN-5 observabilidade]:** Catch ausente — falha no `supabase.delete()` pode lançar sem `Sentry.captureException`. `refundPayment` tem (linha 401-403), `deletePayment` não. Inconsistência.
+
+**Recomendação:**
+- ⚠️ Push permitido com observações. Funcionalmente entrega o objetivo (admin consegue excluir pendentes com guard server-side robusto).
+- **Antes do próximo push relacionado a payments**, endereçar CONCERN-1 (contrato de retorno) e CONCERN-2 (idempotência) — são divergências explícitas do que a story documentou e podem virar bug real.
+- CONCERN-3 (visual destrutivo + Trash2) — fix de 2min, vale fazer agora antes de virar débito.
+- CONCERN-4 e CONCERN-5 podem virar stories próprias.
+
+**Próximo passo:** `@sites-devops` push liberado com CONCERNS documentados; `@sites-dev-delta` decidir se endereça CONCERN-1/2/3 nesta story ou abre follow-up.
 
 ---
 
@@ -1971,7 +2005,7 @@ Próximo passo: @sites-dev-alpha — implementar Server Action checkAndIssueCert
 ### F12.1 — Adapter + Webhook
 | AC | Resultado | Evidência |
 |----|-----------|-----------|
-| AC1 — `createCheckoutLink` payload + endpoint + Bearer | ✅ PASS | `src/lib/payment/infinitepay.ts:53-75` — payload completo, `POST /links`, `Authorization: Bearer` |
+| AC1 — `createCheckoutLink` payload + endpoint + handle | ✅ PASS | `src/lib/payment/infinitepay.ts:53-75` — payload completo, `POST /links`, autenticação via campo `handle` no body (sem Bearer — InfinitePay não usa Authorization header) |
 | AC2 — `verifyPayment` payload + endpoint | ✅ PASS | `src/lib/payment/infinitepay.ts:91-106` — handle, order_nsu, transaction_nsu, slug; `POST /payment_check` |
 | AC3 — Webhook 200 imediato + processamento async | ✅ PASS | `src/app/api/webhooks/infinitepay/route.ts:39-46` — fire-and-forget com Sentry capture |
 | AC4 — Idempotência (PENDING + cohort_members) | ✅ PASS | `route.ts:58-69` busca PENDING; `:99-114` checa membership existente; só incrementa filled_seats em insert novo |

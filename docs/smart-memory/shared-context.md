@@ -1,7 +1,7 @@
 ---
 title: Shared Context
 type: status-board
-updated: 2026-05-07
+updated: 2026-05-11
 tags: [ops]
 ---
 
@@ -9,32 +9,23 @@ tags: [ops]
 
 O lead (team-os) atualiza este arquivo a cada mudança de estado dos teammates.
 
-## Teammates ativos
+## Team ativo — joao-guirunas-site-academy-ops
 
-| Teammate | Status | Task atual | Desde |
+**Nome:** joao-guirunas-site-academy-ops
+**Status:** 🟢 ativo desde 2026-05-11
+**Objetivo:** Operação contínua da área /academy — 2 pipelines em paralelo
+**Início:** 2026-05-11T09:56:00-03:00
+
+| Teammate | Pipeline | Status | Task atual |
 |---|---|---|---|
-| sites-data | ✅ concluído | F1.2–F1.8 + F9.x — todas as stories done | 2026-05-06 |
-| sites-dev-beta | ✅ concluído | Fix mock data → Supabase real (pagamentos + moderação + types) | 2026-05-07 |
-| sites-dev-alpha | ✅ concluído | Fix SEO canonical + OG tags /academy/turmas (7c39341) | 2026-05-07 |
-| sites-dev-delta | ✅ concluído | F10.4 — criar aluno manual + email convite | 2026-05-06 |
-| sites-dev-gamma | ✅ concluído | F11.1 — pg_cron + Edge Functions em produção (a0c1c8b) | 2026-05-07 |
-| sites-devops | ✅ concluído | F8.6 ✅ deploy no ar — joaoguirunas.com, webhook Stripe, todas env vars | 2026-05-07 |
-| sites-qa | ⚠️ CONCERNS preliminar | F8.7 — veredicto final aguarda ACs manuais de João | 2026-05-07 |
-
-## Team ativo
-
-**Nome:** joao-guirunas-site-refactor-checkout-academy
-**Status:** 🟢 ativo desde 2026-05-08
-**Objetivo:** Refactor /curso-online + auditoria completa checkout Stripe e academy
-**Início:** 2026-05-08T23:17:00-03:00
-
-| Teammate | Status | Task atual |
-|---|---|---|
-| sites-architect | 🔄 em andamento | Criar stories F9.7+ para auditoria completa academy |
-| sites-dev-alpha | 🔄 em andamento | F9.1 — refactor /curso-online |
-| sites-dev-beta | 🔄 em andamento | Auditoria backend academy + verificação F9.2 |
-| sites-qa | 🔄 em andamento | QA formal F9.2 (sem QA ainda) |
-| sites-devops | ⏳ aguardando | Push + PR após QA gate |
+| analyst-1 | A | 🔄 em andamento | Research admin: usuários (delete/block) + pagamentos (delete pending) |
+| analyst-2 | B | 🔄 em andamento | Research InfinitePay: webhook URL, produto R$1, fluxo completo |
+| architect-1 | A | ⏳ aguardando | Aguarda relatório do analyst-1 |
+| architect-2 | B | ⏳ aguardando | Aguarda relatório do analyst-2 |
+| dev-alpha | A/B | ⏳ aguardando | Lendo contexto do projeto |
+| dev-beta | A/B | ⏳ aguardando | Lendo contexto do projeto |
+| sites-qa | gate | ⏳ aguardando | Gate de qualidade — acionado após implementação |
+| sites-devops | release | ⏳ aguardando | Push/PR — acionado após QA PASS |
 
 ---
 

@@ -33,6 +33,9 @@ const nextConfig: NextConfig = {
       { source: '/forum/:path*', destination: '/academy/forum/:path*', permanent: true },
       { source: '/admin/:path*', destination: '/academy/admin/:path*', permanent: true },
       { source: '/403', destination: '/academy/403', permanent: true },
+      // mentoria/modulos → mentoria/presencial
+      { source: '/mentoria/modulos', destination: '/mentoria/presencial', permanent: true },
+      { source: '/mentoria/modulos/:path*', destination: '/mentoria/presencial/:path*', permanent: true },
     ]
   },
   async rewrites() {

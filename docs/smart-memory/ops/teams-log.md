@@ -292,3 +292,21 @@ Registro de todos os Agent Teams formados neste projeto. Lead (team-os) atualiza
 - 2b1ddaa — fix(webhook): underpayment guard + Sentry alert InfinitePay
 
 **Build:** 137 páginas · typecheck EXIT 0 · deploy Vercel em prod
+
+## 2026-05-11 — Team joao-guirunas-site-academy-ops
+
+**Objetivo:** Operação contínua da área /academy — delete/block alunos, excluir pagamentos pendentes, configuração InfinitePay + produto R$1 + teste fluxo completo
+**Lead:** team-os (skill)
+**Composição:**
+- analyst-1 — Pipeline A: research admin usuários + pagamentos
+- analyst-2 — Pipeline B: research InfinitePay + fluxo checkout
+- architect-1 — Pipeline A: stories após research
+- architect-2 — Pipeline B: stories após research
+- dev-alpha — Frontend (React, Next.js, shadcn/ui)
+- dev-beta — Backend (API routes, DB, integrações)
+- sites-qa — Gate de qualidade (veredictos formais)
+- sites-devops — Push + PR (autoridade exclusiva)
+
+**Status:** ativo
+**Início:** 2026-05-11T09:56:00-03:00
+**Stories:** [[../stories/BACKLOG]] — F13.x (em criação)

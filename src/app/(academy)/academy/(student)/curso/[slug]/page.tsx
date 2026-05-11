@@ -134,14 +134,19 @@ export default async function CursoPage({ params }: Props) {
         .in('cohort_id', userCohortIds)
     : { data: [] }
 
-  // Union of all module IDs the user has access to across their cohorts
+  // Union of all module IDs the user has access to across their cohorts.
+  // included_module_ids=[] means full access → expand to all course modules.
+  const allCourseModuleIds = course.modules.map((m) => m.id)
   const accessibleModuleIds = new Set(
-    (cohortCourseRows ?? []).flatMap((r) => r.included_module_ids ?? [])
+    (cohortCourseRows ?? []).flatMap((r) => {
+      const isFullAccess = r.included_module_ids === null || r.included_module_ids.length === 0
+      return isFullAccess ? allCourseModuleIds : (r.included_module_ids ?? [])
+    })
   )
 
-  // AC5: hasGlobalAccess only when the student HAS an active cohort but that cohort has
-  // no module restrictions configured (cohort_courses empty for this course).
-  // A student with no active cohort at all must NOT receive global access.
+  // AC5: hasGlobalAccess when the student has an active cohort but no cohort_courses row
+  // exists for this course (legacy / unscoped access). Students with included_module_ids=[]
+  // are handled above via full expansion, not via hasGlobalAccess.
   const hasGlobalAccess = userCohortIds.length > 0 && (cohortCourseRows ?? []).length === 0
 
   // 7. Compute progress stats
