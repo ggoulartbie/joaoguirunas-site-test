@@ -95,12 +95,14 @@ const slides = [
     body: 'REV OS é o sistema de orquestração comercial da GrowthSales. Qualifica leads, personaliza abordagem, gera propostas e faz follow-up automaticamente — em todos os canais ao mesmo tempo. Sem uma pessoa tocar no processo.',
     note: 'Operando em produção para:',
     clients: ['Sisprime', 'Blue3', 'Viva América', 'Argoplan', 'The Mentor', 'PlugaiGym'],
+    screenshot: '/mentoria/revos.png',
   },
   {
     label: 'WORK OS · Gestão de Projetos',
     title: 'Adeus Asana. Adeus Trello. Adeus Monday.',
     body: 'Work OS é o sistema interno de gestão de projetos da GrowthSales. Cria tarefas, delega, monitora progresso e sinaliza bloqueios sozinho — do briefing ao entregável, com rastreabilidade completa de cada decisão.',
     note: 'A mesma infraestrutura de Agent Teams que você vai aprender a montar neste dia.',
+    screenshot: '/mentoria/workos.png',
   },
   {
     label: 'Brandbook · GrowthSales.ai',
@@ -126,6 +128,7 @@ const slides = [
       { label: 'Posts · Abril', value: '17' },
       { label: 'Regime', value: 'One-shot' },
     ],
+    screenshot: '/mentoria/strategy-room.png',
   },
   {
     label: 'Squad de Social Media · Portal',
