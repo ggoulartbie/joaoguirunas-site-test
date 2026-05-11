@@ -1229,7 +1229,7 @@ export function CohortForm(props: CohortFormProps) {
                           onChange={(e) => { setMemberSearch(e.target.value); setMemberDropdownOpen(true) }}
                           onFocus={() => setMemberDropdownOpen(true)}
                           placeholder="Buscar por nome ou email…"
-                          autoComplete="off"
+                          autoComplete="new-password"
                           className="w-full border border-white/[0.16] bg-[var(--ink-2)] px-3 py-2 font-mono text-xs text-[var(--bone)] placeholder-[var(--bone-mute)] focus:outline-none focus:border-white/30"
                           style={{ borderRadius: 0 }}
                         />
