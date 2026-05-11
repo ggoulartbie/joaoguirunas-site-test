@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useTransition } from 'react'
+import { useState, useTransition, useRef, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import type { Database } from '@/types/database'
@@ -20,7 +20,7 @@ import {
   Save,
   ArrowLeft,
 } from 'lucide-react'
-import { createCohort, updateCohort, addMemberByCohortEmail, createCoupon, createLiveSession, updateLiveSession, deleteLiveSession } from './actions'
+import { createCohort, updateCohort, addMembersByIds, createCoupon, createLiveSession, updateLiveSession, deleteLiveSession } from './actions'
 
 type CohortCourse = Database['public']['Tables']['cohort_courses']['Row']
 type CrossExtension = Database['public']['Tables']['cohort_cross_extensions']['Row']
@@ -37,6 +37,8 @@ type Coupon = Database['public']['Tables']['coupons']['Row'] & {
 
 type CohortRow = Database['public']['Tables']['cohorts']['Row']
 
+type UserOption = { id: string; name: string; email: string }
+
 type CohortFormProps =
   | { mode: 'create'; courses: CourseForSelector[]; allCohorts: CohortForSelector[] }
   | {
@@ -49,6 +51,7 @@ type CohortFormProps =
       coupons: Coupon[]
       courses: CourseForSelector[]
       allCohorts: CohortForSelector[]
+      allUsers: UserOption[]
     }
 
 const SECTIONS = [
@@ -250,6 +253,7 @@ export function CohortForm(props: CohortFormProps) {
   const initial = isEdit ? props.cohort : null
   const courses = props.courses
   const allCohorts = props.allCohorts
+  const allUsers = isEdit ? props.allUsers : []
   const router = useRouter()
   const [pending, startTransition] = useTransition()
   const [saveError, setSaveError] = useState<string | null>(null)
@@ -336,11 +340,24 @@ export function CohortForm(props: CohortFormProps) {
   // Section 7 — Membros
   const members = isEdit ? props.members : []
   const [showAddMember, setShowAddMember] = useState(false)
-  const [memberEmail, setMemberEmail] = useState('')
+  const [memberSearch, setMemberSearch] = useState('')
+  const [memberDropdownOpen, setMemberDropdownOpen] = useState(false)
+  const [selectedUserIds, setSelectedUserIds] = useState<string[]>([])
   const [memberRole, setMemberRole] = useState('STUDENT')
+  const memberDropdownRef = useRef<HTMLDivElement>(null)
   const [memberExpiresAt, setMemberExpiresAt] = useState('')
   const [memberError, setMemberError] = useState<string | null>(null)
   const [memberPending, startMemberTransition] = useTransition()
+
+  useEffect(() => {
+    function handleClickOutside(e: MouseEvent) {
+      if (memberDropdownRef.current && !memberDropdownRef.current.contains(e.target as Node)) {
+        setMemberDropdownOpen(false)
+      }
+    }
+    document.addEventListener('mousedown', handleClickOutside)
+    return () => document.removeEventListener('mousedown', handleClickOutside)
+  }, [])
 
   // Section 8 — Sessoes ao vivo
   const liveSessions = isEdit ? props.liveSessions : []
@@ -528,23 +545,24 @@ export function CohortForm(props: CohortFormProps) {
   }
 
   function handleAddMember() {
-    if (!isEdit || !memberEmail) return
+    if (!isEdit || !selectedUserIds.length) return
     setMemberError(null)
     startMemberTransition(async () => {
       try {
-        await addMemberByCohortEmail(
+        await addMembersByIds(
           props.cohort.id,
-          memberEmail,
-          memberRole as 'STUDENT' | 'MENTOR',
+          selectedUserIds,
+          memberRole as 'STUDENT' | 'MENTOR' | 'MONITOR',
           memberExpiresAt || undefined,
         )
         setShowAddMember(false)
-        setMemberEmail('')
+        setSelectedUserIds([])
+        setMemberSearch('')
         setMemberExpiresAt('')
         setMemberRole('STUDENT')
         router.refresh()
       } catch (err) {
-        setMemberError(err instanceof Error ? err.message : 'Erro ao adicionar membro')
+        setMemberError(err instanceof Error ? err.message : 'Erro ao adicionar membros')
       }
     })
   }
@@ -1154,20 +1172,103 @@ export function CohortForm(props: CohortFormProps) {
                   </button>
                 </div>
 
-                {showAddMember && (
+                {showAddMember && (() => {
+                  const memberUserIds = isEdit ? props.members.map((m) => m.user_id) : []
+                  const availableUsers = allUsers.filter((u) => !memberUserIds.includes(u.id))
+                  const filtered = availableUsers.filter((u) =>
+                    memberSearch === '' ||
+                    u.name.toLowerCase().includes(memberSearch.toLowerCase()) ||
+                    u.email.toLowerCase().includes(memberSearch.toLowerCase())
+                  )
+                  return (
                   <div className="mb-4 border border-white/[0.07] p-4">
                     <p className="mb-3 font-mono text-[10px] uppercase tracking-widest text-[var(--bone-mute)]">
-                      Adicionar membro manualmente
+                      Adicionar membros
                     </p>
-                    <div className="grid gap-3 md:grid-cols-3">
-                      <div>
-                        <FieldLabel>E-mail do aluno</FieldLabel>
-                        <TextInput
-                          value={memberEmail}
-                          onChange={setMemberEmail}
-                          placeholder="aluno@exemplo.com"
+
+                    {/* Multi-select */}
+                    <div className="mb-3">
+                      <FieldLabel>Usuários ({availableUsers.length} disponíveis)</FieldLabel>
+
+                      {/* Selected chips */}
+                      {selectedUserIds.length > 0 && (
+                        <div className="mb-2 flex flex-wrap gap-1.5">
+                          {selectedUserIds.map((uid) => {
+                            const u = allUsers.find((x) => x.id === uid)
+                            return (
+                              <span
+                                key={uid}
+                                className="flex items-center gap-1 border border-[var(--ember)]/40 bg-[var(--ember)]/10 px-2 py-0.5 font-mono text-[10px] text-[var(--ember)]"
+                              >
+                                {u?.name || u?.email || uid.slice(0, 8)}
+                                <button
+                                  type="button"
+                                  onClick={() => setSelectedUserIds((ids) => ids.filter((i) => i !== uid))}
+                                  className="ml-0.5 opacity-60 hover:opacity-100"
+                                >
+                                  ×
+                                </button>
+                              </span>
+                            )
+                          })}
+                          <button
+                            type="button"
+                            onClick={() => setSelectedUserIds([])}
+                            className="font-mono text-[10px] text-[var(--bone-mute)] underline hover:text-[var(--bone-dim)]"
+                          >
+                            limpar
+                          </button>
+                        </div>
+                      )}
+
+                      {/* Search + dropdown */}
+                      <div ref={memberDropdownRef} className="relative">
+                        <input
+                          type="text"
+                          value={memberSearch}
+                          onChange={(e) => { setMemberSearch(e.target.value); setMemberDropdownOpen(true) }}
+                          onFocus={() => setMemberDropdownOpen(true)}
+                          placeholder="Buscar por nome ou email…"
+                          className="w-full border border-white/[0.16] bg-[var(--ink-2)] px-3 py-2 font-mono text-xs text-[var(--bone)] placeholder-[var(--bone-mute)] focus:outline-none focus:border-white/30"
+                          style={{ borderRadius: 0 }}
                         />
+                        {memberDropdownOpen && filtered.length > 0 && (
+                          <div className="absolute z-10 max-h-52 w-full overflow-y-auto border border-white/[0.16] bg-[var(--ink)] shadow-xl">
+                            {filtered.map((u) => {
+                              const isSelected = selectedUserIds.includes(u.id)
+                              return (
+                                <button
+                                  key={u.id}
+                                  type="button"
+                                  onClick={() => {
+                                    setSelectedUserIds((ids) =>
+                                      isSelected ? ids.filter((i) => i !== u.id) : [...ids, u.id]
+                                    )
+                                    setMemberSearch('')
+                                  }}
+                                  className="flex w-full items-center gap-3 px-3 py-2 text-left transition-colors hover:bg-white/[0.05]"
+                                >
+                                  <span className={`flex h-3.5 w-3.5 flex-shrink-0 items-center justify-center border ${isSelected ? 'border-[var(--ember)] bg-[var(--ember)]' : 'border-white/30'}`}>
+                                    {isSelected && <Check className="h-2.5 w-2.5 text-[var(--void)]" />}
+                                  </span>
+                                  <span className="min-w-0">
+                                    <span className="block font-mono text-[11px] text-[var(--bone)]">{u.name}</span>
+                                    <span className="block font-mono text-[10px] text-[var(--bone-mute)]">{u.email}</span>
+                                  </span>
+                                </button>
+                              )
+                            })}
+                          </div>
+                        )}
+                        {memberDropdownOpen && memberSearch !== '' && filtered.length === 0 && (
+                          <div className="absolute z-10 w-full border border-white/[0.16] bg-[var(--ink)] px-3 py-2 font-mono text-[10px] text-[var(--bone-mute)]">
+                            Nenhum usuário encontrado
+                          </div>
+                        )}
                       </div>
+                    </div>
+
+                    <div className="grid gap-3 md:grid-cols-2">
                       <div>
                         <FieldLabel>Papel</FieldLabel>
                         <SelectInput
@@ -1181,34 +1282,41 @@ export function CohortForm(props: CohortFormProps) {
                         />
                       </div>
                       <div>
-                        <FieldLabel>Expira em (vazio = vitalicio)</FieldLabel>
+                        <FieldLabel>Expira em (vazio = vitalício)</FieldLabel>
                         <TextInput type="date" value={memberExpiresAt} onChange={setMemberExpiresAt} />
                       </div>
                     </div>
+
                     {memberError && (
                       <p className="mt-2 font-mono text-xs text-red-400">{memberError}</p>
                     )}
+
                     <div className="mt-3 flex gap-2">
                       <button
                         type="button"
-                        disabled={memberPending || !memberEmail}
+                        disabled={memberPending || !selectedUserIds.length}
                         style={{ borderRadius: 0 }}
                         className="bg-[var(--ember)] px-4 py-2 font-mono text-[10px] uppercase tracking-widest text-[var(--void)] disabled:opacity-40"
                         onClick={handleAddMember}
                       >
-                        {memberPending ? 'Adicionando...' : 'Adicionar'}
+                        {memberPending
+                          ? 'Adicionando...'
+                          : selectedUserIds.length > 1
+                            ? `Adicionar ${selectedUserIds.length} membros`
+                            : 'Adicionar'}
                       </button>
                       <button
                         type="button"
                         style={{ borderRadius: 0 }}
                         className="border border-white/[0.07] px-4 py-2 font-mono text-[10px] uppercase tracking-widest text-[var(--bone-mute)] transition-colors hover:text-[var(--bone-dim)]"
-                        onClick={() => { setShowAddMember(false); setMemberError(null) }}
+                        onClick={() => { setShowAddMember(false); setMemberError(null); setSelectedUserIds([]); setMemberSearch('') }}
                       >
                         Cancelar
                       </button>
                     </div>
                   </div>
-                )}
+                  )
+                })()}
 
                 <div className="overflow-x-auto">
                 <table className="w-full" style={{ borderRadius: 0 }}>

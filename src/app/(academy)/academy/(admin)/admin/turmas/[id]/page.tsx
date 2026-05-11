@@ -52,15 +52,22 @@ export default async function EditarTurmaPage({
 
   if (!cohort) notFound()
 
-  // Resolve member emails via auth admin (batch fetch, index by user_id)
-  const memberUserIds = (rawMembers ?? []).map((m) => m.user_id)
+  // Fetch all platform users for the member multi-select
+  const [{ data: allProfiles }, { data: authList }] = await Promise.all([
+    supabaseAdmin.from('profiles').select('id, name').order('name', { ascending: true }),
+    supabaseAdmin.auth.admin.listUsers({ perPage: 1000 }),
+  ])
+
   const emailMap: Record<string, string> = {}
-  if (memberUserIds.length > 0) {
-    const { data: authList } = await supabaseAdmin.auth.admin.listUsers({ perPage: 1000 })
-    for (const u of authList?.users ?? []) {
-      if (u.email) emailMap[u.id] = u.email
-    }
+  for (const u of authList?.users ?? []) {
+    if (u.email) emailMap[u.id] = u.email
   }
+
+  const allUsers = (allProfiles ?? []).map((p) => ({
+    id: p.id,
+    name: p.name ?? '',
+    email: emailMap[p.id] ?? '',
+  }))
 
   const members = (rawMembers ?? []).map((m) => {
     const profile = m.profiles as { name: string } | null
@@ -133,6 +140,7 @@ export default async function EditarTurmaPage({
         coupons={couponsWithCohortName}
         courses={courses}
         allCohorts={allCohorts}
+        allUsers={allUsers}
       />
     </div>
   )

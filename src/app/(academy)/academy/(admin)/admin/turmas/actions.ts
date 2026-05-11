@@ -5,6 +5,7 @@ import { z } from 'zod'
 import { supabaseAdmin } from '@/lib/supabase/admin'
 import { requireAdmin } from '@/lib/auth/helpers'
 import { syncCohortWithStripe, syncCouponWithStripe } from '@/lib/payment/sync'
+import { sendWelcomeToCohortEmail } from '@/lib/email/send'
 import type { Database } from '@/types/database'
 
 type CohortInsert = Database['public']['Tables']['cohorts']['Insert']
@@ -209,7 +210,7 @@ export async function updateCohort(cohortId: string, data: z.infer<typeof cohort
 export async function addMemberToCohort(
   cohortId: string,
   userId: string,
-  memberRole: 'STUDENT' | 'MENTOR' = 'STUDENT',
+  memberRole: 'STUDENT' | 'MENTOR' | 'MONITOR' = 'STUDENT',
   expiresAt?: string,
 ) {
   await requireAdmin()
@@ -331,6 +332,54 @@ export async function createCoupon(data: {
 }
 
 // B4: memberRole parameter added
+export async function addMembersByIds(
+  cohortId: string,
+  userIds: string[],
+  memberRole: 'STUDENT' | 'MENTOR' | 'MONITOR' = 'STUDENT',
+  expiresAt?: string,
+): Promise<{ added: number }> {
+  await requireAdmin()
+
+  if (!userIds.length) return { added: 0 }
+
+  const { data: cohort } = await supabaseAdmin
+    .from('cohorts')
+    .select('name, start_date')
+    .eq('id', cohortId)
+    .single()
+
+  const { data: authList } = await supabaseAdmin.auth.admin.listUsers({ perPage: 1000 })
+  const emailMap: Record<string, string> = {}
+  for (const u of authList?.users ?? []) {
+    if (u.email) emailMap[u.id] = u.email
+  }
+
+  const { data: profiles } = await supabaseAdmin
+    .from('profiles')
+    .select('id, name')
+    .in('id', userIds)
+  const nameMap: Record<string, string> = {}
+  for (const p of profiles ?? []) nameMap[p.id] = p.name ?? ''
+
+  let added = 0
+  for (const userId of userIds) {
+    await addMemberToCohort(cohortId, userId, memberRole, expiresAt)
+    added++
+
+    const email = emailMap[userId]
+    const name = nameMap[userId] ?? ''
+    if (email && cohort) {
+      try {
+        await sendWelcomeToCohortEmail(email, name, cohort.name, cohort.start_date ?? null)
+      } catch {
+        // email failure doesn't roll back the membership
+      }
+    }
+  }
+
+  return { added }
+}
+
 export async function addMemberByCohortEmail(
   cohortId: string,
   email: string,
