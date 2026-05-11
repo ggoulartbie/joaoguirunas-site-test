@@ -1107,6 +1107,7 @@ export type Database = {
           avatar_url: string | null
           bio: string | null
           created_at: string
+          has_set_password: boolean
           id: string
           name: string
           role: string
@@ -1117,6 +1118,7 @@ export type Database = {
           avatar_url?: string | null
           bio?: string | null
           created_at?: string
+          has_set_password?: boolean
           id: string
           name: string
           role?: string
@@ -1127,6 +1129,7 @@ export type Database = {
           avatar_url?: string | null
           bio?: string | null
           created_at?: string
+          has_set_password?: boolean
           id?: string
           name?: string
           role?: string
@@ -1237,6 +1240,10 @@ export type Database = {
       has_access: {
         Args: { p_lesson_id: string; p_user_id: string }
         Returns: boolean
+      }
+      decrement_filled_seats: {
+        Args: { p_cohort_id: string }
+        Returns: undefined
       }
       increment_filled_seats: {
         Args: { p_cohort_id: string }
