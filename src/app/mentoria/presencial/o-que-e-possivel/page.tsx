@@ -58,12 +58,16 @@ const ALL_AGENTS: SlideAgent[] = [
 ];
 
 const SITES_SQUAD: SlideAgent[] = [
-  { slug: 'sites-architect',  codename: 'Zaelion',  accent: SITES, title: 'Architect' },
-  { slug: 'sites-dev-alpha',  codename: 'Novael',   accent: SITES, title: 'Frontend Developer' },
-  { slug: 'sites-dev-beta',   codename: 'Rexali',   accent: SITES, title: 'Backend Developer' },
-  { slug: 'sites-ux',         codename: 'Velani',   accent: SITES, title: 'UX Specialist' },
-  { slug: 'sites-devops',     codename: 'Graveli',  accent: SITES, title: 'DevOps Guardian' },
-  { slug: 'sites-qa',         codename: 'Axilun',   accent: SITES, title: 'QA Master' },
+  { slug: 'sites-analyst',   codename: 'Lyrel',     accent: SITES, title: 'Research Analyst' },
+  { slug: 'sites-architect', codename: 'Zaelion',   accent: SITES, title: 'Architect' },
+  { slug: 'sites-data',      codename: 'Bythelion', accent: SITES, title: 'Data Engineer' },
+  { slug: 'sites-dev-alpha', codename: 'Novael',    accent: SITES, title: 'Frontend Developer' },
+  { slug: 'sites-dev-beta',  codename: 'Rexali',    accent: SITES, title: 'Backend Developer' },
+  { slug: 'sites-dev-delta', codename: 'Kronilux',  accent: SITES, title: 'Hardening & Resilience' },
+  { slug: 'sites-dev-gamma', codename: 'Seranol',   accent: SITES, title: 'Fullstack Developer' },
+  { slug: 'sites-devops',    codename: 'Graveli',   accent: SITES, title: 'DevOps Guardian' },
+  { slug: 'sites-qa',        codename: 'Axilun',    accent: SITES, title: 'QA Master' },
+  { slug: 'sites-ux',        codename: 'Velani',    accent: SITES, title: 'UX Specialist' },
 ];
 
 const slides = [
@@ -96,11 +100,16 @@ const slides = [
     screenshot: '/mentoria/brandbook.png',
   },
   {
-    label: 'Novo Site · GrowthSales.ai',
-    title: 'Design, copy e código — três agentes trabalhando em paralelo.',
-    body: 'Site institucional completo: do briefing ao deploy, com agentes de design, desenvolvimento e copy atuando ao mesmo tempo. O site que você pode visitar hoje foi construído exatamente assim.',
-    note: 'growthsales.ai — coordenado por um lead, executado por um squad.',
-    agents: SITES_SQUAD,
+    label: 'Portal · joaoguirunas.com',
+    title: 'Open-source, páginas de venda — 10 agentes, 70+ stories, live.',
+    body: 'A squad Sites redesenhou e publicou o portal completo: home, open-source com 40+ recursos, e páginas de venda do curso e da mentoria. Do wireframe ao ar, coordenado por um lead, executado em paralelo com veredicto formal de QA a cada entrega.',
+    stats: [
+      { label: 'Agentes', value: '10' },
+      { label: 'Stories', value: '70+' },
+      { label: 'Páginas', value: '8+' },
+      { label: 'Deploy', value: 'Live' },
+    ],
+    screenshot: '/mentoria/portal-opensource.png',
   },
   {
     label: 'Área de Mídia · João Guirunas',
@@ -113,13 +122,6 @@ const slides = [
       { label: 'Regime', value: 'One-shot' },
     ],
     screenshot: '/mentoria/strategy-room.png',
-  },
-  {
-    label: 'Site · joaoguirunas.com',
-    title: 'Portal completo — do design ao deploy — em 8 semanas.',
-    body: 'A squad Sites redesenhou e reconstruiu todo o joaoguirunas.com: home, open-source, curso-online, mentoria e academy. 70+ stories executadas em paralelo por 10 agentes especializados. Do wireframe ao ar, com pagamentos, área do aluno e conteúdo de lançamento.',
-    note: 'Cada entrega com veredicto formal de QA. Cada decisão arquitetural registrada em smart-memory.',
-    screenshot: '/mentoria/portal-opensource.png',
   },
   {
     label: 'Academy · Área do Aluno',

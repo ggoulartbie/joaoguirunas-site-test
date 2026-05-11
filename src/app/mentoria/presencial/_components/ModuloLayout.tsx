@@ -219,12 +219,12 @@ export function ModuloLayout({ slug, children, className }: ModuloLayoutProps) {
                 </span>
               </Link>
             ) : (
-              <Link href="/mentoria#inscricao" className="group flex flex-col gap-1 sm:items-end">
+              <Link href="/academy" className="group flex flex-col gap-1 sm:items-end">
                 <span className="text-[10px] tracking-[0.22em] uppercase text-white/35" style={{ fontFamily: MONO }}>
-                  Finalizar →
+                  Finalizado →
                 </span>
                 <span className="text-base text-white/60 transition-colors group-hover:text-[#FF3A0E]" style={{ fontFamily: DISPLAY }}>
-                  Garantir minha vaga
+                  Acessar Academy
                 </span>
               </Link>
             )}

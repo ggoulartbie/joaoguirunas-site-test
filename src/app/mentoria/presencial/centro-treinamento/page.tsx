@@ -1,48 +1,58 @@
 import type { Metadata } from 'next';
 import { ModuloSlideshow } from '../_components/ModuloSlideshow';
+import type { Slide } from '../_components/ModuloSlideshow';
 
 export const metadata: Metadata = {
   title: 'Módulo 3: Centro de Treinamento de Agentes | Mentoria Claude Code',
   alternates: { canonical: '/mentoria/presencial/centro-treinamento' },
 };
 
-const slides = [
+const slides: Slide[] = [
   {
-    label: 'Por onde começar',
-    title: 'Claude genérico faz tudo mal. Claude especialista faz uma coisa muito bem.',
-    body: 'Um agente genérico é como contratar alguém para fazer marketing, vendas, financeiro e código ao mesmo tempo — ele tenta, mas não tem profundidade em nada. Um agente especialista tem papel definido, contexto específico e as ferramentas certas. A diferença de resultado é brutal.',
-    note: 'Você não contrata uma pessoa para fazer tudo. Com agentes é exatamente igual.',
+    label: 'Centro de Treinamento · 4 Squads',
+    title: '37 agentes, 4 squads, 1 lead — um sistema operacional para IA.',
+    body: 'O Centro de Treinamento é o repositório central de agentes e skills nativos do Claude Code. Cada agente tem papel único, ferramentas específicas e responsabilidades claras. Nenhum sabe fazer tudo — e isso é o que torna o sistema confiável. Tudo em .claude/agents/ e .claude/skills/ — portável entre projetos.',
+    diagram: 'ct-overview',
   },
   {
-    label: 'Anatomia de um agente',
-    title: 'O que compõe um agente que funciona de verdade.',
-    body: 'Cada agente tem: archetype (implementer, architect, reviewer, devops, ux…), persona e tom de voz, ferramentas e acessos configurados, contrato com o time, e instruções específicas do papel. Um agente bem definido não precisa de supervisão constante — ele sabe o que é seu e o que não é.',
-    note: 'A qualidade do resultado é diretamente proporcional à clareza com que você define o papel.',
+    label: 'Time vs Solo · Protocolo',
+    title: 'Por que agentes em time — e como se coordenam.',
+    body: 'IA solo tenta fazer tudo e faz mal. Agentes em time têm papéis definidos, QA formal e execução paralela. O protocolo garante autoridade exclusiva: só dev-qa emite veredictos, só dev-devops faz push. Sem nested teams. Sem polling — cada agente avisa quando termina.',
+    note: 'Enquanto o backend implementa, o QA já prepara os critérios. Zero retrabalho de handoff.',
+    diagram: 'team-protocol',
+  },
+  {
+    label: '/team-os · O Maestro',
+    title: 'Detecta o projeto. Planeja. Forma o time. Coordena — em um comando.',
+    body: 'team-os é a skill de orquestração nativa: detecta o estado automaticamente (NEW / READY / IN_PROGRESS), faz bootstrap completo em projetos novos, quebra objetivos em stories, forma o squad certo e coordena execução em paralelo. É o sistema que usamos para construir tudo que você viu no Módulo 01.',
+    diagram: 'team-os-commands',
   },
   {
     label: 'Smart Memory · docs/smart-memory/',
-    title: 'A memória compartilhada que todos os agentes do time leem — e atualizam.',
-    body: 'Smart Memory é o sistema de memória persistente do projeto, armazenada em docs/smart-memory/ no padrão Obsidian. Cada agente lê e escreve aqui: arquitetura, tech stack, stories em andamento, decisões. Nenhum agente começa do zero — o contexto do projeto está sempre presente.',
-    note: 'É como uma wiki viva do projeto que todos os agentes mantêm atualizada automaticamente.',
-  },
-  {
-    label: '/team-os · Team Lead',
-    title: 'Detecta o projeto. Planeja. Forma o time. Coordena — em um comando.',
-    body: 'team-os é a skill de orquestração nativa do Claude Code: detecta o estado do projeto, quebra objetivos em stories, forma o squad certo, spawna cada agente com instruções específicas e coordena a execução em paralelo. É o sistema que usamos para construir tudo que você viu no Módulo 01.',
-    note: '/team-os *bootstrap — e o time está formado, a memória populada, o trabalho em andamento.',
+    title: 'A fonte de verdade que todos os agentes leem — e atualizam.',
+    body: 'Agentes não têm memória entre sessões. Smart Memory resolve isso: docs/smart-memory/ é um vault Obsidian com wikilinks entre arquivos, frontmatter YAML e estrutura por tipo — project, stories, decisions, ops. Cada agente lê e escreve aqui.',
+    note: 'Qualquer agente (ou humano) entra numa sessão nova e tem contexto completo em segundos.',
+    video: '/mentoria/smart-memory-obsidian.mov',
   },
   {
     label: '/team-os-creator · Agent Factory',
-    title: 'Você descreve o que precisa. Ele gera o agente pronto para trabalhar.',
-    body: 'team-os-creator analisa seu projeto, detecta o archetype certo (SaaS, data, marketing, content), propõe o preset de squad ideal e gera cada arquivo de agente completo — com persona, contrato com o time, skills instaladas e instruções validadas em produção. 9 archetypes, 5 presets, do zero ao squad em minutos.',
-    note: '/team-os-creator *squad dev — squad completa de 10 agentes gerada e validada automaticamente.',
+    title: 'Você descreve o que precisa. Ele gera o squad pronto para trabalhar.',
+    body: 'team-os-creator analisa o stack do projeto, propõe a squad ideal, gera os arquivos .claude/agents/*.md completos e instala as skills relevantes. Nunca sobrescreve silenciosamente. Nunca duplica o orquestrador. Propaga updates para múltiplos projetos de uma vez.',
+    diagram: 'creator-commands',
   },
   {
-    label: 'Sites Squad · Caso Real',
-    title: 'Uma squad de 10 agentes reconstruiu todo o meu portal em 8 semanas.',
-    body: 'A squad Sites — Architect, Frontend, Backend, Data, UX, Hardening, Fullstack, QA, DevOps e Analyst — executou 70+ stories em paralelo. Cada agente com papel definido, contrato com o time e smart-memory compartilhada. Isso é o que você aprende a montar aqui.',
-    note: 'O resultado está no ar em joaoguirunas.com — construído com exatamente o que você vai configurar neste dia.',
-    screenshot: '/mentoria/portal-opensource.png',
+    label: 'Por onde começar · 3 passos',
+    title: 'Do zero ao time rodando em 3 comandos.',
+    body: 'Instalar a squad, inicializar o smart-memory e despachar o trabalho. Do projeto virgem ao time em execução paralela — sem configuração manual, sem setup demorado. Você só aprova.',
+    note: 'O time planeja, executa e entrega. Você define o objetivo.',
+    diagram: 'getting-started',
+  },
+  {
+    label: '/team-os-creator · Referência',
+    title: 'A fábrica está à sua disposição.',
+    body: 'Todos os comandos do team-os-creator que você vai usar para criar, instalar, atualizar e auditar squads em qualquer projeto. Leve com você.',
+    note: 'Nunca sobrescreve silenciosamente. Nunca duplica o orquestrador. Skills sempre instaladas junto.',
+    diagram: 'creator-commands',
   },
 ];
 

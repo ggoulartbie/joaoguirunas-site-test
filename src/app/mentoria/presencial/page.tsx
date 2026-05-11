@@ -120,7 +120,7 @@ export default function ModulosIndexPage() {
 
         <footer className="mt-16 pt-10 border-t" style={{ borderColor: 'rgba(255,255,255,0.06)' }}>
           <Link
-            href="/mentoria#inscricao"
+            href="/academy"
             className="inline-flex items-center gap-2 px-8 py-4 text-sm font-semibold uppercase transition-all hover:brightness-110"
             style={{
               fontFamily: MONO,
@@ -130,7 +130,7 @@ export default function ModulosIndexPage() {
               color: '#050507',
             }}
           >
-            Garantir minha vaga
+            Acessar Academy
             <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M17 8l4 4m0 0l-4 4m4-4H3" />
             </svg>

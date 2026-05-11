@@ -302,11 +302,11 @@ export default function SetupInstalacaoPage() {
               </Link>
             )}
             <Link
-              href="/mentoria#inscricao"
+              href="/academy"
               className="flex items-center gap-2 px-6 py-3 ml-auto transition-all hover:brightness-110"
               style={{ fontFamily: MONO, fontSize: '10px', letterSpacing: '0.14em', textTransform: 'uppercase', background: ACCENT, color: '#050507', fontWeight: 600 }}
             >
-              Garantir minha vaga
+              Acessar Academy
               <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                 <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
               </svg>
