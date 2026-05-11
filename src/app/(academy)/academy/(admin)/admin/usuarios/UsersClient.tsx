@@ -159,6 +159,7 @@ function UserProfileModal({
   onClose,
   onUpdate,
   onDeleted,
+  onError,
 }: {
   user: UserRow
   cohorts: CohortOption[]
@@ -166,6 +167,7 @@ function UserProfileModal({
   onClose: () => void
   onUpdate: (updated: Partial<UserRow>) => void
   onDeleted: () => void
+  onError: (msg: string) => void
 }) {
   const [role, setRole] = useState(user.role)
   const [grantCohortId, setGrantCohortId] = useState('')
@@ -252,8 +254,8 @@ function UserProfileModal({
     startDeleteTransition(async () => {
       const result = await deleteUser(user.id)
       if ('error' in result) {
-        setError(result.error)
         setShowDeleteConfirm(false)
+        onError('Não foi possível excluir a conta. Tente novamente.')
         return
       }
       onDeleted()
@@ -725,6 +727,7 @@ export function UsersClient({
           onClose={() => setSelectedUser(null)}
           onUpdate={(updated) => handleUserUpdate(selectedUser.id, updated)}
           onDeleted={() => handleUserDeleted(selectedUser.id)}
+          onError={showError}
         />
       )}
       {showCreateModal && (

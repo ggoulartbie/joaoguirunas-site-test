@@ -2,6 +2,7 @@
 
 import { revalidatePath } from 'next/cache'
 import { z } from 'zod'
+import * as Sentry from '@sentry/nextjs'
 import { supabaseAdmin } from '@/lib/supabase/admin'
 import { requireAdmin, getCurrentUser } from '@/lib/auth/helpers'
 import { sendWelcomeInviteEmail } from '@/lib/email/send'
@@ -131,6 +132,7 @@ export async function deleteUser(userId: string): Promise<{ success: true } | { 
   } catch (err) {
     const message = err instanceof Error ? err.message : String(err)
     console.error('[deleteUser] failed:', message)
+    Sentry.captureException(err, { extra: { userId } })
     return { error: message }
   }
 }
