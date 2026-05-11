@@ -238,16 +238,16 @@ export function ModuloSlideshow({ slug, slides }: ModuloSlideshowProps) {
             exit="exit"
             transition={slideTransition}
             className="absolute inset-0 flex items-center"
-            style={{ padding: hasBelt ? '2rem 2.5rem 1.5rem' : '2rem 2.5rem', paddingBottom: hasBelt ? '1rem' : '3.5rem' }}
+            style={{ padding: hasBelt ? '1.5rem 2.5rem 1rem' : '1.5rem 2.5rem', paddingBottom: hasBelt ? '1rem' : '2.5rem' }}
           >
-            <div className="w-full max-w-5xl mx-auto flex flex-col h-full justify-center" style={{ gap: hasBelt ? '0' : undefined }}>
+            <div className="w-full max-w-5xl mx-auto flex flex-col h-full justify-center" style={{ gap: hasBelt ? '0' : undefined, overflowY: 'auto', maxHeight: '100%' }}>
 
               {/* Counter + label */}
               <motion.div
                 initial={{ opacity: 0, y: 8 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.05 }}
-                className="flex items-center gap-3 mb-8"
+                className="flex items-center gap-3 mb-5"
               >
                 <span style={{ fontFamily: MONO, fontSize: '11px', fontWeight: 700, color: ACCENT }}>
                   {slideNumber}
@@ -287,7 +287,7 @@ export function ModuloSlideshow({ slug, slides }: ModuloSlideshowProps) {
                       lineHeight: 1.1,
                       letterSpacing: '-0.025em',
                       color: '#fff',
-                      marginBottom: '2rem',
+                      marginBottom: '1.25rem',
                       maxWidth: hasGrid ? '34rem' : '44rem',
                     }}
                   >
@@ -298,7 +298,7 @@ export function ModuloSlideshow({ slug, slides }: ModuloSlideshowProps) {
                     initial={{ scaleX: 0, originX: 0 }}
                     animate={{ scaleX: 1 }}
                     transition={{ delay: 0.22, duration: 0.45 }}
-                    style={{ width: '2.5rem', height: '2px', background: ACCENT, marginBottom: '2rem' }}
+                    style={{ width: '2.5rem', height: '2px', background: ACCENT, marginBottom: '1.25rem' }}
                   />
 
                   {!hasGrid ? (

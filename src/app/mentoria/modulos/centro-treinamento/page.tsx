@@ -8,39 +8,34 @@ export const metadata: Metadata = {
 
 const slides = [
   {
-    label: 'Centro de Treinamento de Agentes',
-    title: 'Agentes não nascem prontos — eles são treinados.',
-    body: 'O Centro de Treinamento é a infraestrutura que permite criar, configurar e orquestrar squads de agentes de forma sistemática. Você vai usar ao vivo neste módulo — e vai criar seu primeiro agente antes de sair daqui.',
-  },
-  {
-    label: '/team-os-creator',
-    title: 'Uma fábrica de agentes. Um comando, um time pronto.',
-    body: 'A skill analisa seu projeto, detecta o que você precisa, propõe o squad certo e gera cada agente completo — personalidade, especialidade, ferramentas e instruções. Não é um template genérico.',
-    note: 'O team-os-creator gera agentes pensados para o seu contexto específico, não para o contexto de outra pessoa.',
-  },
-  {
-    label: '/team-os',
-    title: 'O líder que nunca dorme, nunca perde o contexto.',
-    body: 'A skill que comanda o squad. Detecta o estado do projeto, forma o time certo para o objetivo, distribui tarefas, coordena em paralelo e mantém a memória compartilhada entre todos os agentes.',
-    note: 'team-os é o líder de time que você nunca precisou contratar — e que nunca fica sobrecarregado.',
+    label: 'Por onde começar',
+    title: 'Claude genérico faz tudo mal. Claude especialista faz uma coisa muito bem.',
+    body: 'Um agente genérico é como contratar alguém para fazer marketing, vendas, financeiro e código ao mesmo tempo — ele tenta, mas não tem profundidade em nada. Um agente especialista tem papel definido, contexto específico e as ferramentas certas. A diferença de resultado é brutal.',
+    note: 'Você não contrata uma pessoa para fazer tudo. Com agentes é exatamente igual.',
   },
   {
     label: 'Anatomia de um agente',
-    title: 'O que separa um agente mediano de um especialista.',
-    body: 'Papel e especialidade definidos. Tom e personalidade claros. Ferramentas e acessos configurados. Memória compartilhada. Um agente bem treinado não precisa de supervisão constante — ele sabe exatamente o que fazer.',
-    note: 'A qualidade de um agente é diretamente proporcional à clareza com que você define o papel dele.',
+    title: 'O que compõe um agente que funciona de verdade.',
+    body: 'Cada agente tem: archetype (implementer, architect, reviewer, devops, ux…), persona e tom de voz, ferramentas e acessos configurados, contrato com o time, e instruções específicas do papel. Um agente bem definido não precisa de supervisão constante — ele sabe o que é seu e o que não é.',
+    note: 'A qualidade do resultado é diretamente proporcional à clareza com que você define o papel.',
   },
   {
-    label: 'Squads',
-    title: 'O poder real não é um agente. É um time.',
-    body: 'Design, desenvolvimento, QA e deploy — todos ao mesmo tempo, coordenados por um líder. Nas últimas 8 semanas montamos squads para design, social media, vendas e gestão de projetos.',
-    note: 'Você vai ver um squad sendo formado ao vivo — e vai montar o seu antes de sair.',
+    label: 'Smart Memory · docs/smart-memory/',
+    title: 'A memória compartilhada que todos os agentes do time leem — e atualizam.',
+    body: 'Smart Memory é o sistema de memória persistente do projeto, armazenada em docs/smart-memory/ no padrão Obsidian. Cada agente lê e escreve aqui: arquitetura, tech stack, stories em andamento, decisões. Nenhum agente começa do zero — o contexto do projeto está sempre presente.',
+    note: 'É como uma wiki viva do projeto que todos os agentes mantêm atualizada automaticamente.',
   },
   {
-    label: 'Seu primeiro agente',
-    title: 'Não um exemplo. O seu mesmo — funcionando hoje.',
-    body: 'Você chega com clareza de qual agente quer criar para o seu negócio. Vai embora com ele funcionando: testado ao vivo, ajustado em tempo real, pronto para usar na segunda-feira.',
-    note: 'Este é o começo. As semanas online constroem em cima disso — squads mais complexos, automações encadeadas, sistemas completos.',
+    label: '/team-os · Team Lead',
+    title: 'Detecta o projeto. Planeja. Forma o time. Coordena — em um comando.',
+    body: 'team-os é a skill de orquestração nativa do Claude Code: detecta o estado do projeto, quebra objetivos em stories, forma o squad certo, spawna cada agente com instruções específicas e coordena a execução em paralelo. É o sistema que usamos para construir tudo que você viu no Módulo 01.',
+    note: '/team-os *bootstrap — e o time está formado, a memória populada, o trabalho em andamento.',
+  },
+  {
+    label: '/team-os-creator · Agent Factory',
+    title: 'Você descreve o que precisa. Ele gera o agente pronto para trabalhar.',
+    body: 'team-os-creator analisa seu projeto, detecta o archetype certo (SaaS, data, marketing, content), propõe o preset de squad ideal e gera cada arquivo de agente completo — com persona, contrato com o time, skills instaladas e instruções validadas em produção. 9 archetypes, 5 presets, do zero ao squad em minutos.',
+    note: '/team-os-creator *squad dev — squad completa de 10 agentes gerada e validada automaticamente.',
   },
 ];
 

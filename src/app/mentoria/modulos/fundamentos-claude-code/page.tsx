@@ -37,12 +37,6 @@ const slides = [
     body: 'Toda sessão começa com Claude lendo o CLAUDE.md do seu projeto. É onde você define quem ele é: as regras do negócio, o tom da marca, o que pode fazer e o que está fora de escopo.',
     note: 'Um CLAUDE.md bem escrito elimina a necessidade de repetir contexto toda vez. Você escreve uma vez — ele lembra sempre.',
   },
-  {
-    label: 'Agent Teams',
-    title: 'Seu time de IA.',
-    body: 'Múltiplos agentes especializados trabalhando em paralelo, coordenados por um líder. Em vez de um Claude fazendo tudo em sequência, você tem um time completo — cada um no seu papel, entregando ao mesmo tempo, no mesmo objetivo.',
-    note: 'Este é o tema central da mentoria. Tudo que aprendemos até aqui existe para chegar neste ponto.',
-  },
 ];
 
 export default function FundamentosClaudeCodePage() {
