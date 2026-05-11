@@ -95,8 +95,10 @@ export default async function MeusCursosPage() {
 
   const completedIds = new Set((progressRows ?? []).map((p) => p.lesson_id))
 
-  // 7. Constrói lista de cursos (union de módulos quando aluno tem múltiplas cohorts no mesmo curso)
+  // 7. Constrói lista de cursos — um card por (cohort × course)
+  // Duas turmas com o mesmo curso geram dois cards separados (com o nome da turma no footer)
   type CourseView = {
+    key: string
     id: string
     slug: string
     title: string
@@ -112,40 +114,19 @@ export default async function MeusCursosPage() {
     totalModulesCount: number
   }
 
-  // Consolidar módulos liberados por curso através de todas as cohorts do aluno.
-  // included_module_ids = null ou [] → acesso total (admin salva [] quando "todos os módulos")
-  // included_module_ids = [...] → só esses módulos
-  const modulesByCourse = new Map<string, { moduleIds: Set<string>; firstCohortId: string; fullAccess: boolean }>()
-  for (const cc of cohortCourses) {
-    const isFullAccess = cc.included_module_ids === null || cc.included_module_ids.length === 0
-    const entry = modulesByCourse.get(cc.course_id)
-    if (entry) {
-      if (isFullAccess) {
-        entry.fullAccess = true
-      } else {
-        for (const mid of cc.included_module_ids ?? []) entry.moduleIds.add(mid)
-      }
-    } else {
-      modulesByCourse.set(cc.course_id, {
-        moduleIds: new Set(isFullAccess ? [] : (cc.included_module_ids ?? [])),
-        firstCohortId: cc.cohort_id,
-        fullAccess: isFullAccess,
-      })
-    }
-  }
-
   const available: CourseView[] = []
   const locked: CourseView[] = []
 
-  for (const [courseId, { moduleIds, firstCohortId, fullAccess }] of modulesByCourse) {
-    const course = coursesById.get(courseId)
+  for (const cc of cohortCourses) {
+    const course = coursesById.get(cc.course_id)
     if (!course) continue
 
-    const member = members.find((m) => m.cohort_id === firstCohortId)
+    const member = members.find((m) => m.cohort_id === cc.cohort_id)
     const cohortObj = member && (Array.isArray(member.cohorts) ? member.cohorts[0] : member.cohorts)
 
-    const totalModIds = allModuleIdsByCourse.get(courseId) ?? []
-    const accessibleModIds = fullAccess ? totalModIds : [...moduleIds]
+    const totalModIds = allModuleIdsByCourse.get(cc.course_id) ?? []
+    const isFullAccess = cc.included_module_ids === null || cc.included_module_ids.length === 0
+    const accessibleModIds = isFullAccess ? totalModIds : (cc.included_module_ids ?? [])
     const accessibleModulesCount = accessibleModIds.length
     const totalModulesCount = totalModIds.length
 
@@ -157,6 +138,7 @@ export default async function MeusCursosPage() {
     const isPartialAccess = accessibleModulesCount < totalModulesCount
 
     const view: CourseView = {
+      key: `${cc.cohort_id}-${cc.course_id}`,
       id: course.id,
       slug: course.slug,
       title: course.title,
@@ -241,7 +223,7 @@ export default async function MeusCursosPage() {
 
             return (
               <Link
-                key={course.id}
+                key={course.key}
                 href={`/academy/curso/${course.slug}`}
                 className="group flex flex-col border border-[var(--hairline)] hover:border-[var(--hairline-strong)] transition-colors"
                 style={{ background: 'var(--ink)', overflow: 'hidden', textDecoration: 'none' }}
@@ -414,7 +396,7 @@ export default async function MeusCursosPage() {
           <div className="grid gap-px sm:grid-cols-2 xl:grid-cols-3" style={{ background: 'var(--hairline)' }}>
             {locked.map((course) => (
               <div
-                key={course.id}
+                key={course.key}
                 style={{
                   background: 'var(--ink)',
                   border: '1px solid var(--hairline)',
