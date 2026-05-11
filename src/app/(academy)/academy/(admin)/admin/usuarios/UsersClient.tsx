@@ -490,7 +490,7 @@ function CreateStudentModal({
 }) {
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
-  const [cohortId, setCohortId] = useState(cohorts[0]?.id ?? '')
+  const [cohortId, setCohortId] = useState('')
   const [role, setRole] = useState<'STUDENT' | 'MENTOR'>('STUDENT')
   const [expiresAt, setExpiresAt] = useState('')
   const [successMsg, setSuccessMsg] = useState<string | null>(null)
@@ -600,6 +600,7 @@ function CreateStudentModal({
               onChange={(e) => setCohortId(e.target.value)}
               className="w-full border border-[rgba(255,255,255,0.16)] bg-[var(--ink-2)] px-3 py-2 font-mono text-xs text-[var(--bone-mute)] focus:outline-none"
             >
+              <option value="">Selecione uma turma</option>
               {cohorts.map((c) => (
                 <option key={c.id} value={c.id}>{c.name}</option>
               ))}

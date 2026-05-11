@@ -2,6 +2,9 @@
 
 import { revalidatePath } from 'next/cache'
 import { z } from 'zod'
+
+const uuidRegex = /^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/
+const isUUID = (v: string) => uuidRegex.test(v)
 import * as Sentry from '@sentry/nextjs'
 import { supabaseAdmin } from '@/lib/supabase/admin'
 import { requireAdmin, getCurrentUser } from '@/lib/auth/helpers'
@@ -10,7 +13,7 @@ import { sendWelcomeInviteEmail } from '@/lib/email/send'
 export async function updateUserRole(userId: string, role: string) {
   await requireAdmin()
 
-  if (!z.string().uuid().safeParse(userId).success) throw new Error('User ID inválido')
+  if (!isUUID(userId)) throw new Error('User ID inválido')
   const parsed = z.enum(['STUDENT', 'MENTOR', 'SUPPORT', 'ADMIN']).safeParse(role)
   if (!parsed.success) throw new Error('Role inválida')
 
@@ -26,7 +29,7 @@ export async function updateUserRole(userId: string, role: string) {
 export async function banUser(userId: string) {
   await requireAdmin()
 
-  if (!z.string().uuid().safeParse(userId).success) throw new Error('User ID inválido')
+  if (!isUUID(userId)) throw new Error('User ID inválido')
   const { error } = await supabaseAdmin.auth.admin.updateUserById(userId, {
     ban_duration: '876000h', // 100 years
   })
@@ -38,7 +41,7 @@ export async function banUser(userId: string) {
 export async function unbanUser(userId: string) {
   await requireAdmin()
 
-  if (!z.string().uuid().safeParse(userId).success) throw new Error('User ID inválido')
+  if (!isUUID(userId)) throw new Error('User ID inválido')
   const { error } = await supabaseAdmin.auth.admin.updateUserById(userId, {
     ban_duration: 'none',
   })
@@ -54,8 +57,8 @@ export async function grantCohortAccess(
 ) {
   await requireAdmin()
 
-  if (!z.string().uuid().safeParse(userId).success) throw new Error('User ID inválido')
-  if (!z.string().uuid().safeParse(cohortId).success) throw new Error('Cohort ID inválido')
+  if (!isUUID(userId)) throw new Error('User ID inválido')
+  if (!isUUID(cohortId)) throw new Error('Cohort ID inválido')
 
   const { data: existing } = await supabaseAdmin
     .from('cohort_members')
@@ -99,7 +102,7 @@ export async function grantCohortAccess(
 export async function extendMembership(memberId: string, newExpiresAt: string) {
   await requireAdmin()
 
-  if (!z.string().uuid().safeParse(memberId).success) throw new Error('Member ID inválido')
+  if (!isUUID(memberId)) throw new Error('Member ID inválido')
   if (!z.string().datetime().safeParse(newExpiresAt).success) throw new Error('Data de expiração inválida (ISO 8601 esperado)')
   if (new Date(newExpiresAt) <= new Date()) throw new Error('Data de expiração deve ser no futuro')
 
@@ -115,7 +118,7 @@ export async function extendMembership(memberId: string, newExpiresAt: string) {
 export async function deleteUser(userId: string): Promise<{ success: true } | { error: string }> {
   const admin = await getCurrentUser()
   if (!admin || admin.role !== 'ADMIN') return { error: 'Não autorizado' }
-  if (!z.string().uuid().safeParse(userId).success) return { error: 'User ID inválido' }
+  if (!isUUID(userId)) return { error: 'User ID inválido' }
   if (admin.id === userId) return { error: 'Não é possível excluir a própria conta' }
 
   try {
@@ -140,7 +143,7 @@ export async function deleteUser(userId: string): Promise<{ success: true } | { 
 const createStudentSchema = z.object({
   name: z.string().min(1).max(200),
   email: z.string().email(),
-  cohortId: z.string().uuid(),
+  cohortId: z.string().regex(/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/, 'Cohort ID inválido'),
   role: z.enum(['STUDENT', 'MENTOR']).default('STUDENT'),
   expiresAt: z.string().optional(),
 })
@@ -163,25 +166,26 @@ export async function createStudentManually(data: z.infer<typeof createStudentSc
     .single()
   if (cohortErr || !cohort) throw new Error('Turma não encontrada')
 
-  // Create auth user — email already confirmed, we send the invite ourselves
+  // Create auth user — email already confirmed, we send the invite ourselves.
+  // The on_auth_user_created trigger auto-creates the profile row; pass name via
+  // user_metadata so the trigger picks it up with the right value.
   const { data: authData, error: authErr } = await supabaseAdmin.auth.admin.createUser({
     email: parsed.data.email,
     email_confirm: true,
+    user_metadata: { name: parsed.data.name },
   })
   if (authErr || !authData.user) throw new Error(authErr?.message ?? 'Erro ao criar utilizador')
 
   const userId = authData.user.id
 
-  // Create profile
-  const { error: profileErr } = await supabaseAdmin.from('profiles').insert({
-    id: userId,
-    name: parsed.data.name,
-    role: parsed.data.role,
-  })
+  // Trigger already inserted the profile — update name and role to match the form values.
+  const { error: profileErr } = await supabaseAdmin
+    .from('profiles')
+    .update({ name: parsed.data.name, role: parsed.data.role })
+    .eq('id', userId)
   if (profileErr) {
-    // Roll back auth user to avoid orphan
     await supabaseAdmin.auth.admin.deleteUser(userId)
-    throw new Error('Erro ao criar perfil: ' + profileErr.message)
+    throw new Error('Erro ao actualizar perfil: ' + profileErr.message)
   }
 
   // Create cohort_member
