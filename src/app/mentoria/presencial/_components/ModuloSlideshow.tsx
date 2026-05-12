@@ -27,7 +27,8 @@ export interface Slide {
   diagram?: 'agent-anatomy' | 'webhook' | 'api' | 'mcp' | 'claude-md' | 'claude-structure'
            | 'hub-and-spoke' | 'squads-grid' | 'solo-vs-team' | 'agent-flow'
            | 'team-os-commands' | 'smart-memory-tree' | 'creator-commands' | 'getting-started'
-           | 'ct-overview' | 'team-protocol';
+           | 'ct-overview' | 'team-protocol'
+           | 'limites-contraste' | 'limites-disfarces' | 'limites-exige' | 'limites-flow';
 }
 
 interface ModuloSlideshowProps {
@@ -807,6 +808,135 @@ function GettingStartedDiagram() {
   );
 }
 
+/* ── Limites: Contraste (slide 2) ── */
+function LimitesContrasteDiagram() {
+  const left  = ['Tanta tecnologia', 'Tanto acesso', 'Tanta liberdade de criação'];
+  const right = ['Burnout cresce', 'Ansiedade cresce', 'Vazio cresce'];
+  return (
+    <motion.div initial={{ opacity: 0, x: 24 }} animate={{ opacity: 1, x: 0 }}
+      transition={{ delay: 0.2, duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
+      style={{ width: 300 }}>
+      <div style={{ display: 'flex', gap: 10, marginBottom: 14 }}>
+        {/* coluna esquerda */}
+        <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 6 }}>
+          <p style={{ fontFamily: MONO, fontSize: '7px', letterSpacing: '0.18em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.3)', marginBottom: 4 }}>tivemos</p>
+          {left.map((item, i) => (
+            <motion.div key={item} initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.3 + i * 0.1 }}
+              style={{ padding: '7px 10px', border: '1px solid rgba(255,255,255,0.08)', background: 'rgba(255,255,255,0.025)' }}>
+              <p style={{ fontFamily: MONO, fontSize: '8px', color: 'rgba(255,255,255,0.6)', lineHeight: 1.4 }}>{item}</p>
+            </motion.div>
+          ))}
+        </div>
+        {/* coluna direita */}
+        <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 6 }}>
+          <p style={{ fontFamily: MONO, fontSize: '7px', letterSpacing: '0.18em', textTransform: 'uppercase', color: 'rgba(255,58,14,0.5)', marginBottom: 4 }}>mesmo assim</p>
+          {right.map((item, i) => (
+            <motion.div key={item} initial={{ opacity: 0, x: 10 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.3 + i * 0.1 }}
+              style={{ padding: '7px 10px', border: '1px solid rgba(255,58,14,0.2)', background: 'rgba(255,58,14,0.06)' }}>
+              <p style={{ fontFamily: MONO, fontSize: '8px', color: 'rgba(255,255,255,0.55)', lineHeight: 1.4 }}>{item}</p>
+            </motion.div>
+          ))}
+        </div>
+      </div>
+      <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.7 }}
+        style={{ padding: '10px 12px', border: '1px solid rgba(255,255,255,0.06)', borderLeft: '2px solid rgba(255,58,14,0.5)', background: 'rgba(255,255,255,0.01)' }}>
+        <p style={{ fontFamily: MONO, fontSize: '8px', color: 'rgba(255,255,255,0.4)', lineHeight: 1.6, fontStyle: 'italic' }}>
+          &quot;A mente prefere o conhecido ao potencial.&quot;
+        </p>
+      </motion.div>
+    </motion.div>
+  );
+}
+
+/* ── Limites: Disfarces (slide 3) ── */
+function LimitesDisfarcesDiagram() {
+  const items = ['Perfeccionismo', 'Procrastinação', 'Excesso de preparo', 'Medo de exposição'];
+  return (
+    <motion.div initial={{ opacity: 0, x: 24 }} animate={{ opacity: 1, x: 0 }}
+      transition={{ delay: 0.2, duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
+      style={{ width: 270 }}>
+      <p style={{ fontFamily: MONO, fontSize: '7px', letterSpacing: '0.18em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.25)', marginBottom: 12 }}>limites se disfarçam de</p>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 6, marginBottom: 14 }}>
+        {items.map((item, i) => (
+          <motion.div key={item} initial={{ opacity: 0, x: 16 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.3 + i * 0.12 }}
+            style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '9px 12px', border: '1px solid rgba(255,255,255,0.07)', background: 'rgba(255,255,255,0.02)' }}>
+            <div style={{ width: 4, height: 4, borderRadius: '50%', background: 'rgba(255,58,14,0.5)', flexShrink: 0 }} />
+            <p style={{ fontFamily: MONO, fontSize: '9px', color: 'rgba(255,255,255,0.65)', letterSpacing: '0.04em' }}>{item}</p>
+          </motion.div>
+        ))}
+      </div>
+      <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.85 }}
+        style={{ padding: '10px 12px', border: '1px solid rgba(255,255,255,0.06)', borderLeft: '2px solid rgba(255,58,14,0.5)' }}>
+        <p style={{ fontFamily: MONO, fontSize: '8px', color: 'rgba(255,255,255,0.4)', lineHeight: 1.7, fontStyle: 'italic' }}>
+          &quot;Perfeccionismo não impede erro.<br />Impede existência.&quot;
+        </p>
+      </motion.div>
+    </motion.div>
+  );
+}
+
+/* ── Limites: O que exige (slide 4) ── */
+function LimitesExigeDiagram() {
+  const items = ['Consciência', 'Presença', 'Direção', 'Disciplina interior', 'Coragem para agir imperfeito'];
+  return (
+    <motion.div initial={{ opacity: 0, x: 24 }} animate={{ opacity: 1, x: 0 }}
+      transition={{ delay: 0.2, duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
+      style={{ width: 260 }}>
+      <p style={{ fontFamily: MONO, fontSize: '7px', letterSpacing: '0.18em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.25)', marginBottom: 12 }}>superar exige</p>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 5, marginBottom: 14 }}>
+        {items.map((item, i) => (
+          <motion.div key={item} initial={{ opacity: 0, x: 16 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.3 + i * 0.1 }}
+            style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '8px 12px', border: '1px solid rgba(255,255,255,0.07)', background: 'rgba(255,255,255,0.02)' }}>
+            <p style={{ fontFamily: MONO, fontSize: '8px', letterSpacing: '0.06em', color: 'rgba(255,255,255,0.6)' }}>{String(i + 1).padStart(2, '0')}</p>
+            <p style={{ fontFamily: MONO, fontSize: '8.5px', color: 'rgba(255,255,255,0.65)' }}>{item}</p>
+          </motion.div>
+        ))}
+      </div>
+      <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.95 }}
+        style={{ padding: '8px 12px', background: 'rgba(255,58,14,0.08)', border: '1px solid rgba(255,58,14,0.2)' }}>
+        <p style={{ fontFamily: MONO, fontSize: '8.5px', color: ACCENT, letterSpacing: '0.08em' }}>Movimento gera clareza.</p>
+      </motion.div>
+    </motion.div>
+  );
+}
+
+/* ── Limites: Valores flow (slide 5) ── */
+function LimitesFlowDiagram() {
+  const pairs: [string, string][] = [
+    ['Consciência', 'direção'],
+    ['Clareza', 'expansão'],
+    ['Coragem', 'construção'],
+  ];
+  return (
+    <motion.div initial={{ opacity: 0, x: 24 }} animate={{ opacity: 1, x: 0 }}
+      transition={{ delay: 0.2, duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
+      style={{ width: 270 }}>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 8, marginBottom: 16 }}>
+        {pairs.map(([from, to], i) => (
+          <motion.div key={from} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 + i * 0.15 }}
+            style={{ display: 'flex', alignItems: 'center', gap: 0 }}>
+            <div style={{ padding: '10px 14px', border: '1px solid rgba(255,58,14,0.3)', background: 'rgba(255,58,14,0.07)', minWidth: 110, textAlign: 'center' }}>
+              <p style={{ fontFamily: MONO, fontSize: '9px', letterSpacing: '0.08em', color: ACCENT }}>{from}</p>
+            </div>
+            <motion.div animate={{ scaleX: [0.7, 1, 0.7] }} transition={{ repeat: Infinity, duration: 2.5, delay: i * 0.4, ease: 'easeInOut' }}
+              style={{ height: 1, width: 28, background: `linear-gradient(to right, ${ACCENT}66, rgba(255,255,255,0.3))`, transformOrigin: 'left', flexShrink: 0 }} />
+            <div style={{ padding: '10px 14px', border: '1px solid rgba(255,255,255,0.08)', background: 'rgba(255,255,255,0.025)', flex: 1, textAlign: 'center' }}>
+              <p style={{ fontFamily: MONO, fontSize: '9px', color: 'rgba(255,255,255,0.6)', letterSpacing: '0.06em' }}>{to}</p>
+            </div>
+          </motion.div>
+        ))}
+      </div>
+      <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.8 }}
+        style={{ padding: '10px 14px', border: '1px solid rgba(255,255,255,0.06)', background: 'rgba(255,255,255,0.01)' }}>
+        <p style={{ fontFamily: MONO, fontSize: '8px', color: 'rgba(255,255,255,0.35)', lineHeight: 1.7 }}>
+          O mundo não precisa só de pessoas produtivas.<br />
+          <span style={{ color: 'rgba(255,255,255,0.55)' }}>Precisa de pessoas conscientes.</span>
+        </p>
+      </motion.div>
+    </motion.div>
+  );
+}
+
 /* ── Agent anatomy diagram ── */
 function AgentAnatomyDiagram() {
   const row = (label: string, value: string, accent?: boolean) => (
@@ -1051,8 +1181,12 @@ export function ModuloSlideshow({ slug, slides }: ModuloSlideshowProps) {
                     {slide.diagram === 'smart-memory-tree' && <SmartMemoryTreeDiagram />}
                     {slide.diagram === 'creator-commands'  && <CreatorCommandsDiagram />}
                     {slide.diagram === 'getting-started'   && <GettingStartedDiagram />}
-                    {slide.diagram === 'ct-overview'      && <CtOverviewDiagram />}
-                    {slide.diagram === 'team-protocol'    && <TeamProtocolDiagram />}
+                    {slide.diagram === 'ct-overview'          && <CtOverviewDiagram />}
+                    {slide.diagram === 'team-protocol'        && <TeamProtocolDiagram />}
+                    {slide.diagram === 'limites-contraste'    && <LimitesContrasteDiagram />}
+                    {slide.diagram === 'limites-disfarces'    && <LimitesDisfarcesDiagram />}
+                    {slide.diagram === 'limites-exige'        && <LimitesExigeDiagram />}
+                    {slide.diagram === 'limites-flow'         && <LimitesFlowDiagram />}
                   </div>
                 )}
               </div>

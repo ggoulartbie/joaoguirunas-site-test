@@ -14,6 +14,15 @@ export type Modulo = {
 
 export const MODULOS_PRESENCIAIS: Modulo[] = [
   {
+    slug: 'consciencia-e-limites',
+    number: 0,
+    title: 'IA, Consciência e Limites Internos',
+    type: 'Presencial',
+    date: '15 de junho · Segunda-feira · 13h–18h',
+    tags: ['Consciência', 'Limites', 'Mentalidade'],
+    href: '/mentoria/presencial/consciencia-e-limites',
+  },
+  {
     slug: 'o-que-e-possivel',
     number: 1,
     title: 'O que é possível',
