@@ -27,7 +27,7 @@ const slides: Slide[] = [
     label: 'Centro de Treinamento · 37 Agentes',
     title: 'Conheça o time inteiro — 37 agentes, 4 squads.',
     body: 'Cada agente tem identidade própria, ferramentas específicas e papel insubstituível. Dev, Sites, Social e Traffic — squads completas que trabalham em paralelo, coordenadas por um único lead. Nenhum generalista. Nenhum acúmulo de função.',
-    belt: true,
+    diagram: 'all-agents',
     agents: allAgents,
   },
   {

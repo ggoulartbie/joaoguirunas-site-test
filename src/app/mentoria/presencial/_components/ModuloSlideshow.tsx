@@ -30,7 +30,7 @@ export interface Slide {
            | 'team-os-commands' | 'smart-memory-tree' | 'creator-commands' | 'getting-started'
            | 'ct-overview' | 'team-protocol'
            | 'limites-contraste' | 'limites-disfarces' | 'limites-exige' | 'limites-flow'
-           | 'squads-detail';
+           | 'squads-detail' | 'all-agents';
 }
 
 interface ModuloSlideshowProps {
@@ -1000,6 +1000,90 @@ function AgentAnatomyDiagram() {
   );
 }
 
+/* ── All agents: filtro por squad + belt/grid ── */
+function AllAgentsDiagram({ agents }: { agents: SlideAgent[] }) {
+  const FILTERS = [
+    { id: 'all',     label: 'All',     accent: 'rgba(255,255,255,0.55)' },
+    { id: 'dev',     label: 'Dev',     accent: '#A78BFA' },
+    { id: 'sites',   label: 'Sites',   accent: '#FF3A0E' },
+    { id: 'social',  label: 'Social',  accent: '#EC4899' },
+    { id: 'traffic', label: 'Traffic', accent: '#06B6D4' },
+  ] as const;
+
+  const [active, setActive] = React.useState<string>('all');
+
+  const filtered = active === 'all'
+    ? agents
+    : agents.filter((a) => {
+        const accent = active === 'dev'     ? '#A78BFA'
+                    : active === 'sites'   ? '#FF3A0E'
+                    : active === 'social'  ? '#EC4899'
+                    :                        '#06B6D4';
+        return a.accent === accent;
+      });
+
+  const showBelt = active === 'all';
+
+  return (
+    <div style={{ width: '100%' }}>
+      {/* Filter chips */}
+      <motion.div
+        initial={{ opacity: 0, y: 8 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.1 }}
+        style={{ display: 'flex', gap: 6, marginBottom: 16, flexWrap: 'wrap' }}
+      >
+        {FILTERS.map((f) => {
+          const isActive = active === f.id;
+          return (
+            <button
+              key={f.id}
+              onClick={() => setActive(f.id)}
+              style={{
+                fontFamily: MONO,
+                fontSize: '9px',
+                letterSpacing: '0.14em',
+                textTransform: 'uppercase',
+                padding: '5px 12px',
+                border: `1px solid ${isActive ? f.accent : 'rgba(255,255,255,0.12)'}`,
+                background: isActive ? `${f.accent}18` : 'transparent',
+                color: isActive ? f.accent : 'rgba(255,255,255,0.35)',
+                cursor: 'pointer',
+                transition: 'all 0.18s',
+              }}
+            >
+              {f.label}
+            </button>
+          );
+        })}
+      </motion.div>
+
+      {/* Belt — all agents */}
+      {showBelt && (
+        <motion.div
+          initial={{ opacity: 0, y: 16 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.2 }}
+        >
+          <AgentBelt agents={agents} />
+        </motion.div>
+      )}
+
+      {/* Grid — filtered */}
+      {!showBelt && (
+        <motion.div
+          key={active}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.25 }}
+        >
+          <AgentGrid agents={filtered} />
+        </motion.div>
+      )}
+    </div>
+  );
+}
+
 /* ── Squads detail: 4 colunas com todos os agentes por squad ── */
 function SquadsDetailDiagram() {
   const squadAccents: Record<string, string> = {
@@ -1020,7 +1104,7 @@ function SquadsDetailDiagram() {
       initial={{ opacity: 0, x: 24 }}
       animate={{ opacity: 1, x: 0 }}
       transition={{ delay: 0.25, duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
-      style={{ display: 'flex', gap: 8, alignItems: 'flex-start', width: 420 }}
+      style={{ display: 'flex', gap: 8, alignItems: 'flex-start', width: 480, maxHeight: '60vh', overflowY: 'auto' }}
     >
       {SQUADS.map((squad, si) => {
         const agentes = getAgentesBySquad(squad.id);
@@ -1273,6 +1357,7 @@ export function ModuloSlideshow({ slug, slides }: ModuloSlideshowProps) {
                     {slide.diagram === 'limites-exige'        && <LimitesExigeDiagram />}
                     {slide.diagram === 'limites-flow'         && <LimitesFlowDiagram />}
                     {slide.diagram === 'squads-detail'        && <SquadsDetailDiagram />}
+                    {slide.diagram === 'all-agents'           && <AllAgentsDiagram agents={slide.agents ?? []} />}
                   </div>
                 )}
               </div>
