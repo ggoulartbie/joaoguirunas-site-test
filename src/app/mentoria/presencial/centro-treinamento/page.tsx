@@ -50,6 +50,13 @@ const slides: Slide[] = [
     diagram: 'team-protocol',
   },
   {
+    label: 'Estrutura · Source → Projects',
+    title: 'Um catálogo central. Cada projeto puxa o que precisa.',
+    body: 'O centro de treinamento é a fonte — .claude/agents/ e .claude/skills/ prontos. Cada projeto destino recebe exatamente os agentes e skills que precisa, sem duplicar manualmente.',
+    note: 'team-os-creator faz a sincronização — sem cópia manual.',
+    diagram: 'folder-structure',
+  },
+  {
     label: '/team-os · O Maestro',
     title: 'Detecta o projeto. Planeja. Forma o time. Coordena — em um comando.',
     body: 'team-os é a skill de orquestração nativa: detecta o estado automaticamente (NEW / READY / IN_PROGRESS), faz bootstrap completo em projetos novos, quebra objetivos em stories, forma o squad certo e coordena execução em paralelo. É o sistema que usamos para construir tudo que você viu no Módulo 01.',
@@ -61,6 +68,12 @@ const slides: Slide[] = [
     body: 'Agentes não têm memória entre sessões. Smart Memory resolve isso: docs/smart-memory/ é um vault Obsidian com wikilinks entre arquivos, frontmatter YAML e estrutura por tipo — project, stories, decisions, ops. Cada agente lê e escreve aqui.',
     note: 'Qualquer agente (ou humano) entra numa sessão nova e tem contexto completo em segundos.',
     video: '/mentoria/smart-memory-obsidian.mov',
+  },
+  {
+    label: 'Comandos base · CLI',
+    title: 'Antes de orquestrar agentes — domine os 3 comandos.',
+    body: '/model controla custo e capacidade por sessão. /compact preserva contexto em sessões longas sem reiniciar do zero. /clear reseta tudo quando um novo problema exige raciocínio limpo.',
+    diagram: 'base-commands',
   },
   {
     label: '/team-os-creator · Agent Factory',

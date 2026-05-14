@@ -6,6 +6,8 @@ import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
 import { MODULOS_PRESENCIAIS } from './ModuloLayout';
 import { SQUADS, getAgentesBySquad } from '@/data/agentes';
+import { FOLDER_STRUCTURE, BASE_COMMANDS } from '@/data/treinamento';
+import type { FolderNode } from '@/data/treinamento';
 
 export interface SlideAgent {
   slug: string;
@@ -30,7 +32,7 @@ export interface Slide {
            | 'team-os-commands' | 'smart-memory-tree' | 'creator-commands' | 'getting-started'
            | 'ct-overview' | 'team-protocol'
            | 'limites-contraste' | 'limites-disfarces' | 'limites-exige' | 'limites-flow'
-           | 'squads-detail' | 'all-agents';
+           | 'squads-detail' | 'all-agents' | 'folder-structure' | 'base-commands';
 }
 
 interface ModuloSlideshowProps {
@@ -1000,6 +1002,126 @@ function AgentAnatomyDiagram() {
   );
 }
 
+/* ── Folder structure: source → destination com seta ── */
+function FolderStructureDiagram() {
+  const renderNode = (node: FolderNode, depth: number, isLast: boolean): React.ReactNode => {
+    const isDir = node.type === 'dir';
+    const prefix = depth === 0 ? '' : '  '.repeat(depth - 1) + (isLast ? '└─' : '├─');
+    const nameColor = depth === 0
+      ? ACCENT
+      : isDir
+        ? 'rgba(255,255,255,0.75)'
+        : 'rgba(255,255,255,0.45)';
+
+    return (
+      <React.Fragment key={`${depth}-${node.name}`}>
+        <div style={{ display: 'flex', alignItems: 'baseline', gap: 5, padding: '2px 0' }}>
+          <span style={{ fontFamily: MONO, fontSize: '8.5px', color: 'rgba(255,255,255,0.18)', flexShrink: 0, whiteSpace: 'pre' }}>{prefix}</span>
+          <span style={{ fontFamily: MONO, fontSize: '8.5px', color: nameColor, lineHeight: 1.35 }}>
+            {node.name}
+          </span>
+          {node.description && depth <= 1 && (
+            <span style={{ fontFamily: MONO, fontSize: '7px', color: 'rgba(255,255,255,0.22)', marginLeft: 3, lineHeight: 1.3 }}>
+              ← {node.description.length > 42 ? node.description.slice(0, 42) + '…' : node.description}
+            </span>
+          )}
+        </div>
+        {node.children?.map((child, i) =>
+          renderNode(child, depth + 1, i === (node.children!.length - 1))
+        )}
+      </React.Fragment>
+    );
+  };
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, x: 24 }}
+      animate={{ opacity: 1, x: 0 }}
+      transition={{ delay: 0.25, duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
+      style={{ width: 340, display: 'flex', flexDirection: 'column', gap: 0 }}
+    >
+      {/* Source block */}
+      <div style={{ border: `1px solid ${ACCENT}40`, background: `${ACCENT}06`, padding: '12px 14px' }}>
+        <p style={{ fontFamily: MONO, fontSize: '7.5px', letterSpacing: '0.2em', textTransform: 'uppercase', color: ACCENT, marginBottom: 10 }}>
+          Fonte · centro-treinamento-agentes/
+        </p>
+        <div style={{ borderTop: '1px solid rgba(255,255,255,0.06)', paddingTop: 8 }}>
+          {renderNode(FOLDER_STRUCTURE, 0, false)}
+        </div>
+      </div>
+
+      {/* Arrow + command */}
+      <motion.div
+        initial={{ opacity: 0, scaleX: 0.6 }}
+        animate={{ opacity: 1, scaleX: 1 }}
+        transition={{ delay: 0.5, duration: 0.35 }}
+        style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '8px 0', gap: 3 }}
+      >
+        <div style={{ width: 1, height: 10, background: `rgba(255,58,14,0.4)` }} />
+        <span style={{ fontFamily: MONO, fontSize: '7.5px', letterSpacing: '0.14em', color: ACCENT, border: `1px solid ${ACCENT}33`, background: `${ACCENT}0d`, padding: '2px 10px' }}>
+          team-os-creator *install
+        </span>
+        <div style={{ width: 1, height: 6, background: `rgba(255,58,14,0.4)` }} />
+        <div style={{ width: 0, height: 0, borderLeft: '5px solid transparent', borderRight: '5px solid transparent', borderTop: `7px solid rgba(255,58,14,0.5)` }} />
+      </motion.div>
+
+      {/* Destination block */}
+      <motion.div
+        initial={{ opacity: 0, y: 8 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.6, duration: 0.4 }}
+        style={{ border: '1px solid rgba(255,255,255,0.1)', background: 'rgba(255,255,255,0.02)', padding: '12px 14px' }}
+      >
+        <p style={{ fontFamily: MONO, fontSize: '7.5px', letterSpacing: '0.2em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.35)', marginBottom: 10 }}>
+          Destino · {'{'}{'}'}projeto{'}'}/
+        </p>
+        <div style={{ borderTop: '1px solid rgba(255,255,255,0.06)', paddingTop: 8 }}>
+          {renderNode(FOLDER_STRUCTURE, 0, false)}
+        </div>
+      </motion.div>
+    </motion.div>
+  );
+}
+
+/* ── Base commands: tabela /model /compact /clear ── */
+function BaseCommandsDiagram() {
+  return (
+    <motion.div
+      initial={{ opacity: 0, x: 24 }}
+      animate={{ opacity: 1, x: 0 }}
+      transition={{ delay: 0.25, duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
+      style={{ width: 300, border: '1px solid rgba(255,255,255,0.08)' }}
+    >
+      {BASE_COMMANDS.map((cmd, i) => (
+        <motion.div
+          key={cmd.command}
+          initial={{ opacity: 0, x: -8 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ delay: 0.3 + i * 0.1 }}
+          style={{
+            borderBottom: i < BASE_COMMANDS.length - 1 ? '1px solid rgba(255,255,255,0.06)' : 'none',
+            background: i % 2 === 0 ? 'rgba(255,255,255,0.01)' : 'transparent',
+          }}
+        >
+          {/* Command header */}
+          <div style={{ display: 'flex', gap: 0, borderBottom: '1px solid rgba(255,255,255,0.04)' }}>
+            <div style={{ padding: '8px 12px', width: 100, flexShrink: 0, borderRight: '1px solid rgba(255,255,255,0.06)' }}>
+              <p style={{ fontFamily: MONO, fontSize: '10px', letterSpacing: '0.06em', color: ACCENT, fontWeight: 600 }}>{cmd.command}</p>
+            </div>
+            <div style={{ padding: '8px 12px', flex: 1 }}>
+              <p style={{ fontFamily: MONO, fontSize: '8.5px', color: 'rgba(255,255,255,0.65)', lineHeight: 1.4 }}>{cmd.description}</p>
+            </div>
+          </div>
+          {/* Detail / quando usar */}
+          <div style={{ padding: '7px 12px 8px', background: 'rgba(255,255,255,0.01)' }}>
+            <p style={{ fontFamily: MONO, fontSize: '7.5px', color: 'rgba(255,255,255,0.32)', lineHeight: 1.55 }}>{cmd.detail}</p>
+          </div>
+        </motion.div>
+      ))}
+    </motion.div>
+  );
+}
+
 /* ── All agents: filtro por squad + belt/grid ── */
 function AllAgentsDiagram({ agents }: { agents: SlideAgent[] }) {
   const FILTERS = [
@@ -1196,7 +1318,7 @@ export function ModuloSlideshow({ slug, slides }: ModuloSlideshowProps) {
   const pct   = slides.length > 1 ? (current / (slides.length - 1)) * 100 : 100;
 
   const hasBelt       = !!(slide.belt && slide.agents?.length);
-  const hasGrid       = !!(slide.agents?.length && !slide.belt);
+  const hasGrid       = !!(slide.agents?.length && !slide.belt && !slide.diagram);
   const hasScreenshot = !!slide.screenshot;
   const hasVideo      = !!slide.video;
   const hasDiagram    = !!slide.diagram;
@@ -1358,6 +1480,8 @@ export function ModuloSlideshow({ slug, slides }: ModuloSlideshowProps) {
                     {slide.diagram === 'limites-flow'         && <LimitesFlowDiagram />}
                     {slide.diagram === 'squads-detail'        && <SquadsDetailDiagram />}
                     {slide.diagram === 'all-agents'           && <AllAgentsDiagram agents={slide.agents ?? []} />}
+                    {slide.diagram === 'folder-structure'     && <FolderStructureDiagram />}
+                    {slide.diagram === 'base-commands'        && <BaseCommandsDiagram />}
                   </div>
                 )}
               </div>
