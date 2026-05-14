@@ -1,18 +1,46 @@
 import type { Metadata } from 'next';
 import { ModuloSlideshow } from '../_components/ModuloSlideshow';
-import type { Slide } from '../_components/ModuloSlideshow';
+import type { Slide, SlideAgent } from '../_components/ModuloSlideshow';
+import { ALL_AGENTES } from '@/data/agentes';
 
 export const metadata: Metadata = {
   title: 'Módulo 3: Centro de Treinamento de Agentes | Mentoria Claude Code',
   alternates: { canonical: '/mentoria/presencial/centro-treinamento' },
 };
 
+const SQUAD_ACCENTS: Record<string, string> = {
+  dev: '#A78BFA',
+  sites: '#FF3A0E',
+  social: '#EC4899',
+  traffic: '#06B6D4',
+};
+
+const allAgents: SlideAgent[] = ALL_AGENTES.map((a) => ({
+  slug: a.slug,
+  codename: a.codename ?? a.name,
+  accent: SQUAD_ACCENTS[a.squad] ?? '#FF3A0E',
+  title: a.title ?? undefined,
+}));
+
 const slides: Slide[] = [
+  {
+    label: 'Centro de Treinamento · 37 Agentes',
+    title: 'Conheça o time inteiro — 37 agentes, 4 squads.',
+    body: 'Cada agente tem identidade própria, ferramentas específicas e papel insubstituível. Dev, Sites, Social e Traffic — squads completas que trabalham em paralelo, coordenadas por um único lead. Nenhum generalista. Nenhum acúmulo de função.',
+    belt: true,
+    agents: allAgents,
+  },
   {
     label: 'Centro de Treinamento · 4 Squads',
     title: '37 agentes, 4 squads, 1 lead — um sistema operacional para IA.',
     body: 'O Centro de Treinamento é o repositório central de agentes e skills nativos do Claude Code. Cada agente tem papel único, ferramentas específicas e responsabilidades claras. Nenhum sabe fazer tudo — e isso é o que torna o sistema confiável. Tudo em .claude/agents/ e .claude/skills/ — portável entre projetos.',
     diagram: 'ct-overview',
+  },
+  {
+    label: 'Squads · Quem é quem',
+    title: '4 squads, papéis claros — nenhum agente sabe fazer tudo.',
+    body: 'Especialização é a lei. Cada squad tem autoridades exclusivas: só o devops faz push, só o qa emite veredictos, só o architect cria stories. Nenhum agente invade o território do outro — e é isso que torna o time previsível.',
+    diagram: 'squads-detail',
   },
   {
     label: 'Time vs Solo · Protocolo',

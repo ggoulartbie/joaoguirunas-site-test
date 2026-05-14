@@ -5,6 +5,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
 import { MODULOS_PRESENCIAIS } from './ModuloLayout';
+import { SQUADS, getAgentesBySquad } from '@/data/agentes';
 
 export interface SlideAgent {
   slug: string;
@@ -28,7 +29,8 @@ export interface Slide {
            | 'hub-and-spoke' | 'squads-grid' | 'solo-vs-team' | 'agent-flow'
            | 'team-os-commands' | 'smart-memory-tree' | 'creator-commands' | 'getting-started'
            | 'ct-overview' | 'team-protocol'
-           | 'limites-contraste' | 'limites-disfarces' | 'limites-exige' | 'limites-flow';
+           | 'limites-contraste' | 'limites-disfarces' | 'limites-exige' | 'limites-flow'
+           | 'squads-detail';
 }
 
 interface ModuloSlideshowProps {
@@ -998,6 +1000,89 @@ function AgentAnatomyDiagram() {
   );
 }
 
+/* ── Squads detail: 4 colunas com todos os agentes por squad ── */
+function SquadsDetailDiagram() {
+  const squadAccents: Record<string, string> = {
+    dev: '#A78BFA',
+    sites: '#FF3A0E',
+    social: '#EC4899',
+    traffic: '#06B6D4',
+  };
+  const squadAuthorities: Record<string, string> = {
+    dev: 'devops · push exclusivo  |  qa · veredictos',
+    sites: 'devops · push exclusivo  |  qa · veredictos',
+    social: 'strategist · aprovação final',
+    traffic: 'bi · dados oficiais  |  qa · pré-launch',
+  };
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, x: 24 }}
+      animate={{ opacity: 1, x: 0 }}
+      transition={{ delay: 0.25, duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
+      style={{ display: 'flex', gap: 8, alignItems: 'flex-start', width: 420 }}
+    >
+      {SQUADS.map((squad, si) => {
+        const agentes = getAgentesBySquad(squad.id);
+        const accent = squadAccents[squad.id] ?? ACCENT;
+        const authority = squadAuthorities[squad.id] ?? '';
+        return (
+          <motion.div
+            key={squad.id}
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.3 + si * 0.08, duration: 0.4 }}
+            style={{ flex: 1, border: `1px solid ${accent}30`, background: `${accent}07`, overflow: 'hidden' }}
+          >
+            {/* Squad header */}
+            <div style={{ padding: '7px 9px', borderBottom: `1px solid ${accent}25`, background: `${accent}10` }}>
+              <p style={{ fontFamily: MONO, fontSize: '9px', letterSpacing: '0.12em', color: accent, textTransform: 'uppercase', marginBottom: 2 }}>{squad.label}</p>
+              <p style={{ fontFamily: MONO, fontSize: '18px', fontWeight: 800, color: accent, lineHeight: 1 }}>{squad.count}</p>
+            </div>
+
+            {/* Agent list */}
+            <div style={{ padding: '6px 0' }}>
+              {agentes.map((a, ai) => (
+                <motion.div
+                  key={a.id}
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ delay: 0.45 + si * 0.08 + ai * 0.04 }}
+                  style={{
+                    padding: '4px 9px',
+                    borderBottom: ai < agentes.length - 1 ? '1px solid rgba(255,255,255,0.04)' : 'none',
+                  }}
+                >
+                  <p style={{ fontFamily: MONO, fontSize: '8.5px', color: 'rgba(255,255,255,0.75)', lineHeight: 1.3, letterSpacing: '0.02em' }}>
+                    {a.codename || a.name}
+                  </p>
+                  {a.title && (
+                    <p style={{ fontFamily: MONO, fontSize: '7px', color: 'rgba(255,255,255,0.28)', lineHeight: 1.2, marginTop: 1 }}>
+                      {a.title}
+                    </p>
+                  )}
+                </motion.div>
+              ))}
+            </div>
+
+            {/* Authority footer */}
+            {authority && (
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.7 + si * 0.06 }}
+                style={{ padding: '5px 9px', borderTop: `1px solid ${accent}20`, background: `${accent}08` }}
+              >
+                <p style={{ fontFamily: MONO, fontSize: '6.5px', color: `${accent}99`, lineHeight: 1.4, letterSpacing: '0.04em' }}>{authority}</p>
+              </motion.div>
+            )}
+          </motion.div>
+        );
+      })}
+    </motion.div>
+  );
+}
+
 export function ModuloSlideshow({ slug, slides }: ModuloSlideshowProps) {
   const [current, setCurrent] = useState(0);
 
@@ -1187,6 +1272,7 @@ export function ModuloSlideshow({ slug, slides }: ModuloSlideshowProps) {
                     {slide.diagram === 'limites-disfarces'    && <LimitesDisfarcesDiagram />}
                     {slide.diagram === 'limites-exige'        && <LimitesExigeDiagram />}
                     {slide.diagram === 'limites-flow'         && <LimitesFlowDiagram />}
+                    {slide.diagram === 'squads-detail'        && <SquadsDetailDiagram />}
                   </div>
                 )}
               </div>
