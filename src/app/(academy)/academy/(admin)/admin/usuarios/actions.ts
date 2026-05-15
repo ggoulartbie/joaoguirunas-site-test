@@ -214,7 +214,7 @@ export async function createStudentManually(data: z.infer<typeof createStudentSc
     .eq('id', cohort.id)
 
   // Generate magic link for account activation
-  const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? 'https://joaoguirunas.com'
+  const appUrl = (process.env.NEXT_PUBLIC_APP_URL ?? 'https://joaoguirunas.com').replace(/\/+$/, '')
   const { data: linkData, error: linkErr } = await supabaseAdmin.auth.admin.generateLink({
     type: 'magiclink',
     email: parsed.data.email,
