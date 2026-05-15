@@ -15,10 +15,20 @@ const schema = z.object({
 
 type FormData = z.infer<typeof schema>
 
+const ERROR_MESSAGES: Record<string, string> = {
+  'link-expirado':
+    'O link expirou ou já foi usado. Use seu email e senha temporária recebida — ou peça um novo link em "Esqueci minha senha".',
+  'link-invalido':
+    'O link de acesso não é válido. Faça login normalmente abaixo.',
+}
+
 export function LoginForm() {
   const router = useRouter()
   const searchParams = useSearchParams()
-  const [serverError, setServerError] = useState<string | null>(null)
+  const initialError = searchParams.get('error')
+  const [serverError, setServerError] = useState<string | null>(
+    initialError ? ERROR_MESSAGES[initialError] ?? null : null,
+  )
 
   const {
     register,
@@ -40,12 +50,19 @@ export function LoginForm() {
       return
     }
 
-    // Determinar destino: se ADMIN → /academy/admin, senão usar ?next ou fallback
+    // Determinar destino: primeiro acesso (senha temporária) → forçar redefinição,
+    // ADMIN → /academy/admin, senão ?next ou fallback.
     const { data: profile } = await supabase
       .from('profiles')
-      .select('role')
+      .select('role, has_set_password')
       .eq('id', authData.user!.id)
       .single()
+
+    if (profile?.has_set_password === false) {
+      router.push('/academy/redefinir-senha?primeiro-acesso=1')
+      router.refresh()
+      return
+    }
 
     if (profile?.role === 'ADMIN') {
       router.push('/academy/admin')

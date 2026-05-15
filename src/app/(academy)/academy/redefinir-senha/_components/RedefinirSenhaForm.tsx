@@ -6,7 +6,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
-import { createClient } from '@/lib/supabase/client'
+import { setMyPassword } from '@/app/actions/profile'
 
 const schema = z
   .object({
@@ -37,18 +37,17 @@ export function RedefinirSenhaForm() {
 
   async function onSubmit(data: FormData) {
     setServerError(null)
-    const supabase = createClient()
 
-    const { error } = await supabase.auth.updateUser({ password: data.password })
+    const result = await setMyPassword(data.password)
 
-    if (error) {
-      setServerError('Erro ao redefinir senha. O link pode ter expirado.')
+    if (result.error) {
+      setServerError(result.error)
       return
     }
 
     setSuccess(true)
     setTimeout(() => {
-      router.push('/academy/dashboard')
+      router.push('/academy/aluno')
       router.refresh()
     }, 1500)
   }

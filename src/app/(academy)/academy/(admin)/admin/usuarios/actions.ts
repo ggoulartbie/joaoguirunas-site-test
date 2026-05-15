@@ -148,6 +148,18 @@ const createStudentSchema = z.object({
   expiresAt: z.string().optional(),
 })
 
+// Senha temporária: 12 caracteres, mistura alfanumérica fácil de ler.
+// Evita 0/O/1/l/I para reduzir confusão no email. Robusto contra brute force
+// dado o expiry de 24h até primeira mudança forçada.
+function generateTempPassword(): string {
+  const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnpqrstuvwxyz23456789'
+  const bytes = new Uint8Array(12)
+  crypto.getRandomValues(bytes)
+  let out = ''
+  for (let i = 0; i < 12; i++) out += chars[bytes[i]! % chars.length]
+  return out
+}
+
 export async function createStudentManually(data: z.infer<typeof createStudentSchema>): Promise<{
   userId: string
   email: string
@@ -166,11 +178,15 @@ export async function createStudentManually(data: z.infer<typeof createStudentSc
     .single()
   if (cohortErr || !cohort) throw new Error('Turma não encontrada')
 
-  // Create auth user — email already confirmed, we send the invite ourselves.
-  // The on_auth_user_created trigger auto-creates the profile row; pass name via
-  // user_metadata so the trigger picks it up with the right value.
+  // Gera senha temporária — usuário troca no primeiro login.
+  // Evita magic link OTP (consumido por scanners de email antes do usuário clicar).
+  const tempPassword = generateTempPassword()
+
+  // Cria auth user já confirmado e com senha temporária. has_set_password=false
+  // no profile força redefinição no primeiro login.
   const { data: authData, error: authErr } = await supabaseAdmin.auth.admin.createUser({
     email: parsed.data.email,
+    password: tempPassword,
     email_confirm: true,
     user_metadata: { name: parsed.data.name },
   })
@@ -178,13 +194,7 @@ export async function createStudentManually(data: z.infer<typeof createStudentSc
 
   const userId = authData.user.id
 
-  // Garantir app_metadata.has_password=false via updateUserById — mais confiável que
-  // passar pelo createUser, que pode mesclar de forma inesperada dependendo da versão.
-  await supabaseAdmin.auth.admin.updateUserById(userId, {
-    app_metadata: { has_password: false },
-  })
-
-  // Trigger already inserted the profile — update name, role and flag de senha.
+  // Trigger já inseriu o profile — atualiza name, role e flag de senha não definida.
   const { error: profileErr } = await supabaseAdmin
     .from('profiles')
     .update({ name: parsed.data.name, role: parsed.data.role, has_set_password: false })
@@ -213,22 +223,22 @@ export async function createStudentManually(data: z.infer<typeof createStudentSc
     .update({ filled_seats: cohort.filled_seats + 1 })
     .eq('id', cohort.id)
 
-  // Generate magic link for account activation
+  // Email com senha temporária + link para login (não magic link).
+  // O fluxo LoginForm detecta has_set_password=false e força redefinir senha.
   const appUrl = (process.env.NEXT_PUBLIC_APP_URL ?? 'https://joaoguirunas.com').replace(/\/+$/, '')
-  const { data: linkData, error: linkErr } = await supabaseAdmin.auth.admin.generateLink({
-    type: 'magiclink',
-    email: parsed.data.email,
-    options: { redirectTo: `${appUrl}/academy/auth/callback` },
-  })
-  const activateUrl = linkErr || !linkData?.properties?.action_link
-    ? `${appUrl}/academy/login`
-    : linkData.properties.action_link
+  const loginUrl = `${appUrl}/academy/login`
 
-  // Send invite email (non-blocking — don't fail the action if email fails)
   try {
-    await sendWelcomeInviteEmail(parsed.data.email, parsed.data.name, cohort.name, activateUrl)
+    await sendWelcomeInviteEmail(
+      parsed.data.email,
+      parsed.data.name,
+      cohort.name,
+      loginUrl,
+      undefined,
+      tempPassword,
+    )
   } catch {
-    // Email failure is logged but doesn't roll back — user was created successfully
+    // Email failure logged but doesn't roll back — admin pode reenviar via UI
   }
 
   revalidatePath('/academy/admin/usuarios')
