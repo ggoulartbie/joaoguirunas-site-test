@@ -88,16 +88,33 @@ export async function middleware(request: NextRequest) {
     return NextResponse.redirect(loginUrl)
   }
 
-  // rotas /academy/admin/* exigem role ADMIN — verificado no servidor
-  if (user && pathname.startsWith('/academy/admin')) {
+  // Enforcement de senha não definida + role ADMIN — uma query só para ambos
+  if (user) {
     const { data: profile } = await supabase
       .from('profiles')
-      .select('role')
+      .select('role, has_set_password')
       .eq('id', user.id)
       .single()
 
-    if (!profile || profile.role !== 'ADMIN') {
-      return NextResponse.redirect(new URL('/academy/403', request.url))
+    // Primeiro acesso (senha temporária) → bloqueia acesso a qualquer rota exceto
+    // redefinir-senha, login (caso queira logout) e callbacks de auth.
+    if (profile?.has_set_password === false) {
+      const isAllowedDuringSetup =
+        pathname.startsWith('/academy/redefinir-senha') ||
+        pathname.startsWith('/academy/auth') ||
+        pathname.startsWith('/academy/login')
+      if (!isAllowedDuringSetup) {
+        return NextResponse.redirect(
+          new URL('/academy/redefinir-senha?primeiro-acesso=1', request.url),
+        )
+      }
+    }
+
+    // Rotas /academy/admin/* exigem role ADMIN
+    if (pathname.startsWith('/academy/admin')) {
+      if (!profile || profile.role !== 'ADMIN') {
+        return NextResponse.redirect(new URL('/academy/403', request.url))
+      }
     }
   }
 
