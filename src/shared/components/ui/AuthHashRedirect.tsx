@@ -16,11 +16,15 @@ export function AuthHashRedirect() {
     const hashParams = new URLSearchParams(hash.replace(/^#/, ''))
     const searchParams = new URLSearchParams(search)
 
-    const errorCode = hashParams.get('error_code') || searchParams.get('error_code')
+    // Erro do Supabase vem SEMPRE no hash (#error=...&error_code=...&error_description=...).
+    // Restringir ao hash evita falsos positivos em URLs com ?error_code= de tracking/analytics.
+    const errorCode = hashParams.get('error_code')
+    const errorDescription = hashParams.get('error_description')
     const hasToken = hash.includes('access_token=') || search.includes('code=')
 
     // Caso 1: Supabase devolveu erro (OTP expirado, consumido por scanner, etc.)
-    if (errorCode) {
+    // Exige error_code + error_description juntos pra ter certeza que é do Supabase
+    if (errorCode && errorDescription) {
       const reason =
         errorCode === 'otp_expired'
           ? 'link-expirado'
