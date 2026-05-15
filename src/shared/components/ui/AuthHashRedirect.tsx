@@ -1,27 +1,42 @@
 'use client'
 
 import { useEffect } from 'react'
-import { useRouter } from 'next/navigation'
+import { createClient } from '@/lib/supabase/client'
 
 // Supabase magic links usam fluxo implícito: tokens chegam no hash da URL.
 // O Site URL do Supabase aponta para a homepage, então este componente captura
-// o hash e roteia para a página correta conforme o tipo do token.
+// o hash, estabelece a sessão diretamente aqui e redireciona via window.location.replace
+// (hard redirect) — evita o bug do Next.js App Router que descarta o hash em
+// navegações soft cross-page (router.replace não preserva fragmentos).
 export function AuthHashRedirect() {
-  const router = useRouter()
-
   useEffect(() => {
     const hash = window.location.hash.substring(1)
     if (!hash.includes('access_token=')) return
 
     const params = new URLSearchParams(hash)
     const type = params.get('type')
+    const accessToken = params.get('access_token')
+    const refreshToken = params.get('refresh_token')
 
-    if (type === 'recovery') {
-      router.replace(`/academy/redefinir-senha#${hash}`)
-    } else {
-      router.replace(`/academy/auth/callback#${hash}`)
-    }
-  }, [router])
+    if (!accessToken || !refreshToken) return
+
+    const supabase = createClient()
+
+    supabase.auth
+      .setSession({ access_token: accessToken, refresh_token: refreshToken })
+      .then(({ error }) => {
+        if (error) {
+          window.location.replace('/academy/login?error=link-invalido')
+          return
+        }
+        if (type === 'recovery') {
+          // Sessão já estabelecida — redireciona pro form sem precisar do hash
+          window.location.replace('/academy/redefinir-senha')
+        } else {
+          window.location.replace('/academy/meus-cursos')
+        }
+      })
+  }, [])
 
   return null
 }
