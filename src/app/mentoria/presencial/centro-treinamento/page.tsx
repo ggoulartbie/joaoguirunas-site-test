@@ -24,23 +24,36 @@ const allAgents: SlideAgent[] = ALL_AGENTES.map((a) => ({
 
 const slides: Slide[] = [
   {
-    label: 'Centro de Treinamento · 37 Agentes',
-    title: 'Conheça o time inteiro — 37 agentes, 4 squads.',
-    body: 'Cada agente tem identidade própria, ferramentas específicas e papel insubstituível. Dev, Sites, Social e Traffic — squads completas que trabalham em paralelo, coordenadas por um único lead. Nenhum generalista. Nenhum acúmulo de função.',
-    diagram: 'all-agents',
-    agents: allAgents,
-  },
-  {
     label: 'Centro de Treinamento · 4 Squads',
     title: '37 agentes, 4 squads, 1 lead — um sistema operacional para IA.',
     body: 'O Centro de Treinamento é o repositório central de agentes e skills nativos do Claude Code. Cada agente tem papel único, ferramentas específicas e responsabilidades claras. Nenhum sabe fazer tudo — e isso é o que torna o sistema confiável. Tudo em .claude/agents/ e .claude/skills/ — portável entre projetos.',
     diagram: 'ct-overview',
   },
   {
-    label: 'Squads · Quem é quem',
-    title: '4 squads, papéis claros — nenhum agente sabe fazer tudo.',
-    body: 'Especialização é a lei. Cada squad tem autoridades exclusivas: só o devops faz push, só o qa emite veredictos, só o architect cria stories. Nenhum agente invade o território do outro — e é isso que torna o time previsível.',
+    label: '37 Agentes · 4 Squads',
+    title: 'Cada agente tem um papel. Nenhum faz tudo.',
+    body: 'Dev, Sites, Social e Traffic — 37 especialistas com persona, autoridades e skills definidos. Você escolhe o squad certo para cada projeto.',
+    diagram: 'all-agents',
+    agents: allAgents,
+  },
+  {
+    label: 'Squads · Papéis e Funções',
+    title: 'Quatro squads. Cada agente com função explícita.',
+    body: 'Dev constrói o produto. Sites cuida do canal digital. Social cria e publica conteúdo. Traffic opera campanhas pagas. Cada squad tem analyst, architect, qa e devops — o mesmo protocolo, domínios diferentes.',
     diagram: 'squads-detail',
+  },
+  {
+    label: 'Estrutura de Pastas · .claude/',
+    title: 'Centro de treinamento separado dos projetos.',
+    body: '~/.claude/ é global — agentes e skills ficam aqui, disponíveis em qualquer projeto. Cada projeto tem seu .claude/ próprio com CLAUDE.md, settings e agentes instalados. Nunca edite o centro de treinamento dentro de um projeto.',
+    note: 'team-os-creator *install copia o que precisa para o projeto. O CT fica intacto.',
+    diagram: 'folder-structure',
+  },
+  {
+    label: 'Comandos Base · /model /compact /clear',
+    title: 'Três comandos que você vai usar toda sessão.',
+    body: '/model para calibrar poder de processamento. /compact para conservar contexto. /clear para resetar quando o agente se perde. Simples — mas a diferença entre uma sessão produtiva e uma perdida.',
+    diagram: 'base-commands',
   },
   {
     label: 'Time vs Solo · Protocolo',
@@ -48,13 +61,6 @@ const slides: Slide[] = [
     body: 'IA solo tenta fazer tudo e faz mal. Agentes em time têm papéis definidos, QA formal e execução paralela. O protocolo garante autoridade exclusiva: só dev-qa emite veredictos, só dev-devops faz push. Sem nested teams. Sem polling — cada agente avisa quando termina.',
     note: 'Enquanto o backend implementa, o QA já prepara os critérios. Zero retrabalho de handoff.',
     diagram: 'team-protocol',
-  },
-  {
-    label: 'Estrutura · Source → Projects',
-    title: 'Um catálogo central. Cada projeto puxa o que precisa.',
-    body: 'O centro de treinamento é a fonte — .claude/agents/ e .claude/skills/ prontos. Cada projeto destino recebe exatamente os agentes e skills que precisa, sem duplicar manualmente.',
-    note: 'team-os-creator faz a sincronização — sem cópia manual.',
-    diagram: 'folder-structure',
   },
   {
     label: '/team-os · O Maestro',
@@ -70,12 +76,6 @@ const slides: Slide[] = [
     video: '/mentoria/smart-memory-obsidian.mov',
   },
   {
-    label: 'Comandos base · CLI',
-    title: 'Antes de orquestrar agentes — domine os 3 comandos.',
-    body: '/model controla custo e capacidade por sessão. /compact preserva contexto em sessões longas sem reiniciar do zero. /clear reseta tudo quando um novo problema exige raciocínio limpo.',
-    diagram: 'base-commands',
-  },
-  {
     label: '/team-os-creator · Agent Factory',
     title: 'Você descreve o que precisa. Ele gera o squad pronto para trabalhar.',
     body: 'team-os-creator analisa o stack do projeto, propõe a squad ideal, gera os arquivos .claude/agents/*.md completos e instala as skills relevantes. Nunca sobrescreve silenciosamente. Nunca duplica o orquestrador. Propaga updates para múltiplos projetos de uma vez.',
@@ -87,13 +87,6 @@ const slides: Slide[] = [
     body: 'Instalar a squad, inicializar o smart-memory e despachar o trabalho. Do projeto virgem ao time em execução paralela — sem configuração manual, sem setup demorado. Você só aprova.',
     note: 'O time planeja, executa e entrega. Você define o objetivo.',
     diagram: 'getting-started',
-  },
-  {
-    label: '/team-os-creator · Referência',
-    title: 'A fábrica está à sua disposição.',
-    body: 'Todos os comandos do team-os-creator que você vai usar para criar, instalar, atualizar e auditar squads em qualquer projeto. Leve com você.',
-    note: 'Nunca sobrescreve silenciosamente. Nunca duplica o orquestrador. Skills sempre instaladas junto.',
-    diagram: 'creator-commands',
   },
 ];
 

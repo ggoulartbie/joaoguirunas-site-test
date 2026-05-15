@@ -1147,7 +1147,7 @@ function AllAgentsDiagram({ agents }: { agents: SlideAgent[] }) {
   const showBelt = active === 'all';
 
   return (
-    <div style={{ width: '100%' }}>
+    <div style={{ width: 380 }}>
       {/* Filter chips */}
       <motion.div
         initial={{ opacity: 0, y: 8 }}
