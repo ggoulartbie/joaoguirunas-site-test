@@ -3,21 +3,39 @@
 import { useEffect } from 'react'
 import { createClient } from '@/lib/supabase/client'
 
-// Supabase magic links: Site URL aponta para a homepage, então tokens chegam aqui.
-// createBrowserClient usa flowType="pkce" + detectSessionInUrl=true por padrão,
-// o que cria race condition com setSession() manual. A solução é usar onAuthStateChange
-// para escutar o resultado independentemente de como o Supabase processou os tokens,
-// com fallback manual via setSession() caso o auto-detect não dispare.
+// Supabase devolve auth params na homepage (Site URL).
+// Trata 3 casos:
+// 1. error=otp_expired (link consumido por scanner ou expirado) → login com aviso
+// 2. type=recovery com access_token (fluxo "Esqueci minha senha") → estabelece sessão e vai redefinir
+// 3. signup/magiclink legado (compat: usuários antigos ainda podem ter links pendentes) → meus-cursos
 export function AuthHashRedirect() {
   useEffect(() => {
     const hash = window.location.hash
     const search = window.location.search
-    const hasAuth = hash.includes('access_token=') || search.includes('code=')
-    if (!hasAuth) return
 
-    // Capturar type e tokens ANTES do Supabase limpar a URL
-    const hashParams = new URLSearchParams(hash.substring(1))
+    const hashParams = new URLSearchParams(hash.replace(/^#/, ''))
     const searchParams = new URLSearchParams(search)
+
+    // Erro do Supabase vem SEMPRE no hash (#error=...&error_code=...&error_description=...).
+    // Restringir ao hash evita falsos positivos em URLs com ?error_code= de tracking/analytics.
+    const errorCode = hashParams.get('error_code')
+    const errorDescription = hashParams.get('error_description')
+    const hasToken = hash.includes('access_token=') || search.includes('code=')
+
+    // Caso 1: Supabase devolveu erro (OTP expirado, consumido por scanner, etc.)
+    // Exige error_code + error_description juntos pra ter certeza que é do Supabase
+    if (errorCode && errorDescription) {
+      const reason =
+        errorCode === 'otp_expired'
+          ? 'link-expirado'
+          : errorCode
+      window.location.replace(`/academy/login?error=${encodeURIComponent(reason)}`)
+      return
+    }
+
+    if (!hasToken) return
+
+    // Caso 2 e 3: tem token de auth — deixa Supabase processar e escuta resultado
     const type = hashParams.get('type') || searchParams.get('type')
     const accessToken = hashParams.get('access_token')
     const refreshToken = hashParams.get('refresh_token')
@@ -39,19 +57,16 @@ export function AuthHashRedirect() {
       window.location.replace('/academy/login?error=link-invalido')
     }
 
-    // 1. Subscribir primeiro para capturar eventos assíncronos
     const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
       if ((event === 'SIGNED_IN' || event === 'PASSWORD_RECOVERY') && session) {
         go()
       }
     })
 
-    // 2. Verificar se sessão já foi estabelecida (Supabase pode ter auto-processado)
     supabase.auth.getSession().then(({ data: { session } }) => {
       if (session) go()
     })
 
-    // 3. Fallback: chamar setSession manualmente caso auto-detect não tenha funcionado
     if (accessToken && refreshToken) {
       supabase.auth
         .setSession({ access_token: accessToken, refresh_token: refreshToken })

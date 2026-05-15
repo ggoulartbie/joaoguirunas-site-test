@@ -242,13 +242,22 @@ export async function sendWelcomeInviteEmail(
   cohortName: string,
   activateUrl: string,
   subject?: string,
+  tempPassword?: string,
 ) {
-  const html = await render(WelcomeInviteEmail({ name, cohortName, activateUrl }))
+  const html = await render(
+    WelcomeInviteEmail({
+      name,
+      cohortName,
+      activateUrl,
+      email: tempPassword ? to : undefined,
+      tempPassword,
+    }),
+  )
 
   return getResend().emails.send({
     from: FROM,
     to,
-    subject: subject ?? `Convite de acesso — ${cohortName}`,
+    subject: subject ?? `Acesso liberado — ${cohortName}`,
     html,
   })
 }

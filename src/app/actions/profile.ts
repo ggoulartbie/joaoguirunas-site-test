@@ -57,3 +57,25 @@ export async function changePassword(
 
   return {}
 }
+
+// Define senha quando o usuário já provou identidade via sessão ativa:
+// - primeiro acesso (login com senha temporária, has_set_password=false)
+// - recuperação de senha (sessão de recovery do Supabase)
+// Não exige senha atual — a sessão autenticada é a prova.
+export async function setMyPassword(newPassword: string): Promise<{ error?: string }> {
+  if (newPassword.length < 8) return { error: 'Senha deve ter ao menos 8 caracteres.' }
+
+  const supabase = await createClient()
+  const { data: { user } } = await supabase.auth.getUser()
+  if (!user) return { error: 'Sessão inválida.' }
+
+  const { error } = await supabase.auth.updateUser({ password: newPassword })
+  if (error) return { error: 'Erro ao definir senha. Tente novamente.' }
+
+  await supabaseAdmin
+    .from('profiles')
+    .update({ has_set_password: true })
+    .eq('id', user.id)
+
+  return {}
+}

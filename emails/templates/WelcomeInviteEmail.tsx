@@ -15,13 +15,16 @@ interface Props {
   name: string
   cohortName: string
   activateUrl: string
+  email?: string
+  tempPassword?: string
 }
 
-export function WelcomeInviteEmail({ name, cohortName, activateUrl }: Props) {
+export function WelcomeInviteEmail({ name, cohortName, activateUrl, email, tempPassword }: Props) {
+  const hasCredentials = !!(email && tempPassword)
   return (
     <Html lang="pt-BR">
       <Head />
-      <Preview>Ative sua conta — {cohortName}</Preview>
+      <Preview>Acesso liberado — {cohortName}</Preview>
       <Body style={styles.main}>
         <Container style={styles.container}>
           <table cellPadding="0" cellSpacing="0" style={styles.headerTable}>
@@ -34,21 +37,44 @@ export function WelcomeInviteEmail({ name, cohortName, activateUrl }: Props) {
           </table>
 
           <Section style={styles.card}>
-            <Text style={styles.monoLabel}>CONVITE DE ACESSO</Text>
+            <Text style={styles.monoLabel}>ACESSO LIBERADO</Text>
             <Heading style={styles.heading}>Olá, {name}</Heading>
             <Text style={styles.body}>
               Você foi adicionado à turma{' '}
-              <strong style={styles.strong}>{cohortName}</strong>. Clique no botão abaixo
-              para ativar sua conta e começar.
+              <strong style={styles.strong}>{cohortName}</strong>.
             </Text>
-            <Text style={styles.body}>
-              O link é de uso único e expira em 24 horas.
-            </Text>
-            <Section style={styles.btnWrapper}>
-              <Button href={activateUrl} style={styles.buttonPrimary}>
-                ATIVAR MINHA CONTA
-              </Button>
-            </Section>
+
+            {hasCredentials ? (
+              <>
+                <Text style={styles.body}>
+                  Use as credenciais abaixo para fazer login. No primeiro acesso, você
+                  será solicitado a criar uma nova senha pessoal.
+                </Text>
+                <Section style={styles.credBox}>
+                  <Text style={styles.credLabel}>EMAIL</Text>
+                  <Text style={styles.credValue}>{email}</Text>
+                  <Text style={styles.credLabel}>SENHA TEMPORÁRIA</Text>
+                  <Text style={styles.credValueMono}>{tempPassword}</Text>
+                </Section>
+                <Section style={styles.btnWrapper}>
+                  <Button href={activateUrl} style={styles.buttonPrimary}>
+                    FAZER LOGIN
+                  </Button>
+                </Section>
+              </>
+            ) : (
+              <>
+                <Text style={styles.body}>
+                  Clique no botão abaixo para acessar a plataforma.
+                </Text>
+                <Section style={styles.btnWrapper}>
+                  <Button href={activateUrl} style={styles.buttonPrimary}>
+                    ACESSAR ACADEMY
+                  </Button>
+                </Section>
+              </>
+            )}
+
             <Hr style={styles.hr} />
             <Text style={styles.footer}>
               Se não esperava este email, pode ignorá-lo com segurança. Para dúvidas,
@@ -65,6 +91,8 @@ WelcomeInviteEmail.PreviewProps = {
   name: 'Maria Silva',
   cohortName: 'Mentoria Maio 2026',
   activateUrl: 'http://localhost:3000/academy/login',
+  email: 'maria@exemplo.com',
+  tempPassword: 'Acad3my-9f8x2p',
 } satisfies Props
 
 const styles = {
@@ -128,6 +156,34 @@ const styles = {
   strong: {
     color: '#f1f1f3',
     fontWeight: '600',
+  },
+  credBox: {
+    backgroundColor: '#050507',
+    border: '1px solid rgba(255,58,14,0.25)',
+    padding: '20px',
+    margin: '20px 0',
+  },
+  credLabel: {
+    color: '#ff3a0e',
+    fontFamily: '"Courier New", Courier, monospace',
+    fontSize: '9px',
+    letterSpacing: '0.2em',
+    textTransform: 'uppercase' as const,
+    margin: '0 0 4px',
+  },
+  credValue: {
+    color: '#f1f1f3',
+    fontSize: '15px',
+    margin: '0 0 16px',
+    fontWeight: '500',
+  },
+  credValueMono: {
+    color: '#f1f1f3',
+    fontFamily: '"Courier New", Courier, monospace',
+    fontSize: '16px',
+    margin: '0',
+    fontWeight: '600',
+    letterSpacing: '0.02em',
   },
   btnWrapper: {
     margin: '24px 0 8px',

@@ -148,6 +148,18 @@ const createStudentSchema = z.object({
   expiresAt: z.string().optional(),
 })
 
+// Senha temporária: 12 caracteres alfanuméricos, evita 0/O/1/l/I para reduzir
+// confusão no email. Força redefinição no primeiro login (has_set_password=false +
+// enforcement no middleware).
+function generateTempPassword(): string {
+  const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnpqrstuvwxyz23456789'
+  const bytes = new Uint8Array(12)
+  crypto.getRandomValues(bytes)
+  let out = ''
+  for (let i = 0; i < 12; i++) out += chars[bytes[i]! % chars.length]
+  return out
+}
+
 export async function createStudentManually(data: z.infer<typeof createStudentSchema>): Promise<{
   userId: string
   email: string
@@ -166,69 +178,71 @@ export async function createStudentManually(data: z.infer<typeof createStudentSc
     .single()
   if (cohortErr || !cohort) throw new Error('Turma não encontrada')
 
-  // Create auth user — email already confirmed, we send the invite ourselves.
-  // The on_auth_user_created trigger auto-creates the profile row; pass name via
-  // user_metadata so the trigger picks it up with the right value.
+  const tempPassword = generateTempPassword()
+
+  // Cria auth user já confirmado e com senha temporária.
   const { data: authData, error: authErr } = await supabaseAdmin.auth.admin.createUser({
     email: parsed.data.email,
+    password: tempPassword,
     email_confirm: true,
     user_metadata: { name: parsed.data.name },
   })
   if (authErr || !authData.user) throw new Error(authErr?.message ?? 'Erro ao criar usuário')
 
   const userId = authData.user.id
+  let seatsIncremented = false
 
-  // Garantir app_metadata.has_password=false via updateUserById — mais confiável que
-  // passar pelo createUser, que pode mesclar de forma inesperada dependendo da versão.
-  await supabaseAdmin.auth.admin.updateUserById(userId, {
-    app_metadata: { has_password: false },
-  })
-
-  // Trigger already inserted the profile — update name, role and flag de senha.
-  const { error: profileErr } = await supabaseAdmin
-    .from('profiles')
-    .update({ name: parsed.data.name, role: parsed.data.role, has_set_password: false })
-    .eq('id', userId)
-  if (profileErr) {
-    await supabaseAdmin.auth.admin.deleteUser(userId)
-    throw new Error('Erro ao atualizar perfil: ' + profileErr.message)
-  }
-
-  // Create cohort_member
-  const { error: memberErr } = await supabaseAdmin.from('cohort_members').insert({
-    cohort_id: parsed.data.cohortId,
-    user_id: userId,
-    member_role: parsed.data.role,
-    status: 'ACTIVE',
-    expires_at: parsed.data.expiresAt ?? null,
-  })
-  if (memberErr) {
-    await supabaseAdmin.auth.admin.deleteUser(userId)
-    throw new Error('Erro ao matricular: ' + memberErr.message)
-  }
-
-  // Increment filled_seats
-  await supabaseAdmin
-    .from('cohorts')
-    .update({ filled_seats: cohort.filled_seats + 1 })
-    .eq('id', cohort.id)
-
-  // Generate magic link for account activation
-  const appUrl = (process.env.NEXT_PUBLIC_APP_URL ?? 'https://joaoguirunas.com').replace(/\/+$/, '')
-  const { data: linkData, error: linkErr } = await supabaseAdmin.auth.admin.generateLink({
-    type: 'magiclink',
-    email: parsed.data.email,
-    options: { redirectTo: `${appUrl}/academy/auth/callback` },
-  })
-  const activateUrl = linkErr || !linkData?.properties?.action_link
-    ? `${appUrl}/academy/login`
-    : linkData.properties.action_link
-
-  // Send invite email (non-blocking — don't fail the action if email fails)
+  // Rollback completo se QUALQUER coisa abaixo falhar — inclui falha de email.
+  // Email é crítico: sem ele, admin nunca vê a senha temporária e aluno fica órfão.
   try {
-    await sendWelcomeInviteEmail(parsed.data.email, parsed.data.name, cohort.name, activateUrl)
-  } catch {
-    // Email failure is logged but doesn't roll back — user was created successfully
+    const { error: profileErr } = await supabaseAdmin
+      .from('profiles')
+      .update({ name: parsed.data.name, role: parsed.data.role, has_set_password: false })
+      .eq('id', userId)
+    if (profileErr) throw new Error('Erro ao atualizar perfil: ' + profileErr.message)
+
+    const { error: memberErr } = await supabaseAdmin.from('cohort_members').insert({
+      cohort_id: parsed.data.cohortId,
+      user_id: userId,
+      member_role: parsed.data.role,
+      status: 'ACTIVE',
+      expires_at: parsed.data.expiresAt ?? null,
+    })
+    if (memberErr) throw new Error('Erro ao matricular: ' + memberErr.message)
+
+    const { error: seatsErr } = await supabaseAdmin
+      .from('cohorts')
+      .update({ filled_seats: cohort.filled_seats + 1 })
+      .eq('id', cohort.id)
+    if (seatsErr) throw new Error('Erro ao atualizar vagas: ' + seatsErr.message)
+    seatsIncremented = true
+
+    const appUrl = (process.env.NEXT_PUBLIC_APP_URL ?? 'https://joaoguirunas.com').replace(/\/+$/, '')
+    const loginUrl = `${appUrl}/academy/login`
+
+    await sendWelcomeInviteEmail(
+      parsed.data.email,
+      parsed.data.name,
+      cohort.name,
+      loginUrl,
+      undefined,
+      tempPassword,
+    )
+  } catch (err) {
+    // Rollback: delete user (FK cascade limpa profile + cohort_member) e reverte seats
+    await supabaseAdmin.auth.admin.deleteUser(userId).catch(() => {})
+    if (seatsIncremented) {
+      await supabaseAdmin
+        .from('cohorts')
+        .update({ filled_seats: cohort.filled_seats })
+        .eq('id', cohort.id)
+        .then(() => undefined, () => undefined)
+    }
+    Sentry.captureException(err, {
+      extra: { email: parsed.data.email, cohort: cohort.name, step: 'createStudentManually' },
+    })
+    const msg = err instanceof Error ? err.message : 'Erro ao criar aluno'
+    throw new Error(`${msg} — operação revertida, tente novamente.`)
   }
 
   revalidatePath('/academy/admin/usuarios')
