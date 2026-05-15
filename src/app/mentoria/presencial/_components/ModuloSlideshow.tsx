@@ -119,6 +119,7 @@ function AgentGrid({ agents }: { agents: SlideAgent[] }) {
 
 /* ── Video frame ── */
 function VideoFrame({ src }: { src: string }) {
+  const [errored, setErrored] = React.useState(false);
   return (
     <motion.div
       initial={{ opacity: 0, x: 24, scale: 0.97 }}
@@ -138,14 +139,21 @@ function VideoFrame({ src }: { src: string }) {
         <div style={{ width: 7, height: 7, borderRadius: '50%', background: 'rgba(255,200,50,0.35)' }} />
         <div style={{ width: 7, height: 7, borderRadius: '50%', background: 'rgba(80,200,80,0.35)' }} />
       </div>
-      <video
-        src={src}
-        autoPlay
-        loop
-        muted
-        playsInline
-        style={{ width: '100%', display: 'block', aspectRatio: '16/10', objectFit: 'cover', objectPosition: 'top' }}
-      />
+      {errored ? (
+        <div style={{ aspectRatio: '16/10', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#080810' }}>
+          <p style={{ fontFamily: MONO, fontSize: '9px', color: 'rgba(255,255,255,0.3)' }}>{src.split('/').pop()}</p>
+        </div>
+      ) : (
+        <video
+          src={src}
+          autoPlay
+          loop
+          muted
+          playsInline
+          onError={() => setErrored(true)}
+          style={{ width: '100%', display: 'block', aspectRatio: '16/10', objectFit: 'cover', objectPosition: 'top' }}
+        />
+      )}
     </motion.div>
   );
 }
@@ -1147,7 +1155,7 @@ function AllAgentsDiagram({ agents }: { agents: SlideAgent[] }) {
   const showBelt = active === 'all';
 
   return (
-    <div style={{ width: 380 }}>
+    <div style={{ width: 420, flexShrink: 0 }}>
       {/* Filter chips */}
       <motion.div
         initial={{ opacity: 0, y: 8 }}
@@ -1226,7 +1234,7 @@ function SquadsDetailDiagram() {
       initial={{ opacity: 0, x: 24 }}
       animate={{ opacity: 1, x: 0 }}
       transition={{ delay: 0.25, duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
-      style={{ display: 'flex', gap: 8, alignItems: 'flex-start', width: 480, maxHeight: '60vh', overflowY: 'auto' }}
+      style={{ display: 'flex', gap: 8, alignItems: 'flex-start', width: 480 }}
     >
       {SQUADS.map((squad, si) => {
         const agentes = getAgentesBySquad(squad.id);
@@ -1279,7 +1287,7 @@ function SquadsDetailDiagram() {
                 transition={{ delay: 0.7 + si * 0.06 }}
                 style={{ padding: '5px 9px', borderTop: `1px solid ${accent}20`, background: `${accent}08` }}
               >
-                <p style={{ fontFamily: MONO, fontSize: '6.5px', color: `${accent}99`, lineHeight: 1.4, letterSpacing: '0.04em' }}>{authority}</p>
+                <p style={{ fontFamily: MONO, fontSize: '7.5px', color: `${accent}99`, lineHeight: 1.4, letterSpacing: '0.04em' }}>{authority}</p>
               </motion.div>
             )}
           </motion.div>
