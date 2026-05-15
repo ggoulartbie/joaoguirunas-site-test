@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import { siteConfig } from '@/config/site';
 import { AnimatedHero } from '@/shared/components/ui/animated-hero';
+import { AuthHashRedirect } from '@/shared/components/ui/AuthHashRedirect';
 
 export const metadata: Metadata = {
   title: 'João Guirunas — IA em Negócios Reais com Claude Code',
@@ -25,6 +26,7 @@ export const metadata: Metadata = {
 export default function HomePage() {
   return (
     <main>
+      <AuthHashRedirect />
       <AnimatedHero />
     </main>
   );
