@@ -3,6 +3,8 @@ import Image from 'next/image'
 import { Download } from 'lucide-react'
 import { supabaseAdmin } from '@/lib/supabase/admin'
 
+export const dynamic = 'force-dynamic'
+
 type Props = {
   params: Promise<{ code: string }>
 }

@@ -3,6 +3,8 @@ import { AdminSidebar } from '@/components/admin/AdminSidebar'
 import { AdminTopBar } from '@/components/admin/AdminTopBar'
 import { requireAdmin } from '@/lib/auth/helpers'
 
+export const dynamic = 'force-dynamic'
+
 export const metadata: Metadata = {
   title: {
     default: 'Admin',

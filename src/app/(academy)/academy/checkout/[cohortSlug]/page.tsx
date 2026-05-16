@@ -4,6 +4,8 @@ import { createClient } from '@/lib/supabase/server'
 import { supabaseAdmin } from '@/lib/supabase/admin'
 import { createCheckoutSession } from '@/app/actions/checkout'
 
+export const dynamic = 'force-dynamic'
+
 interface Props {
   params: Promise<{ cohortSlug: string }>
 }

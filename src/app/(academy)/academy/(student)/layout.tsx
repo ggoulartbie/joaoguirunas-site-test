@@ -3,6 +3,8 @@ import { createClient } from '@/lib/supabase/server'
 import { StudentShell } from '@/components/student/StudentShell'
 import { OnboardingWizard } from '@/components/student/OnboardingWizard'
 
+export const dynamic = 'force-dynamic'
+
 export const metadata: Metadata = {
   title: {
     default: 'Área do Aluno',
