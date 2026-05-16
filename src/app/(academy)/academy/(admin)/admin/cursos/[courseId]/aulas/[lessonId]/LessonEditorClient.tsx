@@ -230,7 +230,7 @@ export function LessonEditorClient({
                 <div className="border border-[rgba(255,255,255,0.07)] bg-[var(--void)] px-3 py-2" style={{ borderRadius: 0 }}>
                   <LessonContent
                     content={{ format: 'MARKDOWN', raw: description }}
-                    className="prose prose-invert prose-sm max-w-none"
+                    className=""
                   />
                 </div>
               ) : (
@@ -331,7 +331,7 @@ export function LessonEditorClient({
               {previewError ? (
                 <p className="font-mono text-[11px] text-[var(--ember)]">{previewError}</p>
               ) : previewContent ? (
-                <LessonContent content={previewContent} className="prose prose-invert prose-sm max-w-none" />
+                <LessonContent content={previewContent} className="" />
               ) : (
                 <p className="font-mono text-[10px] text-[var(--bone-mute)]">Renderizando…</p>
               )}

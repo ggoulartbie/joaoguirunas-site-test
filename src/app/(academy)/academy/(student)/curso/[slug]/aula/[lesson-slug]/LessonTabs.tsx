@@ -102,7 +102,7 @@ export function LessonTabs({
           descriptionContent ? (
             <LessonContent
               content={descriptionContent}
-              className="prose prose-sm prose-invert max-w-none"
+              className=""
             />
           ) : description ? (
             <p className="text-sm leading-relaxed" style={{ color: 'var(--bone-dim)' }}>
