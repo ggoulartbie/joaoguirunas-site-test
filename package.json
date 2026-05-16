@@ -84,6 +84,12 @@
       "@tsparticles/engine",
       "esbuild",
       "sharp"
+    ],
+    "allowBuilds": [
+      "@sentry/cli",
+      "@tsparticles/engine",
+      "esbuild",
+      "sharp"
     ]
   }
 }
