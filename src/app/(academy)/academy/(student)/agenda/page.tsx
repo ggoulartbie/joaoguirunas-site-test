@@ -1,3 +1,5 @@
+export const dynamic = 'force-dynamic'
+
 import type { Metadata } from 'next'
 import { Calendar, Download, Video } from 'lucide-react'
 import { ICSDownloadButton } from '@/components/student/ICSDownloadButton'
