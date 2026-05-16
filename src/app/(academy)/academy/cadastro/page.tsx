@@ -1,3 +1,5 @@
+export const dynamic = 'force-dynamic'
+
 import Image from 'next/image'
 import { CadastroForm } from './_components/CadastroForm'
 import type { Metadata } from 'next'

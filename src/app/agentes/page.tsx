@@ -1,3 +1,5 @@
+export const dynamic = 'force-dynamic'
+
 import type { Metadata } from 'next';
 import { siteConfig } from '@/config/site';
 import { ALL_AGENTES, SQUADS, TOTAL_AGENTES, getAgentesBySquad } from '@/data/agentes';

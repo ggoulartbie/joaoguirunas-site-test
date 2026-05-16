@@ -1,3 +1,5 @@
+export const dynamic = 'force-dynamic'
+
 import type { Metadata } from 'next';
 import { siteConfig } from '@/config/site';
 import { OpenSourceClient } from './open-source-client';
