@@ -6,6 +6,9 @@ import * as Sentry from '@sentry/nextjs'
 import { supabaseAdmin } from '@/lib/supabase/admin'
 import { sendPasswordResetEmail } from '@/lib/email/send'
 
+// Server actions herdam o runtime do route handler que as invoca. No projeto, nenhum
+// page/handler usa Edge runtime, então essas actions rodam em Node (necessário pra bcryptjs).
+
 // Janela de validade da senha temporária. Curta o suficiente para reduzir exposição
 // se o email for comprometido; longa o suficiente para o usuário ler o email.
 const TEMP_PASSWORD_TTL_MINUTES = 60
@@ -14,6 +17,9 @@ const TEMP_PASSWORD_TTL_MINUTES = 60
 const RATE_LIMIT_SECONDS = 60
 
 const ALLOWED_CHARS = 'ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnpqrstuvwxyz23456789'
+const BCRYPT_COST = 10
+// Validação mais estrita que ".includes('@')" para evitar batidas inúteis no DB.
+const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 
 function generateTempPassword(): string {
   const bytes = new Uint8Array(12)
@@ -27,36 +33,21 @@ function generateTempPassword(): string {
 // Erros internos são logados no Sentry; usuário vê mensagem genérica.
 export async function requestPasswordReset(email: string): Promise<{ ok: true }> {
   const normalized = email.trim().toLowerCase()
-  if (!normalized || !normalized.includes('@')) return { ok: true }
+  if (!EMAIL_REGEX.test(normalized)) return { ok: true }
 
   try {
-    // Encontrar usuário pelo email — usar listUsers paginado é ruim, mas Supabase
-    // admin não expõe getByEmail. Como alternativa: query direto em auth.users via SQL,
-    // mas isso requer policy. Usamos listUsers limitado: para volume pequeno é aceitável.
-    let foundUserId: string | null = null
-    let foundName: string | null = null
-    let page = 1
-    while (true) {
-      const { data, error } = await supabaseAdmin.auth.admin.listUsers({ page, perPage: 200 })
-      if (error) throw new Error(error.message)
-      const u = data?.users.find((x) => x.email?.toLowerCase() === normalized)
-      if (u) {
-        foundUserId = u.id
-        foundName = (u.user_metadata?.name as string | undefined) ?? null
-        break
-      }
-      if (!data?.users || data.users.length < 200) break
-      page++
-      if (page > 25) break // teto defensivo (5k usuários)
-    }
+    // RPC indexed: O(1) ao invés de listUsers paginado
+    const { data: userId } = await supabaseAdmin.rpc('auth_get_user_id_by_email', {
+      p_email: normalized,
+    })
 
-    if (!foundUserId) return { ok: true }
+    if (!userId) return { ok: true }
 
-    // Rate limit: ler último request
+    // Rate limit + buscar nome para email
     const { data: profile } = await supabaseAdmin
       .from('profiles')
       .select('name, temp_password_requested_at')
-      .eq('id', foundUserId)
+      .eq('id', userId)
       .single()
 
     if (profile?.temp_password_requested_at) {
@@ -69,7 +60,7 @@ export async function requestPasswordReset(email: string): Promise<{ ok: true }>
     }
 
     const tempPassword = generateTempPassword()
-    const hash = await bcrypt.hash(tempPassword, 10)
+    const hash = await bcrypt.hash(tempPassword, BCRYPT_COST)
     const expiresAt = new Date(Date.now() + TEMP_PASSWORD_TTL_MINUTES * 60 * 1000).toISOString()
     const now = new Date().toISOString()
 
@@ -80,10 +71,10 @@ export async function requestPasswordReset(email: string): Promise<{ ok: true }>
         temp_password_expires_at: expiresAt,
         temp_password_requested_at: now,
       })
-      .eq('id', foundUserId)
+      .eq('id', userId)
     if (updateErr) throw new Error('Erro ao salvar senha temporária: ' + updateErr.message)
 
-    const displayName = (profile?.name as string | undefined) ?? foundName ?? 'aluno'
+    const displayName = (profile?.name as string | undefined) ?? 'aluno'
 
     try {
       await sendPasswordResetEmail(
@@ -93,20 +84,19 @@ export async function requestPasswordReset(email: string): Promise<{ ok: true }>
         TEMP_PASSWORD_TTL_MINUTES,
       )
     } catch (err) {
-      // Email falhou — limpa o que salvamos para evitar inconsistência (senha temp
-      // gerada mas usuário não recebeu). Próxima tentativa não bate em rate limit.
+      // Email falhou — limpa hash/expires mas MANTÉM temp_password_requested_at
+      // para que o rate limit continue valendo (impede atacante de usar falha de
+      // email como bypass para flood).
       await supabaseAdmin
         .from('profiles')
         .update({
           temp_password_hash: null,
           temp_password_expires_at: null,
-          temp_password_requested_at: null,
         })
-        .eq('id', foundUserId)
+        .eq('id', userId)
       Sentry.captureException(err, {
         extra: { email: normalized, step: 'requestPasswordReset.email' },
       })
-      // Mantém resposta ok pra não vazar info; usuário pode tentar de novo
     }
 
     return { ok: true }
@@ -119,46 +109,32 @@ export async function requestPasswordReset(email: string): Promise<{ ok: true }>
 }
 
 // Verifica se a senha informada bate com a senha temporária válida.
-// Se bater: promove a senha temp a senha real, marca has_set_password=false
-// (middleware vai forçar redefinir), limpa os campos temp e retorna true.
-// Senão (não bate, expirou, ou usuário não existe): retorna false.
+// Se bater: marca has_set_password=false PRIMEIRO (força middleware a redirecionar),
+// promove a senha temp a senha real, depois limpa os campos temp.
+// Ordem importa: se updateUserById falhar, has_set_password ainda força redefinir.
 // LoginForm chama isso como fallback quando signInWithPassword falha.
 export async function redeemTempPassword(
   email: string,
   password: string,
 ): Promise<{ success: boolean }> {
   const normalized = email.trim().toLowerCase()
-  if (!normalized || !password) return { success: false }
+  if (!EMAIL_REGEX.test(normalized) || !password) return { success: false }
 
   try {
-    let foundUserId: string | null = null
-    let page = 1
-    while (true) {
-      const { data, error } = await supabaseAdmin.auth.admin.listUsers({ page, perPage: 200 })
-      if (error) return { success: false }
-      const u = data?.users.find((x) => x.email?.toLowerCase() === normalized)
-      if (u) {
-        foundUserId = u.id
-        break
-      }
-      if (!data?.users || data.users.length < 200) break
-      page++
-      if (page > 25) break
-    }
+    // RPC retorna user_id + hash em uma query indexed.
+    // Se não há reset pendente para esse email, retorna array vazio (rápido).
+    const { data, error } = await supabaseAdmin.rpc(
+      'auth_get_user_with_temp_password_by_email',
+      { p_email: normalized },
+    )
+    if (error) return { success: false }
 
-    if (!foundUserId) return { success: false }
-
-    const { data: profile } = await supabaseAdmin
-      .from('profiles')
-      .select('temp_password_hash, temp_password_expires_at')
-      .eq('id', foundUserId)
-      .single()
-
-    if (!profile?.temp_password_hash || !profile.temp_password_expires_at) {
+    const row = Array.isArray(data) && data.length > 0 ? data[0] : null
+    if (!row?.user_id || !row.temp_hash || !row.temp_expires_at) {
       return { success: false }
     }
 
-    const expired = new Date(profile.temp_password_expires_at).getTime() < Date.now()
+    const expired = new Date(row.temp_expires_at).getTime() < Date.now()
     if (expired) {
       // Limpa oportunisticamente
       await supabaseAdmin
@@ -167,35 +143,51 @@ export async function redeemTempPassword(
           temp_password_hash: null,
           temp_password_expires_at: null,
         })
-        .eq('id', foundUserId)
+        .eq('id', row.user_id)
       return { success: false }
     }
 
-    const matches = await bcrypt.compare(password, profile.temp_password_hash)
+    const matches = await bcrypt.compare(password, row.temp_hash)
     if (!matches) return { success: false }
 
-    // Match — promove senha temp a senha real
-    const { error: updErr } = await supabaseAdmin.auth.admin.updateUserById(foundUserId, {
+    // Match! Marca has_set_password=false PRIMEIRO. Se isso falhar, abortar
+    // (não promover a senha) — evita estado em que senha foi trocada mas
+    // middleware não obriga redefinir.
+    const { error: profileFlagErr } = await supabaseAdmin
+      .from('profiles')
+      .update({ has_set_password: false })
+      .eq('id', row.user_id)
+    if (profileFlagErr) {
+      Sentry.captureException(new Error('redeemTempPassword: profile flag failed: ' + profileFlagErr.message))
+      return { success: false }
+    }
+
+    // Promove a senha temp a senha real
+    const { error: updErr } = await supabaseAdmin.auth.admin.updateUserById(row.user_id, {
       password,
     })
     if (updErr) {
+      // Rollback do flag — senha real não foi trocada, então não tem sentido forçar redefinir
+      await supabaseAdmin
+        .from('profiles')
+        .update({ has_set_password: true })
+        .eq('id', row.user_id)
+        .then(() => undefined, () => undefined)
       Sentry.captureException(new Error('redeemTempPassword: updateUserById failed: ' + updErr.message))
       return { success: false }
     }
 
-    // Limpa senha temp e marca has_set_password=false para forçar redefinição
-    const { error: profileErr } = await supabaseAdmin
+    // Sucesso total — limpa os campos temp. Se essa última operação falhar, OK:
+    // senha foi trocada, has_set_password=false vai forçar redefinir e a próxima
+    // tentativa de reset vai sobrescrever os campos temp órfãos.
+    await supabaseAdmin
       .from('profiles')
       .update({
         temp_password_hash: null,
         temp_password_expires_at: null,
-        has_set_password: false,
       })
-      .eq('id', foundUserId)
-    if (profileErr) {
-      Sentry.captureException(new Error('redeemTempPassword: profile update failed: ' + profileErr.message))
-      // Senha já foi promovida — segue mesmo assim, mas registra
-    }
+      .eq('id', row.user_id)
+      .then(() => undefined, () => undefined)
 
     return { success: true }
   } catch (err) {
