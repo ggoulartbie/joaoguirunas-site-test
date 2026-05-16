@@ -6,6 +6,7 @@ import { supabaseAdmin } from '@/lib/supabase/admin'
 import { requireUser } from '@/lib/auth/helpers'
 import { createClient } from '@/lib/supabase/server'
 import { sanitizeHtml } from '@/lib/content'
+import type { CommentWithAuthor } from '@/types/student'
 
 const EDIT_WINDOW_MS = 15 * 60 * 1000
 
@@ -13,7 +14,7 @@ export async function addComment(
   lessonId: string,
   content: string,
   parentCommentId?: string
-): Promise<{ success: boolean; error?: string }> {
+): Promise<{ success: boolean; error?: string; comment?: CommentWithAuthor }> {
   const parsed = z.object({
     lessonId: z.string().uuid(),
     content: z.string().min(1).max(4000),
@@ -31,17 +32,45 @@ export async function addComment(
   })
   if (!access) return { success: false, error: 'Acesso negado a esta aula' }
 
-  const { error } = await supabaseAdmin.from('comments').insert({
-    lesson_id: parsed.data.lessonId,
-    author_id: user.id,
-    content: sanitizeHtml(parsed.data.content),
-    parent_comment_id: parsed.data.parentCommentId ?? null,
-  })
+  const { data: inserted, error: insertError } = await supabaseAdmin
+    .from('comments')
+    .insert({
+      lesson_id: parsed.data.lessonId,
+      author_id: user.id,
+      content: sanitizeHtml(parsed.data.content),
+      parent_comment_id: parsed.data.parentCommentId ?? null,
+    })
+    .select('id')
+    .single()
 
-  if (error) return { success: false, error: 'Erro ao publicar comentário' }
+  if (insertError || !inserted) return { success: false, error: 'Erro ao publicar comentário' }
+
+  const { data: row, error: selectError } = await supabaseAdmin
+    .from('comments')
+    .select('id, lesson_id, content, created_at, updated_at, deleted_at, is_pinned, parent_comment_id, author_id, profiles(name, role)')
+    .eq('id', inserted.id)
+    .single()
+
+  if (selectError || !row || !row.profiles) return { success: false, error: 'Erro ao publicar comentário' }
+
+  const profile = Array.isArray(row.profiles) ? row.profiles[0] : row.profiles
+
+  const comment: CommentWithAuthor = {
+    id: row.id,
+    lesson_id: row.lesson_id,
+    content: row.content,
+    created_at: row.created_at,
+    updated_at: row.updated_at,
+    deleted_at: row.deleted_at,
+    is_pinned: row.is_pinned,
+    parent_comment_id: row.parent_comment_id,
+    authorId: row.author_id,
+    authorName: profile.name,
+    authorRole: profile.role,
+  }
 
   revalidatePath('/', 'layout')
-  return { success: true }
+  return { success: true, comment }
 }
 
 export async function editComment(
