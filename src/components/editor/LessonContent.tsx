@@ -149,7 +149,7 @@ export function LessonContent({ content, className }: LessonContentProps) {
   // HTML — sanitized server-side via sanitizeHtml() before reaching this point
   return (
     <div
-      className={`space-y-4 ${className ?? ''}`}
+      className={`lesson-html ${className ?? ''}`}
       dangerouslySetInnerHTML={{ __html: content.html }}
     />
   )
