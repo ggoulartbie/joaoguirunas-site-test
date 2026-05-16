@@ -2,6 +2,7 @@
 
 import ReactMarkdown from 'react-markdown'
 import rehypeRaw from 'rehype-raw'
+import remarkGfm from 'remark-gfm'
 import { MDXRemote } from 'next-mdx-remote'
 import { Callout } from './Callout'
 import { CodeBlock } from './CodeBlock'
@@ -84,10 +85,26 @@ const markdownComponents: React.ComponentProps<typeof ReactMarkdown>['components
     </figure>
   ),
   a: ({ href, children }) => (
-    <a href={href} target="_blank" rel="noopener noreferrer">
+    <a
+      href={href}
+      target="_blank"
+      rel="noopener noreferrer"
+      className="underline"
+      style={{ color: 'var(--ember)' }}
+    >
       {children}
     </a>
   ),
+  del: ({ children }) => (
+    <del style={{ color: 'var(--bone-mute)' }}>{children}</del>
+  ),
+  mark: ({ children }) => (
+    <mark style={{ background: 'var(--ember)', color: 'var(--void)', padding: '0 0.25rem' }}>
+      {children}
+    </mark>
+  ),
+  sup: ({ children }) => <sup style={{ fontSize: '0.75em' }}>{children}</sup>,
+  sub: ({ children }) => <sub style={{ fontSize: '0.75em' }}>{children}</sub>,
   pre: ({ children }) => <>{children}</>,
   code: ({ className: cls, children }) => {
     if (cls?.startsWith('language-')) {
@@ -137,6 +154,7 @@ export function LessonContent({ content, className }: LessonContentProps) {
       <div className={`space-y-4 ${className ?? ''}`}>
         <ReactMarkdown
           components={markdownComponents}
+          remarkPlugins={[remarkGfm]}
           rehypePlugins={[rehypeRaw]}
           remarkRehypeOptions={{ allowDangerousHtml: true }}
         >

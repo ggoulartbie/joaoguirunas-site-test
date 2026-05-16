@@ -5,6 +5,7 @@ const ALLOWED_TAGS = [
   'h1', 'h2', 'h3', 'h4', 'h5', 'h6',
   'p', 'br', 'hr',
   'strong', 'em', 'u', 's', 'b', 'i',
+  'sup', 'sub', 'q', 'mark', 'abbr', 'cite', 'del', 'ins', 'kbd', 'small',
   'ul', 'ol', 'li',
   'blockquote', 'pre', 'code',
   'a', 'img',
@@ -18,6 +19,7 @@ const ALLOWED_ATTR = [
   'href', 'src', 'alt', 'title', 'class', 'id',
   'target', 'rel', 'width', 'height',
   'colspan', 'rowspan', 'scope',
+  'cite', 'datetime',
   'data-language',
 ]
 
