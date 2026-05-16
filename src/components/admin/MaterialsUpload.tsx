@@ -1,6 +1,6 @@
 'use client'
 
-import { useRef, useState } from 'react'
+import { useRef, useState, useEffect } from 'react'
 import {
   uploadMaterialAction,
   addLinkMaterialAction,
@@ -26,15 +26,26 @@ interface MaterialsUploadProps {
   materials: Material[]
 }
 
-export function MaterialsUpload({ lessonId, materials }: MaterialsUploadProps) {
+export function MaterialsUpload({ lessonId, materials: initialMaterials }: MaterialsUploadProps) {
   const fileInputRef = useRef<HTMLInputElement>(null)
+  const cancelBtnRef = useRef<HTMLButtonElement>(null)
+  const [materials, setMaterials] = useState(initialMaterials)
   const [uploading, setUploading] = useState(false)
   const [deleting, setDeleting] = useState<string | null>(null)
+  const [confirming, setConfirming] = useState<string | null>(null)
+  const [confirmError, setConfirmError] = useState<string | null>(null)
   const [error, setError] = useState<string | null>(null)
   const [linkMode, setLinkMode] = useState(false)
   const [linkTitle, setLinkTitle] = useState('')
   const [linkUrl, setLinkUrl] = useState('')
   const [dragging, setDragging] = useState(false)
+
+  // move foco para o botão Cancelar ao abrir painel de confirmação
+  useEffect(() => {
+    if (confirming && cancelBtnRef.current) {
+      cancelBtnRef.current.focus()
+    }
+  }, [confirming])
 
   async function handleFiles(files: FileList | null) {
     if (!files || files.length === 0) return
@@ -78,13 +89,29 @@ export function MaterialsUpload({ lessonId, materials }: MaterialsUploadProps) {
     }
   }
 
+  function openConfirm(materialId: string) {
+    setConfirming(materialId)
+    setConfirmError(null)
+  }
+
+  function closeConfirm() {
+    setConfirming(null)
+    setConfirmError(null)
+  }
+
   async function handleDelete(materialId: string) {
+    const snapshot = materials.find((m) => m.id === materialId)
+    setMaterials((prev) => prev.filter((m) => m.id !== materialId))
     setDeleting(materialId)
-    setError(null)
+    setConfirmError(null)
+
     try {
       await deleteMaterialAction(materialId)
+      setConfirming(null)
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Erro ao deletar')
+      // rollback otimista
+      if (snapshot) setMaterials((prev) => [...prev, snapshot])
+      setConfirmError(err instanceof Error ? err.message : 'Erro ao excluir. Tente novamente.')
     } finally {
       setDeleting(null)
     }
@@ -95,29 +122,77 @@ export function MaterialsUpload({ lessonId, materials }: MaterialsUploadProps) {
       {/* lista de materials existentes */}
       {materials.length > 0 && (
         <ul className="space-y-1.5">
-          {materials.map((m) => (
-            <li
-              key={m.id}
-              className="flex items-center gap-3 border border-[var(--hairline)] bg-[var(--ink-2)] px-4 py-2.5"
-            >
-              <span className="font-mono text-[10px] uppercase tracking-widest text-[var(--bone-mute)]">
-                {KIND_LABELS[m.kind]}
-              </span>
-              <span className="min-w-0 flex-1 truncate font-sans text-sm text-[var(--bone-dim)]">{m.title}</span>
-              {m.size_bytes && (
-                <span className="shrink-0 font-mono text-[10px] text-[var(--bone-mute)]">
-                  {(m.size_bytes / (1024 * 1024)).toFixed(1)} MB
-                </span>
-              )}
-              <button
-                onClick={() => handleDelete(m.id)}
-                disabled={deleting === m.id}
-                className="shrink-0 font-mono text-[10px] uppercase tracking-wider text-[var(--ember)] opacity-60 transition-opacity hover:opacity-100 disabled:opacity-30"
-              >
-                {deleting === m.id ? '...' : 'Remover'}
-              </button>
-            </li>
-          ))}
+          {materials.map((m) => {
+            const isConfirming = confirming === m.id
+            const isDeleting = deleting === m.id
+
+            return (
+              <li key={m.id}>
+                <div
+                  className={`flex items-center gap-3 border border-[var(--hairline)] bg-[var(--ink-2)] px-4 py-2.5 transition-opacity ${isDeleting ? 'opacity-50' : ''}`}
+                >
+                  <span className="font-mono text-[10px] uppercase tracking-widest text-[var(--bone-mute)]">
+                    {KIND_LABELS[m.kind]}
+                  </span>
+                  <span className="min-w-0 flex-1 truncate font-sans text-sm text-[var(--bone-dim)]">{m.title}</span>
+                  {m.size_bytes && (
+                    <span className="shrink-0 font-mono text-[10px] text-[var(--bone-mute)]">
+                      {(m.size_bytes / (1024 * 1024)).toFixed(1)} MB
+                    </span>
+                  )}
+                  {!isConfirming && (
+                    <button
+                      onClick={() => openConfirm(m.id)}
+                      disabled={isDeleting || deleting !== null}
+                      aria-label={`Remover ${m.title}`}
+                      className="shrink-0 font-mono text-[10px] uppercase tracking-wider text-[var(--ember)] opacity-60 transition-opacity hover:opacity-100 disabled:opacity-30"
+                    >
+                      Remover
+                    </button>
+                  )}
+                </div>
+
+                {isConfirming && (
+                  <div
+                    role="alert"
+                    className="border border-t-0 border-[var(--hairline)] bg-[var(--ink-2)] px-4 py-3"
+                  >
+                    <p className="font-sans text-sm text-[var(--bone)]">
+                      Excluir &ldquo;{m.title}&rdquo;?
+                    </p>
+                    <p className="mt-0.5 font-mono text-[10px] text-[var(--bone-mute)]">
+                      Esta ação não pode ser desfeita.
+                    </p>
+
+                    {confirmError && (
+                      <p className="mt-2 bg-[var(--ember)]/10 px-3 py-1.5 font-mono text-[11px] text-[var(--ember)]">
+                        {confirmError}
+                      </p>
+                    )}
+
+                    <div className="mt-3 flex items-center gap-3">
+                      <button
+                        ref={cancelBtnRef}
+                        onClick={closeConfirm}
+                        disabled={isDeleting}
+                        className="font-mono text-[10px] uppercase tracking-wider text-[var(--bone-mute)] transition-colors hover:text-[var(--bone-dim)] disabled:opacity-40"
+                      >
+                        Cancelar
+                      </button>
+                      <button
+                        onClick={() => handleDelete(m.id)}
+                        disabled={isDeleting}
+                        className="bg-[var(--ember)] px-4 py-1.5 font-mono text-[10px] uppercase tracking-widest text-[var(--void)] transition-opacity hover:opacity-90 disabled:opacity-40"
+                        style={{ borderRadius: 0 }}
+                      >
+                        {isDeleting ? '...' : 'Excluir'}
+                      </button>
+                    </div>
+                  </div>
+                )}
+              </li>
+            )
+          })}
         </ul>
       )}
 
