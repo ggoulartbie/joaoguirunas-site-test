@@ -47,6 +47,10 @@ export default async function AulaPage({ params }: Props) {
       description,
       content,
       content_format,
+      summary,
+      summary_format,
+      transcript,
+      transcript_format,
       video_id,
       video_provider,
       kind,
@@ -268,6 +272,14 @@ export default async function AulaPage({ params }: Props) {
         ? await renderContent('MARKDOWN', lesson.description)
         : null
 
+  const renderedSummary = lesson.summary && lesson.summary_format
+    ? await renderContent(lesson.summary_format as 'MDX' | 'HTML' | 'MARKDOWN', lesson.summary)
+    : null
+
+  const renderedTranscript = lesson.transcript && lesson.transcript_format
+    ? await renderContent(lesson.transcript_format as 'MDX' | 'HTML' | 'MARKDOWN', lesson.transcript)
+    : null
+
   // Fetch comments
   const { data: rawComments } = await supabaseAdmin
     .from('comments')
@@ -412,13 +424,15 @@ export default async function AulaPage({ params }: Props) {
             </div>
           </div>
 
-          {/* Tabs: Sobre, Materiais, Comentarios */}
+          {/* Tabs: Sobre, Resumo, Transcrição, Materiais, Comentários */}
           <LessonTabs
             courseSlug={slug}
             lessonSlug={lessonSlug}
             activeTab="sobre"
             description={lesson.description ?? ''}
             descriptionContent={renderedContent}
+            summaryContent={renderedSummary}
+            transcriptContent={renderedTranscript}
             materials={materials}
             comments={comments}
             lessonId={lesson.id}

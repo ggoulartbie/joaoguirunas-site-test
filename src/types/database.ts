@@ -733,7 +733,11 @@ export type Database = {
           module_id: string
           slug: string
           sort_order: number
+          summary: string | null
+          summary_format: string | null
           title: string
+          transcript: string | null
+          transcript_format: string | null
           updated_at: string
           video_id: string | null
           video_provider: string | null
@@ -750,7 +754,11 @@ export type Database = {
           module_id: string
           slug: string
           sort_order: number
+          summary?: string | null
+          summary_format?: string | null
           title: string
+          transcript?: string | null
+          transcript_format?: string | null
           updated_at?: string
           video_id?: string | null
           video_provider?: string | null
@@ -767,7 +775,11 @@ export type Database = {
           module_id?: string
           slug?: string
           sort_order?: number
+          summary?: string | null
+          summary_format?: string | null
           title?: string
+          transcript?: string | null
+          transcript_format?: string | null
           updated_at?: string
           video_id?: string | null
           video_provider?: string | null
