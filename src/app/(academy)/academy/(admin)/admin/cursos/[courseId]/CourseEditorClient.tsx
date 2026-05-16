@@ -73,6 +73,7 @@ function SortableLesson({
     >
       <button
         type="button"
+        suppressHydrationWarning
         {...attributes}
         {...listeners}
         className="cursor-grab text-[var(--bone-mute)] opacity-30 transition-opacity hover:opacity-80 active:cursor-grabbing"
@@ -176,6 +177,7 @@ function SortableModule({
       <div className="flex items-center gap-2 px-4 py-3">
         <button
           type="button"
+          suppressHydrationWarning
           {...attributes}
           {...listeners}
           className="cursor-grab text-[var(--bone-mute)] opacity-50 transition-opacity hover:opacity-100 active:cursor-grabbing"

@@ -1,6 +1,7 @@
 'use client'
 
 import ReactMarkdown from 'react-markdown'
+import rehypeRaw from 'rehype-raw'
 import { MDXRemote } from 'next-mdx-remote'
 import { Callout } from './Callout'
 import { CodeBlock } from './CodeBlock'
@@ -134,7 +135,11 @@ export function LessonContent({ content, className }: LessonContentProps) {
   if (content.format === 'MARKDOWN') {
     return (
       <div className={`space-y-4 ${className ?? ''}`}>
-        <ReactMarkdown components={markdownComponents}>
+        <ReactMarkdown
+          components={markdownComponents}
+          rehypePlugins={[rehypeRaw]}
+          remarkRehypeOptions={{ allowDangerousHtml: true }}
+        >
           {content.raw}
         </ReactMarkdown>
       </div>

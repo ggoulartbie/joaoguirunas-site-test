@@ -44,55 +44,6 @@ const textareaClass =
 const sectionClass =
   'border border-[rgba(255,255,255,0.07)] bg-[var(--ink)] p-6 space-y-4'
 
-// Subcomponente reutilizável: campo markdown com toggle Editar/Visualizar
-function MarkdownField({
-  label,
-  value,
-  onChange,
-  placeholder,
-  rows = 6,
-}: {
-  label: string
-  value: string
-  onChange: (v: string) => void
-  placeholder?: string
-  rows?: number
-}) {
-  const [previewMode, setPreviewMode] = useState(false)
-
-  return (
-    <div className="space-y-1.5">
-      <div className="flex items-center justify-between">
-        <label className="font-mono text-[10px] uppercase tracking-widest text-[var(--bone-mute)]">{label}</label>
-        {value && (
-          <button
-            type="button"
-            aria-pressed={previewMode}
-            onClick={() => setPreviewMode((p) => !p)}
-            className="flex items-center gap-1.5 font-mono text-[10px] text-[var(--bone-mute)] transition-colors hover:text-[var(--bone-dim)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ember)]"
-          >
-            <Eye className="h-3 w-3" />
-            {previewMode ? 'Editar' : 'Visualizar'}
-          </button>
-        )}
-      </div>
-      {previewMode ? (
-        <div className="border border-[rgba(255,255,255,0.07)] bg-[var(--void)] px-3 py-2" style={{ borderRadius: 0 }}>
-          <LessonContent content={{ format: 'MARKDOWN', raw: value }} className="" />
-        </div>
-      ) : (
-        <textarea
-          value={value}
-          onChange={(e) => onChange(e.target.value)}
-          placeholder={placeholder}
-          rows={rows}
-          className={textareaClass}
-          style={{ borderRadius: 0 }}
-        />
-      )}
-    </div>
-  )
-}
 
 export function LessonEditorClient({
   lesson,
@@ -114,7 +65,11 @@ export function LessonEditorClient({
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const lessonAny = lesson as any
   const [summary, setSummary] = useState<string>(lessonAny.summary ?? '')
+  const [summaryFormat, setSummaryFormat] = useState<ContentFormat>((lessonAny.summary_format as ContentFormat) ?? 'MARKDOWN')
+  const [summaryPreview, setSummaryPreview] = useState(false)
   const [transcript, setTranscript] = useState<string>(lessonAny.transcript ?? '')
+  const [transcriptFormat, setTranscriptFormat] = useState<ContentFormat>((lessonAny.transcript_format as ContentFormat) ?? 'MARKDOWN')
+  const [transcriptPreview, setTranscriptPreview] = useState(false)
   const [kind, setKind] = useState<LessonKind>((lesson.kind as LessonKind) ?? 'VIDEO')
   const [videoProvider, setVideoProvider] = useState(lesson.video_provider ?? 'VIMEO')
   const [videoId, setVideoId] = useState(lesson.video_id ?? '')
@@ -163,9 +118,9 @@ export function LessonEditorClient({
           title,
           description: description || null,
           summary: summary || null,
-          summary_format: summary ? 'MARKDOWN' : null,
+          summary_format: summary ? summaryFormat : null,
           transcript: transcript || null,
-          transcript_format: transcript ? 'MARKDOWN' : null,
+          transcript_format: transcript ? transcriptFormat : null,
           kind,
           video_provider: hasVideo ? videoProvider : null,
           video_id: hasVideo && videoId ? videoId : null,
@@ -368,14 +323,39 @@ export function LessonEditorClient({
 
         {/* Resumo */}
         <section className={sectionClass} style={{ borderRadius: 0 }}>
-          <p className="font-mono text-[10px] uppercase tracking-widest text-[var(--bone-mute)]">Resumo</p>
-          <MarkdownField
-            label="Resumo da aula"
-            value={summary}
-            onChange={setSummary}
-            placeholder="Resumo em markdown — aparece na aba Resumo para o aluno..."
-            rows={6}
-          />
+          <div className="flex items-center justify-between">
+            <p className="font-mono text-[10px] uppercase tracking-widest text-[var(--bone-mute)]">Resumo</p>
+            {summary && (
+              <button
+                type="button"
+                aria-pressed={summaryPreview}
+                onClick={() => setSummaryPreview((p) => !p)}
+                className="flex items-center gap-1.5 font-mono text-[10px] text-[var(--bone-mute)] transition-colors hover:text-[var(--bone-dim)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ember)]"
+              >
+                <Eye className="h-3 w-3" />
+                {summaryPreview ? 'Fechar preview' : 'Preview como aluno'}
+              </button>
+            )}
+          </div>
+          {summaryPreview ? (
+            <div className="border border-[rgba(255,255,255,0.07)] bg-[var(--void)] p-4" style={{ borderRadius: 0 }}>
+              {summaryFormat === 'MDX' ? (
+                <p className="font-mono text-[10px] text-[var(--bone-mute)]">Preview MDX indisponível — salve e visualize como aluno.</p>
+              ) : (
+                <LessonContent
+                  content={summaryFormat === 'HTML' ? { format: 'HTML', html: summary } : { format: 'MARKDOWN', raw: summary }}
+                  className=""
+                />
+              )}
+            </div>
+          ) : (
+            <ContentEditor
+              format={summaryFormat}
+              content={summary}
+              onFormatChange={setSummaryFormat}
+              onContentChange={setSummary}
+            />
+          )}
         </section>
 
         {/* Content editor */}
@@ -420,14 +400,39 @@ export function LessonEditorClient({
 
         {/* Transcrição */}
         <section className={sectionClass} style={{ borderRadius: 0 }}>
-          <p className="font-mono text-[10px] uppercase tracking-widest text-[var(--bone-mute)]">Transcrição</p>
-          <MarkdownField
-            label="Transcrição do vídeo"
-            value={transcript}
-            onChange={setTranscript}
-            placeholder="Transcrição em markdown — aparece na aba Transcrição para o aluno..."
-            rows={12}
-          />
+          <div className="flex items-center justify-between">
+            <p className="font-mono text-[10px] uppercase tracking-widest text-[var(--bone-mute)]">Transcrição</p>
+            {transcript && (
+              <button
+                type="button"
+                aria-pressed={transcriptPreview}
+                onClick={() => setTranscriptPreview((p) => !p)}
+                className="flex items-center gap-1.5 font-mono text-[10px] text-[var(--bone-mute)] transition-colors hover:text-[var(--bone-dim)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ember)]"
+              >
+                <Eye className="h-3 w-3" />
+                {transcriptPreview ? 'Fechar preview' : 'Preview como aluno'}
+              </button>
+            )}
+          </div>
+          {transcriptPreview ? (
+            <div className="border border-[rgba(255,255,255,0.07)] bg-[var(--void)] p-4" style={{ borderRadius: 0 }}>
+              {transcriptFormat === 'MDX' ? (
+                <p className="font-mono text-[10px] text-[var(--bone-mute)]">Preview MDX indisponível — salve e visualize como aluno.</p>
+              ) : (
+                <LessonContent
+                  content={transcriptFormat === 'HTML' ? { format: 'HTML', html: transcript } : { format: 'MARKDOWN', raw: transcript }}
+                  className=""
+                />
+              )}
+            </div>
+          ) : (
+            <ContentEditor
+              format={transcriptFormat}
+              content={transcript}
+              onFormatChange={setTranscriptFormat}
+              onContentChange={setTranscript}
+            />
+          )}
         </section>
 
         {/* Materials */}

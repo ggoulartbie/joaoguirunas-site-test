@@ -51,6 +51,9 @@ MOC raiz. Todo arquivo novo em `docs/smart-memory/` deve ser referenciado aqui.
 - [[agents/qa/verdict-stories-2.1-2.2]] — veredicto formal Stories 2.1 (PASS) + 2.2 (CONCERNS) — 2026-05-16
 - [[agents/qa/verdict-story-2.3]] — veredicto formal Story 2.3 (PASS) preview markdown/HTML/MDX admin — 2026-05-16
 - [[agents/qa/verdict-epic-aulas-v2]] — veredicto formal Epic Aulas v2 (PASS, 3 concerns leves) AV-3.1 a AV-3.6 — 2026-05-16
+- [[agents/qa/server-perf-qa-criteria]] — critérios de aceite + smoke checklist para epic de estabilização do servidor (dynamic imports, resiliência, backend) — 2026-05-16
+- [[agents/qa/server-perf-verdict-diagnosis]] — veredicto CONCERNS fase de diagnóstico (5 fixes bloqueantes Tier 1, 5 paralelos Tier 2, 7 follow-ups Tier 3) — 2026-05-16
+- [[agents/qa/server-restart-verdict]] — veredicto CONCERNS `dev:restart` (script PASS no escopo; concerns P1 fora do escopo: heap size + `pnpm-workspace.yaml`) — 2026-05-16
 - [[agents/ux/components]] — specs de componentes
 - [[agents/ux/design-recommendations]] — recomendações P0/P1/P2 (accent, dead code, a11y)
 - [[agents/ux/curso-online-agents-redesign]] — spec redesign seção agentes /curso-online (cards 110px, sem blur, sem link, min-h 80vh)
@@ -61,6 +64,7 @@ MOC raiz. Todo arquivo novo em `docs/smart-memory/` deve ser referenciado aqui.
 - [[agents/research/api-admin-inventory]] — inventário e audit das APIs em /api/admin/ — 2026-05-07
 - [[agents/research/student-bug-hunt]] — bug hunt + a11y sweep área do aluno (14 bugs: 1 P0, 5 P1) — 2026-05-09
 - [[agents/data/audit-database]] — auditoria schema + RLS + bugs fluxo /curso-online — 2026-05-08
+- [[agents/research/server-crash-analysis]] — causa raiz queda dev server: processo duplicado (EADDRINUSE) vs. crash real (OOM) — recomendações restart — 2026-05-16
 
 ## Status
 - [[shared-context]] — status board em tempo real

@@ -11,6 +11,27 @@ Histórico de veredictos emitidos pelo sites-qa (Axilun).
 
 ---
 
+## 2026-05-16 — Epic Estabilização do Servidor — Fase Diagnóstico — ⚠️ CONCERNS
+
+> Veredicto detalhado em [[server-perf-verdict-diagnosis]]. Critérios em [[server-perf-qa-criteria]].
+> Branch alvo: `feat-aulas-v2` (sugerido isolar em nova branch `fix-server-perf-stabilization`).
+
+**Escopo:** Avaliar 4 relatórios de diagnóstico (analyst, dev-alpha, dev-delta, dev-beta) e priorizar fixes.
+
+**Resultado:** CONCERNS — diagnóstico aceito para iniciar fase de fixes. Cobertura cruzada compensa imprecisões pontuais. 3 concerns documentados sem bloquear progresso:
+- Relatório dev-alpha afirma incorretamente que `@splinetool` não é usado — Spline existe em 2 arquivos (cross-check feito). Não remover dependência.
+- Framing "TODA request" do middleware (dev-beta) é impreciso — matcher é positivo, não toca rotas institucionais. Issue real (query de profiles) continua válida.
+- "Three.js sem dispose()" (dev-delta A5) é P1 client-side, não P0 do epic de estabilização do servidor.
+
+**Plano priorizado emitido:**
+- Tier 1 (BLOQUEANTES, ordem): AnimatedHero dynamic + tsParticles config / SplineScene React.lazy → next/dynamic + ErrorBoundary / `renderToBuffer` timeout+try-catch / `revalidatePath('/', 'layout')` → path específico / `pnpm-workspace.yaml` strings → booleanos.
+- Tier 2 (PARALELOS): error.tsx em 5 segmentos críticos / cache de role+has_set_password fora do middleware / Sentry sample rates / Font.register morto / select de colunas específicas.
+- Tier 3 (DEPOIS): TipTap dynamic, batch crons, dispose Three.js, Suspense splitting texturas, `auth.admin.listUsers` lazy, cache PDF certificado.
+
+**Próximo veredicto:** após Tier 1 (idealmente Tier 2) entregue, smoke completo contra `server-perf-qa-criteria.md` §6 + matriz §7.
+
+---
+
 ## 2026-05-16 — Epic Aulas v2 (6 stories AV-3.1 a AV-3.6) — ✅ PASS (3 concerns leves)
 
 > Veredicto detalhado em [[verdict-epic-aulas-v2]]. Branch `feat-aulas-v2`.
@@ -2326,4 +2347,34 @@ Lead esclareceu/corrigiu os concerns:
 ### Veredicto consolidado: ✅ PASS
 
 F12.1 + F12.2 + F12.3 — **PASS**. 10/10 ACs originais atendidos, fluxo dual-provider coerente (auth + email-driven), typecheck limpo. Liberado para @sites-devops push.
+
+---
+
+## 2026-05-16 — `dev:restart` (team `joaoguirunas-academy-investigar-servidor-restart`)
+
+**Documento completo:** [[server-restart-verdict]]
+
+### Veredicto: ⚠️ CONCERNS — Liberado para push
+
+**Escopo auditado:** Script `"dev:restart": "fuser -k 3000/tcp 2>/dev/null; pnpm dev"` em `package.json:7`.
+
+### Checklist (4/4 PASS no escopo)
+- ✅ Funciona com porta livre — `fuser` retorna exit 1, `;` permite `pnpm dev` continuar (testado em `/tmp`)
+- ✅ Funciona com porta ocupada — testado com `nc -l 127.0.0.1 3000`, processo morto e porta liberada
+- ✅ Sem side-effects — `fuser -k 3000/tcp` mira só a porta 3000
+- ✅ `pnpm-workspace.yaml` não foi tocado neste sprint
+
+### Análise dos pontos extras do lead
+- **`;` vs `&&`:** `;` está correto — `&&` quebraria o fluxo (fuser retorna exit 1 com porta livre)
+- **`NODE_OPTIONS='--max-old-space-size=4096'` no `dev`:** recomendado P1, story separada
+- **`pnpm-workspace.yaml` com `true` sem aspas:** YAML aceita, mas a chave `allowBuilds` não é canônica do pnpm v10/11 — `node_modules/sharp/build/Release/sharp-linux-x64.node` confirmadamente ausente. Pré-existente, story separada.
+
+### Concerns
+- [C-001 P1] script `dev` sem heap size aumentado — story dedicada
+- [C-002 P1 pré-existente] `pnpm-workspace.yaml` com chave inválida `allowBuilds` (canônico: `onlyBuiltDependencies` em formato lista)
+- [C-003 P2] porta hardcoded em 3000 — quebra silenciosamente com `PORT` customizado
+
+### Próximo passo
+- @sites-devops: push do `package.json` + `server-crash-analysis.md` liberado
+- Abrir stories para C-001 e C-002
 

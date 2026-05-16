@@ -1,4 +1,4 @@
-import type { Database } from './database'
+import type { Database } from '../src/types/database'
 
 type Tables = Database['public']['Tables']
 

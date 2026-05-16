@@ -37,7 +37,7 @@ export async function setReaction(lessonId: string, reaction: Reaction | null): 
     if (error) throw new Error('Erro ao registrar reação')
   }
 
-  revalidatePath('/', 'layout')
+  revalidatePath('/academy', 'layout')
 }
 
 export async function getLessonReactionStats(

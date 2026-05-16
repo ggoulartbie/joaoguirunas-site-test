@@ -49,10 +49,20 @@ export async function GET(_req: NextRequest, { params }: Params) {
     appUrl: process.env.NEXT_PUBLIC_APP_URL ?? 'https://joaoguirunas.com',
   }
 
-  // renderToBuffer espera ReactElement com Document como root — CertificatePDF já wrappa Document
   const element = React.createElement(CertificatePDF, certData)
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const buffer = await renderToBuffer(element as any)
+
+  let buffer: Buffer
+  try {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    buffer = await Promise.race([
+      renderToBuffer(element as any),
+      new Promise<never>((_, reject) =>
+        setTimeout(() => reject(new Error('PDF generation timeout')), 10_000)
+      ),
+    ])
+  } catch {
+    return NextResponse.json({ error: 'Erro ao gerar certificado' }, { status: 500 })
+  }
 
   return new NextResponse(new Uint8Array(buffer), {
     status: 200,

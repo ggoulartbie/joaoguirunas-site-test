@@ -14,7 +14,7 @@ export async function markNotificationRead(id: string): Promise<void> {
     .eq('id', id)
     .eq('user_id', user.id)
 
-  revalidatePath('/', 'layout')
+  revalidatePath('/academy', 'layout')
 }
 
 export async function markAllNotificationsRead(): Promise<void> {
@@ -27,7 +27,7 @@ export async function markAllNotificationsRead(): Promise<void> {
     .eq('user_id', user.id)
     .is('read_at', null)
 
-  revalidatePath('/', 'layout')
+  revalidatePath('/academy', 'layout')
 }
 
 export async function completeOnboarding(name: string, bio: string): Promise<void> {
@@ -39,5 +39,5 @@ export async function completeOnboarding(name: string, bio: string): Promise<voi
     .update({ name: name.trim() || undefined, bio: bio.trim() || undefined })
     .eq('id', user.id)
 
-  revalidatePath('/', 'layout')
+  revalidatePath('/academy', 'layout')
 }
