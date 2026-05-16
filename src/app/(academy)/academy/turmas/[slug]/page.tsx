@@ -1,3 +1,5 @@
+export const dynamic = 'force-dynamic'
+
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import Image from 'next/image'
@@ -22,16 +24,6 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     title: data.name,
     description: data.description ?? undefined,
   }
-}
-
-export async function generateStaticParams() {
-  const { data } = await supabaseAdmin
-    .from('cohorts')
-    .select('slug')
-    .eq('has_public_page', true)
-    .eq('is_purchasable', true)
-
-  return (data ?? []).map((c) => ({ slug: c.slug }))
 }
 
 function formatPrice(cents: number | null): string {

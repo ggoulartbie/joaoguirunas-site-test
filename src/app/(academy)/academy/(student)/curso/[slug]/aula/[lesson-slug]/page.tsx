@@ -1,3 +1,5 @@
+export const dynamic = 'force-dynamic'
+
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
@@ -10,6 +12,7 @@ import { VideoPlayer } from '@/components/student/VideoPlayer'
 import { LockedContent } from '@/components/student/LockedContent'
 import { MarkCompleteButton } from '@/components/student/MarkCompleteButton'
 import { LessonTabs } from './LessonTabs'
+import { LessonReactions } from '@/components/student/LessonReactions'
 import { CourseSidebar, MobileLessonDrawer } from './CourseSidebar'
 import type { CommentWithAuthor } from '@/types/student'
 import type { UserRole } from '@/types/student'
@@ -47,6 +50,10 @@ export default async function AulaPage({ params }: Props) {
       description,
       content,
       content_format,
+      summary,
+      summary_format,
+      transcript,
+      transcript_format,
       video_id,
       video_provider,
       kind,
@@ -268,6 +275,24 @@ export default async function AulaPage({ params }: Props) {
         ? await renderContent('MARKDOWN', lesson.description)
         : null
 
+  const renderedSummary = lesson.summary && lesson.summary_format
+    ? await renderContent(lesson.summary_format as 'MDX' | 'HTML' | 'MARKDOWN', lesson.summary)
+    : null
+
+  const renderedTranscript = lesson.transcript && lesson.transcript_format
+    ? await renderContent(lesson.transcript_format as 'MDX' | 'HTML' | 'MARKDOWN', lesson.transcript)
+    : null
+
+  // Fetch lesson reactions
+  const { data: reactionRows } = await supabase
+    .from('lesson_reactions')
+    .select('reaction, user_id')
+    .eq('lesson_id', lesson.id)
+
+  const initialLikes = reactionRows?.filter((r) => r.reaction === 'LIKE').length ?? 0
+  const initialDislikes = reactionRows?.filter((r) => r.reaction === 'DISLIKE').length ?? 0
+  const initialMine = (reactionRows?.find((r) => r.user_id === user.id)?.reaction ?? null) as 'LIKE' | 'DISLIKE' | null
+
   // Fetch comments
   const { data: rawComments } = await supabaseAdmin
     .from('comments')
@@ -384,46 +409,57 @@ export default async function AulaPage({ params }: Props) {
               {lesson.title}
             </h1>
 
-            {/* MarkCompleteButton */}
-            <div className="mt-4 flex items-center justify-between">
-              <MarkCompleteButton
-                lessonId={lesson.id}
-                initialCompleted={progress?.completed ?? false}
-              />
-
-              {/* Mobile: lesson list toggle */}
-              <div className="flex lg:hidden">
-                <MobileLessonDrawer
-                  modules={sidebarModules}
-                  currentLessonId={lesson.id}
-                  currentModuleId={currentModuleId}
-                  courseSlug={slug}
-                  totalCompleted={totalCompleted}
-                  totalLessons={totalLessons}
+            {/* MarkCompleteButton + Reactions + Nav compacto */}
+            <div className="mt-4 flex flex-wrap items-start justify-between gap-3">
+              <div className="flex flex-wrap items-center gap-3">
+                <MarkCompleteButton
+                  lessonId={lesson.id}
+                  initialCompleted={progress?.completed ?? false}
                 />
+                <LessonReactions
+                  lessonId={lesson.id}
+                  initialLikes={initialLikes}
+                  initialDislikes={initialDislikes}
+                  initialMine={initialMine}
+                />
+              </div>
+
+              <div className="flex items-center gap-2">
+                <LessonNavCompact
+                  slug={slug}
+                  globalPrev={globalPrev}
+                  globalNext={globalNext}
+                />
+                {/* Mobile: lesson list toggle */}
+                <div className="flex lg:hidden">
+                  <MobileLessonDrawer
+                    modules={sidebarModules}
+                    currentLessonId={lesson.id}
+                    currentModuleId={currentModuleId}
+                    courseSlug={slug}
+                    totalCompleted={totalCompleted}
+                    totalLessons={totalLessons}
+                  />
+                </div>
               </div>
             </div>
           </div>
 
-          {/* Tabs: Sobre, Materiais, Comentarios */}
+          {/* Tabs: Sobre, Resumo, Transcrição, Materiais, Comentários */}
           <LessonTabs
             courseSlug={slug}
             lessonSlug={lessonSlug}
             activeTab="sobre"
             description={lesson.description ?? ''}
             descriptionContent={renderedContent}
+            summaryContent={renderedSummary}
+            transcriptContent={renderedTranscript}
             materials={materials}
             comments={comments}
             lessonId={lesson.id}
             currentUserId={user.id}
           />
 
-          {/* ── Bottom prev/next nav cards ── */}
-          <NavCards
-            slug={slug}
-            globalPrev={globalPrev}
-            globalNext={globalNext}
-          />
         </div>
 
         {/* ── Right: Course outline sidebar (desktop only) ── */}
@@ -448,7 +484,7 @@ export default async function AulaPage({ params }: Props) {
   )
 }
 
-// ── Nav cards component (server, no event handlers) ──
+// ── Nav compacto (server, no event handlers) ──
 type NavLesson = {
   id: string
   slug: string
@@ -457,7 +493,7 @@ type NavLesson = {
   moduleId: string
 }
 
-function NavCards({
+function LessonNavCompact({
   slug,
   globalPrev,
   globalNext,
@@ -467,111 +503,77 @@ function NavCards({
   globalNext: NavLesson | null
 }) {
   return (
-    <div
-      className="border-t grid grid-cols-1 sm:grid-cols-2"
-      style={{
-        borderColor: 'var(--hairline)',
-        background: 'var(--ink)',
-      }}
-    >
-      {/* Previous lesson card */}
+    <div className="flex gap-2">
       {globalPrev ? (
         <Link
           href={`/academy/curso/${slug}/aula/${globalPrev.slug}`}
-          className="group flex flex-col gap-1.5 border-r p-4 lg:p-5 transition-colors"
-          style={{
-            borderColor: 'var(--hairline)',
-            borderBottom: '1px solid var(--hairline)',
-          }}
+          aria-label={`Aula anterior: ${globalPrev.title}`}
+          className="group flex flex-col gap-0.5 rounded-sm border px-3 py-2 transition-colors hover:bg-[var(--ink-2)]"
+          style={{ borderColor: 'var(--hairline)' }}
         >
           <span
-            className="flex items-center gap-1.5 font-mono text-[10px] uppercase tracking-widest"
+            className="flex items-center gap-1 font-mono text-[10px] uppercase tracking-wide"
             style={{ color: 'var(--bone-mute)' }}
           >
-            <ArrowLeft className="h-3 w-3" aria-hidden="true" />
-            Aula anterior
+            <ArrowLeft className="h-3.5 w-3.5" aria-hidden="true" />
+            Anterior
           </span>
           <span
-            className="text-[13px] leading-snug font-medium line-clamp-2 transition-colors group-hover:text-[var(--bone)]"
+            className="max-w-[120px] truncate text-[11px] leading-tight transition-colors group-hover:text-[var(--bone)]"
             style={{ color: 'var(--bone-dim)' }}
           >
             {globalPrev.title}
           </span>
-          <span
-            className="font-mono text-[10px] truncate"
-            style={{ color: 'var(--bone-mute)', opacity: 0.6 }}
-          >
-            {globalPrev.moduleTitle}
-          </span>
         </Link>
       ) : (
         <div
-          className="flex flex-col gap-1.5 p-4 lg:p-5 border-r"
-          style={{
-            borderColor: 'var(--hairline)',
-            borderBottom: '1px solid var(--hairline)',
-            opacity: 0.3,
-          }}
+          aria-hidden="true"
+          className="flex flex-col gap-0.5 rounded-sm border px-3 py-2 pointer-events-none opacity-30"
+          style={{ borderColor: 'var(--hairline)' }}
         >
           <span
-            className="flex items-center gap-1.5 font-mono text-[10px] uppercase tracking-widest"
+            className="flex items-center gap-1 font-mono text-[10px] uppercase tracking-wide"
             style={{ color: 'var(--bone-mute)' }}
           >
-            <ArrowLeft className="h-3 w-3" aria-hidden="true" />
-            Aula anterior
-          </span>
-          <span className="text-[13px]" style={{ color: 'var(--bone-mute)' }}>
-            Primeira aula
+            <ArrowLeft className="h-3.5 w-3.5" aria-hidden="true" />
+            Anterior
           </span>
         </div>
       )}
 
-      {/* Next lesson card */}
       {globalNext ? (
         <Link
           href={`/academy/curso/${slug}/aula/${globalNext.slug}`}
-          className="group flex flex-col gap-1.5 p-4 lg:p-5 transition-colors text-right"
-          style={{
-            borderBottom: '1px solid var(--hairline)',
-          }}
+          aria-label={`Próxima aula: ${globalNext.title}`}
+          className="group flex flex-col gap-0.5 rounded-sm border px-3 py-2 transition-colors hover:bg-[var(--ink-2)]"
+          style={{ borderColor: 'var(--hairline)' }}
         >
           <span
-            className="flex items-center justify-end gap-1.5 font-mono text-[10px] uppercase tracking-widest"
+            className="flex items-center gap-1 font-mono text-[10px] uppercase tracking-wide"
             style={{ color: 'var(--bone-mute)' }}
           >
-            Proxima aula
-            <ArrowRight className="h-3 w-3" aria-hidden="true" />
+            Próxima
+            <ArrowRight className="h-3.5 w-3.5" aria-hidden="true" />
           </span>
           <span
-            className="text-[13px] leading-snug font-medium line-clamp-2 transition-colors group-hover:text-[var(--bone)]"
+            className="max-w-[120px] truncate text-[11px] leading-tight transition-colors group-hover:text-[var(--bone)]"
             style={{ color: 'var(--bone-dim)' }}
           >
             {globalNext.title}
           </span>
-          <span
-            className="font-mono text-[10px] truncate"
-            style={{ color: 'var(--bone-mute)', opacity: 0.6 }}
-          >
-            {globalNext.moduleTitle}
-          </span>
         </Link>
       ) : (
         <div
-          className="flex flex-col gap-1.5 p-4 lg:p-5 text-right"
-          style={{
-            borderBottom: '1px solid var(--hairline)',
-            opacity: 0.3,
-          }}
+          aria-hidden="true"
+          className="flex flex-col gap-0.5 rounded-sm border px-3 py-2 pointer-events-none opacity-30"
+          style={{ borderColor: 'var(--hairline)' }}
         >
           <span
-            className="flex items-center justify-end gap-1.5 font-mono text-[10px] uppercase tracking-widest"
+            className="flex items-center gap-1 font-mono text-[10px] uppercase tracking-wide"
             style={{ color: 'var(--bone-mute)' }}
           >
-            Proxima aula
-            <ArrowRight className="h-3 w-3" aria-hidden="true" />
-          </span>
-          <span className="text-[13px]" style={{ color: 'var(--bone-mute)' }}>
-            Ultima aula
+            Próxima
+            <ArrowRight className="h-3.5 w-3.5" aria-hidden="true" />
           </span>
         </div>
       )}

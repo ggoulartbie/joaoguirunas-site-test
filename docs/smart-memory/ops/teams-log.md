@@ -9,6 +9,20 @@ tags: [ops]
 
 Registro de todos os Agent Teams formados neste projeto. Lead (team-os) atualiza a cada `*dispatch` e `*close`.
 
+## 2026-05-16 — Team joaoguirunas-academy-investigar-servidor-restart
+
+**Objetivo:** Investigar queda do servidor local e implementar restart automático
+**Lead:** team-os (skill)
+**Composição:**
+- sites-dev-delta — investigar causa raiz (processo duplicado vs. crash real)
+- sites-devops — implementar script `dev:restart` no package.json
+- sites-qa — veredicto formal da solução
+
+**Status:** ativo
+**Início:** 2026-05-16
+
+---
+
 ## 2026-05-08 — Team joao-guirunas-site-refactor-checkout-academy
 
 **Objetivo:** Refactor /curso-online com estrutura visual da /mentoria + auditoria completa do checkout Stripe e do academy
@@ -349,3 +363,22 @@ Registro de todos os Agent Teams formados neste projeto. Lead (team-os) atualiza
 **Status:** ativo
 **Início:** 2026-05-16T03:25:00-03:00
 **Stories:** 2.1 (download nova aba), 2.2 (admin lista/exclui materiais) — ver [[../stories/BACKLOG]]
+
+---
+
+## 2026-05-16 — Team joaoguirunas-academy-server-perf-crash
+
+**Objetivo:** Investigar e corrigir instabilidade do servidor web — crashes frequentes causados por dependências pesadas (Three.js, Spline, tsParticles) e possíveis gargalos server-side
+**Lead:** team-os (skill)
+**Composição:**
+- sites-analyst — diagnóstico holístico de causa raiz
+- sites-dev-delta — hardening e resiliência (error boundaries, memory leaks, error handling)
+- sites-dev-alpha — frontend bundle (dynamic imports, code splitting das libs pesadas)
+- sites-dev-beta — backend/server (API routes, Supabase queries, middleware, cache)
+- sites-qa — gate de qualidade formal (veredicto PASS/FAIL após correções)
+
+**Restrição de deploy:** Nenhum push/deploy sem confirmação explícita do usuário João
+
+**Status:** ativo
+**Início:** 2026-05-16T14:40:00-03:00
+**Stories:** a criar após diagnóstico dos agentes

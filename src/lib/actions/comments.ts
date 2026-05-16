@@ -69,7 +69,7 @@ export async function addComment(
     authorRole: profile.role,
   }
 
-  revalidatePath('/', 'layout')
+  revalidatePath('/academy', 'layout')
   return { success: true, comment }
 }
 
@@ -106,7 +106,7 @@ export async function editComment(
 
   if (error) return { success: false, error: 'Erro ao editar comentário' }
 
-  revalidatePath('/', 'layout')
+  revalidatePath('/academy', 'layout')
   return { success: true }
 }
 
@@ -144,6 +144,6 @@ export async function deleteComment(
 
   if (error) return { success: false, error: 'Erro ao remover comentário' }
 
-  revalidatePath('/', 'layout')
+  revalidatePath('/academy', 'layout')
   return { success: true }
 }

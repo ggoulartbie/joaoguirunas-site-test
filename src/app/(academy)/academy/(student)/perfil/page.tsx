@@ -1,3 +1,5 @@
+export const dynamic = 'force-dynamic'
+
 import type { Metadata } from 'next'
 import { requireUser } from '@/lib/auth/helpers'
 import { supabaseAdmin } from '@/lib/supabase/admin'

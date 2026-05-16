@@ -1,3 +1,5 @@
+export const dynamic = 'force-dynamic'
+
 import type { Metadata } from 'next'
 import { getSetting } from './actions'
 import { ConfiguracoesClient } from './ConfiguracoesClient'

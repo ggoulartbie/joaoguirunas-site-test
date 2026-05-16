@@ -1,3 +1,5 @@
+export const dynamic = 'force-dynamic'
+
 import type { Metadata } from 'next';
 import { SkillPage } from '@/shared/components/ui/SkillPage';
 import { RelatedPages } from '@/shared/components/ui/RelatedPages';

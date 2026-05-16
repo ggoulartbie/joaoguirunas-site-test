@@ -1,3 +1,5 @@
+export const dynamic = 'force-dynamic'
+
 import { RedefinirSenhaForm } from './_components/RedefinirSenhaForm'
 import Image from 'next/image'
 import type { Metadata } from 'next'

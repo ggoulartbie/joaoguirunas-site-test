@@ -1,4 +1,4 @@
-import type { Database } from './database'
+import type { Database } from '../src/types/database'
 
 type Tables = Database['public']['Tables']
 
@@ -42,9 +42,11 @@ export type PaymentInsert = Tables['payments']['Insert']
 export type WebhookEvent = Tables['webhook_events']['Row']
 export type WebhookEventInsert = Tables['webhook_events']['Insert']
 
-// Progresso e certificados
+// Progresso, reactions e certificados
 export type LessonProgress = Tables['lesson_progress']['Row']
 export type LessonProgressInsert = Tables['lesson_progress']['Insert']
+export type LessonReaction = Tables['lesson_reactions']['Row']
+export type LessonReactionInsert = Tables['lesson_reactions']['Insert']
 export type Certificate = Tables['certificates']['Row']
 
 // Comunidade

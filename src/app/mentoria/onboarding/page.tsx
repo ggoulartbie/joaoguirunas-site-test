@@ -1,3 +1,5 @@
+export const dynamic = 'force-dynamic'
+
 import type { Metadata } from 'next';
 import { listOnboardings } from '@/lib/actions/onboarding';
 import { OnboardingListClient } from './OnboardingListClient';

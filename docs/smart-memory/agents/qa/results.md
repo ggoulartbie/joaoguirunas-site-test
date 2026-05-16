@@ -11,6 +11,105 @@ Histórico de veredictos emitidos pelo sites-qa (Axilun).
 
 ---
 
+## 2026-05-16 — Refactor ContentFieldSection (commit 084ef5c) — ✅ PASS
+
+**Escopo:** Pré-push do commit `084ef5c` no branch `feat-aulas-v2`. Extração de `ContentFieldSection` reusable para Resumo / Conteúdo da Aula / Transcrição com pipeline idêntico (ContentEditor + previewContentAction server-side com MDX/HTML/MARKDOWN).
+
+**Checklist 10/10:**
+1. Code review — componente isolado em 95 linhas, estado encapsulado, sem leak de useEffect (cleanup do timer presente). ✅
+2. Acceptance criteria — 3 campos com pipeline idêntico; preview server-side passa por `previewContentAction` para os 3. ✅
+3. Sem regressões — render do aluno (`page.tsx` da aula + `LessonTabs.tsx`) consome `lesson.summary/summary_format/transcript/transcript_format` via `renderContent`, intacto. ✅
+4. Performance — debounce 400ms preservado por campo; preview só dispara quando aberto e com conteúdo. ✅
+5. A11y — `aria-pressed` no toggle preservado; foco com ring `--ember`; semântica `<section>` mantida. ✅
+6. SEO — não aplicável (admin auth-only). ✅
+7. Responsivo — layout do form não foi alterado. ✅
+8. Copy — "Preview como aluno" / "Fechar preview" / "Renderizando…" consistentes. ✅
+9. Cross-browser — apenas `useEffect`+`setTimeout`, sem APIs exóticas. ✅
+10. Security — `previewContentAction` segue com `requireAdmin()` antes do `renderContent`. ✅
+
+**Verificações técnicas:**
+- `pnpm tsc --noEmit` — limpo (saída vazia, sem erros).
+- `pnpm build` — concluído com sucesso, sem error/warn no log.
+- `updateLesson` (actions.ts:149) persiste o objeto recebido inteiro → os 6 campos (content/content_format/summary/summary_format/transcript/transcript_format) são gravados.
+- Tipos `lessons.summary/summary_format/transcript/transcript_format` presentes em `src/types/database.ts:736-782`.
+- Imports do `LessonEditorClient` — sem órfãos. `Eye` e `LessonContent` ainda usados pelo preview de descrição.
+- Migração `20260516082336` (colunas) e tabela `lesson_reactions` já confirmadas em sessão anterior.
+
+**Issues:** nenhum.
+
+**Próximo passo:** @sites-devops pode fazer push do `feat-aulas-v2`.
+
+Pode fazer push? **SIM**
+
+---
+
+## 2026-05-16 — Epic Estabilização do Servidor — Fase Diagnóstico — ⚠️ CONCERNS
+
+> Veredicto detalhado em [[server-perf-verdict-diagnosis]]. Critérios em [[server-perf-qa-criteria]].
+> Branch alvo: `feat-aulas-v2` (sugerido isolar em nova branch `fix-server-perf-stabilization`).
+
+**Escopo:** Avaliar 4 relatórios de diagnóstico (analyst, dev-alpha, dev-delta, dev-beta) e priorizar fixes.
+
+**Resultado:** CONCERNS — diagnóstico aceito para iniciar fase de fixes. Cobertura cruzada compensa imprecisões pontuais. 3 concerns documentados sem bloquear progresso:
+- Relatório dev-alpha afirma incorretamente que `@splinetool` não é usado — Spline existe em 2 arquivos (cross-check feito). Não remover dependência.
+- Framing "TODA request" do middleware (dev-beta) é impreciso — matcher é positivo, não toca rotas institucionais. Issue real (query de profiles) continua válida.
+- "Three.js sem dispose()" (dev-delta A5) é P1 client-side, não P0 do epic de estabilização do servidor.
+
+**Plano priorizado emitido:**
+- Tier 1 (BLOQUEANTES, ordem): AnimatedHero dynamic + tsParticles config / SplineScene React.lazy → next/dynamic + ErrorBoundary / `renderToBuffer` timeout+try-catch / `revalidatePath('/', 'layout')` → path específico / `pnpm-workspace.yaml` strings → booleanos.
+- Tier 2 (PARALELOS): error.tsx em 5 segmentos críticos / cache de role+has_set_password fora do middleware / Sentry sample rates / Font.register morto / select de colunas específicas.
+- Tier 3 (DEPOIS): TipTap dynamic, batch crons, dispose Three.js, Suspense splitting texturas, `auth.admin.listUsers` lazy, cache PDF certificado.
+
+**Próximo veredicto:** após Tier 1 (idealmente Tier 2) entregue, smoke completo contra `server-perf-qa-criteria.md` §6 + matriz §7.
+
+---
+
+## 2026-05-16 — Epic Aulas v2 (6 stories AV-3.1 a AV-3.6) — ✅ PASS (3 concerns leves)
+
+> Veredicto detalhado em [[verdict-epic-aulas-v2]]. Branch `feat-aulas-v2`.
+
+**Stories:**
+- AV-3.1 (migration): summary/transcript em lessons + tabela `lesson_reactions` + RLS via `has_access` + UPDATE template em 39 aulas. Tipos regenerados.
+- AV-3.2 (template MD elegante): `LessonContent` com mapeamento explícito (sem `prose`), tokens `--bone`, bullets `·` via `before:content`.
+- AV-3.3 (admin 3 campos): subcomponente `MarkdownField` reutilizável; description virou textarea; seções Resumo + Transcrição com toggle `aria-pressed`.
+- AV-3.4 (aluno 5 abas): filtro por presença de conteúdo, fallback initialTab, `overflow-x-auto` mobile, counters preservados.
+- AV-3.5 (like/dislike): `useOptimistic` + `useTransition` + rollback; server action `setReaction` com `requireUser` + zod + UPSERT/DELETE; aria-pressed + aria-label + role="status".
+- AV-3.6 (nav prev/next topo): `LessonNavCompact` server component no header; NavCards do rodapé totalmente removidos.
+
+**Validações:** typecheck limpo + build ✓ Compiled successfully em 9.5s (144/144 static).
+
+**Concerns leves (não bloqueantes):**
+1. `LessonEditorClient.tsx:115, 162` — `as any` casts desnecessários (tipos já cobrem summary/transcript após regen).
+2. `lesson-reactions.ts:40` — `revalidatePath('/', 'layout')` diverge da spec AC1 (que pediu sem revalidate); funcional, mas invalida cache global. Padrão consistente com `notifications.ts` do codebase.
+3. `setReaction` retorna `void` em vez de `{ likes, dislikes, mine }` da spec AC1; client computa stats local, sem live-sync entre usuários (aceitável MVP).
+
+**Próximo passo:** `sites-devops` autorizado a push da branch `feat-aulas-v2` (Vercel preview = staging). NÃO autorizar push para `main` automaticamente — aguardar smoke manual + autorização explícita do João.
+
+---
+
+## 2026-05-16 — Story 2.3 (preview admin) — ✅ PASS
+
+> Veredicto detalhado em [[verdict-story-2.3]]. Branch `feat-preview-admin-aula`, commit `d1c6213`.
+
+**Implementação:**
+- `preview-actions.ts` — server action `previewContentAction(format, content)` com `requireAdmin()` + `renderContent()` (paridade com renderização real do aluno) + truncate erro 200 chars.
+- `LessonEditorClient.tsx` — toggle "Editar/Visualizar" no `description` (client-side markdown), toggle "Preview como aluno"/"Fechar preview" no `content` (server action), `useEffect` debounced 400ms com cleanup, indicador "Renderizando…", `aria-pressed` em ambos toggles, error state amigável (não crasha editor).
+- `ContentEditor.tsx` — removido `MDXPreviewClient` quebrado (usava `useState` em lugar de `useEffect`) e toggle MDX interno; preview centralizado no `LessonEditorClient`.
+
+**Validações:**
+- ✅ AC1-AC8 atendidas. AC9 (smoke browser) pendente do user — não bloqueia push.
+- ✅ `pnpm typecheck` limpo + `pnpm build` ✓ Compiled successfully em 10.1s (144/144 static).
+- ✅ Pipeline preview = pipeline render aluno (`renderContent`) — paridade garantida.
+- ✅ `MDXPreviewClient` removido limpo (diff confere).
+- ✅ Único consumidor de `ContentEditor` é o `LessonEditorClient` — sem outras telas afetadas.
+- ✅ CONCERN-1 da Story 2.2 corrigido em commit anterior `8d03531` (`deleteMaterial` agora passa `lesson.id`).
+
+**Concerns leves:** smoke test browser pendente do user, sem rate-limit na action (out of scope, admin trusted), description preview é client-side puro (escolha de design documentada).
+
+**Próximo passo:** `sites-devops` autorizado a push.
+
+---
+
 ## 2026-05-16 — Stories 2.1 + 2.2 (materiais) — Mixed (PASS + CONCERNS)
 
 > Veredicto detalhado em [[verdict-stories-2.1-2.2]]. Branch `fix-aula-aluno-ux-bugs`.
@@ -2280,4 +2379,34 @@ Lead esclareceu/corrigiu os concerns:
 ### Veredicto consolidado: ✅ PASS
 
 F12.1 + F12.2 + F12.3 — **PASS**. 10/10 ACs originais atendidos, fluxo dual-provider coerente (auth + email-driven), typecheck limpo. Liberado para @sites-devops push.
+
+---
+
+## 2026-05-16 — `dev:restart` (team `joaoguirunas-academy-investigar-servidor-restart`)
+
+**Documento completo:** [[server-restart-verdict]]
+
+### Veredicto: ⚠️ CONCERNS — Liberado para push
+
+**Escopo auditado:** Script `"dev:restart": "fuser -k 3000/tcp 2>/dev/null; pnpm dev"` em `package.json:7`.
+
+### Checklist (4/4 PASS no escopo)
+- ✅ Funciona com porta livre — `fuser` retorna exit 1, `;` permite `pnpm dev` continuar (testado em `/tmp`)
+- ✅ Funciona com porta ocupada — testado com `nc -l 127.0.0.1 3000`, processo morto e porta liberada
+- ✅ Sem side-effects — `fuser -k 3000/tcp` mira só a porta 3000
+- ✅ `pnpm-workspace.yaml` não foi tocado neste sprint
+
+### Análise dos pontos extras do lead
+- **`;` vs `&&`:** `;` está correto — `&&` quebraria o fluxo (fuser retorna exit 1 com porta livre)
+- **`NODE_OPTIONS='--max-old-space-size=4096'` no `dev`:** recomendado P1, story separada
+- **`pnpm-workspace.yaml` com `true` sem aspas:** YAML aceita, mas a chave `allowBuilds` não é canônica do pnpm v10/11 — `node_modules/sharp/build/Release/sharp-linux-x64.node` confirmadamente ausente. Pré-existente, story separada.
+
+### Concerns
+- [C-001 P1] script `dev` sem heap size aumentado — story dedicada
+- [C-002 P1 pré-existente] `pnpm-workspace.yaml` com chave inválida `allowBuilds` (canônico: `onlyBuiltDependencies` em formato lista)
+- [C-003 P2] porta hardcoded em 3000 — quebra silenciosamente com `PORT` customizado
+
+### Próximo passo
+- @sites-devops: push do `package.json` + `server-crash-analysis.md` liberado
+- Abrir stories para C-001 e C-002
 

@@ -22,6 +22,7 @@ const activeBtn = 'bg-white/10 text-white/90'
 
 export function TipTapEditor({ value, onChange, className }: TipTapEditorProps) {
   const editor = useEditor({
+    immediatelyRender: false,
     extensions: [
       StarterKit.configure({ codeBlock: false }),
       Link.configure({ openOnClick: false }),

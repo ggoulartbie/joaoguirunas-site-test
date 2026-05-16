@@ -1,3 +1,5 @@
+export const dynamic = 'force-dynamic'
+
 import type { Metadata } from 'next';
 import { ModuloSlideshow } from '../_components/ModuloSlideshow';
 import type { Slide, SlideAgent } from '../_components/ModuloSlideshow';

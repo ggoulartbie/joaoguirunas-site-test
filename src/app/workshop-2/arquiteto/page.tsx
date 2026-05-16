@@ -1,3 +1,5 @@
+export const dynamic = 'force-dynamic'
+
 import type { Metadata } from 'next';
 import { WorkshopPhaseLayout } from '../_components/WorkshopPhaseLayout';
 import { CodeBlock } from '../_components/CodeBlock';

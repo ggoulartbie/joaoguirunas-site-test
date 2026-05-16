@@ -9,10 +9,47 @@ tags: [ops]
 
 O lead (team-os) atualiza este arquivo a cada mudança de estado dos teammates.
 
-## Team ativo — joaoguirunas-academy-materials-fix
+## Team anterior — joaoguirunas-academy-investigar-servidor-restart (encerrado 2026-05-16)
+
+**Status:** ✅ encerrado — build Vercel passou, deploy concluído
+**Entregues:** dev:restart no package.json + force-dynamic global em 104 pages server-side
+
+---
+
+## Team anterior — joaoguirunas-academy-investigar-servidor-restart
+
+**Nome:** joaoguirunas-academy-investigar-servidor-restart
+**Status:** 🟢 ativo desde 2026-05-16
+**Objetivo:** Investigar queda do servidor local e implementar restart automático
+**Restrição:** Nenhum push/deploy sem confirmação explícita de João
+
+| Teammate | Fase | Status | Task atual |
+|---|---|---|---|
+| sites-dev-delta | Investigação | 🔄 em andamento | Analisar causa raiz — process duplicado vs. crash real |
+| sites-devops | Implementação | 🔄 em andamento | Script `dev:restart` no package.json |
+| sites-qa | Gate | ✅ concluído | CONCERNS — liberado p/ push. Veredicto em `agents/qa/server-restart-verdict.md` |
+
+---
+
+## Team anterior — joaoguirunas-academy-server-perf-crash
+
+**Nome:** joaoguirunas-academy-server-perf-crash
+**Status:** 🟢 ativo desde 2026-05-16T14:40:00-03:00
+**Objetivo:** Investigar e corrigir instabilidade do servidor web — crashes frequentes por libs pesadas
+**Restrição:** Nenhum push/deploy sem confirmação explícita de João
+
+| Teammate | Fase | Status | Task atual |
+|---|---|---|---|
+| sites-analyst | Diagnóstico | ✅ concluído | Relatório em `agents/research/server-perf-analysis.md` — 3 causas críticas |
+| sites-dev-delta | Hardening | ✅ concluído | Relatório em `agents/hardening/server-perf-hardening.md` — 3 CRÍTICOs, 4 ALTOs |
+| sites-dev-alpha | Frontend | ✅ concluído | Relatório em `agents/research/frontend-bundle-audit.md` — tsParticles estático |
+| sites-dev-beta | Backend | ✅ concluído | Relatório em `agents/research/backend-perf-audit.md` — middleware com query por request |
+| sites-qa | Gate | ✅ pronto | Critérios em `agents/qa/server-perf-qa-criteria.md` — 9 seções, 6 ACs críticos |
+
+## Team anterior — joaoguirunas-academy-materials-fix
 
 **Nome:** joaoguirunas-academy-materials-fix
-**Status:** 🟢 ativo desde 2026-05-16
+**Status:** ⏳ pausado (QA pendente + push aguardando João)
 **Objetivo:** Fix UX de materiais: (A) download abre nova aba no aluno; (B) admin lista/exclui materiais da aula
 **Início:** 2026-05-16T03:25:00-03:00
 **Branch:** fix-aula-aluno-ux-bugs
@@ -24,7 +61,7 @@ O lead (team-os) atualiza este arquivo a cada mudança de estado dos teammates.
 | sites-dev-alpha | 2.1, 2.2 | ✅ concluído | Commits `8035b6a` (2.1), `8c85989`+`bba354d` (2.2 UI) |
 | sites-dev-beta | 2.2 | ✅ concluído | Commits `4861283` (material-actions.ts), `d05e5ac` (actions.ts:211) — 2 componentes coexistem |
 | sites-qa | 2.1, 2.2 | 🔄 revisando | Gate request enviado: typecheck + build + smoke test admin/aluno |
-| sites-devops | 2.1, 2.2 | ⏳ aguardando | Push após QA PASS |
+| sites-devops | 2.1, 2.2 | ⏳ aguardando | Push após QA PASS e confirmação de João |
 
 ## Team anterior (joao-guirunas-site-academy-ops)
 

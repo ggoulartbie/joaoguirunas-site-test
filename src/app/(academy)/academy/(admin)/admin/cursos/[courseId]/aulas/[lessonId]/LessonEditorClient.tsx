@@ -1,16 +1,14 @@
 'use client'
 
-import { useState, useTransition, useRef, useEffect } from 'react'
+import { useState, useTransition, useRef } from 'react'
 import { useRouter } from 'next/navigation'
 import { Upload, Trash2, FileText, ArrowLeft, Eye } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { updateLesson, uploadMaterial, deleteMaterial } from '../../../actions'
-import { previewContentAction } from './preview-actions'
-import { ContentEditor } from '@/components/editor/ContentEditor'
 import { LessonContent } from '@/components/editor/LessonContent'
 import { extractYouTubeId } from '@/components/student/VideoPlayer'
+import { ContentFieldSection } from './ContentFieldSection'
 import type { Database } from '@/types/database'
-import type { RenderedContent } from '@/lib/content'
 
 type LessonRow = Database['public']['Tables']['lessons']['Row']
 type MaterialRow = Database['public']['Tables']['materials']['Row']
@@ -38,8 +36,12 @@ function formatBytes(bytes: number | null) {
 const inputClass =
   'w-full border border-[rgba(255,255,255,0.16)] bg-[var(--ink-2)] px-3 py-3 font-mono text-sm text-[var(--bone)] placeholder-[var(--bone-mute)] outline-none focus:border-[var(--ember)] transition-colors'
 
+const textareaClass =
+  'w-full border border-[rgba(255,255,255,0.16)] bg-[var(--ink-2)] px-3 py-3 font-mono text-sm text-[var(--bone)] placeholder-[var(--bone-mute)] outline-none focus:border-[var(--ember)] transition-colors resize-none [field-sizing:content]'
+
 const sectionClass =
   'border border-[rgba(255,255,255,0.07)] bg-[var(--ink)] p-6 space-y-4'
+
 
 export function LessonEditorClient({
   lesson,
@@ -58,6 +60,10 @@ export function LessonEditorClient({
   const [title, setTitle] = useState(lesson.title)
   const [description, setDescription] = useState(lesson.description ?? '')
   const [descriptionPreview, setDescriptionPreview] = useState(false)
+  const [summary, setSummary] = useState<string>(lesson.summary ?? '')
+  const [summaryFormat, setSummaryFormat] = useState<ContentFormat>((lesson.summary_format as ContentFormat) ?? 'MARKDOWN')
+  const [transcript, setTranscript] = useState<string>(lesson.transcript ?? '')
+  const [transcriptFormat, setTranscriptFormat] = useState<ContentFormat>((lesson.transcript_format as ContentFormat) ?? 'MARKDOWN')
   const [kind, setKind] = useState<LessonKind>((lesson.kind as LessonKind) ?? 'VIDEO')
   const [videoProvider, setVideoProvider] = useState(lesson.video_provider ?? 'VIMEO')
   const [videoId, setVideoId] = useState(lesson.video_id ?? '')
@@ -65,36 +71,12 @@ export function LessonEditorClient({
   const [content, setContent] = useState(lesson.content ?? '')
   const [materials, setMaterials] = useState(initialMaterials)
   const [deleting, setDeleting] = useState<string | null>(null)
-  const [preview, setPreview] = useState(false)
-  const [previewContent, setPreviewContent] = useState<RenderedContent | null>(null)
-  const [previewLoading, setPreviewLoading] = useState(false)
-  const [previewError, setPreviewError] = useState<string | null>(null)
   const [saved, setSaved] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [pending, startTransition] = useTransition()
   const [uploading, setUploading] = useState(false)
 
   const hasVideo = kind === 'VIDEO' || kind === 'LIVE'
-
-  // Carrega preview via server action ao abrir ou quando content/format muda (debounced 400ms)
-  useEffect(() => {
-    if (!preview || !content) return
-
-    const timer = setTimeout(async () => {
-      setPreviewLoading(true)
-      setPreviewError(null)
-      try {
-        const rendered = await previewContentAction(contentFormat, content)
-        setPreviewContent(rendered)
-      } catch (err) {
-        setPreviewError(err instanceof Error ? err.message : 'Erro ao renderizar')
-      } finally {
-        setPreviewLoading(false)
-      }
-    }, 400)
-
-    return () => clearTimeout(timer)
-  }, [preview, content, contentFormat])
 
   function handleSave(e: React.FormEvent) {
     e.preventDefault()
@@ -104,6 +86,10 @@ export function LessonEditorClient({
         await updateLesson(lesson.id, courseId, {
           title,
           description: description || null,
+          summary: summary || null,
+          summary_format: summary ? summaryFormat : null,
+          transcript: transcript || null,
+          transcript_format: transcript ? transcriptFormat : null,
           kind,
           video_provider: hasVideo ? videoProvider : null,
           video_id: hasVideo && videoId ? videoId : null,
@@ -116,11 +102,6 @@ export function LessonEditorClient({
         setError(err instanceof Error ? err.message : 'Erro ao salvar')
       }
     })
-  }
-
-  function togglePreview() {
-    if (!content) return
-    setPreview((p) => !p)
   }
 
   async function handleFileUpload(e: React.ChangeEvent<HTMLInputElement>) {
@@ -228,17 +209,15 @@ export function LessonEditorClient({
               </div>
               {descriptionPreview ? (
                 <div className="border border-[rgba(255,255,255,0.07)] bg-[var(--void)] px-3 py-2" style={{ borderRadius: 0 }}>
-                  <LessonContent
-                    content={{ format: 'MARKDOWN', raw: description }}
-                    className="prose prose-invert prose-sm max-w-none"
-                  />
+                  <LessonContent content={{ format: 'MARKDOWN', raw: description }} className="" />
                 </div>
               ) : (
-                <input
+                <textarea
                   value={description}
                   onChange={(e) => setDescription(e.target.value)}
                   placeholder="Breve descrição da aula..."
-                  className={inputClass}
+                  rows={6}
+                  className={textareaClass}
                   style={{ borderRadius: 0 }}
                 />
               )}
@@ -306,45 +285,29 @@ export function LessonEditorClient({
           </section>
         )}
 
-        {/* Content editor */}
-        <section className={sectionClass} style={{ borderRadius: 0 }}>
-          <div className="flex items-center justify-between">
-            <p className="font-mono text-[10px] uppercase tracking-widest text-[var(--bone-mute)]">Conteúdo da Aula</p>
-            {content && (
-              <button
-                type="button"
-                aria-pressed={preview}
-                onClick={togglePreview}
-                className="flex items-center gap-1.5 font-mono text-[10px] text-[var(--bone-mute)] transition-colors hover:text-[var(--bone-dim)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ember)]"
-              >
-                <Eye className="h-3 w-3" />
-                {preview ? 'Fechar preview' : 'Preview como aluno'}
-              </button>
-            )}
-          </div>
+        <ContentFieldSection
+          label="Resumo"
+          format={summaryFormat}
+          content={summary}
+          onFormatChange={setSummaryFormat}
+          onContentChange={setSummary}
+        />
 
-          {preview ? (
-            <div className="relative border border-[rgba(255,255,255,0.07)] bg-[var(--void)] p-4" style={{ borderRadius: 0 }}>
-              {previewLoading && (
-                <p className="absolute right-3 top-2 font-mono text-[10px] text-[var(--bone-mute)]">Renderizando…</p>
-              )}
-              {previewError ? (
-                <p className="font-mono text-[11px] text-[var(--ember)]">{previewError}</p>
-              ) : previewContent ? (
-                <LessonContent content={previewContent} className="prose prose-invert prose-sm max-w-none" />
-              ) : (
-                <p className="font-mono text-[10px] text-[var(--bone-mute)]">Renderizando…</p>
-              )}
-            </div>
-          ) : (
-            <ContentEditor
-              format={contentFormat}
-              content={content}
-              onFormatChange={setContentFormat}
-              onContentChange={setContent}
-            />
-          )}
-        </section>
+        <ContentFieldSection
+          label="Conteúdo da Aula"
+          format={contentFormat}
+          content={content}
+          onFormatChange={setContentFormat}
+          onContentChange={setContent}
+        />
+
+        <ContentFieldSection
+          label="Transcrição"
+          format={transcriptFormat}
+          content={transcript}
+          onFormatChange={setTranscriptFormat}
+          onContentChange={setTranscript}
+        />
 
         {/* Materials */}
         <section className={sectionClass} style={{ borderRadius: 0 }}>

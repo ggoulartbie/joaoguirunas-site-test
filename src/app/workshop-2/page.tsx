@@ -1,3 +1,5 @@
+export const dynamic = 'force-dynamic'
+
 import Link from 'next/link';
 import type { Metadata } from 'next';
 import { WORKSHOP_2_PHASES } from './_components/WorkshopPhaseLayout';
