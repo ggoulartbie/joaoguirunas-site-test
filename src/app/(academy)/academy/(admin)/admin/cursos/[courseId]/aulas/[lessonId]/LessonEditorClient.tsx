@@ -129,7 +129,7 @@ export function LessonEditorClient({
     setMaterials((prev) => prev.filter((m) => m.id !== id))
     setDeleting(id)
     try {
-      await deleteMaterial(id, storagePath ?? '', courseId)
+      await deleteMaterial(id, storagePath ?? '', courseId, lesson.id)
       router.refresh()
     } catch (err) {
       if (snapshot) setMaterials((prev) => [...prev, snapshot])
