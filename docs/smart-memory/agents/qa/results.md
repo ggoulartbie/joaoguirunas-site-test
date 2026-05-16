@@ -11,6 +11,38 @@ Histórico de veredictos emitidos pelo sites-qa (Axilun).
 
 ---
 
+## 2026-05-16 — Refactor ContentFieldSection (commit 084ef5c) — ✅ PASS
+
+**Escopo:** Pré-push do commit `084ef5c` no branch `feat-aulas-v2`. Extração de `ContentFieldSection` reusable para Resumo / Conteúdo da Aula / Transcrição com pipeline idêntico (ContentEditor + previewContentAction server-side com MDX/HTML/MARKDOWN).
+
+**Checklist 10/10:**
+1. Code review — componente isolado em 95 linhas, estado encapsulado, sem leak de useEffect (cleanup do timer presente). ✅
+2. Acceptance criteria — 3 campos com pipeline idêntico; preview server-side passa por `previewContentAction` para os 3. ✅
+3. Sem regressões — render do aluno (`page.tsx` da aula + `LessonTabs.tsx`) consome `lesson.summary/summary_format/transcript/transcript_format` via `renderContent`, intacto. ✅
+4. Performance — debounce 400ms preservado por campo; preview só dispara quando aberto e com conteúdo. ✅
+5. A11y — `aria-pressed` no toggle preservado; foco com ring `--ember`; semântica `<section>` mantida. ✅
+6. SEO — não aplicável (admin auth-only). ✅
+7. Responsivo — layout do form não foi alterado. ✅
+8. Copy — "Preview como aluno" / "Fechar preview" / "Renderizando…" consistentes. ✅
+9. Cross-browser — apenas `useEffect`+`setTimeout`, sem APIs exóticas. ✅
+10. Security — `previewContentAction` segue com `requireAdmin()` antes do `renderContent`. ✅
+
+**Verificações técnicas:**
+- `pnpm tsc --noEmit` — limpo (saída vazia, sem erros).
+- `pnpm build` — concluído com sucesso, sem error/warn no log.
+- `updateLesson` (actions.ts:149) persiste o objeto recebido inteiro → os 6 campos (content/content_format/summary/summary_format/transcript/transcript_format) são gravados.
+- Tipos `lessons.summary/summary_format/transcript/transcript_format` presentes em `src/types/database.ts:736-782`.
+- Imports do `LessonEditorClient` — sem órfãos. `Eye` e `LessonContent` ainda usados pelo preview de descrição.
+- Migração `20260516082336` (colunas) e tabela `lesson_reactions` já confirmadas em sessão anterior.
+
+**Issues:** nenhum.
+
+**Próximo passo:** @sites-devops pode fazer push do `feat-aulas-v2`.
+
+Pode fazer push? **SIM**
+
+---
+
 ## 2026-05-16 — Epic Estabilização do Servidor — Fase Diagnóstico — ⚠️ CONCERNS
 
 > Veredicto detalhado em [[server-perf-verdict-diagnosis]]. Critérios em [[server-perf-qa-criteria]].
