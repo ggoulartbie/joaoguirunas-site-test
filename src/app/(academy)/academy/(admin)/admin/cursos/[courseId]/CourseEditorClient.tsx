@@ -154,7 +154,31 @@ function SortableModule({
     setLessonError(null)
     startTransition(async () => {
       try {
-        await createLesson({ module_id: mod.id, title: lessonTitle, slug: lessonSlug, kind: lessonKind, courseId })
+        const created = await createLesson({ module_id: mod.id, title: lessonTitle, slug: lessonSlug, kind: lessonKind, courseId })
+        setLessons((prev) => [
+          ...prev,
+          {
+            id: created.id,
+            module_id: mod.id,
+            title: lessonTitle,
+            slug: lessonSlug,
+            kind: lessonKind,
+            sort_order: prev.length,
+            content: null,
+            content_format: null,
+            description: null,
+            duration_seconds: null,
+            summary: null,
+            summary_format: null,
+            transcript: null,
+            transcript_format: null,
+            video_id: null,
+            video_provider: null,
+            created_at: new Date().toISOString(),
+            updated_at: new Date().toISOString(),
+            deleted_at: null,
+          },
+        ])
         setLessonTitle('')
         setLessonSlug('')
         setAddingLesson(false)
