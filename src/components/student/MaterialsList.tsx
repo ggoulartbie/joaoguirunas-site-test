@@ -39,11 +39,10 @@ export function MaterialsList({ materials }: MaterialsListProps) {
       // para arquivos: dispara download
       const a = document.createElement('a')
       a.href = url
+      a.target = '_blank'
+      a.rel = 'noopener noreferrer'
       if (material.kind !== 'LINK') {
         a.download = material.title
-      } else {
-        a.target = '_blank'
-        a.rel = 'noopener noreferrer'
       }
       document.body.appendChild(a)
       a.click()
