@@ -7,8 +7,6 @@ export type Json =
   | Json[]
 
 export type Database = {
-  // Allows to automatically instantiate createClient with right options
-  // instead of createClient<Database, { PostgrestVersion: 'XX' }>(URL, KEY)
   __InternalSupabase: {
     PostgrestVersion: "14.5"
   }
@@ -228,6 +226,7 @@ export type Database = {
           has_public_page: boolean
           has_support: boolean
           id: string
+          infinitepay_checkout_url: string | null
           infinitepay_handle: string | null
           is_purchasable: boolean
           max_installments_entry: number
@@ -258,6 +257,7 @@ export type Database = {
           has_public_page?: boolean
           has_support?: boolean
           id?: string
+          infinitepay_checkout_url?: string | null
           infinitepay_handle?: string | null
           is_purchasable?: boolean
           max_installments_entry?: number
@@ -288,6 +288,7 @@ export type Database = {
           has_public_page?: boolean
           has_support?: boolean
           id?: string
+          infinitepay_checkout_url?: string | null
           infinitepay_handle?: string | null
           is_purchasable?: boolean
           max_installments_entry?: number
@@ -650,6 +651,48 @@ export type Database = {
           },
         ]
       }
+      lesson_reactions: {
+        Row: {
+          created_at: string
+          id: string
+          lesson_id: string
+          reaction: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          lesson_id: string
+          reaction: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          lesson_id?: string
+          reaction?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "lesson_reactions_lesson_id_fkey"
+            columns: ["lesson_id"]
+            isOneToOne: false
+            referencedRelation: "lessons"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "lesson_reactions_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       lessons: {
         Row: {
           content: string | null
@@ -663,7 +706,11 @@ export type Database = {
           module_id: string
           slug: string
           sort_order: number
+          summary: string | null
+          summary_format: string | null
           title: string
+          transcript: string | null
+          transcript_format: string | null
           updated_at: string
           video_id: string | null
           video_provider: string | null
@@ -680,7 +727,11 @@ export type Database = {
           module_id: string
           slug: string
           sort_order: number
+          summary?: string | null
+          summary_format?: string | null
           title: string
+          transcript?: string | null
+          transcript_format?: string | null
           updated_at?: string
           video_id?: string | null
           video_provider?: string | null
@@ -697,7 +748,11 @@ export type Database = {
           module_id?: string
           slug?: string
           sort_order?: number
+          summary?: string | null
+          summary_format?: string | null
           title?: string
+          transcript?: string | null
+          transcript_format?: string | null
           updated_at?: string
           video_id?: string | null
           video_provider?: string | null
@@ -1079,30 +1134,42 @@ export type Database = {
           avatar_url: string | null
           bio: string | null
           created_at: string
+          has_set_password: boolean
           id: string
           name: string
           role: string
           stripe_customer_id: string | null
+          temp_password_expires_at: string | null
+          temp_password_hash: string | null
+          temp_password_requested_at: string | null
           updated_at: string
         }
         Insert: {
           avatar_url?: string | null
           bio?: string | null
           created_at?: string
+          has_set_password?: boolean
           id: string
           name: string
           role?: string
           stripe_customer_id?: string | null
+          temp_password_expires_at?: string | null
+          temp_password_hash?: string | null
+          temp_password_requested_at?: string | null
           updated_at?: string
         }
         Update: {
           avatar_url?: string | null
           bio?: string | null
           created_at?: string
+          has_set_password?: boolean
           id?: string
           name?: string
           role?: string
           stripe_customer_id?: string | null
+          temp_password_expires_at?: string | null
+          temp_password_hash?: string | null
+          temp_password_requested_at?: string | null
           updated_at?: string
         }
         Relationships: []
@@ -1206,6 +1273,19 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      auth_get_user_id_by_email: { Args: { p_email: string }; Returns: string }
+      auth_get_user_with_temp_password_by_email: {
+        Args: { p_email: string }
+        Returns: {
+          temp_expires_at: string
+          temp_hash: string
+          user_id: string
+        }[]
+      }
+      decrement_filled_seats: {
+        Args: { p_cohort_id: string }
+        Returns: undefined
+      }
       has_access: {
         Args: { p_lesson_id: string; p_user_id: string }
         Returns: boolean
@@ -1215,6 +1295,7 @@ export type Database = {
         Returns: undefined
       }
       is_admin: { Args: never; Returns: boolean }
+      user_has_password: { Args: { p_user_id: string }; Returns: boolean }
     }
     Enums: {
       [_ in never]: never
