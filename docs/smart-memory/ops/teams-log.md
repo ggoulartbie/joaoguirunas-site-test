@@ -330,3 +330,22 @@ Registro de todos os Agent Teams formados neste projeto. Lead (team-os) atualiza
 
 **Status:** ativo
 **Stories:** ver [[../stories/BACKLOG]]
+
+---
+
+## 2026-05-16 — Team joaoguirunas-academy-materials-fix
+
+**Objetivo:** Fix UX de materiais — (A) download de material abre em nova aba no aluno; (B) admin ganha UI pra listar e excluir materiais que subiu na aula
+**Lead:** team-os (skill)
+**Branch:** `fix-aula-aluno-ux-bugs` (mesma branch do team anterior)
+**Composição:**
+- sites-architect — criar Stories 2.1 e 2.2 validadas (5-point)
+- sites-ux — spec UI admin (lista de materiais + AlertDialog de delete)
+- sites-dev-alpha — frontend dos 2 bugs (download fix + UI admin)
+- sites-dev-beta — server action `deleteMaterial` + Storage cleanup
+- sites-qa — verdict PASS/CONCERNS/FAIL antes do push
+- sites-devops — push autorizado (sem PR auto)
+
+**Status:** ativo
+**Início:** 2026-05-16T03:25:00-03:00
+**Stories:** 2.1 (download nova aba), 2.2 (admin lista/exclui materiais) — ver [[../stories/BACKLOG]]

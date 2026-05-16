@@ -38,12 +38,17 @@ MOC raiz. Todo arquivo novo em `docs/smart-memory/` deve ser referenciado aqui.
 - [[runbooks/launch-2026-05-07]] — execução go-live em prod 2026-05-07 (pré-flight ✅; checklist final F8.7 2026-05-08 com BLOCKER de Stripe Price ID + CONCERNs documentados)
 - [[runbooks/certificados]] — reemissão manual, revogação, env vars, decisão rate limit P-02
 
+## Hardening
+- [[agents/hardening/hardening-report]] — relatório adversarial dos fixes 1.1/1.2/1.3 (VideoPlayer, CommentsSection, LessonContent) — 2026-05-16
+- [[agents/hardening/risks-not-addressed]] — riscos identificados mas não corrigidos no sprint fix-aula-aluno-ux
+
 ## Agentes
 - [[agents/data-engineer/schema]] — schema completo (21 tabelas, funções, índices)
 - [[agents/data-engineer/rls-policies]] — RLS policies por tabela + casos de teste
 - [[agents/data-engineer/storage]] — buckets de storage, paths, signed URLs
 - [[agents/data-engineer/migrations-log]] — log de migrations aplicadas
 - [[agents/qa/results]] — histórico de veredictos
+- [[agents/qa/verdict-stories-2.1-2.2]] — veredicto formal Stories 2.1 (PASS) + 2.2 (CONCERNS) — 2026-05-16
 - [[agents/ux/components]] — specs de componentes
 - [[agents/ux/design-recommendations]] — recomendações P0/P1/P2 (accent, dead code, a11y)
 - [[agents/ux/curso-online-agents-redesign]] — spec redesign seção agentes /curso-online (cards 110px, sem blur, sem link, min-h 80vh)

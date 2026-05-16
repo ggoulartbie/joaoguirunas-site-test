@@ -1,13 +1,34 @@
 ---
 title: QA Results
 type: qa-log
-updated: 2026-05-11T12:45
+updated: 2026-05-16
 tags: [qa, veredictos]
 ---
 
 # QA Results — Veredictos formais
 
 Histórico de veredictos emitidos pelo sites-qa (Axilun).
+
+---
+
+## 2026-05-16 — Stories 2.1 + 2.2 (materiais) — Mixed (PASS + CONCERNS)
+
+> Veredicto detalhado em [[verdict-stories-2.1-2.2]]. Branch `fix-aula-aluno-ux-bugs`.
+
+**Story 2.1 (download nova aba) — ✅ PASS**
+- `MaterialsList.tsx:42-46` adiciona `target="_blank" + rel="noopener noreferrer"` para todos os kinds; `download` atributo apenas para `kind != 'LINK'`. Todas ACs (1-5) atendidas. Commit `8035b6a`.
+
+**Story 2.2 (admin gerencia materiais) — ⚠️ CONCERNS (push autorizado)**
+- `actions.ts:211` (`deleteMaterial`) — guard `if (storagePath)`, requireAdmin, storage delete antes de row delete, revalidatePath curso + aula condicional. ACs principais OK.
+- `LessonEditorClient.tsx:126-140` — optimistic + rollback + try/catch + router.refresh em sucesso. AC4 OK.
+- `pnpm typecheck` limpo. `pnpm build` ✓ Compiled successfully (144/144 static pages) — proxy supabaseAdmin OK.
+
+**Concerns documentados:**
+1. **CONCERN-1:** `LessonEditorClient.tsx:132` chama `deleteMaterial(id, storagePath ?? '', courseId)` **sem o 4º arg `lesson.id`** — `revalidatePath` da rota da aula no servidor não dispara (mitigado por `router.refresh()` client-side). Fix opcional 1-linha.
+2. **CONCERN-2:** Débito técnico anterior — duas funções de delete coexistem (`actions.ts:211` em uso real; `material-actions.ts:181` mais robusta mas ligada ao `MaterialsUpload.tsx` órfão). Não escopo destas stories.
+3. **CONCERN-3:** Smoke test browser não executado (sem ambiente local) — recomendado ao user/devops antes do push para prod.
+
+**Próximo passo:** `sites-devops` autorizado a push. Lead pode pedir fix do CONCERN-1 antes (1 linha).
 
 ---
 

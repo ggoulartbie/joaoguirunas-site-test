@@ -25,6 +25,27 @@ Numeração FAA-1.x para não colidir com a Epic 1 histórica (Cleanup pós-disc
 
 ---
 
+## Epic Fix Materiais (2026-05-16)
+
+| Story | Título | Complexidade | Status | Agente |
+|---|---|---|---|---|
+| [[backlog/2.1-material-download-nova-aba\|FM-2.1]] | Download de material abre em nova aba — `target="_blank"` em todos os kinds | S | active | sites-dev-alpha |
+| [[backlog/2.2-admin-gerencia-materiais\|FM-2.2]] | Admin gerencia materiais da aula (listar todos os kinds + excluir + cleanup storage + rollback) | M | active | sites-dev-alpha + sites-dev-beta |
+
+2 bugs de materiais reportados pelo lead. **FM-2.1** é fix UX da área do aluno
+(`MaterialsList.tsx` faz o anchor sem `target="_blank"` para arquivos, navegando
+a aba atual em PDFs/imagens servidos com `Content-Disposition: inline` pelo
+Supabase). **FM-2.2** corrige gap de UX no editor de aula admin: lista existe
+mas (a) botão delete não aparece para materiais `LINK` por causa do guard
+`mat.storage_path && ...`, (b) optimistic update sem rollback engole erros do
+server, (c) action não tolera `storagePath` nulo no `storage.remove`. Hard
+delete (tabela sem `deleted_at`), cleanup de storage SIM, sem ownership
+(coluna `uploaded_by` não existe). Stories independentes da Epic FAA-1.x.
+Ambas validadas com 5-point checklist: GO (5/5). Prefixo FM-2.x para não
+colidir com a Epic 2 histórica (Design recommendations P0–P2).
+
+---
+
 ## Epic 1 (histórica) — Cleanup pós-discovery
 
 | Story | Título | Complexidade | Status | Agente |

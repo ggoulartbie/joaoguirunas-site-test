@@ -1,7 +1,7 @@
 ---
 title: Shared Context
 type: status-board
-updated: 2026-05-11
+updated: 2026-05-16
 tags: [ops]
 ---
 
@@ -9,23 +9,28 @@ tags: [ops]
 
 O lead (team-os) atualiza este arquivo a cada mudança de estado dos teammates.
 
-## Team ativo — joao-guirunas-site-academy-ops
+## Team ativo — joaoguirunas-academy-materials-fix
+
+**Nome:** joaoguirunas-academy-materials-fix
+**Status:** 🟢 ativo desde 2026-05-16
+**Objetivo:** Fix UX de materiais: (A) download abre nova aba no aluno; (B) admin lista/exclui materiais da aula
+**Início:** 2026-05-16T03:25:00-03:00
+**Branch:** fix-aula-aluno-ux-bugs
+
+| Teammate | Story | Status | Task atual |
+|---|---|---|---|
+| sites-architect | 2.1, 2.2 | ✅ concluído | Stories 2.1 e 2.2 criadas, GO 5/5. Achado: lista admin já existe em `LessonEditorClient.tsx`, só fixar 3 bugs |
+| sites-ux | 2.2 | ✅ concluído | Spec em `agents/ux/spec-admin-materials-management.md` (sem shadcn — painel inline) |
+| sites-dev-alpha | 2.1, 2.2 | ✅ concluído | Commits `8035b6a` (2.1), `8c85989`+`bba354d` (2.2 UI) |
+| sites-dev-beta | 2.2 | ✅ concluído | Commits `4861283` (material-actions.ts), `d05e5ac` (actions.ts:211) — 2 componentes coexistem |
+| sites-qa | 2.1, 2.2 | 🔄 revisando | Gate request enviado: typecheck + build + smoke test admin/aluno |
+| sites-devops | 2.1, 2.2 | ⏳ aguardando | Push após QA PASS |
+
+## Team anterior (joao-guirunas-site-academy-ops)
 
 **Nome:** joao-guirunas-site-academy-ops
-**Status:** 🟢 ativo desde 2026-05-11
-**Objetivo:** Operação contínua da área /academy — 2 pipelines em paralelo
-**Início:** 2026-05-11T09:56:00-03:00
-
-| Teammate | Pipeline | Status | Task atual |
-|---|---|---|---|
-| analyst-1 | A | 🔄 em andamento | Research admin: usuários (delete/block) + pagamentos (delete pending) |
-| analyst-2 | B | 🔄 em andamento | Research InfinitePay: webhook URL, produto R$1, fluxo completo |
-| architect-1 | A | ⏳ aguardando | Aguarda relatório do analyst-1 |
-| architect-2 | B | ⏳ aguardando | Aguarda relatório do analyst-2 |
-| dev-alpha | A/B | ⏳ aguardando | Lendo contexto do projeto |
-| dev-beta | A/B | ⏳ aguardando | Lendo contexto do projeto |
-| sites-qa | gate | ⏳ aguardando | Gate de qualidade — acionado após implementação |
-| sites-devops | release | ⏳ aguardando | Push/PR — acionado após QA PASS |
+**Status:** ⛔ encerrado implicitamente (nova sessão, novo team)
+**Encerramento:** 2026-05-16
 
 ---
 
