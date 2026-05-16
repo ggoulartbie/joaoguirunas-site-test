@@ -1109,6 +1109,9 @@ export type Database = {
           name: string
           role: string
           stripe_customer_id: string | null
+          temp_password_expires_at: string | null
+          temp_password_hash: string | null
+          temp_password_requested_at: string | null
           updated_at: string
         }
         Insert: {
@@ -1120,6 +1123,9 @@ export type Database = {
           name: string
           role?: string
           stripe_customer_id?: string | null
+          temp_password_expires_at?: string | null
+          temp_password_hash?: string | null
+          temp_password_requested_at?: string | null
           updated_at?: string
         }
         Update: {
@@ -1131,6 +1137,9 @@ export type Database = {
           name?: string
           role?: string
           stripe_customer_id?: string | null
+          temp_password_expires_at?: string | null
+          temp_password_hash?: string | null
+          temp_password_requested_at?: string | null
           updated_at?: string
         }
         Relationships: []

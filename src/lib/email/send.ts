@@ -32,13 +32,26 @@ export async function sendWelcomeEmail(to: string, name: string) {
   })
 }
 
-export async function sendPasswordResetEmail(to: string, name: string, resetUrl: string) {
-  const html = await render(PasswordResetEmail({ name, resetUrl }))
+export async function sendPasswordResetEmail(
+  to: string,
+  name: string,
+  tempPassword: string,
+  expiresInMinutes: number,
+) {
+  const html = await render(
+    PasswordResetEmail({
+      name,
+      email: to,
+      tempPassword,
+      loginUrl: `${APP_URL}/academy/login`,
+      expiresInMinutes,
+    }),
+  )
 
   return getResend().emails.send({
     from: FROM,
     to,
-    subject: 'Redefinir sua senha',
+    subject: 'Sua senha temporária — Academy',
     html,
   })
 }

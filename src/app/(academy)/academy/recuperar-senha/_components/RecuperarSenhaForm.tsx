@@ -5,7 +5,7 @@ import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 import Link from 'next/link'
-import { createClient } from '@/lib/supabase/client'
+import { requestPasswordReset } from '@/app/actions/auth'
 
 const schema = z.object({
   email: z.string().email('Email inválido'),
@@ -26,16 +26,11 @@ export function RecuperarSenhaForm() {
 
   async function onSubmit(data: FormData) {
     setServerError(null)
-    const supabase = createClient()
 
-    const { error } = await supabase.auth.resetPasswordForEmail(data.email, {
-      redirectTo: `${(process.env.NEXT_PUBLIC_APP_URL ?? 'https://joaoguirunas.com').replace(/\/+$/, '')}/academy/redefinir-senha`,
-    })
-
-    if (error) {
-      setServerError('Erro ao enviar email. Tente novamente.')
-      return
-    }
+    // Server action sempre retorna ok=true (não revela se email existe).
+    // Email com senha temporária é enviado se o usuário existir, válida por 1h.
+    // Sua senha atual continua valendo — usar a temp força redefinição.
+    await requestPasswordReset(data.email)
 
     setSubmittedEmail(data.email)
     setSuccess(true)
@@ -56,9 +51,15 @@ export function RecuperarSenhaForm() {
             fontFamily: 'var(--type-sans)',
             fontSize: '14px',
             color: '#4ade80',
+            lineHeight: 1.5,
           }}
         >
-          Link enviado para {submittedEmail}. Verifique sua caixa de entrada.
+          Se houver uma conta com o email <strong>{submittedEmail}</strong>, você receberá
+          uma senha temporária em alguns instantes. Verifique sua caixa de entrada e a
+          pasta de spam.<br /><br />
+          <span style={{ color: 'rgba(74,222,128,0.7)', fontSize: '13px' }}>
+            Sua senha atual continua válida — use-a se preferir não trocar.
+          </span>
         </p>
       </div>
     )
