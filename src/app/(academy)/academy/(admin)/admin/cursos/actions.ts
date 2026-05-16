@@ -208,12 +208,17 @@ export async function uploadMaterial(lessonId: string, courseId: string, formDat
   revalidatePath(`/academy/admin/cursos/${courseId}`)
 }
 
-export async function deleteMaterial(materialId: string, storagePath: string, courseId: string) {
+export async function deleteMaterial(materialId: string, storagePath: string, courseId: string, lessonId?: string) {
   await requireAdmin()
-  await supabaseAdmin.storage.from('materials').remove([storagePath])
+  if (storagePath) {
+    await supabaseAdmin.storage.from('materials').remove([storagePath])
+  }
   const { error } = await supabaseAdmin.from('materials').delete().eq('id', materialId)
   if (error) throw new Error(error.message)
   revalidatePath(`/academy/admin/cursos/${courseId}`)
+  if (lessonId) {
+    revalidatePath(`/academy/admin/cursos/${courseId}/aulas/${lessonId}`)
+  }
 }
 
 function getMaterialKind(mimeType: string): 'PDF' | 'ZIP' | 'IMAGE' | 'LINK' | 'OTHER' {
