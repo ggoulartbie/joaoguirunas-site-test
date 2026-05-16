@@ -26,16 +26,6 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   }
 }
 
-export async function generateStaticParams() {
-  const { data } = await supabaseAdmin
-    .from('cohorts')
-    .select('slug')
-    .eq('has_public_page', true)
-    .eq('is_purchasable', true)
-
-  return (data ?? []).map((c) => ({ slug: c.slug }))
-}
-
 function formatPrice(cents: number | null): string {
   if (!cents) return 'Consultar'
   return new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(cents / 100)
