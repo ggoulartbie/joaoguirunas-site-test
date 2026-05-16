@@ -19,17 +19,21 @@ type Props = {
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const { slug, 'lesson-slug': lessonSlug } = await params
-  const supabase = await createClient()
+  try {
+    const { slug, 'lesson-slug': lessonSlug } = await params
+    const supabase = await createClient()
 
-  const { data: lesson } = await supabase
-    .from('lessons')
-    .select('title, modules!inner(courses!inner(slug))')
-    .eq('slug', lessonSlug)
-    .eq('modules.courses.slug', slug)
-    .single()
+    const { data: lesson } = await supabase
+      .from('lessons')
+      .select('title, modules!inner(courses!inner(slug))')
+      .eq('slug', lessonSlug)
+      .eq('modules.courses.slug', slug)
+      .single()
 
-  return { title: lesson?.title ?? lessonSlug, robots: { index: false, follow: false } }
+    return { title: lesson?.title ?? lessonSlug, robots: { index: false, follow: false } }
+  } catch {
+    return { title: 'Aula' }
+  }
 }
 
 export default async function AulaPage({ params }: Props) {

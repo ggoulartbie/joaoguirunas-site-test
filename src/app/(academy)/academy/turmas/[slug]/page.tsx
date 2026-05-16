@@ -9,29 +9,37 @@ import { createClient } from '@/lib/supabase/server'
 type Props = { params: Promise<{ slug: string }> }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const { slug } = await params
-  const { data } = await supabaseAdmin
-    .from('cohorts')
-    .select('name, description')
-    .eq('slug', slug)
-    .eq('has_public_page', true)
-    .single()
+  try {
+    const { slug } = await params
+    const { data } = await supabaseAdmin
+      .from('cohorts')
+      .select('name, description')
+      .eq('slug', slug)
+      .eq('has_public_page', true)
+      .single()
 
-  if (!data) return { title: 'Turma' }
-  return {
-    title: data.name,
-    description: data.description ?? undefined,
+    if (!data) return { title: 'Turma' }
+    return {
+      title: data.name,
+      description: data.description ?? undefined,
+    }
+  } catch {
+    return { title: 'Turma' }
   }
 }
 
 export async function generateStaticParams() {
-  const { data } = await supabaseAdmin
-    .from('cohorts')
-    .select('slug')
-    .eq('has_public_page', true)
-    .eq('is_purchasable', true)
+  try {
+    const { data } = await supabaseAdmin
+      .from('cohorts')
+      .select('slug')
+      .eq('has_public_page', true)
+      .eq('is_purchasable', true)
 
-  return (data ?? []).map((c) => ({ slug: c.slug }))
+    return (data ?? []).map((c) => ({ slug: c.slug }))
+  } catch {
+    return []
+  }
 }
 
 function formatPrice(cents: number | null): string {

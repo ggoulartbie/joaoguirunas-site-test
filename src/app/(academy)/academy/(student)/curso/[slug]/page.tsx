@@ -48,14 +48,18 @@ type CourseRow = {
 // ─── Metadata ────────────────────────────────────────────────────────────────
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const { slug } = await params
-  const { data: course } = await supabaseAdmin
-    .from('courses')
-    .select('title')
-    .eq('slug', slug)
-    .is('deleted_at', null)
-    .single()
-  return { title: course?.title ?? 'Curso' }
+  try {
+    const { slug } = await params
+    const { data: course } = await supabaseAdmin
+      .from('courses')
+      .select('title')
+      .eq('slug', slug)
+      .is('deleted_at', null)
+      .single()
+    return { title: course?.title ?? 'Curso' }
+  } catch {
+    return { title: 'Curso' }
+  }
 }
 
 // ─── Page ────────────────────────────────────────────────────────────────────

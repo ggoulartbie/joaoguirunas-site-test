@@ -14,13 +14,17 @@ type Props = {
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const { slug } = await params
-  const { data } = await supabaseAdmin
-    .from('forum_threads')
-    .select('title')
-    .eq('slug', slug)
-    .single()
-  return { title: data?.title ?? 'Tópico' }
+  try {
+    const { slug } = await params
+    const { data } = await supabaseAdmin
+      .from('forum_threads')
+      .select('title')
+      .eq('slug', slug)
+      .single()
+    return { title: data?.title ?? 'Tópico' }
+  } catch {
+    return { title: 'Tópico' }
+  }
 }
 
 function formatDate(iso: string) {
