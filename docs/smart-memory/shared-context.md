@@ -9,7 +9,14 @@ tags: [ops]
 
 O lead (team-os) atualiza este arquivo a cada mudança de estado dos teammates.
 
-## Team ativo — joaoguirunas-academy-investigar-servidor-restart
+## Team anterior — joaoguirunas-academy-investigar-servidor-restart (encerrado 2026-05-16)
+
+**Status:** ✅ encerrado — build Vercel passou, deploy concluído
+**Entregues:** dev:restart no package.json + force-dynamic global em 104 pages server-side
+
+---
+
+## Team anterior — joaoguirunas-academy-investigar-servidor-restart
 
 **Nome:** joaoguirunas-academy-investigar-servidor-restart
 **Status:** 🟢 ativo desde 2026-05-16

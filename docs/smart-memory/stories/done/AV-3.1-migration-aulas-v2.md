@@ -1,7 +1,7 @@
 ---
 title: "Story AV-3.1: Migration Aulas v2 — summary + transcript + lesson_reactions + template inicial"
 type: story
-status: backlog
+status: done
 epic: AV
 complexity: M
 agent: sites-data

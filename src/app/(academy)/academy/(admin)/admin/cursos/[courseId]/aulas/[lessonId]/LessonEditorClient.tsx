@@ -62,13 +62,11 @@ export function LessonEditorClient({
   const [title, setTitle] = useState(lesson.title)
   const [description, setDescription] = useState(lesson.description ?? '')
   const [descriptionPreview, setDescriptionPreview] = useState(false)
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const lessonAny = lesson as any
-  const [summary, setSummary] = useState<string>(lessonAny.summary ?? '')
-  const [summaryFormat, setSummaryFormat] = useState<ContentFormat>((lessonAny.summary_format as ContentFormat) ?? 'MARKDOWN')
+  const [summary, setSummary] = useState<string>(lesson.summary ?? '')
+  const [summaryFormat, setSummaryFormat] = useState<ContentFormat>((lesson.summary_format as ContentFormat) ?? 'MARKDOWN')
   const [summaryPreview, setSummaryPreview] = useState(false)
-  const [transcript, setTranscript] = useState<string>(lessonAny.transcript ?? '')
-  const [transcriptFormat, setTranscriptFormat] = useState<ContentFormat>((lessonAny.transcript_format as ContentFormat) ?? 'MARKDOWN')
+  const [transcript, setTranscript] = useState<string>(lesson.transcript ?? '')
+  const [transcriptFormat, setTranscriptFormat] = useState<ContentFormat>((lesson.transcript_format as ContentFormat) ?? 'MARKDOWN')
   const [transcriptPreview, setTranscriptPreview] = useState(false)
   const [kind, setKind] = useState<LessonKind>((lesson.kind as LessonKind) ?? 'VIDEO')
   const [videoProvider, setVideoProvider] = useState(lesson.video_provider ?? 'VIMEO')
@@ -113,8 +111,7 @@ export function LessonEditorClient({
     setError(null)
     startTransition(async () => {
       try {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        await (updateLesson as any)(lesson.id, courseId, {
+        await updateLesson(lesson.id, courseId, {
           title,
           description: description || null,
           summary: summary || null,
