@@ -384,23 +384,30 @@ export default async function AulaPage({ params }: Props) {
               {lesson.title}
             </h1>
 
-            {/* MarkCompleteButton */}
-            <div className="mt-4 flex items-center justify-between">
+            {/* MarkCompleteButton + Nav compacto */}
+            <div className="mt-4 flex flex-wrap items-start justify-between gap-3">
               <MarkCompleteButton
                 lessonId={lesson.id}
                 initialCompleted={progress?.completed ?? false}
               />
 
-              {/* Mobile: lesson list toggle */}
-              <div className="flex lg:hidden">
-                <MobileLessonDrawer
-                  modules={sidebarModules}
-                  currentLessonId={lesson.id}
-                  currentModuleId={currentModuleId}
-                  courseSlug={slug}
-                  totalCompleted={totalCompleted}
-                  totalLessons={totalLessons}
+              <div className="flex items-center gap-2">
+                <LessonNavCompact
+                  slug={slug}
+                  globalPrev={globalPrev}
+                  globalNext={globalNext}
                 />
+                {/* Mobile: lesson list toggle */}
+                <div className="flex lg:hidden">
+                  <MobileLessonDrawer
+                    modules={sidebarModules}
+                    currentLessonId={lesson.id}
+                    currentModuleId={currentModuleId}
+                    courseSlug={slug}
+                    totalCompleted={totalCompleted}
+                    totalLessons={totalLessons}
+                  />
+                </div>
               </div>
             </div>
           </div>
@@ -418,12 +425,6 @@ export default async function AulaPage({ params }: Props) {
             currentUserId={user.id}
           />
 
-          {/* ── Bottom prev/next nav cards ── */}
-          <NavCards
-            slug={slug}
-            globalPrev={globalPrev}
-            globalNext={globalNext}
-          />
         </div>
 
         {/* ── Right: Course outline sidebar (desktop only) ── */}
@@ -448,7 +449,7 @@ export default async function AulaPage({ params }: Props) {
   )
 }
 
-// ── Nav cards component (server, no event handlers) ──
+// ── Nav compacto (server, no event handlers) ──
 type NavLesson = {
   id: string
   slug: string
@@ -457,7 +458,7 @@ type NavLesson = {
   moduleId: string
 }
 
-function NavCards({
+function LessonNavCompact({
   slug,
   globalPrev,
   globalNext,
@@ -467,111 +468,77 @@ function NavCards({
   globalNext: NavLesson | null
 }) {
   return (
-    <div
-      className="border-t grid grid-cols-1 sm:grid-cols-2"
-      style={{
-        borderColor: 'var(--hairline)',
-        background: 'var(--ink)',
-      }}
-    >
-      {/* Previous lesson card */}
+    <div className="flex gap-2">
       {globalPrev ? (
         <Link
           href={`/academy/curso/${slug}/aula/${globalPrev.slug}`}
-          className="group flex flex-col gap-1.5 border-r p-4 lg:p-5 transition-colors"
-          style={{
-            borderColor: 'var(--hairline)',
-            borderBottom: '1px solid var(--hairline)',
-          }}
+          aria-label={`Aula anterior: ${globalPrev.title}`}
+          className="group flex flex-col gap-0.5 rounded-sm border px-3 py-2 transition-colors hover:bg-[var(--ink-2)]"
+          style={{ borderColor: 'var(--hairline)' }}
         >
           <span
-            className="flex items-center gap-1.5 font-mono text-[10px] uppercase tracking-widest"
+            className="flex items-center gap-1 font-mono text-[10px] uppercase tracking-wide"
             style={{ color: 'var(--bone-mute)' }}
           >
-            <ArrowLeft className="h-3 w-3" aria-hidden="true" />
-            Aula anterior
+            <ArrowLeft className="h-3.5 w-3.5" aria-hidden="true" />
+            Anterior
           </span>
           <span
-            className="text-[13px] leading-snug font-medium line-clamp-2 transition-colors group-hover:text-[var(--bone)]"
+            className="max-w-[120px] truncate text-[11px] leading-tight transition-colors group-hover:text-[var(--bone)]"
             style={{ color: 'var(--bone-dim)' }}
           >
             {globalPrev.title}
           </span>
-          <span
-            className="font-mono text-[10px] truncate"
-            style={{ color: 'var(--bone-mute)', opacity: 0.6 }}
-          >
-            {globalPrev.moduleTitle}
-          </span>
         </Link>
       ) : (
         <div
-          className="flex flex-col gap-1.5 p-4 lg:p-5 border-r"
-          style={{
-            borderColor: 'var(--hairline)',
-            borderBottom: '1px solid var(--hairline)',
-            opacity: 0.3,
-          }}
+          aria-hidden="true"
+          className="flex flex-col gap-0.5 rounded-sm border px-3 py-2 pointer-events-none opacity-30"
+          style={{ borderColor: 'var(--hairline)' }}
         >
           <span
-            className="flex items-center gap-1.5 font-mono text-[10px] uppercase tracking-widest"
+            className="flex items-center gap-1 font-mono text-[10px] uppercase tracking-wide"
             style={{ color: 'var(--bone-mute)' }}
           >
-            <ArrowLeft className="h-3 w-3" aria-hidden="true" />
-            Aula anterior
-          </span>
-          <span className="text-[13px]" style={{ color: 'var(--bone-mute)' }}>
-            Primeira aula
+            <ArrowLeft className="h-3.5 w-3.5" aria-hidden="true" />
+            Anterior
           </span>
         </div>
       )}
 
-      {/* Next lesson card */}
       {globalNext ? (
         <Link
           href={`/academy/curso/${slug}/aula/${globalNext.slug}`}
-          className="group flex flex-col gap-1.5 p-4 lg:p-5 transition-colors text-right"
-          style={{
-            borderBottom: '1px solid var(--hairline)',
-          }}
+          aria-label={`Próxima aula: ${globalNext.title}`}
+          className="group flex flex-col gap-0.5 rounded-sm border px-3 py-2 transition-colors hover:bg-[var(--ink-2)]"
+          style={{ borderColor: 'var(--hairline)' }}
         >
           <span
-            className="flex items-center justify-end gap-1.5 font-mono text-[10px] uppercase tracking-widest"
+            className="flex items-center gap-1 font-mono text-[10px] uppercase tracking-wide"
             style={{ color: 'var(--bone-mute)' }}
           >
-            Proxima aula
-            <ArrowRight className="h-3 w-3" aria-hidden="true" />
+            Próxima
+            <ArrowRight className="h-3.5 w-3.5" aria-hidden="true" />
           </span>
           <span
-            className="text-[13px] leading-snug font-medium line-clamp-2 transition-colors group-hover:text-[var(--bone)]"
+            className="max-w-[120px] truncate text-[11px] leading-tight transition-colors group-hover:text-[var(--bone)]"
             style={{ color: 'var(--bone-dim)' }}
           >
             {globalNext.title}
           </span>
-          <span
-            className="font-mono text-[10px] truncate"
-            style={{ color: 'var(--bone-mute)', opacity: 0.6 }}
-          >
-            {globalNext.moduleTitle}
-          </span>
         </Link>
       ) : (
         <div
-          className="flex flex-col gap-1.5 p-4 lg:p-5 text-right"
-          style={{
-            borderBottom: '1px solid var(--hairline)',
-            opacity: 0.3,
-          }}
+          aria-hidden="true"
+          className="flex flex-col gap-0.5 rounded-sm border px-3 py-2 pointer-events-none opacity-30"
+          style={{ borderColor: 'var(--hairline)' }}
         >
           <span
-            className="flex items-center justify-end gap-1.5 font-mono text-[10px] uppercase tracking-widest"
+            className="flex items-center gap-1 font-mono text-[10px] uppercase tracking-wide"
             style={{ color: 'var(--bone-mute)' }}
           >
-            Proxima aula
-            <ArrowRight className="h-3 w-3" aria-hidden="true" />
-          </span>
-          <span className="text-[13px]" style={{ color: 'var(--bone-mute)' }}>
-            Ultima aula
+            Próxima
+            <ArrowRight className="h-3.5 w-3.5" aria-hidden="true" />
           </span>
         </div>
       )}
