@@ -115,10 +115,12 @@ function SortableModule({
   mod,
   courseId,
   onDelete,
+  onUpdate,
 }: {
   mod: ModuleWithLessons
   courseId: string
   onDelete: (id: string) => void
+  onUpdate: (id: string, fields: { title: string; slug: string }) => void
 }) {
   const [open, setOpen] = useState(true)
   const [editingTitle, setEditingTitle] = useState(false)
@@ -225,8 +227,10 @@ function SortableModule({
               onBlur={() => {
                 const trimmed = titleDraft.trim()
                 if (trimmed && trimmed !== mod.title) {
+                  const newSlug = slugify(trimmed)
                   startTransition(async () => {
-                    await updateModule(mod.id, courseId, { title: trimmed, slug: slugify(trimmed) })
+                    await updateModule(mod.id, courseId, { title: trimmed, slug: newSlug })
+                    onUpdate(mod.id, { title: trimmed, slug: newSlug })
                   })
                 }
                 setEditingTitle(false)
@@ -404,6 +408,14 @@ export function CourseEditorClient({
     startSave(() => deleteModule(id, course.id))
   }
 
+  function handleUpdateModule(id: string, fields: { title: string; slug: string }) {
+    setModules((prev) =>
+      prev.map((m) =>
+        m.id === id ? { ...m, ...fields, updated_at: new Date().toISOString() } : m
+      )
+    )
+  }
+
   async function handleAddModule(e: React.FormEvent) {
     e.preventDefault()
     startSave(async () => {
@@ -521,7 +533,7 @@ export function CourseEditorClient({
           <SortableContext items={modules.map((m) => m.id)} strategy={verticalListSortingStrategy}>
             <div className="space-y-2">
               {modules.map((mod) => (
-                <SortableModule key={mod.id} mod={mod} courseId={course.id} onDelete={handleDeleteModule} />
+                <SortableModule key={mod.id} mod={mod} courseId={course.id} onDelete={handleDeleteModule} onUpdate={handleUpdateModule} />
               ))}
             </div>
           </SortableContext>
