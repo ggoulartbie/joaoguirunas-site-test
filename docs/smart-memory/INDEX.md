@@ -18,7 +18,7 @@ MOC raiz. Todo arquivo novo em `docs/smart-memory/` deve ser referenciado aqui.
 - [[project/conventions]] — convenções de código (fonte: sites-analyst)
 
 ## Stories
-- [[stories/BACKLOG]] — stories pendentes (Epics 1–6 do site + Epic Plataforma de Cursos F1–F8)
+- [[stories/BACKLOG]] — stories pendentes (Epics 1–6 do site + Plataforma de Cursos F1–F13 + Epic Aulas v2 AV-3.x)
 - `stories/active/` — em desenvolvimento
 - `stories/done/` — concluídas
 
@@ -49,9 +49,13 @@ MOC raiz. Todo arquivo novo em `docs/smart-memory/` deve ser referenciado aqui.
 - [[agents/data-engineer/migrations-log]] — log de migrations aplicadas
 - [[agents/qa/results]] — histórico de veredictos
 - [[agents/qa/verdict-stories-2.1-2.2]] — veredicto formal Stories 2.1 (PASS) + 2.2 (CONCERNS) — 2026-05-16
+- [[agents/qa/verdict-story-2.3]] — veredicto formal Story 2.3 (PASS) preview markdown/HTML/MDX admin — 2026-05-16
+- [[agents/qa/verdict-epic-aulas-v2]] — veredicto formal Epic Aulas v2 (PASS, 3 concerns leves) AV-3.1 a AV-3.6 — 2026-05-16
 - [[agents/ux/components]] — specs de componentes
 - [[agents/ux/design-recommendations]] — recomendações P0/P1/P2 (accent, dead code, a11y)
 - [[agents/ux/curso-online-agents-redesign]] — spec redesign seção agentes /curso-online (cards 110px, sem blur, sem link, min-h 80vh)
+- [[agents/ux/spec-template-md-aula]] — spec tipografia/espaçamento do template Markdown em LessonContent (Story 3.2)
+- [[agents/ux/spec-nav-topo-aula]] — spec nav prev/next compacto no topo da página de aula (Story 3.6)
 - `agents/research/` — research reports
 - [[agents/research/seo-audit]] — auditoria SEO completa (titles, headings, schema, CWV, sitemap) — 2026-04-23
 - [[agents/research/api-admin-inventory]] — inventário e audit das APIs em /api/admin/ — 2026-05-07

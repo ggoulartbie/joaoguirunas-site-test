@@ -25,24 +25,60 @@ Numeração FAA-1.x para não colidir com a Epic 1 histórica (Cleanup pós-disc
 
 ---
 
+## Epic Aulas v2 (2026-05-16)
+
+| Story | Título | Complexidade | Status | Agente |
+|---|---|---|---|---|
+| [[backlog/AV-3.1-migration-aulas-v2\|AV-3.1]] | Migration única — ADD `summary`+`transcript` + CREATE `lesson_reactions`+RLS + UPDATE description vazias com template | M | backlog | sites-data |
+| [[backlog/AV-3.2-template-md-elegante\|AV-3.2]] | Template MD elegante para `description` vazia (minimalista, sem emojis, sem cards) | S | backlog | sites-ux + sites-dev-alpha |
+| [[backlog/AV-3.3-admin-3-campos-toggle\|AV-3.3]] | Admin — 3 campos textuais (`description`, `summary`, `transcript`) com toggle Editar/Visualizar (reuso padrão Story 2.3) | M | backlog | sites-dev-alpha |
+| [[backlog/AV-3.4-aluno-5-abas\|AV-3.4]] | Aluno — 5 abas em linha (Sobre \| Resumo \| Transcrição \| Materiais \| Comentários), abas vazias somem | M | backlog | sites-dev-alpha |
+| [[backlog/AV-3.5-aluno-like-dislike\|AV-3.5]] | Aluno — Like/Dislike (UI + server action `setReaction` + count agregado, optimistic update) | M | backlog | sites-dev-alpha + sites-dev-beta |
+| [[backlog/AV-3.6-nav-prev-next-topo\|AV-3.6]] | Mover nav prev/next pra topo da página (compacta, remove NavCards do rodapé) | S | backlog | sites-dev-alpha |
+| [[backlog/AV-3.7-smoke-e2e\|AV-3.7]] | Smoke E2E final (admin → aluno end-to-end, veredicto GO/NO-GO) | S | backlog | sites-qa |
+
+Epic Aulas v2 redesenha a experiência da aula tanto no admin quanto no aluno.
+Branch ativa: **`feat-aulas-v2`** (NÃO main). 7 stories validadas com 5-point
+checklist: GO 5/5 cada. Prefixo **AV-3.x** (Aulas v2) escolhido para não colidir
+com a Epic 3 histórica (SEO, abaixo).
+
+**Sequência sugerida:**
+1. AV-3.2 (template) e AV-3.1 (migration) — em paralelo, AV-3.1 lê o template definido por AV-3.2.
+2. AV-3.3, AV-3.4, AV-3.5, AV-3.6 — em paralelo após AV-3.1 aplicada e tipos regenerados. Mesmo dev (sites-dev-alpha) coordena os 3 que tocam `page.tsx` (AV-3.4, AV-3.5, AV-3.6); sites-dev-beta cuida da action de AV-3.5.
+3. AV-3.7 — após todas anteriores em `feat-aulas-v2`. sites-qa valida. GO → lead aprova merge → sites-devops faz push.
+
+**Cuidados críticos:**
+- **NÃO TOCAR EM MAIN.** Push só após GO de QA + aprovação do lead.
+- DB de PROD: AV-3.1 faz UPDATE em ~13 rows reais. Dry-run obrigatório antes (sites-data).
+- Template MD: minimalista, sem emojis, sem cards (diretriz "menos é mais" do lead em AV-3.2).
+
+---
+
 ## Epic Fix Materiais (2026-05-16)
 
 | Story | Título | Complexidade | Status | Agente |
 |---|---|---|---|---|
 | [[backlog/2.1-material-download-nova-aba\|FM-2.1]] | Download de material abre em nova aba — `target="_blank"` em todos os kinds | S | active | sites-dev-alpha |
 | [[backlog/2.2-admin-gerencia-materiais\|FM-2.2]] | Admin gerencia materiais da aula (listar todos os kinds + excluir + cleanup storage + rollback) | M | active | sites-dev-alpha + sites-dev-beta |
+| [[backlog/2.3-preview-markdown-admin\|FM-2.3]] | Preview de markdown/HTML/MDX no editor de aula admin — reusa `LessonContent` + server action `previewContentAction` | M | active | sites-dev-alpha + sites-ux |
 
-2 bugs de materiais reportados pelo lead. **FM-2.1** é fix UX da área do aluno
-(`MaterialsList.tsx` faz o anchor sem `target="_blank"` para arquivos, navegando
-a aba atual em PDFs/imagens servidos com `Content-Disposition: inline` pelo
-Supabase). **FM-2.2** corrige gap de UX no editor de aula admin: lista existe
-mas (a) botão delete não aparece para materiais `LINK` por causa do guard
-`mat.storage_path && ...`, (b) optimistic update sem rollback engole erros do
-server, (c) action não tolera `storagePath` nulo no `storage.remove`. Hard
-delete (tabela sem `deleted_at`), cleanup de storage SIM, sem ownership
-(coluna `uploaded_by` não existe). Stories independentes da Epic FAA-1.x.
-Ambas validadas com 5-point checklist: GO (5/5). Prefixo FM-2.x para não
-colidir com a Epic 2 histórica (Design recommendations P0–P2).
+2 bugs de materiais + 1 enhancement no editor admin reportados pelo lead.
+**FM-2.1** é fix UX da área do aluno (`MaterialsList.tsx` faz o anchor sem
+`target="_blank"` para arquivos, navegando a aba atual em PDFs/imagens servidos
+com `Content-Disposition: inline` pelo Supabase). **FM-2.2** corrige gap de UX
+no editor de aula admin: lista existe mas (a) botão delete não aparece para
+materiais `LINK` por causa do guard `mat.storage_path && ...`, (b) optimistic
+update sem rollback engole erros do server, (c) action não tolera `storagePath`
+nulo no `storage.remove`. Hard delete (tabela sem `deleted_at`), cleanup de
+storage SIM, sem ownership (coluna `uploaded_by` não existe). **FM-2.3** dá ao
+admin um preview ao vivo do markdown/HTML/MDX dos campos `description` e
+`content` no editor de aula — reusa o componente `LessonContent` (já é o
+renderer canônico do aluno) via server action `previewContentAction` que chama
+`renderContent()` server-only, garantindo paridade 1:1 com o que o aluno vê.
+Live debounced 400ms, sanitização de HTML, fallback de erro para MDX inválido,
+cleanup do stub MDX quebrado em `ContentEditor.tsx`. Stories independentes da
+Epic FAA-1.x. Todas validadas com 5-point checklist: GO (5/5). Prefixo FM-2.x
+para não colidir com a Epic 2 histórica (Design recommendations P0–P2).
 
 ---
 

@@ -11,6 +11,52 @@ Histórico de veredictos emitidos pelo sites-qa (Axilun).
 
 ---
 
+## 2026-05-16 — Epic Aulas v2 (6 stories AV-3.1 a AV-3.6) — ✅ PASS (3 concerns leves)
+
+> Veredicto detalhado em [[verdict-epic-aulas-v2]]. Branch `feat-aulas-v2`.
+
+**Stories:**
+- AV-3.1 (migration): summary/transcript em lessons + tabela `lesson_reactions` + RLS via `has_access` + UPDATE template em 39 aulas. Tipos regenerados.
+- AV-3.2 (template MD elegante): `LessonContent` com mapeamento explícito (sem `prose`), tokens `--bone`, bullets `·` via `before:content`.
+- AV-3.3 (admin 3 campos): subcomponente `MarkdownField` reutilizável; description virou textarea; seções Resumo + Transcrição com toggle `aria-pressed`.
+- AV-3.4 (aluno 5 abas): filtro por presença de conteúdo, fallback initialTab, `overflow-x-auto` mobile, counters preservados.
+- AV-3.5 (like/dislike): `useOptimistic` + `useTransition` + rollback; server action `setReaction` com `requireUser` + zod + UPSERT/DELETE; aria-pressed + aria-label + role="status".
+- AV-3.6 (nav prev/next topo): `LessonNavCompact` server component no header; NavCards do rodapé totalmente removidos.
+
+**Validações:** typecheck limpo + build ✓ Compiled successfully em 9.5s (144/144 static).
+
+**Concerns leves (não bloqueantes):**
+1. `LessonEditorClient.tsx:115, 162` — `as any` casts desnecessários (tipos já cobrem summary/transcript após regen).
+2. `lesson-reactions.ts:40` — `revalidatePath('/', 'layout')` diverge da spec AC1 (que pediu sem revalidate); funcional, mas invalida cache global. Padrão consistente com `notifications.ts` do codebase.
+3. `setReaction` retorna `void` em vez de `{ likes, dislikes, mine }` da spec AC1; client computa stats local, sem live-sync entre usuários (aceitável MVP).
+
+**Próximo passo:** `sites-devops` autorizado a push da branch `feat-aulas-v2` (Vercel preview = staging). NÃO autorizar push para `main` automaticamente — aguardar smoke manual + autorização explícita do João.
+
+---
+
+## 2026-05-16 — Story 2.3 (preview admin) — ✅ PASS
+
+> Veredicto detalhado em [[verdict-story-2.3]]. Branch `feat-preview-admin-aula`, commit `d1c6213`.
+
+**Implementação:**
+- `preview-actions.ts` — server action `previewContentAction(format, content)` com `requireAdmin()` + `renderContent()` (paridade com renderização real do aluno) + truncate erro 200 chars.
+- `LessonEditorClient.tsx` — toggle "Editar/Visualizar" no `description` (client-side markdown), toggle "Preview como aluno"/"Fechar preview" no `content` (server action), `useEffect` debounced 400ms com cleanup, indicador "Renderizando…", `aria-pressed` em ambos toggles, error state amigável (não crasha editor).
+- `ContentEditor.tsx` — removido `MDXPreviewClient` quebrado (usava `useState` em lugar de `useEffect`) e toggle MDX interno; preview centralizado no `LessonEditorClient`.
+
+**Validações:**
+- ✅ AC1-AC8 atendidas. AC9 (smoke browser) pendente do user — não bloqueia push.
+- ✅ `pnpm typecheck` limpo + `pnpm build` ✓ Compiled successfully em 10.1s (144/144 static).
+- ✅ Pipeline preview = pipeline render aluno (`renderContent`) — paridade garantida.
+- ✅ `MDXPreviewClient` removido limpo (diff confere).
+- ✅ Único consumidor de `ContentEditor` é o `LessonEditorClient` — sem outras telas afetadas.
+- ✅ CONCERN-1 da Story 2.2 corrigido em commit anterior `8d03531` (`deleteMaterial` agora passa `lesson.id`).
+
+**Concerns leves:** smoke test browser pendente do user, sem rate-limit na action (out of scope, admin trusted), description preview é client-side puro (escolha de design documentada).
+
+**Próximo passo:** `sites-devops` autorizado a push.
+
+---
+
 ## 2026-05-16 — Stories 2.1 + 2.2 (materiais) — Mixed (PASS + CONCERNS)
 
 > Veredicto detalhado em [[verdict-stories-2.1-2.2]]. Branch `fix-aula-aluno-ux-bugs`.
