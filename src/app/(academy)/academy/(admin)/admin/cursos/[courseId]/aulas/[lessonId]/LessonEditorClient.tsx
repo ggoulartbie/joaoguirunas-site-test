@@ -286,6 +286,14 @@ export function LessonEditorClient({
         )}
 
         <ContentFieldSection
+          label="Sobre a Aula"
+          format={contentFormat}
+          content={content}
+          onFormatChange={setContentFormat}
+          onContentChange={setContent}
+        />
+
+        <ContentFieldSection
           label="Resumo"
           format={summaryFormat}
           content={summary}
@@ -299,14 +307,6 @@ export function LessonEditorClient({
           content={transcript}
           onFormatChange={setTranscriptFormat}
           onContentChange={setTranscript}
-        />
-
-        <ContentFieldSection
-          label="Conteúdo da Aula"
-          format={contentFormat}
-          content={content}
-          onFormatChange={setContentFormat}
-          onContentChange={setContent}
         />
 
         {/* Materials */}
