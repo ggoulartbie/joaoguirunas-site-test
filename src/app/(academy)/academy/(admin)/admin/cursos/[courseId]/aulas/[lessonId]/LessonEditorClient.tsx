@@ -38,8 +38,61 @@ function formatBytes(bytes: number | null) {
 const inputClass =
   'w-full border border-[rgba(255,255,255,0.16)] bg-[var(--ink-2)] px-3 py-3 font-mono text-sm text-[var(--bone)] placeholder-[var(--bone-mute)] outline-none focus:border-[var(--ember)] transition-colors'
 
+const textareaClass =
+  'w-full border border-[rgba(255,255,255,0.16)] bg-[var(--ink-2)] px-3 py-3 font-mono text-sm text-[var(--bone)] placeholder-[var(--bone-mute)] outline-none focus:border-[var(--ember)] transition-colors resize-none [field-sizing:content]'
+
 const sectionClass =
   'border border-[rgba(255,255,255,0.07)] bg-[var(--ink)] p-6 space-y-4'
+
+// Subcomponente reutilizável: campo markdown com toggle Editar/Visualizar
+function MarkdownField({
+  label,
+  value,
+  onChange,
+  placeholder,
+  rows = 6,
+}: {
+  label: string
+  value: string
+  onChange: (v: string) => void
+  placeholder?: string
+  rows?: number
+}) {
+  const [previewMode, setPreviewMode] = useState(false)
+
+  return (
+    <div className="space-y-1.5">
+      <div className="flex items-center justify-between">
+        <label className="font-mono text-[10px] uppercase tracking-widest text-[var(--bone-mute)]">{label}</label>
+        {value && (
+          <button
+            type="button"
+            aria-pressed={previewMode}
+            onClick={() => setPreviewMode((p) => !p)}
+            className="flex items-center gap-1.5 font-mono text-[10px] text-[var(--bone-mute)] transition-colors hover:text-[var(--bone-dim)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ember)]"
+          >
+            <Eye className="h-3 w-3" />
+            {previewMode ? 'Editar' : 'Visualizar'}
+          </button>
+        )}
+      </div>
+      {previewMode ? (
+        <div className="border border-[rgba(255,255,255,0.07)] bg-[var(--void)] px-3 py-2" style={{ borderRadius: 0 }}>
+          <LessonContent content={{ format: 'MARKDOWN', raw: value }} className="" />
+        </div>
+      ) : (
+        <textarea
+          value={value}
+          onChange={(e) => onChange(e.target.value)}
+          placeholder={placeholder}
+          rows={rows}
+          className={textareaClass}
+          style={{ borderRadius: 0 }}
+        />
+      )}
+    </div>
+  )
+}
 
 export function LessonEditorClient({
   lesson,
@@ -58,6 +111,10 @@ export function LessonEditorClient({
   const [title, setTitle] = useState(lesson.title)
   const [description, setDescription] = useState(lesson.description ?? '')
   const [descriptionPreview, setDescriptionPreview] = useState(false)
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const lessonAny = lesson as any
+  const [summary, setSummary] = useState<string>(lessonAny.summary ?? '')
+  const [transcript, setTranscript] = useState<string>(lessonAny.transcript ?? '')
   const [kind, setKind] = useState<LessonKind>((lesson.kind as LessonKind) ?? 'VIDEO')
   const [videoProvider, setVideoProvider] = useState(lesson.video_provider ?? 'VIMEO')
   const [videoId, setVideoId] = useState(lesson.video_id ?? '')
@@ -101,9 +158,14 @@ export function LessonEditorClient({
     setError(null)
     startTransition(async () => {
       try {
-        await updateLesson(lesson.id, courseId, {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        await (updateLesson as any)(lesson.id, courseId, {
           title,
           description: description || null,
+          summary: summary || null,
+          summary_format: summary ? 'MARKDOWN' : null,
+          transcript: transcript || null,
+          transcript_format: transcript ? 'MARKDOWN' : null,
           kind,
           video_provider: hasVideo ? videoProvider : null,
           video_id: hasVideo && videoId ? videoId : null,
@@ -228,17 +290,15 @@ export function LessonEditorClient({
               </div>
               {descriptionPreview ? (
                 <div className="border border-[rgba(255,255,255,0.07)] bg-[var(--void)] px-3 py-2" style={{ borderRadius: 0 }}>
-                  <LessonContent
-                    content={{ format: 'MARKDOWN', raw: description }}
-                    className=""
-                  />
+                  <LessonContent content={{ format: 'MARKDOWN', raw: description }} className="" />
                 </div>
               ) : (
-                <input
+                <textarea
                   value={description}
                   onChange={(e) => setDescription(e.target.value)}
                   placeholder="Breve descrição da aula..."
-                  className={inputClass}
+                  rows={6}
+                  className={textareaClass}
                   style={{ borderRadius: 0 }}
                 />
               )}
@@ -306,6 +366,18 @@ export function LessonEditorClient({
           </section>
         )}
 
+        {/* Resumo */}
+        <section className={sectionClass} style={{ borderRadius: 0 }}>
+          <p className="font-mono text-[10px] uppercase tracking-widest text-[var(--bone-mute)]">Resumo</p>
+          <MarkdownField
+            label="Resumo da aula"
+            value={summary}
+            onChange={setSummary}
+            placeholder="Resumo em markdown — aparece na aba Resumo para o aluno..."
+            rows={6}
+          />
+        </section>
+
         {/* Content editor */}
         <section className={sectionClass} style={{ borderRadius: 0 }}>
           <div className="flex items-center justify-between">
@@ -344,6 +416,18 @@ export function LessonEditorClient({
               onContentChange={setContent}
             />
           )}
+        </section>
+
+        {/* Transcrição */}
+        <section className={sectionClass} style={{ borderRadius: 0 }}>
+          <p className="font-mono text-[10px] uppercase tracking-widest text-[var(--bone-mute)]">Transcrição</p>
+          <MarkdownField
+            label="Transcrição do vídeo"
+            value={transcript}
+            onChange={setTranscript}
+            placeholder="Transcrição em markdown — aparece na aba Transcrição para o aluno..."
+            rows={12}
+          />
         </section>
 
         {/* Materials */}
