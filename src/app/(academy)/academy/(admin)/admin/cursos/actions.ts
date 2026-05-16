@@ -195,17 +195,18 @@ export async function uploadMaterial(lessonId: string, courseId: string, formDat
   if (uploadError) throw new Error(uploadError.message)
 
   const kind = getMaterialKind(file.type)
-  const { error } = await supabaseAdmin.from('materials').insert({
+  const { data: material, error } = await supabaseAdmin.from('materials').insert({
     lesson_id: lessonId,
     title: file.name,
     kind,
     storage_path: path,
     size_bytes: file.size,
     sort_order: 0,
-  })
+  }).select('*').single()
 
   if (error) throw new Error(error.message)
   revalidatePath(`/academy/admin/cursos/${courseId}`)
+  return material
 }
 
 export async function deleteMaterial(materialId: string, storagePath: string, courseId: string, lessonId?: string) {

@@ -111,8 +111,8 @@ export function LessonEditorClient({
     const formData = new FormData()
     formData.append('file', file)
     try {
-      await uploadMaterial(lesson.id, courseId, formData)
-      router.refresh()
+      const created = await uploadMaterial(lesson.id, courseId, formData)
+      if (created) setMaterials((prev) => [...prev, created])
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Erro no upload')
     } finally {
