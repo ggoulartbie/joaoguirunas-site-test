@@ -6,6 +6,8 @@ import { createClient } from '@/lib/supabase/server'
 import { supabaseAdmin } from '@/lib/supabase/admin'
 import { siteConfig } from '@/config/site'
 
+export const dynamic = 'force-dynamic'
+
 export const metadata: Metadata = {
   title: 'Turmas · João Guirunas',
   description:

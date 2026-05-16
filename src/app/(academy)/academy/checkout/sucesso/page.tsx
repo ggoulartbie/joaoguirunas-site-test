@@ -3,6 +3,8 @@ import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
 import { supabaseAdmin } from '@/lib/supabase/admin'
 
+export const dynamic = 'force-dynamic'
+
 interface Props {
   searchParams: Promise<{ session_id?: string; order_nsu?: string; provider?: string }>
 }
