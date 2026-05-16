@@ -10,6 +10,7 @@ import { VideoPlayer } from '@/components/student/VideoPlayer'
 import { LockedContent } from '@/components/student/LockedContent'
 import { MarkCompleteButton } from '@/components/student/MarkCompleteButton'
 import { LessonTabs } from './LessonTabs'
+import { LessonReactions } from '@/components/student/LessonReactions'
 import { CourseSidebar, MobileLessonDrawer } from './CourseSidebar'
 import type { CommentWithAuthor } from '@/types/student'
 import type { UserRole } from '@/types/student'
@@ -280,6 +281,16 @@ export default async function AulaPage({ params }: Props) {
     ? await renderContent(lesson.transcript_format as 'MDX' | 'HTML' | 'MARKDOWN', lesson.transcript)
     : null
 
+  // Fetch lesson reactions
+  const { data: reactionRows } = await supabase
+    .from('lesson_reactions')
+    .select('reaction, user_id')
+    .eq('lesson_id', lesson.id)
+
+  const initialLikes = reactionRows?.filter((r) => r.reaction === 'LIKE').length ?? 0
+  const initialDislikes = reactionRows?.filter((r) => r.reaction === 'DISLIKE').length ?? 0
+  const initialMine = (reactionRows?.find((r) => r.user_id === user.id)?.reaction ?? null) as 'LIKE' | 'DISLIKE' | null
+
   // Fetch comments
   const { data: rawComments } = await supabaseAdmin
     .from('comments')
@@ -396,12 +407,20 @@ export default async function AulaPage({ params }: Props) {
               {lesson.title}
             </h1>
 
-            {/* MarkCompleteButton + Nav compacto */}
+            {/* MarkCompleteButton + Reactions + Nav compacto */}
             <div className="mt-4 flex flex-wrap items-start justify-between gap-3">
-              <MarkCompleteButton
-                lessonId={lesson.id}
-                initialCompleted={progress?.completed ?? false}
-              />
+              <div className="flex flex-wrap items-center gap-3">
+                <MarkCompleteButton
+                  lessonId={lesson.id}
+                  initialCompleted={progress?.completed ?? false}
+                />
+                <LessonReactions
+                  lessonId={lesson.id}
+                  initialLikes={initialLikes}
+                  initialDislikes={initialDislikes}
+                  initialMine={initialMine}
+                />
+              </div>
 
               <div className="flex items-center gap-2">
                 <LessonNavCompact
