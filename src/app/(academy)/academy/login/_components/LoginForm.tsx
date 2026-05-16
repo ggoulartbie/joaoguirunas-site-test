@@ -7,6 +7,7 @@ import { z } from 'zod'
 import Link from 'next/link'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
+import { redeemTempPassword } from '@/app/actions/auth'
 
 const schema = z.object({
   email: z.string().email('Email inválido'),
@@ -40,22 +41,43 @@ export function LoginForm() {
     setServerError(null)
     const supabase = createClient()
 
-    const { error, data: authData } = await supabase.auth.signInWithPassword({
+    let { error, data: authData } = await supabase.auth.signInWithPassword({
       email: data.email,
       password: data.password,
     })
 
+    // Se senha real falhou, tentar fallback de senha temporária (fluxo "Esqueci senha").
+    // redeemTempPassword promove a senha temp a senha real e marca has_set_password=false.
     if (error) {
-      setServerError('Email ou senha incorretos.')
+      const redeemed = await redeemTempPassword(data.email, data.password)
+      if (redeemed.success) {
+        const retry = await supabase.auth.signInWithPassword({
+          email: data.email,
+          password: data.password,
+        })
+        if (retry.error || !retry.data.user) {
+          setServerError('Erro inesperado. Tente novamente em alguns segundos.')
+          return
+        }
+        authData = retry.data
+        error = null
+      } else {
+        setServerError('Email ou senha incorretos.')
+        return
+      }
+    }
+
+    if (!authData?.user) {
+      setServerError('Erro inesperado. Tente novamente.')
       return
     }
 
-    // Determinar destino: primeiro acesso (senha temporária) → forçar redefinição,
-    // ADMIN → /academy/admin, senão ?next ou fallback.
+    // Determinar destino: primeiro acesso (senha temporária promovida ou ativação) →
+    // forçar redefinição. ADMIN → /academy/admin, senão ?next ou fallback.
     const { data: profile } = await supabase
       .from('profiles')
       .select('role, has_set_password')
-      .eq('id', authData.user!.id)
+      .eq('id', authData.user.id)
       .single()
 
     if (profile?.has_set_password === false) {

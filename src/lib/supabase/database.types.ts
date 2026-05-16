@@ -1109,6 +1109,9 @@ export type Database = {
           name: string
           role: string
           stripe_customer_id: string | null
+          temp_password_expires_at: string | null
+          temp_password_hash: string | null
+          temp_password_requested_at: string | null
           updated_at: string
         }
         Insert: {
@@ -1120,6 +1123,9 @@ export type Database = {
           name: string
           role?: string
           stripe_customer_id?: string | null
+          temp_password_expires_at?: string | null
+          temp_password_hash?: string | null
+          temp_password_requested_at?: string | null
           updated_at?: string
         }
         Update: {
@@ -1131,6 +1137,9 @@ export type Database = {
           name?: string
           role?: string
           stripe_customer_id?: string | null
+          temp_password_expires_at?: string | null
+          temp_password_hash?: string | null
+          temp_password_requested_at?: string | null
           updated_at?: string
         }
         Relationships: []
@@ -1243,6 +1252,18 @@ export type Database = {
         Returns: undefined
       }
       is_admin: { Args: never; Returns: boolean }
+      auth_get_user_id_by_email: {
+        Args: { p_email: string }
+        Returns: string | null
+      }
+      auth_get_user_with_temp_password_by_email: {
+        Args: { p_email: string }
+        Returns: {
+          user_id: string
+          temp_hash: string
+          temp_expires_at: string
+        }[]
+      }
     }
     Enums: {
       [_ in never]: never

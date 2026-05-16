@@ -11,19 +11,27 @@ import {
   Text,
 } from '@react-email/components'
 
-interface PasswordResetEmailProps {
+interface Props {
   name: string
-  resetUrl: string
+  email: string
+  tempPassword: string
+  loginUrl: string
+  expiresInMinutes: number
 }
 
-export function PasswordResetEmail({ name, resetUrl }: PasswordResetEmailProps) {
+export function PasswordResetEmail({
+  name,
+  email,
+  tempPassword,
+  loginUrl,
+  expiresInMinutes,
+}: Props) {
   return (
     <Html lang="pt-BR">
       <Head />
-      <Preview>Redefinir senha da sua conta JG Academy</Preview>
+      <Preview>Sua senha temporária — Academy</Preview>
       <Body style={styles.main}>
         <Container style={styles.container}>
-          {/* Header */}
           <table cellPadding="0" cellSpacing="0" style={styles.headerTable}>
             <tbody>
               <tr>
@@ -33,26 +41,38 @@ export function PasswordResetEmail({ name, resetUrl }: PasswordResetEmailProps) 
             </tbody>
           </table>
 
-          {/* Card */}
           <Section style={styles.card}>
-            <Text style={styles.monoLabel}>SEGURANÇA</Text>
-            <Heading style={styles.heading}>Redefinir senha</Heading>
+            <Text style={styles.monoLabel}>SENHA TEMPORÁRIA</Text>
+            <Heading style={styles.heading}>Olá, {name}</Heading>
             <Text style={styles.body}>
-              Olá, {name}. Recebemos uma solicitação para redefinir a senha da
-              sua conta. Clique no botão abaixo para criar uma nova senha.
+              Recebemos uma solicitação de redefinição de senha para sua conta. Use as
+              credenciais abaixo para entrar. Ao fazer login, você será solicitado a
+              criar uma nova senha pessoal.
             </Text>
+
+            <Section style={styles.credBox}>
+              <Text style={styles.credLabel}>EMAIL</Text>
+              <Text style={styles.credValue}>{email}</Text>
+              <Text style={styles.credLabel}>SENHA TEMPORÁRIA</Text>
+              <Text style={styles.credValueMono}>{tempPassword}</Text>
+            </Section>
+
             <Section style={styles.btnWrapper}>
-              <Button href={resetUrl} style={styles.button}>
-                REDEFINIR SENHA
+              <Button href={loginUrl} style={styles.button}>
+                FAZER LOGIN
               </Button>
             </Section>
-            <Text style={styles.warning}>
-              Este link expira em 1 hora. Se você não solicitou a redefinição,
-              ignore este email — sua senha permanece a mesma.
+
+            <Text style={styles.notice}>
+              Esta senha temporária expira em <strong>{expiresInMinutes} minutos</strong>.
+              Sua senha atual continua válida — se você se lembrar dela, pode usá-la
+              normalmente e ignorar este email.
             </Text>
+
             <Hr style={styles.hr} />
             <Text style={styles.footer}>
-              Por segurança, nunca compartilhe este link com ninguém.
+              Se não foi você quem solicitou, pode ignorar este email com segurança.
+              Sua senha atual permanece inalterada até alguém usar esta senha temporária.
             </Text>
           </Section>
         </Container>
@@ -62,9 +82,12 @@ export function PasswordResetEmail({ name, resetUrl }: PasswordResetEmailProps) 
 }
 
 PasswordResetEmail.PreviewProps = {
-  name: 'João',
-  resetUrl: 'http://localhost:3000/redefinir-senha/token-exemplo',
-} satisfies PasswordResetEmailProps
+  name: 'Maria Silva',
+  email: 'maria@exemplo.com',
+  tempPassword: 'Acad3my-9f8x2p',
+  loginUrl: 'http://localhost:3000/academy/login',
+  expiresInMinutes: 60,
+} satisfies Props
 
 const styles = {
   main: {
@@ -122,10 +145,38 @@ const styles = {
     color: '#f1f1f3',
     fontSize: '15px',
     lineHeight: '1.6',
-    margin: '0 0 24px',
+    margin: '0 0 16px',
+  },
+  credBox: {
+    backgroundColor: '#050507',
+    border: '1px solid rgba(255,58,14,0.25)',
+    padding: '20px',
+    margin: '20px 0',
+  },
+  credLabel: {
+    color: '#ff3a0e',
+    fontFamily: '"Courier New", Courier, monospace',
+    fontSize: '9px',
+    letterSpacing: '0.2em',
+    textTransform: 'uppercase' as const,
+    margin: '0 0 4px',
+  },
+  credValue: {
+    color: '#f1f1f3',
+    fontSize: '15px',
+    margin: '0 0 16px',
+    fontWeight: '500',
+  },
+  credValueMono: {
+    color: '#f1f1f3',
+    fontFamily: '"Courier New", Courier, monospace',
+    fontSize: '16px',
+    margin: '0',
+    fontWeight: '600',
+    letterSpacing: '0.02em',
   },
   btnWrapper: {
-    margin: '24px 0',
+    margin: '24px 0 16px',
   },
   button: {
     backgroundColor: '#ff3a0e',
@@ -140,11 +191,14 @@ const styles = {
     textDecoration: 'none',
     display: 'inline-block',
   },
-  warning: {
-    color: 'rgba(241,241,243,0.55)',
+  notice: {
+    color: 'rgba(241,241,243,0.65)',
     fontSize: '13px',
-    lineHeight: '1.6',
-    margin: '0',
+    lineHeight: '1.55',
+    margin: '8px 0 0',
+    padding: '12px 14px',
+    backgroundColor: 'rgba(255,255,255,0.025)',
+    borderLeft: '2px solid #ff3a0e',
   },
   hr: {
     borderColor: 'rgba(255,255,255,0.07)',
