@@ -62,6 +62,7 @@ export function LessonEditorClient({
   const [contentFormat, setContentFormat] = useState<ContentFormat>((lesson.content_format as ContentFormat) ?? 'MARKDOWN')
   const [content, setContent] = useState(lesson.content ?? '')
   const [materials, setMaterials] = useState(initialMaterials)
+  const [deleting, setDeleting] = useState<string | null>(null)
   const [preview, setPreview] = useState(false)
   const [previewContent, setPreviewContent] = useState<RenderedContent | null>(null)
   const [saved, setSaved] = useState(false)
@@ -100,7 +101,7 @@ export function LessonEditorClient({
       const raw: RenderedContent =
         contentFormat === 'HTML'
           ? { format: 'HTML', html: content }
-          : { format: 'MARKDOWN', html: content }
+          : { format: 'MARKDOWN', raw: content }
       setPreviewContent(raw)
     }
   }
@@ -122,10 +123,20 @@ export function LessonEditorClient({
     }
   }
 
-  async function handleDeleteMaterial(id: string, storagePath: string) {
+  async function handleDeleteMaterial(id: string, storagePath: string | null) {
     if (!confirm('Remover material?')) return
+    const snapshot = materials.find((m) => m.id === id)
     setMaterials((prev) => prev.filter((m) => m.id !== id))
-    startTransition(() => deleteMaterial(id, storagePath, courseId))
+    setDeleting(id)
+    try {
+      await deleteMaterial(id, storagePath ?? '', courseId)
+      router.refresh()
+    } catch (err) {
+      if (snapshot) setMaterials((prev) => [...prev, snapshot])
+      setError(err instanceof Error ? err.message : 'Erro ao remover material')
+    } finally {
+      setDeleting(null)
+    }
   }
 
   return (
@@ -293,18 +304,25 @@ export function LessonEditorClient({
           {materials.length > 0 && (
             <div className="divide-y divide-[rgba(255,255,255,0.07)]">
               {materials.map((mat) => (
-                <div key={mat.id} className="flex items-center gap-3 py-2.5">
+                <div
+                  key={mat.id}
+                  className={cn('flex items-center gap-3 py-2.5 transition-opacity', deleting === mat.id && 'opacity-50')}
+                >
                   <FileText className="h-4 w-4 shrink-0 text-[var(--bone-mute)]" />
                   <div className="min-w-0 flex-1">
                     <p className="truncate font-[--type-sans] text-xs text-[var(--bone-dim)]">{mat.title}</p>
                     <p className="font-mono text-[10px] text-[var(--bone-mute)]">
-                      {mat.kind} {mat.size_bytes ? `· ${formatBytes(mat.size_bytes)}` : ''}
+                      {mat.kind}
+                      {mat.size_bytes ? ` · ${formatBytes(mat.size_bytes)}` : ''}
+                      {mat.kind === 'LINK' && mat.external_url ? ` · ${mat.external_url.slice(0, 40)}${mat.external_url.length > 40 ? '…' : ''}` : ''}
                     </p>
                   </div>
                   <button
                     type="button"
-                    onClick={() => mat.storage_path && handleDeleteMaterial(mat.id, mat.storage_path)}
-                    className="text-[var(--bone-mute)] transition-colors hover:text-[var(--ember)]"
+                    disabled={deleting === mat.id}
+                    onClick={() => handleDeleteMaterial(mat.id, mat.storage_path)}
+                    className="text-[var(--bone-mute)] transition-colors hover:text-[var(--ember)] disabled:pointer-events-none"
+                    aria-label={`Remover ${mat.title}`}
                   >
                     <Trash2 className="h-3.5 w-3.5" />
                   </button>
