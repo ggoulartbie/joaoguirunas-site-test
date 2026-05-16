@@ -1,7 +1,7 @@
 ---
 title: "Story AV-3.2: Template MD elegante para description vazia"
 type: story
-status: backlog
+status: done
 epic: AV
 complexity: S
 agent: sites-ux + sites-dev-alpha

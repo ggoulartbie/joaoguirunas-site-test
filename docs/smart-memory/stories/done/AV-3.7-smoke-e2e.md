@@ -1,7 +1,7 @@
 ---
 title: "Story AV-3.7: Smoke E2E final Epic Aulas v2"
 type: story
-status: backlog
+status: done
 epic: AV
 complexity: S
 agent: sites-qa

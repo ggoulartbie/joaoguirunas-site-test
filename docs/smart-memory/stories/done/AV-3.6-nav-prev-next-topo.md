@@ -1,7 +1,7 @@
 ---
 title: "Story AV-3.6: Mover navegação prev/next pra topo da página da aula"
 type: story
-status: backlog
+status: done
 epic: AV
 complexity: S
 agent: sites-dev-alpha
