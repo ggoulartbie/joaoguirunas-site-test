@@ -1,10 +1,11 @@
 'use client'
 
-import { useState, useTransition, useRef } from 'react'
+import { useState, useTransition, useRef, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { Upload, Trash2, FileText, ArrowLeft, Eye } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { updateLesson, uploadMaterial, deleteMaterial } from '../../../actions'
+import { previewContentAction } from './preview-actions'
 import { ContentEditor } from '@/components/editor/ContentEditor'
 import { LessonContent } from '@/components/editor/LessonContent'
 import { extractYouTubeId } from '@/components/student/VideoPlayer'
@@ -56,6 +57,7 @@ export function LessonEditorClient({
 
   const [title, setTitle] = useState(lesson.title)
   const [description, setDescription] = useState(lesson.description ?? '')
+  const [descriptionPreview, setDescriptionPreview] = useState(false)
   const [kind, setKind] = useState<LessonKind>((lesson.kind as LessonKind) ?? 'VIDEO')
   const [videoProvider, setVideoProvider] = useState(lesson.video_provider ?? 'VIMEO')
   const [videoId, setVideoId] = useState(lesson.video_id ?? '')
@@ -65,12 +67,34 @@ export function LessonEditorClient({
   const [deleting, setDeleting] = useState<string | null>(null)
   const [preview, setPreview] = useState(false)
   const [previewContent, setPreviewContent] = useState<RenderedContent | null>(null)
+  const [previewLoading, setPreviewLoading] = useState(false)
+  const [previewError, setPreviewError] = useState<string | null>(null)
   const [saved, setSaved] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [pending, startTransition] = useTransition()
   const [uploading, setUploading] = useState(false)
 
   const hasVideo = kind === 'VIDEO' || kind === 'LIVE'
+
+  // Carrega preview via server action ao abrir ou quando content/format muda (debounced 400ms)
+  useEffect(() => {
+    if (!preview || !content) return
+
+    const timer = setTimeout(async () => {
+      setPreviewLoading(true)
+      setPreviewError(null)
+      try {
+        const rendered = await previewContentAction(contentFormat, content)
+        setPreviewContent(rendered)
+      } catch (err) {
+        setPreviewError(err instanceof Error ? err.message : 'Erro ao renderizar')
+      } finally {
+        setPreviewLoading(false)
+      }
+    }, 400)
+
+    return () => clearTimeout(timer)
+  }, [preview, content, contentFormat])
 
   function handleSave(e: React.FormEvent) {
     e.preventDefault()
@@ -94,16 +118,9 @@ export function LessonEditorClient({
     })
   }
 
-  async function handlePreview() {
+  function togglePreview() {
     if (!content) return
     setPreview((p) => !p)
-    if (!preview && content) {
-      const raw: RenderedContent =
-        contentFormat === 'HTML'
-          ? { format: 'HTML', html: content }
-          : { format: 'MARKDOWN', raw: content }
-      setPreviewContent(raw)
-    }
   }
 
   async function handleFileUpload(e: React.ChangeEvent<HTMLInputElement>) {
@@ -195,14 +212,36 @@ export function LessonEditorClient({
               </div>
             </div>
             <div className="space-y-1.5 sm:col-span-2">
-              <label className="font-mono text-[10px] uppercase tracking-widest text-[var(--bone-mute)]">Descrição</label>
-              <input
-                value={description}
-                onChange={(e) => setDescription(e.target.value)}
-                placeholder="Breve descrição da aula..."
-                className={inputClass}
-                style={{ borderRadius: 0 }}
-              />
+              <div className="flex items-center justify-between">
+                <label className="font-mono text-[10px] uppercase tracking-widest text-[var(--bone-mute)]">Descrição</label>
+                {description && (
+                  <button
+                    type="button"
+                    aria-pressed={descriptionPreview}
+                    onClick={() => setDescriptionPreview((p) => !p)}
+                    className="flex items-center gap-1.5 font-mono text-[10px] text-[var(--bone-mute)] transition-colors hover:text-[var(--bone-dim)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ember)]"
+                  >
+                    <Eye className="h-3 w-3" />
+                    {descriptionPreview ? 'Editar' : 'Visualizar'}
+                  </button>
+                )}
+              </div>
+              {descriptionPreview ? (
+                <div className="border border-[rgba(255,255,255,0.07)] bg-[var(--void)] px-3 py-2" style={{ borderRadius: 0 }}>
+                  <LessonContent
+                    content={{ format: 'MARKDOWN', raw: description }}
+                    className="prose prose-invert prose-sm max-w-none"
+                  />
+                </div>
+              ) : (
+                <input
+                  value={description}
+                  onChange={(e) => setDescription(e.target.value)}
+                  placeholder="Breve descrição da aula..."
+                  className={inputClass}
+                  style={{ borderRadius: 0 }}
+                />
+              )}
             </div>
           </div>
         </section>
@@ -274,8 +313,9 @@ export function LessonEditorClient({
             {content && (
               <button
                 type="button"
-                onClick={handlePreview}
-                className="flex items-center gap-1.5 font-mono text-[10px] text-[var(--bone-mute)] transition-colors hover:text-[var(--bone-dim)]"
+                aria-pressed={preview}
+                onClick={togglePreview}
+                className="flex items-center gap-1.5 font-mono text-[10px] text-[var(--bone-mute)] transition-colors hover:text-[var(--bone-dim)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ember)]"
               >
                 <Eye className="h-3 w-3" />
                 {preview ? 'Fechar preview' : 'Preview como aluno'}
@@ -283,9 +323,18 @@ export function LessonEditorClient({
             )}
           </div>
 
-          {preview && previewContent ? (
-            <div className="border border-[rgba(255,255,255,0.07)] bg-[var(--void)] p-4" style={{ borderRadius: 0 }}>
-              <LessonContent content={previewContent} className="prose prose-invert prose-sm max-w-none" />
+          {preview ? (
+            <div className="relative border border-[rgba(255,255,255,0.07)] bg-[var(--void)] p-4" style={{ borderRadius: 0 }}>
+              {previewLoading && (
+                <p className="absolute right-3 top-2 font-mono text-[10px] text-[var(--bone-mute)]">Renderizando…</p>
+              )}
+              {previewError ? (
+                <p className="font-mono text-[11px] text-[var(--ember)]">{previewError}</p>
+              ) : previewContent ? (
+                <LessonContent content={previewContent} className="prose prose-invert prose-sm max-w-none" />
+              ) : (
+                <p className="font-mono text-[10px] text-[var(--bone-mute)]">Renderizando…</p>
+              )}
             </div>
           ) : (
             <ContentEditor
