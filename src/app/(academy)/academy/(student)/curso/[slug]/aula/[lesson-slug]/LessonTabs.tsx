@@ -104,9 +104,13 @@ export function LessonTabs({
               content={descriptionContent}
               className="prose prose-sm prose-invert max-w-none"
             />
-          ) : (
+          ) : description ? (
             <p className="text-sm leading-relaxed" style={{ color: 'var(--bone-dim)' }}>
               {description}
+            </p>
+          ) : (
+            <p className="py-4 font-mono text-xs" style={{ color: 'var(--bone-mute)', opacity: 0.5 }}>
+              Esta aula não possui descrição.
             </p>
           )
         )}

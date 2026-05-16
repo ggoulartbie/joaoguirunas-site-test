@@ -1,12 +1,31 @@
 ---
 title: Story Backlog
 type: backlog
-updated: 2026-05-11
+updated: 2026-05-16
 tags: [story]
 ---
 
 
 # Backlog de Stories
+
+## Epic Fix Aula Aluno UX (2026-05-16)
+
+| Story | Título | Complexidade | Status | Agente |
+|---|---|---|---|---|
+| [[backlog/1.1-fix-vimeo-aspect-ratio\|FAA-1.1]] | Fix Vimeo aspect ratio — iframe cortado fora do container 16:9 | S | backlog | sites-dev-alpha |
+| [[backlog/1.2-comentario-live-update\|FAA-1.2]] | Comentários sem live update — addComment retorna comment + useOptimistic | M | backlog | sites-dev-beta + sites-dev-alpha + sites-dev-gamma |
+| [[backlog/1.3-sobre-aula-render-markdown\|FAA-1.3]] | Aba "Sobre a aula" exibe markdown raw — fallback não renderiza | S | backlog | sites-dev-alpha |
+
+3 bugs UX da área do aluno detectados pelo lead. Stories independentes entre si
+(podem rodar em paralelo). 1.1 e 1.3 são fixes pequenos (S). 1.2 envolve handoff
+server → client (M) — sites-dev-beta ajusta `addComment` para retornar o
+comment, sites-dev-alpha integra `useOptimistic` no `CommentsSection`,
+sites-dev-gamma valida E2E. Todas validadas com 5-point checklist: GO (5/5).
+Numeração FAA-1.x para não colidir com a Epic 1 histórica (Cleanup pós-discovery).
+
+---
+
+## Epic 1 (histórica) — Cleanup pós-discovery
 
 | Story | Título | Complexidade | Status | Agente |
 |---|---|---|---|---|
@@ -17,9 +36,7 @@ tags: [story]
 | [[backlog/2.2-revosform-skeleton\|2.2]] | Skeleton loading no RevosForm (P1) | S | done | sites-dev-gamma |
 | [[backlog/2.3-a11y-calculator-faq\|2.3]] | A11y — role=checkbox na calculadora + aria-controls no FAQ (P2) | S | done | sites-dev-gamma |
 
-## Epic 1 — Cleanup pós-discovery
-
-Stories 1.1–1.3 resolvem os pontos de atenção 1, 2 (parcial — apenas inclusão da rota ausente) e 4 do [[../project/overview|overview]]. Pontos 3 (zero testes) e 5 (RevosForm externo) ficam fora deste epic.
+Stories 1.1–1.3 (históricas) resolvem os pontos de atenção 1, 2 (parcial — apenas inclusão da rota ausente) e 4 do [[../project/overview|overview]]. Pontos 3 (zero testes) e 5 (RevosForm externo) ficam fora deste epic.
 
 ## Epic 2 — Design recommendations P0–P2
 

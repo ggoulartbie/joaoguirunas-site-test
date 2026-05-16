@@ -310,3 +310,23 @@ Registro de todos os Agent Teams formados neste projeto. Lead (team-os) atualiza
 **Status:** ativo
 **Início:** 2026-05-11T09:56:00-03:00
 **Stories:** [[../stories/BACKLOG]] — F13.x (em criação)
+
+## 2026-05-16 — Team joaoguirunas-academy-fix-aula-aluno-ux
+
+**Objetivo:** Corrigir 3 bugs UX na página de aula do aluno: (1) player Vimeo cortando barra de controles, (2) comentários só aparecem após reload, (3) markdown não renderiza em "Sobre a aula"
+**Lead:** team-os (skill)
+**Branch:** `fix-aula-aluno-ux-bugs` (a partir de `main` @ 4875987)
+**Composição:**
+- sites-architect — quebrar stories, validar 5-point
+- sites-analyst — confirmar libs disponíveis
+- sites-ux — spec visual player + UX feedback comentário
+- sites-data — audit queries (sem schema change esperado)
+- sites-dev-alpha — frontend (3 bugs)
+- sites-dev-beta — server action addComment retornar comment
+- sites-dev-gamma — integração end-to-end fluxo comentário
+- sites-dev-delta — hardening edge cases
+- sites-qa — gate final PASS/CONCERNS/FAIL
+- sites-devops — commit estruturado (push manual do usuário — token exposto)
+
+**Status:** ativo
+**Stories:** ver [[../stories/BACKLOG]]

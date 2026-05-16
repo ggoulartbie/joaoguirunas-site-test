@@ -192,7 +192,7 @@ type CommentFormProps = {
   parentCommentId?: string
   replyingToName?: string
   onCancel?: () => void
-  onSubmitted?: () => void
+  onSubmitted?: (comment: Comment) => void
   placeholder?: string
   autoFocus?: boolean
 }
@@ -217,9 +217,13 @@ function CommentForm({
 
     startTransition(async () => {
       const result = await addComment(lessonId, content.trim(), parentCommentId)
-      if (result.success) {
+      if (result.success && result.comment) {
         setContent('')
-        onSubmitted?.()
+        onSubmitted?.(result.comment)
+      } else if (result.success && !result.comment) {
+        // Server returned success without comment data — clear form, parent will revalidate via RSC
+        setContent('')
+        onSubmitted?.({ id: '', lesson_id: lessonId, content: content.trim(), created_at: new Date().toISOString(), updated_at: new Date().toISOString(), deleted_at: null, is_pinned: false, parent_comment_id: parentCommentId ?? null, authorId: '', authorName: '', authorRole: 'STUDENT' } as Comment)
       } else {
         setError(result.error ?? 'Erro ao enviar comentário')
       }
@@ -337,7 +341,9 @@ export function CommentsSection({
       <CommentForm
         lessonId={lessonId}
         placeholder="Deixe sua dúvida ou comentário sobre esta aula..."
-        onSubmitted={() => {}}
+        onSubmitted={(comment) => {
+          if (comment.id) setComments((prev) => [...prev, comment])
+        }}
       />
 
       {/* Thread list */}
@@ -378,7 +384,10 @@ export function CommentsSection({
                     parentCommentId={comment.id}
                     replyingToName={replyingTo.name}
                     onCancel={() => setReplyingTo(null)}
-                    onSubmitted={() => setReplyingTo(null)}
+                    onSubmitted={(reply) => {
+                      if (reply.id) setComments((prev) => [...prev, reply])
+                      setReplyingTo(null)
+                    }}
                     autoFocus
                   />
                 </div>

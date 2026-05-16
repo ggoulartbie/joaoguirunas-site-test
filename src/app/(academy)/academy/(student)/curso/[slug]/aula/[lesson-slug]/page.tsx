@@ -264,7 +264,9 @@ export default async function AulaPage({ params }: Props) {
           lesson.content_format as 'MDX' | 'HTML' | 'MARKDOWN',
           lesson.content
         )
-      : null
+      : lesson.description
+        ? await renderContent('MARKDOWN', lesson.description)
+        : null
 
   // Fetch comments
   const { data: rawComments } = await supabaseAdmin

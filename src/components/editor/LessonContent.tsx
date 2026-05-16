@@ -1,5 +1,6 @@
 'use client'
 
+import ReactMarkdown from 'react-markdown'
 import { MDXRemote } from 'next-mdx-remote'
 import { Callout } from './Callout'
 import { CodeBlock } from './CodeBlock'
@@ -11,7 +12,6 @@ const mdxComponents = {
   CodeBlock,
   Tabs,
   Tab,
-  // Override default pre/code to use CodeBlock
   pre: (props: React.HTMLAttributes<HTMLPreElement>) => {
     const child = (props.children as React.ReactElement<{ className?: string; children?: string }>)
     const lang = child?.props?.className?.replace('language-', '') ?? ''
@@ -33,11 +33,44 @@ export function LessonContent({ content, className }: LessonContentProps) {
     )
   }
 
-  // HTML (sanitized server-side) and MARKDOWN (pre-highlighted code blocks)
+  if (content.format === 'MARKDOWN') {
+    return (
+      <div className={className}>
+        <ReactMarkdown
+          components={{
+            pre: ({ children }) => <>{children}</>,
+            code: ({ className: cls, children }) => {
+              if (cls?.startsWith('language-')) {
+                const lang = cls.replace('language-', '')
+                const code = typeof children === 'string' ? children : String(children ?? '')
+                return <CodeBlock language={lang}>{code.replace(/\n$/, '')}</CodeBlock>
+              }
+              return (
+                <code
+                  className="rounded px-1 py-0.5 font-mono text-sm"
+                  style={{ background: 'var(--ink-3)', color: 'var(--ember)' }}
+                >
+                  {children}
+                </code>
+              )
+            },
+            a: ({ href, children }) => (
+              <a href={href} target="_blank" rel="noopener noreferrer">
+                {children}
+              </a>
+            ),
+          }}
+        >
+          {content.raw}
+        </ReactMarkdown>
+      </div>
+    )
+  }
+
+  // HTML — sanitized server-side via sanitizeHtml() before reaching this point
   return (
     <div
       className={className}
-      // Safe: HTML comes exclusively from sanitizeHtml() which runs server-side with DOMPurify
       dangerouslySetInnerHTML={{ __html: content.html }}
     />
   )
