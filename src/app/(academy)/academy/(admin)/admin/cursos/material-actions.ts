@@ -187,13 +187,17 @@ export async function deleteMaterialAction(materialId: string): Promise<void> {
 
   const { data: material, error } = await supabaseAdmin
     .from('materials')
-    .select('id, storage_path, kind')
+    .select('id, storage_path, kind, lesson_id, lessons(module_id, modules(course_id))')
     .eq('id', materialId)
     .single()
 
   if (error || !material) throw new Error('Material não encontrado')
 
-  // deleta arquivo do storage se existir
+  const lessonId = material.lesson_id
+  const moduleData = material.lessons as { module_id: string; modules: { course_id: string } | null } | null
+  const courseId = moduleData?.modules?.course_id
+
+  // se storage delete falhar, não deleta a row (consistência)
   if (material.storage_path) {
     await deleteMaterialFile(material.storage_path)
   }
@@ -203,9 +207,16 @@ export async function deleteMaterialAction(materialId: string): Promise<void> {
     .delete()
     .eq('id', materialId)
 
-  if (dbError) throw new Error('Erro ao deletar material: ' + dbError.message)
+  if (dbError) {
+    // storage já deletado — logar para auditoria, não reverter (arquivo removido)
+    console.error(`[deleteMaterial] storage removido mas row falhou — materialId=${materialId} lessonId=${lessonId}`, dbError.message)
+    throw new Error('Erro ao deletar registro do material')
+  }
 
   revalidatePath(`/academy/admin/cursos`)
+  if (courseId) {
+    revalidatePath(`/academy/admin/cursos/${courseId}/aulas/${lessonId}`)
+  }
 }
 
 export async function reorderMaterialsAction(
