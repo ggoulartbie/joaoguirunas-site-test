@@ -273,10 +273,14 @@ export function VideoPlayer({
     return (
       <div className={className}>
         <div
-          ref={ytContainerRef}
-          className="w-full overflow-hidden"
+          className="relative w-full overflow-hidden"
           style={{ aspectRatio: '16/9', background: 'var(--void)' }}
-        />
+        >
+          <div
+            ref={ytContainerRef}
+            className="absolute inset-0 h-full w-full"
+          />
+        </div>
       </div>
     )
   }
@@ -298,10 +302,14 @@ export function VideoPlayer({
   return (
     <div className={className}>
       <div
-        ref={vimeoContainerRef}
-        className="w-full overflow-hidden"
+        className="relative w-full overflow-hidden"
         style={{ aspectRatio: '16/9', background: 'var(--void)' }}
-      />
+      >
+        <div
+          ref={vimeoContainerRef}
+          className="absolute inset-0 h-full w-full"
+        />
+      </div>
     </div>
   )
 }
