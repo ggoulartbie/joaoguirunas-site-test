@@ -10,6 +10,8 @@ import {
   Play,
   FileText,
   HelpCircle,
+  Link2,
+  Download,
 } from 'lucide-react'
 import { supabaseAdmin } from '@/lib/supabase/admin'
 import { requireUser } from '@/lib/auth/helpers'
@@ -45,6 +47,17 @@ type CourseRow = {
   cover_image_url: string | null
   slug: string
   modules: ModuleRow[]
+}
+
+type ModuleMaterialItem = {
+  id: string
+  module_id: string
+  title: string
+  kind: string
+  storage_path: string | null
+  external_url: string | null
+  size_bytes: number | null
+  signedUrl: string | null
 }
 
 // ─── Metadata ────────────────────────────────────────────────────────────────
@@ -151,7 +164,40 @@ export default async function CursoPage({ params }: Props) {
   // are handled above via full expansion, not via hasGlobalAccess.
   const hasGlobalAccess = userCohortIds.length > 0 && (cohortCourseRows ?? []).length === 0
 
-  // 7. Compute progress stats
+  // 7. Fetch module_materials for accessible modules — single query, anti-N+1
+  const accessibleModuleIdsList = hasGlobalAccess ? allCourseModuleIds : [...accessibleModuleIds]
+  const { data: rawModuleMaterials } = accessibleModuleIdsList.length > 0
+    ? await supabaseAdmin
+        .from('module_materials')
+        .select('id, module_id, title, kind, storage_path, external_url, size_bytes')
+        .in('module_id', accessibleModuleIdsList)
+        .order('sort_order', { ascending: true })
+    : { data: [] }
+
+  // Generate signed URLs for file materials (TTL 5 min, bucket is private)
+  const moduleMaterialsWithUrls: ModuleMaterialItem[] = await Promise.all(
+    (rawModuleMaterials ?? []).map(async (mat) => {
+      if (mat.kind === 'LINK' || !mat.storage_path) {
+        return { ...mat, signedUrl: null }
+      }
+      const { data: signed } = await supabaseAdmin.storage
+        .from('materials')
+        .createSignedUrl(mat.storage_path, 300)
+      return { ...mat, signedUrl: signed?.signedUrl ?? null }
+    })
+  )
+
+  // Group by module_id for O(1) lookup at render time
+  const materialsByModule = moduleMaterialsWithUrls.reduce<Record<string, ModuleMaterialItem[]>>(
+    (acc, mat) => {
+      if (!acc[mat.module_id]) acc[mat.module_id] = []
+      acc[mat.module_id]!.push(mat)
+      return acc
+    },
+    {}
+  )
+
+  // 8. Compute progress stats
   const totalLessons = allLessonIds.length
   const completedLessons = allLessonIds.filter((id) => completedSet.has(id)).length
   const progressPercent = totalLessons > 0
@@ -304,6 +350,7 @@ export default async function CursoPage({ params }: Props) {
               moduleProgress={moduleProgress}
               isComplete={isComplete}
               completedSet={completedSet}
+              materials={materialsByModule[module.id] ?? []}
             />
           )
         })}
@@ -331,6 +378,7 @@ function ModuleAccordion({
   moduleProgress,
   isComplete,
   completedSet,
+  materials,
 }: {
   module: ModuleRow
   index: number
@@ -340,6 +388,7 @@ function ModuleAccordion({
   moduleProgress: number
   isComplete: boolean
   completedSet: Set<string>
+  materials: ModuleMaterialItem[]
 }) {
   return (
     <details
@@ -388,6 +437,44 @@ function ModuleAccordion({
           />
         </div>
       </summary>
+
+      {/* Module materials — only renders if non-empty, shown before lessons */}
+      {materials.length > 0 && (
+        <div
+          className="px-4 py-3 space-y-1.5"
+          style={{ borderBottom: '1px solid var(--hairline)' }}
+        >
+          <p className="font-mono text-[10px] uppercase tracking-widest mb-2" style={{ color: 'var(--bone-mute)' }}>
+            Materiais do módulo
+          </p>
+          {materials.map((mat) => {
+            const href = mat.kind === 'LINK' ? mat.external_url : mat.signedUrl
+            if (!href) return null
+            return (
+              <a
+                key={mat.id}
+                href={href}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-2.5 py-1.5 transition-opacity hover:opacity-70"
+                style={{ textDecoration: 'none' }}
+              >
+                {mat.kind === 'LINK' ? (
+                  <Link2 className="h-3.5 w-3.5 shrink-0" style={{ color: 'var(--bone-mute)' }} />
+                ) : (
+                  <Download className="h-3.5 w-3.5 shrink-0" style={{ color: 'var(--bone-mute)' }} />
+                )}
+                <span className="text-[13px] leading-snug" style={{ color: 'var(--bone-dim)' }}>
+                  {mat.title}
+                </span>
+                <span className="font-mono text-[10px] shrink-0" style={{ color: 'var(--bone-mute)' }}>
+                  {mat.kind}
+                </span>
+              </a>
+            )
+          })}
+        </div>
+      )}
 
       {/* Lesson list */}
       <ul>
@@ -441,10 +528,7 @@ function ModuleAccordion({
         {moduleTotal > 0 && (
           <li
             className="px-4 py-2.5 font-mono text-[11px]"
-            style={{
-              color: 'var(--bone-mute)',
-              borderTop: module.lessons.length > 0 ? undefined : '1px solid var(--hairline)',
-            }}
+            style={{ color: 'var(--bone-mute)' }}
           >
             {moduleCompleted}/{moduleTotal} aulas concluídas
           </li>
