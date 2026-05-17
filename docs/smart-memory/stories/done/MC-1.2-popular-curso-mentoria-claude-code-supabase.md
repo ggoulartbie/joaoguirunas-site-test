@@ -1,7 +1,7 @@
 ---
 title: "MC-1.2: Popular títulos e descrições das aulas (módulos 3 e 5)"
 type: story
-status: backlog
+status: done
 epic: MC
 complexity: M
 agent: sites-data

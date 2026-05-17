@@ -50,7 +50,7 @@ export function LessonTabs({
   const activeCommentCount = comments.filter((c) => !c.deleted_at).length
 
   const availableTabs = ALL_TABS.filter(({ id }) => {
-    if (id === 'sobre') return !!(descriptionContent || description)
+    if (id === 'sobre') return !!(summaryContent || descriptionContent || description)
     if (id === 'resumo') return !!summaryContent
     if (id === 'transcricao') return !!transcriptContent
     if (id === 'materiais') return materials.length > 0
@@ -116,8 +116,8 @@ export function LessonTabs({
       {/* Tab content */}
       <div className="space-y-4 p-4 lg:p-6">
         {active === 'sobre' && (
-          descriptionContent ? (
-            <LessonContent content={descriptionContent} className="" />
+          (summaryContent ?? descriptionContent) ? (
+            <LessonContent content={(summaryContent ?? descriptionContent)!} className="" />
           ) : description ? (
             <p className="text-sm leading-relaxed" style={{ color: 'var(--bone-dim)' }}>
               {description}

@@ -163,21 +163,41 @@ Ver seção 3b acima para resultado executado.
 
 ---
 
-## 5. Snapshot Pós-Migration (a preencher após apply autorizado pelo João)
+## 5. Snapshot Pós-Migration — Capturado em 2026-05-17
 
-| id | module_slug | sort_order | title (novo) | desc_len (esperado) | video_id (não alterado) |
+Apply executado via `supabase db query --linked -f supabase/migrations/20260517100000_update_mentoria_lessons_m3_m5.sql`. Retorno: `rows: []` (esperado para UPDATEs).
+
+21 rows no pós (vs 20 no pré) — Bythelion inseriu a Aula 8 KV Dev via MC-2.1 entre o apply e o snapshot pós.
+
+| id | module_slug | sort_order | title (novo) | desc_len | video_id |
 |---|---|---|---|---|---|
-| *pendente após apply* | | | | | |
+| `9828e194-...` | modulo-3-fundamentos | 0 | Módulo 3 \| Abertura | 52 | 1192870861 |
+| `d75d8c77-...` | modulo-3-fundamentos | 1 | Módulo 3 \| Parte 0 | 561 | 1192870045 |
+| `d467883b-...` | modulo-3-fundamentos | 2 | Módulo 3 \| Parte 1 | 609 | 1192876884 |
+| `ce149f3e-...` | modulo-3-fundamentos | 3 | Módulo 3 \| Parte 2 \| Pastas | 726 | 1192888765 |
+| `bf67b516-...` | modulo-3-fundamentos | 4 | Módulo 3 \| Parte 3 \| Claude | 1073 | 1192888726 |
+| `5a7f1925-...` | modulo-3-fundamentos | 5 | Módulo 3 \| Parte 4 | 1019 | 1192888570 |
+| `a159c7c2-...` | modulo-3-fundamentos | 6 | Módulo 3 \| Parte 5 | 928 | 1192888571 |
+| `373fbd8a-...` | modulo-3-fundamentos | 7 | Módulo 3 \| Parte 6 | 1206 | 1192888568 |
+| `55646f1d-...` | modulo-3-fundamentos | 8 | Módulo 3 \| Parte 7 | 1528 | 1193013895 |
+| `8609781b-...` | modulo-3-fundamentos | 9 | Módulo 3 \| Parte 8 \| Encerramento | 1265 | 1192888569 |
+| `0c96c53a-...` | modulo-5-claude-design | 0 | Módulo 5 \| Abertura | 365 | null |
+| `d81feaa7-...` | modulo-5-claude-design | 1 | Módulo 5 \| Aula 1 \| Diretor de Arte | 1060 | null |
+| `624ca037-...` | modulo-5-claude-design | 2 | Módulo 5 \| Aula 2 \| Por que Esse Módulo Importa | 916 | null |
+| `10aaf3cd-...` | modulo-5-claude-design | 3 | Módulo 5 \| Aula 3 \| Lógica de Projetos | 991 | null |
+| `4082dd83-...` | modulo-5-claude-design | 4 | Módulo 5 \| Aula 4 \| Design System | 1373 | null |
+| `704167d3-...` | modulo-5-claude-design | 5 | Módulo 5 \| Aula 5 \| KV Site | 1064 | null |
+| `4f30034a-...` | modulo-5-claude-design | 6 | Módulo 5 \| Aula 6 \| KV Social | 1038 | null |
+| `3c8b5423-...` | modulo-5-claude-design | 7 | Módulo 5 \| Aula 7 \| KV Tráfego | 1172 | null |
+| `21cdf781-...` | modulo-5-claude-design | 8 | Módulo 5 \| Aula 8 \| KV Dev | 1258 | null |
+| `da7e8094-...` | modulo-5-claude-design | 9 | Módulo 5 \| Aula 9 \| Handoff pro Claude Code | 1154 | null |
+| `0b153dd0-...` | modulo-5-claude-design | 10 | Módulo 5 \| Aula 10 \| Encerramento | 1333 | null |
 
----
+**Diff pré → pós:**
+- 20 UPDATEs da migration: todos os `desc_len > 0`. Titles atualizados conforme .txt.
+- M3 Abertura (`9828e194`): `desc_len = 52` — description curta (preview truncado em "..."). Valor confirmado por query direta no banco.
+- `video_id` inalterado em todos — M3 manteve Vimeo IDs, M5 manteve null.
+- Aula 8 KV Dev (`21cdf781-...`) inserida por MC-2.1 com `desc_len = 1258` e `sort_order = 8`.
+- Snapshot autoritativo: Bythelion (o apply ocorreu antes da instrução de Rexali chegar — migration foi idempotente).
 
-## 6. Pronto para apply
-
-Todos os pré-requisitos concluídos:
-
-1. Schema validado
-2. Escaping analisado — nenhum risco
-3. Checklist 7/7 PASS
-4. Snapshot pré capturado (20 rows, todos os UUIDs conferidos)
-
-**Aguarda autorização do João para `supabase db push` ou `supabase db query --linked "$(cat supabase/migrations/20260517100000_update_mentoria_lessons_m3_m5.sql)"`.**
+**AC7: PASS. Migration aplicada com sucesso em prod.**
