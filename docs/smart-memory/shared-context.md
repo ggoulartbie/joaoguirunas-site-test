@@ -9,6 +9,35 @@ tags: [ops]
 
 O lead (team-os) atualiza este arquivo a cada mudança de estado dos teammates.
 
+## Team ativo (release) — joaoguirunas-academy-fix-vimeo-dimensions (2026-05-17)
+
+**Status:** 🟢 release em andamento — sites-devops fazendo commit + push para main (autorizado pelo João)
+**Veredicto:** PASS pragmático — fix validado (build OK, QA OK, teste visual localhost OK)
+**Entregue:** fix do iframe Vimeo em `src/components/student/VideoPlayer.tsx` (linhas 108 + 310)
+**Fricção descoberta:** Vimeo precisa de `localhost` no whitelist de domínios para dev local — salvo em memory `project_vimeo_localhost_domain`
+
+| Teammate | Fase | Status |
+|---|---|---|
+| sites-architect (Soren) | Story | ✅ FAA-1.4 entregue |
+| sites-dev-alpha (Novael) | Impl | ✅ fix validado + build OK |
+| sites-qa (Axilun) | Gate | ✅ PASS pragmático |
+| sites-devops | Release | 🔄 commit + push feat-aulas-v2 → fast-forward main → push main |
+
+---
+
+**Contexto crítico:** Modificação local não commitada em `src/components/student/VideoPlayer.tsx` tenta consertar via `responsive: false` + `[&_iframe]:h-full [&_iframe]:w-full [&_iframe]:absolute [&_iframe]:inset-0`.
+
+**Gap raiz da Story 1.1 (insight do QA Axilun):** o arquivo `stories/done/1.1-fix-vimeo-aspect-ratio.md` tem `checklist: GO` mas campo "QA Results" VAZIO — o gate formal nunca foi exercido. A nova story 1.4 NÃO pode ser fechada sem QA Results preenchido com PASS/CONCERNS/FAIL + testes visuais manuais documentados pelo João com vídeos reais 9:16 e 4:3.
+
+**Pontos de auditoria adversarial (QA Axilun, pré-implementação):**
+1. `responsive: false` no SDK: o Vimeo SDK ainda emite `timeupdate`/`ended` corretamente? Risco quebrar saveProgress/markComplete.
+2. Arbitrary CSS selector `[&_iframe]:...` funciona com o purge do Tailwind do projeto?
+3. Cobertura: 9:16 (vertical), 4:3 e 16:9 com e sem letterbox nativo.
+4. YouTube não regredir.
+5. `pnpm build` deve passar.
+
+---
+
 ## Team anterior — joaoguirunas-academy-investigar-servidor-restart (encerrado 2026-05-16)
 
 **Status:** ✅ encerrado — build Vercel passou, deploy concluído

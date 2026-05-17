@@ -9,6 +9,26 @@ tags: [ops]
 
 Registro de todos os Agent Teams formados neste projeto. Lead (team-os) atualiza a cada `*dispatch` e `*close`.
 
+## 2026-05-16 — Team joaoguirunas-academy-fix-vimeo-dimensions
+
+**Objetivo:** Resolver bug recorrente das dimensões do iframe Vimeo (recorrência da Story 1.1) — garantir iframe ocupa 100% do container 16:9 para todos aspect ratios nativos (9:16, 4:3, 16:9)
+**Lead:** team-os (skill)
+**Composição:**
+- sites-architect (Soren) — criou story FAA-1.4 com ACs cobrindo todos aspect ratios
+- sites-dev-alpha (Novael) — validou que o fix local do João já estava correto, rodou `pnpm build` (exit 0)
+- sites-qa (Axilun) — veredicto adversarial inicial: CONCERNS pendente teste visual
+
+**Status:** encerrado
+**Início:** 2026-05-16 (branch `feat-aulas-v2`)
+**Encerrado:** 2026-05-17
+**Trigger:** modificação local não commitada em `src/components/student/VideoPlayer.tsx` — sinal de que fix anterior recorreu.
+**Veredicto final:** PASS pragmático assinado pelo PO João após teste visual em localhost (screenshot 2026-05-17).
+**Stories produzidas:** [[../stories/done/1.4-fix-vimeo-iframe-dimensions-v2]]
+**Memória nova:** [[../../../../../.claude/projects/-home-victor-Claude-joaoguirunas-academy/memory/project_vimeo_localhost_domain]] — Vimeo localhost whitelist
+**Pendente externo:** commit + push (sem autorização explícita do João ainda)
+
+---
+
 ## 2026-05-16 — Team joaoguirunas-academy-investigar-servidor-restart
 
 **Objetivo:** Investigar queda do servidor local e implementar restart automático

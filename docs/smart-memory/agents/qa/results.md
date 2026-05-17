@@ -1,13 +1,52 @@
 ---
 title: QA Results
 type: qa-log
-updated: 2026-05-16
+updated: 2026-05-17
 tags: [qa, veredictos]
 ---
 
 # QA Results — Veredictos formais
 
 Histórico de veredictos emitidos pelo sites-qa (Axilun).
+
+---
+
+## 2026-05-17 — Story FAA-1.4: Fix Vimeo iframe dimensions v2 (regressão da 1.1) — ✅ PASS pragmático (consolidado pelo PO)
+
+**Status final:** veredicto QA original CONCERNS evoluiu para PASS após validação visual do João em localhost. 1 caso real testado: container 16:9 com conteúdo de aspect ratio divergente — controles 100% visíveis, sem overflow, sem corte. Cenários 9:16 puro e 4:3 isolados aceitos como ciclo-futuro pelo PO; classe de bug crítica coberta pela evidência reproduzida.
+
+**Story:** movida para `docs/smart-memory/stories/done/1.4-fix-vimeo-iframe-dimensions-v2.md` com `verdict: PASS (pragmático)` no frontmatter e seção "Veredicto final consolidado (2026-05-17)" no corpo.
+
+**Fricção operacional registrada (memória):** `project_vimeo_localhost_domain.md` — adicionar `localhost` ao whitelist do vídeo no painel Vimeo é pré-requisito para QA visual local de qualquer aula Vimeo.
+
+**Melhoria futura sugerida:** cadastrar curso oculto "QA-Video-Player" com 3 vídeos fixos (16:9, 9:16, 4:3) para gate visual sistemático em rodadas seguintes — elimina dependência de o PO encontrar vídeos de aspect ratios divergentes ad-hoc.
+
+**Lição-raiz consolidada:** o gap da Story 1.1 (QA Results vazio apesar de `checklist: GO`) ficou explicitamente fechado. **Regra Axilun:** todo veredicto futuro de bugfix visual exige OU evidência reproduzível registrada no QA Results da story, OU aceitação pragmática documentada do PO com justificativa explícita do escopo aceito vs. deferido. CONCERNS sem qualquer um dos dois → FAIL automático.
+
+---
+
+## 2026-05-17 — Story FAA-1.4: veredicto inicial CONCERNS (superseded pelo consolidado acima)
+
+**Escopo:** Gate formal do fix de regressão do iframe Vimeo (Story 1.1 voltou a falhar em vídeos não-16:9). Branch `feat-aulas-v2`, diff cirúrgico de 2 linhas em `src/components/student/VideoPlayer.tsx`: `responsive: false` no SDK Vimeo (linha 108) + classes Tailwind v4 `[&_iframe]:h-full [&_iframe]:w-full [&_iframe]:absolute [&_iframe]:inset-0` no wrapper Vimeo (linha 310). YouTube intocado.
+
+**Veredicto:** **CONCERNS** — aprovado condicionalmente. AC1, AC4, AC5, AC6 e build prod ✅. AC2, AC3, AC7 ⏳ pendentes de teste visual manual obrigatório do João com vídeos reais 9:16 e 4:3. Sem esses testes, regride para FAIL — esse é o gap-raiz que fez a Story 1.1 recorrer (QA Results vazio apesar de `checklist: GO`).
+
+**Validações adversariais técnicas concluídas:**
+1. `responsive: false` é apenas oEmbed parameter de URL (confirmado em `node_modules/.pnpm/@vimeo+player@2.30.4/.../dist/player.es.js:818`) — totalmente desacoplado de eventos `play/pause/ended/timeupdate`. Risco zero de quebrar `saveProgress`/`markLessonComplete`.
+2. Selector arbitrário Tailwind v4 `[&_iframe]:*` suportado nativamente — projeto usa `@tailwindcss/postcss` (postcss.config.mjs) + `@import "tailwindcss"` (globals.css).
+3. Único consumer ativo: `src/app/(academy)/academy/(student)/curso/[slug]/aula/[lesson-slug]/page.tsx:349`. `LessonEditorClient` importa só `extractYouTubeId` (helper intocado).
+4. `pnpm build` exit 0 — 48 páginas estáticas, sem TS errors.
+
+**Concern menor (não-bloqueante):** consumer envolve `<VideoPlayer>` em `<div className="aspect-video w-full shrink-0">` SEM passar `className` para o componente, resultando em 3 divs aninhados (aspect-video externo → div vazio → div com aspect-ratio interno). Funciona, mas é débito visual menor. Pode ser limpado em ciclo futuro.
+
+**Testes manuais obrigatórios** (registrados em `docs/smart-memory/stories/active/1.4-fix-vimeo-iframe-dimensions-v2.md` → seção QA Results):
+- 3 `video_id`s Vimeo distintos (16:9, 9:16, 4:3) × 4 breakpoints (360/768/1024/1440) × 3 critérios (controles visíveis / sem overflow / sem corte).
+- Smoke funcional 9:16: play+pause+saveProgress / seek≥95%+markComplete / fullscreen.
+- Smoke regressão YouTube: thumbnail → autoplay → controles.
+
+**Critério de fechamento:** João preenche tabela na story com TODOS "sim" → PASS. Qualquer "não" → FAIL + reabrir story.
+
+**Próximo passo:** Aguardar validação visual do João. Se PASS → `sites-devops` push. Se FAIL → SendMessage para `sites-dev-alpha`.
 
 ---
 

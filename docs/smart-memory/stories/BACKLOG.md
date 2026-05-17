@@ -12,9 +12,10 @@ tags: [story]
 
 | Story | Título | Complexidade | Status | Agente |
 |---|---|---|---|---|
-| [[backlog/1.1-fix-vimeo-aspect-ratio\|FAA-1.1]] | Fix Vimeo aspect ratio — iframe cortado fora do container 16:9 | S | backlog | sites-dev-alpha |
+| [[done/1.1-fix-vimeo-aspect-ratio\|FAA-1.1]] | Fix Vimeo aspect ratio — iframe cortado fora do container 16:9 | S | done | sites-dev-alpha |
 | [[backlog/1.2-comentario-live-update\|FAA-1.2]] | Comentários sem live update — addComment retorna comment + useOptimistic | M | backlog | sites-dev-beta + sites-dev-alpha + sites-dev-gamma |
 | [[backlog/1.3-sobre-aula-render-markdown\|FAA-1.3]] | Aba "Sobre a aula" exibe markdown raw — fallback não renderiza | S | backlog | sites-dev-alpha |
+| [[active/1.4-fix-vimeo-iframe-dimensions-v2\|FAA-1.4]] | Fix Vimeo iframe dimensions v2 — regressão em vídeos não-16:9 | S | active | sites-dev-alpha |
 
 3 bugs UX da área do aluno detectados pelo lead. Stories independentes entre si
 (podem rodar em paralelo). 1.1 e 1.3 são fixes pequenos (S). 1.2 envolve handoff
@@ -22,6 +23,14 @@ server → client (M) — sites-dev-beta ajusta `addComment` para retornar o
 comment, sites-dev-alpha integra `useOptimistic` no `CommentsSection`,
 sites-dev-gamma valida E2E. Todas validadas com 5-point checklist: GO (5/5).
 Numeração FAA-1.x para não colidir com a Epic 1 histórica (Cleanup pós-discovery).
+
+**FAA-1.4 (2026-05-16):** o fix de FAA-1.1 regrediu para vídeos com aspect
+ratio nativo diferente de 16:9 (9:16, 4:3). Causa-raiz: `responsive: true` do
+SDK Vimeo respeita o aspect ratio nativo, não o do container. Solução aprovada:
+`responsive: false` + CSS forçando o iframe a `position: absolute; inset: 0;
+w/h: 100%` via Tailwind arbitrary descendant selector. Modificação local já
+existe em `feat-aulas-v2` (não commitada) — story formaliza, define ACs com 3
+aspect ratios de teste e critério explícito de "pronto". Checklist 5/5 GO.
 
 ---
 
