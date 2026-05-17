@@ -11,6 +11,152 @@ Histórico de veredictos emitidos pelo sites-qa (Axilun).
 
 ---
 
+## 2026-05-17 — Epic FM (Materiais por Módulo): FM-3.2 / FM-3.3 / FM-3.4 / FM-3.5 — ❌ FAIL consolidado (bloqueia FM-3.5)
+
+**Escopo:** Gate adversarial das 4 stories da Epic FM (Functional Materials by Module). Branch `feat-aulas-v2`. ADR-002 aprovada (Opção A — tabela `module_materials` espelhada). Migration aplicada em prod via MCP.
+
+**Veredicto consolidado:** **FAIL** — não-liberada para release. Bug crítico de runtime na FM-3.5 que tornará a feature inteira invisível ao aluno.
+
+### Resumo por story
+
+| Story | Veredicto | Bloqueante? |
+|---|---|---|
+| FM-3.2 (migration + RLS) | ✅ PASS | — |
+| FM-3.3 (server actions) | ⚠️ CONCERNS | não |
+| FM-3.4 (UI admin) | ✅ PASS | — |
+| FM-3.5 (UI student) | ❌ FAIL | **SIM** |
+
+---
+
+### FM-3.2 — Migration `module_materials` + `has_module_access` + RLS — ✅ PASS
+
+- AC1–AC10 ✅: tabela criada espelhando `materials` (sem `updated_at`, sem `deleted_at` — hard delete), índice `(module_id, sort_order)`, função `has_module_access` idêntica em filosofia à `has_access` (filtra `cohort_members ACTIVE` + `cohort_courses.included_module_ids`), RLS habilitada, 4 policies (`select` via `has_module_access OR is_admin`; `insert/update/delete` via `is_admin`).
+- AC11 (smoke RLS): delegado para FM-3.3, aceito pragmaticamente — actions cobrem o caminho real.
+- AC12 ✅: zero alteração em `materials`, `has_access`, policies de `materials` (diff puro aditivo confirmado).
+- Tipos regenerados: `src/types/database.ts:873-916` (`module_materials` Row/Insert/Update) + `:1339` (`has_module_access`).
+
+**Sem ressalvas.**
+
+---
+
+### FM-3.3 — Server actions `uploadModuleMaterial` / `deleteModuleMaterial` / `addLinkModuleMaterial` — ⚠️ CONCERNS (não-bloqueante)
+
+- AC1–AC9 ✅ no que tange comportamento das 3 actions:
+  - `uploadModuleMaterial` (`actions.ts:237-273`): `requireAdmin` → upload com `upsert:false` → insert em `module_materials` → revalidatePath duplo (curso + módulo). ✅
+  - `deleteModuleMaterial` (`actions.ts:275-295`): **incorporou as 3 lições da Story 2.2** — guard `if (storagePath)`, try/catch tolerando file drift no bucket, revalidatePath duplo. ✅
+  - `addLinkModuleMaterial` (`actions.ts:297-328`): Zod schema valida `moduleId/courseId uuid + title 1-200 + url`, insert com `kind:'LINK'`, `storage_path:null`. ✅ (cobre a lacuna do editor de aula que não tinha "adicionar link" acessível.)
+- Helpers extraídos em `lib/materials/storage.ts` (`getMaterialKind`, `buildMaterialPath`, `extractExt`) + refactor de `uploadMaterial` existente usando os mesmos helpers — reduz duplicação real abaixo do que a ADR-002 projetava. ✅
+
+**[CONCERN — não-bloqueante] Divergência de convenção de path:** `src/lib/materials/storage.ts:12` (`{prefix}/{id}/{uuid}.{ext}` → `lessons/<uuid>/<uuid>.pdf`) **NÃO bate** com a storage policy de SELECT do bucket `materials` em `supabase/migrations/20260506022229_storage_buckets_policies.sql:124-135`, que extrai `(storage.foldername(name))[1]::uuid` esperando o **primeiro folder ser o lesson_id direto** (convenção do `lib/storage/materials.ts:9`).
+- **Impacto real:** zero para a feature funcionar — uploads/downloads usam `supabaseAdmin` (bypass de RLS) e `createSignedUrl` (token JWT do Storage também bypassa policy). A funcionalidade roda.
+- **Impacto em defesa em profundidade:** se algum dia um aluno autenticado tentar SELECT direto via `supabase.storage.from('materials').list(...)`, vai falhar por cast de `'lessons'::uuid`. Não é vetor explorável, mas é divergência silenciosa entre 2 convenções no mesmo projeto.
+- **Recomendação:** registrar follow-up para atualizar a storage policy a aceitar tanto `lessons/{uuid}/...` quanto `modules/{uuid}/...` (extraindo `foldername[2]::uuid` quando `[1]` for literal `lessons` ou `modules`). Não bloqueia o release.
+
+---
+
+### FM-3.4 — UI admin `ModuleEditorClient` — ✅ PASS
+
+- AC1 ✅ rota `/cursos/[courseId]/modulos/[moduleId]/page.tsx` com `force-dynamic` (memory `project_supabase_admin_proxy_build`), fetch módulo (notFound se ausente/deleted) + materials ordenados.
+- AC2 ✅ `ModuleEditorClient.tsx` espelha `LessonEditorClient` (header com breadcrumb + voltar).
+- AC3 ✅ listing exibe **todos** os kinds; LINK renderiza ícone `Link2` + URL truncada (linhas 142-155).
+- **AC4 ✅ (ANTI-RECORRÊNCIA 2.2)** botão delete VISÍVEL para LINK — `onClick={() => handleDeleteMaterial(mat.id, mat.storage_path)}` SEM guard `mat.storage_path && ...` (linha 160). Bug crítico da Story 2.2 NÃO regrediu.
+- AC5 ✅ optimistic com snapshot + await dentro de try/catch + rollback (`prev => [...prev, snapshot]`) + setError + finally clearing deleting + router.refresh em success (linhas 71-86).
+- AC6 ✅ loading state por item (`deleting: string | null`, `opacity-50`, `disabled`).
+- AC7 ✅ upload com setUploading + try/catch + reset input no finally.
+- AC8 ✅ form de link com validação client (`title.trim() não-vazio + new URL(url)`), append ao state em success.
+- AC10 ✅ `LessonEditorClient.tsx` não foi tocado.
+- AC11 ✅ tokens KV reusados, `inputClass`/`sectionClass` idênticos.
+- AC13 ✅ a11y: `aria-label="Remover {title}"`, `focus-visible:ring-[var(--ember)]` em todos os botões interativos.
+
+**Link "Materiais" no header de cada módulo** em `CourseEditorClient.tsx:259-265` ✅ (`SortableModule` recebe `courseId`, link aponta para a rota nova).
+
+**Sem ressalvas.**
+
+---
+
+### FM-3.5 — UI student curso `[slug]/page.tsx` — ❌ FAIL (CRÍTICO)
+
+**[CRITICAL — BLOQUEANTE] Query usa coluna inexistente `deleted_at` na tabela `module_materials`:**
+
+```ts
+// src/app/(academy)/academy/(student)/curso/[slug]/page.tsx:169-176
+const { data: rawModuleMaterials } = accessibleModuleIdsList.length > 0
+  ? await supabaseAdmin
+      .from('module_materials')
+      .select('id, module_id, title, kind, storage_path, external_url, size_bytes')
+      .in('module_id', accessibleModuleIdsList)
+      .is('deleted_at', null)  // ← BUG: módulo `module_materials` não tem `deleted_at`
+      .order('sort_order', ...)
+  : { data: [] }
+```
+
+- **Confirmação no schema:** `supabase/migrations/20260516210000_module_materials.sql:7-18` define a tabela SEM `deleted_at` (FM-3.2 AC1: "**Sem** `updated_at` e **sem** `deleted_at` (espelho fiel: materiais são imutáveis após upload, hard delete)").
+- **Confirmação nos tipos regenerados:** `src/types/database.ts:874-906` — colunas listadas: `created_at, external_url, id, kind, module_id, size_bytes, sort_order, storage_path, title`. Zero `deleted_at`.
+- **Por que typecheck e build passaram:** `.is('column', null)` aceita string genérica sem cross-check estático contra o schema na maioria das versões do `@supabase/postgrest-js`. O erro só explode em runtime no Postgres com `42703 column "deleted_at" does not exist`.
+- **Impacto real:** TODA a página do curso do aluno deve quebrar (ou silenciosamente retornar `data: null` com `error` ignorado) no momento em que houver pelo menos 1 módulo acessível. Como a destructuração ignora `error`, o resultado mais provável é `rawModuleMaterials = null`, fluindo para `(rawModuleMaterials ?? []).map(...)` que vira `[]` — e o aluno **NUNCA verá materiais de módulo**. Smoke AC10 (b)/(d) NÃO pode ter passado.
+- **Smoke AC10 documentado como PASS na story sem evidência reproduzível** — gap-raiz da Story 1.1 se repetindo. Critério institucional do ciclo anterior: "CONCERNS sem evidência reproduzível → FAIL automático".
+
+**Outros pontos auditados (PASS individuais, mas anulados pelo bloqueante):**
+
+- AC1 ✅ seção "Materiais do módulo" só renderiza se array não-vazio (linha 505).
+- AC2 ⚠️ usa `supabaseAdmin` em vez de cliente autenticado (a story sugere cliente autenticado para acionar RLS) — funciona porque o gate de acesso por módulo é replicado em código (linhas 134-160 calculam `accessibleModuleIds` a partir de `cohort_courses.included_module_ids`). Defesa em profundidade preservada pela RLS da FM-3.2 quando/se algum dia trocar para cliente autenticado. **Concern menor** (a story aceitou ambos os caminhos).
+- AC3 ✅ signed URL TTL 300s para arquivos; anchor direto para LINK; `target="_blank" rel="noopener noreferrer"` em todos (anti-recorrência Story 2.1).
+- AC5 ✅ aluno sem acesso ao módulo cai em `LockedModuleCard` sem fetch de signedUrl — `accessibleModuleIdsList` filtra antes da query.
+- AC6 ✅ módulos sem materiais não renderizam header.
+- AC7 ✅ single fetch `.in('module_id', accessibleModuleIdsList)` — anti-N+1.
+
+### Issues bloqueantes a corrigir antes de novo gate
+
+1. **[CRITICAL] Remover `.is('deleted_at', null)` da linha 174 de `src/app/(academy)/academy/(student)/curso/[slug]/page.tsx`.** A tabela é hard delete, não há soft delete.
+2. **[CRITICAL] Reexecutar smoke AC10 com evidência reproduzível** (após o fix): admin sobe PDF em módulo → aluno logado com acesso vê o card "Materiais do módulo" com o anchor PDF + ícone Download → click abre nova aba e baixa. Registrar em texto na QA Results da story `FM-3.5-student-module-materials-listing.md`.
+3. **[CONCERN — registrar como follow-up, não bloqueia release após fix do (1)+(2)]** divergência de path Storage policy vs lib/materials/storage.ts (ver bloco CONCERNS na FM-3.3).
+
+### Testes manuais OBRIGATÓRIOS no admin antes de qualquer release
+
+Sequência ponto-a-ponto que o João deve executar (e Axilun precisa receber evidência textual de cada um antes de re-emitir veredicto):
+
+| # | Cenário | Esperado |
+|---|---|---|
+| 1 | Admin: subir PDF em um módulo via `/academy/admin/cursos/[id]/modulos/[id]` | Material aparece imediatamente na lista do admin sem F5 |
+| 2 | Aluno **com matrícula ACTIVE** na cohort do curso: acessar `/academy/curso/[slug]` | Vê seção "Materiais do módulo" no módulo, com PDF + ícone Download. Click abre nova aba e baixa |
+| 3 | Admin: subir IMG (PNG/JPG) em um módulo | Aparece com `kind=IMAGE`; aluno baixa via nova aba |
+| 4 | Admin: adicionar LINK (`https://exemplo.com`, título "Slides") | Aparece na lista admin com URL truncada + ícone Link2 |
+| 5 | Aluno: ver o LINK adicionado | Anchor direto para `https://exemplo.com` em nova aba (sem signed URL) |
+| 6 | Admin: deletar o material LINK | Some da lista admin sem F5; aluno (refresh) deixa de ver |
+| 7 | Admin: deletar PDF | Some da lista admin; arquivo removido do bucket `materials/modules/{id}/...`; aluno deixa de ver |
+| 8 | **NÃO-REGRESSÃO**: abrir editor de aula que tenha materiais | Lista de materiais de aula continua funcionando; upload/add link/delete inalterados |
+| 9 | **NÃO-REGRESSÃO**: aluno em curso sem `module_materials` | Página do curso renderiza normal; nenhuma seção "Materiais do módulo" aparece (lista vazia, header oculto) |
+| 10 | Aluno **SEM** matrícula tentando acessar curso | LockedModuleCard renderiza; nenhum material vazado no HTML |
+
+### Próximo passo
+
+- @sites-dev-alpha (Novael): aplicar fix do (1), reexecutar smoke (2)–(10), atualizar QA Results da FM-3.5 com evidência textual. Resubmeter.
+- Após PASS da FM-3.5: liberar para FM-3.7 (cleanup tech debt) → FM-3.6 (gate end-to-end final) → @sites-devops push autorizado pelo João.
+
+---
+
+## 2026-05-17 — Epic FM: Re-gate parcial FM-3.5 pós-fix — ⏳ HOLD
+
+**Veredicto:** ⏳ HOLD — fix técnico VALIDADO, gate formal aguardando evidência reproduzível.
+
+**Validações exercidas (agente, read-only):**
+- ✅ `page.tsx:169-175` agora referencia somente colunas existentes em `module_materials`. Linha `.is('deleted_at', null)` removida.
+- ✅ Colunas selecionadas (`id, module_id, title, kind, storage_path, external_url, size_bytes`) batem com `database.ts:874-883`.
+- ✅ Fluxo intacto: filtro `accessibleModuleIdsList`, signed URL TTL 300s, group-by `module_id`, render condicional.
+- ✅ Item (3) "sem console.error adicionado" — aceitável como decisão de escopo do Novael (Vercel logs cobrem o caminho de erro do server component).
+
+**O que NÃO foi validável como agente:** smoke AC10 (b)/(d) — requer browser interativo + 2 sessões reais (admin + aluno). Tentar fechar PASS sem isso seria recidiva exata do gap-raiz Story 1.1.
+
+**Caminho para PASS final:** João executa o roteiro de 7 passos (documentado por Novael em `stories/active/FM-3.5-student-module-materials-listing.md` linhas 149-156), documenta resultado linha-a-linha na story, notifica lead → re-gate.
+
+**Alternativa válida:** João emite waiver explícito assumindo o risco.
+
+**Status:** o vetor de runtime bug com 100% de chance de quebra foi eliminado. Risco residual cobre apenas cenários dependentes de dados reais.
+
+**Não é PASS. Não é FAIL. É HOLD ativo.**
+
+---
+
 ## 2026-05-17 — Story FAA-1.4: Fix Vimeo iframe dimensions v2 (regressão da 1.1) — ✅ PASS pragmático (consolidado pelo PO)
 
 **Status final:** veredicto QA original CONCERNS evoluiu para PASS após validação visual do João em localhost. 1 caso real testado: container 16:9 com conteúdo de aspect ratio divergente — controles 100% visíveis, sem overflow, sem corte. Cenários 9:16 puro e 4:3 isolados aceitos como ciclo-futuro pelo PO; classe de bug crítica coberta pela evidência reproduzida.

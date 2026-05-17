@@ -18,8 +18,9 @@ Documentação das Row Level Security policies. Migrations aplicadas:
 |---|---|---|
 | `public.is_admin()` | `boolean` | Verifica se `auth.uid()` tem `role = 'ADMIN'` em `profiles` |
 | `public.has_access(user_id, lesson_id)` | `boolean` | Verifica se o usuário tem matrícula ACTIVE em cohort que libera a lesson |
+| `public.has_module_access(user_id, module_id)` | `boolean` | Espelho de `has_access`, filtra por `module_id` diretamente via `modules.course_id` (FM-3.2) |
 
-Ambas são `security definer` e `stable` — podem ser cacheadas pelo planner.
+Todas são `security definer` e `stable` — podem ser cacheadas pelo planner.
 
 ## Regra geral
 
@@ -63,6 +64,21 @@ Ambas são `security definer` e `stable` — podem ser cacheadas pelo planner.
 |---|---|
 | SELECT | `has_access(auth.uid(), lesson_id)` OR `is_admin()` |
 | INSERT / UPDATE / DELETE | `is_admin()` |
+
+### `module_materials` (FM-3.2 — 2026-05-17)
+| Operação | Policy | Condição |
+|---|---|---|
+| SELECT | `"module_materials: leitura se tem acesso ao módulo"` | `has_module_access(auth.uid(), module_id)` OR `is_admin()` |
+| INSERT | `"module_materials: admin escreve"` | `is_admin()` (WITH CHECK) |
+| UPDATE | `"module_materials: admin atualiza"` | `is_admin()` (USING) |
+| DELETE | `"module_materials: admin deleta"` | `is_admin()` (USING) |
+
+RLS habilitada via `alter table public.module_materials enable row level security` **antes** das policies.
+
+**Smoke RLS esperado:**
+- (a) Aluno ACTIVE com matrícula no curso do módulo → SELECT retorna rows
+- (b) Aluno sem matrícula → SELECT retorna 0 rows (sem erro)
+- (c) Admin → SELECT retorna sempre (via branch `is_admin()`)
 
 ### `cohorts`
 | Operação | Condição |

@@ -89,6 +89,38 @@ cleanup do stub MDX quebrado em `ContentEditor.tsx`. Stories independentes da
 Epic FAA-1.x. Todas validadas com 5-point checklist: GO (5/5). Prefixo FM-2.x
 para não colidir com a Epic 2 histórica (Design recommendations P0–P2).
 
+**Story 2.4 — SUPERSEDED por FM-3.7** (cleanup absorvido na Epic FM-3.x).
+
+---
+
+## Epic FM-3 — Materiais por Módulo (2026-05-17)
+
+| Story | Título | Complexidade | Status | Agente |
+|---|---|---|---|---|
+| [[active/FM-3.2-migration-module-materials\|FM-3.2]] | Migration `module_materials` + função `has_module_access` + RLS + storage convention | M | active | sites-data |
+| [[backlog/FM-3.3-server-actions-module-materials\|FM-3.3]] | Server actions espelhadas (uploadModuleMaterial, deleteModuleMaterial, addLinkModuleMaterial) + helpers em `lib/materials/storage.ts` | M | backlog | sites-dev-beta |
+| [[backlog/FM-3.4-admin-module-editor-client\|FM-3.4]] | UI admin — nova rota `/cursos/[courseId]/modulos/[moduleId]/` com `ModuleEditorClient.tsx` (espelho de LessonEditorClient, anti-recorrência 2.2) | M | backlog | sites-dev-alpha |
+| [[backlog/FM-3.5-student-module-materials-listing\|FM-3.5]] | UI student — exibir materiais do módulo na página do curso (signed URL, target=_blank, RLS-gated) | M | backlog | sites-dev-alpha |
+| [[backlog/FM-3.6-qa-gate-materiais-modulo\|FM-3.6]] | QA gate adversarial — RLS, admin escape, corrupted state, concurrency, perf, regressão Story 2.2 (QA Results obrigatório — anti-recorrência 1.1) | M | backlog | sites-qa |
+| [[active/FM-3.7-cleanup-material-actions-duplicate\|FM-3.7]] | Cleanup `material-actions.ts` + `MaterialsUpload.tsx` órfãos (absorve Story 2.4) | S | done | sites-dev-alpha |
+
+**ADR autoritativa:** [[../decisions/ADR-002-materiais-por-modulo-schema]] (Opção A — tabela `module_materials` espelhada). Aprovada pelo PO João em 2026-05-17.
+
+**Sequência:**
+1. **FM-3.2** (sites-data) — primeira, libera tipos
+2. **FM-3.3** (sites-dev-beta) — após FM-3.2
+3. **FM-3.4** + **FM-3.5** (sites-dev-alpha) — em paralelo após FM-3.3
+4. **FM-3.7** (sites-dev-alpha) — após FM-3.3 (caminho canônico do addLink existe), preferencialmente antes da FM-3.6
+5. **FM-3.6** (sites-qa) — última, gate adversarial end-to-end
+
+**Regras anti-recorrência embutidas (sem espaço para repetir falhas conhecidas):**
+- **Anti-recorrência Story 2.2** nos ACs da FM-3.4 (botão delete visível para LINK, optimistic+rollback, revalidatePath duplo, guard storage_path vazio nas actions FM-3.3)
+- **Anti-recorrência Story 1.1** nos ACs da FM-3.6 (QA Results obrigatoriamente preenchido com evidência reproduzível OU aceitação pragmática do PO antes de mover para done)
+
+**Stack escolhida:** Opção A (tabela nova `module_materials`). Trade-offs e justificativa ranqueada detalhados na ADR-002. Sem refactor de `materials` existente — defesa em profundidade preservada conforme risco RLS crítico do ADR-001. Todas 6 stories validadas com 5-point checklist: GO (5/5) cada.
+
+**Prefixo FM-3.x** escolhido para evoluir o namespace FM (Fix Materials → Functional Materials) sem colidir com FM-2.x (Fix Materiais por aula, em curso).
+
 ---
 
 ## Epic 1 (histórica) — Cleanup pós-discovery

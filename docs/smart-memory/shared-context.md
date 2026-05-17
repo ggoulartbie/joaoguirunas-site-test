@@ -9,19 +9,53 @@ tags: [ops]
 
 O lead (team-os) atualiza este arquivo a cada mudança de estado dos teammates.
 
-## Team ativo (release) — joaoguirunas-academy-fix-vimeo-dimensions (2026-05-17)
+## Team ativo — joaoguirunas-academy-materiais-por-modulo
 
-**Status:** 🟢 release em andamento — sites-devops fazendo commit + push para main (autorizado pelo João)
-**Veredicto:** PASS pragmático — fix validado (build OK, QA OK, teste visual localhost OK)
-**Entregue:** fix do iframe Vimeo em `src/components/student/VideoPlayer.tsx` (linhas 108 + 310)
+**Status:** 🟢 ativo desde 2026-05-17 — FASE 1 em curso (ADR-002)
+**Objetivo:** Materiais (PDF, IMG, ZIP, LINK) por módulo, espelhando fluxo por aula
+**Branch:** `feat-aulas-v2` (a definir)
+**Restrição:** Nenhum commit/push sem autorização explícita do João. Schema decision passa por aprovação via ADR-002.
+
+**Pipeline com bloqueios explícitos:**
+1. ✅ **Soren/Zaelion (architect)** — ADR-002 entregue + status `accepted` (Opção A: tabela `module_materials` espelhada)
+2. ✅ **João** — ADR-002 APROVADO em 2026-05-17
+3. ✅ **Soren (architect)** — Fase 2: 6 stories FM-3.2..3.7 criadas (FM-3.2 active, demais backlog). Story 2.4 arquivada como superseded em `done/`. BACKLOG.md atualizado. Regras anti-recorrência (2.2 + 1.1) embutidas em ACs específicos.
+4. ✅ **Bythelion (data) + lead** — FM-3.2 fechada: migration aplicada em prod, tipos OK, typecheck PASS, story movida para `done/`. Follow-up: `pnpm db:types` aponta para path errado (não bloqueia).
+5. ✅ **Rexali (dev-beta)** — FM-3.3 fechada: 3 actions implementadas no `actions.ts` canônico + helper `src/lib/materials/storage.ts` (`getMaterialKind`, `buildMaterialPath`, `extractExt`) compartilhado. Bônus: refatorou actions de aula para usar os mesmos helpers — duplicação real reduzida vs. ADR projetava. Build OK.
+6. ✅ **Novael (dev-alpha)** — todas as entregas concluídas (FM-3.4 + FM-3.5 + FM-3.7), reorder UX aprovado visualmente pelo João.
+7. ⏭️ **Axilun (qa) — FM-3.6 PULADO**: João decidiu não fazer gate adversarial final (smoke AC10 + visual review do reorder foram suficientes para PO). FM-3.6 fica como story de processo no backlog (não bloqueia release).
+8. 🔄 **sites-devops** — autorizado pelo João: 3 commits planejados (feat backend+admin / feat student / chore cleanup+docs) + push feat-aulas-v2 + fast-forward main + push main. Pré-commit housekeeping inclui mover stories ativas para done/.
+7. ✅ **Axilun (qa)** — gate executado:
+   - FM-3.2 ✅ PASS, FM-3.3 ⚠️ CONCERNS não-bloqueante (path mismatch lib/materials/storage.ts vs storage policy), FM-3.4 ✅ PASS, FM-3.5 ❌ FAIL
+   - Catch crítico: typecheck/build não detectam `.is('coluna_string', null)` em coluna inexistente — PostgrestFilterBuilder é genérico
+   - Documentado em `agents/qa/results.md` (entrada 2026-05-17 Epic FM) + 10 testes manuais para João
+8. ⏳ **sites-devops** — release sob pedido explícito
+
+**Nomenclatura cuidado:** `FM-2.x` = Fix Materiais (aulas, em curso) vs `FM-3.x` = Functional Materials por Módulo (nova feature). Mesmo prefixo FM, sequências distintas.
+4. ⏳ **sites-data** — migration + RLS (espera ADR + story FM-3.2)
+5. ⏳ **sites-dev-beta** — server actions (espera migration)
+6. ⏳ **Novael (dev-alpha)** — UI admin nova rota `/modulos/[moduleId]/` + UI student (espera actions)
+7. ⏳ **Axilun (qa)** — gate adversarial (espera tudo)
+8. ⏳ **sites-devops** — release (sob pedido explícito, opcional)
+
+**Aprendizados aplicados desde Story 2.2 (bug recorrente que vai entrar no escopo do FM-3.4 desde o início):**
+- Botão delete visível para LINK também
+- Optimistic com await + try/catch + rollback
+- `revalidatePath` em todas as rotas afetadas
+- `storage.remove` com guard de path vazio
+
+---
+
+## Team encerrado (release done) — joaoguirunas-academy-fix-vimeo-dimensions (2026-05-17)
+
+**Status:** ✅ encerrado — FAA-1.4 publicada em main, deploy Vercel disparado
+**Commits:**
+- `57a7302` — `fix(student/video-player): forçar iframe Vimeo a preencher container 16:9`
+- `bcc1250` — `chore(smart-memory): registrar team fix-vimeo-dimensions + Story FAA-1.4 done`
+**Push:** `origin/feat-aulas-v2` ✅ + `origin/main` ✅ (fast-forward `01b0e8d..bcc1250`)
+**Veredicto final:** PASS pragmático assinado pelo PO João, 4 teammates contribuíram (Soren / Novael / Axilun / sites-devops)
 **Fricção descoberta:** Vimeo precisa de `localhost` no whitelist de domínios para dev local — salvo em memory `project_vimeo_localhost_domain`
-
-| Teammate | Fase | Status |
-|---|---|---|
-| sites-architect (Soren) | Story | ✅ FAA-1.4 entregue |
-| sites-dev-alpha (Novael) | Impl | ✅ fix validado + build OK |
-| sites-qa (Axilun) | Gate | ✅ PASS pragmático |
-| sites-devops | Release | 🔄 commit + push feat-aulas-v2 → fast-forward main → push main |
+**Sugestão para próximo ciclo (Axilun):** criar story XS no backlog para curso oculto "QA-Video-Player" com 3 vídeos fixos (16:9, 9:16, 4:3) — gate visual sistemático em mudanças no VideoPlayer
 
 ---
 

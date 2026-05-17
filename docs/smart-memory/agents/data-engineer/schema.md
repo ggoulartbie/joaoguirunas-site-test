@@ -70,6 +70,23 @@ Espelho de `auth.users`. Criado automaticamente pelo trigger `handle_new_user`.
 | `storage_path` | text | path no bucket `materials` |
 | `external_url` | text | para kind = LINK |
 
+### `module_materials` (FM-3.2 — 2026-05-17)
+Espelho de `materials`, vinculada a `modules` ao invés de `lessons`. Sem `updated_at`/`deleted_at` (hard delete, imutável após upload).
+
+| Coluna | Tipo | Notas |
+|---|---|---|
+| `id` | uuid PK | `gen_random_uuid()` |
+| `module_id` | uuid FK → modules | CASCADE, NOT NULL |
+| `title` | text NOT NULL | |
+| `kind` | text NOT NULL | `PDF` \| `ZIP` \| `IMAGE` \| `LINK` \| `OTHER` |
+| `storage_path` | text | path no bucket `materials` — null para LINK |
+| `external_url` | text | para kind = LINK |
+| `size_bytes` | bigint | null para LINK |
+| `sort_order` | int NOT NULL | default 0 |
+| `created_at` | timestamptz NOT NULL | default now() |
+
+Índice: `(module_id, sort_order)`
+
 ---
 
 ## Cohorts (unidade central)
@@ -180,6 +197,7 @@ Fórum geral único. `votes` tem constraint: `thread_id XOR reply_id NOT NULL`.
 | `public.handle_new_user()` | trigger | cria `profiles` após INSERT em `auth.users` |
 | `public.is_admin()` | boolean | `security definer`, `stable` |
 | `public.has_access(user_id, lesson_id)` | boolean | `security definer`, `stable` — coração da autorização |
+| `public.has_module_access(user_id, module_id)` | boolean | `security definer`, `stable` — espelho de `has_access` para módulos (FM-3.2) |
 
 ---
 

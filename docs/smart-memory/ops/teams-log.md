@@ -9,6 +9,25 @@ tags: [ops]
 
 Registro de todos os Agent Teams formados neste projeto. Lead (team-os) atualiza a cada `*dispatch` e `*close`.
 
+## 2026-05-17 — Team joaoguirunas-academy-materiais-por-modulo
+
+**Objetivo:** Implementar upload/gerenciamento de materiais (PDF, IMG, ZIP, LINK) por módulo, espelhando o fluxo existente por aula. Inclui ADR de schema, migration, server actions, UI admin nova rota e UI student.
+**Lead:** team-os (skill)
+**Composição:**
+- sites-architect (Soren) — ADR-002 schema + 6 stories formais FM-3.2..3.7
+- sites-data — migration + RLS policies + storage convention (espera ADR aprovado)
+- sites-dev-beta — server actions backend `*ModuleMaterial*` (espera migration)
+- sites-dev-alpha (Novael) — UI admin nova rota `/modulos/[moduleId]/` + UI student (espera server actions)
+- sites-qa (Axilun) — gate formal adversarial (regra institucional: CONCERNS sem evidência → FAIL)
+
+**Status:** ativo (FASE 1: ADR em curso)
+**Início:** 2026-05-17
+**Branch:** `feat-aulas-v2` (a confirmar — pode ser nova branch para essa feature)
+**Pipeline:** ADR (Soren) → aprovação João → migration (data) → actions (beta) → UI (alpha) → QA (Axilun) → devops (sob pedido)
+**Restrição:** Nenhum commit/push sem autorização explícita do João. Toda decisão de schema passa pelo João via ADR.
+
+---
+
 ## 2026-05-16 — Team joaoguirunas-academy-fix-vimeo-dimensions
 
 **Objetivo:** Resolver bug recorrente das dimensões do iframe Vimeo (recorrência da Story 1.1) — garantir iframe ocupa 100% do container 16:9 para todos aspect ratios nativos (9:16, 4:3, 16:9)
@@ -20,12 +39,16 @@ Registro de todos os Agent Teams formados neste projeto. Lead (team-os) atualiza
 
 **Status:** encerrado
 **Início:** 2026-05-16 (branch `feat-aulas-v2`)
-**Encerrado:** 2026-05-17
+**Encerrado:** 2026-05-17 (release publicada)
 **Trigger:** modificação local não commitada em `src/components/student/VideoPlayer.tsx` — sinal de que fix anterior recorreu.
 **Veredicto final:** PASS pragmático assinado pelo PO João após teste visual em localhost (screenshot 2026-05-17).
+**Release:**
+- Commit fix: `57a7302` — `fix(student/video-player): forçar iframe Vimeo a preencher container 16:9`
+- Commit docs: `bcc1250` — `chore(smart-memory): registrar team fix-vimeo-dimensions + Story FAA-1.4 done`
+- Push: `origin/feat-aulas-v2` + `origin/main` (fast-forward `01b0e8d..bcc1250`)
 **Stories produzidas:** [[../stories/done/1.4-fix-vimeo-iframe-dimensions-v2]]
 **Memória nova:** [[../../../../../.claude/projects/-home-victor-Claude-joaoguirunas-academy/memory/project_vimeo_localhost_domain]] — Vimeo localhost whitelist
-**Pendente externo:** commit + push (sem autorização explícita do João ainda)
+**Aprendizado institucional (Axilun):** regra consolidada em `agents/qa/results.md` — CONCERNS sem evidência reproduzível OU aceitação pragmática documentada do PO → FAIL automático.
 
 ---
 

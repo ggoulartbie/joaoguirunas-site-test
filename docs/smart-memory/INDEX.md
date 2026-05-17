@@ -24,6 +24,7 @@ MOC raiz. Todo arquivo novo em `docs/smart-memory/` deve ser referenciado aqui.
 
 ## Decisões Arquiteturais
 - [[decisions/ADR-001-plataforma-cursos-stack]] — stack e decisões consolidadas da plataforma de cursos
+- [[decisions/ADR-002-materiais-por-modulo-schema]] — schema de materiais por módulo (Opção A: tabela nova `module_materials`) — proposed 2026-05-16
 - `decisions/` — ADRs numerados
 
 ## Operações
@@ -47,6 +48,7 @@ MOC raiz. Todo arquivo novo em `docs/smart-memory/` deve ser referenciado aqui.
 - [[agents/data-engineer/rls-policies]] — RLS policies por tabela + casos de teste
 - [[agents/data-engineer/storage]] — buckets de storage, paths, signed URLs
 - [[agents/data-engineer/migrations-log]] — log de migrations aplicadas
+- [[agents/data-engineer/module-materials-schema]] — FM-3.2: schema `module_materials`, função `has_module_access`, RLS, storage path, rollback SQL
 - [[agents/qa/results]] — histórico de veredictos
 - [[agents/qa/verdict-stories-2.1-2.2]] — veredicto formal Stories 2.1 (PASS) + 2.2 (CONCERNS) — 2026-05-16
 - [[agents/qa/verdict-story-2.3]] — veredicto formal Story 2.3 (PASS) preview markdown/HTML/MDX admin — 2026-05-16
