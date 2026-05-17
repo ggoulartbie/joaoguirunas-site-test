@@ -451,7 +451,7 @@ export default async function AulaPage({ params }: Props) {
             lessonSlug={lessonSlug}
             activeTab="sobre"
             description={lesson.description ?? ''}
-            descriptionContent={renderedContent}
+            contentContent={renderedContent}
             summaryContent={renderedSummary}
             transcriptContent={renderedTranscript}
             materials={materials}

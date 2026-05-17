@@ -25,7 +25,7 @@ type LessonTabsProps = {
   lessonSlug: string
   activeTab: Tab
   description: string
-  descriptionContent?: RenderedContent | null
+  contentContent?: RenderedContent | null
   summaryContent?: RenderedContent | null
   transcriptContent?: RenderedContent | null
   materials: Material[]
@@ -39,7 +39,7 @@ export function LessonTabs({
   lessonSlug: _lessonSlug,
   activeTab: initialTab,
   description,
-  descriptionContent,
+  contentContent,
   summaryContent,
   transcriptContent,
   materials,
@@ -50,7 +50,7 @@ export function LessonTabs({
   const activeCommentCount = comments.filter((c) => !c.deleted_at).length
 
   const availableTabs = ALL_TABS.filter(({ id }) => {
-    if (id === 'sobre') return !!(summaryContent || descriptionContent || description)
+    if (id === 'sobre') return !!(contentContent || description)
     if (id === 'resumo') return !!summaryContent
     if (id === 'transcricao') return !!transcriptContent
     if (id === 'materiais') return materials.length > 0
@@ -116,8 +116,8 @@ export function LessonTabs({
       {/* Tab content */}
       <div className="space-y-4 p-4 lg:p-6">
         {active === 'sobre' && (
-          (summaryContent ?? descriptionContent) ? (
-            <LessonContent content={(summaryContent ?? descriptionContent)!} className="" />
+          contentContent ? (
+            <LessonContent content={contentContent} className="" />
           ) : description ? (
             <p className="text-sm leading-relaxed" style={{ color: 'var(--bone-dim)' }}>
               {description}
