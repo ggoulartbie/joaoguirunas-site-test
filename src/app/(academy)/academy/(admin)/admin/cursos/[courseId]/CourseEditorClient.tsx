@@ -163,7 +163,7 @@ function SortableModule({
             id: created.id,
             module_id: mod.id,
             title: lessonTitle,
-            slug: lessonSlug,
+            slug: created.slug,
             kind: lessonKind,
             sort_order: prev.length,
             content: null,

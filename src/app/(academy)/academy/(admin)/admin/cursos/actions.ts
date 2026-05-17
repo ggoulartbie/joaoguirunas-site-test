@@ -5,6 +5,7 @@ import { revalidatePath } from 'next/cache'
 import { supabaseAdmin } from '@/lib/supabase/admin'
 import { requireAdmin } from '@/lib/auth/helpers'
 import { getMaterialKind, buildMaterialPath, extractExt } from '@/lib/materials/storage'
+import { ensureUniqueSlugInCourse } from '@/lib/lessons/slug'
 import type { Database } from '@/types/database'
 
 type CourseInsert = Database['public']['Tables']['courses']['Insert']
@@ -138,10 +139,12 @@ export async function createLesson(data: Pick<LessonInsert, 'module_id' | 'title
 
   const nextOrder = (existing?.sort_order ?? -1) + 1
 
+  const safeSlug = await ensureUniqueSlugInCourse(supabaseAdmin, lessonData.slug, courseId)
+
   const { data: lesson, error } = await supabaseAdmin
     .from('lessons')
-    .insert({ ...lessonData, sort_order: nextOrder })
-    .select('id')
+    .insert({ ...lessonData, slug: safeSlug, sort_order: nextOrder })
+    .select('id, slug')
     .single()
 
   if (error) throw new Error(error.message)
@@ -151,9 +154,16 @@ export async function createLesson(data: Pick<LessonInsert, 'module_id' | 'title
 
 export async function updateLesson(id: string, courseId: string, data: LessonUpdate) {
   await requireAdmin()
+
+  let payload = data
+  if (typeof data.slug === 'string') {
+    const safeSlug = await ensureUniqueSlugInCourse(supabaseAdmin, data.slug, courseId, id)
+    payload = { ...data, slug: safeSlug }
+  }
+
   const { error } = await supabaseAdmin
     .from('lessons')
-    .update(data)
+    .update(payload)
     .eq('id', id)
 
   if (error) throw new Error(error.message)
