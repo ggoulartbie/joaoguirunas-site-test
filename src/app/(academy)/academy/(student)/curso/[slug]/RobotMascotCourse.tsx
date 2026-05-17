@@ -1,16 +1,16 @@
 'use client'
-import { SplineScene } from '@/shared/components/ui/SplineScene'
+import { SplineSceneGlobal } from '@/shared/components/ui/SplineSceneGlobal'
 
 const SCENE = 'https://prod.spline.design/kZDDjO5HuC9GJUM2/scene.splinecode'
 
 export function RobotMascotCourse() {
   return (
     <div
-      className="absolute right-0 top-0 bottom-0 hidden lg:block pointer-events-none"
-      style={{ width: 160 }}
+      className="absolute right-4 lg:right-6 hidden lg:block"
+      style={{ bottom: 0, width: 96, height: 96 }}
       aria-hidden="true"
     >
-      <SplineScene scene={SCENE} className="w-full h-full" />
+      <SplineSceneGlobal scene={SCENE} className="w-full h-full" />
     </div>
   )
 }
