@@ -1,8 +1,10 @@
 'use server'
 
 import { revalidatePath } from 'next/cache'
+
 import { supabaseAdmin } from '@/lib/supabase/admin'
 import { requireAdmin } from '@/lib/auth/helpers'
+import { getMaterialKind, buildMaterialPath, extractExt } from '@/lib/materials/storage'
 import type { Database } from '@/types/database'
 
 type CourseInsert = Database['public']['Tables']['courses']['Insert']
@@ -11,6 +13,7 @@ type ModuleInsert = Database['public']['Tables']['modules']['Insert']
 type ModuleUpdate = Database['public']['Tables']['modules']['Update']
 type LessonInsert = Database['public']['Tables']['lessons']['Insert']
 type LessonUpdate = Database['public']['Tables']['lessons']['Update']
+type ModuleMaterialInsert = Database['public']['Tables']['module_materials']['Insert']
 
 // ── Courses ──────────────────────────────────────────────────────────────────
 
@@ -185,8 +188,8 @@ export async function uploadMaterial(lessonId: string, courseId: string, formDat
   const file = formData.get('file') as File
   if (!file) throw new Error('Nenhum arquivo enviado')
 
-  const ext = file.name.split('.').pop()
-  const path = `lessons/${lessonId}/${crypto.randomUUID()}.${ext}`
+  const ext = extractExt(file.name)
+  const path = buildMaterialPath('lessons', lessonId, ext)
 
   const { error: uploadError } = await supabaseAdmin.storage
     .from('materials')
@@ -222,9 +225,95 @@ export async function deleteMaterial(materialId: string, storagePath: string, co
   }
 }
 
-function getMaterialKind(mimeType: string): 'PDF' | 'ZIP' | 'IMAGE' | 'LINK' | 'OTHER' {
-  if (mimeType === 'application/pdf') return 'PDF'
-  if (mimeType === 'application/zip' || mimeType === 'application/x-zip-compressed') return 'ZIP'
-  if (mimeType.startsWith('image/')) return 'IMAGE'
-  return 'OTHER'
+// ── Module Materials ──────────────────────────────────────────────────────────
+
+export async function uploadModuleMaterial(
+  moduleId: string,
+  courseId: string,
+  formData: FormData
+): Promise<Database['public']['Tables']['module_materials']['Row']> {
+  await requireAdmin()
+  const file = formData.get('file') as File
+  if (!file) throw new Error('Nenhum arquivo enviado')
+
+  const ext = extractExt(file.name)
+  const path = buildMaterialPath('modules', moduleId, ext)
+
+  const { error: uploadError } = await supabaseAdmin.storage
+    .from('materials')
+    .upload(path, file, { upsert: false })
+
+  if (uploadError) throw new Error(uploadError.message)
+
+  const kind = getMaterialKind(file.type)
+  const { data: material, error } = await supabaseAdmin
+    .from('module_materials')
+    .insert({
+      module_id: moduleId,
+      title: file.name,
+      kind,
+      storage_path: path,
+      size_bytes: file.size,
+      sort_order: 0,
+    } satisfies ModuleMaterialInsert)
+    .select('*')
+    .single()
+
+  if (error) throw new Error(error.message)
+  revalidatePath(`/academy/admin/cursos/${courseId}`)
+  revalidatePath(`/academy/admin/cursos/${courseId}/modulos/${moduleId}`)
+  return material
+}
+
+export async function deleteModuleMaterial(
+  materialId: string,
+  storagePath: string | null,
+  courseId: string,
+  moduleId?: string
+): Promise<void> {
+  await requireAdmin()
+  if (storagePath) {
+    try {
+      await supabaseAdmin.storage.from('materials').remove([storagePath])
+    } catch (e) {
+      console.error('[deleteModuleMaterial] storage remove falhou (continuando):', e)
+    }
+  }
+  const { error } = await supabaseAdmin.from('module_materials').delete().eq('id', materialId)
+  if (error) throw new Error(error.message)
+  revalidatePath(`/academy/admin/cursos/${courseId}`)
+  if (moduleId) {
+    revalidatePath(`/academy/admin/cursos/${courseId}/modulos/${moduleId}`)
+  }
+}
+
+export async function addLinkModuleMaterial(
+  moduleId: string,
+  courseId: string,
+  title: string,
+  externalUrl: string
+): Promise<Database['public']['Tables']['module_materials']['Row']> {
+  await requireAdmin()
+
+  if (!title.trim()) throw new Error('Título obrigatório')
+  try { new URL(externalUrl) } catch { throw new Error('URL inválida') }
+
+  const { data: material, error } = await supabaseAdmin
+    .from('module_materials')
+    .insert({
+      module_id: moduleId,
+      title: title.trim(),
+      kind: 'LINK',
+      external_url: externalUrl,
+      storage_path: null,
+      size_bytes: null,
+      sort_order: 0,
+    } satisfies ModuleMaterialInsert)
+    .select('*')
+    .single()
+
+  if (error) throw new Error('Erro ao adicionar link: ' + error.message)
+  revalidatePath(`/academy/admin/cursos/${courseId}`)
+  revalidatePath(`/academy/admin/cursos/${courseId}/modulos/${moduleId}`)
+  return material
 }

@@ -256,6 +256,13 @@ function SortableModule({
         >
           <Pencil className="h-3.5 w-3.5" />
         </button>
+        <Link
+          href={`/academy/admin/cursos/${courseId}/modulos/${mod.id}`}
+          className="p-1 font-mono text-[9px] uppercase tracking-wider text-[var(--bone-mute)] transition-colors hover:text-[var(--bone-dim)]"
+          title="Materiais do módulo"
+        >
+          Materiais
+        </Link>
         <button
           type="button"
           onClick={() => {

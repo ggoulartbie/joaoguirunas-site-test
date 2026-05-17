@@ -12,31 +12,6 @@ export type Database = {
   __InternalSupabase: {
     PostgrestVersion: "14.5"
   }
-  graphql_public: {
-    Tables: {
-      [_ in never]: never
-    }
-    Views: {
-      [_ in never]: never
-    }
-    Functions: {
-      graphql: {
-        Args: {
-          extensions?: Json
-          operationName?: string
-          query?: string
-          variables?: Json
-        }
-        Returns: Json
-      }
-    }
-    Enums: {
-      [_ in never]: never
-    }
-    CompositeTypes: {
-      [_ in never]: never
-    }
-  }
   public: {
     Tables: {
       certificates: {
@@ -683,7 +658,7 @@ export type Database = {
           created_at: string
           id: string
           lesson_id: string
-          reaction: 'LIKE' | 'DISLIKE'
+          reaction: string
           updated_at: string
           user_id: string
         }
@@ -691,7 +666,7 @@ export type Database = {
           created_at?: string
           id?: string
           lesson_id: string
-          reaction: 'LIKE' | 'DISLIKE'
+          reaction: string
           updated_at?: string
           user_id: string
         }
@@ -699,7 +674,7 @@ export type Database = {
           created_at?: string
           id?: string
           lesson_id?: string
-          reaction?: 'LIKE' | 'DISLIKE'
+          reaction?: string
           updated_at?: string
           user_id?: string
         }
@@ -891,6 +866,50 @@ export type Database = {
             columns: ["lesson_id"]
             isOneToOne: false
             referencedRelation: "lessons"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      module_materials: {
+        Row: {
+          created_at: string
+          external_url: string | null
+          id: string
+          kind: string
+          module_id: string
+          size_bytes: number | null
+          sort_order: number
+          storage_path: string | null
+          title: string
+        }
+        Insert: {
+          created_at?: string
+          external_url?: string | null
+          id?: string
+          kind: string
+          module_id: string
+          size_bytes?: number | null
+          sort_order?: number
+          storage_path?: string | null
+          title: string
+        }
+        Update: {
+          created_at?: string
+          external_url?: string | null
+          id?: string
+          kind?: string
+          module_id?: string
+          size_bytes?: number | null
+          sort_order?: number
+          storage_path?: string | null
+          title?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "module_materials_module_id_fkey"
+            columns: ["module_id"]
+            isOneToOne: false
+            referencedRelation: "modules"
             referencedColumns: ["id"]
           },
         ]
@@ -1300,31 +1319,33 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      has_access: {
-        Args: { p_lesson_id: string; p_user_id: string }
-        Returns: boolean
+      auth_get_user_id_by_email: { Args: { p_email: string }; Returns: string }
+      auth_get_user_with_temp_password_by_email: {
+        Args: { p_email: string }
+        Returns: {
+          temp_expires_at: string
+          temp_hash: string
+          user_id: string
+        }[]
       }
       decrement_filled_seats: {
         Args: { p_cohort_id: string }
         Returns: undefined
+      }
+      has_access: {
+        Args: { p_lesson_id: string; p_user_id: string }
+        Returns: boolean
+      }
+      has_module_access: {
+        Args: { p_module_id: string; p_user_id: string }
+        Returns: boolean
       }
       increment_filled_seats: {
         Args: { p_cohort_id: string }
         Returns: undefined
       }
       is_admin: { Args: never; Returns: boolean }
-      auth_get_user_id_by_email: {
-        Args: { p_email: string }
-        Returns: string | null
-      }
-      auth_get_user_with_temp_password_by_email: {
-        Args: { p_email: string }
-        Returns: {
-          user_id: string
-          temp_hash: string
-          temp_expires_at: string
-        }[]
-      }
+      user_has_password: { Args: { p_user_id: string }; Returns: boolean }
     }
     Enums: {
       [_ in never]: never
@@ -1453,9 +1474,6 @@ export type CompositeTypes<
     : never
 
 export const Constants = {
-  graphql_public: {
-    Enums: {},
-  },
   public: {
     Enums: {},
   },
