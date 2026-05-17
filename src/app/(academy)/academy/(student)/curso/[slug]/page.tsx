@@ -448,14 +448,33 @@ function ModuleAccordion({
       {materials.length > 0 && (
         <div
           className="px-4 py-3 space-y-1.5"
-          style={{ borderBottom: '1px solid var(--hairline)' }}
+          style={{
+            borderBottom: '1px solid var(--hairline)',
+            borderLeft: '2px solid rgba(255,58,14,0.35)',
+          }}
         >
-          <p className="font-mono text-[10px] uppercase tracking-widest mb-2" style={{ color: 'var(--bone-mute)' }}>
+          <p className="font-mono text-[10px] uppercase tracking-widest mb-2" style={{ color: 'var(--bone-dim)' }}>
             Materiais do módulo
           </p>
           {materials.map((mat) => {
             const href = mat.kind === 'LINK' ? mat.external_url : mat.signedUrl
-            if (!href) return null
+            const inner = (
+              <>
+                {mat.kind === 'LINK' ? (
+                  <Link2 className="h-3.5 w-3.5 shrink-0" style={{ color: 'var(--bone-dim)' }} />
+                ) : (
+                  <Download className="h-3.5 w-3.5 shrink-0" style={{ color: 'var(--bone-dim)' }} />
+                )}
+                <span className="text-[13px] leading-snug" style={{ color: 'var(--bone)' }}>
+                  {mat.title}
+                </span>
+              </>
+            )
+            if (!href) return (
+              <span key={mat.id} className="flex items-center gap-2.5 py-1.5 opacity-40 cursor-default">
+                {inner}
+              </span>
+            )
             return (
               <a
                 key={mat.id}
@@ -465,17 +484,7 @@ function ModuleAccordion({
                 className="flex items-center gap-2.5 py-1.5 transition-opacity hover:opacity-70"
                 style={{ textDecoration: 'none' }}
               >
-                {mat.kind === 'LINK' ? (
-                  <Link2 className="h-3.5 w-3.5 shrink-0" style={{ color: 'var(--bone-mute)' }} />
-                ) : (
-                  <Download className="h-3.5 w-3.5 shrink-0" style={{ color: 'var(--bone-mute)' }} />
-                )}
-                <span className="text-[13px] leading-snug" style={{ color: 'var(--bone-dim)' }}>
-                  {mat.title}
-                </span>
-                <span className="font-mono text-[10px] shrink-0" style={{ color: 'var(--bone-mute)' }}>
-                  {mat.kind}
-                </span>
+                {inner}
               </a>
             )
           })}

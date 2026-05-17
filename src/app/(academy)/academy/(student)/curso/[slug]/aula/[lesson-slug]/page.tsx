@@ -3,7 +3,7 @@ export const dynamic = 'force-dynamic'
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
-import { ArrowLeft, ArrowRight, Play } from 'lucide-react'
+import { ArrowLeft, ArrowRight, Download, Link2, Play } from 'lucide-react'
 import { createClient } from '@/lib/supabase/server'
 import { supabaseAdmin } from '@/lib/supabase/admin'
 import { requireUser } from '@/lib/auth/helpers'
@@ -16,6 +16,14 @@ import { LessonReactions } from '@/components/student/LessonReactions'
 import { CourseSidebar, MobileLessonDrawer } from './CourseSidebar'
 import type { CommentWithAuthor } from '@/types/student'
 import type { UserRole } from '@/types/student'
+
+type ModuleMaterialItem = {
+  id: string
+  title: string
+  kind: 'FILE' | 'LINK'
+  external_url: string | null
+  signedUrl: string | null
+}
 
 type Props = {
   params: Promise<{ slug: string; 'lesson-slug': string }>
@@ -386,6 +394,35 @@ export default async function AulaPage({ params }: Props) {
 
   const currentModuleId = module?.id ?? ''
 
+  // Fetch module materials for current module
+  let moduleMaterials: ModuleMaterialItem[] = []
+  if (module?.id) {
+    const { data: rawModuleMaterials } = await supabaseAdmin
+      .from('module_materials')
+      .select('id, title, kind, external_url, storage_path, sort_order')
+      .eq('module_id', module.id)
+      .order('sort_order', { ascending: true })
+
+    moduleMaterials = await Promise.all(
+      (rawModuleMaterials ?? []).map(async (mat) => {
+        let signedUrl: string | null = null
+        if (mat.kind === 'FILE' && mat.storage_path) {
+          const { data } = await supabaseAdmin.storage
+            .from('materials')
+            .createSignedUrl(mat.storage_path, 300)
+          signedUrl = data?.signedUrl ?? null
+        }
+        return {
+          id: mat.id,
+          title: mat.title,
+          kind: mat.kind as 'FILE' | 'LINK',
+          external_url: mat.external_url ?? null,
+          signedUrl,
+        }
+      })
+    )
+  }
+
   return (
     // Negative margin to break out of the shell's padding and use full viewport width for the layout
     <div
@@ -495,6 +532,66 @@ export default async function AulaPage({ params }: Props) {
               </div>
             </div>
           </div>
+
+          {/* Module materials strip — shows materials for current module */}
+          {moduleMaterials.length > 0 && (
+            <div
+              className="border-b px-4 py-3 lg:px-6"
+              style={{
+                borderColor: 'var(--hairline)',
+                borderLeft: '2px solid rgba(255,58,14,0.35)',
+              }}
+            >
+              <p
+                className="font-mono text-[10px] uppercase tracking-widest mb-2.5"
+                style={{ color: 'var(--bone-dim)' }}
+              >
+                Materiais do módulo
+              </p>
+              <div className="flex flex-wrap gap-2">
+                {moduleMaterials.map((mat) => {
+                  const href = mat.kind === 'LINK' ? mat.external_url : mat.signedUrl
+                  const inner = (
+                    <>
+                      {mat.kind === 'LINK' ? (
+                        <Link2 className="h-3.5 w-3.5 shrink-0" style={{ color: 'var(--bone-dim)' }} />
+                      ) : (
+                        <Download className="h-3.5 w-3.5 shrink-0" style={{ color: 'var(--bone-dim)' }} />
+                      )}
+                      <span className="text-[13px]" style={{ color: 'var(--bone)' }}>
+                        {mat.title}
+                      </span>
+                    </>
+                  )
+                  if (!href) return (
+                    <span
+                      key={mat.id}
+                      className="flex items-center gap-2 px-3 py-1.5 opacity-40 cursor-default"
+                      style={{ background: 'var(--ink)', border: '1px solid var(--hairline)' }}
+                    >
+                      {inner}
+                    </span>
+                  )
+                  return (
+                    <a
+                      key={mat.id}
+                      href={href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center gap-2 px-3 py-1.5 transition-opacity hover:opacity-70"
+                      style={{
+                        textDecoration: 'none',
+                        background: 'var(--ink)',
+                        border: '1px solid var(--hairline)',
+                      }}
+                    >
+                      {inner}
+                    </a>
+                  )
+                })}
+              </div>
+            </div>
+          )}
 
           {/* Tabs: Sobre, Resumo, Transcrição, Materiais, Comentários */}
           <LessonTabs
