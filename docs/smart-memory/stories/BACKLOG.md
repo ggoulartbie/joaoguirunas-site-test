@@ -1,12 +1,37 @@
 ---
 title: Story Backlog
 type: backlog
-updated: 2026-05-16
+updated: 2026-05-17
 tags: [story]
 ---
 
 
 # Backlog de Stories
+
+## Epic MC — Mentoria Claude Code (2026-05-17)
+
+| Story | Título | Complexidade | Status | Agente |
+|---|---|---|---|---|
+| [[done/MC-1.1-mapear-campos-treinamento-supabase\|MC-1.1]] | Mapear conteúdo Mentoria → schema Supabase + JSON-fonte | M | done | sites-architect + sites-analyst |
+| [[backlog/MC-1.2-popular-curso-mentoria-claude-code-supabase\|MC-1.2]] | Popular curso "Mentoria Claude Code" no Supabase (módulos + aulas, idempotente) | M | backlog | sites-data + sites-dev-beta |
+| [[backlog/MC-1.3-integrar-links-vimeo-aulas-mentoria\|MC-1.3]] | Integrar `video_id` Vimeo nas aulas do curso (update lessons) | S | backlog | sites-data + João |
+| [[backlog/MC-1.4-validar-visualizacao-curso-aluno\|MC-1.4]] | Validar visualização do curso pelo aluno (smoke E2E + veredicto formal) | S | backlog | sites-qa |
+| [[backlog/MC-2.1-adaptar-sistema-campos-extras\|MC-2.1]] | (Contingente) Adaptar sistema academy para campos extras do conteúdo | M | backlog | sites-architect + sites-data |
+
+Objetivo do time **joao-guirunas-site-mentoria-curso**: estruturar e popular o curso "Mentoria Claude Code" no Supabase a partir da pasta-fonte `docs/mentoria-claude-code/Curso On-line/` (10 módulos; 5 com aulas gravadas — M3/M4/M5/M6/M9-bonus-tarefas/M9-bonus-comercial). Arquitetura documentada em [[../../mentoria-claude-code/02-arquitetura-sistema]].
+
+**Sequência:**
+1. **MC-1.1** primeiro — define JSON-fonte canônico, decide cohort (A vs B) e destino dos manuais PDF. **Bloqueia MC-1.2**.
+2. **MC-1.2** após MC-1.1 — script ou migration idempotente popula `courses` + `modules` + `lessons` + `cohort_courses`.
+3. **MC-1.3** em paralelo a MC-1.2 ou logo após — preenche `video_id` Vimeo (depende de upload manual do João).
+4. **MC-1.4** após MC-1.2 + MC-1.3 — smoke E2E adversarial com veredicto formal (anti-recorrência Story 1.1: `QA Results` não pode ficar vazio).
+5. **MC-2.1** contingente — só vira `active` se MC-1.1 identificar gap real de schema; caso contrário, `deleted` com justificativa.
+
+**Restrição operacional:** nada de migration ou push para `main` sem autorização explícita do João. Todas as 5 stories validadas com 5-point checklist: GO (5/5), exceto MC-2.1 (CONDITIONAL_GO).
+
+**Prefixo MC** escolhido porque livre — Epics anteriores usaram numerais (1.x, 2.x, 3.x) ou prefixos FAA/FM/AV/F1..F13.
+
+---
 
 ## Epic Fix Aula Aluno UX (2026-05-16)
 

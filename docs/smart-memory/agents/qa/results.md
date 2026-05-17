@@ -11,6 +11,50 @@ Histórico de veredictos emitidos pelo sites-qa (Axilun).
 
 ---
 
+## 2026-05-17 — fix/academy-soft-delete-restoration — REAUDITORIA #1 — ❌ FAIL (duplicata `abertura` ainda ativa)
+
+**Escopo:** Reauditoria pós-limpeza do sites-data.
+
+**Estado pós-cleanup:**
+- ✅ 2 módulos ativos: `modulo-3-fundamentos` (15 aulas, sort_order=0) + `modulo-5-claude-design` (13 aulas, sort_order=3)
+- ✅ Zero soft-deleted globais em `lessons` e `modules`
+- ❌ **Aula `abertura` ainda tem 2 rows ativas no curso:**
+  - `9bd1b784-6def-4a0b-82ea-fe8798dd377b` → modulo-5-claude-design, **video_id=NULL** (lixo)
+  - `9828e194-3939-4c9e-bb45-7aece7630179` → modulo-3-fundamentos, video_id=`1192870861` (canônica)
+
+**Gate falhou:** critério 2 ("`.single()` retorna 1 row") não atendido. `.single()` em `page.tsx:85` continuará disparando `PGRST116` → `notFound()` → **404 persiste em produção**.
+
+**Issue bloqueante:**
+- [CRITICAL] Hard-delete ou soft-delete da row `9bd1b784…` em `modulo-5-claude-design` (lixo, sem video_id, mesmo slug da canônica).
+
+**SQL sugerido (a executar pelo data/devops, não QA):**
+```sql
+DELETE FROM public.lessons WHERE id = '9bd1b784-6def-4a0b-82ea-fe8798dd377b';
+-- OU se preferir manter histórico:
+UPDATE public.lessons SET deleted_at = now() WHERE id = '9bd1b784-6def-4a0b-82ea-fe8798dd377b';
+```
+
+**Próximo passo:** `@sites-data` remover/soft-deletar a duplicata e resubmeter. Esperado: 1 row, 404 resolvido.
+
+---
+
+## 2026-05-17 — fix/academy-soft-delete-restoration — ❌ FAIL (404 persiste, causa diferente)
+
+**Escopo:** Auditoria pós-restauração do mass soft-delete. URL `https://joaoguirunas.com/academy/curso/mentoria-claude-code-aiox/aula/abertura`.
+
+**Veredicto:** **FAIL** — soft-delete foi corretamente revertido (curso + módulo `modulo-3-fundamentos` + lesson `abertura` todos com `deleted_at IS NULL`), mas o 404 persiste por **slug-duplicate**: existem **3 lessons ativas com slug `abertura`** no mesmo curso (IDs `c5f8a4e5…`, `9bd1b784…`, `9828e194…`), em módulos `modulo-3-fundamentos` (deletado), `modulo-5-claude-design` (ativo, sem video_id) e `modulo-3-fundamentos` (ativo, canônico). A query `src/app/(academy)/academy/(student)/curso/[slug]/aula/[lesson-slug]/page.tsx:45-85` usa `.single()` e quebra com `PGRST116`, retornando `null` → `notFound()` na linha 87.
+
+**Issues:**
+- [CRITICAL] Soft-deletar duplicatas de `abertura` (manter `9828e194…` em modulo-3 ativo; deletar `c5f8a4e5…` órfã + `9bd1b784…` lixo).
+- [CRITICAL] Slug `modulo-3-fundamentos` também duplicado (1 deletado + 1 ativo).
+- [CONCERN] Query não filtra `modules.deleted_at IS NULL` no embed `modules!inner` — aula órfã num módulo deletado ainda aparece no resultset.
+- [CONCERN] Módulos `teste-2`, `teste-3` ativos em produção, `sort_order` colidindo com módulos reais.
+
+**Detalhes:** `agents/qa/verdict-soft-delete-fix.md`
+**Próximo passo:** `@team-lead` → roteia para Bythelion (task #1 `in_progress` já no escopo). Resubmeter após fix do banco.
+
+---
+
 ## 2026-05-17 — Epic FM (Materiais por Módulo): FM-3.2 / FM-3.3 / FM-3.4 / FM-3.5 — ❌ FAIL consolidado (bloqueia FM-3.5)
 
 **Escopo:** Gate adversarial das 4 stories da Epic FM (Functional Materials by Module). Branch `feat-aulas-v2`. ADR-002 aprovada (Opção A — tabela `module_materials` espelhada). Migration aplicada em prod via MCP.

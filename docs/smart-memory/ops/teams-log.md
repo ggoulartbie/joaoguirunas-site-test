@@ -248,6 +248,26 @@ Registro de todos os Agent Teams formados neste projeto. Lead (team-os) atualiza
 
 ---
 
+## 2026-05-17 — Team joao-guirunas-site-mentoria-curso
+
+**Objetivo:** Estruturar e popular o curso "Mentoria Claude Code" no Supabase — estudar academy completo, mapear schema, criar docs/mentoria-claude-code/, preparar fluxo de população de conteúdo com links Vimeo
+**Lead:** team-os (skill)
+**Composição:**
+- sites-analyst — análise do conteúdo `src/data/treinamento/` + gap analysis vs schema Supabase
+- sites-architect — arquitetura do fluxo academy + criação de stories MC-1.x / MC-2.x
+- sites-data — mapeamento completo schema tabelas courses/modules/lessons/materials
+- sites-dev-alpha — inventário componentes frontend (student + admin)
+- sites-dev-beta — mapeamento server actions e APIs para população
+- sites-devops — pipeline deploy + standby para commits
+- sites-ux — fluxo UX aluno + spec estrutura curso Mentoria Claude Code
+
+**Status:** ativo
+**Início:** 2026-05-17T13:52:00-03:00
+**Pasta de conteúdo:** `docs/mentoria-claude-code/` (criada nesta sessão)
+**Restrição:** Nenhum commit/push sem autorização explícita do João. Fase atual = discovery + documentação.
+
+---
+
 ## 2026-05-06 — Team joao-guirunas-site-plataforma-cursos-completo
 
 **Objetivo:** Implementação completa da plataforma de cursos — Fases 1 a 9, 42 stories, do schema ao deploy

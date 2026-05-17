@@ -1,13 +1,31 @@
 ---
 title: Shared Context
 type: status-board
-updated: 2026-05-16
+updated: 2026-05-17
 tags: [ops]
 ---
 
 # Status Board
 
 O lead (team-os) atualiza este arquivo a cada mudança de estado dos teammates.
+
+## Team ativo — joao-guirunas-site-mentoria-curso
+
+**Status:** 🟢 ativo desde 2026-05-17
+**Objetivo:** Estruturar e popular o curso "Mentoria Claude Code" no Supabase
+**Branch:** `main` (sem branch separada por ora)
+**Restrição:** Nenhum commit/push sem autorização explícita do João.
+
+| Teammate | Fase | Status | Task |
+|---|---|---|---|
+| sites-architect (Zaelion) | Arquitetura + stories | ✅ concluído | `docs/mentoria-claude-code/02-arquitetura-sistema.md` + 5 stories MC-1.1..MC-1.4 + MC-2.1 contingente em `stories/backlog/` + BACKLOG.md atualizado |
+| sites-data | Mapeamento schema banco | ✅ concluído | `docs/mentoria-claude-code/03-schema-banco.md` — schema completo, ERD, RLS, sequência inserção, 5 gaps |
+| sites-ux (Velani) | Fluxo aluno | ✅ concluído | `docs/mentoria-claude-code/07-ux-fluxo-aluno.md` + `agents/ux/spec-curso-mentoria-claude-code.md` — fluxo completo, 33 aulas especificadas com slugs, integração Vimeo documentada |
+| sites-devops | Pipeline deploy | ✅ concluído | `docs/mentoria-claude-code/06-deploy-pipeline.md` — em standby para commits |
+| sites-dev-alpha (Novael) | Inventário frontend | ✅ concluído | `docs/mentoria-claude-code/04-componentes-frontend.md` — todos os componentes aluno+admin, Vimeo, materiais, data requirements |
+| sites-analyst (Lyrel) | Análise conteúdo + gap analysis | ✅ concluído | `docs/mentoria-claude-code/01-analise-conteudo.md` — 11 módulos, 33 aulas, 9 gaps mapeados. Achado crítico: vimeo_id ausente é o único blocker real para publicar |
+
+---
 
 ## Team ativo — joaoguirunas-academy-materiais-por-modulo
 
@@ -171,6 +189,45 @@ O lead (team-os) atualiza este arquivo a cada mudança de estado dos teammates.
 - Vercel Hobby plan — sem crons. Toda lógica agendada via Supabase pg_cron + Edge Functions.
 - Auth: sem signup público. Admin cria alunos manualmente ou via webhook Stripe.
 - Duas rotas de compra: /curso-online (público, sem auth) e /mentoria (lead gen).
+
+---
+
+## Team ativo — joao-guirunas-site-mentoria-curso (2026-05-17)
+
+**Status:** 🟢 ativo — mapeamento de estrutura e APIs em curso
+**Objetivo:** Estruturar e popular o curso "Mentoria Claude Code" no Supabase
+**Branch:** main
+
+| Teammate | Task | Status |
+|---|---|---|
+| sites-dev-beta (Rexali) | Mapear server actions e APIs para população de cursos | ✅ concluído |
+
+**Entregue:** `docs/mentoria-claude-code/05-server-actions-api.md`
+**Achado chave:** A estrutura (curso + módulos + 12 aulas) já existe em prod via migration SQL. O conteúdo (video_id, summary, transcript) está NULL — precisa ser populado via migration SQL (batch) + Admin UI (iterativo). Não existe script de population TypeScript.
+
+---
+
+## Capacidades operacionais confirmadas (2026-05-17)
+
+- **Supabase CLI** disponível em `/opt/homebrew/bin/supabase` v2.90.0, projeto linkado `mksmmpfyqowuzjcchhkl`
+- Agentes podem executar SQL diretamente em produção: `supabase db query --linked "SQL"`
+- Canal preferido para operações de banco — não requer que João rode SQL manualmente
+- Detalhes completos em `docs/smart-memory/project/operational-capabilities.md`
+
+---
+
+## Team ativo — joao-guirunas-site-popular-mentoria-mc11-mc12 (2026-05-17)
+
+**Status:** 🟢 ativo
+**Objetivo:** Popular curso Mentoria Claude Code — stories MC-1.1 e MC-1.2
+**Servidor local:** http://localhost:3000 (rodando)
+
+| Teammate | Task | Status |
+|---|---|---|
+| bythelion (sites-data) | MC-1.1 AC1: snapshot banco M3+M5 → depois MC-1.2 migration | 🔄 em andamento |
+| lyrel (sites-analyst) | MC-1.1 AC2: inventário .txt locais M3+M5 | 🔄 em andamento |
+| zaelion (sites-architect) | MC-1.1 AC3-5: mapeamento + gap report (aguarda bythelion + lyrel) | ⏳ aguardando |
+| rexali (sites-dev-beta) | MC-1.2: validar schema + dry-run pré-migration | 🔄 em andamento |
 
 ## Blockers
 <!-- Nenhum blocker de código — apenas operacionais aguardando João -->

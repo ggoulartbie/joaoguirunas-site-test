@@ -16,6 +16,7 @@ MOC raiz. Todo arquivo novo em `docs/smart-memory/` deve ser referenciado aqui.
 - [[project/architecture]] — padrão arquitetural Next.js App Router + SkillPage template (fonte: sites-architect)
 - [[project/modules]] — mapa de ~50 rotas agrupadas em 10 grupos (fonte: sites-architect)
 - [[project/conventions]] — convenções de código (fonte: sites-analyst)
+- [[project/operational-capabilities]] — Supabase CLI disponível e linkado, regra de delegação do lead
 
 ## Stories
 - [[stories/BACKLOG]] — stories pendentes (Epics 1–6 do site + Plataforma de Cursos F1–F13 + Epic Aulas v2 AV-3.x)
@@ -48,6 +49,7 @@ MOC raiz. Todo arquivo novo em `docs/smart-memory/` deve ser referenciado aqui.
 - [[agents/data-engineer/rls-policies]] — RLS policies por tabela + casos de teste
 - [[agents/data-engineer/storage]] — buckets de storage, paths, signed URLs
 - [[agents/data-engineer/migrations-log]] — log de migrations aplicadas
+- [[agents/data-engineer/fix-soft-delete-2026-05-17]] — análise conflitos slug pós-mass-soft-delete: 13 módulos soft-deleted, 9 aulas órfãs em módulo deletado, decisão pendente
 - [[agents/data-engineer/module-materials-schema]] — FM-3.2: schema `module_materials`, função `has_module_access`, RLS, storage path, rollback SQL
 - [[agents/qa/results]] — histórico de veredictos
 - [[agents/qa/verdict-stories-2.1-2.2]] — veredicto formal Stories 2.1 (PASS) + 2.2 (CONCERNS) — 2026-05-16
@@ -67,6 +69,7 @@ MOC raiz. Todo arquivo novo em `docs/smart-memory/` deve ser referenciado aqui.
 - [[agents/research/student-bug-hunt]] — bug hunt + a11y sweep área do aluno (14 bugs: 1 P0, 5 P1) — 2026-05-09
 - [[agents/data/audit-database]] — auditoria schema + RLS + bugs fluxo /curso-online — 2026-05-08
 - [[agents/research/server-crash-analysis]] — causa raiz queda dev server: processo duplicado (EADDRINUSE) vs. crash real (OOM) — recomendações restart — 2026-05-16
+- [[agents/research/conteudo-mentoria-analise]] — análise de conteúdo Mentoria Claude Code: 11 módulos, 33 aulas, gap analysis vs. schema Supabase — 2026-05-17
 
 ## Status
 - [[shared-context]] — status board em tempo real
