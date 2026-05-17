@@ -57,7 +57,7 @@ export async function deleteCourse(id: string) {
   await requireAdmin()
   const { error } = await supabaseAdmin
     .from('courses')
-    .update({ deleted_at: new Date().toISOString() })
+    .delete()
     .eq('id', id)
 
   if (error) throw new Error(error.message)
@@ -105,7 +105,7 @@ export async function deleteModule(id: string, courseId: string) {
   await requireAdmin()
   const { error } = await supabaseAdmin
     .from('modules')
-    .update({ deleted_at: new Date().toISOString() })
+    .delete()
     .eq('id', id)
 
   if (error) throw new Error(error.message)
@@ -165,7 +165,7 @@ export async function deleteLesson(id: string, courseId: string) {
   await requireAdmin()
   const { error } = await supabaseAdmin
     .from('lessons')
-    .update({ deleted_at: new Date().toISOString() })
+    .delete()
     .eq('id', id)
 
   if (error) throw new Error(error.message)
