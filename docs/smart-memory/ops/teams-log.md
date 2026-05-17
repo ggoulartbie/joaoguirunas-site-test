@@ -9,6 +9,26 @@ tags: [ops]
 
 Registro de todos os Agent Teams formados neste projeto. Lead (team-os) atualiza a cada `*dispatch` e `*close`.
 
+## 2026-05-17 — Team joaoguirunas-academy-lesson-availability
+
+**Objetivo:** Adicionar campo `is_available` (boolean, default `true`) na tabela `lessons` — admin ganha toggle (ícone olho) por aula no CourseEditorClient para indisponibilizar; aluno vê aula listada com badge "Em breve" e sem acesso ao player quando `is_available = false`.
+**Lead:** team-os (skill)
+**Branch:** `feat-aulas-v2`
+**Composição:**
+- sites-architect — ADR + stories LA-1.1, LA-1.2, LA-1.3 (5-point)
+- sites-data — migration `is_available` + atualizar database.ts
+- sites-dev-alpha — toggle olho admin + badge "Em breve" no aluno
+- sites-dev-beta — server action updateLesson + query aluno com is_available
+- sites-qa — gate adversarial pré-release
+- sites-devops — commit + push após QA PASS
+
+**Status:** ativo (FASE 1: architect + data em paralelo)
+**Início:** 2026-05-17T20:35:00-03:00
+**Pipeline:** architect (stories) + data (migration) em paralelo → dev-alpha + dev-beta implementam → QA gate → devops release → lead aplica migration via MCP + merge main
+**Restrição:** Migration não aplicada em prod sem autorização explícita do João.
+
+---
+
 ## 2026-05-17 — Team joaoguirunas-academy-fix-aulas-abertura-404
 
 **Objetivo:** Bug em produção — aulas com título "Abertura" em qualquer módulo retornam 404 ao acessar. Hipótese PO: colisão de slug entre aulas homônimas em módulos diferentes.

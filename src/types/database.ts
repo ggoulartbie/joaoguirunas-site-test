@@ -704,6 +704,7 @@ export type Database = {
           description: string | null
           duration_seconds: number | null
           id: string
+          is_available: boolean
           kind: string
           module_id: string
           slug: string
@@ -725,6 +726,7 @@ export type Database = {
           description?: string | null
           duration_seconds?: number | null
           id?: string
+          is_available?: boolean
           kind: string
           module_id: string
           slug: string
@@ -746,6 +748,7 @@ export type Database = {
           description?: string | null
           duration_seconds?: number | null
           id?: string
+          is_available?: boolean
           kind?: string
           module_id?: string
           slug?: string

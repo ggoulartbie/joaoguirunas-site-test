@@ -75,6 +75,7 @@ export default async function MeusCursosPage() {
         .select('id, module_id')
         .in('module_id', accessibleModuleIds)
         .is('deleted_at', null)
+        .eq('is_available', true)
     : { data: [] }
 
   const lessonsByModule = new Map<string, string[]>()

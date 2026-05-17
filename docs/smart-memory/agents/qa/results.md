@@ -11,6 +11,289 @@ Histórico de veredictos emitidos pelo sites-qa (Axilun).
 
 ---
 
+## 2026-05-17 — lesson-availability — VEREDICTO FINAL — ✅ PASS
+
+**Escopo:** Re-gate final após todos os fixes serem aplicados pelo team-lead. **11/11 ataques PASS**. Feature liberada para devops.
+
+**Commits gated:** working-tree completo no branch `feat-aulas-v2` (`8ed0c5a` base + edits no working tree em `aula/[lesson-slug]/page.tsx`, `curso/[slug]/page.tsx`, `meus-cursos/page.tsx`, `dashboard/page.tsx`, `certificate.ts`, `database.ts`, migration `20260517200000_lessons_is_available.sql`, stories LA-1.1/1.2/1.3).
+
+### Tabela adversarial final
+
+| # | Ataque | Resultado | Evidência |
+|---|--------|-----------|-----------|
+| 1 | Aula listada quando indisponível | ✅ PASS | `curso/[slug]/page.tsx:484-554` + `CourseSidebar.tsx:141-214` |
+| 2 | Badge "Em breve" presente | ✅ PASS | `curso/[slug]/page.tsx:508-512` + `CourseSidebar.tsx:176-180` |
+| 3 | Acesso ao player bloqueado | ✅ PASS | `aula/[lesson-slug]/page.tsx:269-315` early return; `video_id` nunca vaza |
+| 4 | Toggle admin salva via server action | ✅ PASS | `CourseEditorClient.tsx:68-72` + `actions.ts:155-172` |
+| 5 | Estado otimista do toggle | ✅ PASS | `CourseEditorClient.tsx:65,69-70` |
+| 6 | Migration `DEFAULT TRUE NOT NULL` | ✅ PASS | `20260517200000_lessons_is_available.sql:7` |
+| 7 | `pnpm typecheck` EXIT 0 | ✅ PASS | `tsc --noEmit` sem erros |
+| 8 | `pnpm build` EXIT 0 | ✅ PASS | Build de produção sem erros |
+| 9 | URL direta ao player negada | ✅ PASS | Mesmo gate de #3; precedência correta após `hasAccess` |
+| 10 | Aluno sem cohort vê "negado" (não "em breve") | ✅ PASS | `page.tsx:227-267` LockedContent precede gate is_available |
+| 11 | Cálculo de progresso consistente entre páginas | ✅ PASS | `meus-cursos/page.tsx:78`, `dashboard/page.tsx:89`, `certificate.ts:81` filtram via `.eq('is_available', true)`. `curso/[slug]/page.tsx:121-123,205-209,215-218,329-336` filtram localmente. `aula/[lesson-slug]/page.tsx:195-201,207-209` filtram `sidebarModules`/totals |
+
+**Resumo:** 11 PASS, 0 CONCERN, 0 FAIL.
+
+### Bonus — Override ADMIN/MENTOR no gate
+
+`aula/[lesson-slug]/page.tsx:273-275` adiciona `isPrivileged = user.role === 'ADMIN' || user.role === 'MENTOR'` e usa `if (lesson.is_available === false && !isPrivileged)`. Consistente com override da RPC `has_access` (`20260510030000_has_access_admin_override.sql`). `requireUser()` retorna `Profile` completo com `.role` (validado em `src/lib/auth/helpers.ts:25-33`).
+
+### Decisões PO registradas
+
+1. **Defesa em profundidade RPC** (CONCERN #2 anterior): PO decidiu NÃO aplicar — app-level suficiente para esta sprint. Story **LA-1.5** "hardening RPC has_access para is_available" será criada como follow-up (risco aceito: writes secundários via API direta — reactions, comments, materials signed URLs — podem bypassar `is_available`).
+
+2. **ADMIN/MENTOR no gate** (CONCERN #1 anterior): PO decidiu adicionar override consistente com RPC.
+
+3. **Certificado/progresso vs Em breve**: PO decidiu excluir `is_available=false` de todos os cálculos de denominador — aluno pode atingir 100% e emitir certificado mesmo se curso tiver aulas Em breve.
+
+### Veredicto
+
+```
+VEREDICTO: ✅ PASS
+Story: LA-1.1/1.2/1.3 | Data: 2026-05-17
+Checklist: 11/11 verificados
+Issues: nenhum bloqueante
+Tech-debt aceito: LA-1.5 (hardening RPC has_access — follow-up)
+Próximo passo: @sites-devops push
+```
+
+✦ A luz está correta.
+
+---
+
+## 2026-05-17 — lesson-availability — RE-GATE #2 — ⚠️ CONCERNS [SUPERSEDED PELO VEREDICTO FINAL ACIMA]
+
+**Escopo:** Re-gate completo após team-lead aplicar (a) gate `is_available` em `aula/[lesson-slug]/page.tsx`, (b) `.eq('is_available', true)` em `certificate.ts`, `meus-cursos/page.tsx` e `dashboard/page.tsx`. PO decidiu NÃO aplicar Opção A (hardening da RPC `has_access`).
+
+**Resultado:** 11 ataques re-executados. Gate de segurança crítico PASS. Encontrada inconsistência entre decisão do PO ("excluir is_available=false do cálculo") e dois locais que ainda contam aulas Em breve no denominador.
+
+### Tabela adversarial completa (re-execução)
+
+| # | Ataque | Resultado | Evidência |
+|---|--------|-----------|-----------|
+| 1 | Aula listada (não escondida) quando indisponível | ✅ PASS | `curso/[slug]/page.tsx:481-551`; `CourseSidebar.tsx:141-214` |
+| 2 | Badge "Em breve" presente quando `is_available=false` | ✅ PASS | `curso/[slug]/page.tsx:505-509` + `CourseSidebar.tsx:176-180` |
+| 3 | Link/acesso ao player bloqueado quando indisponível | ✅ PASS | `aula/[lesson-slug]/page.tsx:269-310` early return — sem expor video_id/conteúdo/materials/comments/reactions |
+| 4 | Toggle admin salva via server action | ✅ PASS | `CourseEditorClient.tsx:68-72` + `actions.ts:155-172` |
+| 5 | Estado otimista do toggle correto | ✅ PASS | `CourseEditorClient.tsx:65,69-70` |
+| 6 | Migration `DEFAULT TRUE NOT NULL` preserva rows | ✅ PASS | `20260517200000_lessons_is_available.sql:7` |
+| 7 | `pnpm typecheck` EXIT 0 | ✅ PASS | `tsc --noEmit` sem erros |
+| 8 | `pnpm build` EXIT 0 | ✅ PASS | Build de produção sem erros |
+| 9 | URL direta ao player negada (mesmo com cohort) | ✅ PASS | Gate de #3. has_access=true → gate is_available ANTES de renderContent/VideoPlayer |
+| 10 | Aluno sem cohort vê "negado" (não "em breve") | ✅ PASS | `page.tsx:227-267` LockedContent precede gate is_available. Ordem correta |
+| 11 | Varredura global SELECT lessons | ⚠️ **CONCERN** | 2 locais ainda contam Em breve no denominador (ver abaixo) |
+
+**Resumo:** 10 PASS, 1 CONCERN. Sem FAILs.
+
+### Issue CONCERN — Inconsistência de cálculo de progresso
+
+Decisão do PO ("excluir `is_available=false` do cálculo") foi aplicada em `certificate.ts`, `meus-cursos/page.tsx`, `dashboard/page.tsx`. Mas 2 locais ainda contam Em breve:
+
+**A) `src/app/(academy)/academy/(student)/curso/[slug]/page.tsx`**
+
+Linha 120: `allLessonIds = course.modules.flatMap((m) => m.lessons.map((l) => l.id))` — inclui Em breve (a query principal traz `is_available` mas o cálculo ignora).
+
+- Linha 202-205: `totalLessons`, `completedLessons`, `progressPercent` com denominador inflado.
+- Linha 278: exibe `{completedLessons}/{totalLessons} aulas concluídas` — inflado.
+- Linha 281: exibe `{progressPercent}%` — menor que o real.
+- Linhas 325-331 (`ModuleAccordion`): `moduleLessonIds`/`moduleCompleted`/`moduleTotal` idem. `isComplete = moduleCompleted === moduleTotal` — **módulo nunca aparece como completo se tiver Em breve**.
+- Linhas 209-216: `firstIncomplete` pode pegar aula `is_available=false` → CTA "Retomar"/"Começar" leva pra URL que mostra "Em breve". UX quebrada (link válido mas tela diz "estará disponível em breve").
+
+**B) `src/app/(academy)/academy/(student)/curso/[slug]/aula/[lesson-slug]/page.tsx`**
+
+- Linha 204: `totalLessons = allLessons.length` — inclui Em breve.
+- Linhas 183-202 (`sidebarModules`): `totalCount: lessons.length` e `completedCount` calculados sem filtrar Em breve.
+- Sidebar lateral (`CourseSidebar.tsx:83`) exibe `{totalCompleted}/{totalLessons} aulas concluidas` inflado.
+- `mod.completedCount/mod.totalCount` (CourseSidebar:124-125) idem por módulo.
+
+**Por que CONCERN e não FAIL:** Sem bypass de segurança. É **inconsistência semântica**: aluno vê 90% na página do curso/sidebar (com Em breve inflando) e 100% no `meus-cursos` (sem Em breve). Módulo nunca fica "concluído" enquanto tiver Em breve. Certificado é emitido (porque `certificate.ts` foi corrigido) mesmo com a UI mostrando módulo incompleto.
+
+### Correção sugerida (mecânica)
+
+**`curso/[slug]/page.tsx`:**
+```ts
+// Linha 120 — filtrar Em breve no cálculo
+const allLessonIds = course.modules
+  .flatMap((m) => m.lessons.filter((l) => l.is_available !== false))
+  .map((l) => l.id)
+
+// Linhas 209-215 — filtrar para resumeLesson
+const firstIncomplete = course.modules
+  .filter((m) => hasGlobalAccess || accessibleModuleIds.has(m.id))
+  .flatMap((m) => m.lessons.filter((l) => l.is_available !== false))
+  .find((l) => !completedSet.has(l.id))
+const firstLesson = course.modules
+  .filter((m) => hasGlobalAccess || accessibleModuleIds.has(m.id))
+  .flatMap((m) => m.lessons.filter((l) => l.is_available !== false))[0]
+
+// ModuleAccordion (linhas 325-331) — filtrar moduleLessonIds
+const moduleLessonIds = module.lessons.filter((l) => l.is_available !== false).map((l) => l.id)
+```
+
+**`aula/[lesson-slug]/page.tsx`:**
+```ts
+// Linhas 183-202 — totalCount/completedCount filtram, lessons[] mantém todas (sidebar precisa renderizar com badge)
+const sidebarModules = (allModulesRaw ?? []).map((m) => {
+  const allLs = (Array.isArray(m.lessons) ? m.lessons : [m.lessons])
+  const lessons = allLs.map((l) => ({ ...mapping..., is_available: l.is_available }))
+  const availableLessons = lessons.filter((l) => l.is_available !== false)
+  return {
+    ...,
+    completedCount: availableLessons.filter((l) => l.completed).length,
+    totalCount: availableLessons.length,
+    lessons, // mantém todas para CourseSidebar renderizar badge
+  }
+})
+
+// Linhas 204-205
+const availableAllLessons = allLessons.filter((l) => l.is_available !== false)
+const totalLessons = availableAllLessons.length
+const totalCompleted = availableAllLessons.filter((l) => completedIds.has(l.id)).length
+```
+
+### Caminho para PASS
+
+Aplicar fix nos dois locais acima + retestar #11. Sem isso fica **CONCERNS** — sistema seguro e funcional, mas com inconsistência visual de progresso entre páginas (curso/aula vs meus-cursos/dashboard) e CTA "Retomar" potencialmente quebrada. Aceitável como ship-now se virar story (LA-1.4 "consistência de progresso pós-is_available").
+
+---
+
+## 2026-05-17 — lesson-availability — REAUDITORIA #1 — ⚠️ CONCERNS [SUPERSEDED PELO RE-GATE #2 ACIMA]
+
+**Escopo:** Reauditoria após fix proativo do team-lead em `aula/[lesson-slug]/page.tsx`. O FAIL crítico abaixo foi reportado e o team-lead aplicou a Opção B antes do veredicto ser arquivado.
+
+**Estado pós-fix:**
+
+| # | Ataque | Reauditoria | Evidência |
+|---|--------|-------------|-----------|
+| 3 | Acesso ao player bloqueado quando `is_available=false` | ✅ PASS | `page.tsx:62` adiciona `is_available` ao SELECT; `page.tsx:269-310` gate early-return retorna "Em breve" antes de qualquer fetch de conteúdo/reactions/comments/materials |
+| 9 | URL direta ao player negada | ✅ PASS | Mesmo gate. `video_id` nunca chega ao `<VideoPlayer>`; nenhum `renderContent` executa |
+| pré-1 | Aluno sem cohort vê "negado", não "Em breve" | ✅ PASS | Gate `hasAccess` (linha 227) tem precedência sobre `is_available` (linha 270). Ordem correta |
+| pré-2 | typecheck + build pós-fix | ✅ PASS | `pnpm typecheck` EXIT 0 + `pnpm build` EXIT 0 |
+
+**Veredicto atualizado: ⚠️ CONCERNS** (não mais FAIL — gate crítico fechado; restam dois pontos não-bloqueantes para hardening/decisão do PO).
+
+### CONCERNs remanescentes
+
+**[CONCERN 1] Falta override de ADMIN/MENTOR no gate `is_available` da página**
+
+Arquivo: `src/app/(academy)/academy/(student)/curso/[slug]/aula/[lesson-slug]/page.tsx:269-310`
+
+O gate atual retorna "Em breve" para TODOS os roles, inclusive ADMIN e MENTOR. Diverge do padrão da RPC `has_access` (`20260510030000_has_access_admin_override.sql`) que dá override de role para revisão.
+
+**Impacto:** ADMIN/MENTOR precisam toggle-on temporário para revisar — fricção operacional.
+
+**Decisão necessária do PO:** (a) aceitar a fricção; (b) adicionar role override análogo ao da RPC.
+
+**[CONCERN 2] Defesa em profundidade pendente na RPC `has_access`**
+
+Arquivo: `supabase/migrations/20260510030000_has_access_admin_override.sql:11-50`
+
+RPC continua retornando `true` para aulas indisponíveis. Como `has_access` também é usado por:
+- Storage policies de `materials` (`20260506022229_storage_buckets_policies.sql`): materiais de aulas indisponíveis ficam acessíveis via signed URL
+- Policies de `lesson_reactions`, `comments`, `lesson_progress` (`20260506022037_has_access_rls_policies.sql`): aluno pode reagir/comentar/marcar concluída em aula "Em breve" via API direta
+
+Cenário: aluno chama a API REST/RPC do Supabase diretamente (não pela página) → INSERT em `lesson_reactions` ou `comments` para uma `lesson_id` de aula Em breve → policy `has_access` retorna true → escrita aceita.
+
+**Sugestão:** Migration adicional atualizando `has_access` para retornar `false` quando `lessons.is_available=false`, com override de ADMIN/MENTOR mantido. Criar story LA-1.5.
+
+**[CONCERN 3] Certificado/progresso contam aulas indisponíveis** (do veredicto inicial — não tocado neste fix)
+
+`certificate.ts:75-95`, `meus-cursos/page.tsx:72-78`, `dashboard/page.tsx:83-89` contam `is_available=false` no denominador. Aulas Em breve travam emissão de certificado e baixam progresso percentual. Story LA-1.4 a criar se for o caso.
+
+### Caminho para PASS
+
+CONCERNS vira PASS quando:
+1. Decisão registrada sobre [CONCERN 1] (aceitar ou aplicar role override)
+2. [CONCERN 2] virou story LA-1.5 explicitamente aceita (hardening pode ficar para próxima)
+3. Decisão registrada sobre [CONCERN 3] (story LA-1.4 ou intenção documentada)
+
+Sem hardening de #2, o sistema **é seguro contra o cenário UI** (player), mas tem superfície de bypass via **API/storage direto** para writes secundários (reactions, comments, progress) e leituras de materiais. Aceitável como "ship now, harden depois" se documentado.
+
+---
+
+## 2026-05-17 — lesson-availability (LA-1.1/1.2/1.3) — ❌ FAIL [SUPERSEDED PELA REAUDITORIA #1 ACIMA]
+
+**Escopo:** Feature `is_available` em lessons. Toggle olho no admin + badge "Em breve" + bloqueio de acesso ao player.
+
+**Commits gated:** `8ed0c5a` (feat: admin eye toggle + student Em breve badge) + working-tree (`src/types/database.ts`, `supabase/migrations/20260517200000_lessons_is_available.sql`, stories LA-1.1/1.2/1.3).
+
+**Critério institucional violado:** Bypass de acesso ao conteúdo quando `is_available=false` (regra: FAIL imediato).
+
+### Tabela adversarial (11 ataques)
+
+| # | Ataque | Resultado |
+|---|--------|-----------|
+| 1 | Aula listada (não escondida) quando indisponível | ✅ PASS |
+| 2 | Badge "Em breve" presente quando `is_available=false` | ✅ PASS |
+| 3 | Link/acesso ao player bloqueado quando `is_available=false` | ❌ **FAIL** |
+| 4 | Toggle admin salva via server action | ✅ PASS |
+| 5 | Estado otimista do toggle correto no frontend | ✅ PASS |
+| 6 | Migration `DEFAULT TRUE NOT NULL` não quebra rows existentes | ✅ PASS |
+| 7 | `pnpm typecheck` EXIT 0 | ✅ PASS |
+| 8 | `pnpm build` EXIT 0 | ✅ PASS |
+| 9 | URL direta ao player negada quando `is_available=false` | ❌ **FAIL CRÍTICO** |
+| 10 | Aluno sem acesso ao curso vê "negado" (não "em breve") | ✅ PASS |
+| 11 | Varredura global de SELECT lessons | ⚠️ CONCERN (certificate/progresso) |
+
+### Issue bloqueante #3 + #9 — Bypass total do gate "Em breve"
+
+**Arquivo:** `src/app/(academy)/academy/(student)/curso/[slug]/aula/[lesson-slug]/page.tsx`
+
+**Cadeia de falha:**
+1. Query principal da lesson (linhas 45-86) NÃO inclui `is_available` no SELECT.
+2. Gate único é `supabase.rpc('has_access', { p_user_id, p_lesson_id })` (linha 90).
+3. RPC `has_access` (`20260510030000_has_access_admin_override.sql:11-50`) só checa role override + cohort/módulo + `expires_at`. **NÃO checa `is_available`**.
+4. Nenhum check de código tipo `if (!lesson.is_available) return ComingSoon/notFound()`.
+
+**Cenário concreto:** Aluno com cohort ativa no módulo → admin marca aula como `is_available=false` → aluno digita URL direta `/academy/curso/{slug}/aula/{lesson-slug}` → `has_access=true` → player Vimeo renderiza com vídeo, conteúdo, transcrição, materiais e comentários. Badge "Em breve" só esconde o LINK da listagem; não bloqueia navegação direta.
+
+### Correção exigida
+
+**Opção A (preferida — defesa em profundidade no servidor):**
+- Nova migration: atualizar RPC `has_access` para retornar `false` quando `lessons.is_available=false`, mantendo override de ADMIN/MENTOR.
+
+**Opção B (mínimo viável no app):**
+- Incluir `is_available` no SELECT da query em `aula/[lesson-slug]/page.tsx:46-86`.
+- Adicionar gate explícito após linha 95 e ANTES de usar `lesson.video_id`:
+
+```ts
+if (lesson.is_available === false) {
+  const { data: profile } = await supabase.from('profiles').select('role').eq('id', user.id).single()
+  const isPrivileged = profile?.role === 'ADMIN' || profile?.role === 'MENTOR'
+  if (!isPrivileged) {
+    return <ComingSoonContent lessonTitle={lesson.title} courseSlug={slug} />
+  }
+}
+```
+
+- Criar `<ComingSoonContent>` análogo a `<LockedContent>` com mensagem "Em breve".
+
+**Recomendação:** aplicar A + B (defesa em profundidade).
+
+### Issue concern #11 — Certificado/progresso contam aulas indisponíveis
+
+**Arquivos afetados:**
+- `src/app/actions/certificate.ts:75-95` — `totalLessons` inclui aulas `is_available=false`. Como elas nunca completam, certificado nunca é emitido enquanto houver aulas Em breve no curso.
+- `src/app/(academy)/academy/(student)/meus-cursos/page.tsx:72-78` e `dashboard/page.tsx:83-89` — mesmo efeito no cálculo de progresso percentual.
+
+**Por que CONCERN e não FAIL:** Comportamento pode ser intencional. **Precisa decisão do PO**. Sugestão: filtrar `is_available=true` no count, OU virar story separada (LA-1.4 "definir semântica de progresso vs aulas Em breve").
+
+### Próximos passos
+
+1. **@sites-dev-alpha**: aplicar Opção B no `page.tsx` da aula + criar `<ComingSoonContent>`.
+2. **@sites-data**: aplicar Opção A — nova migration RPC `has_access` considerando `is_available`.
+3. **@team-lead**: decidir CONCERN do certificado/progresso com PO.
+4. Resubmeter ao QA.
+
+### Critérios para PASS na próxima rodada
+
+- Aluno (não-admin/não-mentor) digitando URL direta de aula indisponível VÊ "Em breve" — sem player, sem vídeo, sem conteúdo, sem materiais.
+- `lesson.is_available` presente no SELECT da query principal.
+- RPC `has_access` retornando `false` para aula indisponível (com override de ADMIN/MENTOR mantido).
+
+---
+
 ## 2026-05-17 — fix/academy-soft-delete-restoration — REAUDITORIA #1 — ❌ FAIL (duplicata `abertura` ainda ativa)
 
 **Escopo:** Reauditoria pós-limpeza do sites-data.
@@ -2684,3 +2967,43 @@ Checklist: 10/10 atacados; nenhum issue bloqueante encontrado. Liberado para rel
 ### Próximo passo
 - @team-lead: release liberado para a próxima fase (deploy/communication ao squad)
 - Considerar registrar [NIT-3] como ADR backlog para defesa em profundidade
+
+---
+
+## VEREDICTO 2026-05-17 — Fix CONCERN #11 (progresso vs `is_available`) — ✅ PASS
+
+**Story:** LA-1.4 (semântica de progresso vs aulas Em breve) — implícito no commit em revisão
+**Branch:** feat-aulas-v2
+**Solicitante:** @team-lead — "CONCERN #11 resolvido — solicito PASS final"
+**Escopo:** Garantir que aulas com `is_available=false` (Em breve) sejam excluídas do denominador de progresso em `curso/[slug]/page.tsx` e `aula/[lesson-slug]/page.tsx`, evitando travamento de % e marcação errada de módulos.
+
+### Contexto histórico
+CONCERN #11 foi originalmente lavrado no VEREDICTO Epic LA "Aulas Em breve" (2026-05-17 mais cedo). Naquele momento `dashboard`, `meus-cursos` e `certificate.ts` já filtravam `is_available=true`, mas `curso/[slug]/page.tsx` e `aula/[lesson-slug]/page.tsx` não — gerando inconsistência (% < 100% no curso vs certificado emitido a 100%).
+
+### Pontos de ataque executados
+
+| # | Ataque | Resultado |
+|---|---|---|
+| 1 | `availableLessonIds` separado de `allLessonIds`; progress query usa `allLessonIds` | ✅ PASS — `curso/[slug]/page.tsx:120-131` |
+| 2 | `totalLessons`/`completedLessons`/`progressPercent` baseados em `availableLessonIds` | ✅ PASS — `curso/[slug]/page.tsx:205-209` |
+| 3 | `firstIncomplete`/`firstLesson` (CTA Retomar) filtram `is_available !== false` | ✅ PASS — `curso/[slug]/page.tsx:212-219`. CTA nunca direciona para tela "Em breve" |
+| 4 | `moduleLessonIds`/`isComplete` por módulo usam `availableModuleLessons` | ✅ PASS — `curso/[slug]/page.tsx:329-336`. Módulo `[A=done, B=Em breve]` agora marca completo (1/1) |
+| 5 | Sidebar de aula: counts usam `availableLessons`, array `lessons` preservado | ✅ PASS — `aula/[lesson-slug]/page.tsx:183-204`. CourseSidebar continua renderizando badge "Em breve" |
+| 6 | Totals globais do sidebar (`totalLessons`/`totalCompleted`) | ✅ PASS — `aula/[lesson-slug]/page.tsx:207-209` |
+| 7 | Auditoria cruzada `dashboard/page.tsx` | ✅ PASS — `:83-89` já filtra `.eq('is_available', true)` |
+| 8 | Auditoria cruzada `meus-cursos/page.tsx` | ✅ PASS — `:72-78` já filtra `.eq('is_available', true)` |
+| 9 | Auditoria cruzada `certificate.ts` (`checkAndIssueCertificate`) | ✅ PASS — `:80-82` filtra `.eq('is_available', true)`. Certificado emite a 100% das disponíveis |
+| 10 | Consistência de % nos 4 surfaces (dashboard ↔ meus-cursos ↔ curso ↔ certificado) | ✅ PASS — todos usam o mesmo denominador (`is_available=true`) |
+| 11 | Gate ADMIN/MENTOR de `is_available=false` preservado | ✅ PASS — `aula/[lesson-slug]/page.tsx:275-316`, `isPrivileged` continua bypassando para revisão |
+| 12 | `pnpm typecheck` | ✅ PASS — EXIT 0 |
+
+### Concerns
+
+Nenhum. Todos os pontos do CONCERN #11 endereçados de forma simétrica e tipada.
+
+### Validação local
+- `pnpm typecheck` → EXIT 0
+
+### Próximo passo
+- @sites-devops liberado para push de `feat-aulas-v2`
+- CONCERN #11 oficialmente **fechado**

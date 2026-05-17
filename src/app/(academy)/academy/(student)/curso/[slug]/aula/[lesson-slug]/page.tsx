@@ -59,6 +59,7 @@ export default async function AulaPage({ params }: Props) {
       kind,
       sort_order,
       module_id,
+      is_available,
       modules!inner (
         id,
         title,
@@ -190,18 +191,22 @@ export default async function AulaPage({ params }: Props) {
         is_available: l.is_available,
       })
     )
+    // Exclude Em breve from counts so module completion % and badge are accurate
+    const availableLessons = lessons.filter((l) => l.is_available !== false)
     return {
       id: m.id,
       title: m.title,
       sort_order: m.sort_order,
-      completedCount: lessons.filter((l) => l.completed).length,
-      totalCount: lessons.length,
-      lessons,
+      completedCount: availableLessons.filter((l) => l.completed).length,
+      totalCount: availableLessons.length,
+      lessons, // full list preserved so CourseSidebar renders badge "Em breve"
     }
   })
 
-  const totalLessons = allLessons.length
-  const totalCompleted = completedIds.size
+  // Exclude Em breve from global sidebar counts
+  const availableAllLessons = allLessons.filter((l) => l.is_available !== false)
+  const totalLessons = availableAllLessons.length
+  const totalCompleted = availableAllLessons.filter((l) => completedIds.has(l.id)).length
 
   // --- Fetch current lesson progress ---
   const progress = hasAccess
@@ -260,6 +265,51 @@ export default async function AulaPage({ params }: Props) {
             cohortSlug={firstCohort?.slug ?? 'turmas'}
             cohortDescription={firstCohort?.description ?? null}
           />
+        </div>
+      </div>
+    )
+  }
+
+  // Gate: aula indisponível (Em breve) — roda APÓS hasAccess; video_id nunca vaza.
+  // ADMIN e MENTOR ignoram o gate para permitir revisão sem toggle.
+  const isPrivileged = user.role === 'ADMIN' || user.role === 'MENTOR'
+  if (lesson.is_available === false && !isPrivileged) {
+    return (
+      <div className="mx-auto max-w-4xl">
+        <div
+          className="border-b p-6"
+          style={{ borderColor: 'var(--hairline)' }}
+        >
+          <p
+            className="font-mono text-[11px] uppercase tracking-wider"
+            style={{ color: 'var(--bone-mute)' }}
+          >
+            <Link
+              href={`/academy/curso/${slug}`}
+              className="transition-colors hover:text-[var(--bone)]"
+              style={{ color: 'var(--bone-mute)' }}
+            >
+              Voltar ao curso
+            </Link>
+          </p>
+          <h1
+            className="mt-3 font-[var(--type-display)] italic"
+            style={{
+              fontSize: 'clamp(1.75rem, 4vw, 2rem)',
+              lineHeight: 1.1,
+              color: 'var(--bone)',
+            }}
+          >
+            {lesson.title}
+          </h1>
+        </div>
+        <div className="p-6">
+          <p
+            className="font-mono text-sm"
+            style={{ color: 'var(--bone-mute)' }}
+          >
+            Esta aula estará disponível em breve.
+          </p>
         </div>
       </div>
     )

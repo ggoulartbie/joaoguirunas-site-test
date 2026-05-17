@@ -20,6 +20,7 @@ MOC raiz. Todo arquivo novo em `docs/smart-memory/` deve ser referenciado aqui.
 
 ## Stories
 - [[stories/BACKLOG]] — stories pendentes (Epics 1–6 do site + Plataforma de Cursos F1–F13 + Epic Aulas v2 AV-3.x)
+- [[stories/backlog/LA-1.1-migration-is-available]] — SQL preparado para `is_available BOOLEAN` em `lessons` — aguardando apply pelo lead
 - `stories/active/` — em desenvolvimento
 - `stories/done/` — concluídas
 

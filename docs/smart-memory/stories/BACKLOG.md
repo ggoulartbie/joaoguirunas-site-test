@@ -8,6 +8,28 @@ tags: [story]
 
 # Backlog de Stories
 
+## Epic LA — Lesson Availability (2026-05-17)
+
+| Story | Título | Complexidade | Status | Agente |
+|---|---|---|---|---|
+| [[backlog/LA-1.1-migration-is-available\|LA-1.1]] | Migration `is_available BOOLEAN DEFAULT TRUE NOT NULL` em `lessons` + regerar types | S | backlog | sites-data |
+| [[backlog/LA-1.2-admin-toggle-is-available\|LA-1.2]] | Admin — toggle Eye/EyeOff em `SortableLesson` + server action `toggleLessonAvailable` (otimistic + rollback) | M | backlog | sites-dev-alpha + sites-dev-beta |
+| [[backlog/LA-1.3-student-badge-em-breve\|LA-1.3]] | Student — badge "Em breve" no listing + `LessonUnavailable` bloqueia player (após gate `hasAccess`) | M | backlog | sites-dev-alpha |
+
+**Objetivo:** dar ao admin um interruptor por aula para marcá-la como "Em breve". No aluno, a aula permanece listada (não some) com badge visual e, ao clicar, o player é substituído por um estado bloqueado dedicado — sem leak de `video_id`. Default `TRUE` mantém todas as aulas existentes disponíveis.
+
+**Dependências:**
+- **LA-1.1 bloqueia LA-1.2 e LA-1.3** — sem a coluna + tipos, TypeScript impede o build.
+- **LA-1.2 e LA-1.3 podem rodar em paralelo** após LA-1.1 done. QA E2E só faz sentido com as duas integradas.
+
+**Decisão arquitetural (em [[backlog/LA-1.3-student-badge-em-breve|LA-1.3]]):** badge + link clicável → estado bloqueado na própria página da aula (após `hasAccess`). Não esconder a aula; não desabilitar o link; não pular no nav prev/next nesta story. Gate semântico de aplicação (não RLS), permitindo PO reverter rápido sem migration.
+
+**Anti-recorrência:** LA-1.2 exige rollback explícito no otimistic update (anti-recorrência FM-2.2). LA-1.3 garante ordem `hasAccess` → `is_available` para defesa em profundidade (paywall antes de "em breve").
+
+**5-point checklist:** GO 5/5 nas três stories.
+
+---
+
 ## Epic MC — Mentoria Claude Code (2026-05-17)
 
 | Story | Título | Complexidade | Status | Agente |

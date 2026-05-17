@@ -78,6 +78,7 @@ export async function checkAndIssueCertificate(
     .select('id, modules!inner(course_id)')
     .eq('modules.course_id', courseId)
     .is('deleted_at', null)
+    .eq('is_available', true)
 
   const totalLessons = lessonIds?.length ?? 0
   if (totalLessons === 0) return null

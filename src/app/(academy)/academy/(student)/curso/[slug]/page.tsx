@@ -116,8 +116,11 @@ export default async function CursoPage({ params }: Props) {
       })),
   }
 
-  // 3. Collect all lesson IDs for progress query
+  // 3. Collect lesson IDs — all for progress query; available-only for counts/navigation
   const allLessonIds = course.modules.flatMap((m) => m.lessons.map((l) => l.id))
+  const availableLessonIds = course.modules.flatMap((m) =>
+    m.lessons.filter((l) => l.is_available !== false).map((l) => l.id)
+  )
 
   // 4. Fetch user's progress for all lessons in this course
   const { data: progressRows } = allLessonIds.length > 0
@@ -198,21 +201,21 @@ export default async function CursoPage({ params }: Props) {
     {}
   )
 
-  // 8. Compute progress stats
-  const totalLessons = allLessonIds.length
-  const completedLessons = allLessonIds.filter((id) => completedSet.has(id)).length
+  // 8. Compute progress stats — exclude Em breve (is_available=false) from counts
+  const totalLessons = availableLessonIds.length
+  const completedLessons = availableLessonIds.filter((id) => completedSet.has(id)).length
   const progressPercent = totalLessons > 0
     ? Math.round((completedLessons / totalLessons) * 100)
     : 0
 
-  // 8. Determine "retomar" link — first incomplete lesson, fallback to first lesson
+  // 9. Determine "retomar" link — skip unavailable lessons
   const firstIncomplete = course.modules
     .filter((m) => hasGlobalAccess || accessibleModuleIds.has(m.id))
     .flatMap((m) => m.lessons)
-    .find((l) => !completedSet.has(l.id))
+    .find((l) => l.is_available !== false && !completedSet.has(l.id))
   const firstLesson = course.modules
     .filter((m) => hasGlobalAccess || accessibleModuleIds.has(m.id))
-    .flatMap((m) => m.lessons)[0]
+    .flatMap((m) => m.lessons.filter((l) => l.is_available !== false))[0]
   const resumeLesson = firstIncomplete ?? firstLesson
 
   return (
@@ -322,7 +325,9 @@ export default async function CursoPage({ params }: Props) {
       <div className="mt-6 space-y-2">
         {course.modules.map((module, index) => {
           const isAccessible = hasGlobalAccess || accessibleModuleIds.has(module.id)
-          const moduleLessonIds = module.lessons.map((l) => l.id)
+          // Exclude Em breve from module counts so isComplete and % are accurate
+          const availableModuleLessons = module.lessons.filter((l) => l.is_available !== false)
+          const moduleLessonIds = availableModuleLessons.map((l) => l.id)
           const moduleCompleted = moduleLessonIds.filter((id) => completedSet.has(id)).length
           const moduleTotal = moduleLessonIds.length
           const moduleProgress = moduleTotal > 0

@@ -86,6 +86,7 @@ export default async function DashboardPage() {
         .select('id, module_id, slug, title, modules!inner(course_id, courses!inner(slug))')
         .in('module_id', allModuleIds)
         .is('deleted_at', null)
+        .eq('is_available', true)
     : { data: [] }
 
   const lessons = lessonRows ?? []
