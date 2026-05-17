@@ -2639,3 +2639,48 @@ F12.1 + F12.2 + F12.3 — **PASS**. 10/10 ACs originais atendidos, fluxo dual-pr
 - @sites-devops: push do `package.json` + `server-crash-analysis.md` liberado
 - Abrir stories para C-001 e C-002
 
+---
+
+## 2026-05-17 — Fix slug "abertura" 404
+
+**Escopo:** Gate adversarial pré-release da correção do bug 404 em `/academy/curso/[slug]/aula/abertura`. Estratégia aprovada pelo PO foi Opção C (fix de dados em prod + guard no gerador de slug). Referências: [[diagnose-aulas-abertura-404]], [[diagnose-slug-abertura]].
+
+**Artefatos auditados:**
+- Fix de dados (Bythelion): UPDATE em `lessons.0c96c53a-fd68-4651-bcd4-530d6e3f9bd0` → slug `abertura-2`. Lesson `9828e194` (Módulo 3) mantém `abertura`.
+- Helper novo: `src/lib/lessons/slug.ts` — `ensureUniqueSlugInCourse()`.
+- Edições em `src/app/(academy)/academy/(admin)/admin/cursos/actions.ts` — `createLesson` e `updateLesson` chamam o guard.
+
+### Veredicto: ✅ PASS
+
+Checklist: 10/10 atacados; nenhum issue bloqueante encontrado. Liberado para release.
+
+### Pontos de ataque executados
+
+| # | Ataque | Resultado |
+|---|---|---|
+| 1 | Helper consulta escopo de curso (não só módulo) | ✅ PASS — `slug.ts:21-27` busca todos `modules.id` por `course_id`; `slug.ts:31-37` agrega lessons de todos esses módulos |
+| 2 | Helper filtra `deleted_at IS NULL` | ✅ PASS — em ambas queries (linhas 25 e 35). Coluna existe nos `Database['public']['Tables']['modules'/'lessons'].Row` (`src/types/database.ts`); imunes ao tipo de bug que motivou a regra institucional pós-FAA-1.1 (`.is('coluna_inexistente', null)` typecheck passa) |
+| 3 | Loop de sufixação termina | ✅ PASS — `slug.ts:47-50`, sufixo monotonamente crescente em Set finito; sem condição que trave |
+| 4 | Tipos da query corretos | ✅ PASS — `pnpm typecheck` EXIT 0 |
+| 5 | Edge cases: course sem módulos | ✅ PASS — `slug.ts:28` `return candidate` antecipadamente |
+| 6 | Edge: candidate já termina com `-N` | ✅ PASS — sufixo appendado independentemente; ex: `abertura-2` colidido → `abertura-2-2`. Comportamento consistente, não ambíguo |
+| 7 | `createLesson` chama guard ANTES do INSERT | ✅ PASS — `actions.ts:142` (guard) precede `:144-148` (INSERT) |
+| 8 | `updateLesson` chama guard só com slug no payload | ✅ PASS — `actions.ts:159` guarda `typeof data.slug === 'string'`; passa `id` como `ignoreLessonId` (`:160`) para não auto-colidir |
+| 9 | Outras vias de criação/edição de slug no codebase | ✅ PASS — varredura completa de `from('lessons')` + `.insert\|.update`: apenas `reorderLessons` toca lessons fora do guard, e só atualiza `sort_order`. Nenhuma outra server action toca `slug` |
+| 10 | Referência hardcoded a `slug = 'abertura'` no código | ✅ PASS — `grep abertura src/` retornou apenas texto de copy em `OnboardingClient.tsx` (nome próprio "Claudia Guirunas / abertura"), sem dependência de slug |
+| 11 | `pnpm build` reproduzido localmente | ✅ PASS — build de produção compilou sem warnings novos |
+| 12 | Smoke-test funcional da query lookup | ✅ PASS (inferência) — fix de dados ST-1 do Bythelion confirmou `content-range: 0-0/1` para `slug=abertura&course.slug=mentoria-claude-code-aiox`. `.single()` agora satisfeito. ST-3 confirma zero duplicatas globais |
+
+### Concerns (não-bloqueantes, P2/P3)
+
+- **[NIT-1 P2 UX]** `CourseEditorClient.tsx:159-167` faz cache otimista do `lessonSlug` digitado pelo admin. Se o guard mutar para `safeSlug` (ex: `abertura-2`), o estado local mostra o slug original até `router.refresh()`. **Sugestão:** retornar `slug` em `createLesson` (`actions.ts:127-153`) e usar no setState. Cosmético, não bloqueia release.
+- **[NIT-2 P3 cosmético]** `slug.ts:31` declara `let query` mas nunca reatribui — poderia ser `const`. Sem impacto funcional.
+- **[NIT-3 P2 defesa em profundidade]** Não há constraint `UNIQUE(course_id, slug)` no banco. Fix de dados via SQL direto (workflow legítimo do Bythelion) pode reintroduzir duplicata sem violar constraint atual `(module_id, slug)`. Guard atual em `actions.ts` cobre 100% do caminho admin no app, mas não substitui invariante de banco. **Sugestão:** ADR de médio prazo para considerar adicionar `lessons.course_id` denormalizado + índice único composto. Backlog, não bloqueia.
+
+### Validação local
+- `pnpm typecheck` → EXIT 0
+- `pnpm build` → sucesso, todas as 200+ rotas compiladas, sem erros
+
+### Próximo passo
+- @team-lead: release liberado para a próxima fase (deploy/communication ao squad)
+- Considerar registrar [NIT-3] como ADR backlog para defesa em profundidade

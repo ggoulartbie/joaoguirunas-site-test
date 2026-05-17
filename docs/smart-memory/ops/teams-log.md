@@ -9,6 +9,24 @@ tags: [ops]
 
 Registro de todos os Agent Teams formados neste projeto. Lead (team-os) atualiza a cada `*dispatch` e `*close`.
 
+## 2026-05-17 — Team joaoguirunas-academy-fix-aulas-abertura-404
+
+**Objetivo:** Bug em produção — aulas com título "Abertura" em qualquer módulo retornam 404 ao acessar. Hipótese PO: colisão de slug entre aulas homônimas em módulos diferentes.
+**Lead:** team-os (skill)
+**Branch:** `feat-aulas-v2`
+**Composição:**
+- sites-data — investigar schema lessons (uniqueness slug global vs composto) + queries de lookup
+- sites-dev-gamma — diagnóstico fullstack (rota student + lookup + href gen) + implementar fix
+- sites-qa — gate adversarial pré-release (bug em prod, exige PASS explícito)
+- sites-devops — release autorizado pelo PO
+
+**Status:** ativo (FASE 1: diagnóstico paralelo)
+**Início:** 2026-05-17
+**Pipeline:** diagnóstico (data + gamma em paralelo) → síntese pelo lead → decisão PO entre opções de fix → implementação (gamma) → QA gate → release (devops)
+**Restrição:** Nenhum commit/push sem autorização explícita do João. Diagnóstico antes de qualquer mudança em código ou schema.
+
+---
+
 ## 2026-05-17 — Team joaoguirunas-academy-materiais-por-modulo
 
 **Objetivo:** Implementar upload/gerenciamento de materiais (PDF, IMG, ZIP, LINK) por módulo, espelhando o fluxo existente por aula. Inclui ADR de schema, migration, server actions, UI admin nova rota e UI student.
@@ -20,11 +38,21 @@ Registro de todos os Agent Teams formados neste projeto. Lead (team-os) atualiza
 - sites-dev-alpha (Novael) — UI admin nova rota `/modulos/[moduleId]/` + UI student (espera server actions)
 - sites-qa (Axilun) — gate formal adversarial (regra institucional: CONCERNS sem evidência → FAIL)
 
-**Status:** ativo (FASE 1: ADR em curso)
+**Status:** encerrado (release done)
 **Início:** 2026-05-17
-**Branch:** `feat-aulas-v2` (a confirmar — pode ser nova branch para essa feature)
-**Pipeline:** ADR (Soren) → aprovação João → migration (data) → actions (beta) → UI (alpha) → QA (Axilun) → devops (sob pedido)
-**Restrição:** Nenhum commit/push sem autorização explícita do João. Toda decisão de schema passa pelo João via ADR.
+**Encerrado:** 2026-05-17 (Epic FM-3 publicada em main, deploy Vercel disparado)
+**Branch:** `feat-aulas-v2` → fast-forward para `main`
+**Pipeline executado:** ADR (Soren) → aprovação João → migration aplicada via MCP (data + lead) → actions (Rexali) → UI admin + student + cleanup (Novael) → smoke PO (PASS) → reorder UX (Novael) → release (sites-devops)
+**FM-3.6 (QA gate adversarial)** pulado por escolha explícita do PO após smoke + visual review.
+**Release:**
+- Commit feat backend+admin: `718c68d`
+- Commit feat student: `e465b5f`
+- Commit chore cleanup+docs: `856fbb6`
+- Push: `origin/feat-aulas-v2` + `origin/main` (fast-forward `bcc1250..856fbb6`)
+**Stories produzidas:** FM-3.2, FM-3.3, FM-3.4, FM-3.5, FM-3.7 todas em `done/`. Story 2.4 superseded. FM-3.6 no backlog como story de processo.
+**ADR:** [[../decisions/ADR-002-materiais-por-modulo-schema]]
+**Migration prod via MCP:** `module_materials` + função `has_module_access(user_id, module_id)` aplicada com `success: true`, advisor sem regressão (3 warns novos consistentes com padrão pré-existente).
+**Aprendizado institucional consolidado:** regra anti-Story 1.1 reforçada com nova captura no Epic FM-3 (Axilun catch crítico de `.is('coluna_string', null)` em coluna inexistente — typecheck não detecta).
 
 ---
 

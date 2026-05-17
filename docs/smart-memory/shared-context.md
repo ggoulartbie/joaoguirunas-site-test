@@ -9,11 +9,38 @@ tags: [ops]
 
 O lead (team-os) atualiza este arquivo a cada mudança de estado dos teammates.
 
-## Team encerrado — joao-guirunas-site-mentoria-curso
+## Team ativo — joaoguirunas-academy-fix-aulas-abertura-404 (2026-05-17)
 
-**Status:** ✅ encerrado em 2026-05-17 — MC-1.1 e MC-1.2 concluídas
+**Status:** 🟢 commits locais criados, aguardando autorização do PO para push
+**Objetivo:** Fix bug 404 em aulas "Abertura" — colisão de slug entre módulos do mesmo curso
+**Branch:** `feat-aulas-v2` (rebased em origin/main)
+**Restrição:** Nenhum push sem autorização explícita do João.
+
+**Pipeline com bloqueios explícitos:**
+1. ✅ **sites-data (Bythelion)** — diagnóstico data layer em `agents/data-engineer/diagnose-slug-abertura.md`. Causa raiz: schema `unique(module_id, slug)` permite slug "abertura" em múltiplos módulos do mesmo curso; query lookup filtra só por slug+course, retorna 2 rows, `.single()` → null → notFound().
+2. ✅ **sites-dev-gamma (Seranol)** — diagnóstico fullstack em `decisions/diagnose-aulas-abertura-404.md`. Confirmou bug também em `generateMetadata` (linha 28).
+3. ✅ **Lead (team-os)** — sintetizou + apresentou ao PO. **Decisão João:** Opção C (fix de dados rápido) + guard no gerador.
+4. ✅ **sites-data (Bythelion)** — fix de dados aplicado em prod via MCP: lesson M5 (id `0c96c53a-fd68-4651-bcd4-530d6e3f9bd0`) renomeada de `abertura` → `abertura-2`. M3 (`9828e194`, criada antes) mantém `abertura`. 3 smoke-tests PASS, zero slugs duplicados no banco. URLs `/aula/abertura` e `/aula/abertura-2` ambas funcionando.
+5. ✅ **sites-dev-gamma (Seranol)** — guard implementado em `src/lib/lessons/slug.ts` (helper `ensureUniqueSlugInCourse`) + integrado em `createLesson` e `updateLesson` de `actions.ts`. Sufixo numérico `-2`, `-3`. Idempotente via `ignoreLessonId`.
+6. ✅ **sites-qa (Axilun)** — veredito PASS (10/10 ataques, typecheck+build PASS, guard cobre 100% das vias admin, zero refs hardcoded a `abertura`). 3 nits não-bloqueantes documentados.
+7. ✅ **sites-dev-gamma** — endereçados NIT-1 (slug efetivo retornado no `createLesson` + setState do `CourseEditorClient` usa retorno em vez do digitado) e NIT-2 (`let`→`const` em `slug.ts`). NIT-3 vai pro backlog (ADR `UNIQUE(course_id, slug)`). Typecheck+build PASS final.
+8. ✅ **Lead (team-os)** — 2 commits locais criados em `feat-aulas-v2` (`fix(lessons): guard de slug único por curso` + `chore(smart-memory): registrar team`) e rebased em `origin/main` (que tinha 9 commits de mentoria-curso + soft-delete fix). **Push pendente de autorização explícita do PO.**
+
+**Estado em prod:**
+- `/aula/abertura` → Módulo 3 (funcional)
+- `/aula/abertura-2` → Módulo 5 (nova URL)
+- Admin futuro: colisões intra-curso auto-sufixadas (apenas se branch publicada).
+
+**Aprendizado prévio relevante:**
+- Commit `6a44c6d fix(db): unique slug em courses/modules/lessons ignora soft-deleted` — verificar se a estratégia atual de uniqueness é por escopo ou global.
+- Regra institucional Story FAA-1.1: typecheck/build NÃO detectam queries `.is('coluna_string', null)` em coluna inexistente — Axilun deve aplicar adversarial sempre que tocar query.
+
+---
+
+## Team encerrado — joao-guirunas-site-mentoria-curso (2026-05-17)
+
+**Status:** ✅ encerrado — MC-1.1 e MC-1.2 concluídas, mergeado em main (HEAD: `8d214e4`)
 **Objetivo:** Estruturar e popular o curso "Mentoria Claude Code" no Supabase
-**Branch:** `main` | HEAD: `970ee64`
 
 | Entrega | Status | Detalhe |
 |---|---|---|
@@ -28,7 +55,22 @@ O lead (team-os) atualiza este arquivo a cada mudança de estado dos teammates.
 
 ---
 
-## Team ativo — joaoguirunas-academy-materiais-por-modulo
+## Team encerrado (release done) — joaoguirunas-academy-materiais-por-modulo (2026-05-17)
+
+**Status:** ✅ Epic FM-3 publicada em main, deploy Vercel disparado
+**Commits:**
+- `718c68d` — `feat(materials): adicionar materiais por módulo (DB + admin)`
+- `e465b5f` — `feat(student): listar materiais do módulo na página do curso`
+- `856fbb6` — `chore(materials): cleanup órfãos + smart-memory Epic FM-3`
+**Push:** `origin/feat-aulas-v2` ✅ + `origin/main` ✅ (fast-forward `bcc1250..856fbb6`)
+**Veredicto final:** smoke AC10 PASS do PO + reorder UX aprovado visualmente. Gate adversarial FM-3.6 pulado por escolha do PO.
+**Stories produzidas:** FM-3.2, FM-3.3, FM-3.4, FM-3.5, FM-3.7 — todas em `stories/done/`. Story 2.4 superseded. FM-3.6 fica como story de processo no backlog.
+**ADR:** [[../decisions/ADR-002-materiais-por-modulo-schema]] (accepted)
+**Migration aplicada em prod via MCP:** `module_materials` + `has_module_access(user_id, module_id)`
+
+---
+
+## Team encerrado anterior — joaoguirunas-academy-materiais-por-modulo (sumário detalhado)
 
 **Status:** 🟢 ativo desde 2026-05-17 — FASE 1 em curso (ADR-002)
 **Objetivo:** Materiais (PDF, IMG, ZIP, LINK) por módulo, espelhando fluxo por aula
