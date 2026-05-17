@@ -20,10 +20,16 @@ Registro de todos os Agent Teams formados neste projeto. Lead (team-os) atualiza
 - sites-qa — gate adversarial pré-release (bug em prod, exige PASS explícito)
 - sites-devops — release autorizado pelo PO
 
-**Status:** ativo (FASE 1: diagnóstico paralelo)
+**Status:** encerrado (release done)
 **Início:** 2026-05-17
-**Pipeline:** diagnóstico (data + gamma em paralelo) → síntese pelo lead → decisão PO entre opções de fix → implementação (gamma) → QA gate → release (devops)
-**Restrição:** Nenhum commit/push sem autorização explícita do João. Diagnóstico antes de qualquer mudança em código ou schema.
+**Encerrado:** 2026-05-17T20:30:00-03:00
+**Pipeline:** diagnóstico (data + gamma em paralelo) → síntese pelo lead → Opção C aprovada pelo PO (fix de dados + guard no gerador) → implementação (gamma) → QA PASS 10/10 → release
+**Release:**
+- Commit fix: `49edd4d` — guard `ensureUniqueSlugInCourse()` em `src/lib/lessons/slug.ts`
+- Commit smart-memory: `bfe5ce5`
+- Push: `feat-aulas-v2` → `main` (fast-forward `8d214e4..bfe5ce5`)
+**Veredicto QA (Axilun):** ✅ PASS — typecheck EXIT 0, build OK, 10 ataques sem bloqueante
+**Fix de dados prod:** slug `abertura` (M5) → `abertura-2` via Bythelion/MCP (pré-release)
 
 ---
 
