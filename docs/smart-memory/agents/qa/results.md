@@ -11,6 +11,190 @@ Histórico de veredictos emitidos pelo sites-qa (Axilun).
 
 ---
 
+## 2026-05-17 — module-materials commit 4d93407 (re-gate após fix) — ✅ PASS
+
+**Escopo:** Re-revisão do fix do bug crítico C1 reportado no FAIL anterior. Commit `4d93407 fix(materials): corrigir guard de signedUrl — kind nunca é 'FILE'`.
+
+**Diff:** 1 arquivo (`aula/[lesson-slug]/page.tsx`), +3/-3.
+
+### Mudanças aplicadas (validadas linha a linha)
+
+| # | Mudança | Local | Esperado | Resultado |
+|---|---------|-------|----------|-----------|
+| 1 | `kind: 'FILE' \| 'LINK'` → `kind: string` no type local | `aula/[lesson-slug]/page.tsx:23` | Type consistente com schema DB (`kind: string`) | ✅ PASS |
+| 2 | Guard `mat.kind === 'FILE' && mat.storage_path` → `mat.kind !== 'LINK' && mat.storage_path` | `aula/[lesson-slug]/page.tsx:409` | Gera signedUrl para PDF/ZIP/IMAGE/OTHER (qualquer não-LINK com storage_path) | ✅ PASS |
+| 3 | Remover cast `as 'FILE' \| 'LINK'` no return | `aula/[lesson-slug]/page.tsx:418` | Atribuição direta `kind: mat.kind` (string) | ✅ PASS |
+
+### Verificação de coerência render-side
+
+- `aula/[lesson-slug]/page.tsx:553` (render do strip): `const href = mat.kind === 'LINK' ? mat.external_url : mat.signedUrl` — branch LINK preserva semântica, branch default agora recebe signedUrl válido para qualquer kind de arquivo. ✅
+- Fallback `if (!href)` (linhas 566-573) agora só dispara quando `kind='LINK' && external_url=null` ou quando `createSignedUrl` falha. ✅
+- Ícone `Link2` vs `Download` segue lógica `kind === 'LINK'` (linhas 556-560) — consistente. ✅
+
+### Build & Typecheck
+
+- `pnpm tsc --noEmit` → exit 0, 0 erros.
+- Diff cirúrgico, sem regressões em outros arquivos (`git show --stat 4d93407` confirma 1 arquivo / +3/-3).
+
+### Concerns secundários (status inalterado)
+
+- **C2 (MÉDIO)** — RLS bucket `materials` com cast `::uuid` da 1ª pasta vs paths `modules/...`: **não tratado neste fix**, fica como tech-debt aceito (a definir com PO se vira story). Status quo de defesa em profundidade preservado.
+- **C3 (BAIXO)** — N+1 de `createSignedUrl`: **não tratado neste fix**, fica como otimização futura.
+
+Nenhum dos dois bloqueia o push.
+
+### Veredicto
+
+```
+VEREDICTO: ✅ PASS
+Story: module-materials (commit 4d93407) | Data: 2026-05-17
+Checklist: 3/3 mudanças aplicadas corretamente + render coerente + typecheck limpo
+Issues: nenhum bloqueante
+Tech-debt aceito: C2 (RLS path modules), C3 (N+1 signed URLs)
+Próximo passo: @sites-devops push para main
+```
+
+✦ A luz está correta. Strip de materiais agora exibe todos os tipos de arquivo.
+
+---
+
+## 2026-05-17 — module-materials commit f0384da (revisão de risco independente) — ❌ FAIL [RESOLVED por 4d93407]
+
+**Escopo:** Revisão de risco do commit `f0384da feat(materials): redesign seção de materiais do módulo + adicionar na página da aula` antes do push para `main`. Foco: validar o que a auditoria MM-1+MM-2 anterior validou + checagem adversarial extra (kind enum, RLS storage path, force-dynamic, build).
+
+**Branch:** `feat-aulas-v2`. **Diff:** 2 arquivos, +121/-15.
+
+### Itens do briefing do lead
+
+| # | Critério | Resultado | Evidência |
+|---|----------|-----------|-----------|
+| 1 | `export const dynamic = 'force-dynamic'` na page de aula | ✅ PASS | `aula/[lesson-slug]/page.tsx:1` |
+| 2 | Migration `module_materials` aplicada | ✅ PASS | `supabase/migrations/20260516210000_module_materials.sql` presente; types regenerados em `src/types/database.ts:876-919` |
+| 3 | Bucket `materials` pré-existente | ✅ PASS | `supabase/migrations/20260506022229_storage_buckets_policies.sql:33-34` cria bucket privado; policies em 118-157 |
+| 4 | Type TS `'FILE' \| 'LINK'` vs CHECK `('PDF','ZIP','IMAGE','LINK','OTHER')` | ❌ **FAIL CRÍTICO** | ver issue C1 abaixo |
+| 5 | Risco de erro de build (SSR, Proxy admin) | ✅ PASS | `pnpm tsc --noEmit` exit 0; `force-dynamic` declarado; admin proxy usado dentro de page já dinâmica |
+| 6 | Side effects em outros arquivos | ✅ PASS | `git show --stat f0384da` confirma SÓ 2 arquivos: `aula/[lesson-slug]/page.tsx` (+99/-) e `curso/[slug]/page.tsx` (+22/-15) |
+
+### Issue C1 — FAIL CRÍTICO — Strip de materiais na aula nunca exibe arquivos
+
+**Local:** `src/app/(academy)/academy/(student)/curso/[slug]/aula/[lesson-slug]/page.tsx:23,409,418`
+
+**Defeito:** O strip de "Materiais do módulo" na página da aula **só gera signed URL quando `mat.kind === 'FILE'`** (linha 409), e o type local declara `kind: 'FILE' | 'LINK'` (linha 23). Mas:
+
+1. **Migration** (`20260516210000_module_materials.sql:11-12`) restringe `kind` à CHECK constraint: `('PDF', 'ZIP', 'IMAGE', 'LINK', 'OTHER')`.
+2. **Função do uploader admin** (`src/lib/materials/storage.ts:5-10`): `getMaterialKind()` retorna **apenas** `'PDF' | 'ZIP' | 'IMAGE' | 'LINK' | 'OTHER'` — nunca `'FILE'`.
+3. **Admin grava** via `actions.ts:258-268` exatamente o valor retornado por `getMaterialKind()` (`'PDF'`/`'ZIP'`/`'IMAGE'`/`'OTHER'`).
+4. **Logo:** Nenhum row em `module_materials` jamais terá `kind === 'FILE'`. A condição `mat.kind === 'FILE' && mat.storage_path` (linha 409) **é sempre falsa para arquivos reais**, e `signedUrl` fica `null`.
+5. **Render** (linha 553): `const href = mat.kind === 'LINK' ? mat.external_url : mat.signedUrl`. Para um row de PDF, `kind='PDF'`, `external_url=null`, `signedUrl=null` → cai no fallback "sem URL" (linhas 566-573) e mostra o material **dimmed e não clicável**.
+
+**Impacto:** Funcionalidade quebrada em produção. Apenas materiais do tipo `LINK` são acessíveis na página da aula. Todos os PDFs/ZIPs/imagens uploadados pelo admin aparecem desabilitados ("opacity-40 cursor-default").
+
+**Por que o TS não pegou:** `Database['public']['Tables']['module_materials']['Row']['kind']` é tipado como `string` (sem narrowing por enum), então o cast `mat.kind as 'FILE' | 'LINK'` (linha 418) é silenciosamente aceito.
+
+**Por que `curso/[slug]/page.tsx` está correto:** Lá a checagem é `kind === 'LINK' || !storage_path` (linha 184), ou seja, "se não é link e tem storage_path, gera signed URL" — independente do valor exato de kind.
+
+**Como corrigir:** Trocar `aula/[lesson-slug]/page.tsx:409` para:
+```ts
+if (mat.kind !== 'LINK' && mat.storage_path) {
+```
+E ajustar o type/cast para refletir a realidade: `kind: string` (consistente com schema) ou enum completo `'PDF' | 'ZIP' | 'IMAGE' | 'LINK' | 'OTHER'`.
+
+### Issue C2 — CONCERN MÉDIO — RLS do bucket assume path `{lesson_id}/...` mas módulos gravam `modules/{moduleId}/...`
+
+**Local:** `supabase/migrations/20260506022229_storage_buckets_policies.sql:124-135` + `src/lib/materials/storage.ts:12-14`
+
+**Detalhe:** A policy SELECT do bucket `materials` faz cast da primeira pasta do path para `uuid` e passa em `has_access(auth.uid(), <lesson_id>::uuid)`. O `buildMaterialPath` para módulos gera `modules/{moduleId}/{uuid}.{ext}` — a primeira pasta é literalmente a string `"modules"`, que **falha o cast `::uuid`** e levanta erro de runtime se algum cliente anon tentar SELECT direto.
+
+**Mitigação atual:** Todos os signed URLs são gerados via `supabaseAdmin` (service_role), que bypassa RLS. Em runtime real, o sistema funciona.
+
+**Risco residual:** (a) defesa em profundidade quebrada — não há policy explícita protegendo `materials/modules/*`; depende inteiramente de o app nunca expor o bucket via anon. (b) Se um futuro código gerar signed URL via `await createClient()` (anon) em vez de `supabaseAdmin`, vai estourar exceção.
+
+**Severidade:** CONCERN, não bloqueante para este push (status quo é consistente com o resto do app). Recomendado: criar policy paralela para path `modules/{module_id}/...` usando `has_module_access()` que já existe na migration `20260516210000_module_materials.sql:28-53`.
+
+### Issue C3 — CONCERN BAIXO — N+1 de signed URL na page de aula
+
+**Local:** `aula/[lesson-slug]/page.tsx:406-423`
+
+`Promise.all` paraleliza, mas cada arquivo faz 1 chamada a `storage.createSignedUrl`. Para módulos com 10+ arquivos, latência soma ~100-300ms na renderização. `curso/[slug]/page.tsx` tem o mesmo padrão. Não bloqueia, mas pode virar dor de cabeça em módulos com muitos materiais.
+
+### Outras verificações (não citadas no briefing mas relevantes)
+
+| Critério | Resultado | Evidência |
+|---|---|---|
+| TypeScript build | ✅ PASS | `pnpm tsc --noEmit` exit 0 |
+| Fetch de `module_materials` ocorre APÓS `hasAccess` gate | ✅ PASS | `aula/[lesson-slug]/page.tsx:399` está após o `if (!hasAccess) return` da linha 239 e após o gate `is_available` da linha 284 |
+| TTL signed URL razoável (300s) | ✅ PASS | linhas 412 e 189 |
+| `storage_path` não vaza pro cliente | ✅ PASS | shape mapeado em 415-421 omite `storage_path` |
+| Fallback visual quando href é null | ⚠️ PARCIAL | implementado corretamente (566-573), mas devido ao bug C1 aparece para TODOS os arquivos não-LINK em produção |
+
+### Veredicto
+
+```
+VEREDICTO: ❌ FAIL
+Story: module-materials (commit f0384da) | Data: 2026-05-17
+Checklist: 5/6 PASS, 1 FAIL CRÍTICO, 2 CONCERN
+Issues bloqueantes:
+- [CRITICAL] aula/[lesson-slug]/page.tsx:409 — condição `kind === 'FILE'` nunca é
+  verdadeira em runtime; nenhum PDF/ZIP/IMAGE/OTHER terá signedUrl no strip da aula
+  → todos aparecem dimmed/não clicáveis. Corrigir para `kind !== 'LINK' && storage_path`.
+Próximo passo: @sites-coder (ou quem fez o commit) corrigir o cast e a condição,
+              resubmeter para QA. Push para main BLOQUEADO.
+```
+
+**Nota sobre o PASS anterior:** A auditoria MM-1+MM-2 (logo abaixo) marcou o item "Signed URL (TTL 300s) para `kind === 'FILE'`" como PASS verificando que **o código existia** mas sem confirmar contra a fonte de verdade do enum (migration + `getMaterialKind`). Esse PASS está **SUPERSEDED** por este FAIL.
+
+✦ A luz não está correta. O strip de materiais na aula está quebrado em runtime.
+
+---
+
+## 2026-05-17 — module-materials MM-1 + MM-2 — ✅ PASS [SUPERSEDED pelo FAIL acima]
+
+**Escopo:** Auditoria das stories MM-1 (redesign da seção de materiais do módulo em `curso/[slug]/page.tsx`) e MM-2 (renderização da seção de materiais do módulo na página da aula `aula/[lesson-slug]/page.tsx`).
+
+**Branch:** `feat-aulas-v2` (working tree).
+
+### MM-1 — Checklist (curso/[slug]/page.tsx)
+
+| # | Critério | Resultado | Evidência |
+|---|----------|-----------|-----------|
+| 1 | Label "Materiais do módulo" com `var(--ember)` | ✅ PASS | `curso/[slug]/page.tsx:453` |
+| 2 | Container com `background: 'rgba(255,58,14,0.04)'` | ✅ PASS | `curso/[slug]/page.tsx:451` |
+| 3 | Ícones `Link2`/`Download` com `var(--ember)` | ✅ PASS | `curso/[slug]/page.tsx:469,471` |
+| 4 | Título do material com `var(--bone)` | ✅ PASS | `curso/[slug]/page.tsx:473` |
+| 5 | TypeScript sem erros | ✅ PASS | `tsc --noEmit` exit 0 |
+
+### MM-2 — Checklist (aula/[lesson-slug]/page.tsx)
+
+| # | Critério | Resultado | Evidência |
+|---|----------|-----------|-----------|
+| 1 | Type `ModuleMaterialItem` definido | ✅ PASS | `aula/[lesson-slug]/page.tsx:20-26` |
+| 2 | Fetch `module_materials` com `.eq('module_id', module.id)` | ✅ PASS | `aula/[lesson-slug]/page.tsx:400-404` |
+| 3 | Omissão de `.is('deleted_at', null)` correta | ✅ PASS | `database.ts:876-887` confirma que `module_materials` NÃO tem `deleted_at` no schema (campos: `created_at`, `external_url`, `id`, `kind`, `module_id`, `size_bytes`, `sort_order`, `storage_path`, `title`) |
+| 4 | Signed URL (TTL 300s) para `kind === 'FILE'` | ✅ PASS | `aula/[lesson-slug]/page.tsx:409-413` |
+| 5 | Seção renderizada ANTES de `<LessonTabs>` | ✅ PASS | bloco `moduleMaterials.length > 0` (linhas 537-578) precede `<LessonTabs>` (linha 581) |
+| 6 | Só renderiza se `moduleMaterials.length > 0` | ✅ PASS | `aula/[lesson-slug]/page.tsx:537` |
+| 7 | `href` usa `external_url` para LINK e `signedUrl` para FILE | ✅ PASS | `aula/[lesson-slug]/page.tsx:550` |
+| 8 | Icons importados de lucide-react | ✅ PASS | `aula/[lesson-slug]/page.tsx:6` (`Download`, `Link2`) |
+| 9 | TypeScript sem erros | ✅ PASS | `tsc --noEmit` exit 0 |
+
+### Segurança
+
+| # | Critério | Resultado | Evidência |
+|---|----------|-----------|-----------|
+| S1 | Fetch só após guard `hasAccess` | ✅ PASS | `aula/[lesson-slug]/page.tsx:239` faz `if (!hasAccess) return <LockedContent>`; fetch dos materiais ocorre em 398-424, após o early return |
+| S2 | Signed URL com TTL curto | ✅ PASS | 300s (5 min) — adequado para sessão de visualização |
+| S3 | `storage_path` não vaza pro cliente | ✅ PASS | `aula/[lesson-slug]/page.tsx:415-421` mapeia para shape com apenas `id/title/kind/external_url/signedUrl`; `storage_path` descartado. Em `curso/[slug]/page.tsx:182-192` o spread (`{ ...mat, signedUrl }`) preserva `storage_path` no payload server, mas o render (linhas 456-481) só usa `href` (derivado), `kind` e `title` — `storage_path` não é serializado pro cliente (Server Component) |
+
+### Build & Typecheck
+
+- `pnpm exec tsc --noEmit` → exit 0, 0 linhas de output (0 erros).
+
+**Resumo:** MM-1 5/5 PASS, MM-2 9/9 PASS, Segurança 3/3 PASS. Total: **17 PASS, 0 CONCERN, 0 FAIL**.
+
+**Próximo passo:** @sites-devops push.
+
+---
+
 ## 2026-05-17 — lesson-availability — VEREDICTO FINAL — ✅ PASS
 
 **Escopo:** Re-gate final após todos os fixes serem aplicados pelo team-lead. **11/11 ataques PASS**. Feature liberada para devops.
@@ -3007,3 +3191,47 @@ Nenhum. Todos os pontos do CONCERN #11 endereçados de forma simétrica e tipada
 ### Próximo passo
 - @sites-devops liberado para push de `feat-aulas-v2`
 - CONCERN #11 oficialmente **fechado**
+
+---
+
+## VEREDICTO 2026-05-17 — Re-gate completo lesson-availability — ⚠️ CONCERNS (não-bloqueantes)
+
+**Story:** LA (epic Aulas Em breve) — re-gate solicitado após fixes do CONCERN #11
+**Branch:** feat-aulas-v2
+**Solicitante:** @sites-qa (auto-assignment via Task #13)
+**Escopo:** Re-executar checklist adversarial completa (11 ataques) contra estado atual: gate `is_available` em `aula/page.tsx` + correção `certificate.ts`/`curso/page.tsx`/`aula/page.tsx`/`meus-cursos`/`dashboard` para excluir `is_available=false` do total.
+
+### Checklist adversarial — 11 ataques
+
+| # | Ataque | Resultado | Evidência |
+|---|---|---|---|
+| 1 | URL direta a aula Em breve (aluno comum) | ✅ PASS | `aula/[lesson-slug]/page.tsx:276` gate retorna tela "Em breve" sem montar VideoPlayer/MarkComplete/conteúdo/transcrição |
+| 2 | Bypass ADMIN/MENTOR no gate | ✅ PASS | `aula/[lesson-slug]/page.tsx:275` `isPrivileged` mantido para revisão |
+| 3 | Listagem aula Em breve em `curso/[slug]` | ✅ PASS | `curso/[slug]/page.tsx:530-553` renderiza `<div aria-disabled>` (sem `<Link>`), badge "Em breve" presente |
+| 4 | Listagem aula Em breve no sidebar de aula | ✅ PASS | `CourseSidebar.tsx:194-211` mesmo padrão div+badge |
+| 5 | CTA "Retomar" apontando para Em breve | ✅ PASS | `curso/[slug]/page.tsx:212-219` `firstIncomplete`/`firstLesson` filtram `is_available !== false` |
+| 6 | Denominador progresso curso infla por Em breve | ✅ PASS | `curso/[slug]/page.tsx:205-209` usa `availableLessonIds` |
+| 7 | Denominador sidebar/totals globais infla | ✅ PASS | `aula/[lesson-slug]/page.tsx:194-209` `availableLessons`/`availableAllLessons` |
+| 8 | Módulo `[done, Em breve]` marcado incompleto | ✅ PASS | `curso/[slug]/page.tsx:329-336` `moduleTotal=1, moduleCompleted=1 → isComplete=true` |
+| 9 | Certificado bloqueado por Em breve | ✅ PASS | `certificate.ts:80-82` filtra `.eq('is_available', true)` |
+| 10 | Inconsistência % entre dashboard ↔ meus-cursos ↔ curso ↔ certificado | ✅ PASS | 4 surfaces convergem no mesmo denominador (`is_available=true`) |
+| 11 | Mutação `lesson_progress` em aula Em breve via server action direta | ⚠️ CONCERN P3 | `progress.ts:9-74` não checa `is_available` no servidor. UI nunca expõe (gate no page mata o player + button), mas curl/fetch com cookie válido + lessonId de Em breve consegue inserir linha. Sem impacto em UX/certificado porque `certificate.ts` exclui Em breve do `totalLessons` |
+
+### Bônus auditado
+
+**RPC `has_access` não consulta `lessons.is_available`** (`supabase/migrations/20260510030000_has_access_admin_override.sql:11-50`). Defesa atual depende exclusivamente do gate em `aula/[lesson-slug]/page.tsx:276`. Já documentado no veredicto Epic LA original. Hardening backlog (CONCERN-defesa-em-profundidade).
+
+### Concerns
+
+- **[CONCERN-1 P3 defesa em profundidade]** `progress.ts` server actions (`saveProgress`, `markLessonComplete`, `toggleLessonComplete`) não validam `is_available` antes de inserir em `lesson_progress`. **Impacto real:** nenhum — UI não expõe e `certificate.ts` filtra Em breve do `totalLessons`, então linhas órfãs não contam para nada. **Sugestão:** adicionar guard de `is_available=true` (ou ADMIN/MENTOR) nas 3 server actions. Story de hardening, não bloqueia release.
+
+- **[CONCERN-2 P3 defesa em profundidade]** RPC `has_access` não considera `is_available`. Mesmo motivo do veredicto Epic LA: defesa atual centralizada no gate de page. Backlog/ADR para considerar atualizar RPC ou adicionar trigger.
+
+### Validação local
+- `pnpm typecheck` → EXIT 0
+- `pnpm build` → sucesso, zero erros, zero warnings novos
+- 200+ rotas compiladas
+
+### Próximo passo
+- @sites-devops: **PUSH LIBERADO** de `feat-aulas-v2`. Funcionalmente PASS; concerns são P3 backlog
+- @team-lead: criar story de hardening (CONCERN-1 + CONCERN-2) para próximo sprint, sem bloquear release atual
