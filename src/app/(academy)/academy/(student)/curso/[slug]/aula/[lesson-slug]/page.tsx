@@ -20,7 +20,7 @@ import type { UserRole } from '@/types/student'
 type ModuleMaterialItem = {
   id: string
   title: string
-  kind: 'FILE' | 'LINK'
+  kind: string
   external_url: string | null
   signedUrl: string | null
 }
@@ -406,7 +406,7 @@ export default async function AulaPage({ params }: Props) {
     moduleMaterials = await Promise.all(
       (rawModuleMaterials ?? []).map(async (mat) => {
         let signedUrl: string | null = null
-        if (mat.kind === 'FILE' && mat.storage_path) {
+        if (mat.kind !== 'LINK' && mat.storage_path) {
           const { data } = await supabaseAdmin.storage
             .from('materials')
             .createSignedUrl(mat.storage_path, 300)
@@ -415,7 +415,7 @@ export default async function AulaPage({ params }: Props) {
         return {
           id: mat.id,
           title: mat.title,
-          kind: mat.kind as 'FILE' | 'LINK',
+          kind: mat.kind,
           external_url: mat.external_url ?? null,
           signedUrl,
         }
