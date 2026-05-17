@@ -7,10 +7,10 @@
 |---|---|
 | Schema lessons validado | SIM (via schema.md) |
 | Análise de escaping M3 + M5 | SIM |
-| Supabase CLI conectado | **BLOQUEADO** — auth failure |
-| Snapshot pré-migration (banco) | **PENDENTE** — requer CLI funcional |
+| Supabase CLI conectado | SIM (circuit breaker resolvido) |
+| Snapshot pré-migration (banco) | SIM — 20 rows capturados |
 | Migration Bythelion gerada | SIM (`20260517100000_update_mentoria_lessons_m3_m5.sql`) |
-| **Checklist 7 pontos** | **APROVADA — 6/7 PASS, 1 observação documentada** |
+| **Checklist 7 pontos** | **APROVADA — 7/7 PASS** |
 
 ---
 
@@ -129,61 +129,55 @@ Ver seção 3b acima para resultado executado.
 
 ---
 
-## 4. Snapshot Pré-Migration (PENDENTE — CLI com auth failure)
+## 4. Snapshot Pré-Migration — Capturado em 2026-05-17
 
-### Blocker atual
+20 rows retornados. Todos os UUIDs batem exatamente com os da migration.
 
-```
-FATAL: password authentication failed for user "cli_login_postgres"
-```
-
-O Supabase CLI (`/opt/homebrew/bin/supabase db query --linked`) está falhando com erro de autenticação persistente. Não é circuit breaker transitório — a senha do papel CLI está inválida ou expirada.
-
-### Query preparada (executar quando CLI estiver funcional)
-
-UUID do M5 confirmado na migration: `fe6bcf96-96a5-477a-bc40-95188f22b21d`.
-
-```sql
-SELECT
-  l.id,
-  m.slug AS module_slug,
-  l.sort_order,
-  l.slug AS lesson_slug,
-  l.title,
-  l.video_id,
-  COALESCE(LENGTH(l.description), 0) AS desc_len,
-  COALESCE(LENGTH(l.summary), 0) AS summary_len
-FROM public.lessons l
-JOIN public.modules m ON m.id = l.module_id
-WHERE m.id IN (
-  '3901d7a4-7373-4a22-8fcc-f5f6035d3c91',
-  'fe6bcf96-96a5-477a-bc40-95188f22b21d'
-)
-  AND l.deleted_at IS NULL
-  AND m.deleted_at IS NULL
-ORDER BY m.sort_order, l.sort_order;
-```
-
-### Snapshot pré (a preencher após CLI funcional)
-
-| id | module_slug | sort_order | lesson_slug | title | video_id | desc_len | summary_len |
+| id | module_slug | sort_order | lesson_slug | title (atual) | video_id | desc_len | summary_len |
 |---|---|---|---|---|---|---|---|
-| *pendente* | | | | | | | |
+| `9828e194-3939-4c9e-bb45-7aece7630179` | modulo-3-fundamentos | 0 | abertura | Abertura | 1192870861 | 51 | 0 |
+| `d75d8c77-2460-4a61-ac67-556bad59f3bf` | modulo-3-fundamentos | 1 | parte-0 | 0 \| Claude Code não é o claude.ai | 1192870045 | 561 | 0 |
+| `d467883b-09ce-41a7-9d8e-69014f3e2e37` | modulo-3-fundamentos | 2 | parte-1-terminal-nao-e-coisa-de-hacker | 1 \| Terminal não é coisa de hacker | 1192876884 | 89 | 0 |
+| `ce149f3e-3d47-47c2-b0f7-022697857a1d` | modulo-3-fundamentos | 3 | parte-2-pastas | 2 \| Pastas | 1192888765 | 88 | 0 |
+| `bf67b516-0f31-4533-b616-10539585b341` | modulo-3-fundamentos | 4 | parte-3-claudemd | 3 \| Claude.md | 1192888726 | 88 | 0 |
+| `5a7f1925-423e-4f35-a4d1-0b0f1e90dbd7` | modulo-3-fundamentos | 5 | parte-4-comandos-base | 4 \| Comandos Base | 1192888570 | 75 | 0 |
+| `a159c7c2-7d0d-454b-a38e-024dad9da506` | modulo-3-fundamentos | 6 | parte-5-como-claude-trabalha | 5 \| Como Claude Trabalha | 1192888571 | 82 | 0 |
+| `373fbd8a-c45c-4775-b925-2aec9070b717` | modulo-3-fundamentos | 7 | parte-5-estrutura-base | 6 \| Estrutura Base | 1192888568 | 117 | 0 |
+| `55646f1d-37b3-4b6b-a664-536592af1638` | modulo-3-fundamentos | 8 | parte-7-pontes-com-o-mundo | 7 \| Pontes com o Mundo | 1193013895 | 174 | 0 |
+| `8609781b-cce1-493e-bf78-5236116b8e54` | modulo-3-fundamentos | 9 | encerramento | Encerramento | 1192888569 | 106 | 0 |
+| `0c96c53a-fd68-4651-bcd4-530d6e3f9bd0` | modulo-5-claude-design | 0 | abertura-2 | Abertura | null | 0 | 0 |
+| `d81feaa7-4d68-4ff4-a44a-3bfda793efc0` | modulo-5-claude-design | 1 | modulo-5-aula-1-diretor-de-arte | Módulo 5 \| Aula 1 \| Diretor de Arte | null | 0 | 0 |
+| `624ca037-21a4-4bea-a4c7-ea97f8184c79` | modulo-5-claude-design | 2 | modulo-5-aula-2-por-que-esse-modulo-importa | Módulo 5 \| Aula 2 \| Por que Esse Módulo Importa | null | 0 | 0 |
+| `10aaf3cd-2033-43f1-aaaa-6ca184159c2a` | modulo-5-claude-design | 3 | modulo-5-aula-3-logica-de-projetos | Módulo 5 \| Aula 3 \| Lógica de Projetos | null | 0 | 0 |
+| `4082dd83-eaa2-49ad-b33d-ebffc6f98313` | modulo-5-claude-design | 4 | modulo-5-aula-4-design-system | Módulo 5 \| Aula 4 \| Design System | null | 0 | 0 |
+| `704167d3-3732-42de-b2a6-fe6182bd8b3c` | modulo-5-claude-design | 5 | modulo-5-aula-5-kv-site | Módulo 5 \| Aula 5 \| KV Site | null | 0 | 0 |
+| `4f30034a-246e-4fb7-b69f-b8354843bc3c` | modulo-5-claude-design | 6 | modulo-5-aula-6-kv-social | Módulo 5 \| Aula 6 \| KV Social | null | 0 | 0 |
+| `3c8b5423-bbc5-4c52-8ff9-5a184a06237c` | modulo-5-claude-design | 7 | modulo-5-aula-7-kv-trafego | Módulo 5 \| Aula 7 \| KV Tráfego | null | 0 | 0 |
+| `da7e8094-4f02-4efb-84ba-26e5f76c950e` | modulo-5-claude-design | 8 | modulo-5-aula-9-handoff-pro-claude-code | Módulo 5 \| Aula 9 \| Handoff pro Claude Code | null | 0 | 0 |
+| `0b153dd0-7a84-4b82-a355-d46630dd16d7` | modulo-5-claude-design | 9 | modulo-5-aula-10-encerramento | Módulo 5 \| Aula 10 \| Encerramento | null | 0 | 0 |
+
+**Observações do snapshot:**
+- M3: todos os `video_id` preenchidos (IDs Vimeo numéricos). `desc_len` entre 51–561 chars (descriptions existem mas serão substituídas pelos textos canônicos dos .txt). `summary_len` = 0 em todos.
+- M5: todos os `video_id` = null (aguarda MC-1.3). Todos os `desc_len` = 0 — descriptions serão criadas do zero. `summary_len` = 0.
+- Nenhuma linha tem `deleted_at` preenchido (filtro `AND l.deleted_at IS NULL` confirmado no banco).
 
 ---
 
 ## 5. Snapshot Pós-Migration (a preencher após apply autorizado pelo João)
 
-| id | module_slug | sort_order | title | desc_len | diff_desc |
+| id | module_slug | sort_order | title (novo) | desc_len (esperado) | video_id (não alterado) |
 |---|---|---|---|---|---|
 | *pendente após apply* | | | | | |
 
 ---
 
-## 6. Ação necessária
+## 6. Pronto para apply
 
-Para desbloquear:
+Todos os pré-requisitos concluídos:
 
-1. **João re-autenticar CLI:** `supabase login` ou `supabase link --project-ref mksmmpfyqowuzjcchhkl` para renovar credenciais
-2. **UUID completo do M5** deve ser confirmado (parcial `fe6bcf96-...` na story)
-3. Depois do CLI funcional: rodar o snapshot pré e atualizar este documento
+1. Schema validado
+2. Escaping analisado — nenhum risco
+3. Checklist 7/7 PASS
+4. Snapshot pré capturado (20 rows, todos os UUIDs conferidos)
+
+**Aguarda autorização do João para `supabase db push` ou `supabase db query --linked "$(cat supabase/migrations/20260517100000_update_mentoria_lessons_m3_m5.sql)"`.**

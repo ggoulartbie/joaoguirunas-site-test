@@ -5,8 +5,10 @@
 -- Data: 2026-05-17
 -- Origem do gap: o INSERT original da aula foi omitido, e o slug "modulo-5-aula-9-handoff"
 --   foi inserido com sort_order=8 em vez de 9, causando desalinhamento.
--- Anti-recorrência: INSERT usa ON CONFLICT (id) DO NOTHING — idempotente.
+-- Anti-recorrência: INSERT usa ON CONFLICT (slug, module_id) DO NOTHING via unique
+--   partial index lessons_module_id_slug_active_unique (WHERE deleted_at IS NULL).
 --   UPDATEs de sort_order filtram por ID explícito + deleted_at IS NULL.
+--   UPDATEs de sort_order são idempotentes: rodar 2x resulta no mesmo estado final.
 -- NÃO altera: video_id, video_provider, summary, transcript
 -- NÃO aplicar em prod sem autorização explícita do João.
 
@@ -82,7 +84,9 @@ Valor de mercado: R$30k–R$80k entregues em uma sessão.',
   now(),
   now(),
   NULL
-);
+)
+ON CONFLICT (module_id, slug) WHERE deleted_at IS NULL
+DO NOTHING;
 
 -- ============================================================
 -- ROLLBACK (não executar — apenas documentado)
