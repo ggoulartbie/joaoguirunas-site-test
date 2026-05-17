@@ -3,6 +3,7 @@ export const dynamic = 'force-dynamic'
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import { Lock, BookOpen } from 'lucide-react'
+import { CourseCoverSpline } from './CourseCoverSpline'
 import { requireUser } from '@/lib/auth/helpers'
 import { supabaseAdmin } from '@/lib/supabase/admin'
 import { createClient } from '@/lib/supabase/server'
@@ -244,12 +245,7 @@ export default async function MeusCursosPage() {
                     backgroundPosition: 'center',
                   }}
                 >
-                  {!course.cover_image_url && (
-                    <BookOpen
-                      className="opacity-30"
-                      style={{ width: 32, height: 32, color: 'var(--bone-mute)' }}
-                    />
-                  )}
+                  {!course.cover_image_url && <CourseCoverSpline />}
                 </div>
 
                 {/* Body */}
