@@ -15,6 +15,7 @@ import {
 } from 'lucide-react'
 import { supabaseAdmin } from '@/lib/supabase/admin'
 import { requireUser } from '@/lib/auth/helpers'
+import { RobotMascotCourse } from './RobotMascotCourse'
 
 type Props = {
   params: Promise<{ slug: string }>
@@ -243,6 +244,7 @@ export default async function CursoPage({ params }: Props) {
         )}
 
         <div className="relative p-6 lg:p-8">
+          <RobotMascotCourse />
           {/* Breadcrumb */}
           <p className="font-mono text-[11px] uppercase tracking-wider" style={{ color: 'var(--bone-mute)' }}>
             <Link

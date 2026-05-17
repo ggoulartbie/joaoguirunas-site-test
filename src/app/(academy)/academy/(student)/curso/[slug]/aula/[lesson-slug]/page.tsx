@@ -14,7 +14,6 @@ import { MarkCompleteButton } from '@/components/student/MarkCompleteButton'
 import { LessonTabs } from './LessonTabs'
 import { LessonReactions } from '@/components/student/LessonReactions'
 import { CourseSidebar, MobileLessonDrawer } from './CourseSidebar'
-import { RobotMascot } from './RobotMascot'
 import type { CommentWithAuthor } from '@/types/student'
 import type { UserRole } from '@/types/student'
 
@@ -610,8 +609,6 @@ export default async function AulaPage({ params }: Props) {
           />
 
         </div>
-
-        <RobotMascot />
 
         {/* ── Right: Course outline sidebar (desktop only) ── */}
         <aside
