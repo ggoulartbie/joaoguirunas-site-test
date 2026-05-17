@@ -105,7 +105,7 @@ export function VideoPlayer({
 
     const player = new Player(vimeoContainerRef.current, {
       id: numericId,
-      responsive: true,
+      responsive: false,
       autopause: false,
       dnt: true,
       title: false,
@@ -307,7 +307,7 @@ export function VideoPlayer({
       >
         <div
           ref={vimeoContainerRef}
-          className="absolute inset-0 h-full w-full"
+          className="absolute inset-0 h-full w-full [&_iframe]:h-full [&_iframe]:w-full [&_iframe]:absolute [&_iframe]:inset-0"
         />
       </div>
     </div>
