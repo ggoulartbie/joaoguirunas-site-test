@@ -25,6 +25,7 @@ type SidebarModule = {
     title: string
     sort_order: number
     completed: boolean
+    is_available: boolean
   }[]
 }
 
@@ -139,57 +140,75 @@ export function CourseSidebar({
                 <ul>
                   {mod.lessons.map((lesson, idx) => {
                     const isCurrent = lesson.id === currentLessonId
+                    const isUnavailable = lesson.is_available === false
+
+                    const innerContent = (
+                      <>
+                        {/* Index / status icon */}
+                        <span
+                          className="mt-0.5 shrink-0"
+                          style={{ width: '20px', textAlign: 'center' }}
+                        >
+                          {lesson.completed ? (
+                            <CheckCircle2
+                              className="h-3.5 w-3.5 inline"
+                              style={{ color: 'var(--ember)', opacity: 0.7 }}
+                              aria-label="Concluida"
+                            />
+                          ) : isCurrent ? (
+                            <Play
+                              className="h-3.5 w-3.5 inline"
+                              style={{ color: 'var(--ember)' }}
+                              aria-label="Aula atual"
+                            />
+                          ) : (
+                            <span
+                              className="font-mono text-[10px]"
+                              style={{ color: 'var(--bone-mute)', opacity: 0.5 }}
+                            >
+                              {String(idx + 1).padStart(2, '0')}
+                            </span>
+                          )}
+                        </span>
+
+                        <span className="flex flex-1 flex-wrap items-center gap-1.5 text-[12px] leading-snug">
+                          {lesson.title}
+                          {isUnavailable && (
+                            <span className="shrink-0 rounded-full bg-[var(--ink-3)] px-2 py-0.5 font-mono text-[9px] uppercase tracking-wider text-[var(--bone-mute)]">
+                              Em breve
+                            </span>
+                          )}
+                        </span>
+                      </>
+                    )
+
+                    const sharedStyle = {
+                      background: isCurrent ? 'rgba(255,58,14,0.07)' : 'transparent',
+                      borderLeft: isCurrent ? '2px solid var(--ember)' : '2px solid transparent',
+                      borderBottom: '1px solid var(--hairline)',
+                      color: isCurrent ? 'var(--bone)' : 'var(--bone-mute)',
+                    }
 
                     return (
                       <li key={lesson.id}>
-                        <Link
-                          href={`/academy/curso/${courseSlug}/aula/${lesson.slug}`}
-                          className="flex items-start gap-3 px-4 py-2.5 transition-colors"
-                          style={{
-                            background: isCurrent
-                              ? 'rgba(255,58,14,0.07)'
-                              : 'transparent',
-                            borderLeft: isCurrent
-                              ? '2px solid var(--ember)'
-                              : '2px solid transparent',
-                            borderBottom: '1px solid var(--hairline)',
-                            color: isCurrent
-                              ? 'var(--bone)'
-                              : 'var(--bone-mute)',
-                          }}
-                          aria-current={isCurrent ? 'page' : undefined}
-                        >
-                          {/* Index / status icon */}
-                          <span
-                            className="mt-0.5 shrink-0"
-                            style={{ width: '20px', textAlign: 'center' }}
+                        {isUnavailable ? (
+                          <div
+                            className="flex cursor-default items-start gap-3 px-4 py-2.5 opacity-60"
+                            style={sharedStyle}
+                            aria-disabled="true"
                           >
-                            {lesson.completed ? (
-                              <CheckCircle2
-                                className="h-3.5 w-3.5 inline"
-                                style={{ color: 'var(--ember)', opacity: 0.7 }}
-                                aria-label="Concluida"
-                              />
-                            ) : isCurrent ? (
-                              <Play
-                                className="h-3.5 w-3.5 inline"
-                                style={{ color: 'var(--ember)' }}
-                                aria-label="Aula atual"
-                              />
-                            ) : (
-                              <span
-                                className="font-mono text-[10px]"
-                                style={{ color: 'var(--bone-mute)', opacity: 0.5 }}
-                              >
-                                {String(idx + 1).padStart(2, '0')}
-                              </span>
-                            )}
-                          </span>
-
-                          <span className="text-[12px] leading-snug">
-                            {lesson.title}
-                          </span>
-                        </Link>
+                            {innerContent}
+                          </div>
+                        ) : (
+                          <Link
+                            href={`/academy/curso/${courseSlug}/aula/${lesson.slug}`}
+                            className="flex items-start gap-3 px-4 py-2.5 transition-colors"
+                            style={sharedStyle}
+                            aria-current={isCurrent ? 'page' : undefined}
+                          >
+                            {innerContent}
+                          </Link>
+                        )}
                       </li>
                     )
                   })}

@@ -29,6 +29,7 @@ type LessonRow = {
   kind: string
   sort_order: number
   deleted_at: string | null
+  is_available: boolean
 }
 
 type ModuleRow = {
@@ -87,7 +88,7 @@ export default async function CursoPage({ params }: Props) {
       modules (
         id, title, slug, sort_order, deleted_at,
         lessons (
-          id, title, slug, kind, sort_order, deleted_at
+          id, title, slug, kind, sort_order, deleted_at, is_available
         )
       )
     `)
@@ -480,46 +481,71 @@ function ModuleAccordion({
       <ul>
         {module.lessons.map((lesson, lessonIndex) => {
           const isCompleted = completedSet.has(lesson.id)
+          const isUnavailable = lesson.is_available === false
           const lessonHref = `/academy/curso/${courseSlug}/aula/${lesson.slug}`
+
+          const lessonInner = (
+            <>
+              {/* Lesson number */}
+              <span
+                className="font-mono text-[11px] shrink-0 w-6 text-right"
+                style={{ color: 'var(--bone-mute)' }}
+              >
+                {String(lessonIndex + 1).padStart(2, '0')}
+              </span>
+
+              {/* Kind icon */}
+              <span style={{ color: 'var(--bone-mute)' }}>
+                <LessonKindIcon kind={lesson.kind} />
+              </span>
+
+              {/* Title + Em breve badge */}
+              <span className="flex flex-1 min-w-0 items-center gap-1.5 text-[13px] leading-snug">
+                <span className="truncate">{lesson.title}</span>
+                {isUnavailable && (
+                  <span className="shrink-0 rounded-full bg-[var(--ink-3)] px-2 py-0.5 font-mono text-[9px] uppercase tracking-wider text-[var(--bone-mute)]">
+                    Em breve
+                  </span>
+                )}
+              </span>
+
+              {/* Completion check */}
+              {isCompleted && !isUnavailable && (
+                <CheckCircle2
+                  className="h-3.5 w-3.5 shrink-0"
+                  style={{ color: 'var(--ember)' }}
+                  aria-label="Aula concluída"
+                />
+              )}
+            </>
+          )
 
           return (
             <li key={lesson.id}>
-              <Link
-                href={lessonHref}
-                className="flex items-center gap-3 px-4 py-3 transition-colors hover:bg-[rgba(255,255,255,0.03)]"
-                style={{
-                  borderBottom: '1px solid var(--hairline)',
-                  color: 'var(--bone-dim)',
-                  textDecoration: 'none',
-                }}
-              >
-                {/* Lesson number */}
-                <span
-                  className="font-mono text-[11px] shrink-0 w-6 text-right"
-                  style={{ color: 'var(--bone-mute)' }}
+              {isUnavailable ? (
+                <div
+                  className="flex cursor-default items-center gap-3 px-4 py-3 opacity-60"
+                  style={{
+                    borderBottom: '1px solid var(--hairline)',
+                    color: 'var(--bone-dim)',
+                  }}
+                  aria-disabled="true"
                 >
-                  {String(lessonIndex + 1).padStart(2, '0')}
-                </span>
-
-                {/* Kind icon */}
-                <span style={{ color: 'var(--bone-mute)' }}>
-                  <LessonKindIcon kind={lesson.kind} />
-                </span>
-
-                {/* Title */}
-                <span className="flex-1 min-w-0 text-[13px] leading-snug truncate">
-                  {lesson.title}
-                </span>
-
-                {/* Completion check */}
-                {isCompleted && (
-                  <CheckCircle2
-                    className="h-3.5 w-3.5 shrink-0"
-                    style={{ color: 'var(--ember)' }}
-                    aria-label="Aula concluída"
-                  />
-                )}
-              </Link>
+                  {lessonInner}
+                </div>
+              ) : (
+                <Link
+                  href={lessonHref}
+                  className="flex items-center gap-3 px-4 py-3 transition-colors hover:bg-[rgba(255,255,255,0.03)]"
+                  style={{
+                    borderBottom: '1px solid var(--hairline)',
+                    color: 'var(--bone-dim)',
+                    textDecoration: 'none',
+                  }}
+                >
+                  {lessonInner}
+                </Link>
+              )}
             </li>
           )
         })}

@@ -124,7 +124,7 @@ export default async function AulaPage({ params }: Props) {
     .from('modules')
     .select(`
       id, title, sort_order,
-      lessons!inner (id, slug, title, sort_order, deleted_at)
+      lessons!inner (id, slug, title, sort_order, deleted_at, is_available)
     `)
     .eq('course_id', courseId)
     .is('lessons.deleted_at', null)
@@ -187,6 +187,7 @@ export default async function AulaPage({ params }: Props) {
         title: l.title,
         sort_order: l.sort_order,
         completed: completedIds.has(l.id),
+        is_available: l.is_available,
       })
     )
     return {

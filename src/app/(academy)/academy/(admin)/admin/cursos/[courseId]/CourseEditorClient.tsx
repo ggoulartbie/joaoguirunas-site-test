@@ -17,7 +17,7 @@ import {
   arrayMove,
 } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
-import { GripVertical, Plus, Pencil, Trash2, ChevronDown, ChevronRight, ArrowLeft } from 'lucide-react'
+import { GripVertical, Plus, Pencil, Trash2, ChevronDown, ChevronRight, ArrowLeft, Eye, EyeOff } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import {
   updateCourse,
@@ -26,6 +26,7 @@ import {
   reorderModules,
   createLesson,
   deleteLesson,
+  updateLesson,
   updateModule,
   reorderLessons,
 } from '../actions'
@@ -61,6 +62,14 @@ function SortableLesson({
 }) {
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({ id: lesson.id })
   const style = { transform: CSS.Transform.toString(transform), transition }
+  const [available, setAvailable] = useState(lesson.is_available ?? true)
+  const [, startToggle] = useTransition()
+
+  function handleToggleAvailable() {
+    const next = !available
+    setAvailable(next)
+    startToggle(() => updateLesson(lesson.id, courseId, { is_available: next }))
+  }
 
   return (
     <div
@@ -92,6 +101,17 @@ function SortableLesson({
         {KIND_LABELS[lesson.kind] ?? lesson.kind}
       </span>
       <span className="flex-1 font-[--type-sans] text-xs text-[var(--bone-dim)]">{lesson.title}</span>
+      <button
+        type="button"
+        onClick={handleToggleAvailable}
+        title={available ? 'Disponível' : 'Indisponível (Em breve para alunos)'}
+        className="p-1 transition-colors"
+      >
+        {available
+          ? <Eye className="h-3 w-3 text-[var(--bone-mute)]" />
+          : <EyeOff className="h-3 w-3 text-amber-500" />
+        }
+      </button>
       <Link
         href={`/academy/admin/cursos/${courseId}/aulas/${lesson.id}`}
         className="p-1 text-[var(--bone-mute)] transition-colors hover:text-[var(--bone)]"
@@ -166,6 +186,7 @@ function SortableModule({
             slug: created.slug,
             kind: lessonKind,
             sort_order: prev.length,
+            is_available: true,
             content: null,
             content_format: null,
             description: null,
