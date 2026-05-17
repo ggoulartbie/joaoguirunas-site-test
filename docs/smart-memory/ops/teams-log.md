@@ -22,10 +22,20 @@ Registro de todos os Agent Teams formados neste projeto. Lead (team-os) atualiza
 - sites-qa — gate adversarial pré-release
 - sites-devops — commit + push após QA PASS
 
-**Status:** ativo (FASE 1: architect + data em paralelo)
+**Status:** encerrado (release done)
 **Início:** 2026-05-17T20:35:00-03:00
-**Pipeline:** architect (stories) + data (migration) em paralelo → dev-alpha + dev-beta implementam → QA gate → devops release → lead aplica migration via MCP + merge main
-**Restrição:** Migration não aplicada em prod sem autorização explícita do João.
+**Encerrado:** 2026-05-17T21:30:00-03:00
+**Pipeline:** architect (stories) + data (migration) em paralelo → dev-alpha + dev-beta implementam → QA 3 rounds (FAIL → CONCERNS → PASS 11/11) → devops commit 1aa8c7f → migration aplicada via Dashboard Supabase → merge main
+**Release:**
+- Commit: `1aa8c7f` — feat(lessons): adicionar is_available
+- Push: `feat-aulas-v2` → `main` (fast-forward `bfe5ce5..1aa8c7f`)
+- Migration prod: `ALTER TABLE lessons ADD COLUMN is_available BOOLEAN NOT NULL DEFAULT TRUE` (Success)
+**QA final:** PASS 11/11 (3 rounds — FAIL→CONCERNS→PASS)
+**Decisões PO:**
+- App-level gate suficiente (sem RPC update)
+- Aulas Em breve excluídas de progresso e certificado
+- ADMIN/MENTOR ignoram gate (podem ver conteúdo indisponível)
+**Follow-up (backlog):** LA-1.5 — hardening RPC has_access + progress.ts server actions
 
 ---
 
