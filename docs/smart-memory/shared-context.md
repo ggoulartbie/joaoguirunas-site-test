@@ -9,21 +9,22 @@ tags: [ops]
 
 O lead (team-os) atualiza este arquivo a cada mudança de estado dos teammates.
 
-## Team ativo — joao-guirunas-site-mentoria-curso
+## Team encerrado — joao-guirunas-site-mentoria-curso
 
-**Status:** 🟢 ativo desde 2026-05-17
+**Status:** ✅ encerrado em 2026-05-17 — MC-1.1 e MC-1.2 concluídas
 **Objetivo:** Estruturar e popular o curso "Mentoria Claude Code" no Supabase
-**Branch:** `main` (sem branch separada por ora)
-**Restrição:** Nenhum commit/push sem autorização explícita do João.
+**Branch:** `main` | HEAD: `970ee64`
 
-| Teammate | Fase | Status | Task |
-|---|---|---|---|
-| sites-architect (Zaelion) | Arquitetura + stories | ✅ concluído | `docs/mentoria-claude-code/02-arquitetura-sistema.md` + 5 stories MC-1.1..MC-1.4 + MC-2.1 contingente em `stories/backlog/` + BACKLOG.md atualizado |
-| sites-data | Mapeamento schema banco | ✅ concluído | `docs/mentoria-claude-code/03-schema-banco.md` — schema completo, ERD, RLS, sequência inserção, 5 gaps |
-| sites-ux (Velani) | Fluxo aluno | ✅ concluído | `docs/mentoria-claude-code/07-ux-fluxo-aluno.md` + `agents/ux/spec-curso-mentoria-claude-code.md` — fluxo completo, 33 aulas especificadas com slugs, integração Vimeo documentada |
-| sites-devops | Pipeline deploy | ✅ concluído | `docs/mentoria-claude-code/06-deploy-pipeline.md` — em standby para commits |
-| sites-dev-alpha (Novael) | Inventário frontend | ✅ concluído | `docs/mentoria-claude-code/04-componentes-frontend.md` — todos os componentes aluno+admin, Vimeo, materiais, data requirements |
-| sites-analyst (Lyrel) | Análise conteúdo + gap analysis | ✅ concluído | `docs/mentoria-claude-code/01-analise-conteudo.md` — 11 módulos, 33 aulas, 9 gaps mapeados. Achado crítico: vimeo_id ausente é o único blocker real para publicar |
+| Entrega | Status | Detalhe |
+|---|---|---|
+| Schema + mapeamento | ✅ | `docs/mentoria-claude-code/01..07` + stories |
+| 33 aulas M3+M4+M5 inseridas | ✅ | Títulos, slugs, description, summary OK |
+| Títulos canonizados | ✅ | Padrão `Módulo X \| Aula N \| Título` — 23 títulos + 12 slugs aplicados |
+| HTML manuais PDF | ✅ | `content` + `content_format='HTML'` populado — 33 aulas (M3:10, M4:12, M5:11) |
+| Frontend "Sobre a Aula" | ✅ | LessonTabs lê `content` (HTML), "Resumo" lê `summary` — commit 35f7ae5 |
+| Docs 11–14 commitados | ✅ | commit 970ee64 em main |
+| MC-1.3 Vimeo | ⏳ | Bloqueado — João precisa subir vídeos + Vimeo MCP configurado |
+| MC-1.4 smoke E2E | ⏳ | Pode ser feito agora em localhost:3000 |
 
 ---
 

@@ -13,7 +13,7 @@ tags: [story]
 | Story | Título | Complexidade | Status | Agente |
 |---|---|---|---|---|
 | [[done/MC-1.1-mapear-campos-treinamento-supabase\|MC-1.1]] | Mapear conteúdo Mentoria → schema Supabase + JSON-fonte | M | done | sites-architect + sites-analyst |
-| [[backlog/MC-1.2-popular-curso-mentoria-claude-code-supabase\|MC-1.2]] | Popular curso "Mentoria Claude Code" no Supabase (módulos + aulas, idempotente) | M | backlog | sites-data + sites-dev-beta |
+| [[done/MC-1.2-popular-curso-mentoria-claude-code-supabase\|MC-1.2]] | Popular curso "Mentoria Claude Code" no Supabase (módulos + aulas, idempotente) | M | done | sites-data + sites-dev-beta |
 | [[backlog/MC-1.3-integrar-links-vimeo-aulas-mentoria\|MC-1.3]] | Integrar `video_id` Vimeo nas aulas do curso (update lessons) | S | backlog | sites-data + João |
 | [[backlog/MC-1.4-validar-visualizacao-curso-aluno\|MC-1.4]] | Validar visualização do curso pelo aluno (smoke E2E + veredicto formal) | S | backlog | sites-qa |
 | [[backlog/MC-2.1-adaptar-sistema-campos-extras\|MC-2.1]] | (Contingente) Adaptar sistema academy para campos extras do conteúdo | M | backlog | sites-architect + sites-data |
