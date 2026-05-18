@@ -72,7 +72,7 @@ export function LessonTabs({
     >
       {/* Tab nav — overflow-x-auto para mobile */}
       <div
-        className="overflow-x-auto border-b"
+        className="overflow-x-auto overflow-y-hidden border-b"
         style={{ borderColor: 'var(--hairline)' }}
       >
         <div className="inline-flex min-w-full">
