@@ -243,7 +243,7 @@ export default async function CursoPage({ params }: Props) {
           />
         )}
 
-        <div className="relative p-6 pr-36 lg:p-8 lg:pr-40">
+        <div className="relative p-6 pr-36 lg:p-8 lg:pr-56">
           <RobotMascotCourse />
           {/* Breadcrumb */}
           <p className="font-mono text-[11px] uppercase tracking-wider" style={{ color: 'var(--bone-mute)' }}>
