@@ -13,15 +13,29 @@ export function SplineSceneGlobal({ scene, className }: Props) {
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   function handleLoad(spline: any) {
-    if (spline?.canvas) canvasRef.current = spline.canvas as HTMLCanvasElement
+    const canvas = spline?.canvas as HTMLCanvasElement | undefined
+    if (!canvas) return
+    canvasRef.current = canvas
+    // Override getBoundingClientRect so Spline normalizes mouse coords against the full
+    // viewport, not just the canvas element bounds — enables global mouse tracking.
+    canvas.getBoundingClientRect = (): DOMRect =>
+      new DOMRect(0, 0, window.innerWidth, window.innerHeight)
   }
 
   useEffect(() => {
     function onMove(e: MouseEvent) {
       const canvas = canvasRef.current
       if (!canvas) return
+      // Spline runtime may listen to pointermove — dispatch both to be safe
       canvas.dispatchEvent(
-        new MouseEvent('mousemove', { clientX: e.clientX, clientY: e.clientY, bubbles: true })
+        new PointerEvent('pointermove', {
+          clientX: e.clientX, clientY: e.clientY,
+          bubbles: false, cancelable: true,
+          pointerId: 1, pointerType: 'mouse', isPrimary: true,
+        })
+      )
+      canvas.dispatchEvent(
+        new MouseEvent('mousemove', { clientX: e.clientX, clientY: e.clientY, bubbles: false })
       )
     }
     window.addEventListener('mousemove', onMove, { passive: true })
