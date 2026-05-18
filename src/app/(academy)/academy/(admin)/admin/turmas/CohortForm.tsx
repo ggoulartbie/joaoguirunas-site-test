@@ -208,6 +208,14 @@ function formatDate(iso: string | null) {
   return new Date(iso).toLocaleDateString('pt-BR')
 }
 
+function getDefaultSessionDate(): string {
+  const now = new Date()
+  now.setMinutes(0, 0, 0)
+  now.setHours(now.getHours() + 1)
+  const brt = new Date(now.getTime() - 3 * 60 * 60 * 1000)
+  return brt.toISOString().slice(0, 16)
+}
+
 function formatDateTimeBR(iso: string | null) {
   if (!iso) return '—'
   return new Date(iso).toLocaleString('pt-BR', { timeZone: 'America/Sao_Paulo', dateStyle: 'short', timeStyle: 'short' })
@@ -1403,7 +1411,11 @@ export function CohortForm(props: CohortFormProps) {
                   </span>
                   <button
                     type="button"
-                    onClick={() => { setShowAddSession(!showAddSession); setSessionError(null) }}
+                    onClick={() => {
+                      if (!showAddSession) setNewSessionDate(getDefaultSessionDate())
+                      setShowAddSession(!showAddSession)
+                      setSessionError(null)
+                    }}
                     style={{ borderRadius: 0 }}
                     className="flex items-center gap-1.5 border border-white/[0.07] px-3 py-1.5 font-mono text-[10px] uppercase tracking-widest text-[var(--bone-mute)] transition-colors hover:border-white/[0.16] hover:text-[var(--bone-dim)]"
                   >
