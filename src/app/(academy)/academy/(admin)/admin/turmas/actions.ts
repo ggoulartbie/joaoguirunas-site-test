@@ -297,7 +297,7 @@ export async function createCoupon(data: {
   await requireAdmin()
 
   const schema = z.object({
-    cohortId: z.string().uuid(),
+    cohortId: uuidField(),
     code: z.string().min(1).max(50).toUpperCase(),
     discountKind: z.enum(['PERCENT', 'FIXED']),
     discountValue: z.number().int().positive(),
@@ -413,7 +413,7 @@ export async function createLiveSession(data: {
   await requireAdmin()
 
   const schema = z.object({
-    cohortId: z.string().uuid(),
+    cohortId: uuidField(),
     title: z.string().min(1).max(300),
     description: z.string().optional(),
     scheduledAt: z.string().min(1),
