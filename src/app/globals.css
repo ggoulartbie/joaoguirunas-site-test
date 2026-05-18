@@ -382,6 +382,10 @@ pre code {
   padding: 1rem;
   border-radius: 0.25rem;
   overflow-x: auto;
+  max-width: 100%;
+  white-space: pre-wrap;
+  word-break: break-word;
+  overflow-wrap: break-word;
 }
 .lesson-html pre code {
   background: transparent;
