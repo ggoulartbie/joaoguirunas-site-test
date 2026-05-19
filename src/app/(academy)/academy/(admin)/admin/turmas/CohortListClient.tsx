@@ -40,14 +40,14 @@ function OccupancyBar({ filled, total }: { filled: number; total: number | null 
   }
   const pct = Math.round((filled / total) * 100)
   return (
-    <div className="flex items-center gap-2">
+    <div className="flex flex-col gap-1.5">
+      <span className="font-mono text-xs text-[var(--bone-mute)]">{filled}/{total}</span>
       <div className="h-px w-20 bg-white/10">
         <div
           className={`h-px ${pct >= 90 ? 'bg-red-400' : 'bg-[var(--ember)]'}`}
           style={{ width: `${pct}%` }}
         />
       </div>
-      <span className="font-mono text-xs text-[var(--bone-mute)]">{filled}/{total}</span>
     </div>
   )
 }
@@ -182,15 +182,19 @@ export function CohortListClient({ initialCohorts }: { initialCohorts: CohortRow
                       <OccupancyBar filled={cohort.filled_seats} total={cohort.total_seats} />
                     </div>
                   </td>
-                  <td className="hidden px-4 py-4 xl:table-cell">
-                    <span className="font-mono text-xs text-[var(--bone-mute)]">
-                      {cohort.start_date
-                        ? new Date(cohort.start_date).toLocaleDateString('pt-BR')
-                        : '—'}
-                      {cohort.end_date
-                        ? ` → ${new Date(cohort.end_date).toLocaleDateString('pt-BR')}`
-                        : ''}
-                    </span>
+                  <td className="hidden px-6 py-4 xl:table-cell">
+                    <div className="flex flex-col gap-0.5">
+                      <span className="font-mono text-xs text-[var(--bone-mute)]">
+                        {cohort.start_date
+                          ? new Date(cohort.start_date).toLocaleDateString('pt-BR')
+                          : '—'}
+                      </span>
+                      {cohort.end_date && (
+                        <span className="font-mono text-xs text-[var(--bone-mute)]/60">
+                          {new Date(cohort.end_date).toLocaleDateString('pt-BR')}
+                        </span>
+                      )}
+                    </div>
                   </td>
                   <td className="hidden px-4 py-4 xl:table-cell">
                     <span className="font-mono text-xs text-[var(--bone-dim)]">
