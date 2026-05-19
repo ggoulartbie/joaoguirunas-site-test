@@ -1,6 +1,5 @@
 'use client'
 
-import { Download } from 'lucide-react'
 import type { LiveSessionWithCohort } from '@/types/student'
 
 type Props = {
@@ -14,57 +13,31 @@ function formatICSDate(date: Date): string {
     .replace(/\.\d{3}/, '')
 }
 
-function generateICS(session: LiveSessionWithCohort): string {
-  const startDate = new Date(session.scheduled_at)
-  const endDate = new Date(startDate.getTime() + session.duration_minutes * 60 * 1000)
-  const start = formatICSDate(startDate)
-  const end = formatICSDate(endDate)
-  const now = formatICSDate(new Date())
-  const uid = `${session.id}-${Date.now()}@joaoguirunas.com`
+function buildGoogleCalendarUrl(session: LiveSessionWithCohort): string {
+  const start = new Date(session.scheduled_at)
+  const end = new Date(start.getTime() + session.duration_minutes * 60 * 1000)
 
-  const lines = [
-    'BEGIN:VCALENDAR',
-    'VERSION:2.0',
-    'PRODID:-//João Guirunas//Plataforma//PT',
-    'CALSCALE:GREGORIAN',
-    'METHOD:PUBLISH',
-    'BEGIN:VEVENT',
-    `UID:${uid}`,
-    `DTSTAMP:${now}`,
-    `DTSTART:${start}`,
-    `DTEND:${end}`,
-    `SUMMARY:${session.title}`,
-    session.description ? `DESCRIPTION:${session.description.replace(/\n/g, '\\n')}` : '',
-    `ORGANIZER;CN=João Guirunas:mailto:joaoguirunasramos@gmail.com`,
-    'END:VEVENT',
-    'END:VCALENDAR',
-  ]
-    .filter(Boolean)
-    .join('\r\n')
+  const params = new URLSearchParams({
+    action: 'TEMPLATE',
+    text: session.title,
+    dates: `${formatICSDate(start)}/${formatICSDate(end)}`,
+    ...(session.description ? { details: session.description } : {}),
+  })
 
-  return lines
+  return `https://calendar.google.com/calendar/render?${params.toString()}`
 }
 
 export function ICSDownloadButton({ session }: Props) {
-  function handleDownload() {
-    const ics = generateICS(session)
-    const blob = new Blob([ics], { type: 'text/calendar;charset=utf-8' })
-    const url = URL.createObjectURL(blob)
-    const a = document.createElement('a')
-    a.href = url
-    a.download = `encontro-${session.id}.ics`
-    a.click()
-    URL.revokeObjectURL(url)
-  }
-
   return (
-    <button
-      onClick={handleDownload}
-      aria-label={`Exportar ${session.title} para calendário (.ics)`}
-      className="flex items-center gap-1.5 border border-[var(--hairline)] px-3 py-2 font-mono text-xs uppercase tracking-wide text-[var(--bone-mute)] hover:border-[var(--hairline-strong)] hover:text-[var(--bone)] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ember)] focus-visible:ring-offset-1 focus-visible:ring-offset-[var(--void)]"
+    <a
+      href={buildGoogleCalendarUrl(session)}
+      target="_blank"
+      rel="noopener noreferrer"
+      aria-label={`Adicionar ${session.title} ao Google Agenda`}
+      className="flex items-center justify-center px-3 h-9 border border-[var(--hairline)] font-mono text-[11px] uppercase tracking-wider whitespace-nowrap transition-colors hover:border-[var(--hairline-strong)] hover:text-[var(--bone)]"
+      style={{ color: 'var(--bone-mute)', borderRadius: 0 }}
     >
-      <Download className="h-3.5 w-3.5" aria-hidden="true" />
-      Exportar .ics
-    </button>
+      Adicione ao Google Agenda
+    </a>
   )
 }

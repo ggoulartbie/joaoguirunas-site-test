@@ -40,7 +40,7 @@ function SessionCard({ session }: { session: LiveSessionWithCohort }) {
 
   return (
     <div
-      className="group flex gap-4 items-start border border-[var(--hairline)] hover:border-[var(--hairline-strong)] p-5 transition-colors"
+      className="group flex gap-4 items-center border border-[var(--hairline)] hover:border-[var(--hairline-strong)] p-5 transition-colors"
       style={{ backgroundColor: 'var(--ink)', borderRadius: 0 }}
     >
       {/* Date column */}
@@ -69,7 +69,7 @@ function SessionCard({ session }: { session: LiveSessionWithCohort }) {
           )}
           {!isPast && !isLive && (
             <span
-              className="font-mono text-[10px] uppercase tracking-wider px-2 py-0.5"
+              className="font-mono text-[10px] uppercase tracking-wider py-0.5"
               style={{ color: 'var(--bone-mute)' }}
             >
               Em breve
@@ -110,7 +110,7 @@ function SessionCard({ session }: { session: LiveSessionWithCohort }) {
       </div>
 
       {/* Actions */}
-      <div className="flex flex-col gap-2 shrink-0">
+      <div className="flex flex-col gap-2 shrink-0 justify-center">
         {!isPast && isLive && session.meeting_url && (
           <a
             href={session.meeting_url}
@@ -125,11 +125,11 @@ function SessionCard({ session }: { session: LiveSessionWithCohort }) {
         )}
         {!isPast && !isLive && (
           <div
-            className="flex items-center gap-1.5 px-3 h-9 font-mono text-[11px] uppercase tracking-wider"
-            style={{ color: 'var(--bone-mute)', borderRadius: 0 }}
+            className="flex items-center gap-1.5 px-3 h-9 font-mono text-[11px] uppercase tracking-wider whitespace-nowrap"
+            style={{ color: 'var(--bone-mute)' }}
           >
-            <Video className="h-3.5 w-3.5" />
-            {linkAvailableTime(session.scheduled_at)}
+            <Video className="h-3.5 w-3.5 shrink-0" />
+            <span>Link disponível às <span style={{ color: 'var(--bone-dim)' }}>{linkAvailableTime(session.scheduled_at)}</span></span>
           </div>
         )}
         {!isPast && (
