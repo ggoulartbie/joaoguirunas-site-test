@@ -42,7 +42,7 @@ function OccupancyBar({ filled, total }: { filled: number; total: number | null 
   return (
     <div className="flex flex-col gap-1.5">
       <span className="font-mono text-xs text-[var(--bone-mute)]">{filled}/{total}</span>
-      <div className="h-px w-20 bg-white/10">
+      <div className="h-px w-12 bg-white/10">
         <div
           className={`h-px ${pct >= 90 ? 'bg-red-400' : 'bg-[var(--ember)]'}`}
           style={{ width: `${pct}%` }}
