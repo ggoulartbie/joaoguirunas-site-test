@@ -16,6 +16,7 @@ import {
   Shield,
   ExternalLink,
   Settings,
+  BarChart2,
 } from 'lucide-react'
 
 const navGroups = [
@@ -25,6 +26,7 @@ const navGroups = [
       { href: '/academy/admin', label: 'Dashboard', icon: LayoutDashboard, exact: true },
       { href: '/academy/admin/cursos', label: 'Cursos', icon: BookOpen },
       { href: '/academy/admin/turmas', label: 'Turmas', icon: GraduationCap },
+      { href: '/academy/admin/progresso', label: 'Progresso', icon: BarChart2 },
     ],
   },
   {
