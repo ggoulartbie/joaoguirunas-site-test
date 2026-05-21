@@ -105,13 +105,18 @@ const markdownComponents: React.ComponentProps<typeof ReactMarkdown>['components
   ),
   sup: ({ children }) => <sup style={{ fontSize: '0.75em' }}>{children}</sup>,
   sub: ({ children }) => <sub style={{ fontSize: '0.75em' }}>{children}</sub>,
-  pre: ({ children }) => <>{children}</>,
+  pre: ({ children }) => {
+    const child = children as React.ReactElement<{ className?: string; children?: string }>
+    const cls = child?.props?.className ?? ''
+    const lang = cls.startsWith('language-') ? cls.replace('language-', '') : undefined
+    const code = typeof child?.props?.children === 'string'
+      ? child.props.children.replace(/\n$/, '')
+      : String(child?.props?.children ?? '')
+    return <CodeBlock language={lang}>{code}</CodeBlock>
+  },
   code: ({ className: cls, children }) => {
-    if (cls?.startsWith('language-')) {
-      const lang = cls.replace('language-', '')
-      const code = typeof children === 'string' ? children : String(children ?? '')
-      return <CodeBlock language={lang}>{code.replace(/\n$/, '')}</CodeBlock>
-    }
+    // inline code only — fenced blocks are handled by the `pre` renderer above
+    if (cls?.startsWith('language-')) return <>{children}</>
     return (
       <code
         className="rounded px-1 py-0.5 font-mono text-sm"
