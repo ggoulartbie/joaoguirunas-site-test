@@ -1,12 +1,44 @@
 ---
 title: Story Backlog
 type: backlog
-updated: 2026-05-17
+updated: 2026-05-21
 tags: [story]
 ---
 
 
 # Backlog de Stories
+
+## Epic AP — Admin Progress (2026-05-21)
+
+| Story | Título | Complexidade | Status | Agente |
+|---|---|---|---|---|
+| [[backlog/AP-1.1-server-actions-progresso-admin\|AP-1.1]] | Server actions admin de progresso (agregado por aluno × curso e por aula × conclusões, filtrável por turma) | M | backlog | sites-dev-beta |
+| [[backlog/AP-1.2-pagina-admin-progresso\|AP-1.2]] | Página admin `/admin/progresso` — tabela de alunos (expansível) + seção por aula | M | backlog | sites-dev-alpha |
+| [[backlog/AP-1.3-filtros-progresso-admin\|AP-1.3]] | (Opcional) Filtros do dashboard de progresso (curso, turma, módulo) | S | backlog | sites-dev-alpha |
+
+**Objetivo:** dar ao admin uma área de acompanhamento dos alunos (% de progresso por curso, aulas concluídas, contagem de conclusões por aula). PO pediu: "área de acompanhamento dos alunos: quantos marcaram que viram, o progresso deles, etc."
+
+**Sequência:**
+1. **AP-1.1** primeiro — server actions agregadas (`getStudentsProgress`, `getLessonsCompletionStats`, `getStudentLessonsBreakdown`). Define contrato de tipos consumido pela UI. **Bloqueia AP-1.2**.
+2. **AP-1.2** após AP-1.1 — página `/admin/progresso` com tabela expansível + seção por aula. Entrada no menu admin.
+3. **AP-1.3** opcional, contingente — filtros (curso/turma/módulo) com sincronização URL. Só promover se PO pedir após AP-1.2 entregue.
+
+**Decisões arquiteturais:**
+- `supabaseAdmin` + `requireAdmin()` em todas as actions (paridade com `/admin/usuarios`). Bypass de RLS intencional; barreira é o gate de admin.
+- **NÃO** duplicar `src/app/actions/progress.ts` (escopo aluno, `requireUser` + RLS via `createClient`). Esta epic é uma camada de leitura agregada paralela.
+- Sem N+1: agregações em memória após ≤ 3 queries por action.
+- Página `force-dynamic` (toca `supabaseAdmin`, ver memory `supabase_admin_proxy_build`).
+- Sem caching/realtime/charts/export — escopo MVP do que PO pediu.
+
+**Anti-recorrência:**
+- AC7 da AP-1.1 explicita "supabaseAdmin apenas + requireAdmin no topo de cada action" — defesa contra vazamento via export para client component.
+- AP-1.2 AC1 reforça `force-dynamic` (project memory: build quebra se omitir).
+
+**Prefixo AP-1.x** escolhido por estar livre (Epics anteriores: LA, MC, FAA, AV, FM, F1–F13, CT, KV, etc.).
+
+**5-point checklist:** GO 5/5 nas três stories.
+
+---
 
 ## Epic LA — Lesson Availability (2026-05-17)
 

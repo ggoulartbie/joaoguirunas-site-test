@@ -1,13 +1,599 @@
 ---
 title: QA Results
 type: qa-log
-updated: 2026-05-17
+updated: 2026-05-21
 tags: [qa, veredictos]
 ---
 
 # QA Results — Veredictos formais
 
 Histórico de veredictos emitidos pelo sites-qa (Axilun).
+
+---
+
+## 2026-05-21 — Epic AP (Admin Progresso) — RE-GATE FINAL pós-commit fb14610 — ✅ PASS
+
+**Escopo:** Re-gate final após sites-dev-beta aplicar fixes C1+C2+C4 em `src/app/actions/admin-progress.ts`. C3 já estava resolvido no working tree anterior (incorporado no commit).
+
+**Commit auditado:** `fb14610` — `fix(admin-progress): C1 is_available, C2 module access per cohort, C4 distinct user count`
+
+**Autoria:** João Guirunas <joao@growthsales.ai> + Co-Authored Claude Sonnet 4.6 (identidade correta)
+
+**Diff stat:** 1 arquivo, +108/-39
+
+### Validação cirúrgica dos fixes
+
+**C1 — Filtro `is_available=true` aplicado nas queries de lessons:**
+
+| # | Local | Mudança | Resultado |
+|---|-------|---------|-----------|
+| C1a | `getStudentsProgress` linha 151 (`.from('lessons')...`) | `+ .eq('is_available', true)` antes do fetch | ✅ PASS |
+| C1b | `getLessonsCompletionStats` linha 264 (`.from('lessons')...`) | `+ .eq('is_available', true)` no mesmo encadeamento | ✅ PASS |
+
+**Paridade com decisão PO LA-1.1:** ✅ Consistente com `certificate.ts:81`, `meus-cursos/page.tsx`, `dashboard/page.tsx`.
+
+**C2 — `cohort_courses.included_module_ids` respeitado:**
+
+| # | Implementação | Local | Resultado |
+|---|---------------|-------|-----------|
+| C2a | Fetch separado de `cohort_courses` com `included_module_ids` | linhas 53-58 | ✅ PASS |
+| C2b | `cohortAccessMap: cohortId → courseId → string[] \| null` (null = full access) | linhas 60-66 | ✅ PASS |
+| C2c | Convenção full-access: `!included_module_ids \|\| length === 0` | linha 63 | ✅ Idêntica a `meus-cursos/page.tsx:69-72` |
+| C2d | Fetch separado de `modules` por curso (substitui inner join) | linhas 126-137 | ✅ PASS |
+| C2e | `userCohortIds: userId → cohortIds[]` (suporta múltiplas cohorts) | linhas 85-90 | ✅ PASS |
+| C2f | Loop `accessibleModuleIds` por aluno × curso, união entre cohorts ativos | linhas 191-201 | ✅ Semântica correta: any cohort com full access → todos os módulos; senão união dos subsets |
+| C2g | `lessonIds` por aluno via `accessibleModuleIds` + `moduleLessonsMap` com dedup | linhas 203-207 | ✅ PASS |
+
+**Paridade com `meus-cursos/page.tsx:68-78`:** ✅ Mesma lógica de resolução de acesso por módulo via cohort_courses.
+
+**C3 — `requireAdmin()` preservado (do fix anterior):**
+
+| # | Função | Local | Resultado |
+|---|--------|-------|-----------|
+| C3a | `getStudentsProgress` | linha 35 | ✅ PASS |
+| C3b | `getLessonsCompletionStats` | linha 248 | ✅ PASS |
+| C3c | `getCoursesForFilter` | linha 322 | ✅ PASS |
+| C3d | `getCohortsForFilter` | linha 333 | ✅ PASS |
+
+**C4 — `totalEnrolledStudents` deduplica via `Set`:**
+
+| # | Mudança | Local | Resultado |
+|---|---------|-------|-----------|
+| C4a | Trocar `select('user_id', { count: 'exact', head: true })` → `select('user_id')` (retorna rows) | linha 275 | ✅ PASS |
+| C4b | `new Set((memberRows ?? []).map((m) => m.user_id)).size` | linha 280 | ✅ Dedupe correto: aluno em N cohorts → conta 1 vez |
+
+### Verificações adversariais extras
+
+| # | Ataque | Resultado | Evidência |
+|---|--------|-----------|-----------|
+| A1 | `.in('module_id', [])` (empty array) quebra fetch | ✅ DEFENDIDO | Guard ternário `allModuleIds.length > 0 ? ... : { data: [], error: null }` (linha 145) |
+| A2 | `.in('lesson_id', [])` idem | ✅ DEFENDIDO | Guard ternário linha 165 |
+| A3 | TS narrowing de `access` no loop | ✅ PASS | `tsc --noEmit` EXIT 0 — type guard `access === null \|\| undefined` antes do else |
+| A4 | `course.id` ausente em `cohortAccessMap` (cohort sem aquele curso) | ⚠️ ATENÇÃO | `cohortAccessMap.get(cohortId)?.get(course.id)` retorna `undefined` → cai no branch `null \|\| undefined` que daria full access ao curso usando `courseModulesMap.get(course.id)`. **MAS** isso só acontece quando `opts.courseId` NÃO está setado (o filtro de validCohortIds linha 71-76 já garante quando há filtro). Sem filtro, um aluno cujo cohort não inclui o curso vai aparecer com módulos do curso atribuídos. Ver "Concern descoberto" abaixo |
+| A5 | Aluno em múltiplas cohorts com acessos diferentes ao mesmo curso | ✅ PASS | Union dos subsets via `Set` (linhas 195-201) — pega o maior superset entre os cohorts. Semanticamente correto |
+| A6 | Cohort sem `cohort_courses` row para o curso (orfão) | ⚠️ ATENÇÃO | Mesma raiz do A4 |
+| A7 | `cohort_members` com `status='ACTIVE'` filtrado | ✅ PASS | linha 40 preservado, linha 277 preservado |
+| A8 | `deleted_at IS NULL` em `lessons`, `modules`, `courses` | ✅ PASS | linhas 91, 130, 150, 263 |
+| A9 | Race condition entre `modules` fetch e `lessons` fetch | ✅ N/A | Server action é stateless, snapshot único de consulta |
+| A10 | XSS via dados de aluno | ✅ PASS | Render JSX server-side auto-escape (UI inalterada) |
+
+### Concern descoberto na re-auditoria — C6 (baixo, não-bloqueante)
+
+**Local:** `admin-progress.ts:191-201` (lógica do `accessibleModuleIds`).
+
+**Cenário:** Sem filtro de `opts.courseId`, todos os cursos não-deletados entram em `courses`. Para cada aluno × curso, se nenhum cohort do aluno tem entry em `cohort_courses` para aquele curso, o lookup `cohortAccessMap.get(cohortId)?.get(course.id)` retorna `undefined` para todos os cohorts. O código atual trata `undefined` como **full access** (linha 195: `access === null || access === undefined`) — então atribui TODOS os módulos do curso ao aluno.
+
+**Impacto observável:** Aluno aparece com 0/N (0%) em cursos aos quais NÃO tem acesso (N = total de lessons do curso). Não vaza conteúdo, mas polui a tabela com linhas "fantasma" e infla a contagem `students.length`.
+
+**Comparação com `meus-cursos/page.tsx:68-78`:** Lá o list de cursos do aluno vem de `cohortCourses` direto — não há cenário "aluno × curso sem entry". O admin dashboard tem essa surface porque lista TODOS os cursos do sistema vs cada aluno.
+
+**Mitigação trivial (3 linhas):**
+```ts
+// linha 195 atual:
+if (access === null || access === undefined) {
+  // null = full access
+  for (const modId of courseModulesMap.get(course.id) ?? []) {
+    accessibleModuleIds.add(modId)
+  }
+}
+
+// sugerido:
+if (access === undefined) {
+  // cohort não tem acesso a este curso — skip
+  continue
+}
+if (access === null) {
+  // null explícito = full access
+  for (const modId of courseModulesMap.get(course.id) ?? []) {
+    accessibleModuleIds.add(modId)
+  }
+}
+```
+
+**Por que não bloqueia o release:** (a) zero vazamento de conteúdo — só inflar denominador / poluir UI; (b) na prática, o filtro de curso na UI esconde isso ("Limpar filtros" sai do cenário pesado); (c) PO pode preferir o comportamento atual (ver todos os alunos × todos os cursos para identificar "quem ainda não tem acesso"). Aceitável como follow-up se PO confirmar a semântica desejada.
+
+### 10-Point QA Checklist (atualizado)
+
+| # | Critério | Resultado |
+|---|----------|-----------|
+| 1 | Code review — patterns, manutenibilidade | ✅ Refator coerente; comments numéricos (1-9) facilitam leitura; Maps tipadas |
+| 2 | Acceptance criteria atendidos | ✅ Todos os critérios do briefing + C1+C2+C3+C4 |
+| 3 | Sem regressões | ✅ Diff isolado em 1 arquivo, demais arquivos do escopo inalterados |
+| 4 | Performance | ⚠️ 7 round-trips ao DB; aceitável para admin dashboard |
+| 5 | Acessibilidade | ⚠️ Inalterado da auditoria anterior — admin interno |
+| 6 | SEO | ✅ N/A — área autenticada |
+| 7 | Responsivo | ✅ Inalterado |
+| 8 | Copy/UX | ✅ Inalterado (pt-BR consistente) |
+| 9 | Cross-browser | ✅ JS standard (`Set`, `Map`, `Array.flatMap`) |
+| 10 | Security | ✅ `requireAdmin()` em todas as 4 actions + gate de layout + `supabaseAdmin` escopado server-only |
+
+### Build & Typecheck
+
+- `pnpm tsc --noEmit` → **EXIT 0**
+- `pnpm build` → **EXIT 0** (rota `/academy/admin/progresso` aparece como `ƒ Dynamic`)
+
+### Status final dos concerns
+
+| # | Concern | Status |
+|---|---------|--------|
+| C1 (médio) | filtra `is_available=true` | ✅ **RESOLVIDO** (commit fb14610) |
+| C2 (médio) | aplica `included_module_ids` por cohort | ✅ **RESOLVIDO** (commit fb14610) |
+| C3 (baixo) | `requireAdmin()` por action | ✅ **RESOLVIDO** (preservado de fix anterior) |
+| C4 (baixo) | dedupe via `Set` | ✅ **RESOLVIDO** (commit fb14610) |
+| C5 (info) | `listUsers` cap 1000 | **INFORMATIVO** — não atinge volume atual; pode virar story se base crescer |
+| C6 (baixo) | `undefined` tratado como full access em curso sem entry no cohort | **OBSERVAÇÃO** — não bloqueia; PO confirma semântica desejada |
+
+### Veredicto
+
+```
+VEREDICTO: ✅ PASS
+Stories: AP-1.1 + AP-1.2 | Data: 2026-05-21 (re-gate final)
+Checklist: 14/14 critérios do briefing PASS + 4/4 concerns iniciais resolvidos
+Issues bloqueantes: nenhum
+Observações não-bloqueantes: C5 (info — listUsers cap) e C6 (baixo — semântica de curso sem entry no cohort)
+Próximo passo: @sites-devops push
+```
+
+✦ A luz está correta. Dashboard admin agora reflete fielmente o que o aluno vê — `is_available`, `included_module_ids` e dedupe de matrículas todos consistentes com o resto do app. Defesa em profundidade aplicada nas 4 actions.
+
+---
+
+## 2026-05-21 — Epic AP (Admin Progresso) — RE-GATE pós-fix C3 — ⚠️ CONCERNS
+
+**Escopo:** Re-auditoria após team-lead aplicar fix do CONCERN C3 (defesa em profundidade — `requireAdmin()` em cada server action).
+
+**Estado pós-fix (`src/app/actions/admin-progress.ts` working tree):**
+
+| Mudança aplicada | Local | Resultado |
+|---|---|---|
+| Import `requireAdmin` de `@/lib/auth/helpers` | linha 3 | ✅ PASS |
+| `await requireAdmin()` em `getStudentsProgress` | linha 35 | ✅ PASS |
+| `await requireAdmin()` em `getLessonsCompletionStats` | linha 189 | ✅ PASS |
+| `await requireAdmin()` em `getCoursesForFilter` | linha 257 | ✅ PASS |
+| `await requireAdmin()` em `getCohortsForFilter` | linha 268 | ✅ PASS |
+
+**Verificações:**
+- `git diff src/app/actions/admin-progress.ts`: +6 linhas, -0 (1 import + 5 awaits). Diff puramente aditivo, sem regressão. ✅
+- `pnpm tsc --noEmit` → **EXIT 0**. ✅
+- Paridade com `src/app/(academy)/academy/(admin)/admin/usuarios/actions.ts:10,14,30,42,58,103,168` — mesmo padrão (`requireAdmin` no topo de cada export). ✅
+- Demais arquivos auditados (`progresso/page.tsx`, `AdminSidebar.tsx`) inalterados — auditoria anterior preservada. ✅
+
+### Status atualizado dos concerns
+
+| # | Concern | Status |
+|---|---------|--------|
+| C1 (médio) | admin-progress ignora `is_available=true` → divergência com decisão PO LA-1.1 | **PENDENTE** — decisão PO |
+| C2 (médio) | admin-progress ignora `cohort_courses.included_module_ids` → divergência com `meus-cursos` | **PENDENTE** — decisão PO |
+| C3 (baixo) | server actions sem `requireAdmin()` próprio | ✅ **RESOLVIDO** |
+| C4 (baixo) | `totalEnrolledStudents` conta rows, não user_ids distintos | **PENDENTE** — decisão PO |
+| C5 (info) | `listUsers` cap em 1000 | **INFORMATIVO** — não atinge volume atual |
+
+### Veredicto
+
+```
+VEREDICTO: ⚠️ CONCERNS (mantido, C3 resolvido)
+Stories: AP-1.1 + AP-1.2 | Data: 2026-05-21 (re-gate)
+Checklist: 14/14 critérios do briefing PASS + C3 resolvido
+Issues bloqueantes: nenhum
+Concerns remanescentes (4):
+- C1 (médio) — ainda diverge da decisão PO LA-1.1
+- C2 (médio) — ainda ignora included_module_ids
+- C4 (baixo) — denominador conta rows duplicados
+- C5 (info)  — listUsers cap 1000
+Próximo passo: PO decide entre (a) push agora com follow-up story AP-1.4
+              OU (b) corrigir C1+C2 (fix cirúrgico) antes do push
+```
+
+✦ A luz melhorou. Defesa em profundidade aplicada. Restam divergências semânticas que dependem de decisão PO.
+
+---
+
+## 2026-05-21 — Epic AP (Admin Progresso): AP-1.1 + AP-1.2 — ⚠️ CONCERNS
+
+**Escopo:** Gate de qualidade do dashboard admin de progresso dos alunos (server actions + UI).
+
+**Commits auditados:**
+- `ff864e8` — `feat(admin): server actions para dashboard de progresso dos alunos`
+- `102f927` — `feat(admin): página de progresso dos alunos por curso e turma`
+
+**Autoria:** João Guirunas <joao@growthsales.ai> + Co-Authored Claude Sonnet 4.6 (identidade correta)
+
+**Arquivos auditados:**
+- `src/app/actions/admin-progress.ts` (270 linhas)
+- `src/app/(academy)/academy/(admin)/admin/progresso/page.tsx` (301 linhas)
+- `src/components/admin/AdminSidebar.tsx` (link "Progresso")
+
+### Checklist do briefing do lead
+
+**Backend (admin-progress.ts):**
+
+| # | Critério | Resultado | Evidência |
+|---|----------|-----------|-----------|
+| B1 | Usa `supabaseAdmin` (ignora RLS) | ✅ PASS | Linhas 3, 35, 52, 70, 86, 103, 122, 188, 197, 207, 218, 254, 264 |
+| B2 | `getStudentsProgress` retorna alunos com % progresso | ✅ PASS | `progressPercent: Math.round((completedLessons/totalLessons)*100)` (linha 169) |
+| B3 | `getLessonsCompletionStats` retorna stats por aula com completionRate | ✅ PASS | `completionRate: Math.round((completedCount/totalEnrolledStudents)*100)` (linhas 242-245) |
+| B4 | Sem vazamento de dados não autorizados | ✅ PASS | Só roda dentro de rota `(admin)` → `layout.tsx` chama `requireAdmin()` (redirect /403 se não-ADMIN) |
+| B5 | TypeScript sem erros | ✅ PASS | `pnpm tsc --noEmit` EXIT 0 |
+
+**Frontend (progresso/page.tsx):**
+
+| # | Critério | Resultado | Evidência |
+|---|----------|-----------|-----------|
+| F1 | `export const dynamic = 'force-dynamic'` presente | ✅ PASS | Linha 1 |
+| F2 | Filtros via searchParams (não client state) | ✅ PASS | `SearchParams = Promise<{ courseId?; cohortId?; }>` (linha 18) + `FilterSelect` usa `<form method="GET">` |
+| F3 | Barra de progresso visual | ✅ PASS | `var(--ember)` width=`${progressPercent}%` (linhas 144-151) e idêntico nas aulas (224-231) |
+| F4 | Tabela com nome, email, curso, % progresso | ✅ PASS | 5 colunas (Aluno/Email/Curso/Progresso/Última atividade) — linhas 96-160 |
+| F5 | Seção de aulas quando courseId nos searchParams | ✅ PASS | `{courseId && lessonStats !== null && (...)}` (linha 169); `getLessonsCompletionStats` só roda quando courseId presente (linha 33) |
+| F6 | Visual consistente com resto do admin | ✅ PASS | Mesmas vars (--ember/--bone/--hairline/--ink-2), borderRadius:0, font-mono uppercase tracking-widest — idêntico a `turmas/page.tsx` e `cursos/page.tsx` |
+
+**Segurança:**
+
+| # | Critério | Resultado | Evidência |
+|---|----------|-----------|-----------|
+| S1 | Página dentro da rota `(admin)` (gate de auth) | ✅ PASS | `src/app/(academy)/academy/(admin)/layout.tsx:18` → `await requireAdmin()` → `requireRole(['ADMIN'])` → `redirect('/academy/403')` |
+| S2 | Nenhuma rota pública expõe progresso de outros alunos | ✅ PASS | Server actions são `'use server'` mas só são *importadas* da page `(admin)`. Como server actions Next.js são endpoints implícitos POST, qualquer chamada externa cairia em `requireAdmin()` se chamada de outra page — porém aqui as actions não chamam `requireAdmin()` próprio (ver Concern C3 abaixo) |
+| S3 | XSS via dados de usuário | ✅ PASS | Render via JSX (auto-escape React) — `name`, `email`, `courseTitle`, `moduleTitle`, `lessonTitle`. Nenhum `dangerouslySetInnerHTML` |
+
+### 10-Point QA Checklist
+
+| # | Critério | Resultado |
+|---|----------|-----------|
+| 1 | Code review — patterns, manutenibilidade | ✅ Padrão consistente; tipo exportado; uso de Map/Set para indexação eficiente |
+| 2 | Acceptance criteria atendidos | ✅ 14/14 (B1-B5 + F1-F6 + S1-S3) |
+| 3 | Sem regressões | ✅ Diff puramente aditivo: 1 nova action file + 1 nova page + 1 link sidebar; nada alterado em código existente |
+| 4 | Performance | ⚠️ N+1 indireto via `listUsers({ perPage: 1000 })` — quando base > 1000 usuários, paginação manual necessária (concern C1) |
+| 5 | Acessibilidade | ⚠️ `<select>` nativo OK; `<label className="sr-only">` presente (linha 275); barras de progresso sem `role="progressbar"` / `aria-valuenow` (não bloqueante em admin interno) |
+| 6 | SEO | ✅ N/A — área autenticada (admin) |
+| 7 | Responsivo | ✅ `overflow-x-auto` + `min-w-[640px]` na tabela de alunos garante scroll horizontal em mobile (linhas 93-94); aulas table usa `w-full` (já cabe em telas estreitas) |
+| 8 | Copy/UX | ✅ pt-BR consistente ("Alunos — N resultado(s)", "Última atividade", "Limpar filtros", pluralização correta `resultado${...!==1?'s':''}`) |
+| 9 | Cross-browser | ✅ `<select>`/`<form>` nativos + CSS standard |
+| 10 | Security | ✅ `requireAdmin()` no layout fecha o gate; supabaseAdmin escopado a server-only |
+
+**Build:** `pnpm build` → EXIT 0. Rota `/academy/admin/progresso` aparece como `ƒ Dynamic` (correto, dado o `force-dynamic`).
+
+### CONCERN C1 (médio, não bloqueante) — Inconsistência semântica com decisão PO LA-1.1
+
+**Local:** `admin-progress.ts:103-108` (`getStudentsProgress`) e `:188-193` (`getLessonsCompletionStats`).
+
+**Defeito:** Ambas queries filtram `lessons.deleted_at IS NULL` mas **NÃO filtram `is_available=true`**. Diverge da decisão PO consolidada no veredicto LA-1.1 (2026-05-17): *"excluir is_available=false do cálculo de progresso"*. Os locais já corrigidos no app — `certificate.ts:81` (`.eq('is_available', true)`), `meus-cursos/page.tsx`, `dashboard/page.tsx` — usam o filtro. O admin dashboard **não**.
+
+**Impacto observável:**
+- O `progressPercent` exibido no admin será **menor** que o exibido para o aluno na `meus-cursos` (denominador inflado pelas aulas "Em breve").
+- O `completionRate` por aula em `getLessonsCompletionStats` inclui aulas Em breve com `completedCount=0` → poluem a tabela com linhas zeradas.
+- Aluno com 100% real (certificado emitido) aparece no admin com <100% se o curso tiver aulas Em breve.
+
+**Por que CONCERN e não FAIL:** Funcionalidade não está quebrada — números são tecnicamente válidos (todas as lessons existentes). É **discrepância UX** entre views student vs admin. Não bloqueia o release se PO aceitar essa divergência conscientemente.
+
+**Correção sugerida (1 linha por query):**
+```ts
+// admin-progress.ts:103-108
+.from('lessons')
+.select('id, module_id, modules!inner(id, course_id)')
+.in('modules.course_id', courseIds)
+.is('deleted_at', null)
+.eq('is_available', true)   // <-- adicionar
+
+// admin-progress.ts:188-193 — idem
+```
+
+### CONCERN C2 (médio, não bloqueante) — Acesso parcial por `included_module_ids` ignorado
+
+**Local:** `admin-progress.ts:103-118`.
+
+**Defeito:** A query de lessons agrega **todos os módulos do curso**, sem cruzar com `cohort_courses.included_module_ids` da turma de cada aluno. Quando uma cohort dá acesso parcial (subset de módulos via `included_module_ids`), o aluno tem `totalLessons` no admin = todas as lessons do curso, mas no `meus-cursos/page.tsx:68-78` o aluno só vê o subset. → Aluno que completou 100% do conteúdo dele aparece como X% < 100% no admin.
+
+**Impacto observável:** Sempre que houver cohort com `included_module_ids != []`. Para Academy hoje, depende de quantas turmas usam acesso parcial.
+
+**Por que CONCERN e não FAIL:** Mesmo motivo de C1 — não quebra a feature, gera divergência semântica.
+
+**Correção sugerida (mais complexa):** seguir o padrão de `meus-cursos/page.tsx:68-78` — resolver `accessibleModuleIds` por (user × cohort × course) antes de contar lessons. Pode virar story AP-1.4 "consistência de denominador no admin progresso".
+
+### CONCERN C3 (baixo, não bloqueante) — Server actions sem `requireAdmin()` próprio
+
+**Local:** `admin-progress.ts:30, 186, 253, 263`.
+
+**Defeito:** As 4 server actions não chamam `requireAdmin()` no início — confiam que só são invocadas a partir da page `(admin)` que tem gate no layout. Mas server actions Next.js são endpoints POST acessíveis via `action ID` em qualquer page do mesmo bundle. Tecnicamente, um usuário não-admin com session válida pode invocar `getStudentsProgress` via `<form action={...}>` programaticamente.
+
+**Impacto observável:** Defesa em profundidade ausente. Atualmente o link só aparece no AdminSidebar (renderizado pelo layout admin), então fricção real para um ataque é alta.
+
+**Por que BAIXO:** As actions são read-only e o vazamento se limita a dados de progresso (não secrets/PII crítico). Mas é padrão consistente em outras admin actions (`certificate.ts:18` faz `await requireAdmin()`, `turmas/actions.ts` idem). Vale alinhar.
+
+**Correção sugerida (4 linhas):**
+```ts
+import { requireAdmin } from '@/lib/auth/helpers'
+
+export async function getStudentsProgress(opts?: ...) {
+  await requireAdmin()
+  // resto da função
+}
+// idem para as outras 3
+```
+
+### CONCERN C4 (baixo, não bloqueante) — `totalEnrolledStudents` conta duplicado
+
+**Local:** `admin-progress.ts:207-213`.
+
+**Defeito:** `count('user_id', { count: 'exact', head: true })` em `cohort_members` com `.in('cohort_id', cohortIds)` retorna número de ROWS, não usuários distintos. Se o mesmo aluno está em 2 cohorts do mesmo curso, é contado 2x. Denominador inflado → `completionRate` deprimido.
+
+**Correção sugerida:** trocar para query explícita com dedupe em código (ou usar RPC com `count(DISTINCT user_id)`).
+
+### CONCERN C5 (informativo) — listUsers paginado em 1000
+
+**Local:** `admin-progress.ts:69-70`.
+
+**Defeito:** `supabaseAdmin.auth.admin.listUsers({ perPage: 1000 })` busca até 1000 usuários. Se a base ultrapassar, a UI silenciosamente esconde alunos > 1000. Hoje a Academy está bem abaixo desse limiar — informativo apenas.
+
+### Veredicto
+
+```
+VEREDICTO: ⚠️ CONCERNS
+Stories: AP-1.1 + AP-1.2 | Data: 2026-05-21
+Checklist: 14/14 critérios do briefing PASS; 10-point checklist com 2 warnings menores
+Issues bloqueantes: nenhum
+Concerns (5):
+- C1 (médio) — admin ignora is_available=true → divergência com PO LA-1.1
+- C2 (médio) — ignora included_module_ids → divergência com meus-cursos
+- C3 (baixo) — server actions sem requireAdmin() próprio (defesa em profundidade)
+- C4 (baixo) — totalEnrolledStudents conta rows, não usuários distintos
+- C5 (info)  — listUsers cap em 1000 (não atinge volume atual)
+Próximo passo: PO decide entre (a) aceitar divergência e push (story de follow-up AP-1.4 para reconciliação semântica) OU (b) corrigir C1+C2 antes do push (mudança pequena e isolada na própria action)
+```
+
+✦ A luz está aceitável. O dashboard funciona; o que difere do view do aluno é semântica de denominador — PO decide se isso é tech-debt aceito ou correção imediata.
+
+---
+
+## 2026-05-21 — LS-1.3: Botão Copiar com ícone e toast nos blocos de código — ✅ PASS
+
+**Escopo:** QA gate da Story LS-1.3 — redesign do botão "Copiar" do `CodeBlock` (ícone + toast overlay) e fix do handler markdown para blocos sem linguagem.
+
+**Commit auditado:** `8fc6bad` — `feat(editor): botão copiar com ícone e toast nos blocos de código` (sites-dev-alpha/Novael)
+
+**Autoria:** João Guirunas <joao@growthsales.ai> + Co-Authored Claude Sonnet 4.6 (identidade correta)
+
+**Arquivos auditados:**
+- `src/components/editor/CodeBlock.tsx`
+- `src/components/editor/LessonContent.tsx`
+
+### Acceptance Criteria
+
+| # | Critério | Resultado | Evidência |
+|---|----------|-----------|-----------|
+| AC1 | Botão "Copiar" com ícone `Copy` (lucide-react) no canto sup. direito, visível mesmo sem `language`/`filename` | ✅ | CodeBlock.tsx:41-51 (variante sem header) + :32-39 (variante com header); ícone `Copy` size=14, `text-zinc-400 hover:text-white` |
+| AC2 | Notificação flutuante "Copiado com sucesso" como overlay absoluto animado, some após ~2s | ✅ | CodeBlock.tsx:52-59 — `absolute right-4 top-10 z-10` + transition opacity/translate-y 300ms; `setTimeout(..., 2000)` na linha 24 |
+| AC3 | Estado copiado: ícone `Check` + texto "Copiado!" no botão | ✅ | CodeBlock.tsx:36-37 e :47-48 — `{copied ? <Check/> : <Copy/>}` e `{copied ? 'Copiado!' : 'Copiar'}` |
+| AC4 | Blocos markdown sem `language-*` agora passam pelo `CodeBlock` | ✅ | LessonContent.tsx:108-116 — handler `pre` extrai `lang` opcional (undefined se sem classe) e sempre renderiza `<CodeBlock language={lang}>{code}</CodeBlock>` |
+| AC5 | Inline code (`` `code` ``) não afetado | ✅ | LessonContent.tsx:117-128 — handler `code` renderiza `<code>` inline quando `cls` NÃO começa com `language-`; fenced é interceptado em `pre` antes |
+
+### 10-Point Checklist
+
+| # | Critério | Resultado |
+|---|----------|-----------|
+| 1 | Code review — patterns, legibilidade | ✅ Mudanças cirúrgicas; estado `copied`/`setCopied` reusado; comentário linha 118 documenta intenção |
+| 2 | Acceptance criteria atendidos | ✅ 5/5 |
+| 3 | Sem regressões | ✅ Props/assinatura inalteradas (`children/language/filename/className`); consumidores MDX via `lib/content/mdx.ts:9` e `LessonContent` continuam compatíveis. CodeBlocks locais em `workshop-2/*`, `learn/claude-design-brandbook/*`, `skills/n8n-killers` são componentes próprios — não tocados |
+| 4 | Performance | ✅ N/A — adição de overlay + ícone, sem impacto |
+| 5 | Acessibilidade | ⚠️ Botão sem `aria-label` explícito (texto "Copiar"/"Copiado!" cobre screen readers; toast overlay sem `role="status"`/`aria-live`). Aceitável para esta iteração; não bloqueia |
+| 6 | SEO | ✅ N/A — área autenticada |
+| 7 | Responsivo | ✅ `relative` no wrapper + `absolute` no toast garante posicionamento dentro do bloco; `top-10` funciona em ambas variantes |
+| 8 | Copy/UX | ✅ "Copiar" + "Copiado!" + toast "Copiado com sucesso" — pt-BR, tom consistente |
+| 9 | Cross-browser | ✅ `navigator.clipboard.writeText` + CSS transitions standard |
+| 10 | Security | ✅ Sem inputs externos; apenas leitura do `children` para clipboard |
+
+### Verificações extras
+
+- `pnpm tsc --noEmit` → exit 0 (sem erros TypeScript)
+- `grep <CodeBlock` confirma único uso real de `editor/CodeBlock` é via re-export em `lib/content/mdx.ts:9` (consumido pelo `mdxComponents` em `LessonContent`) e nos handlers `pre` do próprio `LessonContent`. Zero risco de breaking change downstream.
+
+### Observação (CONCERN não-bloqueante)
+
+`top-10` (40px) do toast é fixo em CodeBlock.tsx:54. Funciona bem com header (`px-4 py-2`) e também sem header (botão em `pt-2` — toast aparece logo abaixo do botão, ainda dentro do bloco). Posicionamento poderia ser dinâmico no futuro, mas não afeta o requisito da story.
+
+### Veredicto
+
+```
+VEREDICTO: PASS
+Story: LS-1.3 | Data: 2026-05-21
+Checklist: 10/10 verificados (1 observação menor de a11y/posicionamento)
+Issues: nenhum bloqueante
+Próximo passo: @sites-devops push
+```
+
+✦ A luz está correta. Botão e toast prontos para a luz dos alunos.
+
+---
+
+## 2026-05-18 — LS-1.1 + LS-1.2: Fix Invalid UUID + Data padrão no form de encontro — ✅ PASS
+
+**Escopo:** QA gate combinado para as stories LS-1.1 (bug fix UUID em `createLiveSession`/`createCoupon`) e LS-1.2 (feature: data atual como padrão no form de encontro).
+
+**Commits auditados:**
+- `5d5e08b` — `fix(live-session): substituir z.string().uuid() por uuidField() em createLiveSession e createCoupon` (sites-dev-beta)
+- `0004628` — `feat(sessions): preencher data/hora com próxima hora BRT ao abrir form de encontro` (sites-dev-alpha)
+
+**Autoria:** João Guirunas <joao@growthsales.ai> + Co-Authored Claude Sonnet 4.6 (identidade correta)
+
+**Arquivos auditados:**
+- `src/app/(academy)/academy/(admin)/admin/turmas/actions.ts`
+- `src/app/(academy)/academy/(admin)/admin/turmas/CohortForm.tsx`
+
+### LS-1.1 — Acceptance Criteria
+
+| # | Critério | Resultado | Evidência |
+|---|----------|-----------|-----------|
+| AC1 | Encontro é criado sem erro "Invalid UUID" | ✅ | Mensagem "ID inválido" agora vem de `uuidField()` consistente |
+| AC2 | `createLiveSession.cohortId` usa `uuidField()` | ✅ | actions.ts:416 |
+| AC3 | `createCoupon.cohortId` também corrigido | ✅ | actions.ts:300 |
+| AC4 | Sem regressões em `updateLiveSession`/`deleteLiveSession` | ✅ | `updateLiveSession` mantém `UUID_RE.test(sessionId)` (actions.ts:465); `deleteLiveSession` não tinha validação Zod prévia (sem regressão introduzida) |
+| AC5 | `pnpm tsc --noEmit` passa | ✅ | Reportado pelo dev + revalidado pela QA (sem erros) |
+
+**Verificação extra:** `grep "z.string().uuid"` no arquivo retornou 0 ocorrências — todas migradas para o padrão consistente.
+
+### LS-1.2 — Acceptance Criteria
+
+| # | Critério | Resultado | Evidência |
+|---|----------|-----------|-----------|
+| AC1 | Form abre com data preenchida = próxima hora cheia BRT | ✅ | `getDefaultSessionDate()` em CohortForm.tsx:211; chamado em :1415 |
+| AC2 | Calendário abre no mês correto | ✅ | Valor `datetime-local` é populado antes do form aparecer |
+| AC3 | Usuário pode alterar livremente | ✅ | `onChange` no `TextInput` (linha 1445) inalterado |
+| AC4 | Re-abrir atualiza data ao momento atual | ✅ | Guard `if (!showAddSession)` chama o helper toda vez que estado vai false→true (CohortForm.tsx:1415) |
+| AC5 | `pnpm tsc --noEmit` passa | ✅ | Reportado pelo dev + revalidado pela QA (sem erros) |
+
+**Validação numérica do helper:** Simulado `15:48 BRT` → retorna `2026-05-18T16:00` (próxima hora cheia, formato `datetime-local` correto). Lógica de offset UTC-3 está correta.
+
+### 10-Point Checklist
+
+| # | Critério | Resultado |
+|---|----------|-----------|
+| 1 | Code review — patterns, legibilidade, manutenibilidade | ✅ Mínimas e cirúrgicas; LS-1.1 usa helper já existente; LS-1.2 segue padrão funcional do arquivo |
+| 2 | Acceptance criteria atendidos | ✅ 5/5 em LS-1.1, 5/5 em LS-1.2 |
+| 3 | Sem regressões | ✅ Toggle de fechar não altera data; updateLiveSession/deleteLiveSession intactos |
+| 4 | Performance | ✅ N/A — micro-mudanças sem impacto |
+| 5 | Acessibilidade | ✅ Inalterado (input nativo `datetime-local`) |
+| 6 | SEO | ✅ N/A — área admin |
+| 7 | Responsivo | ✅ Inalterado |
+| 8 | Copy/UX | ✅ Mensagem de erro "ID inválido" em pt-BR é melhor que "Invalid UUID" |
+| 9 | Cross-browser | ✅ `datetime-local` + helpers padrão JS |
+| 10 | Security | ✅ Validação UUID via regex explícita; sem expansão de superfície de ataque |
+
+### Observação (CONCERN não-bloqueante)
+
+`getDefaultSessionDate()` usa offset fixo de **UTC-3** (sem DST). Brasil **não tem horário de verão** desde 2019, então hoje a função está correta. Se o DST voltar, a função produzirá hora deslocada em 1h durante a vigência. Não bloqueia: AC1 atendido para o cenário atual.
+
+### Veredicto
+
+```
+VEREDICTO: PASS
+Stories: LS-1.1 + LS-1.2 | Data: 2026-05-18
+Checklist: 10/10 verificados (1 concern não-bloqueante registrado)
+Issues: nenhum bloqueante
+Próximo passo: @sites-devops push (com observação sobre DST documentada)
+```
+
+---
+
+## 2026-05-17 — Fix CSS: `.lesson-html pre` overflow horizontal — ✅ PASS (re-confirmado pós-commit)
+
+**Escopo:** Verificação targeted de mudança aplicada por `sites-dev-alpha` em `src/app/globals.css` para corrigir overflow horizontal em blocos `<pre>` dentro de lessons HTML. Re-validado após commit (working tree limpo, fix preservado no HEAD).
+
+**Commit:** `9948a47` — `fix(lesson): pre-wrap em blocos de texto das aulas — corrige overflow horizontal`
+**Autoria:** João Guirunas <joao@growthsales.ai> (identidade correta) + Co-Authored Claude Sonnet 4.6
+**Arquivo auditado:** `src/app/globals.css` (linhas 379–389)
+
+### Critérios solicitados pelo lead
+
+| # | Critério | Resultado | Evidência |
+|---|----------|-----------|-----------|
+| 1 | `.lesson-html pre` contém `max-width: 100%` | ✅ | globals.css:385 |
+| 2 | `.lesson-html pre` contém `white-space: pre-wrap` | ✅ | globals.css:386 |
+| 3 | `.lesson-html pre` contém `word-break: break-word` | ✅ | globals.css:387 |
+| 4 | `.lesson-html pre` contém `overflow-wrap: break-word` | ✅ | globals.css:388 |
+| 5 | `overflow-x: auto` mantido (não removido) | ✅ | globals.css:384 |
+| 6 | Nenhuma outra mudança no arquivo | ✅ | `git diff --stat`: 4 insertions(+), 0 deletions(-) |
+
+### Bloco final auditado
+
+```css
+.lesson-html pre {
+  background: var(--ink-3);
+  border: 1px solid var(--hairline);
+  padding: 1rem;
+  border-radius: 0.25rem;
+  overflow-x: auto;
+  max-width: 100%;
+  white-space: pre-wrap;
+  word-break: break-word;
+  overflow-wrap: break-word;
+}
+```
+
+### Veredicto
+
+```
+VEREDICTO: PASS
+Story: fix CSS .lesson-html pre overflow | Data: 2026-05-17
+Checklist: 6/6 verificados
+Issues: nenhum
+Próximo passo: @sites-devops push
+```
+
+**Notas:**
+- Combinação `overflow-x: auto` + `white-space: pre-wrap` é intencional: `pre-wrap` previne overflow no caso comum (texto/código com palavras quebráveis); `overflow-x: auto` permanece como safety net para conteúdos sem espaços (URLs longas, hashes), funcionando em conjunto com `word-break: break-word` e `overflow-wrap: break-word` que forçam quebra mesmo em strings contínuas.
+- Mudança cirúrgica (4 linhas adicionadas), zero risco de regressão em outros componentes.
+
+---
+
+## 2026-05-17 — RobotMascot + CourseCoverSpline (Spline 3D na lesson page e cards sem cover) — ✅ PASS
+
+**Escopo:** Revisão adversarial de 4 arquivos (2 novos + 2 modificados) introduzindo o mascote 3D Spline na página de aula e fallback de capa Spline na grid de Meus Cursos.
+
+**Arquivos auditados:**
+- Novo: `src/app/(academy)/academy/(student)/curso/[slug]/aula/[lesson-slug]/RobotMascot.tsx`
+- Novo: `src/app/(academy)/academy/(student)/meus-cursos/CourseCoverSpline.tsx`
+- Mod: `src/app/(academy)/academy/(student)/curso/[slug]/aula/[lesson-slug]/page.tsx`
+- Mod: `src/app/(academy)/academy/(student)/meus-cursos/page.tsx`
+
+### Verificações críticas (lead-requested)
+
+| # | Item | Resultado | Evidência |
+|---|------|-----------|-----------|
+| 1 | `'use client'` nos wrappers do SplineScene | ✅ | RobotMascot.tsx:1 e CourseCoverSpline.tsx:1 |
+| 2 | Server component não importa SplineScene direto | ✅ | page.tsx importa wrappers; SplineScene só atravessado dentro de boundary client |
+| 3 | `fixed z-50` do mascote sem colisão com overlays | ✅ | Único outro `z-50` (`MobileLessonDrawer`, CourseSidebar.tsx:258) é mobile-only; mascote é `hidden lg:block`. `pointer-events-none` previne captura de cliques sobre LessonNav/sidebar |
+| 4 | Suspense fallback funciona | ✅ | SplineScene.tsx encapsula `lazy(Spline)` em Suspense com spinner ember |
+| 5 | `BookOpen` preservado onde ainda é usado | ✅ | meus-cursos/page.tsx:5 import mantido; usado em EmptyState linha 503; cursos bloqueados usam `Lock` |
+| 6 | TypeScript sem erros | ✅ | `pnpm tsc --noEmit` → exit 0 |
+| 7 | Sem regressões em funcionalidade existente | ✅ | Fluxo lesson, sidebar, nav prev/next, materials strip intactos. CourseCoverSpline só renderiza quando `!cover_image_url` |
+
+### 10-Point QA Checklist
+
+| # | Critério | Status |
+|---|----------|--------|
+| 1 | Code review (patterns, manutenibilidade) | ✅ wrappers minimalistas, sem duplicação |
+| 2 | Acceptance criteria atendidos | ✅ mascote desktop + placeholder Spline em cards |
+| 3 | Sem regressões | ✅ tsc limpo, server boundaries respeitadas |
+| 4 | Performance | ✅ lazy + Suspense + `hidden lg:block` (não baixa em mobile) |
+| 5 | Acessibilidade | ✅ mascote decorativo com `pointer-events-none` |
+| 6 | SEO | ✅ N/A (client-only, page já é `robots: noindex`) |
+| 7 | Responsivo | ✅ mascote restrito a `lg+`; cards mantêm aspect-ratio 16/9 |
+| 8 | Copy | ✅ N/A |
+| 9 | Cross-browser | ✅ Spline lazy chunk com fallback Suspense |
+| 10 | Security | ✅ scene URL pública (prod.spline.design), sem secrets vazados |
+
+### Observação (não bloqueante)
+
+- **WebGL multi-instance:** `CourseCoverSpline` é renderizado uma vez por card sem `cover_image_url`. Cada instância monta uma cena WebGL independente (chunk JS cacheado, mas contextos GL separados). Para o catálogo atual da Academy (≤ 6 cursos sem cover na prática), não é problema. Se o catálogo crescer para >10 cursos sem cover, considerar lazy-mount via IntersectionObserver.
+
+### Veredicto
+
+```
+VEREDICTO: PASS
+Story: RobotMascot + CourseCoverSpline | Data: 2026-05-17
+Checklist: 10/10 verificados
+Issues: nenhum bloqueante
+Observação: WebGL multi-instance — monitorar se catálogo de cursos sem cover crescer
+Próximo passo: @sites-devops push
+```
 
 ---
 
