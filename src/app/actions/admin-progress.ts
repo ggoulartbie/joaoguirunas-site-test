@@ -191,27 +191,32 @@ export async function getStudentsProgress(opts?: {
     const userProgress = progressIndex.get(userId) ?? new Map()
     const userCohortsForUser = userCohortIds.get(userId) ?? []
 
-    const courseStats = courses.map((course) => {
-      const accessibleModuleIds = new Set<string>()
-      for (const cohortId of userCohortsForUser) {
-        const access = cohortAccessMap.get(cohortId)?.get(course.id)
-        if (access === null || access === undefined) {
-          // null = full access
-          for (const modId of courseModulesMap.get(course.id) ?? []) {
-            accessibleModuleIds.add(modId)
+    const courseStats = courses
+      .map((course) => {
+        const accessibleModuleIds = new Set<string>()
+        for (const cohortId of userCohortsForUser) {
+          const cohortCourseMap = cohortAccessMap.get(cohortId)
+          if (!cohortCourseMap?.has(course.id)) continue // no access via this cohort
+          const access = cohortCourseMap.get(course.id)
+          if (access === null) {
+            // null = full access
+            for (const modId of courseModulesMap.get(course.id) ?? []) {
+              accessibleModuleIds.add(modId)
+            }
+          } else if (access !== undefined) {
+            for (const modId of access) accessibleModuleIds.add(modId)
           }
-        } else {
-          for (const modId of access) accessibleModuleIds.add(modId)
         }
-      }
 
-      const lessonIds = [
-        ...new Set(
-          [...accessibleModuleIds].flatMap((modId) => moduleLessonsMap.get(modId) ?? [])
-        ),
-      ]
+        if (accessibleModuleIds.size === 0) return null // student has no access to this course
 
-      const totalLessons = lessonIds.length
+        const lessonIds = [
+          ...new Set(
+            [...accessibleModuleIds].flatMap((modId) => moduleLessonsMap.get(modId) ?? [])
+          ),
+        ]
+
+        const totalLessons = lessonIds.length
       let completedLessons = 0
       let lastActivityAt: string | null = null
 
@@ -225,15 +230,18 @@ export async function getStudentsProgress(opts?: {
         }
       }
 
-      return {
-        courseId: course.id,
-        courseTitle: course.title,
-        totalLessons,
-        completedLessons,
-        progressPercent: totalLessons > 0 ? Math.round((completedLessons / totalLessons) * 100) : 0,
-        lastActivityAt,
-      }
-    })
+        return {
+          courseId: course.id,
+          courseTitle: course.title,
+          totalLessons,
+          completedLessons,
+          progressPercent: totalLessons > 0 ? Math.round((completedLessons / totalLessons) * 100) : 0,
+          lastActivityAt,
+        }
+      })
+      .filter((s): s is NonNullable<typeof s> => s !== null)
+
+    if (courseStats.length === 0) continue
 
     result.push({
       userId,
