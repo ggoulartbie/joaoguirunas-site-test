@@ -4,13 +4,14 @@ import { useEffect, useRef } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
-import { X, LogOut, LayoutDashboard, BookOpen, MessageSquare, Calendar, Award, User } from 'lucide-react'
+import { X, LogOut, LayoutDashboard, BookOpen, MessageSquare, Calendar, Award, User, Trophy } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { createClient } from '@/lib/supabase/client'
 
 const navItems = [
   { href: '/academy/dashboard', label: 'Dashboard', icon: LayoutDashboard },
   { href: '/academy/meus-cursos', label: 'Meus Cursos', icon: BookOpen },
+  { href: '/academy/ranking', label: 'Ranking', icon: Trophy },
   { href: '/academy/forum', label: 'Fórum', icon: MessageSquare },
   { href: '/academy/agenda', label: 'Agenda', icon: Calendar },
   { href: '/academy/certificados', label: 'Certificados', icon: Award },

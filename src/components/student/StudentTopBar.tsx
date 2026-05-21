@@ -8,6 +8,7 @@ import { NotificationBell } from './NotificationBell'
 const BREADCRUMB_MAP: Record<string, string> = {
   '/academy/dashboard': 'Dashboard',
   '/academy/meus-cursos': 'Meus Cursos',
+  '/academy/ranking': 'Ranking',
   '/academy/forum': 'Fórum',
   '/academy/agenda': 'Agenda',
   '/academy/certificados': 'Certificados',
