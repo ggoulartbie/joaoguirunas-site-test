@@ -1,5 +1,6 @@
 'use server'
 
+import { requireAdmin } from '@/lib/auth/helpers'
 import { supabaseAdmin } from '@/lib/supabase/admin'
 
 export type StudentProgress = {
@@ -31,7 +32,9 @@ export async function getStudentsProgress(opts?: {
   courseId?: string
   cohortId?: string
 }): Promise<StudentProgress[]> {
-  // 1. Resolve which user_ids are enrolled, optionally filtered by cohort/course
+  await requireAdmin()
+
+  // 1. Resolve enrolled members, optionally filtered by cohort
   let memberQuery = supabaseAdmin
     .from('cohort_members')
     .select('user_id, cohort_id')
@@ -45,17 +48,31 @@ export async function getStudentsProgress(opts?: {
   if (membersError) throw new Error(membersError.message)
   if (!members || members.length === 0) return []
 
-  // If filtering by courseId, keep only cohorts that include that course
+  const allCohortIds = [...new Set(members.map((m) => m.cohort_id))]
+
+  // 2. Fetch cohort_courses with included_module_ids for all cohorts
+  const { data: ccRows, error: ccError } = await supabaseAdmin
+    .from('cohort_courses')
+    .select('cohort_id, course_id, included_module_ids')
+    .in('cohort_id', allCohortIds)
+  if (ccError) throw new Error(ccError.message)
+
+  // Build: cohortId → courseId → string[] | null (null = full access)
+  const cohortAccessMap = new Map<string, Map<string, string[] | null>>()
+  for (const cc of ccRows ?? []) {
+    if (!cohortAccessMap.has(cc.cohort_id)) cohortAccessMap.set(cc.cohort_id, new Map())
+    const full = !cc.included_module_ids || cc.included_module_ids.length === 0
+    cohortAccessMap.get(cc.cohort_id)!.set(cc.course_id, full ? null : cc.included_module_ids)
+  }
+
+  // 3. Determine enrolledUserIds (filtered by courseId if provided)
   let enrolledUserIds: string[]
   if (opts?.courseId) {
-    const cohortIds = [...new Set(members.map((m) => m.cohort_id))]
-    const { data: cohortCourses, error: ccError } = await supabaseAdmin
-      .from('cohort_courses')
-      .select('cohort_id')
-      .eq('course_id', opts.courseId)
-      .in('cohort_id', cohortIds)
-    if (ccError) throw new Error(ccError.message)
-    const validCohortIds = new Set((cohortCourses ?? []).map((cc) => cc.cohort_id))
+    const validCohortIds = new Set(
+      (ccRows ?? [])
+        .filter((cc) => cc.course_id === opts.courseId)
+        .map((cc) => cc.cohort_id)
+    )
     enrolledUserIds = [
       ...new Set(members.filter((m) => validCohortIds.has(m.cohort_id)).map((m) => m.user_id)),
     ]
@@ -65,7 +82,15 @@ export async function getStudentsProgress(opts?: {
 
   if (enrolledUserIds.length === 0) return []
 
-  // 2. Fetch user identities from auth.users via admin API
+  // Build: userId → cohortIds[]
+  const userCohortIds = new Map<string, string[]>()
+  for (const m of members) {
+    const arr = userCohortIds.get(m.user_id) ?? []
+    arr.push(m.cohort_id)
+    userCohortIds.set(m.user_id, arr)
+  }
+
+  // 4. Fetch user identities from auth.users via admin API
   const { data: usersListData, error: usersError } =
     await supabaseAdmin.auth.admin.listUsers({ perPage: 1000 })
   if (usersError) throw new Error(usersError.message)
@@ -82,7 +107,7 @@ export async function getStudentsProgress(opts?: {
       ])
   )
 
-  // 3. Fetch courses to show (optionally filtered)
+  // 5. Fetch courses to show (optionally filtered)
   let coursesQuery = supabaseAdmin
     .from('courses')
     .select('id, title')
@@ -99,34 +124,54 @@ export async function getStudentsProgress(opts?: {
 
   const courseIds = courses.map((c) => c.id)
 
-  // 4. Fetch lessons grouped by course (via modules)
-  const { data: lessonsRaw, error: lessonsError } = await supabaseAdmin
-    .from('lessons')
-    .select('id, module_id, modules!inner(id, course_id)')
-    .in('modules.course_id', courseIds)
+  // 6. Fetch all modules for those courses
+  const { data: modulesRaw, error: modulesError } = await supabaseAdmin
+    .from('modules')
+    .select('id, course_id')
+    .in('course_id', courseIds)
     .is('deleted_at', null)
-  if (lessonsError) throw new Error(lessonsError.message)
+  if (modulesError) throw new Error(modulesError.message)
 
-  // Build map: courseId -> lesson ids
-  const courseLessonsMap = new Map<string, string[]>()
-  for (const lesson of lessonsRaw ?? []) {
-    const mod = Array.isArray(lesson.modules) ? lesson.modules[0] : lesson.modules
-    const courseId = mod?.course_id
-    if (!courseId) continue
-    if (!courseLessonsMap.has(courseId)) courseLessonsMap.set(courseId, [])
-    courseLessonsMap.get(courseId)!.push(lesson.id)
+  // Build: courseId → moduleIds[]
+  const courseModulesMap = new Map<string, string[]>()
+  for (const m of modulesRaw ?? []) {
+    const arr = courseModulesMap.get(m.course_id) ?? []
+    arr.push(m.id)
+    courseModulesMap.set(m.course_id, arr)
   }
 
-  // 5. Fetch all lesson_progress for enrolled users
+  // 7. Fetch available lessons for those modules (C1: is_available filter)
+  const allModuleIds = (modulesRaw ?? []).map((m) => m.id)
+  const { data: lessonsRaw, error: lessonsError } = allModuleIds.length > 0
+    ? await supabaseAdmin
+        .from('lessons')
+        .select('id, module_id')
+        .in('module_id', allModuleIds)
+        .is('deleted_at', null)
+        .eq('is_available', true)
+    : { data: [], error: null }
+  if (lessonsError) throw new Error(lessonsError.message)
+
+  // Build: moduleId → lessonIds[]
+  const moduleLessonsMap = new Map<string, string[]>()
+  for (const l of lessonsRaw ?? []) {
+    const arr = moduleLessonsMap.get(l.module_id) ?? []
+    arr.push(l.id)
+    moduleLessonsMap.set(l.module_id, arr)
+  }
+
+  // 8. Fetch lesson_progress for all enrolled users
   const allLessonIds = [...new Set((lessonsRaw ?? []).map((l) => l.id))]
-  const { data: progressRows, error: progressError } = await supabaseAdmin
-    .from('lesson_progress')
-    .select('user_id, lesson_id, completed, completed_at')
-    .in('user_id', enrolledUserIds)
-    .in('lesson_id', allLessonIds)
+  const { data: progressRows, error: progressError } = allLessonIds.length > 0
+    ? await supabaseAdmin
+        .from('lesson_progress')
+        .select('user_id, lesson_id, completed, completed_at')
+        .in('user_id', enrolledUserIds)
+        .in('lesson_id', allLessonIds)
+    : { data: [], error: null }
   if (progressError) throw new Error(progressError.message)
 
-  // Index progress: user_id -> lesson_id -> { completed, completed_at }
+  // Index: userId → lessonId → { completed, completed_at }
   const progressIndex = new Map<string, Map<string, { completed: boolean; completed_at: string | null }>>()
   for (const row of progressRows ?? []) {
     if (!progressIndex.has(row.user_id)) progressIndex.set(row.user_id, new Map())
@@ -136,7 +181,7 @@ export async function getStudentsProgress(opts?: {
     })
   }
 
-  // 6. Assemble result
+  // 9. Assemble result (C2: per-student accessible lesson set via cohort access map)
   const result: StudentProgress[] = []
 
   for (const userId of enrolledUserIds) {
@@ -144,9 +189,28 @@ export async function getStudentsProgress(opts?: {
     if (!userInfo) continue
 
     const userProgress = progressIndex.get(userId) ?? new Map()
+    const userCohortsForUser = userCohortIds.get(userId) ?? []
 
     const courseStats = courses.map((course) => {
-      const lessonIds = courseLessonsMap.get(course.id) ?? []
+      const accessibleModuleIds = new Set<string>()
+      for (const cohortId of userCohortsForUser) {
+        const access = cohortAccessMap.get(cohortId)?.get(course.id)
+        if (access === null || access === undefined) {
+          // null = full access
+          for (const modId of courseModulesMap.get(course.id) ?? []) {
+            accessibleModuleIds.add(modId)
+          }
+        } else {
+          for (const modId of access) accessibleModuleIds.add(modId)
+        }
+      }
+
+      const lessonIds = [
+        ...new Set(
+          [...accessibleModuleIds].flatMap((modId) => moduleLessonsMap.get(modId) ?? [])
+        ),
+      ]
+
       const totalLessons = lessonIds.length
       let completedLessons = 0
       let lastActivityAt: string | null = null
@@ -184,16 +248,19 @@ export async function getStudentsProgress(opts?: {
 }
 
 export async function getLessonsCompletionStats(courseId: string): Promise<LessonCompletionStat[]> {
-  // 1. Fetch all lessons with their module info for this course
+  await requireAdmin()
+
+  // 1. Fetch all available lessons with module info (C1: is_available filter)
   const { data: lessonsRaw, error: lessonsError } = await supabaseAdmin
     .from('lessons')
     .select('id, title, sort_order, modules!inner(id, title, sort_order, course_id)')
     .eq('modules.course_id', courseId)
     .is('deleted_at', null)
+    .eq('is_available', true)
   if (lessonsError) throw new Error(lessonsError.message)
   if (!lessonsRaw || lessonsRaw.length === 0) return []
 
-  // 2. Count total enrolled students for this course
+  // 2. Count distinct enrolled students for this course (C4: deduplicate via Set)
   const { data: cohortCourses, error: ccError } = await supabaseAdmin
     .from('cohort_courses')
     .select('cohort_id')
@@ -204,13 +271,13 @@ export async function getLessonsCompletionStats(courseId: string): Promise<Lesso
   let totalEnrolledStudents = 0
 
   if (cohortIds.length > 0) {
-    const { count, error: countError } = await supabaseAdmin
+    const { data: memberRows, error: countError } = await supabaseAdmin
       .from('cohort_members')
-      .select('user_id', { count: 'exact', head: true })
+      .select('user_id')
       .in('cohort_id', cohortIds)
       .eq('status', 'ACTIVE')
     if (countError) throw new Error(countError.message)
-    totalEnrolledStudents = count ?? 0
+    totalEnrolledStudents = new Set((memberRows ?? []).map((m) => m.user_id)).size
   }
 
   // 3. Fetch completion counts per lesson
@@ -251,6 +318,7 @@ export async function getLessonsCompletionStats(courseId: string): Promise<Lesso
 }
 
 export async function getCoursesForFilter(): Promise<{ id: string; title: string }[]> {
+  await requireAdmin()
   const { data, error } = await supabaseAdmin
     .from('courses')
     .select('id, title')
@@ -261,6 +329,7 @@ export async function getCoursesForFilter(): Promise<{ id: string; title: string
 }
 
 export async function getCohortsForFilter(): Promise<{ id: string; name: string }[]> {
+  await requireAdmin()
   const { data, error } = await supabaseAdmin
     .from('cohorts')
     .select('id, name')
