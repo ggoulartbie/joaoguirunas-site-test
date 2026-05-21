@@ -4,6 +4,7 @@ import ReactMarkdown from 'react-markdown'
 import rehypeRaw from 'rehype-raw'
 import remarkGfm from 'remark-gfm'
 import { MDXRemote } from 'next-mdx-remote'
+import { useEffect, useRef } from 'react'
 import { Callout } from './Callout'
 import { CodeBlock } from './CodeBlock'
 import { Tab, Tabs } from './Tabs'
@@ -170,10 +171,76 @@ export function LessonContent({ content, className }: LessonContentProps) {
   }
 
   // HTML — sanitized server-side via sanitizeHtml() before reaching this point
+  return <HtmlLessonContent html={content.html} className={className} />
+}
+
+function HtmlLessonContent({ html, className }: { html: string; className?: string }) {
+  const ref = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    const container = ref.current
+    if (!container) return
+
+    const pres = container.querySelectorAll<HTMLPreElement>('pre')
+    const cleanups: (() => void)[] = []
+
+    pres.forEach((pre) => {
+      if (pre.querySelector('[data-copy-btn]')) return
+
+      pre.style.position = 'relative'
+
+      const btn = document.createElement('button')
+      btn.setAttribute('data-copy-btn', '')
+      btn.textContent = 'Copiar'
+      btn.style.cssText =
+        'position:absolute;top:8px;right:12px;font-size:11px;color:#d4d4d8;background:#3f3f46;border:1px solid #52525b;border-radius:6px;padding:3px 10px;cursor:pointer;display:flex;align-items:center;gap:4px;font-family:inherit;transition:all 150ms;font-weight:500'
+
+      const toast = document.createElement('div')
+      toast.textContent = 'Copiado com sucesso'
+      toast.style.cssText =
+        'position:absolute;top:8px;right:12px;font-size:11px;background:#3f3f46;color:#fff;padding:4px 10px;border-radius:6px;pointer-events:none;opacity:0;transition:opacity 200ms;z-index:10'
+      pre.appendChild(toast)
+
+      let timer: ReturnType<typeof setTimeout>
+      function handleClick() {
+        const code = pre.querySelector('code')
+        const text = (code ?? pre).innerText
+        navigator.clipboard.writeText(text.trim()).then(() => {
+          btn.textContent = 'Copiado!'
+          btn.style.color = '#86efac'
+          btn.style.background = 'rgba(34,197,94,0.1)'
+          btn.style.borderColor = 'rgba(34,197,94,0.4)'
+          toast.style.opacity = '1'
+          clearTimeout(timer)
+          timer = setTimeout(() => {
+            btn.textContent = 'Copiar'
+            btn.style.color = '#d4d4d8'
+            btn.style.background = '#3f3f46'
+            btn.style.borderColor = '#52525b'
+            toast.style.opacity = '0'
+          }, 2000)
+        })
+      }
+
+      btn.addEventListener('click', handleClick)
+      pre.appendChild(btn)
+      cleanups.push(() => {
+        clearTimeout(timer)
+        btn.removeEventListener('click', handleClick)
+        btn.remove()
+        toast.remove()
+      })
+    })
+
+    return () => cleanups.forEach((fn) => fn())
+  }, [html])
+
   return (
     <div
+      ref={ref}
       className={`lesson-html ${className ?? ''}`}
-      dangerouslySetInnerHTML={{ __html: content.html }}
+      dangerouslySetInnerHTML={{ __html: html }}
     />
   )
 }
+

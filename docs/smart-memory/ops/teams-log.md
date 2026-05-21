@@ -9,6 +9,77 @@ tags: [ops]
 
 Registro de todos os Agent Teams formados neste projeto. Lead (team-os) atualiza a cada `*dispatch` e `*close`.
 
+## 2026-05-17 — Team joaoguirunas-academy-robot-curso-fix
+
+**Objetivo:** Corrigir posição do robô Spline — remover da página de aula, adicionar no hero da página do curso ao lado do 0%
+**Lead:** team-os (skill)
+**Branch:** `main`
+**Composição:**
+- sites-dev-alpha — correção de posicionamento
+- sites-devops — push
+
+**Status:** encerrado
+**Início:** 2026-05-17T23:30:00-03:00
+**Encerrado:** 2026-05-17T23:35:00-03:00
+**Commit:** `3a0b240` — feat(robot-mascot): mover robô Spline da aula para o hero do curso
+**Arquivos:**
+- `RobotMascot.tsx` — deletado (era fixed na aula, lugar errado)
+- `RobotMascotCourse.tsx` (novo) — absolute right-0 top-0 bottom-0 w-[160px], hidden lg:block, dentro do hero do curso
+- `aula/[lesson-slug]/page.tsx` — import/JSX removido
+- `curso/[slug]/page.tsx` — RobotMascotCourse adicionado dentro do div.relative.p-6
+
+---
+
+## 2026-05-17 — Team joaoguirunas-academy-robot-mascot
+
+**Objetivo:** Adicionar robô Spline mascote na página de aula + como capa de curso em Meus Cursos
+**Lead:** team-os (skill)
+**Branch:** `main` (pós-merge feat-aulas-v2)
+**Composição:**
+- sites-dev-alpha — implementação frontend (2 histórias)
+- sites-qa — gate adversarial
+- sites-devops — commit + push
+
+**Status:** encerrado
+**Início:** 2026-05-17T23:15:00-03:00
+**Encerrado:** 2026-05-17T23:25:00-03:00
+**Pipeline:** dev-alpha implementa em paralelo → QA PASS 10/10 → devops commit + push
+**Release:**
+- Commit: `8da5815` — feat(ui): adicionar robô Spline mascote na aula + capa em Meus Cursos
+- Push: `origin/main`
+- Vercel: auto-deploy
+**Arquivos entregues:**
+- `RobotMascot.tsx` (novo) — robô fixed 96×96px, hidden em mobile, desktop only
+- `CourseCoverSpline.tsx` (novo) — robô como fallback de capa em Meus Cursos
+- `aula/[lesson-slug]/page.tsx` — import RobotMascot
+- `meus-cursos/page.tsx` — CourseCoverSpline substituindo BookOpen nos cursos acessíveis
+**Tech-debt:** múltiplas cenas WebGL em meus-cursos se houver >10 cursos sem cover (não-bloqueante)
+
+---
+
+## 2026-05-17 — Team joaoguirunas-academy-materials-validate
+
+**Objetivo:** Validar mudanças de materiais (feat-aulas-v2) + push para main se aprovado
+**Lead:** team-os (skill)
+**Branch:** `feat-aulas-v2`
+**Composição:**
+- sites-qa — revisão adversarial do commit f0384da
+- sites-devops — merge para main após QA PASS
+
+**Status:** encerrado
+**Início:** 2026-05-17T22:50:00-03:00
+**Encerrado:** 2026-05-17T23:00:00-03:00
+**Pipeline:** QA detectou FAIL crítico (guard `kind === 'FILE'` nunca verdadeiro) → lead corrigiu inline → QA re-aprovou PASS → devops build ✅ + merge fast-forward
+**Release:**
+- Fix: `4d93407` — fix(materials): corrigir guard de signedUrl — kind nunca é 'FILE'
+- Push: `feat-aulas-v2` → `main` (fast-forward, origin/main @ `935be42`)
+- Vercel: auto-deploy em progresso
+**QA final:** PASS (2 rounds — FAIL → PASS)
+**Bug encontrado:** `kind === 'FILE'` era dead code; migration usa `'PDF'|'ZIP'|'IMAGE'|'LINK'|'OTHER'`. Todos os arquivos apareciam dimmed sem link na página da aula.
+**Tech-debt registrado:** RLS bucket materials com path `modules/...` (C2-médio), N+1 signed URLs (C3-baixo)
+
+---
+
 ## 2026-05-17 — Team joaoguirunas-academy-lesson-availability
 
 **Objetivo:** Adicionar campo `is_available` (boolean, default `true`) na tabela `lessons` — admin ganha toggle (ícone olho) por aula no CourseEditorClient para indisponibilizar; aluno vê aula listada com badge "Em breve" e sem acesso ao player quando `is_available = false`.
@@ -509,3 +580,32 @@ Registro de todos os Agent Teams formados neste projeto. Lead (team-os) atualiza
 **Status:** ativo
 **Início:** 2026-05-16T14:40:00-03:00
 **Stories:** a criar após diagnóstico dos agentes
+
+---
+
+## 2026-05-18 — Team joaoguirunas-academy-encontro-fixes
+
+**Objetivo:** Corrigir bug "Invalid UUID" ao cadastrar encontro + implementar data padrão no form de sessão
+**Lead:** team-os (skill)
+**Composição:**
+- sites-dev-beta — Story LS-1.1: fix UUID validation em createLiveSession (actions.ts)
+- sites-dev-alpha — Story LS-1.2: default datetime no form de encontro (CohortForm.tsx)
+- sites-qa — gate de qualidade formal após ambas as stories
+
+**Status:** ativo
+**Início:** 2026-05-18T14:48:00-03:00
+**Stories:** [[../stories/active/LS-1.1-fix-invalid-uuid-live-session]], [[../stories/active/LS-1.2-calendar-default-date-session]]
+
+---
+
+## 2026-05-21 — Team joaoguirunas-academy-copy-btn-code
+
+**Objetivo:** Adicionar botão "Copiar" estilizado com toast "Copiado com sucesso" nos blocos de código das aulas
+**Lead:** team-os (skill)
+**Composição:**
+- sites-dev-alpha — redesign botão + toast em CodeBlock.tsx + fix LessonContent.tsx
+- sites-qa — gate de qualidade pós-implementação
+
+**Status:** ativo
+**Início:** 2026-05-21T10:07:00-03:00
+**Stories:** [[../stories/active/LS-1.3-copy-button-code-blocks]]

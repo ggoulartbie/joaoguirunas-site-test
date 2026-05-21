@@ -11,6 +11,22 @@ interface CodeBlockProps {
   className?: string
 }
 
+function CopyBtn({ copied, onClick }: { copied: boolean; onClick: () => void }) {
+  return (
+    <button
+      onClick={onClick}
+      className={`flex items-center gap-1.5 rounded-md border px-2.5 py-1 text-xs font-medium transition-all ${
+        copied
+          ? 'border-green-500/40 bg-green-500/10 text-green-400'
+          : 'border-zinc-600 bg-zinc-700/60 text-zinc-300 hover:border-zinc-500 hover:bg-zinc-700 hover:text-white'
+      }`}
+    >
+      {copied ? <Check size={12} /> : <Copy size={12} />}
+      {copied ? 'Copiado!' : 'Copiar'}
+    </button>
+  )
+}
+
 export function CodeBlock({ children, language, filename, className }: CodeBlockProps) {
   const [copied, setCopied] = useState(false)
 
@@ -29,24 +45,12 @@ export function CodeBlock({ children, language, filename, className }: CodeBlock
       {(filename || language) && (
         <div className="flex items-center justify-between border-b border-white/10 bg-zinc-800/50 px-4 py-2">
           <span className="text-xs text-zinc-400">{filename ?? language}</span>
-          <button
-            onClick={handleCopy}
-            className="flex items-center gap-1.5 text-xs text-zinc-400 transition-colors hover:text-white"
-          >
-            {copied ? <Check size={14} /> : <Copy size={14} />}
-            {copied ? 'Copiado!' : 'Copiar'}
-          </button>
+          <CopyBtn copied={copied} onClick={handleCopy} />
         </div>
       )}
       {!filename && !language && (
         <div className="flex justify-end px-4 pt-2">
-          <button
-            onClick={handleCopy}
-            className="flex items-center gap-1.5 text-xs text-zinc-400 transition-colors hover:text-white"
-          >
-            {copied ? <Check size={14} /> : <Copy size={14} />}
-            {copied ? 'Copiado!' : 'Copiar'}
-          </button>
+          <CopyBtn copied={copied} onClick={handleCopy} />
         </div>
       )}
       <div
