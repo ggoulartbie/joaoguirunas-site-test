@@ -12,13 +12,15 @@ type RankStyle = {
   bg: string
 }
 
-const RANK_STYLES: Record<1 | 2 | 3, RankStyle> = {
+const RANK_STYLES: Record<1 | 2 | 3 | 4 | 5, RankStyle> = {
   1: { pedestal: '#FFB800', border: 'rgba(255,184,0,0.5)', bg: 'rgba(255,184,0,0.08)' },
   2: { pedestal: '#9CA3AF', border: 'rgba(156,163,175,0.4)', bg: 'rgba(156,163,175,0.06)' },
   3: { pedestal: '#B87333', border: 'rgba(184,115,51,0.4)', bg: 'rgba(184,115,51,0.06)' },
+  4: { pedestal: 'rgba(184,115,51,0.35)', border: 'rgba(184,115,51,0.2)', bg: 'rgba(184,115,51,0.03)' },
+  5: { pedestal: 'rgba(150,150,150,0.18)', border: 'rgba(150,150,150,0.12)', bg: 'rgba(150,150,150,0.02)' },
 }
 
-const PEDESTAL_H: Record<1 | 2 | 3, number> = { 1: 80, 2: 56, 3: 40 }
+const PEDESTAL_H: Record<1 | 2 | 3 | 4 | 5, number> = { 1: 80, 2: 56, 3: 40, 4: 26, 5: 14 }
 
 function Avatar({ entry, size }: { entry: RankingEntry; size: number }) {
   const initial = entry.displayName[0]?.toUpperCase() ?? 'A'
@@ -55,10 +57,10 @@ function Avatar({ entry, size }: { entry: RankingEntry; size: number }) {
 }
 
 function PodiumSlot({ entry }: { entry: RankingEntry }) {
-  const rank = entry.rank as 1 | 2 | 3
+  const rank = entry.rank as 1 | 2 | 3 | 4 | 5
   const style = RANK_STYLES[rank]
   const pedestalH = PEDESTAL_H[rank]
-  const avatarSize = rank === 1 ? 72 : 56
+  const avatarSize = rank === 1 ? 72 : rank === 2 || rank === 3 ? 56 : 40
   const isFirst = rank === 1
 
   return (
@@ -69,7 +71,7 @@ function PodiumSlot({ entry }: { entry: RankingEntry }) {
         style={{
           background: style.bg,
           borderColor: style.border,
-          minWidth: isFirst ? 140 : 120,
+          minWidth: isFirst ? 140 : rank <= 3 ? 120 : 96,
         }}
       >
         {isFirst ? (
@@ -131,53 +133,22 @@ export function Podium({ entries }: Props) {
     )
   }
 
-  const first = entries.find((e) => e.rank === 1)
+  const first  = entries.find((e) => e.rank === 1)
   const second = entries.find((e) => e.rank === 2)
-  const third = entries.find((e) => e.rank === 3)
-  const rest = entries.filter((e) => e.rank >= 4)
+  const third  = entries.find((e) => e.rank === 3)
+  const fourth = entries.find((e) => e.rank === 4)
+  const fifth  = entries.find((e) => e.rank === 5)
 
   return (
     <ol className="list-none" aria-label="Pódio de alunos">
-      {/* Top 3 — ordem olímpica: 2º | 1º | 3º, alinhados pela base do pedestal */}
+      {/* Ordem olímpica: 2º | 1º | 3º | 4º | 5º, alinhados pela base do pedestal */}
       <li className="flex items-end justify-center gap-2">
         {second && <PodiumSlot entry={second} />}
-        {first && <PodiumSlot entry={first} />}
-        {third && <PodiumSlot entry={third} />}
+        {first  && <PodiumSlot entry={first}  />}
+        {third  && <PodiumSlot entry={third}  />}
+        {fourth && <PodiumSlot entry={fourth} />}
+        {fifth  && <PodiumSlot entry={fifth}  />}
       </li>
-
-      {/* 4º e 5º — linhas horizontais */}
-      {rest.length > 0 && (
-        <li className="mt-6 flex flex-col gap-2">
-          {rest.map((entry) => (
-            <div
-              key={entry.userId}
-              className="flex flex-row items-center gap-3 border px-4 py-3"
-              style={{ borderColor: 'var(--hairline)', background: 'var(--ink)' }}
-            >
-              <span
-                className="font-mono text-[11px] font-bold"
-                style={{
-                  color: 'var(--bone-mute)',
-                  minWidth: 24,
-                  textAlign: 'center',
-                }}
-              >
-                {entry.rank}º
-              </span>
-              <Avatar entry={entry} size={32} />
-              <span
-                className="flex-1 font-[family-name:var(--type-sans)] text-[13px] font-medium"
-                style={{ color: 'var(--bone)' }}
-              >
-                {entry.displayName}
-              </span>
-              <span className="font-mono text-[11px]" style={{ color: 'var(--bone-mute)' }}>
-                {entry.lessonsCompleted} {entry.lessonsCompleted === 1 ? 'aula' : 'aulas'}
-              </span>
-            </div>
-          ))}
-        </li>
-      )}
     </ol>
   )
 }
