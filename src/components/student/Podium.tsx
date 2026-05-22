@@ -1,22 +1,37 @@
 import Image from 'next/image'
-import { Trophy } from 'lucide-react'
+import { Trophy, Crown } from 'lucide-react'
 import type { RankingEntry } from '@/app/actions/ranking'
 
 type Props = {
   entries: RankingEntry[]
 }
 
-function Avatar({ entry }: { entry: RankingEntry }) {
+type RankStyle = {
+  pedestal: string
+  border: string
+  bg: string
+}
+
+const RANK_STYLES: Record<1 | 2 | 3, RankStyle> = {
+  1: { pedestal: '#FFB800', border: 'rgba(255,184,0,0.5)', bg: 'rgba(255,184,0,0.08)' },
+  2: { pedestal: '#9CA3AF', border: 'rgba(156,163,175,0.4)', bg: 'rgba(156,163,175,0.06)' },
+  3: { pedestal: '#B87333', border: 'rgba(184,115,51,0.4)', bg: 'rgba(184,115,51,0.06)' },
+}
+
+const PEDESTAL_H: Record<1 | 2 | 3, number> = { 1: 80, 2: 56, 3: 40 }
+
+function Avatar({ entry, size }: { entry: RankingEntry; size: number }) {
   const initial = entry.displayName[0]?.toUpperCase() ?? 'A'
+  const fontSize = size === 72 ? 26 : 20
   if (entry.avatarUrl) {
     return (
       <Image
         src={entry.avatarUrl}
         alt={entry.displayName}
-        width={56}
-        height={56}
+        width={size}
+        height={size}
         className="rounded-full object-cover"
-        style={{ width: 56, height: 56 }}
+        style={{ width: size, height: size }}
       />
     )
   }
@@ -24,12 +39,12 @@ function Avatar({ entry }: { entry: RankingEntry }) {
     <div
       className="flex items-center justify-center rounded-full"
       style={{
-        width: 56,
-        height: 56,
+        width: size,
+        height: size,
         background: 'rgba(255,58,14,0.15)',
         color: 'var(--ember)',
         fontFamily: 'var(--type-mono)',
-        fontSize: '20px',
+        fontSize,
         fontWeight: 700,
       }}
       aria-hidden="true"
@@ -39,48 +54,61 @@ function Avatar({ entry }: { entry: RankingEntry }) {
   )
 }
 
-function PodiumCard({
-  entry,
-  size = 'md',
-}: {
-  entry: RankingEntry
-  size?: 'lg' | 'md' | 'sm'
-}) {
-  const isFirst = entry.rank === 1
-  const cardPad = size === 'lg' ? 'p-5' : size === 'md' ? 'p-4' : 'p-3'
+function PodiumSlot({ entry }: { entry: RankingEntry }) {
+  const rank = entry.rank as 1 | 2 | 3
+  const style = RANK_STYLES[rank]
+  const pedestalH = PEDESTAL_H[rank]
+  const avatarSize = rank === 1 ? 72 : 56
+  const isFirst = rank === 1
 
   return (
-    <div
-      className={`flex flex-col items-center gap-2 border ${cardPad} text-center`}
-      style={{
-        background: isFirst ? 'rgba(255,58,14,0.06)' : 'var(--ink)',
-        borderColor: isFirst ? 'rgba(255,58,14,0.3)' : 'var(--hairline)',
-        minWidth: size === 'lg' ? 140 : size === 'md' ? 120 : 100,
-      }}
-    >
-      {isFirst && (
-        <Trophy
-          className="h-4 w-4"
-          style={{ color: 'var(--ember)' }}
-          aria-hidden="true"
-        />
-      )}
-      <Avatar entry={entry} />
-      <span
-        className="font-mono text-[10px] uppercase tracking-widest"
-        style={{ color: 'var(--ember)' }}
+    <div className="flex flex-col items-center">
+      {/* Card */}
+      <div
+        className="flex flex-col items-center gap-2 border p-4 text-center"
+        style={{
+          background: style.bg,
+          borderColor: style.border,
+          minWidth: isFirst ? 140 : 120,
+        }}
       >
-        {entry.rank}º
-      </span>
-      <span
-        className="font-[family-name:var(--type-sans)] text-[13px] font-medium leading-tight"
-        style={{ color: 'var(--bone)' }}
+        {isFirst ? (
+          <Crown className="h-5 w-5" style={{ color: '#FFB800' }} aria-hidden="true" />
+        ) : null}
+        <Avatar entry={entry} size={avatarSize} />
+        <span
+          className="font-[family-name:var(--type-sans)] text-[13px] font-medium leading-tight"
+          style={{ color: 'var(--bone)' }}
+        >
+          {entry.displayName}
+        </span>
+        <span className="font-mono text-[11px]" style={{ color: 'var(--bone-mute)' }}>
+          {entry.lessonsCompleted} {entry.lessonsCompleted === 1 ? 'aula' : 'aulas'}
+        </span>
+      </div>
+
+      {/* Pedestal */}
+      <div
+        style={{
+          height: pedestalH,
+          width: '100%',
+          background: style.pedestal,
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+        }}
       >
-        {entry.displayName}
-      </span>
-      <span className="font-mono text-[11px]" style={{ color: 'var(--bone-mute)' }}>
-        {entry.lessonsCompleted} {entry.lessonsCompleted === 1 ? 'aula' : 'aulas'}
-      </span>
+        <span
+          style={{
+            fontFamily: 'var(--type-mono)',
+            fontSize: 20,
+            fontWeight: 700,
+            color: '#fff',
+          }}
+        >
+          {rank}º
+        </span>
+      </div>
     </div>
   )
 }
@@ -110,30 +138,43 @@ export function Podium({ entries }: Props) {
 
   return (
     <ol className="list-none" aria-label="Pódio de alunos">
-      {/* Top 3 — desktop horizontal, mobile empilhado */}
-      <li className="flex flex-col items-center gap-4 sm:flex-row sm:items-end sm:justify-center sm:gap-3">
-        {second && (
-          <div className="order-2 sm:order-1">
-            <PodiumCard entry={second} size="md" />
-          </div>
-        )}
-        {first && (
-          <div className="order-1 sm:order-2">
-            <PodiumCard entry={first} size="lg" />
-          </div>
-        )}
-        {third && (
-          <div className="order-3">
-            <PodiumCard entry={third} size="md" />
-          </div>
-        )}
+      {/* Top 3 — ordem olímpica: 2º | 1º | 3º, alinhados pela base do pedestal */}
+      <li className="flex items-end justify-center gap-2">
+        {second && <PodiumSlot entry={second} />}
+        {first && <PodiumSlot entry={first} />}
+        {third && <PodiumSlot entry={third} />}
       </li>
 
-      {/* 4º e 5º lugar */}
+      {/* 4º e 5º — linhas horizontais */}
       {rest.length > 0 && (
-        <li className="mt-4 flex flex-col gap-2 sm:flex-row sm:justify-center sm:gap-3">
+        <li className="mt-6 flex flex-col gap-2">
           {rest.map((entry) => (
-            <PodiumCard key={entry.userId} entry={entry} size="sm" />
+            <div
+              key={entry.userId}
+              className="flex flex-row items-center gap-3 border px-4 py-3"
+              style={{ borderColor: 'var(--hairline)', background: 'var(--ink)' }}
+            >
+              <span
+                className="font-mono text-[11px] font-bold"
+                style={{
+                  color: 'var(--bone-mute)',
+                  minWidth: 24,
+                  textAlign: 'center',
+                }}
+              >
+                {entry.rank}º
+              </span>
+              <Avatar entry={entry} size={32} />
+              <span
+                className="flex-1 font-[family-name:var(--type-sans)] text-[13px] font-medium"
+                style={{ color: 'var(--bone)' }}
+              >
+                {entry.displayName}
+              </span>
+              <span className="font-mono text-[11px]" style={{ color: 'var(--bone-mute)' }}>
+                {entry.lessonsCompleted} {entry.lessonsCompleted === 1 ? 'aula' : 'aulas'}
+              </span>
+            </div>
           ))}
         </li>
       )}
