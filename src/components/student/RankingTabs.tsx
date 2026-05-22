@@ -6,6 +6,15 @@ import { Podium } from './Podium'
 
 type Period = 'week' | 'biweek' | 'month'
 
+const DAYS_BY_PERIOD: Record<Period, number> = { week: 7, biweek: 15, month: 30 }
+
+function formatRange(period: Period): string {
+  const fmt = new Intl.DateTimeFormat('pt-BR', { day: '2-digit', month: '2-digit', year: 'numeric' })
+  const now = new Date()
+  const since = new Date(now.getTime() - DAYS_BY_PERIOD[period] * 24 * 60 * 60 * 1000)
+  return `De ${fmt.format(since)} até ${fmt.format(now)}`
+}
+
 const TABS: { id: Period; label: string }[] = [
   { id: 'week', label: 'Semanal' },
   { id: 'biweek', label: 'Quinzenal' },
@@ -72,6 +81,10 @@ export function RankingTabs({ week, biweek, month }: Props) {
           )
         })}
       </div>
+
+      <p className="mt-3 text-xs text-center" style={{ color: 'var(--bone-mute)' }}>
+        {formatRange(active)}
+      </p>
 
       {TABS.map(({ id }) => (
         <div
