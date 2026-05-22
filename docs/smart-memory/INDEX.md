@@ -53,6 +53,7 @@ MOC raiz. Todo arquivo novo em `docs/smart-memory/` deve ser referenciado aqui.
 - [[agents/data-engineer/fix-soft-delete-2026-05-17]] — análise conflitos slug pós-mass-soft-delete: 13 módulos soft-deleted, 9 aulas órfãs em módulo deletado, decisão pendente
 - [[agents/data-engineer/module-materials-schema]] — FM-3.2: schema `module_materials`, função `has_module_access`, RLS, storage path, rollback SQL
 - [[agents/data-engineer/diagnose-slug-abertura]] — diagnóstico bug 404 slug duplicado "abertura": 2 lessons ativas no mesmo curso, .single() lança erro — opções de fix + recomendação
+- [[agents/data-engineer/ranking-query]] — query SQL top 5 alunos por período (7/15/30d), análise de índice necessário + migration parcial `completed_at WHERE completed`
 - [[agents/qa/results]] — histórico de veredictos
 - [[agents/qa/verdict-stories-2.1-2.2]] — veredicto formal Stories 2.1 (PASS) + 2.2 (CONCERNS) — 2026-05-16
 - [[agents/qa/verdict-story-2.3]] — veredicto formal Story 2.3 (PASS) preview markdown/HTML/MDX admin — 2026-05-16

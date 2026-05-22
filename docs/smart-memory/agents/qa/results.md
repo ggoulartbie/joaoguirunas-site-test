@@ -1,13 +1,72 @@
 ---
 title: QA Results
 type: qa-log
-updated: 2026-05-21
+updated: 2026-05-21 (LS-2.1)
 tags: [qa, veredictos]
 ---
 
 # QA Results — Veredictos formais
 
 Histórico de veredictos emitidos pelo sites-qa (Axilun).
+
+---
+
+## 2026-05-21 — Story LS-2.1 — Separar campo data+hora em sessões ao vivo — ✅ PASS
+
+**Escopo:** Refatoração do form de sessões ao vivo em `src/app/(academy)/academy/(admin)/admin/turmas/CohortForm.tsx`. Substituição de `TextInput type="datetime-local"` por dois inputs nativos adjacentes (`type="date"` + `type="time"`) tanto em Adicionar quanto em Editar encontro. Refactor de helpers `getDefaultSessionDate` → `getDefaultSessionDateTime` e `toDatetimeLocalValue` → `toDateTimeValues`.
+
+**Arquivo modificado:** `src/app/(academy)/academy/(admin)/admin/turmas/CohortForm.tsx`
+
+### Checklist por AC
+
+| AC | Descrição | Local | Resultado |
+|----|-----------|-------|-----------|
+| AC1 | Form "Adicionar encontro" usa `type="date"` + `type="time"` adjacentes | 1448–1465 | ✅ PASS — dois `TextInput` em `flex gap-2`, cada um com `flex-1`, labels "Data *" e "Hora (BRT) *" |
+| AC2 | Form "Editar encontro" idem | 1669–1686 | ✅ PASS — estrutura espelhada do form de Adicionar |
+| AC3 | Sem dependências externas de datepicker | `package.json` | ✅ PASS — `grep` por react-datepicker/flatpickr/react-day-picker/@mui/x-date-pickers → zero matches; usa `TextInput` nativo HTML |
+| AC4 | `getDefaultSessionDateTime()` retorna `{date, time}` com próxima hora cheia BRT | 211–218 | ✅ PASS — `setMinutes(0,0,0)` + `+1h` + ajuste BRT (-3h) + slice ISO `0..10` e `11..16` |
+| AC5 | `toDateTimeValues(iso)` retorna `{date, time}` | 225–232 | ✅ PASS — ajuste tzOffset BRT + slice ISO; retorna `{date:'', time:''}` se iso null |
+| AC6 | Submit combina campos via `` new Date(`${date}T${time}:00`).toISOString() `` | Adicionar 1521; Editar 1741 | ✅ PASS — ambos os submits usam exatamente esse padrão |
+| AC7 | Botão disabled checa `(!date \|\| !time)` | Adicionar 1509; Editar 1730 | ✅ PASS — `!newSessionTitle \|\| !newSessionDate \|\| !newSessionTime` e equivalente em Edit |
+| AC8 | onClick "Adicionar Encontro" seta ambos os fields | 1417–1425 | ✅ PASS — destructure `{date, time} = getDefaultSessionDateTime()` e seta os dois setters; guarded por `!showAddSession` (não recongela se reabrir) |
+| AC9 | Zero novas dependências no `package.json` | `package.json` 17–84 | ✅ PASS — diff implícito; nenhuma lib de datepicker presente, apenas inputs HTML nativos |
+| AC10 | `pnpm tsc --noEmit` PASS | terminal | ✅ PASS — exit code 0, zero erros |
+
+### Verificações complementares
+
+- ✅ Zero referências remanescentes aos nomes antigos: `grep -nE "getDefaultSessionDate\b\|toDatetimeLocalValue\|datetime-local"` em CohortForm.tsx → `ZERO_MATCHES`
+- ✅ Estados separados declarados: `newSessionDate/Time` (375–376) e `editSessionDate/Time` (385–386) — sem resquício de `newSessionScheduledAt` ou similar
+- ✅ Reset pós-submit limpa ambos os campos: linhas 1528–1529 (`setNewSessionDate('')`, `setNewSessionTime('')`)
+- ✅ Edit preenche ambos via `toDateTimeValues(ls.scheduled_at)` no onClick "Editar" (linhas 1624–1626)
+- ✅ 10-Point QA Checklist:
+  1. **Code review** — patterns consistentes com restante do form; helpers nomeados com clareza ✅
+  2. **Acceptance criteria** — 10/10 atendidos ✅
+  3. **Sem regressões** — typecheck PASS; semântica de submit preservada (mesmo formato ISO enviado ao server action) ✅
+  4. **Performance** — inputs nativos, zero JS adicional ✅
+  5. **Acessibilidade** — labels "Data *" e "Hora (BRT) *" explícitos; inputs HTML nativos têm a11y built-in superior a datepicker JS ✅
+  6. **SEO** — não aplicável (form em rota admin) ✅
+  7. **Responsivo** — `flex gap-2` com `flex-1` em cada lado; em mobile a row continua usável (dois inputs lado a lado em containers `md:col-span-2` do grid pai) ✅
+  8. **Copy** — "Data *", "Hora (BRT) *" — claros e indicando obrigatoriedade + timezone ✅
+  9. **Cross-browser** — `type="date"` e `type="time"` são nativos em Chrome/Safari/Firefox modernos ✅
+  10. **Security** — sem mudança de superfície; submit continua passando ISO string para o server action existente ✅
+
+### Veredicto
+
+```
+VEREDICTO: PASS
+Story: LS-2.1 | Data: 2026-05-21
+Checklist: 10/10 ACs verificados + 10/10 QA points
+Issues: nenhum
+Próximo passo: @sites-devops push
+```
+
+### Concerns
+
+Nenhum.
+
+### Observação não-bloqueante (informativa)
+
+A semântica de timezone em `toDateTimeValues` usa `tzOffset = -3 * 60` fixo (BRT sem horário de verão — correto para o estado atual do Brasil pós-2019). Caso o horário de verão volte a vigorar em algum momento futuro, o helper precisará revisão. **Não bloqueia este gate.**
 
 ---
 
@@ -3821,3 +3880,81 @@ Nenhum. Todos os pontos do CONCERN #11 endereçados de forma simétrica e tipada
 ### Próximo passo
 - @sites-devops: **PUSH LIBERADO** de `feat-aulas-v2`. Funcionalmente PASS; concerns são P3 backlog
 - @team-lead: criar story de hardening (CONCERN-1 + CONCERN-2) para próximo sprint, sem bloquear release atual
+
+---
+
+## QA — Epic RK (Ranking de Progresso) — 2026-05-21
+
+**Veredicto:** ⚠️ CONCERNS
+
+Funcionalmente aprovado. Build OK, ACs todos cobertos, privacidade preservada (zero referência a email na UI ou no payload). Single concern menor de a11y semântica em `<ol>` do pódio — não bloqueia release.
+
+### RK-1.1 — Server action `getRankingByPeriod`
+
+| AC | Status | Nota |
+|---|---|---|
+| AC1 (contrato) | ✅ PASS | `src/app/actions/ranking.ts:6-19` — types e signature exatos conforme spec |
+| AC2 (requireUser) | ✅ PASS | `ranking.ts:20` `await requireUser()`. Anônimo redireciona via `helpers.ts:28-30` |
+| AC3 (janelas) | ✅ PASS | `ranking.ts:17` mapa `{week:7, biweek:15, month:30}`; `:22` `since = now - N*86400000` |
+| AC4 (agregação + ordenação) | ✅ PASS | `:32-39` agg em Map, `:43-46` DESC count → DESC date, `:47` slice(0,5) |
+| AC5 (privacidade) | ✅ PASS | `:53` select só `id, name, avatar_url`. `:61` `firstName = name.split(/\s+/)[0] \|\| 'Aluno'`. `userId` sai (necessário p/ React key), nenhuma rota pública o consome |
+| AC6 (sem N+1) | ✅ PASS | Exatamente 2 queries (`:24` lesson_progress, `:51` profiles via `.in()`). Agregação 100% em memória |
+| AC7 (supabaseAdmin) | ✅ PASS | `:24` e `:51` via supabaseAdmin. Gate = `requireUser` + payload mínimo |
+| AC8 (vazio) | ✅ PASS | `:30` retorna `[]` se rows vazias; `:49` retorna `[]` se top vazio |
+| AC9 (perfis órfãos) | ✅ PASS | `:60` `profMap.get` permite undefined; `firstName` cai para `'Aluno'`, `avatarUrl: p?.avatar_url ?? null`. Rank preservado |
+| AC10 (build) | ✅ PASS | `pnpm build` sucesso, zero erros, zero warnings novos. Rota `/academy/ranking` listada como `ƒ` (dynamic) |
+
+**Bônus auditado:**
+- `supabase/migrations/20260521100000_lesson_progress_ranking_index.sql` — index parcial `WHERE completed = true` em `completed_at`. Excelente para a query do AC3+AC4 (filtra + ordena). ✅
+
+### RK-1.2 — Página `/academy/ranking`
+
+| AC | Status | Nota |
+|---|---|---|
+| AC1 (rota + force-dynamic) | ✅ PASS | `page.tsx:1` `export const dynamic = 'force-dynamic'` no topo. Anônimo bloqueado indiretamente via `requireUser` da action |
+| AC2 (server fetch + Promise.all) | ✅ PASS | `page.tsx:10-14` `Promise.all` das 3 janelas pré-carregadas |
+| AC3 (tabs + default Semanal) | ✅ PASS | `RankingTabs.tsx:22` `useState<Period>('week')`. Troca de tab é `setActive` puro, sem nova request |
+| AC4 (pódio top 5 + 1º destaque) | ✅ PASS | `Podium.tsx:49-86` `PodiumCard` com `isFirst` e ícone `Trophy`; layout `2 \| 1 \| 3` (sm:order-1/2/3) + rest abaixo |
+| AC5 (sem PII) | ✅ PASS | `grep -n email` em todos os arquivos UI = 0 ocorrências. Render usa exclusivamente `displayName`, `avatarUrl`, `lessonsCompleted`, `rank` |
+| AC6 (estado vazio) | ✅ PASS | `Podium.tsx:89-104` ícone + mensagem amigável "Ainda não há ranking neste período…" |
+| AC7 (1-4 entradas) | ✅ PASS | `:106-108` `find` por rank — slots ausentes simplesmente não renderizam (condicional `&&`) |
+| AC8 (único Client Component) | ✅ PASS | Apenas `RankingTabs.tsx:1` tem `'use client'`. `Podium.tsx` é Server Component |
+| AC9 (entrada no menu) | ✅ PASS | `StudentSidebar.tsx:14` entre Meus Cursos e Fórum (ordem certa); `StudentTopBar.tsx:11` label `'Ranking'` para `/academy/ranking` |
+| AC10 (metadata) | ✅ PASS | `page.tsx:7` `metadata: { title: 'Ranking' }`. Template do layout produz `Ranking \| Área do Aluno` |
+| AC11 (ARIA) | ⚠️ CONCERN-menor | `tablist`/`tab`/`tabpanel`/`aria-selected`/`aria-controls`/`aria-labelledby` todos presentes. Setas ←/→ navegam (`:27-37`). `tabIndex` 0/-1 correto (roving tabindex). **Concern:** `Podium.tsx:112-130` o trio do pódio está em **um único `<li>`** com flex; semanticamente melhor seria 1 `<li>` por posição para SR navegar `2/2`, `1/2`, etc. Não bloqueia (lista ainda é semântica + cada card tem texto descritivo) |
+| AC12 (responsivo) | ✅ PASS | `Podium.tsx:114` `flex-col … sm:flex-row sm:items-end sm:justify-center sm:gap-3`. Ordem visual desktop: 2-1-3 via `order-2 sm:order-1`, `order-1 sm:order-2`, `order-3`. Mobile empilha 1º→2º→3º (intuitivo) |
+| AC13 (build) | ✅ PASS | Build OK, rota dynamic registrada |
+
+### Build
+
+```
+pnpm build
+✓ Compiled successfully
+✓ Linting and checking validity of types
+✓ Generating static pages (8/8)
+ƒ /academy/ranking  → dynamic (correto)
+```
+
+Sem erros, sem warnings novos, sem regressões em outras rotas.
+
+### Segurança / Privacidade — verificação direta
+
+- `supabaseAdmin` usado intencionalmente para bypass RLS em `lesson_progress` cross-user — **aceitável** porque:
+  - Gate `requireUser()` no topo (não admin, mas autenticado é OK por design)
+  - Payload limitado a `{rank, userId, displayName, avatarUrl, lessonsCompleted, lastCompletedAt}` — zero PII vazada
+  - Hard limit `slice(0, 5)` impossibilita enumeração
+- `userId` no payload é usado apenas como React `key` (`Podium.tsx:136`) — não há rota pública `/perfil/[id]` que aceite UUID arbitrário (confirmado: rota `/academy/perfil` é singular do usuário logado)
+- Nenhum log/console.log com dados sensíveis nas server actions
+
+### Itens menores (CONCERNS — não bloqueantes)
+
+- **[CONCERN-1 P3 a11y semântica]** `Podium.tsx:114-130` o trio 1º/2º/3º está em **um único `<li>`** (com flex). Padrão `<ol>` válido mas leitores de tela anunciam "lista, 2 itens" em vez de "lista, 5 itens". Sugestão para hardening futuro: 1 `<li>` por posição, com `<ol>` controlando a ordem visual via CSS `order` no `<li>` direto (ou abandonar `<ol>` em favor de `<section aria-label="Pódio">` com cards). Sem impacto visual, sem urgência.
+
+### Bloqueadores
+
+Nenhum.
+
+### Próximo passo
+
+- **@sites-devops:** PUSH LIBERADO de Epic RK (RK-1.1 + RK-1.2). Funcionalmente PASS; concern P3 backlog
+- **@team-lead:** opcionalmente criar story de hardening a11y (CONCERN-1) — não bloqueia release atual

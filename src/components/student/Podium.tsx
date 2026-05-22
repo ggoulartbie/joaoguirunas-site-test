@@ -2,8 +2,17 @@ import Image from 'next/image'
 import { Trophy, Crown } from 'lucide-react'
 import type { RankingEntry } from '@/app/actions/ranking'
 
+type Category = 'lessons' | 'comments' | 'general'
+
+const SCORE_LABEL: Record<Category, [string, string]> = {
+  lessons: ['aula', 'aulas'],
+  comments: ['comentário', 'comentários'],
+  general: ['ponto', 'pontos'],
+}
+
 type Props = {
   entries: RankingEntry[]
+  category?: Category
 }
 
 type RankStyle = {
@@ -20,7 +29,7 @@ const RANK_STYLES: Record<1 | 2 | 3 | 4 | 5, RankStyle> = {
   5: { pedestal: 'rgba(150,150,150,0.18)', border: 'rgba(150,150,150,0.12)', bg: 'rgba(150,150,150,0.02)' },
 }
 
-const PEDESTAL_H: Record<1 | 2 | 3 | 4 | 5, number> = { 1: 80, 2: 56, 3: 40, 4: 26, 5: 14 }
+const PEDESTAL_H: Record<1 | 2 | 3 | 4 | 5, number> = { 1: 100, 2: 76, 3: 56, 4: 40, 5: 30 }
 
 function Avatar({ entry, size }: { entry: RankingEntry; size: number }) {
   const initial = entry.displayName[0]?.toUpperCase() ?? 'A'
@@ -56,7 +65,7 @@ function Avatar({ entry, size }: { entry: RankingEntry; size: number }) {
   )
 }
 
-function PodiumSlot({ entry }: { entry: RankingEntry }) {
+function PodiumSlot({ entry, category = 'lessons' }: { entry: RankingEntry; category?: Category }) {
   const rank = entry.rank as 1 | 2 | 3 | 4 | 5
   const style = RANK_STYLES[rank]
   const pedestalH = PEDESTAL_H[rank]
@@ -85,7 +94,8 @@ function PodiumSlot({ entry }: { entry: RankingEntry }) {
           {entry.displayName}
         </span>
         <span className="font-mono text-[11px]" style={{ color: 'var(--bone-mute)' }}>
-          {entry.lessonsCompleted} {entry.lessonsCompleted === 1 ? 'aula' : 'aulas'}
+          {entry.lessonsCompleted}{' '}
+          {entry.lessonsCompleted === 1 ? SCORE_LABEL[category][0] : SCORE_LABEL[category][1]}
         </span>
       </div>
 
@@ -115,7 +125,7 @@ function PodiumSlot({ entry }: { entry: RankingEntry }) {
   )
 }
 
-export function Podium({ entries }: Props) {
+export function Podium({ entries, category = 'lessons' }: Props) {
   if (entries.length === 0) {
     return (
       <div
@@ -127,7 +137,7 @@ export function Podium({ entries }: Props) {
           className="mt-4 max-w-xs font-[family-name:var(--type-sans)] text-[14px]"
           style={{ color: 'var(--bone-mute)' }}
         >
-          Ainda não há ranking neste período — comece a concluir aulas para aparecer aqui.
+          Ainda não há dados neste período — seja o primeiro a aparecer aqui.
         </p>
       </div>
     )
@@ -141,13 +151,13 @@ export function Podium({ entries }: Props) {
 
   return (
     <ol className="list-none" aria-label="Pódio de alunos">
-      {/* Ordem olímpica: 2º | 1º | 3º | 4º | 5º, alinhados pela base do pedestal */}
+      {/* Ordem: 4º | 2º | 1º | 3º | 5º, alinhados pela base do pedestal */}
       <li className="flex items-end justify-center gap-2">
-        {second && <PodiumSlot entry={second} />}
-        {first  && <PodiumSlot entry={first}  />}
-        {third  && <PodiumSlot entry={third}  />}
-        {fourth && <PodiumSlot entry={fourth} />}
-        {fifth  && <PodiumSlot entry={fifth}  />}
+        {fourth && <PodiumSlot entry={fourth} category={category} />}
+        {second && <PodiumSlot entry={second} category={category} />}
+        {first  && <PodiumSlot entry={first}  category={category} />}
+        {third  && <PodiumSlot entry={third}  category={category} />}
+        {fifth  && <PodiumSlot entry={fifth}  category={category} />}
       </li>
     </ol>
   )

@@ -8,6 +8,56 @@ tags: [story]
 
 # Backlog de Stories
 
+## Epic LS — Live Sessions (2026-05-18)
+
+| Story | Título | Complexidade | Status | Agente |
+|---|---|---|---|---|
+| [[done/LS-1.1-fix-invalid-uuid-live-session\|LS-1.1]] | Fix `z.string().uuid()` → `uuidField()` em `createLiveSession` | S | done | sites-dev-alpha |
+| [[done/LS-1.2-calendar-default-date-session\|LS-1.2]] | Data padrão (próxima hora cheia BRT) no form de encontro | S | done | sites-dev-alpha |
+| [[done/LS-1.3-copy-button-code-blocks\|LS-1.3]] | Botão copiar em code blocks (live sessions UX) | S | done | sites-dev-alpha |
+| [[done/LS-2.1-datepicker-sessoes-ao-vivo\|LS-2.1]] | Separar campo data+hora em sessões ao vivo e usar calendário nativo | S | done | sites-dev-alpha |
+
+**Objetivo do Epic LS:** evoluir a UX de criação/edição de encontros ao vivo no admin de turmas (`CohortForm.tsx`). LS-1.x consolidaram fixes pontuais (UUID, default date, copy button). LS-2.1 abre o segundo ciclo focado em datepicker.
+
+**LS-2.1 (2026-05-21):** o `<input type="datetime-local">` atual exige clicar num ícone minúsculo para abrir o calendário — UX ruim no admin. Decisão validada pelo lead: separar em dois campos nativos (`type="date"` + `type="time"`), reaproveitando o padrão já presente em 3 lugares do mesmo arquivo (startDate, endDate, memberExpiresAt). Zero deps, zero migration — só UI. ACs cobrem ambos os forms (Adicionar + Editar), refactor de `getDefaultSessionDate()` / `toDatetimeLocalValue()`, validação dos dois campos e build pass. Checklist 5/5 GO.
+
+---
+
+## Epic RK — Ranking de Progresso (2026-05-21)
+
+| Story | Título | Complexidade | Status | Agente |
+|---|---|---|---|---|
+| [[backlog/RK-1.1-server-action-ranking-by-period\|RK-1.1]] | Server action `getRankingByPeriod` — top 5 alunos por período (week/biweek/month) | M | backlog | sites-dev-beta |
+| [[backlog/RK-1.2-pagina-ranking-podio\|RK-1.2]] | Página `/academy/ranking` — pódio com tabs (Semanal/Quinzenal/Mensal) + entrada na sidebar | M | backlog | sites-dev-alpha |
+
+**Objetivo:** dar a TODOS os alunos autenticados uma tela pública de ranking — pódio dos top 5 alunos por número de aulas concluídas em três janelas rolling (7d / 15d / 30d). Métrica: `lesson_progress.completed = true` agregado por `user_id` no intervalo. Desempate por `completed_at` mais recente. Privacidade: nunca exibir email; mostrar apenas primeiro nome de `profiles.name`.
+
+**Sequência:**
+1. **RK-1.1** primeiro — server action `getRankingByPeriod(period)` em `src/app/actions/ranking.ts`. Define contrato `RankingEntry` consumido pela UI. **Bloqueia RK-1.2**.
+2. **RK-1.2** após RK-1.1 — page `/academy/ranking` (Server Component `force-dynamic`) + `RankingTabs` (Client) + `Podium` (Server). Entrada na sidebar `Trophy`.
+
+**Decisões arquiteturais:**
+- `supabaseAdmin` + `requireUser()` (não `requireAdmin`) na action — primeira leitura cross-user para aluno. Gate é o aluno autenticado + limite de 5 + payload sem email.
+- Janelas **rolling em dias corridos** (`now - 7/15/30 dias`), não calendário. Mais simples e consistente com a descrição "semanal/quinzenal/mensal" do lead.
+- 2 queries por chamada da action: `lesson_progress` (filtrado por janela + completed) → agregação em memória → `profiles` em batch (`.in('id', top5)`). Anti-N+1.
+- Page pré-carrega os 3 períodos em paralelo via `Promise.all` — sem flash entre tabs, sem novas requisições no client.
+- `force-dynamic` na page (toca `supabaseAdmin`, ver memory `supabase_admin_proxy_build`).
+
+**Privacidade:**
+- `displayName` = primeiro token de `profiles.name`, com fallback `'Aluno'` se vazio. Email nunca trafega no payload.
+- `userId` é retornado (necessário para keys no React) mas não há rota pública que aceite isso, então não vaza nada usável.
+
+**Anti-recorrência:**
+- RK-1.1 AC5 + RK-1.2 AC5: defesa em profundidade contra vazamento de email — backend não envia, UI não consome.
+- RK-1.2 AC1 reforça `force-dynamic` explicitamente (anti-recorrência do incidente de build em rotas com `supabaseAdmin`).
+- RK-1.2 AC11 embute padrão ARIA para tabs — evita débito de a11y.
+
+**Prefixo RK** escolhido por estar livre. Epics anteriores: AP, LA, MC, FAA, AV, FM, F1–F13, CT, KV, LS.
+
+**5-point checklist:** GO 5/5 nas duas stories.
+
+---
+
 ## Epic AP — Admin Progress (2026-05-21)
 
 | Story | Título | Complexidade | Status | Agente |

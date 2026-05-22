@@ -9,6 +9,32 @@ tags: [ops]
 
 Registro de todos os Agent Teams formados neste projeto. Lead (team-os) atualiza a cada `*dispatch` e `*close`.
 
+## 2026-05-22 — Team joaoguirunas-academy-qa-ranking-seguranca
+
+**Objetivo:** Verificação de segurança pré-deploy do epic RK-2 (ranking 3 categorias: Aulas, Comentários, Geral)
+**Lead:** team-os (skill)
+**Branch:** `feat/rk-ranking-progresso`
+**Composição:**
+- sites-qa — auditoria de interface, a11y, tipos, imports
+- sites-data — auditoria de banco (colunas, índices, autenticação, soft delete)
+
+**Status:** encerrado
+**Início:** 2026-05-22T14:10:00-03:00
+**Encerrado:** 2026-05-22T14:20:00-03:00
+**Veredicto final:** ✅ PASS (após correções)
+
+**Issues corrigidos:**
+- `aria-controls` apontava para IDs inexistentes → categoria virou `role="group"` + `aria-pressed`, período manteve tablist com painel real `#ranking-podium`
+- Índices de banco ausentes para queries de ranking → migration `20260522120000_ranking_comments_indexes.sql` criada
+
+**Débitos técnicos (não bloqueantes):**
+- SELECTs sem LIMIT (volume baixo hoje)
+- `lessonsCompleted` carrega comentários/pontos (naming confuso mas não quebra)
+- Admins aparecem no ranking se participarem
+- Peso igual aulas/comentários no ranking geral (1:1)
+
+---
+
 ## 2026-05-17 — Team joaoguirunas-academy-robot-curso-fix
 
 **Objetivo:** Corrigir posição do robô Spline — remover da página de aula, adicionar no hero da página do curso ao lado do 0%
@@ -196,7 +222,7 @@ Registro de todos os Agent Teams formados neste projeto. Lead (team-os) atualiza
 - sites-devops — implementar script `dev:restart` no package.json
 - sites-qa — veredicto formal da solução
 
-**Status:** ativo
+\*\*Status:\*\* encerrado\n**Encerrado:** 2026-05-21\n**PR:** https://github.com/joaoguirunas/joaoguirunas-academy/pull/4
 **Início:** 2026-05-16
 
 ---
@@ -609,3 +635,18 @@ Registro de todos os Agent Teams formados neste projeto. Lead (team-os) atualiza
 **Status:** ativo
 **Início:** 2026-05-21T10:07:00-03:00
 **Stories:** [[../stories/active/LS-1.3-copy-button-code-blocks]]
+
+## 2026-05-21 — Team joaoguirunas-academy-ranking-progresso
+
+**Objetivo:** Criar tela de ranking com top 5 de melhor progresso semanal, quinzenal e mensal — visível a todos os alunos
+**Lead:** team-os (skill)
+**Composição:**
+- sites-architect — stories RK-1.1, RK-1.2
+- sites-data — query SQL de ranking por período
+- sites-dev-gamma — implementação fullstack (server action + UI)
+- sites-qa — gate de qualidade (a spawnar após implementação)
+- sites-devops — push + PR (a spawnar após QA)
+
+**Status:** ativo
+**Início:** 2026-05-21
+**Stories:** ver [[../stories/BACKLOG]]
