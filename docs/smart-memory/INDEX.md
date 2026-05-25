@@ -1,7 +1,7 @@
 ---
 title: Smart Memory Index
 type: index
-updated: 2026-05-08
+updated: 2026-05-25
 tags: [index]
 ---
 
@@ -27,6 +27,7 @@ MOC raiz. Todo arquivo novo em `docs/smart-memory/` deve ser referenciado aqui.
 ## Decisões Arquiteturais
 - [[decisions/ADR-001-plataforma-cursos-stack]] — stack e decisões consolidadas da plataforma de cursos
 - [[decisions/ADR-002-materiais-por-modulo-schema]] — schema de materiais por módulo (Opção A: tabela nova `module_materials`) — proposed 2026-05-16
+- [[decisions/ADR-turma-granular-access]] — controle de acesso granular em turmas: `included_lesson_ids` em `cohort_courses` (Opção A) — proposed 2026-05-25
 - `decisions/` — ADRs numerados
 
 ## Operações

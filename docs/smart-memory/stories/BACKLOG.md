@@ -1,12 +1,52 @@
 ---
 title: Story Backlog
 type: backlog
-updated: 2026-05-21
+updated: 2026-05-25
 tags: [story]
 ---
 
 
 # Backlog de Stories
+
+## Epic TGA — Turma Granular Access (2026-05-25)
+
+| Story | Título | Complexidade | Status | Agente |
+|---|---|---|---|---|
+| [[backlog/TGA-1.1-migration-included-lesson-ids\|TGA-1.1]] | Migration `included_lesson_ids` em `cohort_courses` + atualização `has_access` + regen types | M | backlog | sites-data |
+| [[backlog/TGA-1.2-admin-ui-lesson-selector\|TGA-1.2]] | Admin UI — tree-select Curso > Módulo > Aula em CohortForm + `cohortCourseSchema` estendido | M | backlog | sites-dev-alpha + sites-dev-beta |
+| [[backlog/TGA-1.3-student-enforcement-included-lesson-ids\|TGA-1.3]] | Student — enforcement de `included_lesson_ids` nas 5 páginas do aluno + helper compartilhado | M | backlog | sites-dev-alpha |
+| [[backlog/TGA-1.4-qa-gate-granular-access\|TGA-1.4]] | QA gate adversarial — 4 variants de cohort, RLS, defense in depth, veredicto formal | M | backlog | sites-qa |
+
+**ADR autoritativa:** [[../decisions/ADR-turma-granular-access]] (Opção A — coluna `included_lesson_ids: uuid[]` espelhada em `cohort_courses`). **Proposed** 2026-05-25, aguarda aprovação do PO.
+
+**Objetivo do Epic TGA:** permitir que uma turma controle acesso até a granularidade aula (Curso > Módulo > Aula), abrindo o caminho para vender subconjuntos do curso como turmas-produto (ex.: "só Módulo 1", "Módulo 2 + aulas 1-3 do Módulo 3"). Estende o padrão existente `included_module_ids` com um terceiro nível paralelo `included_lesson_ids` — mesma semântica de "lista vazia = sem restrição neste nível".
+
+**Sequência:**
+1. **TGA-1.1** (sites-data) primeiro — migration aditiva + RPC `has_access` ganha 1 cláusula nova + types regenerados. **Bloqueia TGA-1.2 e TGA-1.3.**
+2. **TGA-1.2** + **TGA-1.3** em paralelo após TGA-1.1. Mesmo dev (sites-dev-alpha) coordena os 2 que tocam UI; sites-dev-beta cuida do schema/action de TGA-1.2.
+3. **TGA-1.4** (sites-qa) por último — adversarial end-to-end com veredicto formal. **AC12 anti-recorrência Story 1.1**: QA Results obrigatoriamente preenchido antes de mover qualquer TGA para `done/`.
+
+**Decisões arquiteturais (detalhe na ADR-003):**
+- Opção A vs B: array em `cohort_courses` (escolhida) vs tabela nova `cohort_lessons` (rejeitada). Razão #1: padrão existente `included_module_ids` já é a convenção do projeto. Razão #2: minimiza diff em `has_access` (1 cláusula nova vs reescrita estrutural — RLS é risco crítico no ADR-001).
+- `has_module_access` (materiais de módulo, ADR-002) **NÃO é tocada** — materiais de módulo continuam por módulo, semântica preservada.
+- 5 caminhos no aluno consomem `included_module_ids` hoje (dashboard, /meus-cursos, /curso/[slug], /curso/[slug]/aula/[lesson-slug] via RPC, /turmas/[slug]). TGA-1.3 cobre todos via helper compartilhado `src/lib/access/cohort-filters.ts`.
+- Backwards compat garantida: `DEFAULT '{}'` na coluna nova = lista vazia = comportamento atual preservado para 100% das cohorts existentes.
+
+**Invariante semântica documentada:** módulo bloqueia antes de aula. Se aula listada em `included_lesson_ids` mas módulo não está em `included_module_ids`, aula permanece bloqueada (UI impede configurar; RPC faz `AND` das duas listas). Variant "L-only" do QA gate (TGA-1.4 AC4) testa exatamente isso.
+
+**Anti-recorrência embutida:**
+- AC8 da TGA-1.2 (coerência módulo/aula no admin) — desmarcar módulo limpa as aulas órfãs.
+- AC8 da TGA-1.3 (não-leak via listagem) — aula bloqueada **não aparece** na lista do aluno.
+- AC12 da TGA-1.4 (QA Results obrigatório) — defesa contra Story 1.1 histórica.
+
+**5-point checklist:** GO 5/5 em cada story. Prefixo TGA livre — Epics anteriores: AP, LA, MC, FAA, AV, FM, F1-F13, CT, KV, LS, RK.
+
+**Revisão Axilun (sites-qa, 2026-05-25):** 3 concerns incorporados após primeira pass.
+- **#1 RPC gate primário:** TGA-1.1 AC3 reforçada + novo AC9 (atomicidade DDL: ALTER TABLE + CREATE OR REPLACE FUNCTION no mesmo arquivo de migration; splittar é proibido por criar janela de bypass via URL direta).
+- **#2 Inconsistência student pages:** TGA-1.3 AC4 expandido para refatorar `aula/[lesson-slug]/page.tsx:119-145` (padrão "set vazio = todos passam" acidental) usando o helper `filterLessonsByCohortAccess` do AC6 — nivela com `curso/[slug]/page.tsx:159-165` que já faz expansão explícita.
+- **#3 Semântica módulo=[] ignora aula:** ADR-003 ganhou "Tabela verdade semântica autoritativa". TGA-1.1 AC10 documenta no comentário SQL da função. TGA-1.2 AC13 + AC7 normalizado bloqueiam dirty state na UI/action (aula só editável quando módulo tem restrição). TGA-1.3 AC11 fixa a invariante no helper.
+
+---
 
 ## Epic LS — Live Sessions (2026-05-18)
 

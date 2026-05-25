@@ -9,7 +9,30 @@ tags: [ops]
 
 O lead (team-os) atualiza este arquivo a cada mudança de estado dos teammates.
 
-## Team ativo — joaoguirunas-academy-fix-aulas-abertura-404 (2026-05-17)
+## Team ativo — joaoguirunas-academy-turma-acesso-granular (2026-05-25)
+
+**Status:** 🟡 em execução — teammates em paralelo
+**Objetivo:** `included_lesson_ids` em cohort_courses + admin UI + student enforcement
+**Branch:** a ser criada pelo sites-devops (feat/turma-acesso-granular)
+**Restrição:** Nenhum push sem QA PASS + autorização explícita do João.
+
+**Semântica definida pelo lead:**
+- `included_lesson_ids uuid[] DEFAULT '{}'` — array vazio = todas as aulas do módulo liberadas
+- Se `included_module_ids = []` (full course) → `included_lesson_ids` não se aplica
+- Aula de módulo não permitido é bloqueada independente de `included_lesson_ids`
+- RPC `has_access` no banco é o gate primário — migration deve atualizá-la
+
+**Pipeline:**
+1. 🔄 **sites-architect** — ADR + stories TGA (incorporando feedback QA + semântica)
+2. ⏳ **sites-data** — pronto para migration assim que ADR confirmar (semântica entregue)
+3. ⏳ **sites-dev-alpha** — plano mapeado (Novael): novo estado `selectedLessons`, 3º nível UI, query atualizada
+4. ⏳ **sites-dev-beta** — plano mapeado (Rexali): 5 pontos de modificação identificados
+5. ⏳ **sites-qa** — observações críticas prontas (Axilun): RPC, inconsistência pages, 10 ataques
+6. ⏳ **sites-devops** — pronto (Graveli): branch main limpa
+
+---
+
+## Team encerrado — joaoguirunas-academy-fix-aulas-abertura-404 (2026-05-17)
 
 **Status:** 🟢 commits locais criados, aguardando autorização do PO para push
 **Objetivo:** Fix bug 404 em aulas "Abertura" — colisão de slug entre módulos do mesmo curso

@@ -9,6 +9,24 @@ tags: [ops]
 
 Registro de todos os Agent Teams formados neste projeto. Lead (team-os) atualiza a cada `*dispatch` e `*close`.
 
+## 2026-05-25 — Team joaoguirunas-academy-turma-acesso-granular
+
+**Objetivo:** Estender controle de acesso de turmas para suportar seleção de aulas específicas por módulo (`included_lesson_ids`), permitindo criar turmas-produto com conteúdo granular para venda separada.
+**Lead:** team-os (skill)
+**Composição:**
+- sites-architect — decisão arquitetural, ADR, criação de stories TGA
+- sites-data — migration `included_lesson_ids` + atualização de types
+- sites-dev-alpha — admin UI: seletor de aulas no CohortForm "Cursos Liberados"
+- sites-dev-beta — student enforcement (dashboard, /curso, /aula, server actions)
+- sites-qa — gate adversarial (10 ataques, foco access control)
+- sites-devops — commits + PR após QA PASS
+
+**Status:** ativo
+**Início:** 2026-05-25T09:51:00-03:00
+**Stories:** ver [[../stories/BACKLOG]] — epic TGA (a ser criado por sites-architect)
+
+---
+
 ## 2026-05-22 — Team joaoguirunas-academy-qa-ranking-seguranca
 
 **Objetivo:** Verificação de segurança pré-deploy do epic RK-2 (ranking 3 categorias: Aulas, Comentários, Geral)

@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, type ReactNode } from 'react'
+import { useState, useRef, type ReactNode } from 'react'
 import { Copy, Check } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
@@ -29,15 +29,33 @@ function CopyBtn({ copied, onClick }: { copied: boolean; onClick: () => void }) 
 
 export function CodeBlock({ children, language, filename, className }: CodeBlockProps) {
   const [copied, setCopied] = useState(false)
+  const copyingRef = useRef(false)
 
   const code = typeof children === 'string'
     ? children
     : (children as { props?: { children?: string } })?.props?.children ?? ''
 
   async function handleCopy() {
-    await navigator.clipboard.writeText(code.trim())
-    setCopied(true)
-    setTimeout(() => setCopied(false), 2000)
+    // Debounce: ignore if a copy is already in flight
+    if (copyingRef.current) return
+    copyingRef.current = true
+
+    try {
+      if (!navigator?.clipboard?.writeText) {
+        // Clipboard API unavailable (HTTP, old browser, SSR hydration edge case)
+        copyingRef.current = false
+        return
+      }
+      await navigator.clipboard.writeText(code.trim())
+      setCopied(true)
+      setTimeout(() => {
+        setCopied(false)
+        copyingRef.current = false
+      }, 2000)
+    } catch {
+      // Permission denied or other clipboard error — fail silently
+      copyingRef.current = false
+    }
   }
 
   return (

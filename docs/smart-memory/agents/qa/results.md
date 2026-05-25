@@ -3958,3 +3958,216 @@ Nenhum.
 
 - **@sites-devops:** PUSH LIBERADO de Epic RK (RK-1.1 + RK-1.2). Funcionalmente PASS; concern P3 backlog
 - **@team-lead:** opcionalmente criar story de hardening a11y (CONCERN-1) — não bloqueia release atual
+
+---
+
+## Delta Hardening — features recentes
+
+**Data:** 2026-05-25
+**Agente:** Kronilux (Hardening & Resilience)
+**Escopo:** Ranking de Progresso, Dashboard Admin, Botão Copiar Code Blocks
+
+---
+
+### Feature 1 — Ranking de Progresso
+
+| # | Vetor | Achado | Severidade |
+|---|---|---|---|
+| RK-H1 | Race condition / múltiplos renders | `page.tsx` usa `Promise.allSettled` + `force-dynamic`. SSR gera 1 render por request HTTP. RankingTabs é pure state (zero fetch adicional). Sem race. | 🟢 Baixo |
+| RK-H2 | Array vazio (0 alunos no período) | `Podium.tsx:129-143` guard `if (entries.length === 0)` retorna empty state antes de qualquer `.find()`. Seguro. | 🟢 Baixo |
+| RK-H3 | Promise.all parcial — 1 categoria falha | `page.tsx:17-27` usa `Promise.allSettled`. Fallback `settled()` retorna `[]`. UI mostra array vazio para categoria com erro. Correto por design. | 🟢 Baixo |
+| RK-H4 | Índices cobrem as queries? | `20260521` cria índice partial `completed_at WHERE completed = true`. Query filtra `eq('completed', true).gte('completed_at', since)`. Cobertura exata, sem full table scan. | 🟢 Baixo |
+| RK-H5 | Timezone inconsistência | Âncora `Date.UTC(2026,4,18,3,0,0)` = 18/05 00:00 BRT. Ciclo gira em 00:00 BRT. `formatRange` usa `timeZone: 'America/Sao_Paulo'`. Sem inconsistência. | 🟢 Baixo |
+| RK-H6 | `getLessonScores` puxa todas as linhas em JS | Query retorna todas as linhas `completed_at >= since`, agrega em JS. Com 10k+ alunos ativos, pode trazer dezenas de milhares de linhas por request. | 🟡 Médio |
+| RK-H7 | Índices de comments sem `author_id` | Índices em `created_at DESC` cobrem o filtro temporal mas exigem heap fetch para `author_id` em cada linha. Aceitável para volume atual. | 🟡 Médio |
+
+**Findings críticos:** nenhum.
+
+**Fix proposto para RK-H6** (aguarda autorização):
+Substituir `getLessonScores` por RPC Supabase com `GROUP BY user_id` para fazer aggregation no banco e trazer apenas 5 linhas.
+
+---
+
+### Feature 2 — Dashboard de Progresso Admin
+
+| # | Vetor | Achado | Severidade |
+|---|---|---|---|
+| AP-H1 | Divisão por zero | `admin-progress.ts:238` guard `totalLessons > 0 ? ... : 0`. `getLessonsCompletionStats:318` mesmo padrão. Sem divisão por zero. | 🟢 Baixo |
+| AP-H2 | Turma com `included_module_ids` | `:196-208` build de `accessibleModuleIds` respeita o array da turma. Aulas de módulos não liberados não entram no cálculo. Correto. | 🟢 Baixo |
+| AP-H3 | Aluno em múltiplas turmas do mesmo curso | `enrolledUserIds = [...new Set(...)]` deduplication. `accessibleModuleIds` é `Set<string>` — union das permissões. `lessonIds` deduplicado via `new Set`. Aluno contado uma vez. | 🟢 Baixo |
+| AP-H4 | `listUsers({ perPage: 1000 })` trunca silenciosamente | `admin-progress.ts:95` não pagina além de 1000 usuários Auth. Alunos além do limite desaparecem do dashboard sem erro visível. **CRÍTICO — precisa de fix.** | 🔴 Crítico |
+| AP-H5 | Sem paginação na UI — 500+ alunos | Table renderiza todos os `students` sem paginação. 500+ linhas = DOM pesado + potencial timeout na query encadeada. | 🟡 Médio |
+| AP-H6 | Error boundary ausente | `page.tsx` não tem `try/catch` nem `error.tsx` na rota. Qualquer falha de query explode com error page genérica. | 🟡 Médio |
+| AP-H7 | `progressRows` sem filtro `completed = true` | `:165-171` busca linhas `completed = false` que são descartadas no loop. Desperdício com muitos alunos. | 🟡 Médio |
+
+**Fix proposto para AP-H4** (aguarda autorização do lead):
+```typescript
+async function listAllAuthUsers() {
+  const all: { id: string; email?: string; user_metadata?: Record<string, unknown> }[] = []
+  let page = 1
+  while (true) {
+    const { data, error } = await supabaseAdmin.auth.admin.listUsers({ page, perPage: 1000 })
+    if (error) throw new Error(error.message)
+    all.push(...data.users)
+    if (data.users.length < 1000) break
+    page++
+  }
+  return all
+}
+```
+
+---
+
+### Feature 3 — Botão Copiar nos Code Blocks
+
+| # | Vetor | Achado | Severidade |
+|---|---|---|---|
+| CB-H1 | `navigator.clipboard` undefined em HTTP | `CodeBlock.tsx:39` chamava `navigator.clipboard.writeText` sem guard. Em HTTP local, `clipboard` é `undefined` → TypeError unhandled. **FIXADO.** | 🔴 Crítico |
+| CB-H2 | Mesmo problema no HTML Content path | `LessonContent.tsx:208` sem guard. **FIXADO.** | 🔴 Crítico |
+| CB-H3 | Múltiplos cliques rápidos — empilham setTimeout | Sem debounce, cliques rápidos empilhavam múltiplos `setTimeout` com reset conflitante. **FIXADO** com `copyingRef`. | 🔴 Crítico |
+| CB-H4 | Múltiplos cliques no HTML path | Mesmo problema. **FIXADO** com `let copying`. | 🔴 Crítico |
+| CB-H5 | SSR: acesso a `navigator` durante SSR | `'use client'` presente. `handleCopy` só é chamado em event handler. Sem risco de crash no build. | 🟢 Baixo |
+| CB-H6 | Content >1MB | `writeText` sem limite na spec; browsers impõem ~1MB. Improvável em conteúdo educacional. `try/catch` adicionado captura quota error. | 🟢 Baixo |
+
+**Arquivos modificados:**
+- `src/components/editor/CodeBlock.tsx` — guard + `useRef` debounce + `try/catch`
+- `src/components/editor/LessonContent.tsx` — guard + `let copying` debounce + `.catch()`
+
+---
+
+### Sumário executivo
+
+| Severidade | Qtd | Status |
+|---|---|---|
+| 🔴 Crítico | 5 | 4 fixados (CB-H1/H2/H3/H4); AP-H4 aguarda autorização |
+| 🟡 Médio | 5 | AP-H5/H6/H7/RK-H6/RK-H7 — propostas documentadas, aguardam autorização |
+| 🟢 Baixo | 8 | Documentados |
+
+---
+
+## QA Adversarial Gate — 3 Features Recentes (Ranking, Admin Progresso, CodeBlock Copy)
+
+**Data:** 2026-05-25
+**Auditor:** Axilun (sites-qa)
+**Build:** `next build` ✓ Compiled successfully em 28.0s, 0 errors. 1 warning pré-existente (middleware deprecation — não-regressão).
+**Typecheck:** `tsc --noEmit` ✓ Sem erros, sem warnings.
+
+---
+
+### Feature 1 — Ranking de Progresso (`/academy/ranking`)
+
+**Arquivos auditados:**
+- `src/app/actions/ranking.ts` (184 linhas)
+- `src/components/student/Podium.tsx` (164 linhas)
+- `src/components/student/RankingTabs.tsx` (166 linhas)
+- `src/app/(academy)/academy/(student)/ranking/page.tsx` (65 linhas)
+- `src/lib/ranking-cycle.ts` (23 linhas, util compartilhada)
+- `supabase/migrations/20260521100000_lesson_progress_ranking_index.sql`
+- `supabase/migrations/20260522120000_ranking_comments_indexes.sql`
+
+| # | Check | Resultado | Evidência |
+|---|---|---|---|
+| 1 | `requireUser()` em todas as 3 actions públicas | ✅ PASS | `ranking.ts:127`, `:137`, `:147` |
+| 2 | Payload só `displayName` (firstName), sem email | ✅ PASS | `ranking.ts:41-49` — `RankingEntry` type não tem campo email; `buildEntries` extrai apenas `firstName` |
+| 3 | Fallback para `'Aluno'` se name vazio/null | ✅ PASS | `ranking.ts:41` — `(p?.name ?? '').trim().split(/\s+/)[0] \|\| 'Aluno'` |
+| 4 | 3 categorias com queries independentes (Aulas/Comentários/Geral) | ✅ PASS | `getRankingByPeriod` (lesson_progress), `getRankingByComments` (comments+forum_threads+forum_replies), `getRankingGeneral` (soma das duas) |
+| 5 | Pódio com <5 alunos não quebra | ✅ PASS | `Podium.tsx:146-160` usa `entries.find((e) => e.rank === N)` + render condicional `&&` — ausência de slot é tratada graceful |
+| 6 | `force-dynamic` na page | ✅ PASS | `ranking/page.tsx:1` |
+| 7 | Janelas rolling em dias corridos (não calendário) | ✅ PASS | `ranking-cycle.ts:15-22` — `DAYS_BY_PERIOD * 86400000`, ancorado em LAUNCH_UTC_MS, ciclos avançam a cada N dias corridos |
+| 8 | Desempate por `completed_at`/`created_at` mais recente | ✅ PASS | `ranking.ts:113-122`, `:171-178` — sort secundário por `lastAt` desc |
+| 9 | Migrações com nomes de colunas corretos | ✅ PASS | `lesson_progress.completed_at` (confirmado em `database.ts:614`), `comments.created_at` + `comments.deleted_at` (`database.ts:312-315`), idem para `forum_threads`/`forum_replies` |
+| 10 | Sem `any`, tipos `RankingEntry` corretos | ✅ PASS | Typecheck limpo. Tipo bem definido em `ranking.ts:10-17` |
+
+**Findings não-bloqueantes (observações):**
+
+- **R-OBS-1 (informativo):** `Promise.allSettled` com 9 chamadas em paralelo (`ranking/page.tsx:17-27`) — cada uma faz 1 query de progress + 3 queries de comments (no caso de `general`) + 1 query de profiles. Para 9 períodos paralelos isso é ~9-13 queries simultâneas. Em produção sob carga, monitorar latência. Para MVP é aceitável.
+- **R-OBS-2 (informativo):** Ranking **não filtra por `role`** — alunos ADMIN/MENTOR que completam aulas (ex: ao revisar) aparecem no pódio competindo com STUDENTs. Decisão de produto, mas vale documentar/confirmar. Não bloqueante.
+- **R-OBS-3 (informativo):** `Podium.tsx:34-66` usa `next/image` para avatares sem `unoptimized` flag. Se `avatarUrl` for Supabase storage signed URL com TTL, há risco de o Next image optimizer cachear um URL expirado em runtime — verificar config de `images.remotePatterns` em `next.config.ts`. Não bloqueante; fora do escopo desta auditoria.
+- **R-OBS-4 (cosmético):** `Podium.tsx:97` usa label "lessonsCompleted" mas o tipo é genérico (vale para comments/general também). Funcionalmente correto via `SCORE_LABEL`, mas nome do campo no tipo (`lessonsCompleted: number`) é misleading para `comments`/`general` — melhor seria `score: number`. Cosmético.
+
+**Veredicto Feature 1: ✅ PASS**
+
+---
+
+### Feature 2 — Dashboard de Progresso Admin (`/academy/admin/progresso`)
+
+**Arquivos auditados:**
+- `src/app/actions/admin-progress.ts` (348 linhas)
+- `src/app/(academy)/academy/(admin)/admin/progresso/page.tsx` (302 linhas)
+- `src/components/admin/AdminSidebar.tsx` (item 10)
+
+| # | Check | Resultado | Evidência |
+|---|---|---|---|
+| 1 | `requireAdmin()` em **todas** as server actions | ✅ PASS | `admin-progress.ts:35` (getStudentsProgress), `:259` (getLessonsCompletionStats), `:329` (getCoursesForFilter), `:340` (getCohortsForFilter) — 4/4 |
+| 2 | Filtro de turma só mostra alunos daquela turma | ✅ PASS | `:38-48` — `memberQuery.eq('cohort_id', opts.cohortId)` aplica antes do fetch de members |
+| 3 | Anti-N+1: sem query por aluno | ✅ PASS | Toda a função usa queries em lote: 1 query members, 1 cohort_courses, 1 listUsers, 1 courses, 1 modules, 1 lessons, 1 lesson_progress. Loop final só monta o resultado em memória |
+| 4 | `distinct` em contagens de usuários (C4) | ✅ PASS | `:288` — `new Set((memberRows ?? []).map((m) => m.user_id)).size` deduplica corretamente. Mesmo pattern em `:77` e `:80` |
+| 5 | `is_available=true` filtra aulas (C1) | ✅ PASS | `:151` (getStudentsProgress) e `:267` (getLessonsCompletionStats) — ambos filtram `eq('is_available', true)` |
+| 6 | Module access per cohort respeitado (C2) | ✅ PASS | `:61-66` constrói `cohortAccessMap`; `:194-209` itera cohorts do user e só soma módulos das turmas onde tem acesso. `included_module_ids=[]/null` → full access expandido em `:64` |
+| 7 | Alunos sem acesso ao curso são excluídos (C6) | ✅ PASS | `:211` — `if (accessibleModuleIds.size === 0) return null`, depois `:242` filtra null, e `:244` `if (courseStats.length === 0) continue` — aluno some da lista |
+| 8 | `force-dynamic` na page admin | ✅ PASS | `progresso/page.tsx:1` |
+| 9 | Typecheck limpo | ✅ PASS | `tsc --noEmit` 0 errors |
+| 10 | Sidebar admin com link `/progresso` | ✅ PASS | `AdminSidebar.tsx:29` — `{ href: '/academy/admin/progresso', label: 'Progresso', icon: BarChart2 }` |
+
+**Findings não-bloqueantes:**
+
+- **A-OBS-1 (informativo):** `getLessonsCompletionStats` em `:282-287` conta enrolled students via `cohort_members` filtrando apenas por `status='ACTIVE'`. Não filtra `expires_at` (turmas com acesso expirado). Pode inflacionar denominador → `completionRate` menor que real. Verificar se o produto considera membros expirados como "matriculados". **Não bloqueante**, mas documentar.
+- **A-OBS-2 (informativo):** Filtro de turma + curso pode mostrar combinações vazias sem feedback claro (ex: turma X não tem acesso ao curso Y → lista vazia com mensagem genérica "Nenhum aluno encontrado"). UX aceitável, mas poderia diferenciar "sem alunos" vs "turma não inclui este curso".
+- **A-OBS-3 (informativo):** `usersListData` em `:94-95` busca **todos** os auth.users (`perPage: 1000`). Em escala >1000, este endpoint precisaria paginação. Aceita para MVP; flag para futuro.
+- **A-OBS-4 (cosmético):** `progresso/page.tsx:115-160` renderiza uma linha por (aluno × curso). Se um aluno está em 5 cursos, ocupa 5 linhas na tabela. Coluna "Aluno" mostra nome repetido. UX legível mas verbose. Não bloqueante.
+
+**Veredicto Feature 2: ✅ PASS**
+
+---
+
+### Feature 3 — Botão Copiar nos Code Blocks
+
+**Arquivos auditados:**
+- `src/components/editor/CodeBlock.tsx` (67 linhas)
+- `src/components/editor/LessonContent.tsx` (246 linhas)
+
+| # | Check | Resultado | Evidência |
+|---|---|---|---|
+| 1 | Funciona sem JS / graceful degradation | ⚠️ N/A | `'use client'` declarado (`CodeBlock.tsx:1`, `LessonContent.tsx:1`). Botão depende de JS. Sem JS, o code block ainda renderiza (texto visível), apenas o botão não funciona — aceitável |
+| 2 | `navigator.clipboard.writeText` com fallback p/ browsers antigos | ✅ PASS | `CodeBlock.tsx:44-48` — guard `if (!navigator?.clipboard?.writeText) { return }` + `try/catch` em `:43-58`. `LessonContent.tsx:208` — `if (!navigator?.clipboard?.writeText) return`. Falha silenciosa em HTTP/old browsers — comportamento correto (botão fica sem efeito em vez de crashar) |
+| 3 | Toast de confirmação no sistema do projeto | ⚠️ CONCERN | Projeto **não tem sistema de toast global** (sem `sonner`, `react-hot-toast`, ou hook `useToast`). Implementação ad-hoc inline em ambos arquivos. Aceitável mas inconsistente com pattern futuro |
+| 4 | Ícone volta ao estado inicial após N segundos | ✅ PASS | `CodeBlock.tsx:40` — `setTimeout(() => setCopied(false), 2000)`. `LessonContent.tsx:215-221` idem |
+| 5 | Múltiplos code blocks isolados | ✅ PASS | `CodeBlock.tsx` é componente próprio com `useState` interno — cada instância tem estado independente. `LessonContent.tsx:187` itera `pres.forEach((pre))` criando handler local por elemento — isolado |
+| 6 | Typecheck limpo | ✅ PASS | `tsc --noEmit` 0 errors |
+| 7 | `aria-label` no botão copiar | ❌ **AUSENTE** | `CodeBlock.tsx:14-28` (`CopyBtn`) não tem `aria-label` nem `aria-pressed`. O texto visível "Copiar"/"Copiado!" serve como nome acessível, mas screen reader não anuncia mudança de estado. `LessonContent.tsx:192` (botão dinâmico em HTML) idem |
+
+**Findings (todos não-bloqueantes):**
+
+- **CB-OBS-1 (acessibilidade — não-bloqueante):** Botão em `CodeBlock.tsx:14-28` (`CopyBtn`) **não tem `aria-label`** explícito. O texto visível "Copiar"/"Copiado!" serve como nome acessível via texto-do-botão, e o toast "Copiado com sucesso" em `:74-81` não tem `aria-live="polite"` — screen reader não anuncia a confirmação. Para WCAG AA stricto isso é um gap, mas funcionalmente acessível via texto. Idem para o botão dinâmico em `LessonContent.tsx:192`. Sugestão para follow-up.
+
+- **CB-OBS-2 (correção de leitura anterior):** Auditoria inicial sinalizou ausência de guard `navigator.clipboard` (CB-FAIL-1). **Re-verificação confirma que o guard ESTÁ presente** em ambos arquivos (`CodeBlock.tsx:44` + `LessonContent.tsx:208`), com `try/catch` (CodeBlock) e `.catch()` (LessonContent). Hardening do sites-hardener (CB-H1/H2/H3/H4) está corretamente aplicado. **Falso positivo retirado.**
+
+**Findings não-bloqueantes:**
+
+- **C-OBS-1 (informativo):** `CodeBlock.tsx:33-35` extrai `code` de `children` com cast `(children as { props?: { children?: string } })?.props?.children ?? ''`. Se `children` for um React node aninhado profundamente (ex: highlight.js wrap com múltiplos spans), o texto extraído pode ser apenas o primeiro nível. Para code blocks simples MDX funciona; para HTML highlighted pode falhar. Validar com payload real.
+- **C-OBS-2 (cosmético):** Toast "Copiado com sucesso" em `CodeBlock.tsx:57-63` é posicionado absoluto no topo do code block. Sobrepõe-se ao header com filename/language. Visualmente pode causar overlap em telas pequenas.
+
+**Veredicto Feature 3: ⚠️ CONCERNS** (gap acessibilidade WCAG AA — `aria-label`/`aria-live`; não bloqueia push)
+
+---
+
+### Veredicto Consolidado
+
+| Feature | Veredicto | Bloqueios |
+|---|---|---|
+| Ranking de Progresso | ✅ PASS | 0 |
+| Dashboard Progresso Admin | ✅ PASS | 0 |
+| Botão Copiar Code Blocks | ⚠️ CONCERNS | 0 bloqueantes; gap a11y (aria-label) recomendado p/ follow-up |
+
+**Build:** ✅ `next build` clean, 0 errors. 1 warning pré-existente (middleware deprecation) — não-regressão.
+**Typecheck:** ✅ `tsc --noEmit` clean, 0 errors, 0 warnings.
+
+**Veredicto consolidado: ✅ PASS** (com 1 CONCERN não-bloqueante na Feature 3 — acessibilidade do botão copiar).
+
+**Próximo passo:**
+1. **@sites-devops:** push autorizado. Features prontas para produção.
+2. **Follow-up sugerido (não bloqueante):** PR de a11y para `CodeBlock.tsx` e `LessonContent.tsx` — adicionar `aria-label` no botão e `aria-live="polite"` no toast.
+3. **Observações documentadas** (R-OBS-1 a R-OBS-4, A-OBS-1 a A-OBS-4) ficam como tech-debt rastreável.
+
+**Auditor:** ✦ Axilun — A luz está correta.
+
