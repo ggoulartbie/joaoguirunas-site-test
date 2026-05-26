@@ -22,9 +22,12 @@ Registro de todos os Agent Teams formados neste projeto. Lead (team-os) atualiza
 - sites-qa — gate de qualidade formal (LP-3.1)
 - sites-devops — commits locais (sem push)
 
-**Status:** ativo
+**Status:** encerrado
 **Início:** 2026-05-26T00:00:00-03:00
-**Stories:** ver [[../stories/BACKLOG]] — epic LP (em criação por sites-architect)
+**Encerrado:** 2026-05-26T05:30:00-03:00
+**Commits:** d97a697 (createLeadOnly), 8ae60d4 (sitemap), ba958e2 (smart-memory), 326f96c (5 LPs)
+**Branch:** feat/landing-pages-cursos — sem push (aguarda validação em staging)
+**Stories:** ver [[../stories/BACKLOG]] — epics LP e DISC criados
 
 ---
 
