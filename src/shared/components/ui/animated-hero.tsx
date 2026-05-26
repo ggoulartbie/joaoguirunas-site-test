@@ -8,6 +8,7 @@ import { ArrowRight } from 'lucide-react';
 import { SparklesCore } from '@/shared/components/ui/sparkles';
 import { GrowthWatermark } from './growth-watermark';
 import { Logo } from '@/shared/components/ui/Logo';
+import { CoursesDropdown } from '@/shared/components/ui/CoursesDropdown';
 
 const EMBER = '#FF3A0E';
 const CINEMA: [number, number, number, number] = [0.7, 0, 0.2, 1];
@@ -106,7 +107,7 @@ export function AnimatedHero() {
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.35, ease: CINEMA }}
-          className="flex flex-col sm:flex-row items-stretch sm:items-center justify-center gap-3 w-full max-w-xs sm:max-w-none sm:w-auto mb-0 mt-12 sm:mt-8"
+          className="relative flex flex-col sm:flex-row items-stretch sm:items-center justify-center gap-3 w-full max-w-xs sm:max-w-none sm:w-auto mb-0 mt-12 sm:mt-8"
         >
           {/* 1 — Open Source */}
           <Link
@@ -117,14 +118,8 @@ export function AnimatedHero() {
             Open Source
           </Link>
 
-          {/* 2 — Curso Online */}
-          <Link
-            href="/curso-online"
-            className="inline-flex items-center justify-center px-7 py-3 text-sm font-semibold text-white/70 transition-all duration-200 hover:text-white hover:bg-white/[0.05]"
-            style={{ border: '1px solid rgba(255,255,255,0.14)', letterSpacing: '-0.01em' }}
-          >
-            Curso Online
-          </Link>
+          {/* 2 — Cursos (dropdown) */}
+          <CoursesDropdown />
 
           {/* 3 — Mentoria (KV principal) */}
           <Link
