@@ -57,6 +57,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { path: '/skills/supabase',           priority: 0.5, freq: 'monthly' },
     { path: '/skills/vercel',             priority: 0.5, freq: 'monthly' },
     { path: '/skills/github',             priority: 0.5, freq: 'monthly' },
+    // Cursos (landing pages "Em Breve")
+    { path: '/curso-ia-agentes',          priority: 0.8, freq: 'weekly' },
+    { path: '/curso-design',              priority: 0.8, freq: 'weekly' },
+    { path: '/curso-dev',                 priority: 0.8, freq: 'weekly' },
+    { path: '/curso-social-media',        priority: 0.8, freq: 'weekly' },
+    { path: '/curso-bundle',              priority: 0.8, freq: 'weekly' },
     // Framework / Monitor / Squads
     { path: '/framework/aiox-framework',  priority: 0.6, freq: 'monthly' },
     { path: '/squads/xquads',             priority: 0.5, freq: 'monthly' },
