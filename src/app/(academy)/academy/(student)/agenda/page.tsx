@@ -11,15 +11,15 @@ import type { LiveSessionWithCohort } from '@/types/student'
 export const metadata: Metadata = { title: 'Agenda' }
 
 function formatDay(iso: string) {
-  return new Date(iso).toLocaleDateString('pt-BR', { day: '2-digit' })
+  return new Date(iso).toLocaleDateString('pt-BR', { timeZone: 'America/Sao_Paulo', day: '2-digit' })
 }
 
 function formatMonth(iso: string) {
-  return new Date(iso).toLocaleDateString('pt-BR', { month: 'short' }).toUpperCase().replace('.', '')
+  return new Date(iso).toLocaleDateString('pt-BR', { timeZone: 'America/Sao_Paulo', month: 'short' }).toUpperCase().replace('.', '')
 }
 
 function formatTime(iso: string) {
-  return new Date(iso).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })
+  return new Date(iso).toLocaleTimeString('pt-BR', { timeZone: 'America/Sao_Paulo', hour: '2-digit', minute: '2-digit' })
 }
 
 function isMeetingLinkAvailable(scheduledAt: string): boolean {

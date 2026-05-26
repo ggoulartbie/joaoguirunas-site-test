@@ -13,6 +13,7 @@ export const metadata: Metadata = { title: 'Dashboard' }
 
 function formatDate(iso: string) {
   return new Date(iso).toLocaleDateString('pt-BR', {
+    timeZone: 'America/Sao_Paulo',
     weekday: 'short',
     day: 'numeric',
     month: 'short',
