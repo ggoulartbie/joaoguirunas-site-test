@@ -1,7 +1,7 @@
 ---
 title: Smart Memory Index
 type: index
-updated: 2026-05-08
+updated: 2026-05-26
 tags: [index]
 ---
 
@@ -27,7 +27,12 @@ MOC raiz. Todo arquivo novo em `docs/smart-memory/` deve ser referenciado aqui.
 ## Decisões Arquiteturais
 - [[decisions/ADR-001-plataforma-cursos-stack]] — stack e decisões consolidadas da plataforma de cursos
 - [[decisions/ADR-002-materiais-por-modulo-schema]] — schema de materiais por módulo (Opção A: tabela nova `module_materials`) — proposed 2026-05-16
+- [[decisions/ADR-turma-granular-access]] — controle de acesso granular em turmas: `included_lesson_ids` em `cohort_courses` (Opção A) — proposed 2026-05-25
+- [[decisions/ADR-landing-pages-cursos]] — 5 LPs de venda de cursos com captura de lead (rotas top-level, shared em `cursos/_shared/`, action `createLeadOnly`, "Em Breve") — proposed 2026-05-26
 - `decisions/` — ADRs numerados
+
+## Stories planejadas (próximos ciclos)
+- [[stories/backlog/DISC-1.1-desconto-proporcional-bundle]] — Desconto proporcional no curso-bundle para quem já comprou cursos individuais (Stripe coupon dinâmico + análise InfinitePay; zero migration; ativar após LP-2.x + cohorts em prod) — backlog 2026-05-26
 
 ## Operações
 - [[ops/delegation-log]] — histórico de delegações do lead

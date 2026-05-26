@@ -9,6 +9,46 @@ tags: [ops]
 
 Registro de todos os Agent Teams formados neste projeto. Lead (team-os) atualiza a cada `*dispatch` e `*close`.
 
+## 2026-05-26 — Team joaoguirunas-academy-landing-pages-cursos
+
+**Objetivo:** Criar 5 landing pages de venda de cursos: 4 individuais (IA & Agentes, Design, Dev, Social Media) + 1 bundle. Form "Em Breve" coleta lead → CRM webhook. Sem InfinityPay/Stripe no momento.
+**Branch:** `feat/landing-pages-cursos`
+**Lead:** team-os (skill)
+**Composição:**
+- sites-architect — ADR de arquitetura, stories LP-1.x a LP-3.1
+- sites-dev-beta — server action `createLeadOnly` (LP-1.1)
+- sites-dev-alpha — componentes compartilhados + 5 LPs (LP-1.2 + LP-2.x)
+- sites-dev-delta — hardening pós-implementação
+- sites-qa — gate de qualidade formal (LP-3.1)
+- sites-devops — commits locais (sem push)
+
+**Status:** encerrado
+**Início:** 2026-05-26T00:00:00-03:00
+**Encerrado:** 2026-05-26T05:30:00-03:00
+**Commits:** d97a697 (createLeadOnly), 8ae60d4 (sitemap), ba958e2 (smart-memory), 326f96c (5 LPs)
+**Branch:** feat/landing-pages-cursos — sem push (aguarda validação em staging)
+**Stories:** ver [[../stories/BACKLOG]] — epics LP e DISC criados
+
+---
+
+## 2026-05-25 — Team joaoguirunas-academy-turma-acesso-granular
+
+**Objetivo:** Estender controle de acesso de turmas para suportar seleção de aulas específicas por módulo (`included_lesson_ids`), permitindo criar turmas-produto com conteúdo granular para venda separada.
+**Lead:** team-os (skill)
+**Composição:**
+- sites-architect — decisão arquitetural, ADR, criação de stories TGA
+- sites-data — migration `included_lesson_ids` + atualização de types
+- sites-dev-alpha — admin UI: seletor de aulas no CohortForm "Cursos Liberados"
+- sites-dev-beta — student enforcement (dashboard, /curso, /aula, server actions)
+- sites-qa — gate adversarial (10 ataques, foco access control)
+- sites-devops — commits + PR após QA PASS
+
+**Status:** ativo
+**Início:** 2026-05-25T09:51:00-03:00
+**Stories:** ver [[../stories/BACKLOG]] — epic TGA (a ser criado por sites-architect)
+
+---
+
 ## 2026-05-22 — Team joaoguirunas-academy-qa-ranking-seguranca
 
 **Objetivo:** Verificação de segurança pré-deploy do epic RK-2 (ranking 3 categorias: Aulas, Comentários, Geral)

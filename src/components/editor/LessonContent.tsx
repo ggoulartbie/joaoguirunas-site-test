@@ -202,9 +202,13 @@ function HtmlLessonContent({ html, className }: { html: string; className?: stri
       pre.appendChild(toast)
 
       let timer: ReturnType<typeof setTimeout>
+      let copying = false
       function handleClick() {
+        if (copying) return
+        if (!navigator?.clipboard?.writeText) return
         const code = pre.querySelector('code')
         const text = (code ?? pre).innerText
+        copying = true
         navigator.clipboard.writeText(text.trim()).then(() => {
           btn.textContent = 'Copiado!'
           btn.style.color = '#86efac'
@@ -218,7 +222,10 @@ function HtmlLessonContent({ html, className }: { html: string; className?: stri
             btn.style.background = '#3f3f46'
             btn.style.borderColor = '#52525b'
             toast.style.opacity = '0'
+            copying = false
           }, 2000)
+        }).catch(() => {
+          copying = false
         })
       }
 

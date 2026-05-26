@@ -1,12 +1,131 @@
 ---
 title: Story Backlog
 type: backlog
-updated: 2026-05-21
+updated: 2026-05-26
 tags: [story]
 ---
 
 
 # Backlog de Stories
+
+## Epic DISC — Desconto Proporcional Bundle (2026-05-26)
+
+| Story | Título | Complexidade | Status | Agente |
+|---|---|---|---|---|
+| [[backlog/DISC-1.1-desconto-proporcional-bundle\|DISC-1.1]] | Desconto proporcional no `curso-bundle` para quem já comprou cursos individuais (Stripe coupon dinâmico + análise InfinitePay) | L | backlog | sites-dev-beta + sites-data |
+
+**Objetivo do Epic DISC:** quando um aluno autenticado já comprou 1+ dos 4 cursos individuais (`curso-ia-agentes`, `curso-design`, `curso-dev`, `curso-social-media`) e inicia checkout do `curso-bundle`, aplicar desconto igual à soma do que já pagou em compras `APPROVED` + `purchase_kind = 'ENTRY'` desses cohorts. Cross-sell sem fricção: aluno que comprou só uma área pode subir pro pacote completo pagando apenas a diferença.
+
+**Quando ativar:** **somente após** (a) LPs LP-2.x done, (b) cohorts dos 5 produtos criados em `cohorts` table com `is_purchasable=true` + `entry_price_cents` configurado, (c) PO decidir abrir pagamentos reais (sair de "Em Breve"). Não iniciar implementação antes desses 3 gates.
+
+**Decisões arquiteturais:**
+- **Zero migration.** Schema existente (`payments.user_id`, `cohort_id`, `amount_cents`, `status`, `purchase_kind`) já comporta a query. Auditoria via `payments.metadata` (jsonb existente) e via metadata da Stripe Session (`coupon_id`).
+- **Infra de cupons já existe** (`StripeAdapter.createCoupon` em `src/lib/payment/stripe.ts:95-106`, interface `CreateCheckoutParams.couponId` em `src/lib/payment/interface.ts:9`). DISC-1.1 conecta os pontos — apenas estende `createCheckoutSession` para injetar `discounts: [{ coupon }]` na SessionCreateParams.
+- **Stripe coupon dinâmico:** criado a cada checkout do bundle quando aluno autenticado tem histórico. `amount_off` em centavos, `duration: 'once'`, metadata para auditoria.
+- **InfinitePay:** provider não suporta cupom nativo na API atual (POST /links aceita só `items[].price`). Análise documental em `docs/smart-memory/runbooks/infinitepay-discount-analysis.md` entregue antes do código. Recomendação provisória: opção (a) — reduzir `amountCents` no payload + registrar desconto em `payments.metadata` para reconciliação. Confirmar com PO.
+- **Cap mínimo R$ 1 (100 centavos):** desconto nunca ultrapassa `bundle_price - 100`. Edge case explícito para evitar cobrança de R$ 0 ou negativa.
+- **`allow_promotion_codes: false`** quando coupon dinâmico presente — Stripe não permite empilhar cupom de promoção com discount preset.
+
+**Proteções (defesa em profundidade):**
+- AC13: desconto exige aluno autenticado (lookup de pagamentos prévios precisa de `user_id`).
+- AC14: só `purchase_kind = 'ENTRY'` (extensões e outros kinds futuros não contribuem).
+- AC15: só `status = 'APPROVED'` (PENDING/REFUNDED/FAILED ficam fora).
+- AC16: guard contra `BUNDLE_SLUG ∈ BUNDLE_COMPONENT_SLUGS` (rebrand acidental que geraria loop).
+- AC17: webhook Stripe loga `session.discounts` para auditoria pós-checkout.
+
+**Anti-recorrência embutida:**
+- AC5 dedupe por `cohort_id` (caso aluno tenha 2× ENTRY do mesmo cohort por bug futuro).
+- AC6/AC7 cap mínimo + guard de cohort mal configurado (bundle price ≤ R$ 1) — função nunca retorna negativo nem maior que `price - 100`.
+- AC22 tests cobrindo zero compras, 1, 2, 4, cap exato, dedupe.
+
+**Prefixo DISC-** escolhido por estar livre. Epics anteriores: AP, LA, MC, FAA, AV, FM, F1–F13, CT, KV, LS, RK, TGA, LP.
+
+**5-point checklist:** GO 5/5 (23 ACs, complexity L, escopo IN/OUT explícito, alinhada com stack/payments existente).
+
+---
+
+## Epic LP — Landing Pages de Cursos (2026-05-26)
+
+| Story | Título | Complexidade | Status | Agente |
+|---|---|---|---|---|
+| [[backlog/LP-1.1-server-action-create-lead-only\|LP-1.1]] | Server action `createLeadOnly` + helper webhook CRM em `lib/crm/webhook.ts` | M | backlog | sites-dev-beta |
+| [[backlog/LP-1.2-shared-components-cursos\|LP-1.2]] | Componentes compartilhados das LPs em `src/app/cursos/_shared/` (LeadForm, ComingSoonCTA, CursoHero/Benefits/Curriculum/Facilitadores/Faq/FinalCTA, PhoneField movido) | M | backlog | sites-dev-alpha |
+| [[backlog/LP-2.1-curso-ia-agentes\|LP-2.1]] | LP `/curso-ia-agentes` (módulos 1–4: Fundamentos + Centro de Treinamento) | M | backlog | sites-dev-alpha |
+| [[backlog/LP-2.2-curso-design\|LP-2.2]] | LP `/curso-design` (módulo 5: Claude Design — Design System) | M | backlog | sites-dev-alpha |
+| [[backlog/LP-2.3-curso-dev\|LP-2.3]] | LP `/curso-dev` (módulos 6 + 10: Squad Sites Github/Vercel + Squad Dev Supabase) | M | backlog | sites-dev-alpha |
+| [[backlog/LP-2.4-curso-social-media\|LP-2.4]] | LP `/curso-social-media` (módulo 7: Freepik + Eleven Labs + Heygen + Meta API) | M | backlog | sites-dev-alpha |
+| [[backlog/LP-2.5-curso-bundle\|LP-2.5]] | LP `/curso-bundle` (pacote dos 4) + atualização `sitemap.ts` com 5 rotas | M | backlog | sites-dev-alpha |
+| [[backlog/LP-3.1-qa-gate-landing-pages\|LP-3.1]] | QA gate adversarial — 5 LPs, LeadForm, CRM webhook, veredicto formal | M | backlog | sites-qa |
+
+**ADR autoritativa:** [[../decisions/ADR-landing-pages-cursos]] (D1–D8: rotas top-level, shared em `cursos/_shared/`, action separada `createLeadOnly`, estratégia "Em Breve"). **Proposed** 2026-05-26.
+
+**Objetivo do Epic LP:** entregar 5 landing pages de venda otimizadas para tráfego pago (4 por área + 1 bundle) na branch `feat/landing-pages-cursos`. Fase 1: captura de lead via CRM externo (sem checkout). Botão "Em Breve" visível mas não-clicável; logo abaixo, `LeadForm` com Nome+Email+WhatsApp dispara `createLeadOnly` → webhook CRM com `source` igual ao slug da LP.
+
+**Sequência:**
+1. **LP-1.1** (sites-dev-beta) + **LP-1.2** (sites-dev-alpha) em paralelo. **Ambas bloqueiam LP-2.x.**
+2. **LP-2.1, LP-2.2, LP-2.3, LP-2.4** em paralelo após LP-1.1 e LP-1.2 done. Mesmo dev (sites-dev-alpha) coordena as 4 LPs individuais.
+3. **LP-2.5** (Bundle) após LP-2.1–LP-2.4 (cards do BundleCoursesGrid linkam para as LPs individuais; sitemap consolidado nesta story).
+4. **LP-3.1** (sites-qa) por último — adversarial end-to-end com veredicto formal. **AC15 anti-recorrência Story 1.1**: QA Results obrigatório.
+
+**Decisões arquiteturais (detalhe na ADR-landing-pages-cursos):**
+- **Rotas top-level** (`/curso-ia-agentes` etc.) em vez de `/cursos/[slug]` dinâmica. Razão: conteúdo heterogêneo por LP (módulos, copy, FAQ); rota dinâmica forçaria JSON gigante.
+- **Componentes shared em `src/app/cursos/_shared/`** (App Router pasta privada — underscore). 10 componentes parametrizados via props.
+- **Server action `createLeadOnly` separada** (não adapta `createPublicCheckoutSession`). Defesa em profundidade: action de lead NÃO toca em payments/users/cohorts.
+- **`fireCrmWebhook` extraído** para `src/lib/crm/webhook.ts` para reuso entre as duas actions. Refactor diff mínimo em `checkoutPublic.ts`.
+- **"Em Breve" não-clicável:** `aria-disabled`, `tabIndex=-1`, sem `<button type="submit">` — evita confusão com submit do form.
+- **Tracking via `source` no payload do webhook** = slug da LP. CRM segmenta lead por canal.
+
+**Anti-recorrência embutida:**
+- AC2 da LP-3.1 (botão "Em Breve" não-clicável + não-submit) — verificável via interceptação do form.onsubmit.
+- AC7 da LP-3.1 (defesa em profundidade `createLeadOnly`) — leitura do arquivo confirma zero `supabaseAdmin.from(payments|users|cohorts)`.
+- AC12 da LP-3.1 (regressão `/curso-online`) — refactor de PhoneField e webhook helper não quebra checkout existente.
+- AC15 da LP-3.1 (QA Results obrigatório) — defesa contra Story 1.1 histórica que ficou done sem QA.
+
+**Recomendação reuso vs novo (questão do lead):** **híbrido — parametrizar e extrair** os componentes de `curso-online/_components/` para `cursos/_shared/`. NÃO refatorar curso-online ainda (mantém estável; apenas `PhoneField` é movido). Componentes shared aceitam config via props (`CursoHero`, `CursoBenefits`, `CursoCurriculum`, `CursoFaq`, `CursoFinalCTA`). `CheckoutForm` é substituído por `LeadForm` novo (não-checkout). Detalhes em ADR D3.
+
+**5-point checklist:** GO 5/5 em cada uma das 8 stories. Prefixo **LP-** escolhido por estar livre — Epics anteriores: AP, LA, MC, FAA, AV, FM, F1-F13, CT, KV, LS, RK, TGA.
+
+---
+
+## Epic TGA — Turma Granular Access (2026-05-25)
+
+| Story | Título | Complexidade | Status | Agente |
+|---|---|---|---|---|
+| [[backlog/TGA-1.1-migration-included-lesson-ids\|TGA-1.1]] | Migration `included_lesson_ids` em `cohort_courses` + atualização `has_access` + regen types | M | backlog | sites-data |
+| [[backlog/TGA-1.2-admin-ui-lesson-selector\|TGA-1.2]] | Admin UI — tree-select Curso > Módulo > Aula em CohortForm + `cohortCourseSchema` estendido | M | backlog | sites-dev-alpha + sites-dev-beta |
+| [[backlog/TGA-1.3-student-enforcement-included-lesson-ids\|TGA-1.3]] | Student — enforcement de `included_lesson_ids` nas 5 páginas do aluno + helper compartilhado | M | backlog | sites-dev-alpha |
+| [[backlog/TGA-1.4-qa-gate-granular-access\|TGA-1.4]] | QA gate adversarial — 4 variants de cohort, RLS, defense in depth, veredicto formal | M | backlog | sites-qa |
+
+**ADR autoritativa:** [[../decisions/ADR-turma-granular-access]] (Opção A — coluna `included_lesson_ids: uuid[]` espelhada em `cohort_courses`). **Proposed** 2026-05-25, aguarda aprovação do PO.
+
+**Objetivo do Epic TGA:** permitir que uma turma controle acesso até a granularidade aula (Curso > Módulo > Aula), abrindo o caminho para vender subconjuntos do curso como turmas-produto (ex.: "só Módulo 1", "Módulo 2 + aulas 1-3 do Módulo 3"). Estende o padrão existente `included_module_ids` com um terceiro nível paralelo `included_lesson_ids` — mesma semântica de "lista vazia = sem restrição neste nível".
+
+**Sequência:**
+1. **TGA-1.1** (sites-data) primeiro — migration aditiva + RPC `has_access` ganha 1 cláusula nova + types regenerados. **Bloqueia TGA-1.2 e TGA-1.3.**
+2. **TGA-1.2** + **TGA-1.3** em paralelo após TGA-1.1. Mesmo dev (sites-dev-alpha) coordena os 2 que tocam UI; sites-dev-beta cuida do schema/action de TGA-1.2.
+3. **TGA-1.4** (sites-qa) por último — adversarial end-to-end com veredicto formal. **AC12 anti-recorrência Story 1.1**: QA Results obrigatoriamente preenchido antes de mover qualquer TGA para `done/`.
+
+**Decisões arquiteturais (detalhe na ADR-003):**
+- Opção A vs B: array em `cohort_courses` (escolhida) vs tabela nova `cohort_lessons` (rejeitada). Razão #1: padrão existente `included_module_ids` já é a convenção do projeto. Razão #2: minimiza diff em `has_access` (1 cláusula nova vs reescrita estrutural — RLS é risco crítico no ADR-001).
+- `has_module_access` (materiais de módulo, ADR-002) **NÃO é tocada** — materiais de módulo continuam por módulo, semântica preservada.
+- 5 caminhos no aluno consomem `included_module_ids` hoje (dashboard, /meus-cursos, /curso/[slug], /curso/[slug]/aula/[lesson-slug] via RPC, /turmas/[slug]). TGA-1.3 cobre todos via helper compartilhado `src/lib/access/cohort-filters.ts`.
+- Backwards compat garantida: `DEFAULT '{}'` na coluna nova = lista vazia = comportamento atual preservado para 100% das cohorts existentes.
+
+**Invariante semântica documentada:** módulo bloqueia antes de aula. Se aula listada em `included_lesson_ids` mas módulo não está em `included_module_ids`, aula permanece bloqueada (UI impede configurar; RPC faz `AND` das duas listas). Variant "L-only" do QA gate (TGA-1.4 AC4) testa exatamente isso.
+
+**Anti-recorrência embutida:**
+- AC8 da TGA-1.2 (coerência módulo/aula no admin) — desmarcar módulo limpa as aulas órfãs.
+- AC8 da TGA-1.3 (não-leak via listagem) — aula bloqueada **não aparece** na lista do aluno.
+- AC12 da TGA-1.4 (QA Results obrigatório) — defesa contra Story 1.1 histórica.
+
+**5-point checklist:** GO 5/5 em cada story. Prefixo TGA livre — Epics anteriores: AP, LA, MC, FAA, AV, FM, F1-F13, CT, KV, LS, RK.
+
+**Revisão Axilun (sites-qa, 2026-05-25):** 3 concerns incorporados após primeira pass.
+- **#1 RPC gate primário:** TGA-1.1 AC3 reforçada + novo AC9 (atomicidade DDL: ALTER TABLE + CREATE OR REPLACE FUNCTION no mesmo arquivo de migration; splittar é proibido por criar janela de bypass via URL direta).
+- **#2 Inconsistência student pages:** TGA-1.3 AC4 expandido para refatorar `aula/[lesson-slug]/page.tsx:119-145` (padrão "set vazio = todos passam" acidental) usando o helper `filterLessonsByCohortAccess` do AC6 — nivela com `curso/[slug]/page.tsx:159-165` que já faz expansão explícita.
+- **#3 Semântica módulo=[] ignora aula:** ADR-003 ganhou "Tabela verdade semântica autoritativa". TGA-1.1 AC10 documenta no comentário SQL da função. TGA-1.2 AC13 + AC7 normalizado bloqueiam dirty state na UI/action (aula só editável quando módulo tem restrição). TGA-1.3 AC11 fixa a invariante no helper.
+
+---
 
 ## Epic LS — Live Sessions (2026-05-18)
 
