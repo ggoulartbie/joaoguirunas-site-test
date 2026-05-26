@@ -4171,3 +4171,95 @@ async function listAllAuthUsers() {
 
 **Auditor:** ✦ Axilun — A luz está correta.
 
+---
+
+## 2026-05-26 — Story LP-3.1 — Quality Gate Landing Pages "Em Breve" — ⚠️ CONCERNS
+
+**Escopo:** 5 landing pages de cursos com formulário "Em Breve" (lead capture), 7 componentes compartilhados em `src/app/cursos/_shared/`, e server action `createLeadOnly` integrada.
+
+**Rotas auditadas:**
+- `/curso-ia-agentes` — IA & Agentes (Claude Code, MCP, AIOX)
+- `/curso-design` — Design com IA (Claude Design, Figma, Brand)
+- `/curso-dev` — Dev com IA (Next.js, Supabase, Vercel, GitHub)
+- `/curso-social-media` — Social Media & Conteúdo com IA
+- `/curso-bundle` — Bundle dos 4 cursos com cards linkados
+
+### Aprovados (PASS)
+
+| # | Critério | Resultado |
+|---|----------|-----------|
+| 1 | Estrutura das 5 LPs (rota + Hero + conteúdo + form + FAQ) | ✅ Todas as 5 rotas existem e seguem o template comum |
+| 2 | Badge "EM BREVE" visível e destacado em todas as LPs | ✅ Duplo reforço: `EmBreveHero.tsx:60-84` (badge no topo do Hero, cor `#FFB000` com border) + `LeadCaptureForm.tsx:247-270` (badge animado `#FF3A0E` com pulse `animate-ping` no form) + `CursoInscricaoEmBreve.tsx:107-119` (badge no header do card "Inscrições em breve") |
+| 3 | Form coleta Nome + Email + WhatsApp e chama `createLeadOnly` real | ✅ `LeadCaptureForm.tsx:6` importa `createLeadOnly` de `@/app/actions/createLeadOnly`. Submit em `:108`. Mock removido pelo hardening do delta — confirmado. |
+| 4 | Sem links para InfinityPay/Stripe/checkout nas 5 LPs novas | ✅ `grep -rEn "(infinitypay\|stripe\|checkout\|createCheckout\|R\$)"` retornou ZERO matches nas 5 LPs e nos 7 componentes compartilhados |
+| 5 | Success state correto: "Você será avisado(a) assim que abrirmos as inscrições!" | ✅ `LeadCaptureForm.tsx:204-208` exibe exatamente a mensagem com role="status" e aria-live="polite" |
+| 6 | Error state tratado | ✅ `LeadCaptureForm.tsx:308-322` mostra mensagem do server com role="alert" e aria-live="assertive". Try/catch também trata exceções de rede (`:114-119`) |
+| 7 | Não-regressão: `src/app/curso-online/page.tsx` intacto | ✅ `git diff main -- src/app/curso-online/page.tsx` retornou vazio. `git status` sem modificações na pasta |
+| 8 | Não-regressão: `src/app/actions/checkoutPublic.ts` intacto | ✅ `git diff main -- src/app/actions/checkoutPublic.ts` retornou vazio |
+| 9 | TypeScript: 0 erros | ✅ `./node_modules/.bin/tsc --noEmit` → exit 0, output limpo |
+| 10 | Build: zero erros, todas as rotas registradas | ✅ `next build` → "✓ Compiled successfully in 17.7s", "Generating static pages using 7 workers (53/53)". As 5 LPs aparecem como `○ (Static)` — excelente para SEO e Core Web Vitals |
+| 11 | Metadata SEO único por LP (title + description + canonical) | ✅ 5 títulos únicos, 5 descriptions únicas, 5 canonicals únicos. Sem duplicate content |
+| 12 | OpenGraph + Twitter cards configurados | ✅ Todas as 5 LPs têm `openGraph` (com `url: ${siteConfig.url}/...` + image 1200x630) e `twitter` (card: 'summary_large_image') |
+| 13 | Design tokens: bg `#050507`, accent `#FF3A0E`, fonts `display-serif` + `mono` | ✅ Consistente em todos os componentes compartilhados. Confirmado em `EmBreveHero`, `CursoFeatures`, `CursoParaQuem`, `CursoFacilitador`, `CursoEmBreveFaq`, `CursoInscricaoEmBreve`, `LeadCaptureForm` |
+| 14 | Validação client-side (defesa em profundidade) | ✅ `validateLeadForm` em `LeadCaptureForm.tsx:60-82` — nome ≥3, regex email, telefone ≥10 dígitos. Server (`createLeadOnly.ts:21-27`) usa Zod com mesmas regras. Offline check em `:100-105`. |
+| 15 | Acessibilidade (WCAG AA) — atributos ARIA | ✅ FAQ accordion com `aria-expanded`, `aria-controls`, `aria-labelledby`, `role="region"`. Form com `role="status"`/`aria-live` em success e rate-limit, `role="alert"`/`aria-live="assertive"` em erro. Ícones decorativos com `aria-hidden="true"`. |
+| 16 | Bundle: 4 cards linkados para cursos individuais | ✅ `curso-bundle/page.tsx:47-76` define `BUNDLE_COURSES` com slugs `/curso-ia-agentes`, `/curso-design`, `/curso-dev`, `/curso-social-media`. Renderizados como `<Link>` em `:160-233` |
+| 17 | Arquitetura RSC + Client onde necessário | ✅ 5 pages são RSC (server). Apenas 3 componentes são `'use client'`: `LeadCaptureForm`, `EmBreveHero`, `CursoEmBreveFaq` — todos com justificativa (form interativo, animação de pulse, accordion stateful) |
+| 18 | Webhook CRM aceita `phone: ''` (ponto de atenção do delta) | ✅ `createLeadOnly.ts:25` define `phone: z.string().optional()`. Linhas `:39` e `:74` usam `payload.phone ?? ''`. Quando vazio, CRM recebe `phone: ''` e lead webhook recebe `Whatsapp: ''` sem erro de validação. Defesa front-end (`required` no input visível + `minLength` no name + regex no email + ≥10 dígitos no phone) torna o caminho de `phone: ''` improvável de ser atingido por usuário real. |
+
+### Concerns (não bloqueantes — aceitáveis para MVP)
+
+| # | Concern | Severidade | Recomendação |
+|---|---------|------------|--------------|
+| C1 | **`sitemap.ts` não inclui as 5 novas rotas** — `src/app/sitemap.ts` ainda lista apenas `/curso-online` (linha 11). As rotas `/curso-ia-agentes`, `/curso-design`, `/curso-dev`, `/curso-social-media`, `/curso-bundle` ausentes. | MEDIUM | Adicionar as 5 entradas em `sitemap.ts` com `priority: 0.8-0.9, freq: 'weekly'`. Não-bloqueante pelo MVP, mas Google demora ~7-14 dias para descobrir rotas sem sitemap. Recomendo PR de follow-up no mesmo sprint. |
+| C2 | **Rate limiting por pageload (memória de módulo)** — `LeadCaptureForm.tsx:128` (`submitTimestamps`) reseta a cada reload da página. Não há proteção server-side contra abuso. | LOW | Aceitável para MVP (lead webhook é fire-and-forget e idempotente do lado do CRM). Para produção em escala, considerar rate limit server-side via Upstash Redis ou Vercel KV no `createLeadOnly`. |
+| C3 | **`siteConfig.url` hardcoded `https://joaoguirunas.com`** em `src/config/site.ts:3` — usado nos canonicals/OG das 5 LPs. | INFO | Confirma URL de produção. Se deploy preview/staging usar domínio diferente, canonical apontará para prod (intencional para SEO; está correto). |
+| C4 | **Sem JSON-LD `Course`/`Product`/`EducationalOccupationalProgram` nas LPs** | LOW | Schema.org/Course melhoraria rich results. Não-bloqueante; metadata padrão já cobre OG/Twitter. Follow-up de SEO. |
+| C5 | **PhoneField `string vazia` no submit auto** — se um bot/agente submeter sem digitar telefone, server aceita `phone: ''` e dispara webhook com WhatsApp vazio. | LOW | Comportamento confirmado pelo delta e validado. CRM lida com `Whatsapp: ''` sem erro. Não-bloqueante. |
+| C6 | **Arquivos fora do escopo LP estão no `diff main..HEAD`:** `src/components/editor/CodeBlock.tsx`, `src/components/editor/LessonContent.tsx`, `.claude/settings.json` | INFO | NÃO foram modificados pelo commit `326f96c` (que contém apenas os 12 arquivos LP). São de feature anterior (`feat(editor): hardening do botão copiar`, commit `1ad9a4e`) ainda não mergeada em main. Sem impacto na story LP-3.1. Apenas registrar para o devops saber o que vai junto no eventual push. |
+
+### Blocker condicional (somente se push for executado SEM stage adicional)
+
+| # | Achado | Status |
+|---|--------|--------|
+| B1 | **`src/app/actions/createLeadOnly.ts` está UNTRACKED** — não foi incluído no commit `326f96c`. As 5 LPs importam este arquivo (`@/app/actions/createLeadOnly`). Se o devops fizer `git push` sem antes adicionar este arquivo a um novo commit, o build em produção falhará com `Module not found: Can't resolve '@/app/actions/createLeadOnly'`. | ⚠️ **AÇÃO OBRIGATÓRIA para sites-devops antes do push** |
+
+**Verificação:** `git status` lista o arquivo em "Arquivos não monitorados". `git show 326f96c --stat` confirma que o arquivo não está no commit das LPs.
+
+**Como resolver (ação para sites-devops):**
+```bash
+git add src/app/actions/createLeadOnly.ts
+git commit -m "feat(actions): createLeadOnly — server action para lead capture nas LPs em breve"
+# (ou amend se preferir manter histórico limpo)
+```
+
+### Recomendações
+
+1. **OBRIGATÓRIO antes de push:** sites-devops resolver B1 (commitar `createLeadOnly.ts`).
+2. **Follow-up alto valor (próxima sprint):** atualizar `sitemap.ts` com as 5 rotas (C1) — impacta tempo de indexação no Google.
+3. **Follow-up SEO:** adicionar JSON-LD Schema.org/Course nas LPs (C4).
+4. **Tech debt rastreável:** rate limit server-side (C2).
+5. **OG image dedicada por LP:** todas usam `/images/og-default.png`. Idealmente, uma OG image por curso aumentaria CTR em compartilhamentos.
+
+### Métricas do build
+
+- **Compile:** 17.7s
+- **Static pages geradas:** 53/53 em 362ms (com 7 workers)
+- **LPs como `○ (Static)`:** 5/5 — performance máxima, ideal para Core Web Vitals e Lighthouse
+- **TypeScript errors:** 0
+- **TypeScript warnings:** 0
+- **Build errors:** 0
+- **Build warnings:** 0
+
+### Veredicto final
+
+**⚠️ CONCERNS** — entrega aprovada com 6 concerns documentados (todos não-bloqueantes) e 1 blocker condicional acionável (B1: `createLeadOnly.ts` precisa ser commitado pelo devops antes do push).
+
+Tecnicamente o código é sólido, type-safe, build limpo, acessível e SEO-ready. A única razão de NÃO ser PASS direto é o arquivo untracked que vai quebrar o deploy se for esquecido — risco operacional alto, mitigação trivial (um `git add`).
+
+**Próximo passo:**
+1. **@sites-devops:** resolver B1 (`git add src/app/actions/createLeadOnly.ts` + novo commit) ANTES do push. Sem essa correção, o deploy quebra. Após resolvido, push autorizado.
+2. **Follow-up sites-dev-alpha (ou quem mais o lead designar):** atualizar `sitemap.ts` com as 5 novas rotas (PR pequeno, alta prioridade SEO).
+
+**Auditor:** ✦ Axilun — A luz está correta.
+

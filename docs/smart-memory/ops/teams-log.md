@@ -9,6 +9,25 @@ tags: [ops]
 
 Registro de todos os Agent Teams formados neste projeto. Lead (team-os) atualiza a cada `*dispatch` e `*close`.
 
+## 2026-05-26 — Team joaoguirunas-academy-landing-pages-cursos
+
+**Objetivo:** Criar 5 landing pages de venda de cursos: 4 individuais (IA & Agentes, Design, Dev, Social Media) + 1 bundle. Form "Em Breve" coleta lead → CRM webhook. Sem InfinityPay/Stripe no momento.
+**Branch:** `feat/landing-pages-cursos`
+**Lead:** team-os (skill)
+**Composição:**
+- sites-architect — ADR de arquitetura, stories LP-1.x a LP-3.1
+- sites-dev-beta — server action `createLeadOnly` (LP-1.1)
+- sites-dev-alpha — componentes compartilhados + 5 LPs (LP-1.2 + LP-2.x)
+- sites-dev-delta — hardening pós-implementação
+- sites-qa — gate de qualidade formal (LP-3.1)
+- sites-devops — commits locais (sem push)
+
+**Status:** ativo
+**Início:** 2026-05-26T00:00:00-03:00
+**Stories:** ver [[../stories/BACKLOG]] — epic LP (em criação por sites-architect)
+
+---
+
 ## 2026-05-25 — Team joaoguirunas-academy-turma-acesso-granular
 
 **Objetivo:** Estender controle de acesso de turmas para suportar seleção de aulas específicas por módulo (`included_lesson_ids`), permitindo criar turmas-produto com conteúdo granular para venda separada.
