@@ -690,3 +690,19 @@ Registro de todos os Agent Teams formados neste projeto. Lead (team-os) atualiza
 **Status:** ativo
 **Início:** 2026-05-21
 **Stories:** ver [[../stories/BACKLOG]]
+
+## 2026-05-26 — Team joaoguirunas-academy-nav-courses-dropdown
+
+**Objetivo:** Implementar CoursesDropdown popover no AnimatedHero da homepage
+**Lead:** team-os (skill)
+**Composição:**
+- sites-dev-alpha — implementação frontend
+
+**Status:** encerrado
+**Início:** 2026-05-26T17:00
+**Encerrado:** 2026-05-26T17:04
+**Arquivos produzidos:**
+- `src/shared/components/ui/CoursesDropdown.tsx` (novo)
+- `src/shared/components/ui/animated-hero.tsx` (integração)
+**Commit:** d9292a0
+**Stories:** [[../stories/done/NAV-1.1-courses-popover-dropdown]]
