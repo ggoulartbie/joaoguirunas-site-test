@@ -46,6 +46,23 @@ const inputStyle: React.CSSProperties = {
   borderRadius: 0,
 }
 
+const COURSE_INTERESTS = [
+  { slug: 'curso-design', label: 'Site' },
+  { slug: 'curso-dev', label: 'Devs' },
+  { slug: 'curso-social-media', label: 'Social Media' },
+  { slug: 'curso-ia-agentes', label: 'Tráfego' },
+] as const
+
+type InterestSlug = (typeof COURSE_INTERESTS)[number]['slug']
+
+const ORIGIN_OPTIONS = [
+  { value: 'instagram', label: 'Instagram' },
+  { value: 'youtube', label: 'YouTube' },
+  { value: 'indicacao', label: 'Indicação' },
+  { value: 'google', label: 'Google' },
+  { value: 'outro', label: 'Outro' },
+] as const
+
 // Rate limiting: max 3 submits per 60s per course slug
 const RATE_LIMIT_MAX = 3
 const RATE_LIMIT_WINDOW_MS = 60_000
@@ -89,6 +106,8 @@ async function leadAction(
   const email = (formData.get('email') as string | null) ?? ''
   const phone = (formData.get('phone') as string | null) ?? ''
   const courseSlug = (formData.get('courseSlug') as string | null) ?? ''
+  const interests = formData.getAll('interests').map(String).filter(Boolean)
+  const originRaw = (formData.get('origin') as string | null) ?? ''
 
   // Client-side validation guard (double protection — server also validates)
   const validationError = validateLeadForm(name, email, phone)
@@ -105,7 +124,14 @@ async function leadAction(
   }
 
   try {
-    const result = await createLeadOnly(name.trim(), email.trim(), phone, courseSlug)
+    const result = await createLeadOnly(
+      name.trim(),
+      email.trim(),
+      phone,
+      courseSlug,
+      interests.length > 0 ? interests : undefined,
+      originRaw || undefined,
+    )
     if ('success' in result) return { status: 'success' }
     return {
       status: 'error',
@@ -141,6 +167,12 @@ function recordSubmit(slug: string) {
   submitTimestamps[slug] = [...ts, Date.now()]
 }
 
+// Map courseSlug prop to interest slug if it matches one of the 4 interest options
+function derivePreselectedInterest(slug: string): InterestSlug | null {
+  const match = COURSE_INTERESTS.find((c) => c.slug === slug)
+  return match ? match.slug : null
+}
+
 export function LeadCaptureForm({
   courseSlug,
   label = 'Quero ser avisado(a)',
@@ -149,6 +181,24 @@ export function LeadCaptureForm({
     leadAction,
     { status: 'idle' }
   )
+
+  // Checkboxes: pre-select the current course if it matches one of the 4 interest slugs
+  const preselected = derivePreselectedInterest(courseSlug)
+  const [checkedInterests, setCheckedInterests] = useState<Set<InterestSlug>>(
+    () => new Set(preselected ? [preselected] : [])
+  )
+
+  function toggleInterest(slug: InterestSlug) {
+    setCheckedInterests((prev) => {
+      const next = new Set(prev)
+      if (next.has(slug)) {
+        next.delete(slug)
+      } else {
+        next.add(slug)
+      }
+      return next
+    })
+  }
 
   // Rate limiting state (visual)
   const [isRateLimited, setIsRateLimited] = useState(false)
@@ -292,6 +342,62 @@ export function LeadCaptureForm({
           style={inputStyle}
         />
         <PhoneField name="phone" required />
+
+        {/* Checkboxes de interesse */}
+        <fieldset className="flex flex-col gap-2 pt-1">
+          <legend
+            className="text-xs mb-2"
+            style={{
+              color: 'rgba(255,255,255,0.45)',
+              fontFamily: 'var(--font-mono)',
+              letterSpacing: '0.12em',
+              textTransform: 'uppercase',
+            }}
+          >
+            Quais cursos te interessam?
+          </legend>
+          <div className="grid grid-cols-2 gap-x-4 gap-y-2">
+            {COURSE_INTERESTS.map(({ slug, label: courseLabel }) => (
+              <label
+                key={slug}
+                className="flex items-center gap-2 cursor-pointer select-none"
+                style={{
+                  fontFamily: 'var(--font-mono)',
+                  fontSize: '12px',
+                  color: 'rgba(255,255,255,0.75)',
+                }}
+              >
+                <input
+                  type="checkbox"
+                  name="interests"
+                  value={slug}
+                  checked={checkedInterests.has(slug)}
+                  onChange={() => toggleInterest(slug)}
+                  className="shrink-0"
+                  style={{ accentColor: '#FF3A0E', width: '14px', height: '14px' }}
+                />
+                {courseLabel}
+              </label>
+            ))}
+          </div>
+        </fieldset>
+
+        {/* Select de origem */}
+        <select
+          name="origin"
+          defaultValue=""
+          className="w-full px-4 py-3 outline-none appearance-none focus:border-[#FF3A0E]/50 transition-colors"
+          style={{ ...inputStyle, color: 'rgba(255,255,255,0.75)', cursor: 'pointer' }}
+        >
+          <option value="" style={{ color: 'rgba(255,255,255,0.35)' }}>
+            Como você nos encontrou?
+          </option>
+          {ORIGIN_OPTIONS.map(({ value, label: originLabel }) => (
+            <option key={value} value={value} style={{ background: '#0A0A10', color: '#fff' }}>
+              {originLabel}
+            </option>
+          ))}
+        </select>
 
         <button
           type="submit"

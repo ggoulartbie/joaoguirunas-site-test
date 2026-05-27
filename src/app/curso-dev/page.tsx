@@ -7,6 +7,7 @@ import { CursoParaQuem } from '@/app/cursos/_shared/CursoParaQuem'
 import { CursoFacilitador } from '@/app/cursos/_shared/CursoFacilitador'
 import { CursoInscricaoEmBreve } from '@/app/cursos/_shared/CursoInscricaoEmBreve'
 import { CursoEmBreveFaq } from '@/app/cursos/_shared/CursoEmBreveFaq'
+import { OutrosCursos } from '@/app/cursos/_shared/OutrosCursos'
 import { siteConfig } from '@/config/site'
 
 export const metadata: Metadata = {
@@ -141,6 +142,8 @@ export default function CursoDevPage() {
         />
 
         <CursoEmBreveFaq items={FAQ_ITEMS} id="faq-dev" />
+
+        <OutrosCursos currentSlug="curso-dev" />
       </div>
     </>
   )

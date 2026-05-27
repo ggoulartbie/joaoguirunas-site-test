@@ -7,25 +7,26 @@ import { CursoParaQuem } from '@/app/cursos/_shared/CursoParaQuem'
 import { CursoFacilitador } from '@/app/cursos/_shared/CursoFacilitador'
 import { CursoInscricaoEmBreve } from '@/app/cursos/_shared/CursoInscricaoEmBreve'
 import { CursoEmBreveFaq } from '@/app/cursos/_shared/CursoEmBreveFaq'
+import { OutrosCursos } from '@/app/cursos/_shared/OutrosCursos'
 import { siteConfig } from '@/config/site'
 
 export const metadata: Metadata = {
-  title: 'Curso IA & Agentes — Claude Code, Automação e Agentes | Em Breve',
+  title: 'Curso Tráfego com IA — Automação Comercial e Captação de Leads | Em Breve',
   description:
-    'Aprenda a criar agentes Claude Code, orquestrar squads autônomas e automatizar processos com o framework AIOX. Lista de espera aberta.',
+    'Use agentes de IA para prospectar, nutrir e converter leads no piloto automático. Orquestrador comercial, funis automatizados e CRM inteligente. Lista de espera aberta.',
   alternates: { canonical: '/curso-ia-agentes' },
   openGraph: {
-    title: 'Curso IA & Agentes | João Guirunas — Em Breve',
+    title: 'Curso Tráfego com IA | João Guirunas — Em Breve',
     description:
-      'Aprenda a criar agentes Claude Code, orquestrar squads autônomas e automatizar processos com o framework AIOX.',
+      'Automatize prospecção, conteúdo e conversão de leads com agentes de IA. Do tráfego à venda — no piloto automático.',
     url: `${siteConfig.url}/curso-ia-agentes`,
     images: [{ url: '/images/og-default.png', width: 1200, height: 630 }],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Curso IA & Agentes | João Guirunas — Em Breve',
+    title: 'Curso Tráfego com IA | João Guirunas — Em Breve',
     description:
-      'Aprenda a criar agentes Claude Code, orquestrar squads autônomas e automatizar processos com o framework AIOX.',
+      'Automatize prospecção, conteúdo e conversão de leads com agentes de IA. Do tráfego à venda — no piloto automático.',
   },
 }
 
@@ -33,59 +34,59 @@ const COURSE_SLUG = 'curso-ia-agentes'
 
 const FEATURES = [
   {
-    title: 'Fundamentos de Agentes com Claude Code',
+    title: 'Orquestrador Comercial com IA',
     description:
-      'Entenda como agentes autônomos funcionam, como configurar o ambiente e criar seus primeiros agentes do zero.',
+      'Configure agentes que prospectam, qualificam e categorizam leads automaticamente — sem depender de SDR ou time comercial manual.',
   },
   {
-    title: 'Orquestração com Agent Teams',
+    title: 'Criação de Conteúdo em Escala',
     description:
-      'Aprenda a criar e coordenar squads completas de agentes que trabalham em paralelo e se comunicam entre si.',
+      'Produza posts, anúncios, emails e roteiros com agentes IA: volume de agência, custo de operação solo.',
   },
   {
-    title: 'Framework AIOX na Prática',
+    title: 'Funil Automatizado: captação ao fechamento',
     description:
-      'Domine o framework AIOX — arquitetura de agentes orientada a negócios, com padrões prontos para produção.',
+      'Monte funis completos com agentes: landing pages, lead magnets, sequências de nutrição e ofertas — tudo no piloto automático.',
   },
   {
-    title: 'MCP — Model Context Protocol',
+    title: 'CRM Inteligente com Follow-up Automático',
     description:
-      'Configure servidores MCP para conectar seus agentes a APIs externas, bancos de dados e ferramentas corporativas.',
+      'Classifique leads por temperatura, configure gatilhos de follow-up e nunca deixe uma oportunidade esfriar — com IA tomando as decisões.',
   },
   {
-    title: 'Automações de Alto Impacto',
+    title: 'Análise de Métricas e Otimização',
     description:
-      'Construa pipelines automatizados: processamento de documentos, análise de dados, geração de relatórios e mais.',
+      'Use IA para interpretar dados de campanha, identificar o que está convertendo e tomar decisões de otimização com velocidade.',
   },
   {
-    title: 'Deploy e Operação em Produção',
+    title: 'Integração com WhatsApp, Instagram e Email',
     description:
-      'Aprenda a monitorar, escalar e manter squads de agentes rodando de forma confiável em produção.',
+      'Conecte seus agentes aos canais onde seus leads estão: WhatsApp, DMs do Instagram, email marketing — tudo integrado e automatizado.',
   },
 ]
 
 const PERSONAS = [
   {
-    title: 'Profissionais que querem automatizar',
+    title: 'Empreendedores e donos de negócio',
     description:
-      'Gestores, analistas e empreendedores que querem delegar tarefas repetitivas para agentes de IA e focar no que importa.',
+      'Quem quer crescer a carteira de clientes sem contratar time comercial — usando agentes de IA para prospectar e nutrir no piloto automático.',
   },
   {
-    title: 'Devs e tech leads',
+    title: 'Times comerciais e gestores de vendas',
     description:
-      'Desenvolvedores que querem incorporar agentes Claude Code em seus produtos e pipelines com arquitetura robusta.',
+      'Líderes que querem multiplicar a capacidade do time sem aumentar headcount, automatizando prospecção, qualificação e follow-up.',
   },
   {
-    title: 'Consultores e fundadores',
+    title: 'Infoprodutores e agências digitais',
     description:
-      'Quem quer oferecer automação com IA como serviço para clientes ou usar agentes para escalar o próprio negócio.',
+      'Criadores e agências que querem escalar captação de leads e receita com automações inteligentes, sem depender só de anúncios pagos.',
   },
 ]
 
 const FAQ_ITEMS = [
   {
-    q: 'Preciso saber programar para fazer este curso?',
-    a: 'Não é necessário ter experiência avançada. O curso parte de conceitos fundamentais e avança gradualmente. Familiaridade básica com linha de comando é recomendada.',
+    q: 'Preciso ter experiência com marketing digital para fazer este curso?',
+    a: 'Não é obrigatório, mas ajuda entender conceitos básicos de funil e geração de leads. O curso explica os fundamentos e vai direto às automações práticas com IA.',
   },
   {
     q: 'Qual a diferença entre este curso e a Mentoria?',
@@ -105,15 +106,15 @@ export default function CursoIaAgentesPage() {
         <SectionDots />
 
         <EmBreveHero
-          area="IA & Agentes · Claude Code"
-          headline="Crie agentes que"
-          headlineAccent="trabalham por você"
-          subtitle="Domine Claude Code, o framework AIOX e a orquestração de squads autônomas. Do primeiro agente ao sistema em produção — sem depender de ninguém."
-          tags={['Claude Code', 'MCP', 'Automação', 'AIOX', 'Agent Teams']}
+          area="Tráfego com IA · Automação Comercial"
+          headline="Leads e vendas no"
+          headlineAccent="piloto automático"
+          subtitle="Configure agentes que prospectam, produzem conteúdo e convertem leads enquanto você foca no negócio. Do tráfego ao fechamento — automatizado."
+          tags={['Orquestrador Comercial', 'WhatsApp', 'Funil', 'CRM', 'Automação']}
           stats={[
             { value: '6', label: 'Módulos' },
             { value: '100%', label: 'On-demand' },
-            { value: '∞', label: 'Possibilidades' },
+            { value: '24/7', label: 'Prospecção' },
           ]}
         />
 
@@ -121,7 +122,7 @@ export default function CursoIaAgentesPage() {
           features={FEATURES}
           sectionLabel="O que você vai aprender"
           heading="Conteúdo do"
-          headingAccent="Curso IA & Agentes"
+          headingAccent="Curso Tráfego com IA"
         />
 
         <CursoParaQuem personas={PERSONAS} />
@@ -141,6 +142,8 @@ export default function CursoIaAgentesPage() {
         />
 
         <CursoEmBreveFaq items={FAQ_ITEMS} id="faq-ia-agentes" />
+
+        <OutrosCursos currentSlug="curso-ia-agentes" />
       </div>
     </>
   )

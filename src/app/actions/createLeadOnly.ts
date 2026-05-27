@@ -1,7 +1,7 @@
 'use server'
 
 // Server action para criar lead nas LPs de cursos (sem pagamento — "Em Breve")
-// Recebe: name, email, phone, courseSlug
+// Recebe: name, email, phone, courseSlug, interests?, origin?
 // Dispara CRM webhook + lead webhook (fire-and-forget)
 // NÃO faz redirect, NÃO cria usuário no Supabase, NÃO gera checkout session
 
@@ -24,6 +24,8 @@ const schema = z.object({
   email: z.string().email('E-mail inválido'),
   phone: z.string().optional(),
   courseSlug: z.enum(VALID_COURSE_SLUGS),
+  interests: z.array(z.string()).max(10).optional(),
+  origin: z.string().max(100).optional(),
 })
 
 const LEAD_WEBHOOK_URL =
@@ -58,6 +60,8 @@ function fireCrmWebhook(payload: {
   email: string
   phone?: string
   courseSlug: CourseSlug
+  interests?: string[]
+  origin?: string
 }) {
   getCrmWebhookUrl()
     .then((url) => {
@@ -75,6 +79,10 @@ function fireCrmWebhook(payload: {
           course_slug: payload.courseSlug,
           source: 'landing-page-curso',
           timestamp: new Date().toISOString(),
+          ...(payload.interests && payload.interests.length > 0
+            ? { interests: payload.interests.join(',') }
+            : {}),
+          ...(payload.origin ? { origin: payload.origin } : {}),
         }),
       }).catch((err) => {
         // Fire-and-forget: log silently without propagating
@@ -91,8 +99,10 @@ export async function createLeadOnly(
   email: string,
   phone: string | undefined,
   courseSlug: string,
+  interests?: string[],
+  origin?: string,
 ): Promise<{ success: true } | { error: string }> {
-  const parsed = schema.safeParse({ name, email, phone, courseSlug })
+  const parsed = schema.safeParse({ name, email, phone, courseSlug, interests, origin })
 
   if (!parsed.success) {
     const firstError = parsed.error.issues[0]?.message ?? 'Dados inválidos.'
@@ -102,14 +112,28 @@ export async function createLeadOnly(
     return { error: firstError }
   }
 
-  const { name: validName, email: validEmail, phone: validPhone, courseSlug: validCourseSlug } = parsed.data
+  const {
+    name: validName,
+    email: validEmail,
+    phone: validPhone,
+    courseSlug: validCourseSlug,
+    interests: validInterests,
+    origin: validOrigin,
+  } = parsed.data
 
   // Log successful lead capture for traceability (no PII — only slug and masked email)
   const emailDomain = validEmail.includes('@') ? validEmail.split('@')[1] : 'unknown'
   console.info('[createLeadOnly] lead captured — slug:', validCourseSlug, '| domain:', emailDomain)
 
   // Both webhooks are fire-and-forget — errors must not propagate to the user
-  fireCrmWebhook({ name: validName, email: validEmail, phone: validPhone, courseSlug: validCourseSlug })
+  fireCrmWebhook({
+    name: validName,
+    email: validEmail,
+    phone: validPhone,
+    courseSlug: validCourseSlug,
+    interests: validInterests,
+    origin: validOrigin,
+  })
   fireLeadWebhook({ name: validName, email: validEmail, phone: validPhone })
 
   return { success: true }

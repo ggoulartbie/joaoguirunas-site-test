@@ -6,17 +6,18 @@ import { EmBreveHero } from '@/app/cursos/_shared/EmBreveHero'
 import { CursoFacilitador } from '@/app/cursos/_shared/CursoFacilitador'
 import { CursoInscricaoEmBreve } from '@/app/cursos/_shared/CursoInscricaoEmBreve'
 import { CursoEmBreveFaq } from '@/app/cursos/_shared/CursoEmBreveFaq'
+import { OutrosCursos } from '@/app/cursos/_shared/OutrosCursos'
 import { siteConfig } from '@/config/site'
 
 export const metadata: Metadata = {
   title: 'Bundle — Os 4 Cursos de IA num Pacote Completo | Em Breve',
   description:
-    'IA & Agentes, Design com IA, Dev com IA e Social Media com IA — tudo num único pacote. Acesso completo com condições especiais. Lista de espera aberta.',
+    'Tráfego, Site, Dev e Social Media com IA — tudo num único pacote. Acesso completo com condições especiais. Lista de espera aberta.',
   alternates: { canonical: '/curso-bundle' },
   openGraph: {
     title: 'Bundle Completo — 4 Cursos de IA | João Guirunas — Em Breve',
     description:
-      'IA & Agentes, Design com IA, Dev com IA e Social Media com IA — tudo num único pacote com condições especiais.',
+      'Tráfego, Site, Dev e Social Media com IA — tudo num único pacote com condições especiais.',
     url: `${siteConfig.url}/curso-bundle`,
     images: [{ url: '/images/og-default.png', width: 1200, height: 630 }],
   },
@@ -24,7 +25,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'Bundle Completo — 4 Cursos de IA | João Guirunas — Em Breve',
     description:
-      'IA & Agentes, Design com IA, Dev com IA e Social Media com IA — tudo num único pacote com condições especiais.',
+      'Tráfego, Site, Dev e Social Media com IA — tudo num único pacote com condições especiais.',
   },
 }
 
@@ -46,17 +47,17 @@ const KV_MONO: React.CSSProperties = {
 
 const BUNDLE_COURSES = [
   {
-    area: 'IA & Agentes',
+    area: 'Tráfego',
     slug: '/curso-ia-agentes',
-    headline: 'Claude Code, MCP, AIOX e orquestração de squads autônomas.',
-    tags: ['Claude Code', 'MCP', 'AIOX'],
+    headline: 'Orquestrador comercial, funil automatizado e captação de leads com agentes de IA.',
+    tags: ['Automação', 'CRM', 'WhatsApp'],
     color: '#FF3A0E',
   },
   {
-    area: 'Design com IA',
+    area: 'Site',
     slug: '/curso-design',
-    headline: 'Design systems automatizados, Figma + IA e brand com agentes.',
-    tags: ['Design System', 'Figma', 'Claude Design'],
+    headline: 'Identidade visual com Claude Design e deploy com GitHub + Vercel.',
+    tags: ['Claude Design', 'Vercel', 'GitHub'],
     color: '#FF3A0E',
   },
   {
@@ -78,7 +79,7 @@ const BUNDLE_COURSES = [
 const BUNDLE_BENEFITS = [
   {
     title: 'Acesso completo a todos os 4 cursos',
-    description: 'Um único login, todos os conteúdos — IA & Agentes, Design, Dev e Social Media.',
+    description: 'Um único login, todos os conteúdos — Tráfego, Site, Dev e Social Media.',
   },
   {
     title: 'Melhor custo-benefício',
@@ -101,7 +102,7 @@ const FAQ_ITEMS = [
   },
   {
     q: 'Os cursos têm pré-requisitos entre si?',
-    a: 'Não há pré-requisitos obrigatórios. O Curso IA & Agentes é uma boa porta de entrada, mas você pode começar por qualquer área que seja mais relevante para você.',
+    a: 'Não há pré-requisitos obrigatórios. O Curso Tráfego é uma boa porta de entrada para quem quer resultados comerciais rápidos, mas você pode começar por qualquer área que seja mais relevante para você.',
   },
   {
     q: 'Por quanto tempo terei acesso?',
@@ -124,8 +125,8 @@ export default function CursoBundlePage() {
           area="Bundle · 4 Cursos Completos"
           headline="Tudo que você precisa para"
           headlineAccent="dominar a IA"
-          subtitle="Os 4 cursos num único pacote: IA & Agentes, Design com IA, Dev com IA e Social Media. Uma trilha completa de aprendizado — do zero à operação real."
-          tags={['IA & Agentes', 'Design', 'Dev', 'Social Media', 'Bundle']}
+          subtitle="Os 4 cursos num único pacote: Tráfego, Site, Dev e Social Media. Uma trilha completa de aprendizado — do zero à operação real."
+          tags={['Tráfego', 'Site', 'Dev', 'Social Media', 'Bundle']}
           stats={[
             { value: '4', label: 'Cursos' },
             { value: '24+', label: 'Módulos' },
@@ -313,6 +314,8 @@ export default function CursoBundlePage() {
         />
 
         <CursoEmBreveFaq items={FAQ_ITEMS} id="faq-bundle" />
+
+        <OutrosCursos currentSlug="curso-bundle" />
       </div>
     </>
   )
