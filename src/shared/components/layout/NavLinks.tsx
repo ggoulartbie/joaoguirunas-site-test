@@ -10,7 +10,8 @@ const NAV = [
 ];
 
 const CURSOS_DROPDOWN = [
-  { slug: 'curso-online', label: 'Completo', href: '/curso-online' },
+  { slug: 'curso-bundle', label: 'Completo', href: '/curso-bundle' },
+  { slug: 'curso-online', label: 'Fundamentos', href: '/curso-online' },
   { slug: 'curso-design', label: 'Site', href: '/curso-design' },
   { slug: 'curso-dev', label: 'Devs', href: '/curso-dev' },
   { slug: 'curso-social-media', label: 'Social Media', href: '/curso-social-media' },
