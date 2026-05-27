@@ -6,11 +6,11 @@ import { useState, useRef } from 'react';
 
 const NAV = [
   { href: '/open-source', label: 'Open-source' },
-  { href: '/curso-online', label: 'Curso Online' },
   { href: '/mentoria', label: 'Mentoria' },
 ];
 
 const CURSOS_DROPDOWN = [
+  { slug: 'curso-online', label: 'Completo', href: '/curso-online' },
   { slug: 'curso-design', label: 'Site', href: '/curso-design' },
   { slug: 'curso-dev', label: 'Devs', href: '/curso-dev' },
   { slug: 'curso-social-media', label: 'Social Media', href: '/curso-social-media' },
@@ -57,7 +57,7 @@ export function NavLinks() {
           aria-haspopup="true"
           aria-expanded={dropdownOpen}
         >
-          Cursos
+          Formações
         </button>
 
         {dropdownOpen && (
