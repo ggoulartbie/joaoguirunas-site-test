@@ -1,13 +1,132 @@
 ---
 title: QA Results
 type: qa-log
-updated: 2026-05-21 (LS-2.1)
+updated: 2026-05-29 (UCO-1.2)
 tags: [qa, veredictos]
 ---
 
 # QA Results — Veredictos formais
 
 Histórico de veredictos emitidos pelo sites-qa (Axilun).
+
+---
+
+## 2026-05-29 — Epic CLEAN — Remoção completa academy/Supabase/Stripe — ⚠️ CONCERNS (push autorizado)
+
+**Escopo:** Remoção definitiva da camada academy, middleware, server actions, libs (supabase/payment/auth/video/content/email), API routes, componentes student/admin/editor/forum, tipos de DB, mentoria/onboarding, 13 pacotes npm, limpeza de `next.config.ts` e `.env.local.example`. Substituição da captura por embed Revos CRM (`CursoOnlineForm` + `revos-form` com guard `activeEmbeds`).
+
+**Working tree na auditoria:** 163 deleções, 7 modificações, 2 novos. Commits já feitos: `e3b00e6` (pacotes + config). Restante do working tree será commitado pelo Graveli (sites-devops) junto.
+
+### 10-point checklist do CLEAN
+
+| # | Critério | Resultado |
+|---|----------|-----------|
+| 1 | `src/app/(academy)/` não existe | ✅ PASS — `ls`: No such file |
+| 2 | `src/middleware.ts` não existe | ✅ PASS — `test -f` retorna falso |
+| 3 | `src/app/actions/` não existe | ✅ PASS — `ls`: No such file |
+| 4 | `src/lib/supabase/`, `src/lib/payment/` não existem | ✅ PASS — ambos sem diretório |
+| 5 | `src/components/student/`, `src/components/admin/` não existem | ✅ PASS — ambos sem diretório |
+| 6 | Grep imports proibidos em `src/**/*.{ts,tsx}` (`supabase`, `stripe`, `lib/payment`, `lib/auth`) | ✅ PASS — ZERO matches |
+| 7 | `package.json` sem `@supabase/ssr`, `@supabase/supabase-js`, `stripe`, `bcryptjs` | ✅ PASS — grep retorna ZERO |
+| 8 | `src/app/curso-online/_components/CursoOnlineForm.tsx` existe com `FORM_ID = '44e30c7d-03d2-4896-a85a-53daef5c6623'` | ✅ PASS — existe + FORM_ID correto |
+| 9 | `src/app/mentoria/revos-form.tsx` tem guard `activeEmbeds` (anti-duplicação StrictMode) | ✅ PASS — `Set<string>` em `:11`, `has/add/delete` em `:19,20,40` |
+| 10 | `pnpm typecheck` passa | ✅ PASS — `tsc --noEmit` exit 0 |
+
+### Verificações adversariais adicionais (além do checklist)
+
+| Item | Resultado |
+|------|-----------|
+| Grep imports expandido (`lib/video`, `lib/content`, `lib/email`, `academy`) | ✅ PASS — ZERO matches |
+| Grep chamadas API (`createServerClient`, `createBrowserClient`, `createPublicCheckoutSession`, `stripe`) | ✅ PASS — ZERO matches |
+| `.env.local.example` sem `SUPABASE_*`, `STRIPE_*`, `INFINIT*`, `DATABASE_URL`, `JWT_SECRET` | ✅ PASS — apenas `RESEND_*`, `NEXT_PUBLIC_APP_URL`, `CRON_SECRET`, `SENTRY_*` |
+| `pnpm build` (production) | ✅ PASS — `✓ Compiled successfully in 7.2s`, `/curso-online` rota estática `○`, zero warnings em curso-online |
+| `CursoOnlineForm` agora também com guard `activeEmbeds` (paridade com `revos-form`) | ✅ PASS — `:11,19,20,34` |
+| `SolarSystemBackground` import em `page.tsx:15` — alerta anterior | ✅ RESOLVIDO — agora é usado em `page.tsx:131` (não é mais órfão) |
+
+### CONCERNS remanescentes (não-bloqueantes)
+
+**C1 — Redirects órfãos em `next.config.ts`**
+**Severidade:** baixa-média.
+**Local:** `next.config.ts:11-29` — 17 ocorrências de `/academy/*` como destino de redirects (`/login → /academy/login`, `/dashboard → /academy/dashboard`, etc).
+**Razão:** As rotas `/login`, `/cadastro`, `/dashboard`, `/meus-cursos`, `/perfil`, `/agenda`, `/certificados`, `/turmas`, `/checkout/*`, `/curso/*`, `/forum/*`, `/admin/*`, `/403` redirecionam para `/academy/*`, MAS `/academy/*` foi totalmente removido neste epic. Resultado em produção: usuário acessa `/login` → redirect 308 para `/academy/login` → 404. Sequência redirect→404 é tecnicamente equivalente a 404 direto, mas adiciona um hop desnecessário e pode confundir crawlers/usuários.
+**Mitigação recomendada:** simplificar para redirects diretos a `/` (homepage) ou remover esses redirects históricos. Pequeno PR de cleanup pode ir junto com o push da epic CLEAN ou logo após.
+**Impacto se ignorado:** baixo — não quebra build, não quebra runtime, apenas UX e SEO levemente sub-ótimos. Ranking SEO de URLs antigas (`/login` etc) provavelmente já está fora do índice.
+
+**C2 — Visual QA humano em dev**
+**Severidade:** baixa.
+**Razão:** Embed do Revos (`crm.joaoguirunas.com`) carrega via script externo. Verificação estática mostra o `useEffect` correto, guard `activeEmbeds`, fallback `blocked` para ad-blockers, cleanup no unmount. Submit real depende do CRM externo — fora do escopo deste repo.
+**Mitigação:** João abre `/curso-online` e `/mentoria` em dev e confirma que ambos os forms carregam e são submetíveis (1 minuto cada).
+**Impacto:** baixo — código está estruturalmente correto.
+
+### Pontos confirmados como SUPERSEDED (não-FAIL)
+
+Os pontos AC4 e AC11 do UCO-2.1 anterior, que originalmente exigiam `CheckoutForm` + cohort `curso-online-padrao` + JSON-LD `offers.url: /academy/checkout/...`, foram **substituídos por decisão de produto** conforme já documentado. Estado atual confirmado:
+- `CursoOnlineForm` (embed Revos) em uso em `page.tsx:297`
+- `offers.url: ${siteConfig.url}/curso-online` em `page.tsx:55` (oferta na própria página)
+- Zero refs a `cohort` ou `CheckoutForm` em `src/app/curso-online/`
+
+### Métricas
+
+- **Working tree:** 172 entradas (163 D, 7 M, 2 ??)
+- **Build:** 7.2s, zero warnings em rotas tocadas
+- **Typecheck:** exit 0
+- **Imports proibidos:** 0 em src/
+- **Pacotes proibidos:** 0 em package.json
+
+### VEREDICTO: ⚠️ CONCERNS — push autorizado
+
+**A epic CLEAN está estruturalmente íntegra.** 10/10 itens do checklist em PASS, todas as verificações adversariais adicionais em PASS, build e typecheck limpos. Os 2 CONCERNS remanescentes (redirects órfãos em `next.config.ts` e visual QA humano dos forms Revos) são **não-bloqueantes** e podem ser tratados em PR de follow-up ou validação rápida do João em dev.
+
+### Próximo passo
+
+1. **@sites-devops (Graveli):** commit do working tree atual (163 D + 7 M + 2 ??) com mensagem alinhada ao epic CLEAN. Push autorizado para `main`.
+2. **Follow-up (curto prazo):** PR pequeno cleaning os 17 redirects órfãos em `next.config.ts` (C1) — pode ser logo após o push da CLEAN.
+3. **Follow-up (1 min do João):** abrir `/curso-online` e `/mentoria` em dev, confirmar carregamento dos forms Revos (C2).
+
+**Auditor:** ✦ Axilun — A luz está correta. A casa está limpa.
+
+---
+
+## 2026-05-29 — Story UCO-1.2 — Remoção SolarSystemBackground de /curso-online — ⚠️ CONCERNS
+
+**Escopo entregue:** Commit `e5f35e5` (citado pelo dev como `c5f2cde` em mensagem) — remove import + JSX `SolarSystemBackground` e wrapper `div.relative.z-10` de `src/app/curso-online/page.tsx`. Subsequente `0a30a3f` corrige texto factualmente errado em `CursoPricingCalculator`.
+
+**Arquivos verificados:**
+- `src/app/curso-online/page.tsx` (estado final)
+- `src/app/curso-online/_components/` (catálogo completo)
+- `src/app/mentoria/page.tsx` (comparação estrutural)
+- `src/app/agentes/_components/SolarSystemBackground.tsx` (origem — preservada)
+
+### Checklist por AC
+
+| AC | Descrição | Resultado | Detalhe |
+|----|-----------|-----------|---------|
+| AC1 | Ordem espelha mentoria (SectionDots → Hero → Solution → Diferenciais → Timeline → Facilitadores → Pricing → Inscrição → FAQ → CTA Final) | ✅ PASS | `page.tsx:129-360` — ordem confere |
+| AC2 | Timeline com apenas Semanas 1-4 | ✅ PASS | `CursoOnlineTimeline` em uso, sem Pré-Mentoria/Presencial/Bônus/Encerramento |
+| AC3 | Diferenciais espelha `mentorship-features` | ✅ PASS | `CursoOnlineDiferenciais` em uso |
+| AC4 | FAQ espelha `faq-accordion` | ✅ PASS | `CursoFaqAccordion` em uso |
+| AC5 | Form mantém `CursoOnlineForm` (não `RevosForm`) | ✅ PASS | `page.tsx:14, 291` — `CursoOnlineForm` (form ID `44e30c7d…`) distinto do `RevosForm` da mentoria (`a11d7cc4…`) |
+| AC6 | Hero curso-online (R$ 797) com tratamento Spline/SolarSystem da UCO-1.1 | ✅ PASS | `CursoOnlineHero` em uso; `SolarSystemBackground` removido conforme decisão da spec |
+| AC7 | Facilitadores: 2 cards (João + Claudia) | ✅ PASS | `page.tsx:86-101, 161-205` |
+| AC8 | `pnpm build` + typecheck limpo | ✅ PASS | `tsc --noEmit` exit 0; `next build` exit 0; rota `/curso-online` como estática (`○`) sem warning |
+| AC9 | Visual QA manual lado a lado | ⚠️ N/A | Sem screenshots no PR — Axilun não executa browser. Recomendado QA visual humano antes de push |
+| AC10 | JSON-LD `Course` + metadata + canonical | ✅ PASS | `page.tsx:36-56` — preço 797, schema correto, canonical `/curso-online` |
+| AC11 | Sem componentes órfãos em `_components/` | ❌ FAIL | `CursoSquadSection.tsx` e `CursoSquadsSticky.tsx` permanecem no diretório sem nenhum import vivo no projeto (grep confirmou) |
+
+### Issues
+
+- [CONCERN] AC11 — componentes órfãos não removidos:
+  - `src/app/curso-online/_components/CursoSquadSection.tsx`
+  - `src/app/curso-online/_components/CursoSquadsSticky.tsx`
+  - Nenhum import vivo (grep `from.*CursoSquadSection|from.*CursoSquadsSticky` → 0 matches em `src/`). AC11 da story exige remoção explícita.
+- [INFO] AC9 — comparação visual manual lado a lado entre `/mentoria` e `/curso-online` em dev não foi executada (Axilun é read-only e sem browser). Push depende dessa validação humana.
+- [INFO] Mensagem do dev cita commit `c5f2cde`, mas `git log` mostra `e5f35e5` com a mesma mensagem — provavelmente rebase posterior. Não bloqueia.
+
+### Veredicto
+
+⚠️ **CONCERNS** — Implementação core (remoção de `SolarSystemBackground`) está correta e build/typecheck passam. Aprovado com condição de cleanup de AC11 antes de push: remover `CursoSquadSection.tsx` e `CursoSquadsSticky.tsx` ou justificar manutenção. Visual QA humano (AC9) também necessário antes de devops avançar.
+
+**Próximo passo:** @sites-dev-alpha remover componentes órfãos (10 min) → @sites-devops push.
 
 ---
 
@@ -4307,6 +4426,41 @@ Aguarda UCO-1.2 (sites-dev-alpha — `src/app/curso-online/page.tsx`) para audit
 
 ---
 
+## 2026-05-29 — UCO-2.1 — Revisão pós decisão de produto (Stripe→Revos CRM) — ⚠️ CONCERNS (mantido, agora apenas C1+C3)
+
+**Contexto:** Lead confirmou decisão de produto definitiva. CheckoutForm → CursoOnlineForm (embed Revos CRM `crm.joaoguirunas.com`, form ID `44e30c7d-03d2-4896-a85a-53daef5c6623`) é substituição **intencional e aprovada pelo PO**. Epic CLEAN em curso remove todo o checkout interno (Stripe/InfinitePay) do site.
+
+### Impacto no relatório
+
+| Item | Antes | Depois |
+|------|-------|--------|
+| AC4 — CheckoutForm cohort `curso-online-padrao` | ⚠️ CONCERN C2 | ✅ **SUPERSEDED** (não-FAIL) — `CursoOnlineForm` em uso, zero refs a cohort no `src/app/curso-online/` |
+| AC11 — JSON-LD `offers.url: /academy/checkout/curso-online-padrao` | ✅ PASS | ✅ **SUPERSEDED** — `offers.url` agora `${siteConfig.url}/curso-online` (oferta na própria página, correto para Revos) |
+| C2 — Submit real + cohort no Supabase prod | ⚠️ CONCERN não-bloqueante | ❌ **CANCELADO** — sem cohort a verificar |
+| C4 — Copy "13 módulos + 2 bônus" | ⚠️ CONCERN | ✅ CORRIGIDO no commit `0a30a3f` |
+
+### CONCERNS remanescentes (não-bloqueantes)
+
+- **C1** — Visual side-by-side `/mentoria` vs `/curso-online` pelo João no browser antes do push (estrutura DOM 100% paritária, risco baixíssimo).
+- **C3** — `pnpm lint` script defeituoso no `package.json` (defeito histórico Next 16, build do Next roda ESLint integrado e passa — não é regressão).
+
+### ⚠️ Observação pré-push para Graveli (sites-devops)
+
+Working tree atual de `src/app/curso-online/page.tsx`:
+- `CursoOnlineForm` em uso ✅
+- `offers.url` corrigido para `/curso-online` ✅
+- Linha 15 **re-importa `SolarSystemBackground`** mas o componente NÃO é invocado no JSX (`return` em 122-130 não o usa). Vai gerar warning ESLint de import não-usado. Remover o import antes do commit, OU reintroduzir o uso conforme intenção do PO.
+
+### VEREDICTO mantido: ⚠️ CONCERNS — push autorizado
+
+Apenas C1 (visual humano) e C3 (lint script) remanescentes. AC4/AC11 superseded por decisão de produto. Commit do working tree pelo Graveli junto com epic CLEAN.
+
+**Relatório atualizado:** `docs/smart-memory/qa-reports/UCO-2.1-2026-05-29.md` (secção "Nota de decisão de produto").
+
+**Auditor:** ✦ Axilun — A luz está correta na nova estratégia.
+
+---
+
 ## 2026-05-29 — Story UCO-2.1 — QA gate adversarial /curso-online unificada — ⚠️ CONCERNS
 
 **Escopo:** Veredicto final do épico UCO. Cobertura: UCO-1.2 (página unificada) + UCO-1.3 (remoção de 6 pastas) + UCO-1.4/UCO-1.5 (sitemap, NavLinks, dropdown removido). 12 ACs auditados.
@@ -4356,6 +4510,58 @@ Push autorizado para `main` com 3 concerns documentados (todos não-bloqueantes 
 3. **Follow-up UX:** revisar numeração módulos 1-7,10 com PO (baixa prioridade).
 
 **Relatório completo:** `docs/smart-memory/qa-reports/UCO-2.1-2026-05-29.md`
+
+**Auditor:** ✦ Axilun — A luz está correta. Push autorizado.
+
+---
+
+## 2026-05-29 — UCO-2.1 — Re-verificação pós-commit c5f2cde (Novael) + 10-point checklist completo
+
+**Contexto:** Lead pediu re-validação com o commit `c5f2cde feat(curso-online): remover SolarSystemBackground` e fechamento do 10-point checklist (a11y, SEO, responsivo, performance, copy). Já havia veredicto formal ⚠️ CONCERNS emitido anteriormente — esta entrada CONFIRMA o veredicto e ADICIONA 1 CONCERN novo (C4: copy).
+
+### Re-verificação HEAD = c5f2cde
+
+| Item | Verificação | Resultado |
+|------|-------------|-----------|
+| SolarSystemBackground removido | `grep -rE "SolarSystemBackground" src/app/curso-online/` | ✅ PASS — ZERO matches |
+| Termos proibidos como fases ("pré-mentoria", "encerramento") | `grep -rniE "pré-mentoria\|encerramento"` em curso-online/ | ✅ PASS — ZERO matches |
+| "encontros ao vivo" — contraste vs fase | 2 matches: `page.tsx:84` (NOT_INCLUDED) e `CursoFaqAccordion.tsx:18` (FAQ explicando diferença) | ✅ PASS — usos legítimos de contraste |
+| "bônus/bonus" — contraste vs fase | 4 matches: `page.tsx:86` (NOT_INCLUDED), `CursoOnlineTimeline.tsx:7,112` (tipo TS `ItemType = 'Video' \| 'Bonus'`, não label de fase), `CursoPricingCalculator.tsx:465` (copy de oferta — **VER C4**) | ⚠️ 3 legítimos + 1 problema de copy (C4) |
+| CursoOnlineTimeline sem fases 0 (Pré-Mentoria), 1 (Presencial), 6 (Bônus Online), 7 (Encerramento) | leitura `CursoOnlineTimeline.tsx:23-105` — fases reais: `Fundamentos`, `Semana 1`, `Semana 2`, `Semana 3`, `Semana 4` | ✅ PASS — zero fases proibidas |
+| `pnpm typecheck` | exit code 0, saída limpa | ✅ PASS |
+
+### 10-point checklist (completo)
+
+| # | Critério | Resultado |
+|---|----------|-----------|
+| 1 | Code review — patterns, manutenibilidade | ✅ PASS — componentes `SectionDots` e `SolutionSection` importados de `@/app/mentoria/` (reuso correto); design tokens consistentes (`var(--color-accent)`, `var(--font-display-serif)`, `var(--font-mono)`); JSX legível, sem dead code |
+| 2 | Acceptance criteria | ⚠️ 9/12 PASS direto + 3 CONCERNS já documentados (C1, C2, C3) |
+| 3 | Sem regressões | ✅ PASS — typecheck limpo, build limpo, zero imports quebrados, zero links órfãos para rotas removidas |
+| 4 | Performance — Lighthouse/CWV | ⏭ OUT — explicitamente fora de escopo per story UCO-2.1 |
+| 5 | Acessibilidade (WCAG AA básica) | ✅ PASS — H1 único ("Agentes Claude que trabalham por você"), 7 H2, 27 H3 (hierarquia ok), skip-link presente, alt texts nas imagens dos facilitadores, `aria-hidden="true"` em decorativos, nav com `aria-label` e `aria-current` |
+| 6 | SEO | ✅ PASS — metadata completo (title, description, canonical `/curso-online`, OpenGraph, Twitter card), JSON-LD `@type: Course` válido com price/availability/url, sitemap inclui `/curso-online` |
+| 7 | Responsivo (mobile/tablet/desktop) | ✅ PASS — 31 ocorrências de breakpoints `sm:/md:/lg:` em `page.tsx`, 14 em Timeline, 6 em Hero, layouts grid mobile-first |
+| 8 | Copy | ⚠️ **NOVO CONCERN C4** — `CursoPricingCalculator.tsx:465` exibe "13 módulos + 2 bônus com código" logo abaixo do botão "Comprar agora — R$ 797". Inconsistente com a Timeline real (8 módulos, todos do tipo Video; nenhum bônus separado). Texto remanescente da estrutura antiga da mentoria. Defeito visível ao usuário no momento da decisão de compra. |
+| 9 | Cross-browser | ⏭ OUT — explicitamente fora de escopo per story UCO-2.1 |
+| 10 | Security | ✅ PASS — server actions com cohort slug fixo (não vem do client), zero inputs raw na URL, link externo `https://www.growthsales.ai` com `rel="noopener noreferrer"`, nenhum dado sensível exposto no HTML |
+
+### Concerns consolidados (1 novo + 3 anteriores)
+
+- **C1 (AC3):** Visual pixel-perfect /mentoria vs /curso-online requer smoke manual do João no browser. Estrutura DOM 100% paritária. Risco mínimo.
+- **C2 (AC4):** Submit real do form não executado. **Pré-push obrigatório:** confirmar `cohorts.slug='curso-online-padrao'` no Supabase de prod.
+- **C3 (AC9):** `pnpm lint` script defeituoso (não regressão deste épico). Build do Next roda ESLint integrado e passa. Abrir story separada de fix.
+- **C4 (10-point #8) — RESOLVIDO:** copy "13 módulos + 2 bônus com código" em `CursoPricingCalculator.tsx:465` estava factualmente incorreto. ✅ **Corrigido no commit `0a30a3f`** (João + Claude) — texto trocado para "8 módulos · Acesso por 6 meses", exatamente como recomendado. C4 fechado.
+
+### VEREDICTO FINAL: ⚠️ CONCERNS (3 concerns abertos após resolução de C4)
+
+**Push para `main` autorizado** com 3 concerns abertos (C1, C2, C3), todos não-bloqueantes. C4 já foi resolvido.
+
+**Próximos passos:**
+1. **@sites-devops:** push autorizado APÓS:
+   - Confirmar cohort `curso-online-padrao` no Supabase de prod (C2).
+   - João valida visualmente /curso-online vs /mentoria no browser (C1).
+2. **@sites-dev-alpha (ou whoever for designado):** fix rápido de C4 — `CursoPricingCalculator.tsx:465` "13 módulos + 2 bônus com código" → texto correto reflectindo 8 módulos. PR pequeno, pode ir junto com UCO-2.2 ou logo após.
+3. **Follow-up backlog:** story para fix de `pnpm lint` (C3, fora de escopo deste épico).
 
 **Auditor:** ✦ Axilun — A luz está correta. Push autorizado.
 
