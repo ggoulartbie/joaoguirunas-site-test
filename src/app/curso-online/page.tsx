@@ -10,7 +10,6 @@ import { CursoOnlineDiferenciais } from './_components/CursoOnlineDiferenciais'
 import { CursoOnlineTimeline } from './_components/CursoOnlineTimeline'
 import { CursoPricingCalculator } from './_components/CursoPricingCalculator'
 import { CursoFaqAccordion } from './_components/CursoFaqAccordion'
-import { CursoOnlineForm } from './_components/CursoOnlineForm'
 import { SolarSystemBackground } from '@/app/agentes/_components/SolarSystemBackground'
 
 export const metadata: Metadata = {
@@ -224,7 +223,7 @@ export default function CursoOnlinePage() {
               style={{ background: 'rgba(255,255,255,0.06)', fontFamily: 'var(--font-mono)', fontSize: '0.7rem', letterSpacing: '0.12em' }}
             >
               <span className="w-2 h-2 rounded-full bg-[#FF3A0E]" style={{ boxShadow: '0 0 6px #FF3A0E' }} />
-              <span className="text-[#FF3A0E] uppercase">Acesso imediato · R$ 797</span>
+              <span className="text-[#FF3A0E] uppercase">Fale com um especialista · Acesso por 6 meses</span>
             </span>
             <h2
               className="text-3xl sm:text-4xl text-white mb-3"
@@ -237,7 +236,23 @@ export default function CursoOnlinePage() {
               8 módulos em vídeo, materiais por módulo e certificado de conclusão. 6 meses de acesso.
             </p>
           </div>
-          <CursoOnlineForm />
+          <div className="flex flex-col items-center">
+            <a
+              href="https://www.growthsales.ai"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center justify-center gap-3 px-10 py-5 text-sm font-semibold uppercase transition-all hover:brightness-110 active:scale-[0.98]"
+              style={{ background: '#FF3A0E', color: '#050507', fontFamily: 'var(--font-mono)', fontSize: '12px', letterSpacing: '0.16em' }}
+            >
+              Fale com um especialista
+              <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+              </svg>
+            </a>
+            <p className="mt-4 text-xs text-white/50" style={{ fontFamily: 'var(--font-mono)' }}>
+              Resposta em até 24h · Acesso por 6 meses
+            </p>
+          </div>
         </div>
       </section>
 
@@ -283,11 +298,16 @@ export default function CursoOnlinePage() {
           </p>
           <div className="flex justify-center">
             <a
-              href="#inscricao"
-              className="inline-flex items-center justify-center gap-2 px-8 py-4 text-sm font-semibold uppercase transition-all hover:brightness-110 active:scale-[0.98]"
+              href="https://www.growthsales.ai"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center justify-center gap-3 px-10 py-5 text-sm font-semibold uppercase transition-all hover:brightness-110 active:scale-[0.98]"
               style={{ background: '#FF3A0E', color: '#050507', fontFamily: 'var(--font-mono)', fontSize: '12px', letterSpacing: '0.16em' }}
             >
-              Comprar agora — R$ 797
+              Fale com um especialista
+              <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+              </svg>
             </a>
           </div>
           <p className="mt-6 text-xs sm:text-sm text-white/60">

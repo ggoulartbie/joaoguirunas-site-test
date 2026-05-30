@@ -8,7 +8,6 @@ import { MentoriaHeroSpline } from './_components/MentoriaHeroSpline';
 import { FaqAccordion } from './faq-accordion';
 import { MentorshipFeatures } from './mentorship-features';
 import { CourseModulesTimeline } from './course-modules-timeline';
-import { RevosForm } from './revos-form';
 import { PricingCalculator } from './pricing-calculator';
 import { SectionDots } from './section-dots';
 import { SolutionSection } from './solution-section';
@@ -211,7 +210,23 @@ export default function MentoriaPage() {
               Turma de julho 2026 — data a definir. 12 alunos com vagas limitadas.
             </p>
           </div>
-          <RevosForm />
+          <div className="flex flex-col items-center">
+            <a
+              href="https://www.growthsales.ai"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center justify-center gap-3 px-10 py-5 text-sm font-semibold uppercase transition-all hover:brightness-110 active:scale-[0.98]"
+              style={{ background: '#FF3A0E', color: '#050507', fontFamily: 'var(--font-mono)', fontSize: '12px', letterSpacing: '0.16em' }}
+            >
+              Fale com um especialista
+              <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+              </svg>
+            </a>
+            <p className="mt-4 text-xs text-white/50" style={{ fontFamily: 'var(--font-mono)' }}>
+              Resposta em até 24h · Turma de julho 2026
+            </p>
+          </div>
         </div>
       </section>
 
