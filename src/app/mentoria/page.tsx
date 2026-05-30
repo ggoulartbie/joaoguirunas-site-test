@@ -198,17 +198,17 @@ export default function MentoriaPage() {
               style={{ background: 'rgba(255,255,255,0.06)', fontFamily: 'var(--font-mono)', fontSize: '0.7rem', letterSpacing: '0.12em' }}
             >
               <span className="w-2 h-2 rounded-full bg-[#FF3A0E]" style={{ boxShadow: '0 0 6px #FF3A0E' }} />
-              <span className="text-[#FF3A0E] uppercase">Turma de junho · 15/06 · 12 vagas</span>
+              <span className="text-[#FF3A0E] uppercase">Turma de julho · Data a definir · 12 vagas</span>
             </span>
             <h2
               className="text-3xl sm:text-4xl text-white mb-3"
               style={{ fontFamily: 'var(--font-display-serif)', fontWeight: 400, letterSpacing: '-0.03em', lineHeight: 0.95 }}
             >
               Garanta sua vaga na{' '}
-              <span className="text-[#FF3A0E] italic" style={{ fontWeight: 300 }}>turma de junho</span>
+              <span className="text-[#FF3A0E] italic" style={{ fontWeight: 300 }}>turma de julho</span>
             </h2>
             <p className="text-white/55 text-sm sm:text-base max-w-lg mx-auto leading-relaxed">
-              Início em 15 de junho. Turma de 12 alunos com vagas limitadas.
+              Turma de julho 2026 — data a definir. 12 alunos com vagas limitadas.
             </p>
           </div>
           <RevosForm />
@@ -231,7 +231,7 @@ export default function MentoriaPage() {
       <section className="py-12 sm:py-16 bg-[#050507]">
         <div className="mx-auto max-w-4xl px-5 sm:px-6 lg:px-8 text-center">
           <h3 className="text-3xl sm:text-4xl text-white mb-4" style={{ ...KV_DISPLAY, lineHeight: 0.95 }}>Pronto para ter sua própria <span className="text-[#FF3A0E] italic" style={{ fontWeight: 300 }}>equipe de agentes IA</span>?</h3>
-          <p className="text-white/60 mb-8 max-w-2xl mx-auto text-sm sm:text-base">Início em 15 de junho. Turma de 12 alunos — vagas limitadas.</p>
+          <p className="text-white/60 mb-8 max-w-2xl mx-auto text-sm sm:text-base">Turma de julho 2026 — data a definir. 12 alunos com vagas limitadas.</p>
           <CtaButton label="Entrar na lista de espera" className="text-base sm:text-lg" />
           <p className="mt-6 text-xs sm:text-sm text-white/60"><Icon name="zap" size="16" className="inline" /> Resposta em até 24h | <Icon name="lock" size="16" className="inline" /> Dados 100% seguros</p>
         </div>
