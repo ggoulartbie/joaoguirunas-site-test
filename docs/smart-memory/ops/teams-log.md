@@ -706,3 +706,20 @@ Registro de todos os Agent Teams formados neste projeto. Lead (team-os) atualiza
 - `src/shared/components/ui/animated-hero.tsx` (integração)
 **Commit:** d9292a0
 **Stories:** [[../stories/done/NAV-1.1-courses-popover-dropdown]]
+
+## 2026-05-29 — Team joao-guirunas-site-unificar-curso-online
+
+**Objetivo:** Unificar página curso-online similar à mentoria (sem pré-mentoria, encontros ao vivo, bônus, encerramento) + apagar páginas obsoletas de cursos + simplificar menu global
+**Lead:** team-os (skill)
+**Composição:**
+- sites-architect — stories e análise de estrutura
+- sites-ux — spec UX da página unificada
+- sites-dev-alpha — implementação frontend página curso-online
+- sites-dev-beta — sitemap, links e menu global
+- sites-dev-gamma — remoção de páginas obsoletas
+- sites-qa — QA gate formal
+- sites-devops — push + PR
+
+**Status:** ativo
+**Início:** 2026-05-29
+**Stories:** UCO-1.1 a UCO-2.2 + UCO-1.5 (menu global)

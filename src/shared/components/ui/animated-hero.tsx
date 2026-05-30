@@ -8,7 +8,6 @@ import { ArrowRight } from 'lucide-react';
 import { SparklesCore } from '@/shared/components/ui/sparkles';
 import { GrowthWatermark } from './growth-watermark';
 import { Logo } from '@/shared/components/ui/Logo';
-import { CoursesDropdown } from '@/shared/components/ui/CoursesDropdown';
 
 const EMBER = '#FF3A0E';
 const CINEMA: [number, number, number, number] = [0.7, 0, 0.2, 1];
@@ -118,8 +117,14 @@ export function AnimatedHero() {
             Open Source
           </Link>
 
-          {/* 2 — Cursos (dropdown) */}
-          <CoursesDropdown />
+          {/* 2 — Curso Online */}
+          <Link
+            href="/curso-online"
+            className="inline-flex items-center justify-center px-7 py-3 text-sm font-semibold text-white/70 transition-all duration-200 hover:text-white hover:bg-white/[0.05]"
+            style={{ border: '1px solid rgba(255,255,255,0.14)', letterSpacing: '-0.01em' }}
+          >
+            Curso Online
+          </Link>
 
           {/* 3 — Mentoria (KV principal) */}
           <Link

@@ -71,6 +71,7 @@ MOC raiz. Todo arquivo novo em `docs/smart-memory/` deve ser referenciado aqui.
 - [[agents/ux/curso-online-agents-redesign]] — spec redesign seção agentes /curso-online (cards 110px, sem blur, sem link, min-h 80vh)
 - [[agents/ux/spec-template-md-aula]] — spec tipografia/espaçamento do template Markdown em LessonContent (Story 3.2)
 - [[agents/ux/spec-nav-topo-aula]] — spec nav prev/next compacto no topo da página de aula (Story 3.6)
+- [[agents/ux/curso-online-spec]] — mapa de secções mentoria→curso-online (✅/❌ incluir/excluir), delta de props, componentes reutilizáveis — 2026-05-29
 - `agents/research/` — research reports
 - [[agents/research/seo-audit]] — auditoria SEO completa (titles, headings, schema, CWV, sitemap) — 2026-04-23
 - [[agents/research/api-admin-inventory]] — inventário e audit das APIs em /api/admin/ — 2026-05-07

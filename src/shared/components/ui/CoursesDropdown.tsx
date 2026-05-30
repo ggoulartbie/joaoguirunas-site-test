@@ -17,11 +17,6 @@ interface Course {
 
 const COURSES: Course[] = [
   { title: 'Claude Agents Team', href: '/curso-online', badge: 'Ativo', active: true },
-  { title: 'Site', href: '/curso-design', badge: 'Em breve', active: false },
-  { title: 'Dev com IA', href: '/curso-dev', badge: 'Em breve', active: false },
-  { title: 'Tráfego', href: '/curso-ia-agentes', badge: 'Em breve', active: false },
-  { title: 'Social Media & Conteúdo', href: '/curso-social-media', badge: 'Em breve', active: false },
-  { title: 'Bundle — os 4 cursos', href: '/curso-bundle', badge: 'Em breve', active: false, separator: true },
 ];
 
 export function CoursesDropdown() {
