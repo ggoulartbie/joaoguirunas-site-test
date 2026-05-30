@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 import React from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
-import { X, Play, FileText, MessageSquare, Award } from 'lucide-react'
+
 import { siteConfig } from '@/config/site'
 import { SectionDots } from '@/app/mentoria/section-dots'
 import { SolutionSection } from '@/app/mentoria/solution-section'
@@ -70,19 +70,6 @@ const KV_MONO: React.CSSProperties = {
   fontWeight: 500,
 }
 
-const INCLUDED = [
-  { icon: Play, text: 'Aulas gravadas — assista no seu ritmo' },
-  { icon: FileText, text: 'Materiais e templates de cada módulo' },
-  { icon: MessageSquare, text: 'Fórum da comunidade — tire dúvidas' },
-  { icon: Award, text: 'Certificado de conclusão' },
-]
-
-const NOT_INCLUDED = [
-  'Encontros ao vivo ou aulas em tempo real',
-  'Mentoria 1:1 com os facilitadores',
-  'Bônus e frameworks aceleradores Growth Sales',
-  'Suporte via WhatsApp prioritário',
-]
 
 const FACILITADORES = [
   {
