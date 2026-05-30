@@ -1,7 +1,6 @@
 import type { Metadata } from 'next'
 import React from 'react'
 import Image from 'next/image'
-import Link from 'next/link'
 
 import { siteConfig } from '@/config/site'
 import { SectionDots } from '@/app/mentoria/section-dots'
