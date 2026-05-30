@@ -11,6 +11,106 @@ Histórico de veredictos emitidos pelo sites-qa (Axilun).
 
 ---
 
+## 2026-05-30 — Veredicto FINAL — Epic CLEAN + Epic UCO totalmente concluídos — ✅ PASS
+
+**Gatilho:** Task #12 (QA gate CLEAN) reatribuída. Re-validação confirma que todos os concerns remanescentes foram fechados pelo commit `ecd98a3 chore(curso-online): remover componentes órfãos e import Link não utilizado` (392 linhas deletadas: 135 + 256 + 1).
+
+### Estado HEAD final (após 7 commits desde `e3b00e6`)
+
+| Commit | Função |
+|--------|--------|
+| `e3b00e6` | Rex-S — remoção pacotes academy/DB |
+| `bc14941` | Lead — Revos CRM embed + revos-form dedup fix |
+| `ef8d988` | Seranol — remoção /academy + infra DB |
+| `cf2bd03` | smart-memory — QA CLEAN PASS docs |
+| `f2de3f9` | curso-online — cleanup imports unused |
+| `f51cd03` | curso-online — remoção Link unused |
+| `a6958fd` | curso-online+clean — unificação final |
+| **`ecd98a3`** | **curso-online — remoção CursoSquadSection + CursoSquadsSticky + Link (392 linhas deletadas) → fecha AC11 UCO-1.2** |
+
+### Verificação final
+
+| Item | Resultado |
+|------|-----------|
+| `pnpm typecheck` (cache limpo) | ✅ PASS — exit 0 |
+| `pnpm build` production | ✅ PASS — `✓ Compiled in 4.1s`, `/curso-online` rota estática `○` |
+| `CursoSquadSection.tsx` removido fisicamente | ✅ PASS — "No such file" |
+| `CursoSquadsSticky.tsx` removido fisicamente | ✅ PASS — "No such file" |
+| Working tree | ✅ apenas cache + docs (irrelevantes para CLEAN) |
+
+### Veredicto consolidado FINAL
+
+✅ **PASS** — Epic CLEAN + Epic UCO totalmente concluídos e validados.
+
+- 10/10 checklist CLEAN PASS
+- 11/11 ACs UCO-1.2 PASS (AC11 finalmente fechado por `ecd98a3`)
+- AC4 + AC11 UCO-2.1 SUPERSEDED por decisão de produto (Revos CRM)
+- Build limpo + typecheck limpo + zero imports proibidos + zero pacotes proibidos
+- Zero dead code remanescente em `src/app/curso-online/`
+
+**CONCERNS apenas para follow-up (não-bloqueantes, fora de escopo destes epics):**
+- **C1 (epic CLEAN)** — 17 redirects órfãos em `next.config.ts:11-29` apontando para `/academy/*` (rotas removidas). PR pequeno de cleanup recomendado pós-push.
+- **C3 (UCO-2.1)** — Script `pnpm lint` em `package.json` defeituoso (defeito histórico Next 16, ESLint integrado ao build passa).
+- **Visual QA humano** — João abrir `/curso-online` e `/mentoria` em dev para confirmar carga dos forms Revos (1 min, não-bloqueante).
+
+**Push final autorizado.** Próxima ação: Graveli pode fazer o push para `main` quando entender.
+
+**Auditor:** ✦ Axilun — A luz está perfeita. A casa está completamente limpa.
+
+---
+
+## 2026-05-30 — Confirmação Rex-S (commit e3b00e6) + estado pós-cleanup — ✅ PASS
+
+**Contexto:** Rex-S (sites-dev-beta) re-notificou a entrega do commit `e3b00e6 chore(clean): remover pacotes academy/DB e limpar configurações`. Este commit **já tinha sido auditado e aprovado** no QA gate da epic CLEAN (entrada `2026-05-29 — Epic CLEAN`). Esta entrada CONFIRMA o estado atual do projeto após mais 4 commits subsequentes:
+- `bc14941 feat(forms): replace checkout with Revos CRM embed on curso-online, fix revos-form duplication`
+- `ef8d988 feat(clean): remover /academy e toda infra DB — site público apenas`
+- `cf2bd03 chore(smart-memory): QA CLEAN PASS + veredicto final UCO-2.1 actualizado`
+- `f2de3f9 chore(curso-online): remover imports e constantes não utilizadas após refactor da seção inscrição`
+- `f51cd03 chore(curso-online): remover import Link não utilizado`
+
+### Verificações no HEAD atual
+
+| Item | Resultado |
+|------|-----------|
+| `pnpm typecheck` (após `rm tsconfig.tsbuildinfo`) | ✅ PASS — exit 0 |
+| `pnpm build` production | ✅ PASS — `✓ Compiled in 4.7s`, `/curso-online` rota `○` |
+| Imports proibidos (`supabase`/`stripe`/`lib/payment`/`lib/auth`) | ✅ PASS — 0 matches |
+| `CursoOnlineForm` em uso (`page.tsx`) | ✅ PASS |
+| `SolarSystemBackground` em uso (`page.tsx:118`) | ✅ PASS |
+| JSON-LD `offers.url` para `/curso-online` | ✅ PASS — `:55` |
+| `Link` em uso legítimo (`:271` link para `/mentoria`) | ✅ PASS — não é morto |
+| `KV_MONO` em uso legítimo (`:256, 269, 284, 298`) | ✅ PASS — não é morto |
+| `git diff HEAD` em `page.tsx` | ✅ PASS — vazio (sincronizado) |
+
+### Retração de concerns anteriores
+
+**RETRATO** os concerns #1 (Link morto) e #2 (KV_MONO morto) que emiti em re-auditoria anterior nesta sessão. Eram **falsos positivos** causados por inspeção parcial do arquivo durante refactor em andamento. No HEAD atual, ambos os símbolos têm uso legítimo na seção Inscrição completa.
+
+**RETRATO** o concern de regressão tsc sobre `AuthHashRedirect.tsx`. Era 100% cache desatualizado em `tsconfig.tsbuildinfo` (arquivo ignorado pelo git, gerado localmente). Após `rm tsconfig.tsbuildinfo`, `pnpm typecheck` exit 0. Zero referências reais a `AuthHashRedirect` em `src/` ou `tsconfig.json`.
+
+### Único concern remanescente
+
+**AC11 de UCO-1.2** — `CursoSquadSection.tsx` e `CursoSquadsSticky.tsx` permanecem em `src/app/curso-online/_components/` sem nenhum import vivo. AC11 da story original exige remoção explícita. Não bloqueia build/typecheck/runtime — dead code apenas. 1 min de `rm` para fechar.
+
+### Estado de working tree
+
+```
+ M supabase/.temp/cli-latest    (arquivo de cache local, irrelevante)
+?? docs/jo-o-guirunas-kv-site/  (nova pasta de docs, não auditada — fora de escopo CLEAN)
+```
+
+Nada bloqueante. `page.tsx` está sincronizado com HEAD.
+
+### Veredicto
+
+✅ **PASS** — Epic CLEAN totalmente íntegra no HEAD atual. Build, typecheck (com cache limpo), imports e estrutura todos confirmados. Único pendente é o `rm` dos 2 órfãos AC11 (não-bloqueante).
+
+**Recomendação:** Graveli pode fazer o push final. Os 2 órfãos podem entrar no mesmo commit final ou em PR de follow-up de 1 linha.
+
+**Auditor:** ✦ Axilun — A luz está correta. A casa está limpa.
+
+---
+
 ## 2026-05-29 — Epic CLEAN — Remoção completa academy/Supabase/Stripe — ⚠️ CONCERNS (push autorizado)
 
 **Escopo:** Remoção definitiva da camada academy, middleware, server actions, libs (supabase/payment/auth/video/content/email), API routes, componentes student/admin/editor/forum, tipos de DB, mentoria/onboarding, 13 pacotes npm, limpeza de `next.config.ts` e `.env.local.example`. Substituição da captura por embed Revos CRM (`CursoOnlineForm` + `revos-form` com guard `activeEmbeds`).
