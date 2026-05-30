@@ -1,28 +1,26 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 const FORM_ID = '44e30c7d-03d2-4896-a85a-53daef5c6623'
 const DIV_ID = `lp-form-${FORM_ID}`
 const SCRIPT_SRC = `https://crm.joaoguirunas.com/embed.js?form_id=${FORM_ID}`
 
-// Module-level guard: prevents double-injection across StrictMode remounts
-// and client-side navigations where the script is already cached in the document.
-const activeEmbeds = new Set<string>()
-
 type LoadState = 'loading' | 'loaded' | 'blocked'
 
 export function CursoOnlineForm() {
   const [state, setState] = useState<LoadState>('loading')
+  const initialized = useRef(false)
 
   useEffect(() => {
-    if (activeEmbeds.has(FORM_ID)) return
-    activeEmbeds.add(FORM_ID)
-
-    const container = document.getElementById(DIV_ID)
-    if (container) container.innerHTML = ''
+    // useRef persists across StrictMode's fake unmount/remount, preventing
+    // double injection. Resets naturally on real navigation (new component instance).
+    if (initialized.current) return
+    initialized.current = true
 
     document.querySelectorAll(`script[data-revos="${FORM_ID}"]`).forEach(el => el.remove())
+    const container = document.getElementById(DIV_ID)
+    if (container) container.innerHTML = ''
 
     const script = document.createElement('script')
     script.src = SCRIPT_SRC
@@ -38,11 +36,7 @@ export function CursoOnlineForm() {
     }, 5000)
 
     return () => {
-      activeEmbeds.delete(FORM_ID)
-      script.remove()
       window.clearTimeout(timeout)
-      const el = document.getElementById(DIV_ID)
-      if (el) el.innerHTML = ''
     }
   }, [])
 
