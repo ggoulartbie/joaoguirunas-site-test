@@ -2,17 +2,17 @@
 
 import { useEffect, useState } from 'react'
 
-const FORM_ID = 'a11d7cc4-17b8-400e-94e4-0f27ca47e9a4'
+const FORM_ID = '44e30c7d-03d2-4896-a85a-53daef5c6623'
 const DIV_ID = `lp-form-${FORM_ID}`
 const SCRIPT_SRC = `https://crm.joaoguirunas.com/embed.js?form_id=${FORM_ID}`
 
-// Module-level guard: prevents double-injection across StrictMode remounts and
-// client-side navigations where the script is already cached in the document.
+// Module-level guard: prevents double-injection across StrictMode remounts
+// and client-side navigations where the script is already cached in the document.
 const activeEmbeds = new Set<string>()
 
 type LoadState = 'loading' | 'loaded' | 'blocked'
 
-export function RevosForm() {
+export function CursoOnlineForm() {
   const [state, setState] = useState<LoadState>('loading')
 
   useEffect(() => {
@@ -21,6 +21,7 @@ export function RevosForm() {
 
     const container = document.getElementById(DIV_ID)
     if (container) container.innerHTML = ''
+
     document.querySelectorAll(`script[data-revos="${FORM_ID}"]`).forEach(el => el.remove())
 
     const script = document.createElement('script')
