@@ -1,20 +1,18 @@
-export const dynamic = 'force-dynamic'
-
 import type { Metadata } from 'next'
 import React from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
-import { X, Play, FileText, MessageSquare, Award } from 'lucide-react'
+
 import { siteConfig } from '@/config/site'
 import { SectionDots } from '@/app/mentoria/section-dots'
 import { SolutionSection } from '@/app/mentoria/solution-section'
-import { SolarSystemBackground } from '@/app/agentes/_components/SolarSystemBackground'
 import { CursoOnlineHero } from './_components/CursoOnlineHero'
 import { CursoOnlineDiferenciais } from './_components/CursoOnlineDiferenciais'
 import { CursoOnlineTimeline } from './_components/CursoOnlineTimeline'
 import { CursoPricingCalculator } from './_components/CursoPricingCalculator'
 import { CursoFaqAccordion } from './_components/CursoFaqAccordion'
-import { CheckoutForm } from './_components/checkout-form'
+import { CursoOnlineForm } from './_components/CursoOnlineForm'
+import { SolarSystemBackground } from '@/app/agentes/_components/SolarSystemBackground'
 
 export const metadata: Metadata = {
   title: 'Curso Online | Claude Agents Team — R$ 797',
@@ -36,8 +34,6 @@ export const metadata: Metadata = {
   },
 }
 
-const COHORT_SLUG = 'curso-online-padrao'
-
 const jsonLd = {
   '@context': 'https://schema.org',
   '@type': 'Course',
@@ -56,7 +52,7 @@ const jsonLd = {
     price: '797',
     priceCurrency: 'BRL',
     availability: 'https://schema.org/InStock',
-    url: `${siteConfig.url}/academy/checkout/${COHORT_SLUG}`,
+    url: `${siteConfig.url}/curso-online`,
   },
 }
 
@@ -74,19 +70,6 @@ const KV_MONO: React.CSSProperties = {
   fontWeight: 500,
 }
 
-const INCLUDED = [
-  { icon: Play, text: 'Aulas gravadas — assista no seu ritmo' },
-  { icon: FileText, text: 'Materiais e templates de cada módulo' },
-  { icon: MessageSquare, text: 'Fórum da comunidade — tire dúvidas' },
-  { icon: Award, text: 'Certificado de conclusão' },
-]
-
-const NOT_INCLUDED = [
-  'Encontros ao vivo ou aulas em tempo real',
-  'Mentoria 1:1 com os facilitadores',
-  'Bônus e frameworks aceleradores Growth Sales',
-  'Suporte via WhatsApp prioritário',
-]
 
 const FACILITADORES = [
   {
@@ -131,14 +114,15 @@ export default function CursoOnlinePage() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
 
-      {/* Sistema solar animado — fixed, z-index 0, atrás de todo o conteúdo */}
+      {/* Fixed 3D solar system canvas behind everything */}
       <SolarSystemBackground />
 
       <div className="relative z-10">
-        <SectionDots />
 
-        {/* ===== HERO ===== */}
-        <CursoOnlineHero />
+      <SectionDots />
+
+      {/* ===== HERO ===== */}
+      <CursoOnlineHero />
 
       {/* ===== SOLUÇÃO ===== */}
       <SolutionSection />
@@ -222,94 +206,39 @@ export default function CursoOnlinePage() {
       {/* ===== INSCRIÇÃO / CTA ===== */}
       <section
         id="inscricao"
-        className="py-16 sm:py-24"
-        style={{ background: '#050507', borderTop: '1px solid rgba(255,255,255,0.07)' }}
+        className="relative py-16 sm:py-24 overflow-hidden"
       >
-        <div className="mx-auto max-w-5xl px-5 sm:px-6 lg:px-8">
-          <div className="lg:grid lg:grid-cols-[1fr_400px] lg:gap-16 lg:items-start">
-
-            {/* ── Esquerda: info ── */}
-            <div>
-              <SectionBadge label="Investimento" />
-              <h2
-                className="text-3xl sm:text-4xl lg:text-5xl text-white mb-4"
-                style={{ ...KV_DISPLAY, lineHeight: 0.95 }}
-              >
-                Acesso completo por{' '}
-                <span className="text-[#FF3A0E] italic" style={{ fontWeight: 300 }}>R$ 797</span>
-              </h2>
-              <p className="text-white/55 text-sm sm:text-base leading-relaxed mb-8 max-w-md">
-                Aulas gravadas, materiais por módulo, fórum da comunidade e certificado de conclusão. 6 meses de acesso, começando agora.
-              </p>
-
-              <div className="space-y-3 mb-10">
-                {INCLUDED.map(({ icon: Icon, text }) => (
-                  <div key={text} className="flex items-center gap-3">
-                    <div
-                      className="flex h-8 w-8 shrink-0 items-center justify-center"
-                      style={{ background: 'rgba(255,58,14,0.12)', border: '1px solid rgba(255,58,14,0.2)' }}
-                    >
-                      <Icon className="h-3.5 w-3.5" style={{ color: '#FF3A0E' }} aria-hidden="true" />
-                    </div>
-                    <span className="text-sm" style={{ color: 'rgba(255,255,255,0.75)' }}>{text}</span>
-                  </div>
-                ))}
-              </div>
-
-              {/* Não incluso */}
-              <div>
-                <p className="mb-4" style={{ ...KV_MONO, color: 'rgba(255,255,255,0.3)' }}>Não incluso</p>
-                <div className="space-y-2">
-                  {NOT_INCLUDED.map((text) => (
-                    <div
-                      key={text}
-                      className="flex items-center gap-3 px-4 py-3"
-                      style={{ border: '1px solid rgba(255,255,255,0.05)', background: 'rgba(255,255,255,0.02)' }}
-                    >
-                      <X className="h-3.5 w-3.5 shrink-0" style={{ color: 'rgba(255,255,255,0.2)' }} aria-hidden="true" />
-                      <span className="text-sm" style={{ color: 'rgba(255,255,255,0.35)' }}>{text}</span>
-                    </div>
-                  ))}
-                </div>
-                <p className="mt-6 text-xs" style={{ ...KV_MONO, color: 'rgba(255,255,255,0.25)' }}>
-                  Quer acompanhamento ao vivo?{' '}
-                  <Link href="/mentoria" className="underline underline-offset-2" style={{ color: 'rgba(255,255,255,0.5)' }}>
-                    Ver a Mentoria →
-                  </Link>
-                </p>
-              </div>
-            </div>
-
-            {/* ── Direita: card do form ── */}
-            <div
-              className="mt-12 lg:mt-0 sticky top-24"
-              style={{ background: '#0D0D14', border: '1px solid rgba(255,255,255,0.1)' }}
+        <div className="absolute inset-0">
+          <Image
+            src="/images/form-bg.jpg"
+            alt=""
+            fill
+            className="object-cover"
+            style={{ objectPosition: 'center top' }}
+          />
+          <div className="absolute inset-0 bg-[#050507]/65" />
+        </div>
+        <div className="relative z-10 mx-auto max-w-3xl px-5 sm:px-6 lg:px-8">
+          <div className="text-center mb-10">
+            <span
+              className="inline-flex items-center gap-2 border border-white/20 px-4 py-2 mb-6"
+              style={{ background: 'rgba(255,255,255,0.06)', fontFamily: 'var(--font-mono)', fontSize: '0.7rem', letterSpacing: '0.12em' }}
             >
-              <div className="p-6 sm:p-8" style={{ borderBottom: '1px solid rgba(255,255,255,0.07)' }}>
-                <p className="mb-1" style={{ ...KV_MONO, color: '#FF3A0E', fontSize: '10px' }}>Acesso imediato</p>
-                <div className="flex items-baseline gap-2">
-                  <span className="text-3xl sm:text-4xl font-bold text-white">R$ 797</span>
-                  <span className="text-white/40 text-sm">à vista</span>
-                </div>
-                <p className="text-white/40 text-xs mt-1">
-                  ou 6× de R$ {Math.ceil(797 / 6).toLocaleString('pt-BR', { minimumFractionDigits: 2 })} no cartão
-                </p>
-              </div>
-
-              <div className="p-6 sm:p-8">
-                <CheckoutForm cohortSlug={COHORT_SLUG} label="Comprar agora" />
-                <div className="mt-5 flex flex-wrap gap-x-4 gap-y-2">
-                  {['7 dias de garantia', 'Acesso por 6 meses', 'Cancelamento fácil'].map((g) => (
-                    <span key={g} className="text-xs flex items-center gap-1.5" style={{ color: 'rgba(255,255,255,0.35)', ...KV_MONO, fontSize: '9px' }}>
-                      <span style={{ width: 4, height: 4, borderRadius: '50%', background: 'rgba(255,58,14,0.6)', display: 'inline-block', flexShrink: 0 }} />
-                      {g}
-                    </span>
-                  ))}
-                </div>
-              </div>
-            </div>
-
+              <span className="w-2 h-2 rounded-full bg-[#FF3A0E]" style={{ boxShadow: '0 0 6px #FF3A0E' }} />
+              <span className="text-[#FF3A0E] uppercase">Acesso imediato · R$ 797</span>
+            </span>
+            <h2
+              className="text-3xl sm:text-4xl text-white mb-3"
+              style={{ fontFamily: 'var(--font-display-serif)', fontWeight: 400, letterSpacing: '-0.03em', lineHeight: 0.95 }}
+            >
+              Comece a aprender{' '}
+              <span className="text-[#FF3A0E] italic" style={{ fontWeight: 300 }}>agora mesmo</span>
+            </h2>
+            <p className="text-white/55 text-sm sm:text-base max-w-lg mx-auto leading-relaxed">
+              8 módulos em vídeo, materiais por módulo e certificado de conclusão. 6 meses de acesso.
+            </p>
           </div>
+          <CursoOnlineForm />
         </div>
       </section>
 
@@ -367,7 +296,8 @@ export default function CursoOnlinePage() {
           </p>
         </div>
       </section>
-      </div>
+
+      </div>{/* end relative z-10 */}
     </>
   )
 }

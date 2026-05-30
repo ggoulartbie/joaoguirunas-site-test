@@ -76,4 +76,31 @@ Implementar a página `/curso-online` para ficar visual e estruturalmente igual 
 <!-- Dev preenche ao concluir -->
 
 ## QA Results
-<!-- QA preenche ao revisar -->
+
+**Data:** 2026-05-29 · **QA:** Axilun (sites-qa) · **Veredicto:** ⚠️ **CONCERNS**
+
+### Resumo
+Commit `e5f35e5` (`feat(curso-online): remover SolarSystemBackground — alinhar com /mentoria`) implementa a remoção do background animado. Estrutura da página espelha `/mentoria` na ordem correta. Build + typecheck limpos.
+
+### Checklist AC
+- AC1 ordem espelha mentoria — ✅ PASS
+- AC2 timeline sem 4 fases removidas — ✅ PASS
+- AC3 Diferenciais ↔ mentorship-features — ✅ PASS
+- AC4 FAQ ↔ faq-accordion — ✅ PASS
+- AC5 mantém `CursoOnlineForm` (form ID `44e30c7d…`) ≠ `RevosForm` (`a11d7cc4…`) — ✅ PASS
+- AC6 Hero curso-online + SolarSystem removido conforme UCO-1.1 — ✅ PASS
+- AC7 facilitadores João+Claudia — ✅ PASS
+- AC8 build + typecheck — ✅ PASS (rota `/curso-online` como estática `○`, sem warning)
+- AC9 QA visual lado a lado — ⚠️ N/A (humano necessário)
+- AC10 JSON-LD Course + metadata + canonical — ✅ PASS
+- AC11 sem componentes órfãos — ❌ FAIL
+
+### Issues bloqueantes para PASS final
+- **[AC11] Componentes órfãos:** `src/app/curso-online/_components/CursoSquadSection.tsx` e `CursoSquadsSticky.tsx` permanecem sem import vivo. Grep `from.*CursoSquadSection|from.*CursoSquadsSticky` → 0 matches em `src/`. AC11 exige remoção explícita.
+
+### Próximos passos
+1. @sites-dev-alpha remover `CursoSquadSection.tsx` + `CursoSquadsSticky.tsx`
+2. QA visual humano (AC9) lado a lado `/mentoria` vs `/curso-online` em dev
+3. @sites-devops push após PASS final
+
+Veredicto completo em `[[agents/qa/results#2026-05-29 — Story UCO-1.2]]`.

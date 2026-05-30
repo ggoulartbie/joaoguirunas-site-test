@@ -462,7 +462,7 @@ export function CursoPricingCalculator() {
         >
           <span className="flex items-center gap-2 text-sm text-white/60">
             <BookOpen size={16} className="text-[var(--color-accent)]" />
-            13 módulos + 2 bônus com código
+            8 módulos · Acesso por 6 meses
           </span>
           <span className="flex items-center gap-2 text-sm text-white/60">
             <Users2 size={16} className="text-[var(--color-accent)]" />

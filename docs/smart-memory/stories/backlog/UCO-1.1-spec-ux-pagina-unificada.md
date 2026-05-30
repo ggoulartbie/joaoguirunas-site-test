@@ -71,13 +71,14 @@ Produzir spec UX/IA da página `/curso-online` para ficar visualmente e estrutur
 
 | Campo      | Valor |
 |---         |---|
-| Agente     | — |
-| Iniciado   | — |
-| Concluído  | — |
-| Branch     | — |
+| Agente     | sites-ux |
+| Iniciado   | 2026-05-30 |
+| Concluído  | 2026-05-30 |
+| Branch     | main |
 
 ## File List
-<!-- UX preenche ao concluir -->
+- `docs/smart-memory/specs/uco-curso-online-unified.md` — spec formal com 6 decisões UX e wireframe
+- `docs/smart-memory/agents/ux/curso-online-spec.md` — análise exploratória prévia (referência)
 
 ## QA Results
 <!-- QA preenche ao revisar -->
