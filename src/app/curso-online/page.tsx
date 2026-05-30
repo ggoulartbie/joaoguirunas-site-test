@@ -8,7 +8,6 @@ import { X, Play, FileText, MessageSquare, Award } from 'lucide-react'
 import { siteConfig } from '@/config/site'
 import { SectionDots } from '@/app/mentoria/section-dots'
 import { SolutionSection } from '@/app/mentoria/solution-section'
-import { SolarSystemBackground } from '@/app/agentes/_components/SolarSystemBackground'
 import { CursoOnlineHero } from './_components/CursoOnlineHero'
 import { CursoOnlineDiferenciais } from './_components/CursoOnlineDiferenciais'
 import { CursoOnlineTimeline } from './_components/CursoOnlineTimeline'
@@ -131,14 +130,10 @@ export default function CursoOnlinePage() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
 
-      {/* Sistema solar animado — fixed, z-index 0, atrás de todo o conteúdo */}
-      <SolarSystemBackground />
+      <SectionDots />
 
-      <div className="relative z-10">
-        <SectionDots />
-
-        {/* ===== HERO ===== */}
-        <CursoOnlineHero />
+      {/* ===== HERO ===== */}
+      <CursoOnlineHero />
 
       {/* ===== SOLUÇÃO ===== */}
       <SolutionSection />
@@ -367,7 +362,6 @@ export default function CursoOnlinePage() {
           </p>
         </div>
       </section>
-      </div>
     </>
   )
 }
