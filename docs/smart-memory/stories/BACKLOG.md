@@ -1,12 +1,54 @@
 ---
 title: Story Backlog
 type: backlog
-updated: 2026-05-26
+updated: 2026-05-29
 tags: [story]
 ---
 
 
 # Backlog de Stories
+
+## Epic UCO — Unificar /curso-online com /mentoria (2026-05-29)
+
+| Story | Título | Complexidade | Status | Agente |
+|---|---|---|---|---|
+| [[backlog/UCO-1.1-spec-ux-pagina-unificada\|UCO-1.1]] | Spec UX da página `/curso-online` unificada (espelho de `/mentoria`, sem fases ao vivo) | M | backlog | sites-ux |
+| [[backlog/UCO-1.2-adaptar-componentes-curso-online\|UCO-1.2]] | Adaptar componentes de `/curso-online` espelhando `/mentoria` (Diferenciais, Timeline filtrada, FAQ) | L | backlog | sites-dev-alpha |
+| [[backlog/UCO-1.3-remover-paginas-obsoletas\|UCO-1.3]] | Apagar `curso-bundle`, `curso-design`, `curso-dev`, `curso-ia-agentes`, `curso-social-media`, `cursos/_shared` | S | backlog | sites-dev-gamma |
+| [[backlog/UCO-1.4-atualizar-sitemap-links-internos\|UCO-1.4]] | Actualizar `sitemap.ts`, `NavLinks.tsx` e `CoursesDropdown.tsx` removendo as 5 rotas obsoletas | S | done | Rex-S |
+| [[backlog/UCO-2.1-qa-gate-curso-online-unificado\|UCO-2.1]] | QA gate adversarial — veredicto formal PASS/FAIL sobre UCO-1.2 + 1.3 + 1.4 | M | backlog | sites-qa |
+| [[backlog/UCO-2.2-push-pr-uco\|UCO-2.2]] | Branch `feat/uco-curso-online-unificado`, push, PR para `main` | S | backlog | sites-devops |
+
+**Objetivo do Epic UCO:** unificar a página `/curso-online` para ter exactamente a mesma estrutura visual e narrativa de `/mentoria`, **removendo** as secções específicas do formato presencial+ao vivo: `Pré-Mentoria` (1h Design Thinking com Claudia), `Dia Presencial` (15/junho 13h-18h), `Bônus Online` e `Encerramento`. Resultado: curso-online vira a versão self-paced (R$ 797, 6 meses, aulas gravadas) com a mesma identidade visual da mentoria. Em seguida apagar as 5 landing pages "Em Breve" criadas no Epic LP (`curso-bundle`, `curso-design`, `curso-dev`, `curso-ia-agentes`, `curso-social-media`) e a pasta `cursos/_shared/`.
+
+**Secções da `/mentoria` mantidas no curso-online:** Hero · `SolutionSection` · Diferenciais · Timeline (filtrada: `Semana 1-4` apenas) · Facilitadores · Pricing · Inscrição (`CheckoutForm`, cohort `curso-online-padrao`) · FAQ · CTA Final.
+
+**Secções removidas da Timeline da mentoria:** índices 0 (`Pré-Mentoria`), 1 (`Dia Presencial`), 6 (`Bônus Online`), 7 (`Encerramento`) em `src/app/mentoria/course-modules-timeline.tsx`.
+
+**Forma de partilha de componentes** (decisão em UCO-1.1): duplicar para `curso-online/_components/` (zero acoplamento) **ou** importar da mentoria com prop `excludePhases` (DRY, mas acopla rotas). Padrão actual: `SolutionSection` e `SectionDots` já importados directo da mentoria — manter precedente.
+
+**Páginas a apagar:**
+- `src/app/curso-bundle/`
+- `src/app/curso-design/`
+- `src/app/curso-dev/`
+- `src/app/curso-ia-agentes/`
+- `src/app/curso-social-media/`
+- `src/app/cursos/_shared/` (toda a pasta)
+
+**Stories LP supersededs por UCO-1.3:** LP-1.1, LP-1.2, LP-2.1, LP-2.2, LP-2.3, LP-2.4, LP-2.5, LP-3.1. ADR `decisions/ADR-landing-pages-cursos.md` vira `superseded`.
+
+**Pipeline:** UCO-1.1 (spec) → UCO-1.2 + UCO-1.3 (paralelos) → UCO-1.4 (depende de 1.3) → UCO-2.1 (depende de 1.2+1.3+1.4) → UCO-2.2 (depende de 2.1 PASS).
+
+**Não-objectivos:**
+- Mudar checkout / preço / cohort (`curso-online-padrao` permanece, R$ 797 permanece).
+- Mudar schema, server actions, payments.
+- Redirects 301 das rotas removidas (padrão: 404; PO confirma se precisa).
+- Cleanup de cohorts em DB referentes às 5 LPs apagadas.
+- E2E / Lighthouse / a11y completo — abrir stories separadas se PO pedir.
+
+**5-point checklist:** GO 5/5 (título claro, ACs testáveis, escopo IN/OUT explícito, complexidade estimada por story, alinhada com stack Next.js App Router + arquitectura existente do site).
+
+---
 
 ## Epic DISC — Desconto Proporcional Bundle (2026-05-26)
 

@@ -4263,3 +4263,99 @@ Tecnicamente o código é sólido, type-safe, build limpo, acessível e SEO-read
 
 **Auditor:** ✦ Axilun — A luz está correta.
 
+---
+
+## 2026-05-29 — UCO-1.3 (Seranol) + UCO-1.5 (Rexali) — ✅ PASS PARCIAL
+
+**Escopo do QA parcial:** Remoção de páginas obsoletas de cursos (UCO-1.3) + simplificação do menu global para 4 itens (UCO-1.5). Veredicto final UCO-2.1 do épico curso-online aguarda conclusão de UCO-1.2 (sites-dev-alpha — implementação da página unificada).
+
+### UCO-1.3 — Remover páginas obsoletas de cursos (Seranol)
+
+| Critério | Verificação | Resultado |
+|----------|-------------|-----------|
+| Pastas removidas | `ls src/app/` filtrado por `curso` | ✅ PASS — apenas `curso-online/` presente; `curso-bundle`, `curso-design`, `curso-dev`, `curso-ia-agentes`, `curso-social-media`, `cursos/` ausentes |
+| sitemap.ts limpo | leitura linha-a-linha de `src/app/sitemap.ts` | ✅ PASS — única rota de curso é `/curso-online` (l.12); zero referências às rotas removidas |
+| Imports quebrados | `grep -rE "from.*curso-bundle\|from.*curso-design\|from.*curso-dev\|from.*curso-ia-agentes\|from.*curso-social-media\|from.*cursos/_shared"` em `src/` | ✅ PASS — zero matches |
+| Links públicos órfãos | `grep -rE "href=['\"]/curso-bundle\|/curso-design\|/curso-dev['\"]\|/curso-ia-agentes\|/curso-social-media\|/cursos['\"]"` em `src/` | ✅ PASS — zero matches |
+| Referências a `/cursos` remanescentes | `grep -rE "/cursos['\"/]"` | ✅ PASS — todas em `src/app/(academy)/academy/(admin)/admin/cursos/...` (CMS interno do Academy, rota distinta e legítima) + `AdminSidebar.tsx` / `AdminTopBar.tsx` (idem). Nenhuma é a rota pública removida. |
+| Typecheck | `npx tsc --noEmit` | ✅ PASS — saída limpa, zero erros |
+
+### UCO-1.5 — Simplificar menu global (Rexali)
+
+| Critério | Verificação | Resultado |
+|----------|-------------|-----------|
+| NavLinks com 4 itens corretos | leitura `src/shared/components/layout/NavLinks.tsx` | ✅ PASS — `NAV_INTERNAL` tem Open-source (l.7), Curso Online (l.8), Mentoria (l.9); `NAV_EXTERNAL` tem Consultoria → `https://www.growthsales.ai` (l.13). Total = 4 itens, ordem e rótulos conforme spec. |
+| Ordem dos itens | l.7-13 | ✅ PASS — Open-source → Curso Online → Mentoria → Consultoria (externo, target=_blank com rel="noopener noreferrer") |
+| CoursesDropdown removido | `grep -rE "CoursesDropdown" src/` + `ls src/shared/components/layout/` | ✅ PASS — zero matches; arquivo não existe; barrel `index.ts` exporta apenas Header e Footer |
+| Active state | `pathname === href \|\| pathname.startsWith(href + '/')` (l.22) | ✅ PASS — funciona para `/curso-online`, `/mentoria` e rotas filhas |
+| A11y básica | `aria-label="Navegação principal"` (l.20), `aria-current={isActive ? 'page' : undefined}` (l.38), link externo com `rel="noopener noreferrer"` (l.50) | ✅ PASS |
+| Footer / SiteChrome / Header consistência | grep por `curso`/`Curso` nestes arquivos | ✅ PASS — única menção é "Cursos Anthropic" → `/learn/anthropic-courses` (nome próprio, rota legítima) |
+
+### Resumo do parcial
+
+- **UCO-1.3:** ✅ PASS — limpeza completa, sem regressão de imports nem links órfãos
+- **UCO-1.5:** ✅ PASS — menu enxuto, semântico, acessível, alinhado com a estratégia de unificação
+
+### Pendente para veredicto UCO-2.1 final
+
+Aguarda UCO-1.2 (sites-dev-alpha — `src/app/curso-online/page.tsx`) para auditar:
+- Existência e correção da página unificada
+- Ausência de termos proibidos: "pré-mentoria", "encontros ao vivo", "bônus", "encerramento" dentro de `src/app/curso-online/`
+- 10-point checklist completo (a11y, SEO, responsivo, performance, copy, cross-browser, security, regressões)
+
+**Auditor:** ✦ Axilun — A luz está correta no que foi verificado. Aguardando UCO-1.2 para o veredicto final do épico.
+
+---
+
+## 2026-05-29 — Story UCO-2.1 — QA gate adversarial /curso-online unificada — ⚠️ CONCERNS
+
+**Escopo:** Veredicto final do épico UCO. Cobertura: UCO-1.2 (página unificada) + UCO-1.3 (remoção de 6 pastas) + UCO-1.4/UCO-1.5 (sitemap, NavLinks, dropdown removido). 12 ACs auditados.
+
+**Resultado por AC:**
+
+| AC | Resultado |
+|----|-----------|
+| AC1 — Ordem de seções espelha mentoria | ✅ PASS |
+| AC2 — Timeline sem fases proibidas | ✅ PASS |
+| AC3 — Visual comparison Diferenciais/Facilitadores/FAQ/CTA | ⚠️ CONCERN C1 (verificação estrutural ok, pixel-perfect requer browser manual) |
+| AC4 — Form CheckoutForm cohort curso-online-padrao | ⚠️ CONCERN C2 (validação estática ok, submit real não executado) |
+| AC5 — 404 das 5 rotas removidas | ✅ PASS |
+| AC6 — Sitemap só curso-online | ✅ PASS |
+| AC7 — Nav sem links órfãos | ✅ PASS |
+| AC8 — pnpm build limpo | ✅ PASS |
+| AC9 — pnpm lint | ⚠️ CONCERN C3 (script package.json defeituoso, mas ESLint integrado ao build passa) |
+| AC10 — grep imports mortos | ✅ PASS — CLEAN |
+| AC11 — JSON-LD Course válido | ✅ PASS |
+| AC12 — Relatório registrado | ✅ PASS (`docs/smart-memory/qa-reports/UCO-2.1-2026-05-29.md`) |
+
+**Evidências principais:**
+- Render order: `hero → solucao → diferenciais → modulos → facilitadores → investimento → inscricao → faq` (posições no DOM)
+- 404 confirmados em dev (porta 3001) para curso-bundle, curso-design, curso-dev, curso-ia-agentes, curso-social-media
+- Sitemap: única rota de curso é `https://joaoguirunas.com/curso-online`
+- JSON-LD: `price:'797'`, `availability:InStock`, `url:/academy/checkout/curso-online-padrao` ✓
+- Grep adversarial: ZERO matches dos termos proibidos da mentoria nos componentes da timeline
+- Build: `/curso-online` no manifest, zero warnings em curso-online ou sitemap.ts
+
+**3 CONCERNS não-bloqueantes:**
+- **C1:** Visual side-by-side pixel-perfect requer João validar no browser (não há browser tooling no agente). Estrutura DOM 100% paritária — risco baixíssimo.
+- **C2:** Submit real do form em dev não executado (evita poluir DB). HTML servido contém cohortSlug correto e server action linkado. **Pré-push: confirmar que `cohorts.slug='curso-online-padrao'` existe no Supabase de prod.**
+- **C3:** `pnpm lint` falha com "Invalid project directory" (defeito de invocação de `next lint` no Next 16, não regressão deste épico). Build do Next roda ESLint integrado e passa. Abrir story separada para fix.
+
+**Observações fora de AC:**
+- Numeração de módulos é 1-7+10 (gap 8,9) — design intencional confirmado em `agents/ux/curso-online-spec.md:46-55`, herdado da mentoria. Não é blocker, mas backlog futuro de UX.
+- Fase "Fundamentos" + Semanas 1-4 na Timeline (5 fases vs 4 do AC2): spec UX (sec.3) não impõe label de fase, apenas lista módulos. Não viola.
+- `NOT_INCLUDED` em `page.tsx:83-88` cita "Encontros ao vivo"/"Bônus" como contraste legítimo do que NÃO está incluso (vs. mentoria) — uso correto.
+
+**VEREDICTO: ⚠️ CONCERNS**
+
+Push autorizado para `main` com 3 concerns documentados (todos não-bloqueantes e com mitigação acionável).
+
+**Próximo passo:**
+1. **@sites-devops:** push para main. Antes: confirmar cohort `curso-online-padrao` no Supabase de prod (C2). João valida visualmente /curso-online vs /mentoria (C1).
+2. **Follow-up backlog:** story de fix do comando `pnpm lint` no package.json (C3, fora de escopo).
+3. **Follow-up UX:** revisar numeração módulos 1-7,10 com PO (baixa prioridade).
+
+**Relatório completo:** `docs/smart-memory/qa-reports/UCO-2.1-2026-05-29.md`
+
+**Auditor:** ✦ Axilun — A luz está correta. Push autorizado.
+
