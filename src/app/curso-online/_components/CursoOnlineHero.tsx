@@ -73,7 +73,7 @@ export function CursoOnlineHero() {
 
           <div className="mt-10 flex flex-wrap gap-6">
             {[
-              { value: '11', label: 'Módulos' },
+              { value: '8', label: 'Módulos' },
               { value: '6m', label: 'Acesso' },
               { value: '100%', label: 'On-demand' },
             ].map(({ value, label }) => (
