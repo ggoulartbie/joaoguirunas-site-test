@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useTransition } from 'react'
+import { useState, useTransition, useRef } from 'react'
 import { useRouter } from 'next/navigation'
 import {
   DndContext,
@@ -17,7 +17,7 @@ import {
   arrayMove,
 } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
-import { GripVertical, Plus, Pencil, Trash2, ChevronDown, ChevronRight, ArrowLeft } from 'lucide-react'
+import { GripVertical, Plus, Pencil, Trash2, ChevronDown, ChevronRight, ArrowLeft, ExternalLink } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import {
   updateCourse,
@@ -27,10 +27,12 @@ import {
   createLesson,
   deleteLesson,
   updateModule,
+  updateLesson,
   reorderLessons,
 } from '../actions'
 import type { Database } from '@/types/database'
 import Link from 'next/link'
+import { InlineEditField } from './InlineEditField'
 
 type CourseRow = Database['public']['Tables']['courses']['Row']
 type ModuleRow = Database['public']['Tables']['modules']['Row']
@@ -54,13 +56,31 @@ function SortableLesson({
   lesson,
   courseId,
   onDelete,
+  onTitleUpdate,
 }: {
   lesson: LessonRow
   courseId: string
   onDelete: () => void
+  onTitleUpdate: (lessonId: string, title: string) => void
 }) {
+  const [editingTitle, setEditingTitle] = useState(false)
+  const pencilRef = useRef<HTMLButtonElement>(null)
+
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({ id: lesson.id })
   const style = { transform: CSS.Transform.toString(transform), transition }
+
+  async function handleSaveTitle(trimmed: string) {
+    await updateLesson(lesson.id, courseId, { title: trimmed })
+    onTitleUpdate(lesson.id, trimmed)
+  }
+
+  function handleEditingChange(editing: boolean) {
+    setEditingTitle(editing)
+    if (!editing) {
+      // Return focus to the pencil button
+      setTimeout(() => pencilRef.current?.focus(), 0)
+    }
+  }
 
   return (
     <div
@@ -90,12 +110,30 @@ function SortableLesson({
       >
         {KIND_LABELS[lesson.kind] ?? lesson.kind}
       </span>
-      <span className="flex-1 font-[--type-sans] text-xs text-[var(--bone-dim)]">{lesson.title}</span>
+      <InlineEditField
+        value={lesson.title}
+        onSave={handleSaveTitle}
+        isEditing={editingTitle}
+        onEditingChange={handleEditingChange}
+        className="flex-1 font-[--type-sans] text-xs text-[var(--bone-dim)]"
+        inputClassName="font-[--type-sans] text-xs text-[var(--bone-dim)]"
+        aria-label="Título da aula"
+      />
+      <button
+        ref={pencilRef}
+        type="button"
+        onClick={() => setEditingTitle(true)}
+        className="p-1 text-[var(--bone-mute)] transition-colors hover:text-[var(--bone)]"
+        title="Editar título inline"
+      >
+        <Pencil className="h-3 w-3" />
+      </button>
       <Link
         href={`/academy/admin/cursos/${courseId}/aulas/${lesson.id}`}
         className="p-1 text-[var(--bone-mute)] transition-colors hover:text-[var(--bone)]"
+        title="Edição completa"
       >
-        <Pencil className="h-3 w-3" />
+        <ExternalLink className="h-3 w-3" />
       </Link>
       <button
         type="button"
@@ -114,14 +152,15 @@ function SortableModule({
   mod,
   courseId,
   onDelete,
+  onUpdate,
 }: {
   mod: ModuleWithLessons
   courseId: string
   onDelete: (id: string) => void
+  onUpdate: (id: string, data: { title: string; slug: string }) => void
 }) {
   const [open, setOpen] = useState(true)
   const [editingTitle, setEditingTitle] = useState(false)
-  const [titleDraft, setTitleDraft] = useState(mod.title)
   const [addingLesson, setAddingLesson] = useState(false)
   const [lessonTitle, setLessonTitle] = useState('')
   const [lessonSlug, setLessonSlug] = useState('')
@@ -129,7 +168,11 @@ function SortableModule({
   const [pending, startTransition] = useTransition()
   const [lessonError, setLessonError] = useState<string | null>(null)
   const [lessons, setLessons] = useState(mod.lessons)
-  const lessonSensors = useSensors(useSensor(PointerSensor))
+  const pencilRef = useRef<HTMLButtonElement>(null)
+
+  const lessonSensors = useSensors(
+    useSensor(PointerSensor, { activationConstraint: { distance: 8 } })
+  )
 
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({ id: mod.id })
 
@@ -142,10 +185,24 @@ function SortableModule({
     setLessons(reordered)
     startTransition(() => reorderLessons(mod.id, courseId, reordered.map((l) => l.id)))
   }
+
   const style = { transform: CSS.Transform.toString(transform), transition }
 
   function slugify(str: string) {
     return str.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[^a-z0-9\s-]/g, '').trim().replace(/\s+/g, '-')
+  }
+
+  async function handleSaveTitle(trimmed: string) {
+    const newSlug = slugify(trimmed)
+    await updateModule(mod.id, courseId, { title: trimmed, slug: newSlug })
+    onUpdate(mod.id, { title: trimmed, slug: newSlug })
+  }
+
+  function handleEditingChange(editing: boolean) {
+    setEditingTitle(editing)
+    if (!editing) {
+      setTimeout(() => pencilRef.current?.focus(), 0)
+    }
   }
 
   function handleAddLesson(e: React.FormEvent) {
@@ -153,7 +210,27 @@ function SortableModule({
     setLessonError(null)
     startTransition(async () => {
       try {
-        await createLesson({ module_id: mod.id, title: lessonTitle, slug: lessonSlug, kind: lessonKind, courseId })
+        const newLesson = await createLesson({ module_id: mod.id, title: lessonTitle, slug: lessonSlug, kind: lessonKind, courseId })
+        setLessons((prev) => [
+          ...prev,
+          {
+            id: newLesson.id,
+            module_id: mod.id,
+            title: lessonTitle,
+            slug: lessonSlug,
+            kind: lessonKind,
+            sort_order: prev.length,
+            created_at: new Date().toISOString(),
+            updated_at: new Date().toISOString(),
+            deleted_at: null,
+            content: null,
+            content_format: null,
+            description: null,
+            duration_seconds: null,
+            video_id: null,
+            video_provider: null,
+          } satisfies LessonRow,
+        ])
         setLessonTitle('')
         setLessonSlug('')
         setAddingLesson(false)
@@ -172,7 +249,7 @@ function SortableModule({
         isDragging && 'opacity-50'
       )}
     >
-      {/* Module header */}
+      {/* Module header — flat flex, no nested interactive elements */}
       <div className="flex items-center gap-2 px-4 py-3">
         <button
           type="button"
@@ -185,44 +262,31 @@ function SortableModule({
         <button
           type="button"
           onClick={() => setOpen((o) => !o)}
-          className="flex flex-1 items-center gap-2 text-left"
+          className="shrink-0 text-[var(--bone-mute)]"
         >
           {open
-            ? <ChevronDown className="h-3.5 w-3.5 text-[var(--bone-mute)]" />
-            : <ChevronRight className="h-3.5 w-3.5 text-[var(--bone-mute)]" />
+            ? <ChevronDown className="h-3.5 w-3.5" />
+            : <ChevronRight className="h-3.5 w-3.5" />
           }
-          {editingTitle ? (
-            <input
-              autoFocus
-              value={titleDraft}
-              onChange={(e) => setTitleDraft(e.target.value)}
-              onBlur={() => {
-                const trimmed = titleDraft.trim()
-                if (trimmed && trimmed !== mod.title) {
-                  startTransition(async () => {
-                    await updateModule(mod.id, courseId, { title: trimmed, slug: slugify(trimmed) })
-                  })
-                }
-                setEditingTitle(false)
-              }}
-              onKeyDown={(e) => {
-                if (e.key === 'Enter') e.currentTarget.blur()
-                if (e.key === 'Escape') { setTitleDraft(mod.title); setEditingTitle(false) }
-              }}
-              onClick={(e) => e.stopPropagation()}
-              className="flex-1 bg-transparent font-mono text-xs font-medium text-[var(--bone)] outline-none border-b border-[var(--ember)]"
-            />
-          ) : (
-            <span className="font-mono text-xs font-medium text-[var(--bone)]">{mod.title}</span>
-          )}
-          <span className="font-mono text-[10px] text-[var(--bone-mute)]">
-            {mod.lessons.length} aula{mod.lessons.length !== 1 ? 's' : ''}
-          </span>
         </button>
+        <InlineEditField
+          value={mod.title}
+          onSave={handleSaveTitle}
+          isEditing={editingTitle}
+          onEditingChange={handleEditingChange}
+          className="flex-1 font-mono text-xs font-medium text-[var(--bone)]"
+          inputClassName="font-mono text-xs font-medium text-[var(--bone)]"
+          aria-label="Título do módulo"
+        />
+        <span className="shrink-0 font-mono text-[10px] text-[var(--bone-mute)]">
+          {lessons.length} aula{lessons.length !== 1 ? 's' : ''}
+        </span>
         <button
+          ref={pencilRef}
           type="button"
           onClick={() => setEditingTitle(true)}
           className="p-1 text-[var(--bone-mute)] transition-colors hover:text-[var(--bone)]"
+          title="Editar título inline"
         >
           <Pencil className="h-3.5 w-3.5" />
         </button>
@@ -247,6 +311,9 @@ function SortableModule({
                   key={lesson.id}
                   lesson={lesson}
                   courseId={courseId}
+                  onTitleUpdate={(lessonId, title) => {
+                    setLessons((prev) => prev.map((l) => l.id === lessonId ? { ...l, title } : l))
+                  }}
                   onDelete={() => {
                     if (confirm(`Remover aula "${lesson.title}"?`)) {
                       setLessons((prev) => prev.filter((l) => l.id !== lesson.id))
@@ -342,7 +409,9 @@ export function CourseEditorClient({
   const [modTitle, setModTitle] = useState('')
   const [modSlug, setModSlug] = useState('')
 
-  const sensors = useSensors(useSensor(PointerSensor))
+  const sensors = useSensors(
+    useSensor(PointerSensor, { activationConstraint: { distance: 8 } })
+  )
 
   function slugify(str: string) {
     return str.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[^a-z0-9\s-]/g, '').trim().replace(/\s+/g, '-')
@@ -495,7 +564,15 @@ export function CourseEditorClient({
           <SortableContext items={modules.map((m) => m.id)} strategy={verticalListSortingStrategy}>
             <div className="space-y-2">
               {modules.map((mod) => (
-                <SortableModule key={mod.id} mod={mod} courseId={course.id} onDelete={handleDeleteModule} />
+                <SortableModule
+                  key={mod.id}
+                  mod={mod}
+                  courseId={course.id}
+                  onDelete={handleDeleteModule}
+                  onUpdate={(id, data) => {
+                    setModules((prev) => prev.map((m) => m.id === id ? { ...m, ...data } : m))
+                  }}
+                />
               ))}
             </div>
           </SortableContext>
