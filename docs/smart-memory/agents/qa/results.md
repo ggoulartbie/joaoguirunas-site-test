@@ -1,13 +1,45 @@
 ---
 title: QA Results
 type: qa-log
-updated: 2026-05-11T12:45
+updated: 2026-06-02T03:30
 tags: [qa, veredictos]
 ---
 
 # QA Results — Veredictos formais
 
 Histórico de veredictos emitidos pelo sites-qa (Axilun).
+
+---
+
+## 2026-06-02 — QE + AP-1.5 (branch: victor-alteracoes-aluno)
+
+### VEREDICTO: PASS — 13/13 verificações
+
+**Feature 1 — QE (Quick Inline Edit)** — 8/8
+1. `<input>` fora de `<button>` ✓ (InlineEditField.tsx:99-116; header flat flex)
+2. `activationConstraint: { distance: 8 }` ✓ (CourseEditorClient.tsx:174, 413)
+3. Lápis `<button>` + `ExternalLink` separado ✓ (CourseEditorClient.tsx:122-137)
+4. Slug NÃO enviado no save da aula — só `{ title }` ✓ (CourseEditorClient.tsx:73)
+5. Blur salva ✓ (InlineEditField.tsx:84-92)
+6. Sucesso silencioso (sem toast) ✓
+7. `onPointerDown stopPropagation` no input ✓ (InlineEditField.tsx:106)
+8. `isEditing` controlado externamente ✓ (props isEditing/onEditingChange)
+
+**Feature 2 — AP-1.5 (Detalhe do aluno)** — 5/5
+1. `requireAdmin()` em todas as rotas/actions ✓ (progresso/page.tsx:9; admin-progress.ts:52; detalhe protegido via getStudentDetail)
+2. `getStudentDetail` existe, retorna null seguro, sem dados sensíveis (só name/email/role/avatar) ✓
+3. Link de volta para /academy/admin/progresso ✓ ([userId]/page.tsx:73-79)
+4. Imports @/lib/auth/helpers + @/lib/supabase/admin existem e exportam ✓
+5. Typecheck dentro da exceção conhecida ✓
+
+**Gate final:**
+- `pnpm tsc --noEmit`: EXIT 1 — APENAS 2 erros, ambos em `.next/types/validator.ts` (validator gerado/stale p/ rotas não relacionadas: cursos/[courseId]/modulos/[moduleId] e ranking). Nenhum erro em código-fonte da app. Dentro da exceção declarada pelo lead.
+- `pnpm build`: EXIT 0 — Compiled successfully. 4 rotas admin compiladas (/academy/admin/cursos/[courseId], .../aulas/[lessonId], /academy/admin/progresso, /academy/admin/progresso/[userId]).
+
+Nota: `pnpm tsc` disparou prune de node_modules (-28, incl. rehype-raw/remark-gfm). Verificado: não importados em src/, package.json e pnpm-lock.yaml inalterados no git. Sem impacto.
+
+Issues: nenhum
+Próximo passo: @sites-devops push
 
 ---
 
