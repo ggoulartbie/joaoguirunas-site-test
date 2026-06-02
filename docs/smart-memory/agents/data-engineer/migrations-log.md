@@ -27,6 +27,18 @@ Histórico de migrations aplicadas no projeto `mksmmpfyqowuzjcchhkl`.
 | 12 | `20260506110000_modules_cover_image.sql` | 2026-05-06 | Coluna `cover_image_url` em `modules` | APPLIED |
 | 13 | `20260506_perf_indexes.sql` | 2026-05-06 | Índices de performance extras em `payments` + `cohort_members`; função `increment_filled_seats()` atômica | APPLIED |
 | 14 | `20260506120000_fix_avatars_storage_policies.sql` | 2026-05-06 | **F9.x**: remove 8 policies duplicadas de avatars (migrations 5 e 11), recria 4 canônicas com WITH CHECK no UPDATE | APPLIED |
+| 15+ | _(migrations intermediárias de live_sessions, payments, cron, seed, certificates, settings, hard-delete cascade, passwords, aulas-v2, slug-uniqueness)_ | 2026-05-07 a 2026-05-16 | Ver lista completa em `supabase/migrations/` | APPLIED |
+| N | `20260516210000_module_materials.sql` | 2026-05-17 | **FM-3.2**: tabela `module_materials` (espelho de `materials` para módulos), índice `(module_id, sort_order)`, função `has_module_access(user_id, module_id)` (`security definer stable`), RLS habilitada + 4 policies (SELECT via `has_module_access`, INSERT/UPDATE/DELETE via `is_admin()`). Migration aditiva pura — zero alterações em `materials`, `has_access` ou policies existentes. | PENDING APPLY |
+
+**Rollback de `20260516210000_module_materials.sql`:**
+```sql
+drop policy if exists "module_materials: admin deleta" on public.module_materials;
+drop policy if exists "module_materials: admin atualiza" on public.module_materials;
+drop policy if exists "module_materials: admin escreve" on public.module_materials;
+drop policy if exists "module_materials: leitura se tem acesso ao módulo" on public.module_materials;
+drop function if exists public.has_module_access(uuid, uuid);
+drop table if exists public.module_materials;
+```
 
 ## Regra crítica sobre seed
 

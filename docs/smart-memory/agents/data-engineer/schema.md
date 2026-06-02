@@ -2,7 +2,7 @@
 title: Schema — Plataforma de Cursos
 type: reference
 agent: sites-data
-updated: 2026-05-05
+updated: 2026-05-17
 tags: [schema, supabase, plataforma-cursos]
 ---
 
@@ -40,7 +40,7 @@ Espelho de `auth.users`. Criado automaticamente pelo trigger `handle_new_user`.
 ### `courses`
 | Coluna | Tipo | Notas |
 |---|---|---|
-| `slug` | text UNIQUE | |
+| `slug` | text | unique WHERE `deleted_at IS NULL` (partial index, 20260516200000) |
 | `published` | boolean | false por padrão |
 | `deleted_at` | timestamptz | soft delete |
 
@@ -49,7 +49,7 @@ Espelho de `auth.users`. Criado automaticamente pelo trigger `handle_new_user`.
 |---|---|---|
 | `course_id` | uuid FK → courses | CASCADE |
 | `sort_order` | int NOT NULL | |
-| UNIQUE | `(course_id, slug)` | |
+| UNIQUE | `(course_id, slug)` WHERE `deleted_at IS NULL` | partial index — soft-delete aware (20260516200000) |
 
 ### `lessons`
 | Coluna | Tipo | Notas |
@@ -57,10 +57,15 @@ Espelho de `auth.users`. Criado automaticamente pelo trigger `handle_new_user`.
 | `module_id` | uuid FK → modules | CASCADE |
 | `kind` | text | `VIDEO` \| `LIVE` \| `IN_PERSON` \| `CODE` \| `READING` |
 | `video_provider` | text | `VIMEO` \| `YOUTUBE` \| `CLOUDFLARE_STREAM` |
-| `video_id` | text | ID no provedor |
+| `video_id` | text | ID no provedor (para Vimeo: ID numérico como string) |
+| `duration_seconds` | int | duração em segundos |
 | `content_format` | text | `MDX` \| `HTML` \| `MARKDOWN` |
 | `content` | text | corpo da aula |
-| UNIQUE | `(module_id, slug)` | |
+| `summary` | text | resumo da aula (adicionado em 20260516100000) |
+| `summary_format` | text | `MDX` \| `HTML` \| `MARKDOWN` |
+| `transcript` | text | transcrição completa (adicionado em 20260516100000) |
+| `transcript_format` | text | `MDX` \| `HTML` \| `MARKDOWN` |
+| UNIQUE | `(module_id, slug)` WHERE `deleted_at IS NULL` | partial index — soft-delete aware (20260516200000) |
 
 ### `materials`
 | Coluna | Tipo | Notas |
@@ -69,6 +74,37 @@ Espelho de `auth.users`. Criado automaticamente pelo trigger `handle_new_user`.
 | `kind` | text | `PDF` \| `ZIP` \| `IMAGE` \| `LINK` \| `OTHER` |
 | `storage_path` | text | path no bucket `materials` |
 | `external_url` | text | para kind = LINK |
+
+### `lesson_reactions` (20260516100000)
+Reações LIKE/DISLIKE de usuários por aula. Um usuário pode ter no máximo uma reação por aula (UNIQUE `(lesson_id, user_id)`).
+
+| Coluna | Tipo | Notas |
+|---|---|---|
+| `id` | uuid PK | |
+| `lesson_id` | uuid FK → lessons | CASCADE |
+| `user_id` | uuid FK → profiles | CASCADE |
+| `reaction` | text NOT NULL | `LIKE` \| `DISLIKE` |
+| `created_at` | timestamptz | |
+| `updated_at` | timestamptz | trigger `set_updated_at` |
+
+Índice: `(lesson_id, reaction)`.
+
+### `module_materials` (FM-3.2 — 2026-05-17)
+Espelho de `materials`, vinculada a `modules` ao invés de `lessons`. Sem `updated_at`/`deleted_at` (hard delete, imutável após upload).
+
+| Coluna | Tipo | Notas |
+|---|---|---|
+| `id` | uuid PK | `gen_random_uuid()` |
+| `module_id` | uuid FK → modules | CASCADE, NOT NULL |
+| `title` | text NOT NULL | |
+| `kind` | text NOT NULL | `PDF` \| `ZIP` \| `IMAGE` \| `LINK` \| `OTHER` |
+| `storage_path` | text | path no bucket `materials` — null para LINK |
+| `external_url` | text | para kind = LINK |
+| `size_bytes` | bigint | null para LINK |
+| `sort_order` | int NOT NULL | default 0 |
+| `created_at` | timestamptz NOT NULL | default now() |
+
+Índice: `(module_id, sort_order)`
 
 ---
 
@@ -180,6 +216,7 @@ Fórum geral único. `votes` tem constraint: `thread_id XOR reply_id NOT NULL`.
 | `public.handle_new_user()` | trigger | cria `profiles` após INSERT em `auth.users` |
 | `public.is_admin()` | boolean | `security definer`, `stable` |
 | `public.has_access(user_id, lesson_id)` | boolean | `security definer`, `stable` — coração da autorização |
+| `public.has_module_access(user_id, module_id)` | boolean | `security definer`, `stable` — espelho de `has_access` para módulos (FM-3.2) |
 
 ---
 

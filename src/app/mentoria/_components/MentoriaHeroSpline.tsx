@@ -130,19 +130,19 @@ export function MentoriaHeroSpline() {
                 >
                   <Icon name="clock" size="16" className="text-[#FF3A0E]" />
                   <span className="text-white/70 text-xs uppercase tracking-wider">
-                    Início da turma: <strong className="text-white">12 de maio</strong>
+                    Próxima turma: <strong className="text-white">Julho 2026 — data a definir</strong>
                   </span>
                 </div>
                 <div
                   className="inline-flex items-center gap-2 border border-white/20 px-4 py-2"
                   style={{ background: 'rgba(255,255,255,0.06)' }}
                 >
-                  <span className="w-2 h-2 rounded-full bg-white/40" />
+                  <span className="w-2 h-2 rounded-full bg-[#FF3A0E]" style={{ boxShadow: '0 0 6px #FF3A0E' }} />
                   <span
-                    className="text-white/70 text-xs font-semibold uppercase tracking-wider"
+                    className="text-[#FF3A0E] text-xs font-semibold uppercase tracking-wider"
                     style={{ fontFamily: 'var(--font-mono)' }}
                   >
-                    Turma esgotada
+                    Vagas abertas
                   </span>
                 </div>
               </div>
@@ -194,8 +194,8 @@ export function MentoriaHeroSpline() {
                 style={{ fontFamily: 'var(--font-mono)' }}
               >
                 <Icon name="clock" size="16" className="text-[#FF3A0E]" /> Próxima turma:{' '}
-                <span className="text-white font-semibold">12 de maio</span>{' '}
-                <span className="opacity-40">|</span> Turma esgotada
+                <span className="text-white font-semibold">Julho 2026</span>{' '}
+                <span className="opacity-40">|</span> Data a definir
               </p>
             </div>
           </div>

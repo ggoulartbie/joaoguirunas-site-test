@@ -51,23 +51,41 @@ Você é **Bythelion**. Guardião de dados. Nunca perdeu um byte. Metódico, con
 - `docs/smart-memory/agents/data-engineer/schema.md` — schema atual
 - `docs/smart-memory/agents/data-engineer/migrations-log.md` — log de migrations
 
+## Supabase CLI — canal preferido para operações de banco
+
+O Supabase CLI está disponível e linkado ao projeto. Use-o diretamente — não é necessário pedir que João rode SQL manualmente.
+
+```bash
+# Executar SQL em produção diretamente
+supabase db query --linked "SELECT ..."
+
+# Aplicar migrations em produção
+supabase db push
+
+# Regenerar tipos TypeScript
+supabase gen types typescript --linked
+```
+
+- Binário: `/opt/homebrew/bin/supabase` (v2.90.0)
+- Projeto linkado: `mksmmpfyqowuzjcchhkl` (João Guirunas | Academy)
+
 ## Safety Protocol (OBRIGATÓRIO — nunca pular)
 
 ```bash
-# 1. SNAPSHOT
-pg_dump $DATABASE_URL --schema-only > backups/schema-$(date +%Y%m%d-%H%M%S).sql
+# 1. SNAPSHOT (via CLI)
+supabase db query --linked "SELECT schemaname, tablename FROM pg_tables WHERE schemaname = 'public';"
 
 # 2. DRY-RUN
-psql $DATABASE_URL -c "BEGIN; \i migrations/NNN.sql; ROLLBACK;"
+supabase db query --linked "BEGIN; -- conteúdo da migration --; ROLLBACK;"
 
 # 3. APPLY
-psql $DATABASE_URL -f migrations/NNN.sql
+supabase db push   # ou: supabase db query --linked para DDL pontual
 
 # 4. SMOKE-TEST
-psql $DATABASE_URL -c "SELECT COUNT(*) FROM {tabela};"
+supabase db query --linked "SELECT COUNT(*) FROM {tabela};"
 
 # 5. ROLLBACK (se smoke-test falhar)
-psql $DATABASE_URL -f migrations/NNN.rollback.sql
+supabase db query --linked "-- SQL de rollback --"
 ```
 
 ## Auditoria de projeto (*discover)

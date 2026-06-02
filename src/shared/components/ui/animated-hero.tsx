@@ -106,7 +106,7 @@ export function AnimatedHero() {
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.35, ease: CINEMA }}
-          className="flex flex-col sm:flex-row items-stretch sm:items-center justify-center gap-3 w-full max-w-xs sm:max-w-none sm:w-auto mb-0 mt-12 sm:mt-8"
+          className="relative flex flex-col sm:flex-row items-stretch sm:items-center justify-center gap-3 w-full max-w-xs sm:max-w-none sm:w-auto mb-0 mt-12 sm:mt-8"
         >
           {/* 1 — Open Source */}
           <Link

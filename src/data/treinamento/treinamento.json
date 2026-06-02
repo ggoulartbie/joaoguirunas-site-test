@@ -1,0 +1,227 @@
+{
+  "generatedAt": "2026-05-14T00:00:00.000Z",
+  "folderStructure": {
+    "name": ".claude/",
+    "type": "dir",
+    "description": "Diretório raiz de configuração do Claude Code — agents, skills, hooks e memória do projeto.",
+    "children": [
+      {
+        "name": "agents/",
+        "type": "dir",
+        "description": "Um arquivo .md por agente. Cada arquivo = um agente nativo Agent Teams com frontmatter + instruções + Contrato com team-os.",
+        "children": [
+          {
+            "name": "sites-architect.md",
+            "type": "file",
+            "description": "Arquiteto de sites — cria stories e toma decisões de arquitetura."
+          },
+          {
+            "name": "sites-dev-alpha.md",
+            "type": "file",
+            "description": "Frontend developer — implementa UI, landing pages e componentes."
+          },
+          {
+            "name": "sites-dev-beta.md",
+            "type": "file",
+            "description": "Backend developer — APIs, server actions e integrações."
+          },
+          {
+            "name": "sites-dev-gamma.md",
+            "type": "file",
+            "description": "Fullstack/Integration — CRO, SEO técnico e features cross-layer."
+          },
+          {
+            "name": "sites-dev-delta.md",
+            "type": "file",
+            "description": "Hardening & Resilience — erro handling e edge cases após features prontas."
+          },
+          {
+            "name": "sites-devops.md",
+            "type": "file",
+            "description": "DevOps Guardian — git push exclusivo, PRs e deploys Vercel/Netlify."
+          },
+          {
+            "name": "sites-qa.md",
+            "type": "file",
+            "description": "QA Master — veredictos formais PASS/CONCERNS/FAIL/WAIVED."
+          },
+          {
+            "name": "sites-ux.md",
+            "type": "file",
+            "description": "UX Specialist — wireframes, component specs e acessibilidade."
+          },
+          {
+            "name": "sites-analyst.md",
+            "type": "file",
+            "description": "Research Analyst — keyword research, competitor analysis e benchmarks."
+          },
+          {
+            "name": "sites-data.md",
+            "type": "file",
+            "description": "Data Engineer — schema, migrations, RLS e query optimization."
+          }
+        ]
+      },
+      {
+        "name": "skills/",
+        "type": "dir",
+        "description": "Skills instaladas no projeto. Cada skill é uma pasta com SKILL.md — contexto especializado carregado sob demanda pelo agente.",
+        "children": [
+          {
+            "name": "team-os/",
+            "type": "dir",
+            "description": "Skill do Team Lead — orquestra Agent Teams nativos.",
+            "children": [
+              {
+                "name": "SKILL.md",
+                "type": "file",
+                "description": "Instruções completas do team-os — fluxo principal, comandos, regras absolutas."
+              }
+            ]
+          },
+          {
+            "name": "team-os-creator/",
+            "type": "dir",
+            "description": "Skill criadora de agentes — gera arquivos .md completos para novos agentes.",
+            "children": [
+              {
+                "name": "SKILL.md",
+                "type": "file",
+                "description": "Agent factory — analisa projeto e propõe squad baseada no stack."
+              }
+            ]
+          },
+          {
+            "name": "sites-frontend-design/",
+            "type": "dir",
+            "description": "Padrões React/Next.js/Tailwind para o dev-alpha.",
+            "children": [
+              { "name": "SKILL.md", "type": "file" }
+            ]
+          },
+          {
+            "name": "sites-seo-technical/",
+            "type": "dir",
+            "description": "SEO técnico full-stack — metadata dinâmica, structured data, sitemap.",
+            "children": [
+              { "name": "SKILL.md", "type": "file" }
+            ]
+          },
+          {
+            "name": "sites-page-cro/",
+            "type": "dir",
+            "description": "CRO structure e trust signals para landing pages.",
+            "children": [
+              { "name": "SKILL.md", "type": "file" }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "agent-memory/",
+        "type": "dir",
+        "description": "Memória persistente por agente — arquivos MEMORY.md e arquivos .md por tópico. Persiste entre conversas.",
+        "children": [
+          {
+            "name": "sites-dev-gamma/",
+            "type": "dir",
+            "description": "Memória do agente Seranol (sites-dev-gamma).",
+            "children": [
+              { "name": "MEMORY.md", "type": "file", "description": "Índice de memórias do agente." }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "hooks/",
+        "type": "dir",
+        "description": "Shell hooks que executam em resposta a eventos do Claude Code (pre-tool, post-tool, stop)."
+      },
+      {
+        "name": "settings.json",
+        "type": "file",
+        "description": "Configurações do projeto — permissões, modelos, ambiente e features habilitadas."
+      },
+      {
+        "name": "CLAUDE.md",
+        "type": "file",
+        "description": "Instruções globais do projeto lidas automaticamente pelo Claude Code em cada sessão."
+      }
+    ]
+  },
+  "baseCommands": [
+    {
+      "command": "/model",
+      "shortcut": null,
+      "description": "Troca o modelo Claude ativo na sessão",
+      "detail": "Permite alternar entre claude-sonnet-4-6, claude-opus-4-7 e claude-haiku-4-5 sem reiniciar. Use claude-opus para tasks de arquitetura e raciocínio complexo; sonnet para implementação; haiku para tasks rápidas e barato."
+    },
+    {
+      "command": "/compact",
+      "shortcut": null,
+      "description": "Comprime o histórico da conversa preservando contexto essencial",
+      "detail": "Quando o contexto está próximo do limite (aviso amarelo), /compact resume a conversa em ~1000 tokens mantendo as decisões e código gerado. Essencial em sessões longas de implementação — evita perda de contexto sem reiniciar do zero."
+    },
+    {
+      "command": "/clear",
+      "shortcut": null,
+      "description": "Limpa completamente o contexto da sessão atual",
+      "detail": "Reseta a sessão para um estado limpo. Use quando quiser começar uma nova task sem contexto anterior contaminando o raciocínio. Diferente de /compact — /clear não preserva nada."
+    }
+  ],
+  "teamOsSkill": {
+    "name": "team-os",
+    "trigger": "/team-os",
+    "tagline": "Team Lead Orchestrator — orquestra Agent Teams nativos do Claude Code",
+    "description": "A skill /team-os assume o papel de Team Lead do projeto. Detecta o estado atual (NEW vs EXISTING), forma o time de agentes via Agent Teams nativo, coordena via Tasks e SendMessage, e mantém a smart-memory (docs/smart-memory/) como fonte de verdade compartilhada entre todos os teammates.",
+    "commands": [
+      {
+        "input": "/team-os",
+        "action": "Fluxo inteligente: detecta estado do projeto e roteia para bootstrap / resume / novo time"
+      },
+      {
+        "input": "/team-os *bootstrap",
+        "action": "Init + Discover em sequência: cria estrutura, forma time, audita código, popula smart-memory"
+      },
+      {
+        "input": "/team-os *plan \"objetivo\"",
+        "action": "Quebra objetivo em stories, popula o backlog em docs/smart-memory/stories/"
+      },
+      {
+        "input": "/team-os *dispatch",
+        "action": "Forma o team e inicia trabalho nas stories ativas"
+      },
+      {
+        "input": "/team-os *status",
+        "action": "Mostra estado atual: tasks, stories, agentes, blockers"
+      },
+      {
+        "input": "/team-os *resume",
+        "action": "Lê smart-memory e retoma trabalho em progresso"
+      }
+    ]
+  },
+  "teamOsCreatorFunctions": [
+    {
+      "id": "analyze",
+      "name": "Análise de Projeto",
+      "trigger": "/team-os-creator *analyze",
+      "description": "Lê o stack do projeto (package.json, README, estrutura de pastas) e detecta automaticamente o archetype ideal para a squad — dev, data, content, marketing ou custom.",
+      "output": "Relatório com archetype detectado, squad sugerida e justificativa baseada no stack real. Sem criar nenhum arquivo — apenas análise."
+    },
+    {
+      "id": "squad",
+      "name": "Criação de Squad Completa",
+      "trigger": "/team-os-creator *squad <preset>",
+      "description": "Gera todos os agentes de um preset completo de uma vez. Cada arquivo .md é criado com frontmatter Agent Teams, Contrato com team-os, smart-memory project-scope, e skills relevantes ao role.",
+      "output": "Arquivos .md em .claude/agents/ para cada agente do preset. Roda validate-agent.sh automaticamente ao final para garantir compliance."
+    },
+    {
+      "id": "create",
+      "name": "Criação de Agente Individual",
+      "trigger": "/team-os-creator *create <role>",
+      "description": "Cria UM agente interativamente — pergunta nome, archetype, especialização, skills e modelo preferido. Nunca sobrescreve agente existente silenciosamente.",
+      "output": "Um arquivo .md em .claude/agents/<nome>.md completo e validado. Propõe skills relevantes do skills.sh baseado no role mesmo que o usuário pule essa etapa."
+    }
+  ]
+}

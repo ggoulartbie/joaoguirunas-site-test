@@ -29,7 +29,8 @@ Migrations:
 |---|---|---|
 | `avatars` | `{user_id}/avatar.{ext}` | `user_id` = UUID do `profiles.id` |
 | `covers` | `{entity_id}/{filename}` | `entity_id` = UUID do course ou cohort |
-| `materials` | `{lesson_id}/{material_id}.{ext}` | `lesson_id` na primeira pasta — usado pela RLS policy |
+| `materials` | `lessons/{lesson_id}/{uuid}.{ext}` | `lesson_id` na primeira subpasta — usado pela RLS policy de storage |
+| `materials` | `modules/{module_id}/{uuid}.{ext}` | **FM-3.2** — material de módulo; mesmo bucket, prefixo disjunto. Paths nunca colidem com `lessons/...` |
 | `certificates` | `{user_id}/{certificate_id}.pdf` | `user_id` na primeira pasta — usado pela RLS policy |
 
 **Path é load-bearing:** as policies de RLS no Storage extraem IDs via `(storage.foldername(name))[1]`. Alterar a convenção quebra as policies.
@@ -69,8 +70,10 @@ const { data: certUrl } = await adminClient.storage
 - INSERT/UPDATE/DELETE: `is_admin()`
 
 ### materials
-- SELECT: `has_access(auth.uid(), lesson_id)` onde `lesson_id` = primeira pasta do path
+- SELECT: `has_access(auth.uid(), lesson_id)` onde `lesson_id` = primeira pasta do path (`lessons/...`)
 - INSERT/UPDATE/DELETE: `is_admin()`
+
+**Nota FM-3.2:** O path `modules/{moduleId}/...` não tem policy de storage dedicada — acesso é via `supabaseAdmin` (service_role bypassa storage policies). Signed URLs geradas server-side como no fluxo de aula. Nenhuma policy nova de storage necessária.
 
 ### certificates
 - SELECT: `auth.uid()::text = user_id` onde `user_id` = primeira pasta do path

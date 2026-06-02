@@ -28,6 +28,11 @@ logs/
 
 # AIOX Local
 .aiox-core/local/
+
+# Mentoria — arquivos de vídeo e binários grandes (não pertencem ao git)
+docs/mentoria-claude-code/Curso On-line/
+docs/mentoria-claude-code/Encontros On-line/
+*.mp4
 .claude/settings.local.json
 .aiox/install-log.txt
 

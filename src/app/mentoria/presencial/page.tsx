@@ -1,3 +1,5 @@
+export const dynamic = 'force-dynamic'
+
 import Link from 'next/link';
 import type { Metadata } from 'next';
 import { MODULOS_PRESENCIAIS } from './_components/ModuloLayout';
@@ -43,7 +45,7 @@ export default function ModulosIndexPage() {
               className="w-1.5 h-1.5 rounded-full"
               style={{ background: ACCENT, boxShadow: `0 0 6px ${ACCENT}` }}
             />
-            Presencial · 15 de junho · 13h–18h
+            Presencial · Julho 2026 · a definir
           </div>
           <h1
             className="text-5xl font-light leading-[1.05] md:text-6xl"

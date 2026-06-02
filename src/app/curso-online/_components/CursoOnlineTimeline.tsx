@@ -277,7 +277,7 @@ export function CursoOnlineTimeline() {
                 fontWeight: 600,
               }}
             >
-              5 Módulos + 4 Semanas de Aulas
+              8 Módulos · Aprenda no Seu Ritmo
             </span>
           </div>
           <h2
