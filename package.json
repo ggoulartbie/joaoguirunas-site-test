@@ -68,5 +68,19 @@
     "react-email": "^6.0.8",
     "tailwindcss": "^4.0.0",
     "typescript": "^5.7.0"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "@sentry/cli",
+      "@tsparticles/engine",
+      "esbuild",
+      "sharp"
+    ],
+    "allowBuilds": [
+      "@sentry/cli",
+      "@tsparticles/engine",
+      "esbuild",
+      "sharp"
+    ]
   }
 }
