@@ -1,0 +1,110 @@
+'use client'
+
+import { useActionState } from 'react'
+import dynamic from 'next/dynamic'
+import { ArrowRight } from 'lucide-react'
+import { createPublicCheckoutSession } from '@/app/actions/checkoutPublic'
+
+const PhoneField = dynamic(() => import('./PhoneField').then((m) => m.PhoneField), {
+  ssr: false,
+  loading: () => (
+    <input
+      type="tel"
+      placeholder="WhatsApp com DDD"
+      disabled
+      className="w-full px-4 py-3 outline-none"
+      style={{
+        background: '#0A0A10',
+        border: '1px solid rgba(255,255,255,0.14)',
+        color: '#fff',
+        fontFamily: 'var(--font-mono)',
+        fontSize: '13px',
+        borderRadius: 0,
+      }}
+    />
+  ),
+})
+
+const KV_MONO: React.CSSProperties = {
+  fontFamily: 'var(--font-mono)',
+  fontSize: '11px',
+  letterSpacing: '0.16em',
+  textTransform: 'uppercase',
+  fontWeight: 500,
+}
+
+const inputStyle: React.CSSProperties = {
+  background: '#0A0A10',
+  border: '1px solid rgba(255,255,255,0.14)',
+  color: '#fff',
+  fontFamily: 'var(--font-mono)',
+  fontSize: '13px',
+  borderRadius: 0,
+}
+
+type ActionState = { error: string } | null
+
+async function checkoutAction(_prev: ActionState, formData: FormData): Promise<ActionState> {
+  const slug = formData.get('cohortSlug') as string
+  const name  = (formData.get('name')  as string | null) ?? undefined
+  const email = (formData.get('email') as string | null) ?? undefined
+  const phone = (formData.get('phone') as string | null) ?? undefined
+  return await createPublicCheckoutSession(slug, email, phone, name)
+}
+
+interface CheckoutFormProps {
+  cohortSlug: string
+  label?: string
+}
+
+export function CheckoutForm({ cohortSlug, label = 'Comprar agora — R$ 797' }: CheckoutFormProps) {
+  const [state, formAction, isPending] = useActionState(checkoutAction, null)
+
+  return (
+    <div className="w-full">
+      <form action={formAction} className="flex flex-col gap-3 w-full">
+        <input type="hidden" name="cohortSlug" value={cohortSlug} />
+        <input
+          type="text"
+          name="name"
+          required
+          placeholder="Seu nome"
+          autoComplete="name"
+          className="w-full px-4 py-3 outline-none"
+          style={inputStyle}
+        />
+        <input
+          type="email"
+          name="email"
+          required
+          placeholder="seu@email.com"
+          autoComplete="email"
+          className="w-full px-4 py-3 outline-none"
+          style={inputStyle}
+        />
+        <PhoneField name="phone" required />
+        <button
+          type="submit"
+          disabled={isPending}
+          className="inline-flex items-center justify-center gap-2 px-8 py-4 text-sm font-semibold uppercase transition-all hover:brightness-110 active:scale-[0.98] disabled:opacity-60 w-full"
+          style={{ ...KV_MONO, background: '#FF3A0E', color: '#050507', fontSize: '12px' }}
+        >
+          {isPending ? 'Aguarde...' : label}
+          {!isPending && <ArrowRight size={14} aria-hidden="true" />}
+        </button>
+      </form>
+      {state?.error && (
+        <div
+          className="mt-4 flex items-start gap-3 px-4 py-3"
+          style={{ background: 'rgba(255,58,14,0.1)', border: '1px solid rgba(255,58,14,0.3)' }}
+          role="alert"
+        >
+          <span style={{ color: '#FF3A0E', flexShrink: 0 }}>⚠</span>
+          <p className="text-sm" style={{ color: 'rgba(255,255,255,0.8)', lineHeight: 1.5 }}>
+            {state.error}
+          </p>
+        </div>
+      )}
+    </div>
+  )
+}
