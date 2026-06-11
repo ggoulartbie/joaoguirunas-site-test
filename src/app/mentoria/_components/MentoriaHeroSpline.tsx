@@ -119,8 +119,16 @@ export function MentoriaHeroSpline() {
         {/* ── Layout split: content left / Spline right ── */}
         <div className="relative z-10 flex flex-col sm:flex-row h-full min-h-[520px] sm:min-h-[90vh]">
 
-          {/* ── LEFT — conteúdo ── */}
-          <div className="flex-1 flex items-end sm:items-center px-6 sm:px-10 lg:px-16 pb-8 sm:pb-0 pt-24 sm:pt-0">
+          {/* ── SPLINE 3D — top mobile (em fluxo), right desktop (absolute) ── */}
+          <div className="relative w-full h-[300px] flex-shrink-0 sm:absolute sm:right-0 sm:top-0 sm:bottom-0 sm:w-[58%] sm:h-auto pointer-events-none sm:pointer-events-auto">
+            <SplineScene
+              scene="https://prod.spline.design/kZDDjO5HuC9GJUM2/scene.splinecode"
+              className="w-full h-full"
+            />
+          </div>
+
+          {/* ── CONTENT — bottom mobile, left desktop ── */}
+          <div className="flex-1 flex items-end sm:items-center px-6 sm:px-10 lg:px-16 pb-8 sm:pb-0 pt-6 sm:pt-0">
             <div className="sm:max-w-xl lg:max-w-2xl w-full">
               {/* H1 */}
               <h1
@@ -173,56 +181,6 @@ export function MentoriaHeroSpline() {
             </div>
           </div>
 
-          {/* ── RIGHT — Spline 3D (desktop only) ── */}
-          <div className="hidden sm:block absolute right-0 top-0 bottom-0 w-[58%]">
-            <SplineScene
-              scene="https://prod.spline.design/kZDDjO5HuC9GJUM2/scene.splinecode"
-              className="w-full h-full"
-            />
-          </div>
-
-          {/* ── MOBILE — fallback visual: agentes grid decorativo ── */}
-          <div className="sm:hidden absolute inset-0 pointer-events-none overflow-hidden" aria-hidden>
-            {/* Circular glow central — evoca a esfera 3D */}
-            <div
-              className="absolute"
-              style={{
-                right: '-20%',
-                top: '50%',
-                transform: 'translateY(-50%)',
-                width: '320px',
-                height: '320px',
-                borderRadius: '50%',
-                background: 'radial-gradient(circle, rgba(255,58,14,0.18) 0%, rgba(255,58,14,0.06) 40%, transparent 70%)',
-                filter: 'blur(20px)',
-              }}
-            />
-            {/* Ring decorativo */}
-            <div
-              className="absolute"
-              style={{
-                right: '-8%',
-                top: '50%',
-                transform: 'translateY(-50%)',
-                width: '260px',
-                height: '260px',
-                borderRadius: '50%',
-                border: '1px solid rgba(255,58,14,0.12)',
-              }}
-            />
-            <div
-              className="absolute"
-              style={{
-                right: '-2%',
-                top: '50%',
-                transform: 'translateY(-50%)',
-                width: '180px',
-                height: '180px',
-                borderRadius: '50%',
-                border: '1px solid rgba(255,58,14,0.08)',
-              }}
-            />
-          </div>
         </div>
 
         {/* Mobile overlay bottom fade */}

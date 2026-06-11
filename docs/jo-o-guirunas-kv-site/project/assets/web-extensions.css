@@ -1,0 +1,351 @@
+/* ============================================================
+   WEB EXTENSIONS — additions to João Guirunas DS, web-specific
+   Sinalizado como sugestão de adição ao DS:
+   - --fs-lead, --fs-prose (escalas tipográficas web)
+   - prose blockquote, code inline, inline ember link
+   - states semânticos mono+ember (success/error/warning/info)
+   - loading skeleton
+   ============================================================ */
+@import url('./tokens.css');
+
+:root {
+  /* --- Web-only type scale --- */
+  --fs-lead:  clamp(17px, 1.5vw, 22px);   /* sub-hero lead */
+  --fs-prose: 19px;                       /* article body */
+  --prose-measure: 68ch;                  /* max-width for prose */
+
+  /* --- Form sizing --- */
+  --input-h: 48px;
+  --input-h-sm: 40px;
+}
+
+/* --- Reset that respects DS --- */
+*, *::before, *::after { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+body {
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-size: var(--fs-body);
+  line-height: var(--leading-body);
+}
+img, svg { display: block; max-width: 100%; }
+button { cursor: pointer; font-family: inherit; }
+input, textarea, select { font-family: inherit; color: inherit; }
+
+/* --- Prose article (blog post) --- */
+.prose {
+  font-family: var(--font-sans);
+  font-size: var(--fs-prose);
+  line-height: 1.7;
+  color: var(--fg-secondary);
+  max-width: var(--prose-measure);
+}
+.prose > * + * { margin-top: 1.2em; }
+.prose h2 {
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: 36px;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  color: var(--fg);
+  margin-top: 2.5em;
+  margin-bottom: 0.4em;
+}
+.prose h3 {
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: 24px;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  color: var(--fg);
+  margin-top: 2em;
+  margin-bottom: 0.3em;
+}
+.prose p { margin: 0; }
+.prose strong { color: var(--fg); font-weight: 600; }
+.prose em { font-style: italic; color: var(--fg); }
+.prose a {
+  color: var(--ember);
+  text-decoration: none;
+  border-bottom: 1px solid rgba(255,58,14,0.4);
+  transition: border-color var(--dur-fast) ease;
+}
+.prose a:hover { border-bottom-color: var(--ember); }
+.prose blockquote {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-weight: 300;
+  font-size: 28px;
+  line-height: 1.3;
+  color: var(--fg);
+  border-left: 2px solid var(--ember);
+  padding: 4px 0 4px 24px;
+  margin: 1.6em 0;
+}
+.prose code {
+  font-family: var(--font-mono);
+  font-size: 0.88em;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.06);
+  padding: 2px 6px;
+  color: var(--fg);
+}
+.prose pre {
+  font-family: var(--font-mono);
+  font-size: 14px;
+  line-height: 1.6;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  padding: 20px;
+  overflow-x: auto;
+  color: var(--fg);
+}
+.prose pre code { background: transparent; border: 0; padding: 0; }
+.prose ul, .prose ol { padding-left: 1.4em; margin: 0; }
+.prose li { margin: 0.4em 0; }
+.prose li::marker { color: var(--ember); }
+.prose hr { border: 0; border-top: 1px solid var(--border); margin: 2.5em 0; }
+.prose img { width: 100%; border: 1px solid var(--border); }
+
+/* --- Lead paragraph (sub-hero) --- */
+.lead {
+  font-family: var(--font-sans);
+  font-weight: 300;
+  font-size: var(--fs-lead);
+  line-height: 1.55;
+  color: var(--fg-secondary);
+  max-width: 60ch;
+}
+
+/* --- Buttons — primary, ghost, ember-outline --- */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  height: 48px;
+  padding: 0 24px;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: var(--tracking-mono);
+  text-transform: uppercase;
+  text-decoration: none;
+  border: 0;
+  cursor: pointer;
+  transition: all var(--dur-base) ease;
+  white-space: nowrap;
+}
+.btn-sm { height: 40px; padding: 0 18px; font-size: 11px; }
+.btn-lg { height: 56px; padding: 0 32px; font-size: 13px; }
+
+.btn-primary {
+  background: var(--ember);
+  color: var(--void);
+}
+.btn-primary:hover {
+  filter: brightness(1.1);
+  box-shadow: var(--glow-ember);
+}
+.btn-primary:active { transform: scale(0.98); }
+
+.btn-ghost {
+  background: transparent;
+  color: var(--fg-secondary);
+  border: 1px solid var(--bone-ghost);
+}
+.btn-ghost:hover {
+  background: rgba(255,255,255,0.05);
+  color: var(--fg);
+}
+
+.btn-ember-outline {
+  background: rgba(255,58,14,0.10);
+  color: var(--ember);
+  border: 1px solid rgba(255,58,14,0.30);
+}
+.btn-ember-outline:hover {
+  background: rgba(255,58,14,0.18);
+  border-color: rgba(255,58,14,0.50);
+}
+
+.btn-disabled,
+.btn[disabled] { opacity: 0.4; pointer-events: none; cursor: not-allowed; }
+
+/* --- Form fields --- */
+.field {
+  width: 100%;
+  height: var(--input-h);
+  padding: 0 14px;
+  background: transparent;
+  color: var(--fg);
+  border: 1px solid var(--border);
+  font-family: var(--font-sans);
+  font-size: 15px;
+  outline: none;
+  transition: border-color var(--dur-fast) ease, background var(--dur-fast) ease;
+}
+.field::placeholder { color: var(--fg-faint); }
+.field:hover { border-color: var(--border-strong); }
+.field:focus { border-color: var(--ember); background: rgba(255,58,14,0.03); }
+.field-textarea { height: auto; padding: 14px; resize: vertical; min-height: 140px; line-height: 1.5; }
+.field-error { border-color: var(--ember); background: rgba(255,58,14,0.04); }
+.field-label {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-mono);
+  color: var(--fg-muted);
+  margin-bottom: 8px;
+}
+.field-help {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  color: var(--fg-faint);
+  margin-top: 6px;
+}
+.field-help-error { color: var(--ember); }
+
+/* --- Eyebrow / accent line / section header pattern --- */
+.eyebrow {
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono-label);
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-mono-wide);
+  color: var(--ember);
+  font-weight: 500;
+}
+.eyebrow-muted {
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono-label);
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-mono-wide);
+  color: var(--fg-faint);
+  font-weight: 500;
+}
+.accent-line { width: 64px; height: 2px; background: var(--accent-line); }
+
+/* --- Container --- */
+.container { max-width: var(--container-max); margin: 0 auto; padding: 0 var(--container-pad); }
+@media (min-width: 1024px) { .container { padding: 0 2rem; } }
+
+/* --- Section spacing --- */
+.section { padding: 80px 0; }
+.section-lg { padding: 120px 0; }
+.section-sm { padding: 48px 0; }
+
+/* --- Loading skeleton --- */
+@keyframes skeleton-shimmer {
+  0%, 100% { background-color: rgba(255,255,255,0.04); }
+  50%      { background-color: rgba(255,255,255,0.08); }
+}
+.skeleton {
+  background: rgba(255,255,255,0.04);
+  animation: skeleton-shimmer 1.5s ease-in-out infinite;
+}
+
+/* --- Status pills (success/error/warning/info — mono+ember) --- */
+.status {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 12px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-mono);
+  font-weight: 500;
+  border: 1px solid rgba(255,58,14,0.30);
+  background: rgba(255,58,14,0.08);
+  color: var(--ember);
+}
+.status-neutral {
+  border-color: var(--border);
+  background: rgba(255,255,255,0.03);
+  color: var(--fg-secondary);
+}
+
+/* --- Status dot --- */
+.dot { display: inline-block; width: 8px; height: 8px; border-radius: 9999px; background: var(--ember); }
+.dot-pulse::after {
+  content: ""; position: absolute; inset: 0; border-radius: 9999px;
+  background: var(--ember); animation: dot-pulse 2s ease-out infinite;
+}
+@keyframes dot-pulse {
+  0%   { transform: scale(1); opacity: 0.6; }
+  100% { transform: scale(3); opacity: 0; }
+}
+
+/* --- Dot grid texture utility --- */
+.bg-dots {
+  position: relative;
+}
+.bg-dots::before {
+  content: ""; position: absolute; inset: 0; pointer-events: none;
+  background: var(--texture-dot);
+  opacity: 0.55;
+  z-index: 0;
+}
+.bg-dots > * { position: relative; z-index: 1; }
+
+/* --- Hairline divider --- */
+.hairline { height: 1px; background: var(--border); border: 0; margin: 0; }
+.hairline-strong { background: var(--border-strong); }
+
+/* --- Underline on hover (links in lists) --- */
+.uline {
+  position: relative;
+  color: var(--fg-secondary);
+  transition: color var(--dur-fast) ease;
+}
+.uline::after {
+  content: ""; position: absolute; left: 0; bottom: -2px; height: 1px; width: 100%;
+  background: currentColor; transform: scaleX(0); transform-origin: left;
+  transition: transform var(--dur-base) var(--ease-glide);
+}
+.uline:hover { color: var(--fg); }
+.uline:hover::after { transform: scaleX(1); }
+
+/* --- Page chrome reset inside artboards (they don't scroll) --- */
+.page-frame {
+  background: var(--void);
+  color: var(--fg);
+  overflow: hidden;
+  position: relative;
+}
+.page-frame::before {
+  content: ""; position: absolute; inset: 0; pointer-events: none;
+  background: var(--texture-dot);
+  opacity: 0.55;
+  z-index: 0;
+}
+.page-frame > * { position: relative; z-index: 1; }
+
+/* --- Mobile breakpoint helpers (consumed by JSX via vp prop normally) --- */
+.show-mobile { display: none; }
+.show-desktop { display: block; }
+@media (max-width: 767px) {
+  .show-mobile { display: block; }
+  .show-desktop { display: none; }
+}
+
+/* --- Animation keyframes mirror the DS UI kit --- */
+@keyframes jg-fade-up {
+  from { opacity: 0; transform: translateY(14px); filter: blur(4px); }
+  to   { opacity: 1; transform: translateY(0);    filter: blur(0); }
+}
+@keyframes jg-blur-in {
+  from { opacity: 0; transform: translateY(44px); filter: blur(8px); }
+  to   { opacity: 1; transform: translateY(0);    filter: blur(0); }
+}
+.jg-fade-up { animation: jg-fade-up 600ms var(--ease-glide) both; }
+.jg-blur-in { animation: jg-blur-in 850ms var(--ease-cinema) both; }
+.jg-d1 { animation-delay: 80ms; }
+.jg-d2 { animation-delay: 180ms; }
+.jg-d3 { animation-delay: 320ms; }
+.jg-d4 { animation-delay: 440ms; }

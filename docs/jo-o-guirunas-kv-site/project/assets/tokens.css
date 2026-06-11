@@ -1,0 +1,266 @@
+/* ============================================================
+   João Guirunas — Design Tokens
+   Brutalist editorial. Void background, ember accent.
+   Source: src/app/globals.css + src/app/layout.tsx
+   ============================================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,700&family=Inter+Tight:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap');
+
+:root {
+  /* ----- COLORS — primitive ------------------------------- */
+  --void:           #050507;   /* primary background */
+  --void-2:         #08080C;   /* section break */
+  --ink:            #0e0e11;   /* card / footer surface */
+  --ink-2:          #16161a;   /* raised card */
+  --ink-3:          #1f1f24;   /* hover state */
+  --ember:          #FF3A0E;   /* signature accent */
+  --ember-hover:    #FF5A1F;
+  --ember-deep:     #B81F00;
+  --bone:           #FFFFFF;
+  --bone-warm:      #FAFAFA;
+  --bone-dim:       rgba(255,255,255,0.70);
+  --bone-mute:      rgba(255,255,255,0.50);
+  --bone-faint:     rgba(255,255,255,0.30);
+  --bone-ghost:     rgba(255,255,255,0.14);
+
+  --hairline:        rgba(255,255,255,0.07);
+  --hairline-strong: rgba(255,255,255,0.16);
+
+  /* category accents (a11y compliant; used sparingly) */
+  --cat-skills:        #22C55E;
+  --cat-apps:          #A78BFA;
+  --cat-integracoes:   #0EA5E9;
+  --cat-aprendizado:   #06B6D4;
+
+  /* ----- COLOR — semantic --------------------------------- */
+  --bg:              var(--void);
+  --bg-section:      var(--void-2);
+  --bg-card:         var(--ink);
+  --bg-card-raised:  var(--ink-2);
+  --bg-card-hover:   var(--ink-3);
+  --fg:              var(--bone);
+  --fg-secondary:    var(--bone-dim);
+  --fg-muted:        var(--bone-mute);
+  --fg-faint:        var(--bone-faint);
+  --accent:          var(--ember);
+  --accent-hover:    var(--ember-hover);
+  --border:          var(--hairline);
+  --border-strong:   var(--hairline-strong);
+
+  /* ----- TYPOGRAPHY — families ---------------------------- */
+  /* Display: editorial italic serif (manifesto, hero, H2) */
+  --font-display: 'Fraunces', 'Times New Roman', Georgia, serif;
+  /* Sans: tight humanist for body */
+  --font-sans:    'Inter Tight', 'Inter', system-ui, -apple-system, sans-serif;
+  /* Mono: labels, eyebrows, CTAs, technical density */
+  --font-mono:    'JetBrains Mono', 'Roboto Mono', ui-monospace, Menlo, monospace;
+
+  /* ----- TYPOGRAPHY — sizes (1080p baseline) -------------- */
+  --fs-display-xl: clamp(64px, 10vw, 120px); /* hero */
+  --fs-display-lg: clamp(48px, 6vw, 96px);
+  --fs-display-md: clamp(36px, 5vw, 56px);
+  --fs-h1:         clamp(40px, 5.2vw, 64px);
+  --fs-h2:         clamp(28px, 3.6vw, 48px);
+  --fs-h3:         24px;
+  --fs-h4:         18px;
+  --fs-body:       16px;
+  --fs-body-sm:    14px;
+  --fs-meta:       12px;
+  --fs-mono-label: 11px;   /* eyebrow / nav / kicker */
+  --fs-mono-mini:  10px;
+
+  /* ----- TYPOGRAPHY — letter-spacing & line-height -------- */
+  --tracking-display:  -0.03em;
+  --tracking-h:        -0.02em;
+  --tracking-body:     -0.01em;
+  --tracking-mono:     0.10em;   /* default uppercase mono */
+  --tracking-mono-wide:0.16em;   /* section eyebrows */
+
+  --leading-display:   0.92;
+  --leading-heading:   1.05;
+  --leading-body:      1.6;
+  --leading-tight:     1.3;
+
+  /* ----- SPACING ------------------------------------------ */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.25rem;
+  --space-6: 1.5rem;
+  --space-8: 2rem;
+  --space-10: 2.5rem;
+  --space-12: 3rem;
+  --space-16: 4rem;
+  --space-20: 5rem;
+  --space-24: 6rem;
+
+  /* container */
+  --container-max:     1152px;     /* max-w-6xl */
+  --container-pad:     1.25rem;
+  --container-pad-lg:  140px;
+
+  /* ----- BORDERS / RADII / SHADOWS ------------------------ */
+  /* Brutalist — radii are 0 by default */
+  --radius-none:  0;
+  --radius-sm:    0;
+  --radius-pill:  9999px;   /* only used for status dots */
+
+  --border-hairline: 1px solid var(--border);
+  --border-card:     1px solid var(--border);
+  --border-active:   1px solid rgba(255,58,14,0.35);
+
+  /* Glow shadows — replace blur soft shadows */
+  --glow-ember-sm: 0 0 6px var(--ember);
+  --glow-ember:    0 0 20px rgba(255,58,14,0.25);
+  --glow-ember-lg: 0 0 40px rgba(255,58,14,0.25);
+  --glow-ember-xl: 0 0 80px rgba(255,58,14,0.40);
+  --shadow-card:   none;            /* cards have NO drop shadow */
+
+  /* ----- MOTION ------------------------------------------- */
+  --ease-cinema: cubic-bezier(0.7, 0, 0.2, 1);   /* hero entrances */
+  --ease-glide:  cubic-bezier(0.25, 1, 0.3, 1);  /* glide-in */
+  --ease-out:    cubic-bezier(0.16, 1, 0.3, 1);
+  --dur-fast:    150ms;
+  --dur-base:    200ms;
+  --dur-slow:    500ms;
+  --dur-hero:    700ms;
+
+  /* ----- TEXTURES ----------------------------------------- */
+  --texture-dot:
+    radial-gradient(rgba(255,255,255,0.04) 1px, transparent 1px) 0 0 / 24px 24px;
+  --texture-dot-strong:
+    radial-gradient(rgba(255,255,255,0.06) 1px, transparent 1px) 0 0 / 24px 24px;
+  --accent-line:
+    linear-gradient(90deg, transparent, var(--ember) 30%, var(--ember) 70%, transparent);
+}
+
+/* ============================================================
+   SEMANTIC ELEMENT STYLES
+   Apply by tag for quick prototype output.
+   ============================================================ */
+
+html { background: var(--bg); color: var(--fg); font-family: var(--font-sans); }
+body { background: var(--bg); }
+
+::selection { background: var(--ember); color: var(--void); }
+*:focus-visible { outline: 2px solid var(--ember); outline-offset: 2px; }
+
+/* --- Display headings (Fraunces, mostly italic light) --- */
+h1, .h1 {
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: var(--fs-h1);
+  line-height: var(--leading-display);
+  letter-spacing: var(--tracking-display);
+  color: var(--fg);
+}
+h2, .h2 {
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: var(--fs-h2);
+  line-height: 0.95;
+  letter-spacing: var(--tracking-display);
+  color: var(--fg);
+}
+h3, .h3 {
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: var(--fs-h3);
+  line-height: var(--leading-tight);
+  letter-spacing: var(--tracking-h);
+  color: var(--fg);
+}
+h4, .h4 {
+  font-family: var(--font-sans);
+  font-weight: 600;
+  font-size: var(--fs-h4);
+  line-height: var(--leading-tight);
+  letter-spacing: var(--tracking-h);
+  color: var(--fg);
+}
+
+/* Italic span used inside headings to highlight a phrase. */
+h1 em, h2 em, h3 em,
+.h-italic {
+  font-style: italic;
+  font-weight: 300;
+  color: var(--ember);
+}
+
+/* --- Body --- */
+p, .p {
+  font-family: var(--font-sans);
+  font-weight: 400;
+  font-size: var(--fs-body);
+  line-height: var(--leading-body);
+  color: var(--fg-secondary);
+  text-wrap: pretty;
+}
+.p-lead { font-size: 18px; color: var(--fg-secondary); max-width: 60ch; }
+.p-meta { font-size: var(--fs-meta); color: var(--fg-muted); }
+
+a {
+  color: var(--ember);
+  text-decoration: none;
+  transition: color var(--dur-fast) ease;
+}
+a:hover { color: var(--bone); }
+
+strong, b { color: var(--fg); font-weight: 600; }
+
+/* --- Mono utility classes — used for ALL labels, badges, CTAs --- */
+.mono-label,
+[data-mono-label] {
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono-label);
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-mono);
+  font-weight: 500;
+  color: var(--fg-muted);
+}
+.mono-eyebrow {
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono-label);
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-mono-wide);
+  font-weight: 500;
+  color: var(--ember);
+}
+.mono-mini {
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono-mini);
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--fg-faint);
+}
+
+code, kbd, pre, .code {
+  font-family: var(--font-mono);
+  font-size: 0.92em;
+  color: var(--bone);
+}
+
+/* --- Accent line — used under section titles --- */
+.accent-line {
+  height: 2px;
+  width: 64px;
+  background: var(--accent-line);
+}
+
+/* --- Page-level texture (apply on <body> or section) --- */
+.dot-texture::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: var(--texture-dot);
+  opacity: 0.55;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}

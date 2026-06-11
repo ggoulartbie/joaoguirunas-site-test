@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>KV Site · João Guirunas</title>
+
+<link rel="stylesheet" href="assets/web-extensions.css" />
+
+<style>
+  html, body {
+    background: #f0eee9;
+    height: 100%;
+    overflow: hidden;
+  }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+  }
+</style>
+
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+</head>
+<body>
+
+<div id="root"></div>
+
+<!-- Canvas + shared primitives -->
+<script type="text/babel" src="design-canvas.jsx"></script>
+<script type="text/babel" src="src/primitives.jsx"></script>
+
+<!-- Pages -->
+<script type="text/babel" src="src/page-home.jsx"></script>
+<script type="text/babel" src="src/page-mentoria.jsx"></script>
+<script type="text/babel" src="src/page-open-source.jsx"></script>
+<script type="text/babel" src="src/page-sobre.jsx"></script>
+<script type="text/babel" src="src/page-blog.jsx"></script>
+<script type="text/babel" src="src/page-blog-post.jsx"></script>
+<script type="text/babel" src="src/page-contato.jsx"></script>
+<script type="text/babel" src="src/page-secondary.jsx"></script>
+<script type="text/babel" src="src/catalog.jsx"></script>
+
+<script type="text/babel">
+function App() {
+  return (
+    <DesignCanvas>
+
+      {/* ─── COVER ─────────────────────────────────────────── */}
+      <DCSection id="cover" title="João Guirunas — KV Site" subtitle="Brutalist editorial · 100% herdado do DS · Mobile + Desktop">
+        <DCArtboard id="readme" label="00 · Capa" width={680} height={520}>
+          <Cover />
+        </DCArtboard>
+        <DCArtboard id="overview" label="00b · Mapa do KV" width={680} height={520}>
+          <Overview />
+        </DCArtboard>
+      </DCSection>
+
+      {/* ─── DESIGN SYSTEM ─────────────────────────────────── */}
+      <DCSection id="system" title="Sistema" subtitle="Tokens, componentes e estados — herdados do João Guirunas DS, sinalizados quando estendidos">
+        <DCArtboard id="components" label="Componentes · catálogo" width={1000} height={3800}>
+          <ComponentsCatalog />
+        </DCArtboard>
+        <DCArtboard id="states" label="Estados · interação" width={900} height={1640}>
+          <StatesCatalog />
+        </DCArtboard>
+      </DCSection>
+
+      {/* ─── PÁGINAS PRINCIPAIS ────────────────────────────── */}
+      <DCSection id="home" title="01 · Home" subtitle="Tier 1 surface · Hub completo · Conversão principal → Mentoria">
+        <DCArtboard id="home-mobile" label="Mobile · 375" width={375} height={4900}>
+          <HomePage vp="mobile" />
+        </DCArtboard>
+        <DCArtboard id="home-desktop" label="Desktop · 1440" width={1440} height={4500}>
+          <HomePage vp="desktop" />
+        </DCArtboard>
+      </DCSection>
+
+      <DCSection id="mentoria" title="02 · Mentoria" subtitle="Tier 1 conversão · R$8.700 · 12 vagas · Floripa · Turma 03">
+        <DCArtboard id="mentoria-mobile" label="Mobile · 375" width={375} height={6700}>
+          <MentoriaPage vp="mobile" />
+        </DCArtboard>
+        <DCArtboard id="mentoria-desktop" label="Desktop · 1440" width={1440} height={5800}>
+          <MentoriaPage vp="desktop" />
+        </DCArtboard>
+      </DCSection>
+
+      <DCSection id="open-source" title="03 · Open Source" subtitle="Tier 3 engajamento técnico · 32 recursos curados · MIT">
+        <DCArtboard id="os-mobile" label="Mobile · 375" width={375} height={5400}>
+          <OpenSourcePage vp="mobile" />
+        </DCArtboard>
+        <DCArtboard id="os-desktop" label="Desktop · 1440" width={1440} height={3200}>
+          <OpenSourcePage vp="desktop" />
+        </DCArtboard>
+      </DCSection>
+
+      <DCSection id="sobre" title="04 · Sobre" subtitle="Bio longa · Manifesto · Trajetória de 12 anos">
+        <DCArtboard id="sobre-mobile" label="Mobile · 375" width={375} height={4200}>
+          <SobrePage vp="mobile" />
+        </DCArtboard>
+        <DCArtboard id="sobre-desktop" label="Desktop · 1440" width={1440} height={3400}>
+          <SobrePage vp="desktop" />
+        </DCArtboard>
+      </DCSection>
+
+      <DCSection id="blog" title="05 · Blog · Lista" subtitle="Tier 4 autoridade · Editorial · 47 posts">
+        <DCArtboard id="blog-mobile" label="Mobile · 375" width={375} height={5200}>
+          <BlogPage vp="mobile" />
+        </DCArtboard>
+        <DCArtboard id="blog-desktop" label="Desktop · 1440" width={1440} height={2800}>
+          <BlogPage vp="desktop" />
+        </DCArtboard>
+      </DCSection>
+
+      <DCSection id="blog-post" title="06 · Blog Post" subtitle="Artigo individual · Prose 68ch · Inline CTA + related">
+        <DCArtboard id="post-mobile" label="Mobile · 375" width={375} height={4400}>
+          <BlogPostPage vp="mobile" />
+        </DCArtboard>
+        <DCArtboard id="post-desktop" label="Desktop · 1440" width={1440} height={3600}>
+          <BlogPostPage vp="desktop" />
+        </DCArtboard>
+      </DCSection>
+
+      <DCSection id="contato" title="07 · Contato" subtitle="Form + canais diretos · Resposta pessoal em 48h">
+        <DCArtboard id="contato-mobile" label="Mobile · 375" width={375} height={2400}>
+          <ContatoPage vp="mobile" />
+        </DCArtboard>
+        <DCArtboard id="contato-desktop" label="Desktop · 1440" width={1440} height={1500}>
+          <ContatoPage vp="desktop" />
+        </DCArtboard>
+      </DCSection>
+
+      {/* ─── PÁGINAS SECUNDÁRIAS (desktop-only) ──────────── */}
+      <DCSection id="secondary" title="Páginas secundárias" subtitle="Hi-fi simplificado · só desktop · Curso, Framework, Monitor, 404">
+        <DCArtboard id="curso" label="08 · Curso Online" width={1440} height={1800}>
+          <CursoPage vp="desktop" />
+        </DCArtboard>
+        <DCArtboard id="framework" label="09 · Framework AIOX" width={1440} height={1500}>
+          <FrameworkPage vp="desktop" />
+        </DCArtboard>
+        <DCArtboard id="monitor" label="10 · Monitor" width={1440} height={1700}>
+          <MonitorPage vp="desktop" />
+        </DCArtboard>
+        <DCArtboard id="404" label="11 · 404" width={1440} height={1100}>
+          <NotFoundPage vp="desktop" />
+        </DCArtboard>
+      </DCSection>
+
+      {/* ─── HANDOFF NOTES ────────────────────────────────── */}
+      <DCSection id="handoff" title="Handoff · Claude Code" subtitle="Como ler este KV e exportar pra implementação">
+        <DCArtboard id="handoff-notes" label="Handoff notes" width={900} height={620}>
+          <HandoffNotes />
+        </DCArtboard>
+      </DCSection>
+
+    </DesignCanvas>
+  );
+}
+
+/* ═══ COVER ═══ */
+function Cover() {
+  return (
+    <div style={{ width: '100%', height: '100%', background: 'var(--void)', color: 'var(--fg)', padding: 48, position: 'relative', overflow: 'hidden', fontFamily: 'var(--font-sans)' }}>
+      <div style={{ position: 'absolute', inset: 0, background: 'var(--texture-dot)', opacity: 0.55, pointerEvents: 'none' }}/>
+      <div style={{ position: 'relative', height: '100%', display: 'flex', flexDirection: 'column' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+          <LogoSymbol size={32} />
+          <Logo height={26} />
+        </div>
+        <div style={{ marginTop: 'auto' }}>
+          <p className="eyebrow" style={{ marginBottom: 16 }}>KV Site · v1 · Mai/2026</p>
+          <h1 style={{ margin: 0, fontFamily: 'var(--font-display)', fontWeight: 400, fontSize: 56, lineHeight: 0.95, letterSpacing: '-0.03em', color: 'var(--fg)' }}>
+            Hub do operador.<br/>
+            <em style={{ fontStyle: 'italic', fontWeight: 300, color: 'var(--ember)' }}>Sem hub falso.</em>
+          </h1>
+          <p style={{ marginTop: 20, fontSize: 16, lineHeight: 1.55, color: 'var(--fg-secondary)', maxWidth: 480 }}>
+            7 páginas principais em <strong style={{ color: 'var(--fg)' }}>mobile + desktop</strong>, 4 secundárias em desktop, componentes catalogados e estados de interação completos. 100% herdado do João Guirunas DS.
+          </p>
+          <div style={{ marginTop: 32, display: 'flex', gap: 24, flexWrap: 'wrap' }}>
+            {[['11','páginas'],['18','frames'],['1','DS'],['0','invenção']].map(([v,l]) => (
+              <div key={l}>
+                <div style={{ fontFamily: 'var(--font-display)', fontWeight: 700, color: 'var(--ember)', fontSize: 28, lineHeight: 1 }}>{v}</div>
+                <div style={{ fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--fg-faint)', marginTop: 4 }}>{l}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/* ═══ OVERVIEW ═══ */
+function Overview() {
+  const ROWS = [
+    { p: 'Home',         t: 'Tier 1 · Hub',          cta: 'Mentoria',           m: 'sim', d: 'sim' },
+    { p: 'Mentoria',     t: 'Tier 1 · Conversão',    cta: 'Lista de espera',    m: 'sim', d: 'sim' },
+    { p: 'Open Source',  t: 'Tier 3 · Engajamento',  cta: 'GitHub',             m: 'sim', d: 'sim' },
+    { p: 'Sobre',        t: 'Tier 4 · Autoridade',   cta: 'Mentoria',           m: 'sim', d: 'sim' },
+    { p: 'Blog',         t: 'Tier 4 · Autoridade',   cta: 'Newsletter',         m: 'sim', d: 'sim' },
+    { p: 'Blog Post',    t: 'Tier 4 · Autoridade',   cta: 'Mentoria (inline)', m: 'sim', d: 'sim' },
+    { p: 'Contato',      t: 'Captura · Suporte',     cta: 'Enviar',             m: 'sim', d: 'sim' },
+    { p: 'Curso Online', t: 'Tier 2 · Captura',      cta: 'Waitlist',           m: '—',   d: 'sim' },
+    { p: 'Framework',    t: 'Tier 3 · Docs',         cta: 'GitHub',             m: '—',   d: 'sim' },
+    { p: 'Monitor',      t: 'Tier 2 · Beta',         cta: 'Beta',               m: '—',   d: 'sim' },
+    { p: '404',          t: '—',                     cta: 'Home',               m: '—',   d: 'sim' },
+  ];
+  return (
+    <div style={{ width: '100%', height: '100%', background: 'var(--void)', padding: 40, color: 'var(--fg)', fontFamily: 'var(--font-sans)', position: 'relative', overflow: 'auto' }}>
+      <p className="eyebrow" style={{ marginBottom: 12 }}>Mapa · 11 páginas</p>
+      <h2 style={{ margin: 0, fontFamily: 'var(--font-display)', fontWeight: 400, fontSize: 36, lineHeight: 0.95, letterSpacing: '-0.03em' }}>
+        O que está <em style={{ fontStyle: 'italic', fontWeight: 300, color: 'var(--ember)' }}>onde</em>.
+      </h2>
+      <div className="accent-line" style={{ marginTop: 14, marginBottom: 28 }}/>
+      <table style={{ width: '100%', borderCollapse: 'collapse', fontFamily: 'var(--font-mono)', fontSize: 11 }}>
+        <thead>
+          <tr style={{ textAlign: 'left', color: 'var(--fg-faint)', letterSpacing: '0.10em', textTransform: 'uppercase' }}>
+            <th style={{ padding: '8px 8px', borderBottom: '1px solid var(--border)' }}>Página</th>
+            <th style={{ padding: '8px 8px', borderBottom: '1px solid var(--border)' }}>Tier</th>
+            <th style={{ padding: '8px 8px', borderBottom: '1px solid var(--border)' }}>CTA principal</th>
+            <th style={{ padding: '8px 8px', borderBottom: '1px solid var(--border)', textAlign: 'center' }}>Mobile</th>
+            <th style={{ padding: '8px 8px', borderBottom: '1px solid var(--border)', textAlign: 'center' }}>Desktop</th>
+          </tr>
+        </thead>
+        <tbody>
+          {ROWS.map(r => (
+            <tr key={r.p}>
+              <td style={{ padding: '10px 8px', borderBottom: '1px solid var(--border)', fontFamily: 'var(--font-sans)', fontSize: 14, color: 'var(--fg)', fontWeight: 500 }}>{r.p}</td>
+              <td style={{ padding: '10px 8px', borderBottom: '1px solid var(--border)', color: 'var(--fg-muted)' }}>{r.t}</td>
+              <td style={{ padding: '10px 8px', borderBottom: '1px solid var(--border)', color: 'var(--ember)' }}>{r.cta}</td>
+              <td style={{ padding: '10px 8px', borderBottom: '1px solid var(--border)', textAlign: 'center', color: r.m === 'sim' ? 'var(--ember)' : 'var(--fg-faint)' }}>{r.m === 'sim' ? '●' : '—'}</td>
+              <td style={{ padding: '10px 8px', borderBottom: '1px solid var(--border)', textAlign: 'center', color: 'var(--ember)' }}>●</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  );
+}
+
+/* ═══ HANDOFF NOTES ═══ */
+function HandoffNotes() {
+  return (
+    <div style={{ width: '100%', height: '100%', background: 'var(--void)', padding: 40, color: 'var(--fg)', fontFamily: 'var(--font-sans)', position: 'relative', overflow: 'auto' }}>
+      <p className="eyebrow" style={{ marginBottom: 12 }}>Handoff · Próximos passos</p>
+      <h2 style={{ margin: 0, fontFamily: 'var(--font-display)', fontWeight: 400, fontSize: 36, lineHeight: 0.95, letterSpacing: '-0.03em' }}>
+        Pra <em style={{ fontStyle: 'italic', fontWeight: 300, color: 'var(--ember)' }}>Claude Code</em>.
+      </h2>
+      <div className="accent-line" style={{ marginTop: 14 }}/>
+
+      <div style={{ marginTop: 28, display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 24 }}>
+        {[
+          { t: 'Tokens', d: 'Todos em assets/tokens.css (CSS custom properties). 100% espelha o DS original. Web extensions em assets/web-extensions.css (prose, lead, button helpers).' },
+          { t: 'Páginas', d: 'src/page-*.jsx — cada arquivo expõe a Page como global window. Cada Page recebe vp="mobile"|"desktop" pra reorganizar layout.' },
+          { t: 'Primitives', d: 'src/primitives.jsx — Header, Footer, Logo, Icon (AIOX v1.0), SectionHeader, FloatingCta.' },
+          { t: 'Catálogos', d: 'src/catalog.jsx — ComponentsCatalog e StatesCatalog, com when-to-use / when-not-to-use inline.' },
+          { t: 'Adições sinalizadas', d: '6 extensões web não-DS: --fs-lead, --fs-prose, prose blockquote, code inline, inline ember link, status mono+ember.' },
+          { t: 'Próximo', d: 'Portar pra Next.js app/router. Cada Page vira route. Forms multi-step ligam em /api/leads. Newsletter via webhook.' },
+        ].map(c => (
+          <div key={c.t} style={{ padding: 20, border: '1px solid var(--border)', background: 'var(--bg-card)' }}>
+            <div style={{ fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--ember)', marginBottom: 8 }}>{c.t}</div>
+            <p style={{ margin: 0, fontSize: 13, lineHeight: 1.55, color: 'var(--fg-secondary)' }}>{c.d}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+</script>
+</body>
+</html>
