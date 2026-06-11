@@ -139,7 +139,7 @@ export function OpenSourceClient() {
   return (
     <>
       {/* ── 1. Editorial Header ── */}
-      <section className="relative overflow-hidden bg-[#050507] pt-32 pb-20 min-h-[60vh] flex items-end">
+      <section className="relative overflow-hidden bg-[#050507] pt-20 sm:pt-32 pb-16 sm:pb-20 min-h-[60vh] flex items-end">
         {/* Founder portrait */}
         <Image
           src="/images/bg-open-source.png"
@@ -172,7 +172,7 @@ export function OpenSourceClient() {
             animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
             transition={{ duration: 0.85, delay: 0.08, ease: CINEMA }}
             className="font-[family-name:var(--font-display-serif)] font-[400] leading-[0.92] tracking-[-0.03em] text-white mb-8"
-            style={{ fontSize: 'clamp(64px, 10vw, 120px)' }}
+            style={{ fontSize: 'clamp(48px, 10vw, 120px)' }}
           >
             Open{' '}
             <span className="italic font-[300]" style={{ color: '#FF3A0E' }}>
@@ -240,7 +240,7 @@ export function OpenSourceClient() {
               }}
             />
 
-            <div className="relative grid grid-cols-1 lg:grid-cols-[1fr_auto] gap-8 lg:gap-12 items-center p-8 sm:p-12">
+            <div className="relative grid grid-cols-1 lg:grid-cols-[1fr_auto] gap-8 lg:gap-12 items-center p-5 sm:p-8 lg:p-12">
               <div>
                 <div className="flex items-center gap-3 mb-5">
                   <span
@@ -334,7 +334,7 @@ export function OpenSourceClient() {
 
           {/* Search */}
           <div className="pt-10 pb-5">
-            <div className="relative max-w-xs">
+            <div className="relative w-full sm:max-w-xs">
               <Search
                 className="absolute left-3.5 top-1/2 -translate-y-1/2 h-3.5 w-3.5 pointer-events-none"
                 style={{ color: 'rgba(255,255,255,0.28)' }}
@@ -344,7 +344,7 @@ export function OpenSourceClient() {
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="Buscar..."
-                className="w-full pl-10 pr-8 py-2.5 text-sm placeholder-white/25 bg-transparent focus:outline-none transition-colors"
+                className="w-full pl-10 pr-8 py-3 text-sm placeholder-white/25 bg-transparent focus:outline-none transition-colors min-h-[44px]"
                 style={{
                   fontFamily: 'var(--font-mono)',
                   fontSize: '0.8rem',
@@ -380,7 +380,7 @@ export function OpenSourceClient() {
                 <button
                   key={id}
                   onClick={() => setActiveFilter(id)}
-                  className="inline-flex items-center gap-1.5 px-3.5 py-2 transition-all duration-150"
+                  className="inline-flex items-center gap-1.5 px-3.5 py-2.5 min-h-[44px] transition-all duration-150"
                   style={{
                     fontFamily: 'var(--font-mono)',
                     fontSize: '0.68rem',
@@ -550,7 +550,7 @@ export function OpenSourceClient() {
           {/* H2 */}
           <h2
             className="font-[family-name:var(--font-display-serif)] font-[400] leading-[0.92] tracking-[-0.03em] mb-8 max-w-3xl"
-            style={{ fontSize: 'clamp(48px, 7vw, 96px)', color: '#050507' }}
+            style={{ fontSize: 'clamp(36px, 7vw, 96px)', color: '#050507' }}
           >
             Pronto para{' '}
             <span className="italic font-[300]">escalar?</span>

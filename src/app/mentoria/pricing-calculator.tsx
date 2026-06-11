@@ -82,7 +82,7 @@ const INSTALLMENTS = 12;
 const INSTALLMENT_VALUE = Math.ceil(AGENT_COST / INSTALLMENTS);
 
 const checklist = [
-  '8 encontros (1 presencial + 6 online + 1 final)',
+  '7 encontros (1 presencial + 5 online + 1 final)',
   'Desbloqueio mental com Claudia',
   'Framework AIOX completo',
   'Squad personalizada para seu negócio',
@@ -268,34 +268,38 @@ export function PricingCalculator() {
         </motion.div>
 
         {/* Tabs */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
-          transition={{ duration: 0.5, delay: 0.15 }}
-          role="tablist"
-          aria-label="Tipo de equipe"
-          className="flex gap-3 mb-10 sm:mb-12 overflow-x-auto sm:overflow-visible sm:flex-wrap sm:justify-center pb-2 sm:pb-0"
-          style={{ scrollbarWidth: 'none' }}
-        >
-          {squads.map((squad) => (
-            <button
-              key={squad.id}
-              type="button"
-              role="tab"
-              aria-selected={activeSquad === squad.id}
-              onClick={() => setActiveSquad(squad.id)}
-              className={cn(
-                'flex-shrink-0 px-4 sm:px-5 py-2 sm:py-2.5 text-xs sm:text-sm font-semibold uppercase tracking-wider transition-all duration-200',
-                activeSquad === squad.id
-                  ? 'bg-[var(--color-accent)] text-white'
-                  : 'bg-white/[0.05] border border-white/[0.08] text-white/50 hover:bg-white/[0.08] hover:text-white/70',
-              )}
-              style={{ fontFamily: "'Roboto Mono', var(--font-bb-mono), monospace" }}
-            >
-              {squad.label}
-            </button>
-          ))}
-        </motion.div>
+        <div className="relative mb-10 sm:mb-12">
+          {/* scroll fade hint — mobile only */}
+          <div className="absolute right-0 top-0 bottom-2 w-10 bg-gradient-to-l from-[#08080C] to-transparent pointer-events-none z-10 sm:hidden" />
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+            transition={{ duration: 0.5, delay: 0.15 }}
+            role="tablist"
+            aria-label="Tipo de equipe"
+            className="flex gap-3 overflow-x-auto sm:overflow-visible sm:flex-wrap sm:justify-center pb-2 sm:pb-0"
+            style={{ scrollbarWidth: 'none' }}
+          >
+            {squads.map((squad) => (
+              <button
+                key={squad.id}
+                type="button"
+                role="tab"
+                aria-selected={activeSquad === squad.id}
+                onClick={() => setActiveSquad(squad.id)}
+                className={cn(
+                  'flex-shrink-0 px-4 sm:px-5 py-2 sm:py-2.5 text-xs sm:text-sm font-semibold uppercase tracking-wider transition-all duration-200',
+                  activeSquad === squad.id
+                    ? 'bg-[var(--color-accent)] text-white'
+                    : 'bg-white/[0.05] border border-white/[0.08] text-white/50 hover:bg-white/[0.08] hover:text-white/70',
+                )}
+                style={{ fontFamily: "'Roboto Mono', var(--font-bb-mono), monospace" }}
+              >
+                {squad.label}
+              </button>
+            ))}
+          </motion.div>
+        </div>
 
         {/* Grid */}
         <div className="grid gap-6 lg:grid-cols-[1fr_48px_1fr] lg:gap-0 lg:items-start">
@@ -391,9 +395,25 @@ export function PricingCalculator() {
 
               <div className="relative z-10">
                 {/* Badge */}
-                <span className="inline-block px-3 py-1 text-xs font-bold uppercase tracking-widest text-[var(--color-accent)] border border-[var(--color-accent)]/20 bg-[var(--color-accent)]/[0.06] mb-6">
+                <span className="inline-block px-3 py-1 text-xs font-bold uppercase tracking-widest text-[var(--color-accent)] border border-[var(--color-accent)]/20 bg-[var(--color-accent)]/[0.06] mb-4">
                   Investimento Único
                 </span>
+
+                {/* Destaque turma */}
+                <div className="mb-6 border border-[var(--color-accent)]/30 bg-[var(--color-accent)]/[0.06] px-4 py-3">
+                  <p
+                    className="text-[0.55rem] text-[var(--color-accent)]/60 uppercase tracking-widest mb-1"
+                    style={{ fontFamily: "'Roboto Mono', var(--font-bb-mono), monospace" }}
+                  >
+                    Próxima turma
+                  </p>
+                  <p
+                    className="text-sm font-bold text-white"
+                    style={{ fontFamily: "'Roboto Mono', var(--font-bb-mono), monospace" }}
+                  >
+                    Início 05/08/2026 · 12 vagas
+                  </p>
+                </div>
 
                 {/* Claude Code branding */}
                 <div className="flex items-center gap-2 mb-4">

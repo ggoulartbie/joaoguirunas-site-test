@@ -723,3 +723,41 @@ Registro de todos os Agent Teams formados neste projeto. Lead (team-os) atualiza
 **Status:** ativo
 **Início:** 2026-05-29
 **Stories:** UCO-1.1 a UCO-2.2 + UCO-1.5 (menu global)
+
+## 2026-06-10 — Team joao-guirunas-site-mobile-mentoria-pass
+
+**Objetivo:** Dois work-streams paralelos:
+1. Atualizar cronograma da mentoria — turma agosto/setembro 2026 (7 encontros, 1 por quarta começando 05/08, 1 encontro online de 1h30 por módulo em vez de 2)
+2. Refinar mobile (≤640px) de todas as páginas do site para consistência visual, com 1 dev por área (paralelismo de 5 frentes) + 1 UX auditor produzindo checklist priorizado
+
+**Lead:** team-os (skill)
+**Composição (spawn inicial — 7 agentes em paralelo):**
+- `mentoria-cronograma` (sites-dev-alpha) — cronograma novo + estrutura 7 encontros em src/app/mentoria/{course-modules-timeline,mentorship-pricing,pricing-calculator,faq-accordion,mentorship-features}.tsx
+- `mobile-ux-auditor` (sites-ux) — audit MOBILE do site inteiro → `docs/smart-memory/agents/ux/mobile-audit-2026-06.md`
+- `mobile-mentoria` (sites-dev-alpha) — /mentoria/* (P0: investigar Spline 3D que some no mobile)
+- `mobile-home` (sites-dev-alpha) — / + /open-source
+- `mobile-cursos` (sites-dev-alpha) — /curso-online, /workshop-1, /workshop-2/*
+- `mobile-learn-skills` (sites-dev-alpha) — /learn/* (11) + /skills/* (~25)
+- `mobile-agentes-tools` (sites-dev-alpha) — /agentes, /squads/*, /tools/*, /framework/*, /setup/*, /monitor/*
+
+**Sequência futura (spawn condicional):**
+- `sites-qa` — gate formal após impl
+- `sites-devops` — push + PR (apenas com autorização explícita do PO)
+
+**Cronograma confirmado (mentoria turma 2026-Q3):**
+1. 05/08/2026 (qua) — Presencial abertura
+2. 12/08/2026 (qua) — Tira-dúvidas Centro de Treinamento de Agentes
+3. 19/08/2026 (qua) — Claude Design
+4. 26/08/2026 (qua) — Squad Site
+5. 02/09/2026 (qua) — Squad Social
+6. 09/09/2026 (qua) — Squad Dev
+7. 16/09/2026 (qua) — Encerramento presencial
+
+**Restrições do PO:**
+- NÃO push sem autorização explícita
+- NÃO mexer em desktop — só mobile (`sm:` e abaixo)
+- Coordenação de conflito: `mentoria-cronograma` mexe em CONTEÚDO; `mobile-mentoria` em STYLING dos mesmos arquivos
+
+**Status:** ativo
+**Início:** 2026-06-10T20:59:00-03:00
+**Stories:** dispatch direto (sem stories formais — o objetivo é cross-cutting e cada agente registra suas próprias tasks na TaskList do team)

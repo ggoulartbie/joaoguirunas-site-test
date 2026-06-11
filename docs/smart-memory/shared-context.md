@@ -1,7 +1,7 @@
 ---
 title: Shared Context
 type: status-board
-updated: 2026-05-17
+updated: 2026-06-10
 tags: [ops]
 ---
 
@@ -9,7 +9,45 @@ tags: [ops]
 
 O lead (team-os) atualiza este arquivo a cada mudança de estado dos teammates.
 
-## Team ativo — joaoguirunas-academy-turma-acesso-granular (2026-05-25)
+## Team ativo — joao-guirunas-site-mobile-mentoria-pass (2026-06-10)
+
+**Status:** 🟡 em execução — 7 teammates em paralelo
+**Objetivo:** (1) Atualizar cronograma mentoria turma 05/08/2026 (7 encontros, 1 quarta/módulo, 1h30 cada) + (2) Refinar mobile (≤640px) de todas as páginas do site
+**Branch:** main (sem branch nova até dispatch final do devops)
+**Restrição:** Nenhum push sem autorização explícita do João. Mobile devs NÃO mexem em desktop.
+
+**Cronograma fixado (turma agosto-setembro 2026):**
+1. 05/08 (qua) — Presencial abertura
+2. 12/08 (qua) — Tira-dúvidas Centro de Treinamento de Agentes
+3. 19/08 (qua) — Claude Design
+4. 26/08 (qua) — Squad Site
+5. 02/09 (qua) — Squad Social
+6. 09/09 (qua) — Squad Dev
+7. 16/09 (qua) — Encerramento presencial
+
+**Pipeline em paralelo:**
+1. 🔄 **mentoria-cronograma** (sites-dev-alpha) — atualizando cronograma + estrutura "1 encontro/módulo" em 5+ arquivos /mentoria/
+2. 🔄 **mobile-ux-auditor** (sites-ux) — auditando ~70 páginas mobile, produzindo `docs/smart-memory/agents/ux/mobile-audit-2026-06.md`
+3. 🔄 **mobile-mentoria** (sites-dev-alpha) — investigando Spline 3D invisível no mobile + refinando /mentoria/*
+4. 🔄 **mobile-home** (sites-dev-alpha) — / + /open-source
+5. 🔄 **mobile-cursos** (sites-dev-alpha) — /curso-online, /workshop-1, /workshop-2/*
+6. 🔄 **mobile-learn-skills** (sites-dev-alpha) — /learn/* (11) + /skills/* (~25)
+7. 🔄 **mobile-agentes-tools** (sites-dev-alpha) — /agentes, /squads/*, /tools/*, /framework/*, /setup/*, /monitor/*
+
+**Aguardando spawn pós-impl:**
+- ⏳ **sites-qa** — gate formal
+- ⏳ **sites-devops** — push + PR (autorização explícita do PO)
+
+**Coordenação cross-agentes (conflito antecipado):**
+- `mentoria-cronograma` edita CONTEÚDO (strings, datas, módulos) de course-modules-timeline/pricing/faq
+- `mobile-mentoria` edita STYLING (classes Tailwind) dos mesmos arquivos
+- Comunicação direta via SendMessage entre os dois quando precisar reestruturar markup
+
+**Dev server:** rodando em `http://localhost:3000` (PID 98399, Next.js 16.2.4 + Turbopack)
+
+---
+
+## Team ativo (legado) — joaoguirunas-academy-turma-acesso-granular (2026-05-25)
 
 **Status:** 🟡 em execução — teammates em paralelo
 **Objetivo:** `included_lesson_ids` em cohort_courses + admin UI + student enforcement

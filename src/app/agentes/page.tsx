@@ -53,7 +53,7 @@ export default function AgentesPage() {
       <SquadSideNav squads={SQUADS} />
 
       {/* Content sits above the canvas */}
-      <div className="relative z-10">
+      <div className="relative z-10 pb-20 lg:pb-0">
         <AgentesHero total={TOTAL_AGENTES} squads={SQUADS} />
         <StatsBar total={TOTAL_AGENTES} squads={SQUADS} />
 

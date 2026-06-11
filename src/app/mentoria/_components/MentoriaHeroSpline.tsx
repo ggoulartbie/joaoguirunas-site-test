@@ -120,33 +120,8 @@ export function MentoriaHeroSpline() {
         <div className="relative z-10 flex flex-col sm:flex-row h-full min-h-[520px] sm:min-h-[90vh]">
 
           {/* ── LEFT — conteúdo ── */}
-          <div className="flex-1 flex items-end sm:items-center px-6 sm:px-10 lg:px-16 pb-8 sm:pb-0 pt-28 sm:pt-0">
+          <div className="flex-1 flex items-end sm:items-center px-6 sm:px-10 lg:px-16 pb-8 sm:pb-0 pt-24 sm:pt-0">
             <div className="sm:max-w-xl lg:max-w-2xl w-full">
-              {/* Badges */}
-              <div className="flex flex-col items-start gap-2 mb-4 sm:mb-6">
-                <div
-                  className="inline-flex items-center gap-2 border border-white/20 px-3 py-1.5"
-                  style={{ background: 'rgba(255,255,255,0.04)', fontFamily: 'var(--font-mono)' }}
-                >
-                  <Icon name="clock" size="16" className="text-[#FF3A0E]" />
-                  <span className="text-white/70 text-xs uppercase tracking-wider">
-                    Próxima turma: <strong className="text-white">Julho 2026 — data a definir</strong>
-                  </span>
-                </div>
-                <div
-                  className="inline-flex items-center gap-2 border border-white/20 px-4 py-2"
-                  style={{ background: 'rgba(255,255,255,0.06)' }}
-                >
-                  <span className="w-2 h-2 rounded-full bg-[#FF3A0E]" style={{ boxShadow: '0 0 6px #FF3A0E' }} />
-                  <span
-                    className="text-[#FF3A0E] text-xs font-semibold uppercase tracking-wider"
-                    style={{ fontFamily: 'var(--font-mono)' }}
-                  >
-                    Vagas abertas
-                  </span>
-                </div>
-              </div>
-
               {/* H1 */}
               <h1
                 className="text-3xl sm:text-4xl lg:text-5xl text-white mb-3 sm:mb-5"
@@ -169,8 +144,7 @@ export function MentoriaHeroSpline() {
 
               {/* Description */}
               <p className="text-sm sm:text-base text-white/80 sm:max-w-lg leading-relaxed mb-5 sm:mb-8">
-                Aprenda a criar, configurar e orquestrar agentes autônomos que executam tarefas complexas para você{' '}
-                <span className="hidden sm:inline">— da escrita de código à criação de conteúdo</span>.{' '}
+                Aprenda a criar, configurar e orquestrar agentes autônomos que executam tarefas complexas para você.{' '}
                 <strong className="text-white font-medium">Mentoria intensiva e prática.</strong>
               </p>
 
@@ -193,18 +167,60 @@ export function MentoriaHeroSpline() {
                 className="hidden sm:flex text-white/40 text-xs uppercase tracking-widest items-center gap-2 mt-2"
                 style={{ fontFamily: 'var(--font-mono)' }}
               >
-                <Icon name="clock" size="16" className="text-[#FF3A0E]" /> Próxima turma:{' '}
-                <span className="text-white font-semibold">Julho 2026</span>{' '}
-                <span className="opacity-40">|</span> Data a definir
+                <Icon name="clock" size="16" className="text-[#FF3A0E]" /> Início:{' '}
+                <span className="text-white font-semibold">05/08/2026</span>{' '}
               </p>
             </div>
           </div>
 
-          {/* ── RIGHT — Spline 3D ── */}
+          {/* ── RIGHT — Spline 3D (desktop only) ── */}
           <div className="hidden sm:block absolute right-0 top-0 bottom-0 w-[58%]">
             <SplineScene
               scene="https://prod.spline.design/kZDDjO5HuC9GJUM2/scene.splinecode"
               className="w-full h-full"
+            />
+          </div>
+
+          {/* ── MOBILE — fallback visual: agentes grid decorativo ── */}
+          <div className="sm:hidden absolute inset-0 pointer-events-none overflow-hidden" aria-hidden>
+            {/* Circular glow central — evoca a esfera 3D */}
+            <div
+              className="absolute"
+              style={{
+                right: '-20%',
+                top: '50%',
+                transform: 'translateY(-50%)',
+                width: '320px',
+                height: '320px',
+                borderRadius: '50%',
+                background: 'radial-gradient(circle, rgba(255,58,14,0.18) 0%, rgba(255,58,14,0.06) 40%, transparent 70%)',
+                filter: 'blur(20px)',
+              }}
+            />
+            {/* Ring decorativo */}
+            <div
+              className="absolute"
+              style={{
+                right: '-8%',
+                top: '50%',
+                transform: 'translateY(-50%)',
+                width: '260px',
+                height: '260px',
+                borderRadius: '50%',
+                border: '1px solid rgba(255,58,14,0.12)',
+              }}
+            />
+            <div
+              className="absolute"
+              style={{
+                right: '-2%',
+                top: '50%',
+                transform: 'translateY(-50%)',
+                width: '180px',
+                height: '180px',
+                borderRadius: '50%',
+                border: '1px solid rgba(255,58,14,0.08)',
+              }}
             />
           </div>
         </div>
@@ -230,9 +246,8 @@ export function MentoriaHeroSpline() {
           className="text-white/40 text-xs uppercase tracking-widest flex items-center gap-2 flex-wrap mt-2"
           style={{ fontFamily: 'var(--font-mono)' }}
         >
-          <Icon name="clock" size="16" className="text-[#FF3A0E]" /> Próxima turma:{' '}
-          <span className="text-white font-semibold">12 de maio</span>{' '}
-          <span className="opacity-40">|</span> Turma esgotada
+          <Icon name="clock" size="16" className="text-[#FF3A0E]" /> Início:{' '}
+          <span className="text-white font-semibold">05/08/2026</span>
         </p>
       </div>
     </section>

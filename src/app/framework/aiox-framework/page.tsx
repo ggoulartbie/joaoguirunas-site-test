@@ -104,22 +104,26 @@ export default function AioxFrameworkPage() {
             <div className="space-y-6">
               <div>
                 <p className="text-white/60 mb-3 text-sm">Novo projeto:</p>
-                <div className="bg-[#16161a] border border-white/10 p-4 font-mono text-sm text-[#FF3A0E]">
-                  npx aiox-core init meu-projeto
+                <div className="overflow-x-auto rounded-none">
+                  <div className="bg-[#16161a] border border-white/10 p-4 font-mono text-sm text-[#FF3A0E] whitespace-nowrap min-w-0">
+                    npx aiox-core init meu-projeto
+                  </div>
                 </div>
               </div>
               <div>
                 <p className="text-white/60 mb-3 text-sm">Projeto existente:</p>
-                <div className="bg-[#16161a] border border-white/10 p-4 font-mono text-sm text-[#FF3A0E]">
-                  cd seu-projeto
-                  <br />
-                  npx aiox-core install
+                <div className="overflow-x-auto rounded-none">
+                  <div className="bg-[#16161a] border border-white/10 p-4 font-mono text-sm text-[#FF3A0E] whitespace-pre min-w-0">
+                    {'cd seu-projeto\nnpx aiox-core install'}
+                  </div>
                 </div>
               </div>
               <div>
                 <p className="text-white/60 mb-3 text-sm">Ativar um agente (Claude Code):</p>
-                <div className="bg-[#16161a] border border-white/10 p-4 font-mono text-sm text-[#FF3A0E]">
-                  /agent-name
+                <div className="overflow-x-auto rounded-none">
+                  <div className="bg-[#16161a] border border-white/10 p-4 font-mono text-sm text-[#FF3A0E] whitespace-nowrap min-w-0">
+                    /agent-name
+                  </div>
                 </div>
               </div>
               <p className="text-white/50 text-sm">

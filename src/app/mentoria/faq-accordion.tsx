@@ -13,7 +13,7 @@ const faqItems: FaqItem[] = [
   { q: 'Preciso de software pago?', a: 'Sim, você precisa de uma assinatura ativa do Claude Pro (US$ 20/mês). As outras ferramentas são gratuitas ou têm planos gratuitos suficientes.' },
   { q: 'As aulas online são ao vivo?', a: 'Sim, todas são ao vivo com interação em tempo real. E todas são gravadas — se você perder uma aula, pode assistir depois e tirar dúvidas no grupo.' },
   { q: 'E se eu não puder ir a Florianópolis?', a: 'O encontro presencial é parte fundamental (setup inicial + sessão de desbloqueio mental com Claudia). Se você realmente não puder ir, recomendamos esperar uma turma futura que funcione para sua agenda.' },
-  { q: 'Quanto tempo dura o programa?', a: 'São 8 encontros distribuídos ao longo de 6-8 semanas (aproximadamente 2 meses).' },
+  { q: 'Quanto tempo dura o programa?', a: 'São 7 encontros distribuídos ao longo de ~7 semanas (de 05/08 a 16/09/2026).' },
   { q: 'Vou conseguir criar minha própria squad do zero?', a: 'Sim! Esse é um dos principais objetivos. Ao final, você terá autonomia completa para criar, configurar e orquestrar agentes para qualquer necessidade.' },
   { q: 'Posso usar os agentes comercialmente?', a: 'Sim, 100%. Tudo que você criar é seu para usar como quiser — incluindo em projetos comerciais, para clientes, ou para sua empresa.' },
   { q: 'Terei suporte depois do programa?', a: 'Você terá acesso vitalício ao grupo de alunos, onde pode tirar dúvidas, trocar experiências e acompanhar as evoluções do framework.' },

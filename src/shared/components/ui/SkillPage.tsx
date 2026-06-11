@@ -118,7 +118,7 @@ export function SkillPage({
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(softwareSchema) }} />
 
       {/* ── Hero ── */}
-      <section className="relative overflow-hidden flex items-end min-h-[52vh]">
+      <section className="relative overflow-hidden flex items-end min-h-fit sm:min-h-[52vh]">
         {bgImage ? (
           <>
             <Image
@@ -139,10 +139,10 @@ export function SkillPage({
           </div>
         )}
 
-        <div className="relative w-full mx-auto max-w-6xl px-6 sm:px-10 lg:px-[140px] py-16 sm:py-20">
+        <div className="relative w-full mx-auto max-w-6xl px-5 sm:px-10 lg:px-[140px] py-10 sm:py-16 lg:py-20">
           {/* Breadcrumb */}
-          <nav aria-label="Breadcrumb" className="mb-10">
-            <ol className="flex items-center gap-2" style={{ ...MONO, color: 'rgba(255,255,255,0.35)' }}>
+          <nav aria-label="Breadcrumb" className="mb-7 sm:mb-10">
+            <ol className="flex items-center gap-2 flex-wrap" style={{ ...MONO, color: 'rgba(255,255,255,0.35)' }}>
               <li>
                 <Link href="/" className="transition-colors hover:text-white/70">Home</Link>
               </li>
@@ -151,7 +151,7 @@ export function SkillPage({
                 <Link href="/open-source" className="transition-colors hover:text-white/70">Open Source</Link>
               </li>
               <li aria-hidden="true" style={{ color: 'rgba(255,255,255,0.2)' }}>/</li>
-              <li style={{ color: '#FF3A0E' }} aria-current="page">{title}</li>
+              <li className="truncate max-w-[160px] sm:max-w-none" style={{ color: '#FF3A0E' }} aria-current="page">{title}</li>
             </ol>
           </nav>
 
@@ -204,31 +204,31 @@ export function SkillPage({
           {/* H1 — Fraunces Display */}
           <h1
             className="font-[family-name:var(--font-display-serif)] font-[400] text-white leading-[0.92] tracking-[-0.03em] mb-6 max-w-3xl"
-            style={{ fontSize: 'clamp(42px, 6vw, 80px)' }}
+            style={{ fontSize: 'clamp(34px, 7vw, 80px)' }}
           >
             {title}
           </h1>
 
           {/* Description */}
           <p
-            className="max-w-2xl leading-relaxed mb-10"
-            style={{ fontSize: '1.1rem', color: 'rgba(255,255,255,0.52)', letterSpacing: '-0.005em' }}
+            className="max-w-2xl leading-relaxed mb-8 sm:mb-10 text-base sm:text-[1.1rem]"
+            style={{ color: 'rgba(255,255,255,0.65)', letterSpacing: '-0.005em' }}
           >
             {description}
           </p>
 
           {/* CTA buttons */}
           {primaryLink && (
-            <div className="flex flex-wrap gap-3">
+            <div className="flex flex-col sm:flex-row flex-wrap gap-3">
               <a
                 href={primaryLink}
                 target={isExternal ? '_blank' : undefined}
                 rel={isExternal ? 'noopener noreferrer' : undefined}
-                className="inline-flex items-center gap-2 transition-all hover:brightness-110 active:scale-[0.98]"
+                className="inline-flex items-center justify-center gap-2 transition-all hover:brightness-110 active:scale-[0.98] min-h-[44px]"
                 style={{
                   background: '#FF3A0E',
                   color: '#050507',
-                  padding: '14px 24px',
+                  padding: '12px 20px',
                   fontSize: 14,
                   fontWeight: 600,
                   letterSpacing: '-0.01em',
@@ -240,12 +240,12 @@ export function SkillPage({
               {showMentoria && (
                 <Link
                   href="/mentoria"
-                  className="inline-flex items-center gap-2 transition-all hover:brightness-110"
+                  className="inline-flex items-center justify-center gap-2 transition-all hover:brightness-110 min-h-[44px]"
                   style={{
                     border: '1px solid rgba(255,58,14,0.45)',
                     color: 'rgba(255,58,14,0.9)',
                     background: 'rgba(255,58,14,0.06)',
-                    padding: '14px 20px',
+                    padding: '12px 16px',
                     fontSize: 14,
                     fontWeight: 500,
                     letterSpacing: '-0.01em',
@@ -256,11 +256,11 @@ export function SkillPage({
               )}
               <Link
                 href="/open-source"
-                className="inline-flex items-center gap-2 transition-all hover:bg-white/5"
+                className="inline-flex items-center justify-center gap-2 transition-all hover:bg-white/5 min-h-[44px]"
                 style={{
                   border: '1px solid rgba(255,255,255,0.16)',
                   color: 'rgba(255,255,255,0.65)',
-                  padding: '14px 20px',
+                  padding: '12px 16px',
                   fontSize: 14,
                   fontWeight: 500,
                   letterSpacing: '-0.01em',
@@ -276,8 +276,8 @@ export function SkillPage({
       </section>
 
       {/* ── O que é ── */}
-      <section className="py-20 sm:py-24" style={{ background: '#050507' }} aria-labelledby="what-is-heading">
-        <div className="mx-auto max-w-6xl px-6 sm:px-10 lg:px-[140px]">
+      <section className="py-14 sm:py-20 lg:py-24" style={{ background: '#050507' }} aria-labelledby="what-is-heading">
+        <div className="mx-auto max-w-6xl px-5 sm:px-10 lg:px-[140px]">
           <div className="max-w-3xl">
             <p className="mb-4" style={EYEBROW}>O que é</p>
             <h2
@@ -289,7 +289,7 @@ export function SkillPage({
             </h2>
             <div className="space-y-5">
               {longDescription.map((paragraph, i) => (
-                <p key={i} className="text-base sm:text-lg leading-relaxed" style={{ color: 'rgba(255,255,255,0.52)' }}>
+                <p key={i} className="text-base sm:text-lg leading-relaxed" style={{ color: 'rgba(255,255,255,0.65)' }}>
                   {paragraph}
                 </p>
               ))}
@@ -300,12 +300,12 @@ export function SkillPage({
 
       {/* ── Features ── */}
       <section
-        className="py-20 sm:py-24"
+        className="py-14 sm:py-20 lg:py-24"
         style={{ background: '#0e0e11', borderTop: '1px solid rgba(255,255,255,0.07)' }}
         aria-labelledby="features-heading"
       >
-        <div className="mx-auto max-w-6xl px-6 sm:px-10 lg:px-[140px]">
-          <div className="mb-14">
+        <div className="mx-auto max-w-6xl px-5 sm:px-10 lg:px-[140px]">
+          <div className="mb-10 sm:mb-14">
             <p className="mb-3" style={EYEBROW}>Como funciona</p>
             <h2
               id="features-heading"
@@ -338,7 +338,7 @@ export function SkillPage({
                   />
                 </div>
                 <h3 className="text-sm font-semibold text-white mb-2 tracking-tight">{feature.title}</h3>
-                <p className="text-sm leading-relaxed" style={{ color: 'rgba(255,255,255,0.45)' }}>{feature.description}</p>
+                <p className="text-sm leading-relaxed" style={{ color: 'rgba(255,255,255,0.6)' }}>{feature.description}</p>
               </div>
             ))}
           </div>
@@ -351,12 +351,12 @@ export function SkillPage({
       {/* ── CTA Final — KV ctaSplit pattern ── */}
       {primaryLink && (
         <section
-          className="py-16 sm:py-20"
+          className="py-12 sm:py-16 lg:py-20"
           style={{ background: '#050507', borderTop: '1px solid rgba(255,255,255,0.07)' }}
         >
-          <div className="mx-auto max-w-6xl px-6 sm:px-10 lg:px-[140px]">
+          <div className="mx-auto max-w-6xl px-5 sm:px-10 lg:px-[140px]">
             <div
-              className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-8 p-8 sm:p-10"
+              className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6 p-6 sm:p-8 lg:p-10"
               style={{ background: '#16161a', border: '1px solid rgba(255,255,255,0.16)' }}
             >
               <div>
@@ -365,19 +365,18 @@ export function SkillPage({
                   Explore o repositório, contribua ou integre na sua operação.
                 </p>
               </div>
-              <div className="flex flex-wrap gap-3 flex-shrink-0">
+              <div className="flex flex-col sm:flex-row flex-wrap gap-3 w-full sm:w-auto sm:flex-shrink-0">
                 {showMentoria && (
                   <Link
                     href="/mentoria"
-                    className="inline-flex items-center gap-2 transition-all hover:brightness-110 active:scale-[0.98]"
+                    className="inline-flex items-center justify-center gap-2 transition-all hover:brightness-110 active:scale-[0.98] min-h-[44px]"
                     style={{
                       background: '#FF3A0E',
                       color: '#050507',
-                      padding: '14px 24px',
+                      padding: '12px 20px',
                       fontSize: 14,
                       fontWeight: 600,
                       letterSpacing: '-0.01em',
-                      whiteSpace: 'nowrap',
                     }}
                   >
                     Conhecer a Mentoria
@@ -388,16 +387,15 @@ export function SkillPage({
                   href={primaryLink}
                   target={isExternal ? '_blank' : undefined}
                   rel={isExternal ? 'noopener noreferrer' : undefined}
-                  className="inline-flex items-center gap-2 transition-all hover:bg-white/5"
+                  className="inline-flex items-center justify-center gap-2 transition-all hover:bg-white/5 min-h-[44px]"
                   style={{
                     border: '1px solid rgba(255,255,255,0.16)',
                     color: showMentoria ? 'rgba(255,255,255,0.55)' : '#050507',
                     background: showMentoria ? 'transparent' : '#FF3A0E',
-                    padding: '14px 20px',
+                    padding: '12px 20px',
                     fontSize: 14,
                     fontWeight: showMentoria ? 500 : 600,
                     letterSpacing: '-0.01em',
-                    whiteSpace: 'nowrap',
                   }}
                 >
                   {primaryLabel}

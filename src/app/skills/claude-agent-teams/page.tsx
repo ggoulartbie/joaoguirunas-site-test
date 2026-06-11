@@ -211,8 +211,8 @@ claude`}</code>
                     { state: 'IN_PROGRESS', color: 'text-[#FF3A0E]', desc: 'Stories ativas detectadas → retoma trabalho automaticamente (*resume)' },
                     { state: 'READY', color: 'text-[#FF3A0E]', desc: 'Smart-memory OK, sem stories → pede objetivo para formar novo time' },
                   ].map(({ state, color, desc }) => (
-                    <div key={state} className="flex items-start gap-3 bg-[#050507]/80 p-3">
-                      <span className={`font-mono text-xs font-bold ${color} flex-shrink-0 mt-0.5 w-24`}>{state}</span>
+                    <div key={state} className="flex flex-col sm:flex-row sm:items-start gap-1 sm:gap-3 bg-[#050507]/80 p-3">
+                      <span className={`font-mono text-xs font-bold ${color} flex-shrink-0 sm:w-28`}>{state}</span>
                       <span className="text-sm text-white/60">{desc}</span>
                     </div>
                   ))}
@@ -300,8 +300,8 @@ claude`}</code>
                     { cmd: '/team-os *unblock <agente>', desc: 'Resolve blocker específico de um agente' },
                     { cmd: '/team-os *close', desc: 'Arquiva smart-memory e encerra o team' },
                   ].map(({ cmd, desc }) => (
-                    <div key={cmd} className="flex items-start gap-3 bg-[#050507]/80 p-3">
-                      <span className="font-mono text-xs text-[#FF3A0E] flex-shrink-0 mt-0.5 min-w-[220px]">{cmd}</span>
+                    <div key={cmd} className="flex flex-col sm:flex-row sm:items-start gap-1 sm:gap-3 bg-[#050507]/80 p-3">
+                      <span className="font-mono text-xs text-[#FF3A0E] flex-shrink-0 sm:min-w-[220px]">{cmd}</span>
                       <span className="text-sm text-white/60">{desc}</span>
                     </div>
                   ))}

@@ -54,28 +54,28 @@ interface SlideProps {
   center?: boolean;
 }
 const Slide: React.FC<SlideProps> = ({ n, total, label = "CLAUDE CODE WORKSHOP", children, center }) => (
-  <div className="relative w-full h-screen overflow-hidden" style={{ backgroundColor: "#08080C" }}>
+  <div className="relative w-full h-[100dvh] overflow-hidden" style={{ backgroundColor: "#08080C" }}>
     <DotGrid />
     {/* radial glow — subtle, top-left only */}
     <div className="absolute inset-0 z-0 pointer-events-none"
       style={{ background: "radial-gradient(ellipse 40% 35% at 15% 15%, rgba(255,68,0,0.04) 0%, transparent 65%)" }} />
     <Corner pos="tl" /><Corner pos="br" />
     {/* hud label */}
-    <div className="absolute top-7 left-20 z-20 font-mono text-[10px] tracking-[0.22em] uppercase" style={{ color: "var(--color-accent)", fontFamily: "'Roboto Mono',monospace" }}>
+    <div className="absolute top-7 left-4 sm:left-20 z-20 font-mono text-[10px] tracking-[0.22em] uppercase hidden sm:block" style={{ color: "var(--color-accent)", fontFamily: "'Roboto Mono',monospace" }}>
       {label}
     </div>
     {/* accent line top */}
-    <div className="absolute top-[54px] left-20 w-28 h-[1.5px] z-20" style={{ background: "var(--color-accent)" }} />
+    <div className="absolute top-[54px] left-4 sm:left-20 w-28 h-[1.5px] z-20 hidden sm:block" style={{ background: "var(--color-accent)" }} />
     {/* content */}
-    <div className={cn("relative z-10 h-full px-20 pt-20 pb-16 flex flex-col", center && "items-center justify-center text-center")}>
+    <div className={cn("relative z-10 h-full px-5 sm:px-8 lg:px-20 pt-10 sm:pt-20 pb-16 flex flex-col overflow-y-auto", center && "items-center justify-center text-center")}>
       {children}
     </div>
     {/* slide number */}
-    <div className="absolute bottom-7 right-20 z-20 font-mono text-[11px] tracking-[0.15em]" style={{ color: "rgba(255,68,0,0.55)", fontFamily: "'Roboto Mono',monospace" }}>
+    <div className="absolute bottom-7 right-5 sm:right-20 z-20 font-mono text-[11px] tracking-[0.15em]" style={{ color: "rgba(255,68,0,0.55)", fontFamily: "'Roboto Mono',monospace" }}>
       {String(n).padStart(2, "0")} / {String(total).padStart(2, "0")}
     </div>
     {/* accent line bottom */}
-    <div className="absolute bottom-[54px] right-20 w-20 h-[1.5px] z-20" style={{ background: "rgba(255,68,0,0.35)" }} />
+    <div className="absolute bottom-[54px] right-4 sm:right-20 w-20 h-[1.5px] z-20 hidden sm:block" style={{ background: "rgba(255,68,0,0.35)" }} />
   </div>
 );
 
@@ -94,7 +94,7 @@ const Label = ({ children, dim }: { children: React.ReactNode; dim?: boolean }) 
   <span className="block mb-2 font-mono text-[10px] tracking-[0.18em] uppercase" style={{ color: dim ? DIM : AC, fontFamily: MONO }}>{children}</span>
 );
 const H2 = ({ children }: { children: React.ReactNode }) => (
-  <h2 className="text-[2.1rem] font-black uppercase leading-none tracking-tight text-white mb-0" style={{ fontFamily: "var(--font-bb-display),'Inter',sans-serif", letterSpacing: "-0.02em" }}>
+  <h2 className="text-[1.5rem] sm:text-[2.1rem] font-black uppercase leading-none tracking-tight text-white mb-0" style={{ fontFamily: "var(--font-bb-display),'Inter',sans-serif", letterSpacing: "-0.02em" }}>
     {children}
   </h2>
 );
@@ -132,9 +132,9 @@ const AioxBadge = ({ n, total }: { n: number; total: number }) => (
   </span>
 );
 const Stat = ({ n, l, accent }: { n: string; l: string; accent?: boolean }) => (
-  <div className={cn("p-4 border text-center", accent ? "border-[rgba(255,68,0,0.35)] bg-[rgba(255,68,0,0.07)]" : "border-[rgba(255,255,255,0.07)] bg-[rgba(255,255,255,0.025)]")}>
-    <div className="font-black leading-none mb-1 text-[2.2rem]" style={{ fontFamily: "var(--font-bb-display),'Inter',sans-serif", color: AC }}>{n}</div>
-    <div className="font-mono text-[10px] tracking-[0.1em] uppercase" style={{ color: DIM, fontFamily: MONO }}>{l}</div>
+  <div className={cn("p-3 sm:p-4 border text-center", accent ? "border-[rgba(255,68,0,0.35)] bg-[rgba(255,68,0,0.07)]" : "border-[rgba(255,255,255,0.07)] bg-[rgba(255,255,255,0.025)]")}>
+    <div className="font-black leading-none mb-1 text-[1.6rem] sm:text-[2.2rem]" style={{ fontFamily: "var(--font-bb-display),'Inter',sans-serif", color: AC }}>{n}</div>
+    <div className="font-mono text-[9px] sm:text-[10px] tracking-[0.1em] uppercase" style={{ color: DIM, fontFamily: MONO }}>{l}</div>
   </div>
 );
 const TItem = ({ time, children }: { time: string; children: React.ReactNode }) => (
@@ -154,7 +154,7 @@ const slides = [
   <Slide key={1} n={1} total={TOTAL} center>
     <div className="flex flex-col items-center gap-4 max-w-3xl">
       <span className="inline-block font-mono text-[10px] tracking-[0.18em] uppercase px-4 py-2" style={{ fontFamily: MONO, border: "1px solid rgba(255,68,0,0.4)", background: "rgba(255,68,0,0.08)", color: AC }}>Workshop · 1 Hora</span>
-      <h1 className="text-[5.5rem] font-black uppercase leading-none text-white text-center" style={{ fontFamily: "var(--font-bb-display),'Inter',sans-serif", letterSpacing: "-0.03em" }}>
+      <h1 className="text-[3rem] sm:text-[5.5rem] font-black uppercase leading-none text-white text-center" style={{ fontFamily: "var(--font-bb-display),'Inter',sans-serif", letterSpacing: "-0.03em" }}>
         Claude<br /><span style={{ color: AC }}>Code</span>
       </h1>
       <p className="text-[1rem] font-light" style={{ color: DIM }}>Do setup ao squad completo — construindo seu time de agentes de IA</p>
@@ -185,7 +185,7 @@ const slides = [
     <Label>Fundamento</Label>
     <H2>Claude Raiz vs Claude do Projeto</H2>
     <HRac />
-    <div className="grid grid-cols-2 gap-4 flex-1 content-start">
+    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 flex-1 content-start">
       <div className="flex flex-col gap-2">
         <Card accent>
           <Label>~/.claude/ — Global</Label>
@@ -213,7 +213,7 @@ const slides = [
     <Label>Estrutura</Label>
     <H2>A Pasta .claude/ e o /init</H2>
     <HRac />
-    <div className="grid grid-cols-2 gap-4 flex-1 content-start">
+    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 flex-1 content-start">
       <div>
         <Label>O que fica aqui</Label>
         <Code className="mb-3"><K>.claude/</K><br/><C>├─ </C>CLAUDE.md<br/><C>├─ </C>settings.json<br/><C>├─ </C>rules/<br/><C>└─ </C>agents/<br/><br/><K>.env</K>  <C>← variáveis de ambiente</C></Code>
@@ -244,7 +244,7 @@ const slides = [
     <div className="flex items-center justify-between mb-2"><Label>AIOX Framework</Label><AioxBadge n={1} total={4} /></div>
     <H2>Estrutura Base do AIOX</H2>
     <HRac />
-    <div className="grid grid-cols-2 gap-6 flex-1 content-start">
+    <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 flex-1 content-start">
       <Code><K>.aiox-core/</K>  <C>← o framework</C><br/><C>├─ </C><K>constitution.md</K>  <C>← lei máxima</C><br/><C>├─ </C>agents/  <C>← personas dos agentes</C><br/><C>├─ </C>tasks/   <C>← workflows executáveis</C><br/><C>├─ </C>templates/  <C>← modelos de docs</C><br/><C>├─ </C>workflows/  <C>← orquestração</C><br/><C>└─ </C>rules/  <C>← padrões e restrições</C><br/><br/><K>docs/stories/</K>  <C>← onde o trabalho vive</C><br/><K>squads/</K>        <C>← seus times de agentes</C><br/><K>.claude/</K>       <C>← config do projeto</C></Code>
       <div className="flex flex-col gap-3">
         <Li><strong className="text-white">.aiox-core/</strong> — nunca modificar. É o núcleo protegido do framework.</Li>
@@ -264,7 +264,7 @@ const slides = [
     <div className="flex items-center justify-between mb-2"><Label>AIOX Framework</Label><AioxBadge n={2} total={4} /></div>
     <H2>Agentes Base</H2>
     <HRac />
-    <div className="grid grid-cols-4 gap-[8px] flex-1 content-start">
+    <div className="grid grid-cols-2 sm:grid-cols-4 gap-[8px] flex-1 content-start overflow-y-auto">
       {[
         { cmd: "@aiox-master", name: "Orion", icon: "👑", title: "Master Orchestrator", desc: "Governa o framework, executa qualquer task diretamente, sem restrições de autoridade. A lei máxima." },
         { cmd: "@dev", name: "Dex", icon: "💻", title: "Full Stack Developer", desc: "Implementa código, commits locais, branches e merge. Nunca faz git push — delega ao devops." },
@@ -297,7 +297,7 @@ const slides = [
     <div className="flex items-center justify-between mb-2"><Label>AIOX Framework</Label><AioxBadge n={3} total={4} /></div>
     <H2>Anatomia de um Agente</H2>
     <HRac />
-    <div className="grid grid-cols-2 gap-4 flex-1 content-start">
+    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 flex-1 content-start">
       <Code><K>agent:</K><br/><C>  name: </C><span style={{ color: "rgba(255,200,100,0.8)" }}>Dex</span><br/><C>  id: </C><span style={{ color: "rgba(255,200,100,0.8)" }}>dev</span><br/><C>  title: </C><span style={{ color: "rgba(255,200,100,0.8)" }}>Lead Developer</span><br/><br/><K>persona:</K><br/><C>  role: </C>Implementação de código<br/><C>  tone: </C>Técnico, direto<br/><br/><K>commands:</K><br/><C>  - *</C>develop<C>  - *</C>review<C>  - *</C>exit<br/><br/><K>memory:</K><br/><C>  file: </C>agents/dev/MEMORY.md</Code>
       <div>
         <Label>Os 5 Elementos</Label>
@@ -325,7 +325,7 @@ const slides = [
     <H2>Squad Creator</H2>
     <HRac />
     <p className="text-[14px] mb-4 max-w-2xl" style={{ color: DIM }}>O agente que <span style={{ color: AC, fontWeight: 700 }}>cria outros agentes</span>. Com ele você sai do genérico e constrói <strong className="text-white">seu time personalizado</strong> para qualquer contexto.</p>
-    <div className="grid grid-cols-2 gap-4 flex-1 content-start">
+    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 flex-1 content-start">
       <Card accent>
         <Label>Como funciona</Label>
         <Li>1. Você descreve o papel que precisa</Li>
@@ -352,7 +352,7 @@ const slides = [
     <Label>Claude Code</Label>
     <H2>Agentes · Skills · Integrações</H2>
     <HRac />
-    <div className="grid grid-cols-3 gap-4 flex-1 content-start">
+    <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 flex-1 content-start overflow-y-auto">
       <Card accent>
         <Label>Agente = Quem faz</Label>
         <Code className="mb-3"><K>@dev</K>, <K>@qa</K>, <K>@pm</K><br/><C># ativado com @nome</C></Code>
@@ -382,7 +382,7 @@ const slides = [
     <Label>Superpoder</Label>
     <H2>Claude + Obsidian</H2>
     <HRac />
-    <div className="grid grid-cols-2 gap-4 flex-1 content-start">
+    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 flex-1 content-start">
       <div>
         <Label dim>Sem Obsidian</Label>
         <Li dim>Cada conversa começa do zero</Li>
@@ -415,13 +415,13 @@ const slides = [
     <Label>Prova de Conceito</Label>
     <H2>O que fiz em <span style={{ color: AC }}>6 semanas</span></H2>
     <HRac />
-    <div className="grid grid-cols-4 gap-3 mb-5">
+    <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-5">
       <Stat n="4" l="Produtos lançados" accent />
       <Stat n="3" l="Squads criadas" />
       <Stat n="20+" l="Agentes ativos" />
       <Stat n="24/7" l="Time operando" />
     </div>
-    <div className="grid grid-cols-2 gap-4 flex-1 content-start">
+    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 flex-1 content-start">
       <div className="flex flex-col gap-2">
         <Card accent>
           <Label>Revos</Label>
@@ -449,28 +449,28 @@ const slides = [
   <Slide key={12} n={12} total={TOTAL} center>
     <div className="flex flex-col items-center gap-3 max-w-2xl w-full">
       <span className="inline-block font-mono text-[10px] tracking-[0.16em] uppercase px-4 py-2 font-bold" style={{ fontFamily: MONO, border: "1px solid rgba(255,68,0,0.65)", background: "rgba(255,68,0,0.15)", color: "#fff" }}>⚠ Apenas 3 Vagas Restantes</span>
-      <h2 className="text-[2.8rem] font-black uppercase leading-none text-white text-center" style={{ fontFamily: "var(--font-bb-display),'Inter',sans-serif", letterSpacing: "-0.025em" }}>
+      <h2 className="text-[2rem] sm:text-[2.8rem] font-black uppercase leading-none text-white text-center" style={{ fontFamily: "var(--font-bb-display),'Inter',sans-serif", letterSpacing: "-0.025em" }}>
         Mentoria Claude Code<br /><span style={{ color: AC }}>+ AIOX</span>
       </h2>
       <p className="text-[14px] text-center max-w-lg" style={{ color: DIM }}>
         Tudo que você viu hoje — do zero ao squad completo rodando no seu negócio — em <strong className="text-white">4 semanas</strong>, com acompanhamento ao vivo.
       </p>
-      <div className="grid grid-cols-3 gap-3 w-full mt-1">
+      <div className="grid grid-cols-3 gap-2 sm:gap-3 w-full mt-1">
         <Stat n="12/05" l="Início · Terça" accent />
         <Stat n="4" l="Semanas" />
-        <div className="p-4 border border-[rgba(255,68,0,0.4)] bg-[rgba(255,68,0,0.08)] text-center">
-          <div className="font-black leading-none mb-1 text-[2.2rem]" style={{ fontFamily: "var(--font-bb-display),'Inter',sans-serif", color: AC }}>3</div>
-          <div className="font-mono text-[10px] tracking-[0.1em] uppercase" style={{ color: AC, fontFamily: MONO }}>Vagas restantes</div>
+        <div className="p-3 sm:p-4 border border-[rgba(255,68,0,0.4)] bg-[rgba(255,68,0,0.08)] text-center">
+          <div className="font-black leading-none mb-1 text-[1.8rem] sm:text-[2.2rem]" style={{ fontFamily: "var(--font-bb-display),'Inter',sans-serif", color: AC }}>3</div>
+          <div className="font-mono text-[9px] sm:text-[10px] tracking-[0.1em] uppercase" style={{ color: AC, fontFamily: MONO }}>Vagas restantes</div>
         </div>
       </div>
       <p className="font-mono text-[10px] tracking-[0.1em] uppercase" style={{ fontFamily: MONO, color: "rgba(255,255,255,0.25)" }}>Turma super seleta · máximo 15 projetos · suporte individual</p>
-      <div className="flex items-center gap-4 mt-1">
-        <div style={{ padding: "6px", background: "#fff" }}>
+      <div className="flex flex-col sm:flex-row items-center gap-3 sm:gap-4 mt-1">
+        <div className="hidden sm:block" style={{ padding: "6px", background: "#fff" }}>
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src="https://api.qrserver.com/v1/create-qr-code/?size=80x80&data=https://opensource.growthsales.ai/mentoria&color=08080C&bgcolor=ffffff" alt="QR" width={80} height={80} style={{ display: "block" }} />
         </div>
-        <div className="text-left">
-          <p className="font-mono text-[13px] font-bold" style={{ color: AC, fontFamily: MONO }}>opensource.growthsales.ai/mentoria</p>
+        <div className="text-center sm:text-left">
+          <p className="font-mono text-[12px] sm:text-[13px] font-bold break-all" style={{ color: AC, fontFamily: MONO }}>opensource.growthsales.ai/mentoria</p>
           <p className="font-mono text-[10px] tracking-[0.08em] uppercase mt-1" style={{ color: "rgba(255,255,255,0.28)", fontFamily: MONO }}>Aponte a câmera · Garanta sua vaga</p>
         </div>
       </div>
@@ -502,7 +502,7 @@ export function WorkshopClient() {
       {/* nav arrows */}
       {cur > 0 && (
         <button onClick={prev} aria-label="Anterior"
-          className="fixed left-5 top-1/2 -translate-y-1/2 z-50 w-10 h-10 flex items-center justify-center border transition-colors"
+          className="fixed left-3 sm:left-5 top-1/2 -translate-y-1/2 z-50 w-11 h-11 sm:w-10 sm:h-10 flex items-center justify-center border transition-colors"
           style={{ borderColor: "rgba(255,68,0,0.4)", color: AC, background: "rgba(8,8,12,0.8)" }}
           onMouseEnter={e => { (e.currentTarget as HTMLButtonElement).style.background = AC; (e.currentTarget as HTMLButtonElement).style.color = "#000"; }}
           onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.background = "rgba(8,8,12,0.8)"; (e.currentTarget as HTMLButtonElement).style.color = AC; }}>
@@ -511,7 +511,7 @@ export function WorkshopClient() {
       )}
       {cur < TOTAL - 1 && (
         <button onClick={next} aria-label="Próximo"
-          className="fixed right-5 top-1/2 -translate-y-1/2 z-50 w-10 h-10 flex items-center justify-center border transition-colors"
+          className="fixed right-3 sm:right-5 top-1/2 -translate-y-1/2 z-50 w-11 h-11 sm:w-10 sm:h-10 flex items-center justify-center border transition-colors"
           style={{ borderColor: "rgba(255,68,0,0.4)", color: AC, background: "rgba(8,8,12,0.8)" }}
           onMouseEnter={e => { (e.currentTarget as HTMLButtonElement).style.background = AC; (e.currentTarget as HTMLButtonElement).style.color = "#000"; }}
           onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.background = "rgba(8,8,12,0.8)"; (e.currentTarget as HTMLButtonElement).style.color = AC; }}>

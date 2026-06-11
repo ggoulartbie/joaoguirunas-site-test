@@ -25,7 +25,7 @@ const comAiox = [
 ]
 
 const incluso = [
-  '8 encontros (1 presencial + 6 online + 1 final)',
+  '7 encontros (1 presencial + 5 online + 1 final)',
   'Desbloqueio mental com Claudia',
   'Framework AIOX completo',
   'Squad personalizada para seu negocio',
@@ -182,6 +182,22 @@ export function MentorshipPricing() {
                     Investimento Unico
                   </span>
                 </div>
+              </div>
+
+              {/* Destaque turma */}
+              <div className="mb-5 border border-[var(--color-accent)]/30 bg-[var(--color-accent)]/[0.06] px-4 py-2.5 text-center">
+                <p
+                  className="text-[0.6rem] text-[var(--color-accent)]/60 uppercase tracking-widest mb-0.5"
+                  style={{ fontFamily: "'Geist Mono', monospace" }}
+                >
+                  Próxima turma
+                </p>
+                <p
+                  className="text-sm font-bold text-white tracking-wide"
+                  style={{ fontFamily: "'Geist Mono', monospace" }}
+                >
+                  Início 05/08/2026 · 12 vagas
+                </p>
               </div>
 
               {/* Price */}

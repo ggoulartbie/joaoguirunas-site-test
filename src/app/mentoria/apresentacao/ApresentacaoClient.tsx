@@ -70,7 +70,12 @@ export function ApresentacaoClient() {
             }
             .reveal .slides section {
               text-align: left;
-              padding: 40px 60px;
+              padding: 24px 28px;
+            }
+            @media (min-width: 640px) {
+              .reveal .slides section {
+                padding: 40px 60px;
+              }
             }
             .reveal .slides section h1,
             .reveal .slides section h2 {
@@ -80,18 +85,35 @@ export function ApresentacaoClient() {
               color: #fff;
             }
             .reveal .slides section h1 {
-              font-size: 2.4em;
+              font-size: 1.6em;
               line-height: 1.15;
             }
+            @media (min-width: 640px) {
+              .reveal .slides section h1 {
+                font-size: 2.4em;
+              }
+            }
             .reveal .slides section h2 {
-              font-size: 1.8em;
-              margin-bottom: 0.6em;
+              font-size: 1.2em;
+              margin-bottom: 0.5em;
+            }
+            @media (min-width: 640px) {
+              .reveal .slides section h2 {
+                font-size: 1.8em;
+                margin-bottom: 0.6em;
+              }
             }
             .reveal .slides section p,
             .reveal .slides section li {
-              font-size: 0.7em;
+              font-size: 0.6em;
               line-height: 1.6;
               color: #d4d4d8;
+            }
+            @media (min-width: 640px) {
+              .reveal .slides section p,
+              .reveal .slides section li {
+                font-size: 0.7em;
+              }
             }
             .badge {
               display: inline-block;
@@ -108,15 +130,29 @@ export function ApresentacaoClient() {
             }
             .stat-grid {
               display: flex;
-              gap: 16px;
-              margin-top: 32px;
+              flex-wrap: wrap;
+              gap: 12px;
+              margin-top: 24px;
+            }
+            @media (min-width: 640px) {
+              .stat-grid {
+                flex-wrap: nowrap;
+                gap: 16px;
+                margin-top: 32px;
+              }
             }
             .stat-box {
               border: 1px solid rgba(255, 255, 255, 0.12);
               border-radius: 8px;
-              padding: 16px 24px;
+              padding: 12px 16px;
               text-align: center;
               flex: 1;
+              min-width: 80px;
+            }
+            @media (min-width: 640px) {
+              .stat-box {
+                padding: 16px 24px;
+              }
             }
             .stat-box .number {
               font-size: 1.4em;
@@ -136,9 +172,15 @@ export function ApresentacaoClient() {
             }
             .topic-grid {
               display: grid;
-              grid-template-columns: 1fr 1fr;
-              gap: 12px 32px;
+              grid-template-columns: 1fr;
+              gap: 8px 32px;
               margin: 16px 0;
+            }
+            @media (min-width: 640px) {
+              .topic-grid {
+                grid-template-columns: 1fr 1fr;
+                gap: 12px 32px;
+              }
             }
             .topic-item {
               font-size: 0.65em !important;
@@ -190,9 +232,15 @@ export function ApresentacaoClient() {
             }
             .persona-grid {
               display: grid;
-              grid-template-columns: 1fr 1fr 1fr;
-              gap: 8px 24px;
+              grid-template-columns: 1fr 1fr;
+              gap: 8px 16px;
               margin: 16px 0;
+            }
+            @media (min-width: 640px) {
+              .persona-grid {
+                grid-template-columns: 1fr 1fr 1fr;
+                gap: 8px 24px;
+              }
             }
             .persona-item {
               font-size: 0.6em;
@@ -234,9 +282,15 @@ export function ApresentacaoClient() {
             }
             .two-col {
               display: grid;
-              grid-template-columns: 1fr 1fr;
-              gap: 24px;
+              grid-template-columns: 1fr;
+              gap: 16px;
               margin: 16px 0;
+            }
+            @media (min-width: 640px) {
+              .two-col {
+                grid-template-columns: 1fr 1fr;
+                gap: 24px;
+              }
             }
             .col-title {
               font-size: 0.6em;
@@ -267,11 +321,11 @@ export function ApresentacaoClient() {
               </p>
               <div className="stat-grid" style={{ justifyContent: 'center', maxWidth: '600px', margin: '32px auto 0' }}>
                 <div className="stat-box">
-                  <span className="number">8</span>
+                  <span className="number">7</span>
                   <span className="label">Encontros</span>
                 </div>
                 <div className="stat-box">
-                  <span className="number">~19h</span>
+                  <span className="number">~12h</span>
                   <span className="label">Totais</span>
                 </div>
                 <div className="stat-box">
@@ -322,149 +376,102 @@ export function ApresentacaoClient() {
             </div>
           </section>
 
-          {/* Slide 4: Online 1 - Claude Code */}
+          {/* Slide 4: Online 2 - Tira-duvidas CTA */}
           <section data-background-gradient="linear-gradient(135deg, #08080C 0%, #0D0D14 50%, #1a0a00 100%)">
-            <span className="badge">Online &middot; 2h</span>
-            <h2>Online 1: Dominando o Claude Code</h2>
-            <div className="topic-grid">
-              <div className="topic-item"><span className="check">&#10003;</span> Navegacao e interface</div>
-              <div className="topic-item"><span className="check">&#10003;</span> Edicao de arquivos</div>
-              <div className="topic-item"><span className="check">&#10003;</span> Comandos bash</div>
-              <div className="topic-item"><span className="check">&#10003;</span> Integracao com git</div>
-              <div className="topic-item"><span className="check">&#10003;</span> Gerenciamento de contexto</div>
-              <div className="topic-item"><span className="check">&#10003;</span> Modelo de seguranca</div>
-              <div className="topic-item"><span className="check">&#10003;</span> Estrutura de prompts</div>
-            </div>
-            <div className="deliverable">
-              <div className="label">Entregavel</div>
-              <div className="value">Dominio completo do Claude Code</div>
-            </div>
-          </section>
-
-          {/* Slide 5: Online 2 - Skills */}
-          <section data-background-gradient="linear-gradient(135deg, #08080C 0%, #0D0D14 50%, #1a0a00 100%)">
-            <span className="badge">Online &middot; 2h</span>
-            <h2>Online 2: Skills</h2>
-            <div className="agent-list" style={{ marginBottom: '20px' }}>
-              <span className="agent-tag">/pdf</span>
-              <span className="agent-tag">/pptx</span>
-              <span className="agent-tag">/docx</span>
-              <span className="agent-tag">/graphic-designer</span>
-              <span className="agent-tag">/copywriting</span>
-              <span className="agent-tag">/social-media-content</span>
-            </div>
-            <p style={{ fontSize: '0.65em', color: '#a1a1aa' }}>
-              1h de conteudo + 1h de bate-papo e auxilio
+            <span className="badge">Online &middot; 12/08/2026 &middot; 1h30</span>
+            <h2>Online 2: Tira-duvidas Centro de Treinamento de Agentes</h2>
+            <p style={{ fontSize: '0.65em', color: '#a1a1aa', marginBottom: '20px' }}>
+              Voce traz o que travou na semana e resolvemos juntos. A duvida de um beneficia toda a turma.
             </p>
-            <div className="deliverable">
-              <div className="label">Entregavel</div>
-              <div className="value">Skills instaladas e funcionando</div>
-            </div>
-          </section>
-
-          {/* Slide 6: Online 3 - MCP Servers */}
-          <section data-background-gradient="linear-gradient(135deg, #08080C 0%, #0D0D14 50%, #1a0a00 100%)">
-            <span className="badge">Online &middot; 2h</span>
-            <h2>Online 3: MCP Servers</h2>
-            <div style={{ margin: '20px 0' }}>
-              <p><span className="check">&#10003;</span> <strong>Playwright</strong> &mdash; Automacao de browser</p>
-              <p><span className="check">&#10003;</span> <strong>Context7</strong> &mdash; Documentacao de bibliotecas</p>
-              <p><span className="check">&#10003;</span> <strong>Apify</strong> &mdash; Web scraping</p>
-            </div>
-            <div className="deliverable">
-              <div className="label">Entregavel</div>
-              <div className="value">MCPs instalados e integrados</div>
-            </div>
-          </section>
-
-          {/* Slide 7: Online 4 - Framework AIOX */}
-          <section data-background-gradient="linear-gradient(135deg, #08080C 0%, #0D0D14 50%, #1a0a00 100%)">
-            <span className="badge">Online &middot; 2h</span>
-            <h2>Online 4: Framework AIOX</h2>
-            <div className="topic-grid" style={{ marginBottom: '16px' }}>
-              <div className="topic-item"><span className="check">&#10003;</span> Estrutura do framework</div>
-              <div className="topic-item"><span className="check">&#10003;</span> Constitution</div>
-              <div className="topic-item"><span className="check">&#10003;</span> Sistema de camadas</div>
-            </div>
-            <div style={{ marginBottom: '12px' }}>
-              <div className="col-title">Agentes</div>
-              <div className="agent-list">
-                <span className="agent-tag">@dev</span>
-                <span className="agent-tag">@qa</span>
-                <span className="agent-tag">@pm</span>
-                <span className="agent-tag">@po</span>
-                <span className="agent-tag">@sm</span>
-                <span className="agent-tag">@architect</span>
-                <span className="agent-tag">@devops</span>
-              </div>
-            </div>
-            <div style={{ marginBottom: '12px' }}>
-              <div className="col-title">Workflows</div>
-              <div className="agent-list">
-                <span className="agent-tag">SDC</span>
-                <span className="agent-tag">QA Loop</span>
-                <span className="agent-tag">Spec Pipeline</span>
-              </div>
-            </div>
-            <div className="deliverable">
-              <div className="label">Entregavel</div>
-              <div className="value">Compreensao completa do framework AIOX</div>
-            </div>
-          </section>
-
-          {/* Slide 8: Online 5 - Squads Personalizadas */}
-          <section data-background-gradient="linear-gradient(135deg, #08080C 0%, #0D0D14 50%, #1a0a00 100%)">
-            <span className="badge">Online &middot; 2h</span>
-            <h2>Online 5: Squads Personalizadas</h2>
             <div>
-              <div className="part-item">
-                <span className="duration">1</span>
-                <span className="desc"><strong>Anatomia de um Agente</strong> &mdash; Persona, comandos, dependencias e memoria</span>
-              </div>
-              <div className="part-item">
-                <span className="duration">2</span>
-                <span className="desc"><strong>Criacao de Agentes</strong> &mdash; Definir agentes para seu contexto profissional</span>
-              </div>
-              <div className="part-item">
-                <span className="duration">3</span>
-                <span className="desc"><strong>Workshop Pratico</strong> &mdash; Construir e testar sua primeira squad</span>
-              </div>
+              <p><span className="check">&#10003;</span> Duvidas sobre Claude Code e primeiros agentes</p>
+              <p><span className="check">&#10003;</span> Troubleshooting ao vivo em grupo</p>
+              <p><span className="check">&#10003;</span> Proximos passos individuais</p>
             </div>
             <div className="deliverable">
               <div className="label">Entregavel</div>
-              <div className="value">Primeira versao da squad personalizada</div>
+              <div className="value">Desbloqueio das duvidas da semana 1</div>
             </div>
           </section>
 
-          {/* Slide 9: Online 6 - Integracoes */}
+          {/* Slide 5: Online 3 - Claude Design */}
           <section data-background-gradient="linear-gradient(135deg, #08080C 0%, #0D0D14 50%, #1a0a00 100%)">
-            <span className="badge">Online &middot; 2h</span>
-            <h2>Online 6: Integracoes &amp; Automacoes</h2>
-            <div className="two-col">
-              <div>
-                <div className="col-title">Integracoes</div>
-                <p className="topic-item"><span className="check">&#10003;</span> APIs externas</p>
-                <p className="topic-item"><span className="check">&#10003;</span> Webhooks</p>
-                <p className="topic-item"><span className="check">&#10003;</span> Bancos de dados</p>
-                <p className="topic-item"><span className="check">&#10003;</span> Servicos cloud</p>
-              </div>
-              <div>
-                <div className="col-title">Automacoes</div>
-                <p className="topic-item"><span className="check">&#10003;</span> Workflows multi-agente</p>
-                <p className="topic-item"><span className="check">&#10003;</span> Scheduling</p>
-                <p className="topic-item"><span className="check">&#10003;</span> Casos avancados</p>
-              </div>
+            <span className="badge">Online &middot; 19/08/2026 &middot; 1h30</span>
+            <h2>Online 3: Claude Design</h2>
+            <div className="topic-grid">
+              <div className="topic-item"><span className="check">&#10003;</span> Design System com agentes</div>
+              <div className="topic-item"><span className="check">&#10003;</span> Paleta e tipografia</div>
+              <div className="topic-item"><span className="check">&#10003;</span> Componentes e tokens</div>
+              <div className="topic-item"><span className="check">&#10003;</span> Consistencia visual</div>
             </div>
             <div className="deliverable">
               <div className="label">Entregavel</div>
-              <div className="value">Integracoes funcionando e projeto final</div>
+              <div className="value">Design system configurado com agente Claude Design</div>
             </div>
           </section>
 
-          {/* Slide 10: Encontro Final */}
+          {/* Slide 6: Online 4 - Squad de Sites */}
           <section data-background-gradient="linear-gradient(135deg, #08080C 0%, #0D0D14 50%, #1a0a00 100%)">
-            <span className="badge">Presencial ou Online &middot; 2-3h</span>
-            <h2>Encontro Final</h2>
+            <span className="badge">Online &middot; 26/08/2026 &middot; 1h30</span>
+            <h2>Online 4: Squad de Sites</h2>
+            <div className="agent-list" style={{ marginBottom: '16px' }}>
+              <span className="agent-tag">Frontend Agent</span>
+              <span className="agent-tag">QA Agent</span>
+              <span className="agent-tag">DevOps Agent</span>
+            </div>
+            <div>
+              <p><span className="check">&#10003;</span> <strong>Github</strong> &mdash; Commits e versionamento automaticos</p>
+              <p><span className="check">&#10003;</span> <strong>Vercel</strong> &mdash; Deploy continuo sem linha de codigo manual</p>
+            </div>
+            <div className="deliverable">
+              <div className="label">Entregavel</div>
+              <div className="value">Site publicado do zero com squad de agentes</div>
+            </div>
+          </section>
+
+          {/* Slide 7: Online 5 - Squad de Social Media */}
+          <section data-background-gradient="linear-gradient(135deg, #08080C 0%, #0D0D14 50%, #1a0a00 100%)">
+            <span className="badge">Online &middot; 02/09/2026 &middot; 1h30</span>
+            <h2>Online 5: Squad de Social Media</h2>
+            <div className="agent-list" style={{ marginBottom: '16px' }}>
+              <span className="agent-tag">Freepik</span>
+              <span className="agent-tag">Eleven Labs</span>
+              <span className="agent-tag">Heygen</span>
+              <span className="agent-tag">Meta API</span>
+            </div>
+            <div>
+              <p><span className="check">&#10003;</span> Imagens, narracao em voz e videos com avatar</p>
+              <p><span className="check">&#10003;</span> Publicacao automatica via Meta API</p>
+            </div>
+            <div className="deliverable">
+              <div className="label">Entregavel</div>
+              <div className="value">Squad de conteudo configurado e publicando</div>
+            </div>
+          </section>
+
+          {/* Slide 8: Online 6 - Squad de Dev */}
+          <section data-background-gradient="linear-gradient(135deg, #08080C 0%, #0D0D14 50%, #1a0a00 100%)">
+            <span className="badge">Online &middot; 09/09/2026 &middot; 1h30</span>
+            <h2>Online 6: Squad de Dev</h2>
+            <div className="agent-list" style={{ marginBottom: '16px' }}>
+              <span className="agent-tag">Supabase</span>
+              <span className="agent-tag">Banco de Dados</span>
+              <span className="agent-tag">APIs</span>
+            </div>
+            <div>
+              <p><span className="check">&#10003;</span> Agentes criando tabelas, queries e autenticacao</p>
+              <p><span className="check">&#10003;</span> Logica de negocio sem contratar um dev</p>
+            </div>
+            <div className="deliverable">
+              <div className="label">Entregavel</div>
+              <div className="value">Projeto com banco de dados real funcionando</div>
+            </div>
+          </section>
+
+          {/* Slide 9: Encontro Final */}
+          <section data-background-gradient="linear-gradient(135deg, #08080C 0%, #0D0D14 50%, #1a0a00 100%)">
+            <span className="badge">Presencial &middot; 16/09/2026 &middot; Florianopolis</span>
+            <h2>Encontro 7: Encerramento Presencial</h2>
             <div style={{ margin: '20px 0' }}>
               <p><span className="check">&#10003;</span> <strong>Apresentacoes</strong> &mdash; Cada aluno apresenta sua squad e projeto</p>
               <p><span className="check">&#10003;</span> <strong>Feedback</strong> &mdash; Revisao e orientacoes finais</p>
@@ -476,7 +483,7 @@ export function ApresentacaoClient() {
             </div>
           </section>
 
-          {/* Slide 11: Para Quem E? */}
+          {/* Slide 10: Para Quem E? */}
           <section data-background-gradient="linear-gradient(135deg, #08080C 0%, #0D0D14 50%, #1a0a00 100%)">
             <h2>Para Quem E?</h2>
             <div className="alert-box">

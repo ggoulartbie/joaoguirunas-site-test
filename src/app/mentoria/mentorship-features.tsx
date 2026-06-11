@@ -159,7 +159,7 @@ export function MentorshipFeatures() {
           style={{ scrollbarWidth: 'none' }}
         >
           {features.map((feature, index) => (
-            <div key={feature.title} className="w-[280px] flex-shrink-0 snap-center md:w-auto md:flex-shrink-0 md:h-full">
+            <div key={feature.title} className="w-[calc(100vw-64px)] flex-shrink-0 snap-center md:w-auto md:flex-shrink-0 md:h-full">
               <FeatureCard
                 icon={feature.icon}
                 title={feature.title}

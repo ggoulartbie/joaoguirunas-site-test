@@ -104,18 +104,18 @@ export default function AioxMonitorPage() {
             <div className="space-y-6">
               <div>
                 <p className="text-white/60 mb-3 text-sm">Clone o repositório:</p>
-                <div className="bg-[#16161a] border border-white/10 p-4 font-mono text-sm text-[#FF3A0E]">
-                  git clone https://github.com/SynkraAI/aiox-dashboard
-                  <br />
-                  cd aiox-dashboard
+                <div className="overflow-x-auto rounded-none">
+                  <div className="bg-[#16161a] border border-white/10 p-4 font-mono text-sm text-[#FF3A0E] whitespace-pre min-w-0">
+                    {'git clone https://github.com/SynkraAI/aiox-dashboard\ncd aiox-dashboard'}
+                  </div>
                 </div>
               </div>
               <div>
                 <p className="text-white/60 mb-3 text-sm">Instale as dependências e inicie:</p>
-                <div className="bg-[#16161a] border border-white/10 p-4 font-mono text-sm text-[#FF3A0E]">
-                  npm install
-                  <br />
-                  npm run dev
+                <div className="overflow-x-auto rounded-none">
+                  <div className="bg-[#16161a] border border-white/10 p-4 font-mono text-sm text-[#FF3A0E] whitespace-pre min-w-0">
+                    {'npm install\nnpm run dev'}
+                  </div>
                 </div>
               </div>
               <p className="text-white/50 text-sm">

@@ -140,8 +140,8 @@ export default function MentoriaPage() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-12 sm:gap-16 lg:gap-20 max-w-5xl mx-auto">
             {[
-              { name: 'João Guirunas', role: 'Fundador GrowthSales.ai', bio: 'Especialista em IA aplicada a vendas e marketing. Pioneiro em orquestração de agentes autônomos. Criador do framework AIOX.', img: '/images/joao-guirunas-profile.jpg', linkedin: 'https://www.linkedin.com/in/joaoguirunas' },
-              { name: 'Claudia Guirunas', role: 'Co-Fundadora GrowthSales.ai', bio: 'Especialista em transformação digital e implementação de IA em processos de vendas. Focada em resultados mensuráveis e ROI.', img: '/images/claudia-guirunas.png', linkedin: 'https://www.linkedin.com/in/claudiaguirunas' },
+              { name: 'Claudia Guirunas', role: 'CEO & Co-Fundadora · GrowthSales.ai', bio: 'Especialista em transformação digital e implementação de IA em processos de vendas. Focada em resultados mensuráveis e ROI.', img: '/images/claudia-guirunas.png', linkedin: 'https://www.linkedin.com/in/claudiaguirunas' },
+              { name: 'João Guirunas', role: 'CSO & Co-Fundador · GrowthSales.ai', bio: 'Especialista em IA aplicada a vendas e marketing. Pioneiro em orquestração de agentes autônomos. Criador do framework AIOX.', img: '/images/joao-guirunas-profile.jpg', linkedin: 'https://www.linkedin.com/in/joaoguirunas' },
             ].map((f) => (
               <div key={f.name} className="flex flex-col items-center text-center group">
                 <div className="relative mb-8">
@@ -191,24 +191,16 @@ export default function MentoriaPage() {
           <div className="absolute inset-0 bg-[#050507]/65" />
         </div>
         <div className="relative z-10 mx-auto max-w-3xl px-5 sm:px-6 lg:px-8">
-          {/* Aviso de turma esgotada */}
           <div className="text-center mb-10">
-            <span
-              className="inline-flex items-center gap-2 border border-white/20 px-4 py-2 mb-6"
-              style={{ background: 'rgba(255,255,255,0.06)', fontFamily: 'var(--font-mono)', fontSize: '0.7rem', letterSpacing: '0.12em' }}
-            >
-              <span className="w-2 h-2 rounded-full bg-[#FF3A0E]" style={{ boxShadow: '0 0 6px #FF3A0E' }} />
-              <span className="text-[#FF3A0E] uppercase">Turma de julho · Data a definir · 12 vagas</span>
-            </span>
             <h2
-              className="text-3xl sm:text-4xl text-white mb-3"
+              className="text-3xl sm:text-4xl text-white mb-4"
               style={{ fontFamily: 'var(--font-display-serif)', fontWeight: 400, letterSpacing: '-0.03em', lineHeight: 0.95 }}
             >
               Garanta sua vaga na{' '}
-              <span className="text-[#FF3A0E] italic" style={{ fontWeight: 300 }}>turma de julho</span>
+              <span className="text-[#FF3A0E] italic" style={{ fontWeight: 300 }}>turma de agosto</span>
             </h2>
-            <p className="text-white/55 text-sm sm:text-base max-w-lg mx-auto leading-relaxed">
-              Turma de julho 2026 — data a definir. 12 alunos com vagas limitadas.
+            <p className="text-white/55 text-xs sm:text-sm uppercase tracking-widest" style={{ fontFamily: 'var(--font-mono)' }}>
+              Início 05/08/2026 · 7 encontros · 12 vagas
             </p>
           </div>
           <RevosForm />
@@ -231,7 +223,7 @@ export default function MentoriaPage() {
       <section className="py-12 sm:py-16 bg-[#050507]">
         <div className="mx-auto max-w-4xl px-5 sm:px-6 lg:px-8 text-center">
           <h3 className="text-3xl sm:text-4xl text-white mb-4" style={{ ...KV_DISPLAY, lineHeight: 0.95 }}>Pronto para ter sua própria <span className="text-[#FF3A0E] italic" style={{ fontWeight: 300 }}>equipe de agentes IA</span>?</h3>
-          <p className="text-white/60 mb-8 max-w-2xl mx-auto text-sm sm:text-base">Turma de julho 2026 — data a definir. 12 alunos com vagas limitadas.</p>
+          <p className="text-white/60 mb-8 max-w-2xl mx-auto text-sm sm:text-base">Início 05/08/2026 · 12 vagas.</p>
           <CtaButton label="Entrar na lista de espera" className="text-base sm:text-lg" />
           <p className="mt-6 text-xs sm:text-sm text-white/60"><Icon name="zap" size="16" className="inline" /> Resposta em até 24h | <Icon name="lock" size="16" className="inline" /> Dados 100% seguros</p>
         </div>

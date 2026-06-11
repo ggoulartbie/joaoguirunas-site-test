@@ -26,7 +26,7 @@ export function ExternalLink({ href, label, display, note }: ExternalLinkProps) 
       </div>
       <div className="flex items-center gap-2 flex-shrink-0">
         {display && (
-          <code className="text-xs text-white/30 group-hover:text-white/50 transition-colors" style={{ fontFamily: MONO }}>
+          <code className="hidden sm:inline text-xs text-white/30 group-hover:text-white/50 transition-colors" style={{ fontFamily: MONO }}>
             {display}
           </code>
         )}
@@ -64,7 +64,7 @@ export function InternalLink({ href, label, display, note }: InternalLinkProps) 
       </div>
       <div className="flex items-center gap-2 flex-shrink-0">
         {display && (
-          <code className="text-xs text-white/30 group-hover:text-white/50 transition-colors" style={{ fontFamily: MONO }}>
+          <code className="hidden sm:inline text-xs text-white/30 group-hover:text-white/50 transition-colors" style={{ fontFamily: MONO }}>
             {display}
           </code>
         )}

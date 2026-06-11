@@ -101,14 +101,14 @@ export default async function AgentDetailPage({ params }: AgentPageParams) {
 
         <div className="relative mx-auto max-w-7xl px-5 sm:px-6 lg:px-12">
           {/* Breadcrumb */}
-          <nav className="mb-10 flex items-center gap-2" style={MONO} aria-label="Breadcrumb">
+          <nav className="mb-10 flex items-center flex-wrap gap-2" style={MONO} aria-label="Breadcrumb">
             <Link href="/agentes" className="text-white/40 hover:text-white uppercase transition-colors">Agentes</Link>
             <span className="text-white/20">/</span>
             <Link href={`/agentes#squad-${sq.id}`} className="uppercase hover:opacity-80 transition-opacity" style={{ color: sq.accent }}>
               {sq.label}
             </Link>
             <span className="text-white/20">/</span>
-            <span className="text-white/60 uppercase">{a.id}</span>
+            <span className="text-white/60 uppercase truncate max-w-[120px] sm:max-w-none">{a.id}</span>
           </nav>
 
           <div className="grid grid-cols-1 lg:grid-cols-[300px_1fr] gap-10 lg:gap-16 items-start">
@@ -175,7 +175,7 @@ export default async function AgentDetailPage({ params }: AgentPageParams) {
                 {sq.label} Squad · {a.id}
               </p>
 
-              <h1 className="text-5xl sm:text-6xl lg:text-7xl text-white mb-3" style={{ ...KV_DISPLAY, lineHeight: 0.92 }}>
+              <h1 className="text-4xl sm:text-6xl lg:text-7xl text-white mb-3" style={{ ...KV_DISPLAY, lineHeight: 0.92 }}>
                 {a.codename || a.name}
               </h1>
 
@@ -277,12 +277,14 @@ export default async function AgentDetailPage({ params }: AgentPageParams) {
             <div className="flex flex-col gap-3">
               {a.skills.map((skill) => (
                 <div key={skill.command} className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4 p-4 border border-white/[0.08] bg-white/[0.02]">
-                  <code
-                    className="shrink-0 px-3 py-1.5 text-sm border"
-                    style={{ fontFamily: 'var(--font-mono)', color: sq.accent, background: `${sq.accent}10`, borderColor: `${sq.accent}33` }}
-                  >
-                    {skill.command}
-                  </code>
+                  <div className="overflow-x-auto shrink-0 max-w-full sm:max-w-none">
+                    <code
+                      className="inline-block px-3 py-1.5 text-sm border whitespace-nowrap"
+                      style={{ fontFamily: 'var(--font-mono)', color: sq.accent, background: `${sq.accent}10`, borderColor: `${sq.accent}33` }}
+                    >
+                      {skill.command}
+                    </code>
+                  </div>
                   <span className="text-white/60 text-sm leading-snug">{skill.description}</span>
                 </div>
               ))}

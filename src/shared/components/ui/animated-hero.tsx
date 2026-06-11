@@ -24,7 +24,7 @@ export function AnimatedHero() {
   }, [titleNumber, titles]);
 
   return (
-    <div className="w-full bg-black flex flex-col items-center justify-start sm:justify-center min-h-screen overflow-hidden relative">
+    <div className="w-full bg-black flex flex-col items-center justify-start sm:justify-center min-h-screen overflow-x-hidden relative">
 
       {/* Eyebrow — foto + nome (mobile: topo; desktop: acima do H1) */}
       <motion.div
@@ -77,7 +77,7 @@ export function AnimatedHero() {
           initial={{ opacity: 0, y: 20, filter: 'blur(6px)' }}
           animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
           transition={{ duration: 0.7, delay: 0.1, ease: CINEMA }}
-          className="relative z-10 text-5xl sm:text-7xl lg:text-[96px] text-center font-[family-name:var(--font-display-serif)] font-[400]"
+          className="relative z-10 text-4xl sm:text-7xl lg:text-[96px] text-center font-[family-name:var(--font-display-serif)] font-[400]"
           style={{ letterSpacing: '-0.03em', lineHeight: 0.92 }}
         >
           <span className="relative flex w-full justify-center pb-2 sm:pb-4">
@@ -111,7 +111,7 @@ export function AnimatedHero() {
           {/* 1 — Open Source */}
           <Link
             href="/open-source"
-            className="inline-flex items-center justify-center px-7 py-3 text-sm font-semibold text-white/70 transition-all duration-200 hover:text-white hover:bg-white/[0.05]"
+            className="inline-flex items-center justify-center px-7 py-[0.6875rem] min-h-[44px] text-sm font-semibold text-white/70 transition-all duration-200 hover:text-white hover:bg-white/[0.05]"
             style={{ border: '1px solid rgba(255,255,255,0.14)', letterSpacing: '-0.01em' }}
           >
             Open Source
@@ -120,7 +120,7 @@ export function AnimatedHero() {
           {/* 2 — Curso Online */}
           <Link
             href="/curso-online"
-            className="inline-flex items-center justify-center px-7 py-3 text-sm font-semibold text-white/70 transition-all duration-200 hover:text-white hover:bg-white/[0.05]"
+            className="inline-flex items-center justify-center px-7 py-[0.6875rem] min-h-[44px] text-sm font-semibold text-white/70 transition-all duration-200 hover:text-white hover:bg-white/[0.05]"
             style={{ border: '1px solid rgba(255,255,255,0.14)', letterSpacing: '-0.01em' }}
           >
             Curso Online
@@ -129,7 +129,7 @@ export function AnimatedHero() {
           {/* 3 — Mentoria (KV principal) */}
           <Link
             href="/mentoria"
-            className="group inline-flex items-center justify-center gap-2 px-7 py-3 text-sm font-semibold transition-all duration-200 hover:brightness-110 active:scale-[0.98]"
+            className="group inline-flex items-center justify-center gap-2 px-7 py-[0.6875rem] min-h-[44px] text-sm font-semibold transition-all duration-200 hover:brightness-110 active:scale-[0.98]"
             style={{ background: EMBER, color: '#050507', letterSpacing: '-0.01em' }}
           >
             Mentoria

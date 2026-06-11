@@ -47,7 +47,7 @@ export default function Workshop2IndexPage() {
 
   return (
     <main className="relative min-h-screen bg-black text-white">
-      <div className="mx-auto max-w-5xl px-6 py-20 md:px-8 md:py-28">
+      <div className="mx-auto max-w-5xl px-4 py-12 sm:px-6 sm:py-20 md:px-8 md:py-28">
         <header className="mb-16">
           <span
             className="inline-block font-mono text-[10px] tracking-[0.22em] uppercase"
@@ -56,7 +56,7 @@ export default function Workshop2IndexPage() {
             Workshop · {totalMinutes} min · 7 fases
           </span>
           <h1
-            className="mt-4 text-5xl font-light italic leading-[1.05] md:text-7xl"
+            className="mt-4 text-4xl font-light italic leading-[1.05] md:text-7xl"
             style={{ fontFamily: SERIF }}
           >
             Workshop 2:{' '}

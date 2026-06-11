@@ -78,10 +78,10 @@ export function AgentesHero({ total, squads }: AgentesHeroProps) {
                 Mentoria
               </a>
 
-              {/* Tertiary — install, discreto */}
+              {/* Tertiary — install, discreto. Oculto no mobile (baixo contraste + hierarquia clara) */}
               <a
                 href="/skills/claude-agent-teams"
-                className="inline-flex items-center justify-center gap-2 px-5 py-3 uppercase transition-all hover:text-white/60"
+                className="hidden sm:inline-flex items-center justify-center gap-2 px-5 py-3 uppercase transition-all hover:text-white/60"
                 style={{ ...MONO, color: 'rgba(255,255,255,0.28)', border: '1px solid rgba(255,255,255,0.08)' }}
               >
                 Como instalar
