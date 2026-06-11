@@ -8,6 +8,8 @@ type ItemType = 'Presencial' | 'Video' | 'QA' | 'Bonus';
 interface TimelineItem {
   num?: number;
   type: ItemType;
+  badgeLabel?: string;
+  count?: number;
   title: string;
   description: string;
   tags: string[];
@@ -50,16 +52,11 @@ const PHASES: Phase[] = [
     items: [
       {
         type: 'Presencial',
+        badgeLabel: 'Presencial + Gravado',
         date: '05/08/2026 · quarta-feira · Florianópolis',
-        title: 'Demos ao Vivo — O que é possível com agentes hoje',
-        description: 'Você vai ver, ao vivo, o que é possível construir com agentes de IA hoje. Sites, squads de conteúdo, automações de vendas, sistemas de atendimento. Não teoria — demonstrações reais rodando na frente de você.',
-        tags: ['Presencial', 'Demos', 'Cases Reais', 'IA Agêntica'],
-      },
-      {
-        type: 'Video',
-        title: 'O que é Possível',
-        description: 'Cases e demos para você rever a qualquer momento.',
-        tags: ['Gravado', 'Cases', 'Demos'],
+        title: 'O que é Possível com agentes de IA',
+        description: 'Demos ao vivo no presencial — sites, squads de conteúdo, automações de vendas, sistemas de atendimento — e aulas gravadas com os cases pra você rever no seu ritmo.',
+        tags: ['Presencial', 'Gravado', 'Demos', 'Cases Reais'],
       },
     ],
   },
@@ -68,16 +65,11 @@ const PHASES: Phase[] = [
     items: [
       {
         type: 'Presencial',
+        badgeLabel: 'Presencial + Gravado',
         date: '05/08/2026 · quarta-feira · Florianópolis',
-        title: 'Setup e Instalação ao Vivo',
-        description: 'Ninguém sai sem ambiente funcionando. Instalamos tudo junto: Claude Code, extensões, chaves de API, MCP servers. Você sai do dia presencial com o ambiente 100% pronto para trabalhar.',
-        tags: ['Presencial', 'Setup', 'Instalação', 'Ambiente'],
-      },
-      {
-        type: 'Video',
         title: 'Setup e Instalação',
-        description: 'Passo-a-passo de instalação para você consultar quando precisar.',
-        tags: ['Gravado', 'Setup', 'Instalação'],
+        description: 'Instalamos tudo junto no presencial — Claude Code, extensões, chaves de API, MCP servers — e o passo-a-passo gravado fica disponível pra você consultar sempre que precisar.',
+        tags: ['Presencial', 'Gravado', 'Setup', 'Instalação'],
       },
     ],
   },
@@ -85,10 +77,13 @@ const PHASES: Phase[] = [
     label: 'Módulo 3 — Fundamentos',
     items: [
       {
-        type: 'Video',
-        title: 'Fundamentos do Claude Code (10 aulas)',
-        description: 'Conteúdo em vídeo cobrindo Claude Code, agentes, MCP, contexto, pastas, comandos base, hooks e skills. Base conceitual para tudo que vem a seguir. Assista no seu ritmo.',
-        tags: ['Gravado', 'Claude Code', 'MCP', 'Fundamentos'],
+        type: 'Presencial',
+        badgeLabel: 'Presencial + Gravado',
+        count: 10,
+        date: '05/08/2026 · quarta-feira · Florianópolis',
+        title: 'Fundamentos do Claude Code',
+        description: 'Base conceitual apresentada ao vivo no presencial — Claude Code, agentes, MCP, contexto, comandos base, hooks e skills — com 10 aulas gravadas pra você consultar e aprofundar.',
+        tags: ['Presencial', 'Gravado', 'Claude Code', 'MCP', 'Fundamentos'],
       },
     ],
   },
@@ -96,10 +91,13 @@ const PHASES: Phase[] = [
     label: 'Módulo 4 — Centro de Treinamento de Agentes',
     items: [
       {
-        type: 'Video',
-        title: 'Centro de Treinamento (12 aulas)',
-        description: 'Conteúdo em vídeo cobrindo arquitetura mental de agentes, instalação do Centro, smart-memory, anatomia de squads e o Team-OS. Você assiste no seu ritmo durante a semana — chega no ao vivo com dúvidas claras.',
-        tags: ['Gravado', 'Centro de Treinamento', 'Team-OS', 'Smart-Memory'],
+        type: 'Presencial',
+        badgeLabel: 'Presencial + Gravado',
+        count: 12,
+        date: '05/08/2026 · quarta-feira · Florianópolis',
+        title: 'Centro de Treinamento de Agentes',
+        description: 'Você cria seu primeiro agente ao vivo no presencial — personalidade, especialidade, instruções. Mais 12 aulas gravadas com arquitetura mental, smart-memory, anatomia de squads e Team-OS pra você aprofundar.',
+        tags: ['Presencial', 'Gravado', 'Centro de Treinamento', 'Team-OS', 'Smart-Memory'],
       },
       {
         type: 'QA',
@@ -116,7 +114,8 @@ const PHASES: Phase[] = [
     items: [
       {
         type: 'Video',
-        title: 'Claude Design (11 aulas)',
+        count: 11,
+        title: 'Claude Design',
         description: 'Diretor de arte por agentes, lógica de projetos, design system, KV para Site/Social/Tráfego/Dev, handoff pro Claude Code. Tudo em vídeo pra você assistir no seu ritmo.',
         tags: ['Gravado', 'Design System', 'KV', 'Claude Design'],
       },
@@ -135,7 +134,8 @@ const PHASES: Phase[] = [
     items: [
       {
         type: 'Video',
-        title: 'Squad de Sites (13 aulas)',
+        count: 13,
+        title: 'Squad de Sites',
         description: 'Do zero ao site no ar com agentes: Squad Sites Luminari em ação, stack escolhida, criação de repositório, deploy Vercel, configuração de domínio e DNS, publicação automática via GitHub.',
         tags: ['Gravado', 'Sites', 'Github', 'Vercel'],
       },
@@ -426,8 +426,16 @@ function TimelineCard({
                 className={`border px-2 py-1 text-xs font-semibold uppercase tracking-wider ${badge.cls}`}
                 style={{ fontFamily: "'Roboto Mono', var(--font-bb-mono), monospace" }}
               >
-                {badge.label}
+                {item.badgeLabel ?? badge.label}
               </span>
+              {item.count !== undefined && (
+                <span
+                  className="border border-white/15 bg-white/[0.04] text-white/70 px-2 py-1 text-xs font-semibold uppercase tracking-wider"
+                  style={{ fontFamily: "'Roboto Mono', var(--font-bb-mono), monospace" }}
+                >
+                  {item.count} aulas
+                </span>
+              )}
             </div>
             {item.date && (
               <p

@@ -224,7 +224,7 @@ export default function MentoriaPage() {
         <div className="mx-auto max-w-4xl px-5 sm:px-6 lg:px-8 text-center">
           <h3 className="text-3xl sm:text-4xl text-white mb-4" style={{ ...KV_DISPLAY, lineHeight: 0.95 }}>Pronto para ter sua própria <span className="text-[#FF3A0E] italic" style={{ fontWeight: 300 }}>equipe de agentes IA</span>?</h3>
           <p className="text-white/60 mb-8 max-w-2xl mx-auto text-sm sm:text-base">Início 05/08/2026 · 12 vagas.</p>
-          <CtaButton label="Entrar na lista de espera" className="text-base sm:text-lg" />
+          <CtaButton label="Iniciar Inscrição" className="text-base sm:text-lg" />
           <p className="mt-6 text-xs sm:text-sm text-white/60"><Icon name="zap" size="16" className="inline" /> Resposta em até 24h | <Icon name="lock" size="16" className="inline" /> Dados 100% seguros</p>
         </div>
       </section>
