@@ -149,7 +149,7 @@ export function AnimatedHero() {
         className="order-4 sm:order-4 text-sm sm:text-base lg:text-lg leading-relaxed max-w-md sm:max-w-xl text-center px-5 mt-6 mb-10"
         style={{ color: 'rgba(255,255,255,0.45)' }}
       >
-        CEO da GrowthSales.ai. Uso IA em negócios reais — automação, growth
+        CSO da GrowthSales.ai. Uso IA em negócios reais — automação, growth
         e sistemas que escalam. O que funciona, eu compartilho e ensino.
       </motion.p>
     </div>
