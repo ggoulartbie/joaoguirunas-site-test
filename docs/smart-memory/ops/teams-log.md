@@ -758,6 +758,23 @@ Registro de todos os Agent Teams formados neste projeto. Lead (team-os) atualiza
 - NÃO mexer em desktop — só mobile (`sm:` e abaixo)
 - Coordenação de conflito: `mentoria-cronograma` mexe em CONTEÚDO; `mobile-mentoria` em STYLING dos mesmos arquivos
 
-**Status:** ativo
+**Status:** encerrado
 **Início:** 2026-06-10T20:59:00-03:00
+**Encerrado:** 2026-06-10T22:30:00-03:00
 **Stories:** dispatch direto (sem stories formais — o objetivo é cross-cutting e cada agente registra suas próprias tasks na TaskList do team)
+
+**Entregas finais:**
+- Mentoria cronograma turma 2026-Q3 (7 encontros · 9 módulos · 46+ aulas)
+- Timeline por MÓDULO (M0-M8) com badges multi-tag (`Presencial + Gravado`) + count separado (`X AULAS`)
+- Hero limpo (badges proeminentes + box redundante removidos); Florianópolis apenas em contexto presencial
+- Fundadores: Claudia (CEO) + João (CSO) — ordem e cargos corrigidos
+- Mobile pass cross-site: Header global com hamburger drawer, SkillPage shared, workshops, /agentes, home, open-source, learn/skills
+- Audit completo em [[../agents/ux/mobile-audit-2026-06]]
+- 4 roteiros de vídeo de vendas evergreen entregues em chat (não persistido)
+
+**Commits em prod:**
+- `9364f22` feat(mentoria+site): cronograma + timeline + mobile pass
+- `cf0c78c` refactor(mentoria/timeline): badges multi-tag + count separado + copy refinada
+
+**Deploys Vercel:**
+- Production Ready · 2m build · domínio joaoguirunas-academy

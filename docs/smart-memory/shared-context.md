@@ -9,9 +9,10 @@ tags: [ops]
 
 O lead (team-os) atualiza este arquivo a cada mudança de estado dos teammates.
 
-## Team ativo — joao-guirunas-site-mobile-mentoria-pass (2026-06-10)
+## Team encerrado — joao-guirunas-site-mobile-mentoria-pass (2026-06-10)
 
-**Status:** 🟡 em execução — 7 teammates em paralelo
+**Status:** 🟢 encerrado — entregas em prod, ver [[./ops/teams-log#2026-06-10 — Team joao-guirunas-site-mobile-mentoria-pass]]
+**Status histórico (durante execução):** 🟡 7 teammates em paralelo
 **Objetivo:** (1) Atualizar cronograma mentoria turma 05/08/2026 (7 encontros, 1 quarta/módulo, 1h30 cada) + (2) Refinar mobile (≤640px) de todas as páginas do site
 **Branch:** main (sem branch nova até dispatch final do devops)
 **Restrição:** Nenhum push sem autorização explícita do João. Mobile devs NÃO mexem em desktop.
