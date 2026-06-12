@@ -48,20 +48,18 @@ const AREAS: Area[] = [
 export default function ProcessoInternoPage() {
   return (
     <Workshop3DeckLayout slug="processo-interno">
-      {/* Background — joao-dual-monitors.png, overlay 82% */}
+      {/* Background — movimento-04.mp4, poster dual-monitors, overlay 82% */}
       <div aria-hidden="true" style={{ position: 'absolute', inset: 0, zIndex: 0 }}>
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
-          src="/photos/joao/joao-dual-monitors.png"
-          alt=""
-          style={{
-            width: '100%',
-            height: '100%',
-            objectFit: 'cover',
-            objectPosition: 'center center',
-            display: 'block',
-          }}
-        />
+        <video
+          className="absolute inset-0 w-full h-full object-cover"
+          autoPlay
+          muted
+          loop
+          playsInline
+          poster="/photos/joao/joao-dual-monitors.png"
+        >
+          <source src="/video/joao/movimento-04.mp4" type="video/mp4" />
+        </video>
         {/* Overlay denso 82% */}
         <div style={{ position: 'absolute', inset: 0, background: 'rgba(5,5,7,0.82)' }} />
         {/* Ember warmth subtle */}

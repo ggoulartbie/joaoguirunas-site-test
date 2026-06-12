@@ -36,7 +36,7 @@ export default function ClientesPage() {
           display: 'block',
         }}
       >
-        <source src="/video/editorial/video-woman-analytics.mp4" type="video/mp4" />
+        <source src="/video/joao/foco-03.mp4" type="video/mp4" />
       </video>
 
       {/* Overlay 78% */}
