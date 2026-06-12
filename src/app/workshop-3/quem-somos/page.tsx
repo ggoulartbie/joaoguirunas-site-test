@@ -268,7 +268,7 @@ export default function QuemSomosPage() {
                   lineHeight: 1.6, color: BONEMUTE,
                 }}
               >
-                Estratégia corporativa · Gestão · Comportamento humano · Experiência do cliente · Cultura organizacional · IA aplicada a processos
+                MBA em Gestão Estratégica · Psicanalista · Estratégia corporativa · Gestão · Comportamento humano · Experiência do cliente · Cultura organizacional · IA aplicada a processos
               </motion.p>
             </div>
           </motion.div>
@@ -351,7 +351,7 @@ export default function QuemSomosPage() {
                   lineHeight: 1.6, color: BONEMUTE,
                 }}
               >
-                Publicitário FACHA · Web Developer INFNET · MBAs em Gestão Empresarial, Inteligência Competitiva, Data Science & Big Data, Inteligência Artificial e Neurociência
+                ESPM · PURS · Web Developer INFNET · MBAs em Gestão Empresarial, Inteligência Competitiva, Data Science & Big Data, Inteligência Artificial e Neurociência
               </motion.p>
             </div>
           </motion.div>
