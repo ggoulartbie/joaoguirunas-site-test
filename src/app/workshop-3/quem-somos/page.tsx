@@ -227,7 +227,7 @@ export default function QuemSomosPage() {
                 letterSpacing: '0.2em', textTransform: 'uppercase',
                 color: EMBER, marginBottom: 3,
               }}>
-                CEO · Co-Founder
+                CRO · Co-Founder
               </span>
 
               {/* Nome */}
