@@ -778,3 +778,41 @@ Registro de todos os Agent Teams formados neste projeto. Lead (team-os) atualiza
 
 **Deploys Vercel:**
 - Production Ready · 2m build · domínio joaoguirunas-academy
+
+
+## 2026-06-12 — Team joao-guirunas-site-workshop-3-deck
+
+**Objetivo:** Implementar deck de 9 slides em `/workshop-3` para encerramento de evento Growth Sales + Trae.ai. Apresentação **HOJE** pela tarde. Tom empresário pra empresário, leve. Brand Growth Sales A.I.
+
+**Lead:** team-os (skill)
+
+**Composição:**
+- `sites-ux` — extrai brand tokens/logos/voice do manual local (`/Users/joaoramos/Downloads/growth-sales-a-i-manual-da-marca/`) e entrega specs em `docs/smart-memory/agents/ux/workshop-3-brand.md`
+- `sites-architect` — quebra em stories WK3-1.x, valida com 5-point checklist
+- `sites-dev-alpha` — implementa `Workshop3DeckLayout` + índice + 9 slides em `src/app/workshop-3/`
+- `sites-qa` — gate formal antes da apresentação (PASS/CONCERNS/FAIL)
+
+**Restrições do PO (João):**
+- Evento HOJE — implementação executável em 1-2h
+- **NÃO push, NÃO deploy** — só local (`pnpm dev`)
+- Sem menção à Trae.ai ou tecnologia específica nos slides
+- noindex (evento privado)
+- Tom: empresário pra empresário, leve, vivido — sem alarmismo
+- Conceitos centrais: WorkOS = **System as a Service** · Orquestrador Comercial = **Service as a System**
+- Reflexão final endereça **pessoa** (eficiência operacional vale pra qualquer profissão — médico, advogado, etc.) E **empresário** (eficiência + REPERTÓRIO direciona)
+- Frase de fechamento: *"IA não cria o caminho. Ela encurta o caminho que você já sabia andar."*
+
+**Plano dos 9 slides:**
+1. `quem-somos` (2:00) — Growth Sales, 18 meses, 2 produtos
+2. `pergunta` (2:00) — "Por onde começa um negócio com IA?"
+3. `tese` (2:00) — Frase-âncora: necessidade > ideia
+4. `workos` (2:30) — PMO de agentes · System as a Service
+5. `orquestrador` (2:30) — Orquestrador Comercial · Service as a System
+6. `numeros` (2:00) — 0 → 150k/mês · projeção 500k/mês dez/2026 · meta R$ 6M 2027
+7. `clientes` (1:30) — Sisprime · Blue3 · Viva América · Argoplan
+8. `processo-interno` (2:30) — A gente come o que cozinha
+9. `reflexao` (3:00) — Pra pessoa + pra empresário · fechamento
+
+**Status:** ativo
+**Início:** 2026-06-12T16:15:00-03:00
+**Stories:** ver `docs/smart-memory/stories/active/WK3-*.md` (em criação pelo sites-architect)

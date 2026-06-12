@@ -1,3 +1,4 @@
+import type React from 'react';
 import type { Metadata } from 'next';
 import { Workshop3DeckLayout } from '../_components/Workshop3DeckLayout';
 
@@ -6,73 +7,123 @@ export const metadata: Metadata = {
   robots: { index: false, follow: false },
 };
 
-const MONO    = "'Geist Mono', 'Roboto Mono', monospace";
-const DISPLAY = "var(--font-display), 'Space Grotesk', sans-serif";
-const SERIF   = "var(--font-display-serif), 'Fraunces', serif";
-const EMBER   = '#FF3A0E';
+const MONO  = "'Geist Mono', 'JetBrains Mono', monospace";
+const SERIF = "var(--font-display-serif), 'Fraunces', serif";
+const SANS  = "var(--font-display), 'Inter Tight', system-ui, sans-serif";
+const EMBER = '#FF3A0E';
+
+const fadeUp = (delay: number): React.CSSProperties => ({
+  animation: `fadeUp 600ms cubic-bezier(0.25, 1, 0.3, 1) ${delay}ms both`,
+});
 
 export default function PerguntaPage() {
   return (
     <Workshop3DeckLayout slug="pergunta">
-      <div className="flex flex-col gap-14">
-        <header>
-          <span
-            className="block font-mono text-[10px] tracking-[0.22em] uppercase mb-5"
-            style={{ fontFamily: MONO, color: EMBER }}
-          >
-            Slide 02 · O ponto de partida
-          </span>
-          <h1
-            className="text-5xl font-light italic leading-[1.05] md:text-7xl max-w-3xl"
-            style={{ fontFamily: SERIF }}
-          >
-            Por onde começa um negócio com IA?
-          </h1>
-        </header>
+      {/* Dot-grid sutil — tipográfico puro */}
+      <div
+        className="absolute inset-0 pointer-events-none"
+        style={{
+          backgroundImage: 'radial-gradient(rgba(255,255,255,0.03) 1px, transparent 1px)',
+          backgroundSize: '24px 24px',
+          opacity: 0.4,
+          zIndex: 0,
+        }}
+      />
 
-        <div
-          className="p-8 max-w-2xl"
-          style={{
-            border: '1px solid rgba(255,58,14,0.35)',
-            background: 'rgba(255,58,14,0.05)',
-            borderLeft: `4px solid ${EMBER}`,
-          }}
-        >
+      <div className="relative z-10 slide-content flex flex-col" style={{ gap: 'clamp(40px, 6vh, 80px)' }}>
+
+        {/* Kicker */}
+        <div style={fadeUp(0)}>
           <span
-            className="block font-mono text-[10px] tracking-[0.22em] uppercase mb-4"
+            className="block text-[10px] tracking-[0.22em] uppercase"
             style={{ fontFamily: MONO, color: EMBER }}
           >
-            A resposta que todo mundo espera
+            Reframe · 02
           </span>
-          <p
-            className="text-2xl font-light leading-snug line-through"
-            style={{ fontFamily: DISPLAY, color: 'rgba(255,255,255,0.4)', textDecorationColor: EMBER }}
-          >
-            "Escolha uma ferramenta de IA."
-          </p>
         </div>
 
-        <div className="max-w-2xl">
-          <span
-            className="block font-mono text-[10px] tracking-[0.22em] uppercase mb-4"
-            style={{ fontFamily: MONO, color: 'rgba(255,255,255,0.4)' }}
+        {/* Headline — pergunta */}
+        <div style={fadeUp(80)}>
+          <h1
+            style={{
+              fontFamily: SERIF,
+              fontWeight: 300,
+              fontStyle: 'italic',
+              fontSize: 'clamp(48px, 8vw, 96px)',
+              lineHeight: 0.92,
+              letterSpacing: '-0.035em',
+              color: '#f1f1f3',
+              margin: 0,
+              maxWidth: '16ch',
+            }}
           >
-            A pergunta certa
-          </span>
+            Por onde começa
+            <br />
+            um negócio com IA?
+          </h1>
+        </div>
+
+        {/* Sub — reframe da pergunta */}
+        <div style={fadeUp(160)}>
           <p
-            className="text-3xl font-semibold leading-snug md:text-4xl"
-            style={{ fontFamily: DISPLAY }}
+            style={{
+              fontFamily: SANS,
+              fontWeight: 400,
+              fontSize: 'clamp(16px, 2vw, 22px)',
+              lineHeight: 1.5,
+              color: '#c5c5ca',
+              maxWidth: '42ch',
+              margin: 0,
+            }}
           >
             Quase todo empresário me pergunta isso.{' '}
-            <span style={{ color: EMBER }}>A pergunta certa não é essa.</span>
-          </p>
-          <p
-            className="mt-6 text-xl leading-relaxed"
-            style={{ fontFamily: DISPLAY, color: 'rgba(255,255,255,0.6)' }}
-          >
-            A pergunta certa é: <strong className="text-white">qual dor no seu negócio ainda não tem resolução?</strong> IA é o caminho — não o destino.
+            <span style={{ color: '#f1f1f3', fontWeight: 500 }}>
+              A pergunta certa não é essa.
+            </span>
           </p>
         </div>
+
+        {/* Separador hairline ember — 60px */}
+        <div
+          style={{
+            ...fadeUp(240),
+            width: 60,
+            height: 1,
+            background: EMBER,
+            opacity: 0.7,
+          }}
+        />
+
+        {/* Resposta — "Começa pela dor." */}
+        <div style={fadeUp(320)}>
+          <p
+            style={{
+              fontFamily: SERIF,
+              fontWeight: 300,
+              fontStyle: 'italic',
+              fontSize: 'clamp(40px, 6vw, 80px)',
+              lineHeight: 0.95,
+              letterSpacing: '-0.03em',
+              color: EMBER,
+              margin: 0,
+            }}
+          >
+            Começa pela dor.
+          </p>
+          <p
+            style={{
+              fontFamily: SANS,
+              fontWeight: 300,
+              fontSize: 'clamp(16px, 2vw, 22px)',
+              lineHeight: 1.5,
+              color: '#84848c',
+              marginTop: 'clamp(8px, 1.5vh, 16px)',
+            }}
+          >
+            Não pela ferramenta.
+          </p>
+        </div>
+
       </div>
     </Workshop3DeckLayout>
   );

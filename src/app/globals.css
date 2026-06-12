@@ -154,6 +154,24 @@ body::before {
 }
 
 /* ============================================
+   WORKSHOP-3 DECK — Animações
+   ============================================ */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes maskReveal {
+  0%   { clip-path: inset(0 100% 0 0); }
+  100% { clip-path: inset(0 0% 0 0); }
+}
+.slide-content {
+  animation: fadeUp 0.6s cubic-bezier(0.25, 1, 0.3, 1) forwards;
+}
+.number-reveal {
+  animation: maskReveal 1.2s cubic-bezier(0.7, 0, 0.2, 1) forwards;
+}
+
+/* ============================================
    SKIP LINK — Acessibilidade global
    ============================================ */
 .skip-link {

@@ -67,6 +67,7 @@ MOC raiz. Todo arquivo novo em `docs/smart-memory/` deve ser referenciado aqui.
 - [[agents/qa/server-perf-verdict-diagnosis]] — veredicto CONCERNS fase de diagnóstico (5 fixes bloqueantes Tier 1, 5 paralelos Tier 2, 7 follow-ups Tier 3) — 2026-05-16
 - [[agents/qa/server-restart-verdict]] — veredicto CONCERNS `dev:restart` (script PASS no escopo; concerns P1 fora do escopo: heap size + `pnpm-workspace.yaml`) — 2026-05-16
 - [[qa-reports/UCO-2.1-2026-05-29]] — veredicto CONCERNS épico /curso-online unificado (9/12 ACs PASS direto, 3 CONCERNS não-bloqueantes — push autorizado) — 2026-05-29
+- [[agents/ux/workshop-3-brand]] — brand system Growth Sales A.I. + deck spec completo 9 slides (evento encerramento 2026-06-12)
 - [[agents/ux/components]] — specs de componentes
 - [[agents/ux/design-recommendations]] — recomendações P0/P1/P2 (accent, dead code, a11y)
 - [[agents/ux/curso-online-agents-redesign]] — spec redesign seção agentes /curso-online (cards 110px, sem blur, sem link, min-h 80vh)

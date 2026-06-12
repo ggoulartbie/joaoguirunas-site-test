@@ -9,6 +9,7 @@ const CHROME_EXCLUDED = [
   '/',
   '/academy',
   '/certificado',
+  '/workshop-3',
 ];
 
 function hasChromeExcluded(pathname: string): boolean {
