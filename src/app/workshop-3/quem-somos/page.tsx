@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import Image from 'next/image';
 import { Workshop3DeckLayout } from '../_components/Workshop3DeckLayout';
 import { GrowthLogo } from '../_components/GrowthLogo';
 
@@ -41,21 +42,18 @@ const SLIDE_TAGLINE = '18 meses. 2 produtos no mercado.';
 export default function QuemSomosPage() {
   return (
     <Workshop3DeckLayout slug="quem-somos">
-      {/* BG — vídeo cinemático fullbleed */}
+      {/* BG — Claudia cinematic dashboards */}
       <div aria-hidden="true" style={{ position: 'absolute', inset: 0, zIndex: 0 }}>
-        <video
-          className="absolute inset-0 w-full h-full object-cover"
-          autoPlay
-          muted
-          loop
-          playsInline
-          poster="/photos/editorial/hero-editorial-writing.png"
-        >
-          <source src="/video/joao/cinematic-01.mp4" type="video/mp4" />
-        </video>
+        <Image
+          src="/photos/claudia/claudia-bg-dashboards.png"
+          alt=""
+          fill
+          priority
+          style={{ objectFit: 'cover', objectPosition: 'center' }}
+        />
         <div style={{
           position: 'absolute', inset: 0,
-          background: 'linear-gradient(to bottom, rgba(5,5,7,0.52) 0%, rgba(5,5,7,0.68) 100%)',
+          background: 'linear-gradient(to bottom, rgba(5,5,7,0.30) 0%, rgba(5,5,7,0.45) 50%, rgba(5,5,7,0.62) 100%)',
         }} />
       </div>
 
