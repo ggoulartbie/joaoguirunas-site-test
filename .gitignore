@@ -40,3 +40,6 @@ docs/mentoria-claude-code/Encontros On-line/
 tsconfig.tsbuildinfo
 next-env.d.ts
 .claude/worktrees/
+
+# EXCEÇÃO: vídeos públicos do deck workshop-3 (BG cinemáticos)
+!public/video/joao/*.mp4
