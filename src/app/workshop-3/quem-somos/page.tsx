@@ -21,8 +21,8 @@ const FOUNDERS = [
     name: 'Claudia Guirunas',
     role: 'Co-CEO · Co-Founder',
     handle: '@claudia.guirunas',
-    photoSrc: '/photos/claudia/claudia-profile.jpg',
-    photoLabel: 'FOTO · CLAUDIA',
+    photoSrc: '/photos/founders/claudia-official.png',
+    photoAlt: 'Claudia Guirunas — Co-CEO & Co-Founder da Growth Sales',
     bioLead: 'Transforma dados, comportamento e experiência em sistemas inteligentes que geram clareza, fluidez e resultados reais.',
     bioTrail: 'Sua trajetória une estratégia corporativa e gestão ao estudo do comportamento humano. Atua na interseção entre experiência do cliente, cultura organizacional e IA aplicada a processos — tornando operações mais leves e experiências mais consistentes.',
   },
@@ -30,8 +30,8 @@ const FOUNDERS = [
     name: 'João Guirunas',
     role: 'CEO · Co-Founder',
     handle: '@joaoguirunas',
-    photoSrc: '/photos/joao/joao-profile.jpg',
-    photoLabel: 'FOTO · JOÃO',
+    photoSrc: '/photos/founders/joao-official.png',
+    photoAlt: 'João Guirunas — CEO & Co-Founder da Growth Sales',
     bioLead: 'Lidera a frente de estratégia e inovação na Growth Sales, transformando inteligência artificial em eficiência real e evolução dos negócios.',
     bioTrail: 'Sua trajetória une experiência em crescimento e liderança a uma formação sólida em negócio e tecnologia. É publicitário pela FACHA, Web Developer pelo INFNET e possui MBAs em Gestão Empresarial, Inteligência Competitiva, Data Science & Big Data, Inteligência Artificial e Neurociência.',
   },
@@ -42,18 +42,21 @@ const SLIDE_TAGLINE = '18 meses. 2 produtos no mercado.';
 export default function QuemSomosPage() {
   return (
     <Workshop3DeckLayout slug="quem-somos">
-      {/* BG — Claudia cinematic dashboards */}
+      {/* BG — vídeo cinemático fullbleed */}
       <div aria-hidden="true" style={{ position: 'absolute', inset: 0, zIndex: 0 }}>
-        <Image
-          src="/photos/claudia/claudia-bg-dashboards.png"
-          alt=""
-          fill
-          priority
-          style={{ objectFit: 'cover', objectPosition: 'center' }}
-        />
+        <video
+          className="absolute inset-0 w-full h-full object-cover"
+          autoPlay
+          muted
+          loop
+          playsInline
+          poster="/photos/editorial/hero-editorial-writing.png"
+        >
+          <source src="/video/joao/cinematic-01.mp4" type="video/mp4" />
+        </video>
         <div style={{
           position: 'absolute', inset: 0,
-          background: 'linear-gradient(to bottom, rgba(5,5,7,0.30) 0%, rgba(5,5,7,0.45) 50%, rgba(5,5,7,0.62) 100%)',
+          background: 'linear-gradient(to bottom, rgba(5,5,7,0.52) 0%, rgba(5,5,7,0.68) 100%)',
         }} />
       </div>
 
@@ -80,13 +83,12 @@ export default function QuemSomosPage() {
           {FOUNDERS.map((f) => (
             <div key={f.name} style={{ display: 'flex', flexDirection: 'column', gap: 0 }}>
 
-              {/* Foto — proporção 3:4, placeholder para ambos até fotos reais chegarem */}
+              {/* Foto — proporção 3:4 com foto oficial */}
               <div
                 style={{
                   position: 'relative',
                   aspectRatio: '3/4',
                   maxHeight: 220,
-                  background: 'linear-gradient(160deg, rgba(22,22,26,1) 0%, rgba(14,14,17,1) 100%)',
                   border: '1px solid rgba(255,255,255,0.08)',
                   overflow: 'hidden',
                 }}
@@ -103,30 +105,12 @@ export default function QuemSomosPage() {
                   opacity: 0.5, zIndex: 1,
                 }} />
 
-                <div style={{
-                  position: 'absolute', inset: 0,
-                  display: 'flex', flexDirection: 'column',
-                  alignItems: 'center', justifyContent: 'center', gap: 10,
-                }}>
-                  <span style={{
-                    fontFamily: MONO, fontSize: 10,
-                    letterSpacing: '0.22em', textTransform: 'uppercase' as const,
-                    color: 'rgba(255,255,255,0.18)',
-                  }}>
-                    {f.photoLabel}
-                  </span>
-                  <span style={{
-                    display: 'block', width: 28, height: 1,
-                    background: 'rgba(255,58,14,0.3)',
-                  }} />
-                  <span style={{
-                    fontFamily: MONO, fontSize: 9,
-                    letterSpacing: '0.12em',
-                    color: 'rgba(255,255,255,0.08)',
-                  }}>
-                    {f.photoSrc}
-                  </span>
-                </div>
+                <Image
+                  src={f.photoSrc}
+                  alt={f.photoAlt}
+                  fill
+                  style={{ objectFit: 'cover', objectPosition: 'center top' }}
+                />
               </div>
 
               {/* Identity block */}
