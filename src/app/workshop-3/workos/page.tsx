@@ -45,19 +45,26 @@ const BLOCKS = [
 export default function WorkOSPage() {
   return (
     <Workshop3DeckLayout slug="workos">
-      {/* Background P-D editorial, overlay escuro */}
+      {/* Background — vídeo cinematográfico com fallback foto */}
       <div aria-hidden="true" style={{ position: 'absolute', inset: 0, zIndex: 0 }}>
-        <img
-          src="/photos/editorial/editorial-ai-workflow-man.png"
-          alt=""
+        <video
+          autoPlay
+          muted
+          loop
+          playsInline
+          poster="/photos/editorial/editorial-ai-workflow-man.png"
           style={{
+            position: 'absolute',
+            inset: 0,
             width: '100%',
             height: '100%',
             objectFit: 'cover',
             objectPosition: 'center 30%',
             display: 'block',
           }}
-        />
+        >
+          <source src="/video/joao/cinematic-01.mp4" type="video/mp4" />
+        </video>
         {/* gradiente direita → escuro */}
         <div style={{
           position: 'absolute',
