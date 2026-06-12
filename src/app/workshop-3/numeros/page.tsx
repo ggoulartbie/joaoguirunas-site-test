@@ -49,14 +49,6 @@ export default function NumerosPage() {
           <GrowthLineChart />
         </div>
 
-        <div style={{ borderTop: '1px solid rgba(255,255,255,0.07)', paddingTop: '1rem' }}>
-          <p
-            className="text-xl font-light italic"
-            style={{ fontFamily: SERIF, color: 'rgba(241,241,243,0.55)', letterSpacing: '-0.01em' }}
-          >
-            Não foi sorte — foi dor real.
-          </p>
-        </div>
       </div>
     </Workshop3DeckLayout>
   );

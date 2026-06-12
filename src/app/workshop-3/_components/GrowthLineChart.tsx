@@ -5,10 +5,18 @@ import { useEffect, useRef, useState } from 'react';
 const MONO = "'Geist Mono', 'Roboto Mono', monospace";
 const SERIF = "var(--font-display-serif), 'Fraunces', serif";
 
+// Layout: viewBox 720×360
+// Plot area: x=[80,660]  y=[30,240]
+// Abaixo do plot: 240→360 = 120px para X labels (y≈262) + respiro
+const VW = 720;
+const VH = 360;
+const X_RANGE: [number, number] = [80, 660];
+const Y_RANGE: [number, number] = [30, 240];   // top=30, bottom=240 (Y aumenta pra baixo)
+const X_LABEL_Y = 262;                          // linha dos ticks de mês
+const LEGEND_Y  = 16;                           // legenda no topo, acima da grid
+
 const X_DOMAIN: [Date, Date] = [new Date('2025-04-01'), new Date('2026-12-01')];
 const Y_DOMAIN: [number, number] = [0, 600_000];
-const X_RANGE: [number, number]  = [60, 660];
-const Y_RANGE: [number, number]  = [280, 40];
 
 function mx(date: Date) {
   const t = (date.getTime() - X_DOMAIN[0].getTime()) / (X_DOMAIN[1].getTime() - X_DOMAIN[0].getTime());
@@ -16,7 +24,8 @@ function mx(date: Date) {
 }
 function my(value: number) {
   const t = (value - Y_DOMAIN[0]) / (Y_DOMAIN[1] - Y_DOMAIN[0]);
-  return Y_RANGE[0] + t * (Y_RANGE[1] - Y_RANGE[0]);
+  // t=0 (valor 0) → y=Y_RANGE[1] (bottom=240); t=1 (valor max) → y=Y_RANGE[0] (top=30)
+  return Y_RANGE[1] - t * (Y_RANGE[1] - Y_RANGE[0]);
 }
 
 // 15 meses reais: Abr/2025 → Jun/2026
@@ -38,7 +47,7 @@ const PAST = [
   { date: new Date('2026-06-01'), value: 180_000 },
 ];
 
-// 6 meses projeção: Jul/2026 → Dez/2026 (+60k/mês)
+// 6 meses projeção: Jun/2026 → Dez/2026
 const PROJ = [
   { date: new Date('2026-06-01'), value: 180_000 },
   { date: new Date('2026-07-01'), value: 240_000 },
@@ -49,13 +58,27 @@ const PROJ = [
   { date: new Date('2026-12-01'), value: 540_000 },
 ];
 
+// Apenas 2 marcos — sem "Início" (valor 0 óbvio no gráfico)
 const MILESTONES = [
-  { date: new Date('2025-04-01'), value: 0,       label: 'Início',  ctx: 'abr/2025 · 0',         anchor: 'start'  as const, opacity: 0.65 },
-  { date: new Date('2026-06-01'), value: 180_000,  label: '180k',   ctx: 'jun/2026 · hoje',       anchor: 'middle' as const, opacity: 1    },
-  { date: new Date('2026-12-01'), value: 540_000,  label: '540k',   ctx: 'dez/2026 · projeção',   anchor: 'end'    as const, opacity: 0.55 },
+  {
+    date: new Date('2026-06-01'),
+    value: 180_000,
+    label: '180k',
+    ctx: 'jun/2026 · hoje',
+    anchor: 'middle' as const,
+    opacity: 1,
+  },
+  {
+    date: new Date('2026-12-01'),
+    value: 540_000,
+    label: '540k',
+    ctx: 'dez/2026 · projeção',
+    anchor: 'end' as const,
+    opacity: 0.55,
+  },
 ];
 
-// Ticks a cada 3 meses
+// Ticks a cada 3 meses — sem sobreposição com legenda (legenda está no topo)
 const X_LABELS = [
   { date: new Date('2025-04-01'), label: 'abr/25' },
   { date: new Date('2025-07-01'), label: 'jul/25' },
@@ -90,7 +113,7 @@ export function GrowthLineChart() {
   const pastRef = useRef<SVGPathElement>(null);
   const projRef = useRef<SVGPathElement>(null);
   const [ready, setReady] = useState(false);
-  const [milestoneIn, setMilestoneIn] = useState([false, false, false]);
+  const [milestoneIn, setMilestoneIn] = useState([false, false]);
 
   useEffect(() => {
     const past = pastRef.current;
@@ -107,9 +130,8 @@ export function GrowthLineChart() {
 
     const raf = requestAnimationFrame(() => {
       setReady(true);
-      setTimeout(() => setMilestoneIn([true, false, false]), 200);
-      setTimeout(() => setMilestoneIn([true, true, false]), 900);
-      setTimeout(() => setMilestoneIn([true, true, true]), 1900);
+      setTimeout(() => setMilestoneIn([true, false]), 900);
+      setTimeout(() => setMilestoneIn([true, true]),  1900);
     });
 
     return () => cancelAnimationFrame(raf);
@@ -117,11 +139,19 @@ export function GrowthLineChart() {
 
   return (
     <svg
-      viewBox="0 0 720 320"
+      viewBox={`0 0 ${VW} ${VH}`}
       width="100%"
       style={{ display: 'block', overflow: 'visible' }}
       aria-hidden="true"
     >
+      {/* Legenda — topo direito, acima da grid */}
+      <g transform={`translate(${X_RANGE[1]}, ${LEGEND_Y})`}>
+        <line x1={-140} y1={0} x2={-116} y2={0} stroke="#FF5A1F" strokeWidth={2.5} />
+        <text x={-112} y={4} fill="rgba(241,241,243,0.4)" fontSize={9} fontFamily={MONO} letterSpacing="0.1em">REAL</text>
+        <line x1={-76} y1={0} x2={-52} y2={0} stroke="#FF5A1F" strokeWidth={2} strokeOpacity={0.55} strokeDasharray="5 3" />
+        <text x={-48} y={4} fill="rgba(241,241,243,0.4)" fontSize={9} fontFamily={MONO} letterSpacing="0.1em">PROJEÇÃO</text>
+      </g>
+
       {/* Y grid + labels */}
       {Y_LABELS.map(({ value, label }) => (
         <g key={value}>
@@ -146,7 +176,7 @@ export function GrowthLineChart() {
       {/* Divider jun/26 — separa real/projeção */}
       <line
         x1={dividerX} x2={dividerX}
-        y1={Y_RANGE[1] - 10} y2={Y_RANGE[0]}
+        y1={Y_RANGE[0]} y2={Y_RANGE[1]}
         stroke="rgba(255,255,255,0.10)"
         strokeWidth={1}
         strokeDasharray="3 5"
@@ -184,49 +214,49 @@ export function GrowthLineChart() {
         }}
       />
 
-      {/* Milestones */}
-      {MILESTONES.map((m, i) => (
-        <g
-          key={m.label}
-          style={{
-            opacity: milestoneIn[i] ? m.opacity : 0,
-            transform: milestoneIn[i] ? 'scale(1)' : 'scale(0.7)',
-            transformOrigin: `${mx(m.date).toFixed(1)}px ${my(m.value).toFixed(1)}px`,
-            transition: 'opacity 0.4s ease, transform 0.4s cubic-bezier(0.22,1,0.36,1)',
-          }}
-        >
-          <circle
-            cx={mx(m.date)} cy={my(m.value)}
-            r={5}
-            fill="#FF5A1F"
-            stroke="rgba(255,255,255,0.15)"
-            strokeWidth={1.5}
-          />
-          <text
-            x={mx(m.date)} y={my(m.value) - 18}
-            textAnchor={m.anchor}
-            fill="#f1f1f3"
-            fontSize={14}
-            fontFamily={SERIF}
-            fontStyle="italic"
-            fontWeight={300}
-          >{m.label}</text>
-          <text
-            x={mx(m.date)} y={my(m.value) - 6}
-            textAnchor={m.anchor}
-            fill="rgba(241,241,243,0.45)"
-            fontSize={9}
-            fontFamily={MONO}
-            letterSpacing="0.14em"
-          >{m.ctx.toUpperCase()}</text>
-        </g>
-      ))}
+      {/* Milestones — label Fraunces grande + ctx Mono pequeno, espaçamento vertical limpo */}
+      {MILESTONES.map((m, i) => {
+        const cx = mx(m.date);
+        const cy = my(m.value);
+        return (
+          <g
+            key={m.label}
+            style={{
+              opacity: milestoneIn[i] ? m.opacity : 0,
+              transform: milestoneIn[i] ? 'scale(1)' : 'scale(0.8)',
+              transformOrigin: `${cx.toFixed(1)}px ${cy.toFixed(1)}px`,
+              transition: 'opacity 0.4s ease, transform 0.4s cubic-bezier(0.22,1,0.36,1)',
+            }}
+          >
+            <circle cx={cx} cy={cy} r={5} fill="#FF5A1F" stroke="rgba(255,255,255,0.15)" strokeWidth={1.5} />
+            {/* Número grande — Fraunces italic */}
+            <text
+              x={cx} y={cy - 28}
+              textAnchor={m.anchor}
+              fill="#f1f1f3"
+              fontSize={15}
+              fontFamily={SERIF}
+              fontStyle="italic"
+              fontWeight={300}
+            >{m.label}</text>
+            {/* Contexto — Mono pequeno, linha abaixo */}
+            <text
+              x={cx} y={cy - 14}
+              textAnchor={m.anchor}
+              fill="rgba(241,241,243,0.45)"
+              fontSize={9}
+              fontFamily={MONO}
+              letterSpacing="0.12em"
+            >{m.ctx.toUpperCase()}</text>
+          </g>
+        );
+      })}
 
-      {/* X labels */}
+      {/* X labels — zona própria abaixo do plot, sem colisão */}
       {X_LABELS.map(({ date, label }) => (
         <text
           key={label}
-          x={mx(date)} y={Y_RANGE[0] + 18}
+          x={mx(date)} y={X_LABEL_Y}
           textAnchor="middle"
           fill="rgba(241,241,243,0.35)"
           fontSize={9}
@@ -234,14 +264,6 @@ export function GrowthLineChart() {
           letterSpacing="0.06em"
         >{label}</text>
       ))}
-
-      {/* Legend — bottom right */}
-      <g transform={`translate(${X_RANGE[1] - 8}, ${Y_RANGE[0] + 16})`}>
-        <line x1={-126} y1={0} x2={-102} y2={0} stroke="#FF5A1F" strokeWidth={2.5} />
-        <text x={-98} y={4} fill="rgba(241,241,243,0.4)" fontSize={9} fontFamily={MONO} letterSpacing="0.1em">REAL</text>
-        <line x1={-66} y1={0} x2={-42} y2={0} stroke="#FF5A1F" strokeWidth={2} strokeOpacity={0.55} strokeDasharray="5 3" />
-        <text x={-38} y={4} fill="rgba(241,241,243,0.4)" fontSize={9} fontFamily={MONO} letterSpacing="0.1em">PROJEÇÃO</text>
-      </g>
     </svg>
   );
 }
