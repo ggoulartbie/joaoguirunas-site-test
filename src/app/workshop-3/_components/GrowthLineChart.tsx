@@ -1,210 +1,227 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
-const W = 800;
-const H = 300;
-const PAD = { top: 40, right: 60, bottom: 40, left: 16 };
-const MONTHS_TOTAL = 36;
-const MONO  = "'Geist Mono', 'Roboto Mono', monospace";
+const MONO = "'Geist Mono', 'Roboto Mono', monospace";
 const SERIF = "var(--font-display-serif), 'Fraunces', serif";
-const EMBER = '#FF5A1F';
-const VOID  = '#050507';
-const BONE  = '#f1f1f3';
 
-function mx(mo: number) {
-  return PAD.left + (mo / MONTHS_TOTAL) * (W - PAD.left - PAD.right);
+const X_DOMAIN: [Date, Date] = [new Date('2025-01-01'), new Date('2027-12-01')];
+const Y_DOMAIN: [number, number] = [0, 900_000];
+const X_RANGE: [number, number]  = [60, 660];
+const Y_RANGE: [number, number]  = [280, 40];
+
+function mx(date: Date) {
+  const t = (date.getTime() - X_DOMAIN[0].getTime()) / (X_DOMAIN[1].getTime() - X_DOMAIN[0].getTime());
+  return X_RANGE[0] + t * (X_RANGE[1] - X_RANGE[0]);
 }
-function my(value: number, maxVal = 1000000) {
-  return PAD.top + (1 - value / maxVal) * (H - PAD.top - PAD.bottom);
+function my(value: number) {
+  const t = (value - Y_DOMAIN[0]) / (Y_DOMAIN[1] - Y_DOMAIN[0]);
+  return Y_RANGE[0] + t * (Y_RANGE[1] - Y_RANGE[0]);
 }
 
-const PAST_POINTS = [
-  { mo: 0,  v: 0 },
-  { mo: 2,  v: 8000 },
-  { mo: 5,  v: 28000 },
-  { mo: 8,  v: 62000 },
-  { mo: 11, v: 98000 },
-  { mo: 14, v: 130000 },
-  { mo: 17, v: 150000 },
+const PAST = [
+  { date: new Date('2025-01-01'), value: 0 },
+  { date: new Date('2025-06-01'), value: 20_000 },
+  { date: new Date('2025-10-01'), value: 55_000 },
+  { date: new Date('2026-02-01'), value: 90_000 },
+  { date: new Date('2026-06-01'), value: 150_000 },
 ];
 
-const PROJ_POINTS = [
-  { mo: 17, v: 150000 },
-  { mo: 20, v: 280000 },
-  { mo: 23, v: 500000 },
-  { mo: 29, v: 700000 },
-  { mo: 35, v: 900000 },
+const PROJ = [
+  { date: new Date('2026-06-01'), value: 150_000 },
+  { date: new Date('2026-12-01'), value: 500_000 },
+  { date: new Date('2027-06-01'), value: 720_000 },
+  { date: new Date('2027-12-01'), value: 900_000 },
 ];
 
-const MILESTONES: { mo: number; v: number; num: string; ctx: string; anchor: 'start' | 'middle' | 'end'; opacity: number }[] = [
-  { mo: 17, v: 150000, num: '150k',    ctx: '· hoje',      anchor: 'start',  opacity: 1 },
-  { mo: 23, v: 500000, num: '500k',    ctx: '· dez/2026',  anchor: 'middle', opacity: 0.65 },
-  { mo: 35, v: 900000, num: 'R$ 6M',  ctx: '· meta 2027', anchor: 'end',    opacity: 0.42 },
+const MILESTONES = [
+  { date: new Date('2025-01-01'), value: 0,        label: 'R$ 0',    ctx: 'jan/2025 · início', anchor: 'start'  as const },
+  { date: new Date('2026-06-01'), value: 150_000,   label: 'R$ 150k', ctx: 'jun/2026 · hoje',   anchor: 'middle' as const },
+  { date: new Date('2026-12-01'), value: 500_000,   label: 'R$ 500k', ctx: 'dez/2026 · meta',   anchor: 'middle' as const },
 ];
 
 const X_LABELS = [
-  { mo: 0,  label: 'Jan/25' },
-  { mo: 11, label: 'Dez/25' },
-  { mo: 17, label: 'Jun/26' },
-  { mo: 23, label: 'Dez/26' },
-  { mo: 35, label: '2027' },
+  { date: new Date('2025-01-01'), label: 'jan/25' },
+  { date: new Date('2025-07-01'), label: 'jul/25' },
+  { date: new Date('2026-01-01'), label: 'jan/26' },
+  { date: new Date('2026-06-01'), label: 'jun/26' },
+  { date: new Date('2026-12-01'), label: 'dez/26' },
+  { date: new Date('2027-12-01'), label: '2027' },
 ];
 
-function toPath(pts: { mo: number; v: number }[]) {
+const Y_LABELS = [
+  { value: 0,        label: '0' },
+  { value: 150_000,  label: '150k' },
+  { value: 500_000,  label: '500k' },
+  { value: 900_000,  label: '1M' },
+];
+
+function toPath(pts: { date: Date; value: number }[]) {
   return pts.map((p, i) =>
-    `${i === 0 ? 'M' : 'L'} ${mx(p.mo).toFixed(1)} ${my(p.v).toFixed(1)}`
+    `${i === 0 ? 'M' : 'L'} ${mx(p.date).toFixed(1)} ${my(p.value).toFixed(1)}`
   ).join(' ');
 }
 
+const pastD = toPath(PAST);
+const projD = toPath(PROJ);
+const dividerX = mx(new Date('2026-06-01'));
+
 export function GrowthLineChart() {
+  const pastRef = useRef<SVGPathElement>(null);
+  const projRef = useRef<SVGPathElement>(null);
   const [ready, setReady] = useState(false);
+  const [milestoneIn, setMilestoneIn] = useState([false, false, false]);
 
   useEffect(() => {
-    const id = requestAnimationFrame(() => setReady(true));
-    return () => cancelAnimationFrame(id);
+    const past = pastRef.current;
+    const proj = projRef.current;
+    if (!past || !proj) return;
+
+    const pastLen = past.getTotalLength();
+    const projLen = proj.getTotalLength();
+
+    past.style.strokeDasharray = String(pastLen);
+    past.style.strokeDashoffset = String(pastLen);
+    proj.style.strokeDasharray = String(projLen);
+    proj.style.strokeDashoffset = String(projLen);
+
+    const raf = requestAnimationFrame(() => {
+      setReady(true);
+      setTimeout(() => setMilestoneIn([true, false, false]), 200);
+      setTimeout(() => setMilestoneIn([true, true, false]), 800);
+      setTimeout(() => setMilestoneIn([true, true, true]), 1800);
+    });
+
+    return () => cancelAnimationFrame(raf);
   }, []);
 
-  const pastD = toPath(PAST_POINTS);
-  const projD = toPath(PROJ_POINTS);
-
   return (
-    <div>
-      {/* Legenda */}
-      <div style={{ display: 'flex', gap: 24, alignItems: 'center', marginBottom: 16 }}>
-        <span style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-          <svg width={28} height={4} aria-hidden="true">
-            <line x1={0} y1={2} x2={28} y2={2} stroke={EMBER} strokeWidth={3} />
-          </svg>
-          <span style={{ fontFamily: MONO, fontSize: 10, letterSpacing: '0.12em', color: 'rgba(255,255,255,0.5)', textTransform: 'uppercase' }}>
-            Real
-          </span>
-        </span>
-        <span style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-          <svg width={28} height={4} aria-hidden="true">
-            <line x1={0} y1={2} x2={28} y2={2} stroke={EMBER} strokeWidth={2} strokeDasharray="5 3" strokeOpacity={0.55} />
-          </svg>
-          <span style={{ fontFamily: MONO, fontSize: 10, letterSpacing: '0.12em', color: 'rgba(255,255,255,0.35)', textTransform: 'uppercase' }}>
-            Projeção · Meta 2027
-          </span>
-        </span>
-      </div>
-
-      {/* Gráfico SVG */}
-      <svg
-        viewBox={`0 0 ${W} ${H}`}
-        width="100%"
-        style={{ display: 'block', overflow: 'visible' }}
-        aria-hidden="true"
-      >
-        <style>{`
-          .line-past-wk3 {
-            stroke-dasharray: 2000;
-            stroke-dashoffset: ${ready ? '0' : '2000'};
-            transition: stroke-dashoffset 1.4s cubic-bezier(0.25, 1, 0.3, 1);
-          }
-          .line-proj-wk3 {
-            stroke-dasharray: 2000;
-            stroke-dashoffset: ${ready ? '0' : '2000'};
-            transition: stroke-dashoffset 1.6s cubic-bezier(0.25, 1, 0.3, 1) 1.1s;
-          }
-        `}</style>
-
-        {/* Grid horizontal */}
-        {[0.25, 0.5, 0.75, 1].map((t) => (
+    <svg
+      viewBox="0 0 720 320"
+      width="100%"
+      style={{ display: 'block', overflow: 'visible' }}
+      aria-hidden="true"
+    >
+      {/* Y grid + labels */}
+      {Y_LABELS.map(({ value, label }) => (
+        <g key={value}>
           <line
-            key={t}
-            x1={PAD.left} x2={W - PAD.right}
-            y1={my(t * 1000000)} y2={my(t * 1000000)}
-            stroke="rgba(255,255,255,0.06)"
+            x1={X_RANGE[0]} x2={X_RANGE[1]}
+            y1={my(value)} y2={my(value)}
+            stroke="rgba(241,241,243,0.06)"
             strokeWidth={1}
             strokeDasharray="2 8"
           />
-        ))}
-
-        {/* Divisória real/projeção (jun/2026) */}
-        <line
-          x1={mx(17)} x2={mx(17)}
-          y1={PAD.top} y2={H - PAD.bottom}
-          stroke="rgba(255,255,255,0.08)"
-          strokeWidth={1}
-          strokeDasharray="3 5"
-        />
-
-        {/* Linha passado — sólida, ember-glow */}
-        <path
-          d={pastD}
-          fill="none"
-          stroke={EMBER}
-          strokeWidth={3}
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          className="line-past-wk3"
-        />
-
-        {/* Linha projeção — tracejada, ember 55% */}
-        <path
-          d={projD}
-          fill="none"
-          stroke={EMBER}
-          strokeWidth={2.5}
-          strokeOpacity={0.55}
-          strokeDasharray="8 5"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          className="line-proj-wk3"
-        />
-
-        {/* Marcos — número em Fraunces, contexto em Geist Mono */}
-        {MILESTONES.map((m) => {
-          const x = mx(m.mo);
-          const y = my(m.v);
-          return (
-            <g key={m.num} opacity={m.opacity}>
-              <circle cx={x} cy={y} r={5} fill={EMBER} stroke={VOID} strokeWidth={2} />
-              <text
-                x={x}
-                y={y - 22}
-                textAnchor={m.anchor}
-                fill={BONE}
-                fontSize={13}
-                fontFamily={SERIF}
-                fontWeight={600}
-                letterSpacing="-0.01em"
-              >
-                {m.num}
-              </text>
-              <text
-                x={x}
-                y={y - 10}
-                textAnchor={m.anchor}
-                fill={BONE}
-                fontSize={10}
-                fontFamily={MONO}
-                letterSpacing="0.08em"
-              >
-                {m.ctx}
-              </text>
-            </g>
-          );
-        })}
-
-        {/* Labels eixo X */}
-        {X_LABELS.map(({ mo, label }) => (
           <text
-            key={label}
-            x={mx(mo)}
-            y={H - 8}
-            textAnchor="middle"
-            fill="rgba(255,255,255,0.28)"
-            fontSize={10}
+            x={X_RANGE[0] - 8} y={my(value) + 4}
+            textAnchor="end"
+            fill="rgba(241,241,243,0.35)"
+            fontSize={9}
             fontFamily={MONO}
             letterSpacing="0.06em"
-          >
-            {label}
-          </text>
-        ))}
-      </svg>
-    </div>
+          >{label}</text>
+        </g>
+      ))}
+
+      {/* Divider jun/26 */}
+      <line
+        x1={dividerX} x2={dividerX}
+        y1={Y_RANGE[1] - 10} y2={Y_RANGE[0]}
+        stroke="rgba(255,255,255,0.10)"
+        strokeWidth={1}
+        strokeDasharray="3 5"
+      />
+
+      {/* Past line — sólido */}
+      <path
+        ref={pastRef}
+        d={pastD}
+        fill="none"
+        stroke="#FF5A1F"
+        strokeWidth={3.5}
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        style={{
+          transition: ready ? 'stroke-dashoffset 1.4s cubic-bezier(0.25,1,0.3,1) 0.2s' : 'none',
+          strokeDashoffset: ready ? 0 : undefined,
+        }}
+      />
+
+      {/* Proj line — tracejado */}
+      <path
+        ref={projRef}
+        d={projD}
+        fill="none"
+        stroke="#FF5A1F"
+        strokeWidth={3}
+        strokeOpacity={0.55}
+        strokeDasharray="8 5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        style={{
+          transition: ready ? 'stroke-dashoffset 1.0s cubic-bezier(0.25,1,0.3,1) 1.7s' : 'none',
+          strokeDashoffset: ready ? 0 : undefined,
+        }}
+      />
+
+      {/* Milestones */}
+      {MILESTONES.map((m, i) => (
+        <g
+          key={m.label}
+          style={{
+            opacity: milestoneIn[i] ? 1 : 0,
+            transform: milestoneIn[i] ? 'scale(1)' : 'scale(0.7)',
+            transformOrigin: `${mx(m.date).toFixed(1)}px ${my(m.value).toFixed(1)}px`,
+            transition: 'opacity 0.4s ease, transform 0.4s cubic-bezier(0.22,1,0.36,1)',
+          }}
+        >
+          <circle
+            cx={mx(m.date)} cy={my(m.value)}
+            r={5}
+            fill="#FF5A1F"
+            stroke="rgba(255,255,255,0.15)"
+            strokeWidth={1.5}
+          />
+          <text
+            x={mx(m.date)} y={my(m.value) - 18}
+            textAnchor={m.anchor}
+            fill="#f1f1f3"
+            fontSize={14}
+            fontFamily={SERIF}
+            fontStyle="italic"
+            fontWeight={300}
+          >{m.label}</text>
+          <text
+            x={mx(m.date)} y={my(m.value) - 6}
+            textAnchor={m.anchor}
+            fill="rgba(241,241,243,0.45)"
+            fontSize={9}
+            fontFamily={MONO}
+            letterSpacing="0.14em"
+          >{m.ctx.toUpperCase()}</text>
+        </g>
+      ))}
+
+      {/* X labels */}
+      {X_LABELS.map(({ date, label }) => (
+        <text
+          key={label}
+          x={mx(date)} y={Y_RANGE[0] + 18}
+          textAnchor="middle"
+          fill="rgba(241,241,243,0.35)"
+          fontSize={9}
+          fontFamily={MONO}
+          letterSpacing="0.06em"
+        >{label}</text>
+      ))}
+
+      {/* Legend — bottom right */}
+      <g transform={`translate(${X_RANGE[1] - 8}, ${Y_RANGE[0] + 16})`}>
+        <line x1={-126} y1={0} x2={-102} y2={0} stroke="#FF5A1F" strokeWidth={2.5} />
+        <text x={-98} y={4} fill="rgba(241,241,243,0.4)" fontSize={9} fontFamily={MONO} letterSpacing="0.1em">REAL</text>
+        <line x1={-66} y1={0} x2={-42} y2={0} stroke="#FF5A1F" strokeWidth={2} strokeOpacity={0.55} strokeDasharray="5 3" />
+        <text x={-38} y={4} fill="rgba(241,241,243,0.4)" fontSize={9} fontFamily={MONO} letterSpacing="0.1em">PROJEÇÃO</text>
+      </g>
+    </svg>
   );
 }

@@ -1,10 +1,10 @@
 'use client';
 
 import Link from 'next/link';
-import Image from 'next/image';
 import { useEffect, type ReactNode } from 'react';
 import { cn } from '@/lib/utils';
 import { WORKSHOP_3_SLIDES, type DeckSlide } from './slides';
+import { GrowthLogo } from './GrowthLogo';
 
 export { WORKSHOP_3_SLIDES, type DeckSlide };
 
@@ -42,23 +42,11 @@ export function Workshop3DeckLayout({ slug, children, className }: Workshop3Deck
   }, [prev, next]);
 
   return (
-    <article className={cn('relative min-h-screen bg-[#050507] text-white', className)}>
+    <article className={cn('relative min-h-screen bg-[#050507] text-white overflow-hidden', className)}>
       {/* ── Top bar ── */}
       <div className="flex items-center justify-between px-8 pt-8 pb-0 md:px-12 md:pt-10">
-        <Link href="/workshop-3" className="flex items-center gap-3 opacity-70 hover:opacity-100 transition-opacity">
-          <Image
-            src="/brand/growth/symbol-official.svg"
-            alt="Growth Sales A.I."
-            width={28}
-            height={28}
-            className="flex-shrink-0"
-          />
-          <span
-            className="font-mono text-[10px] tracking-[0.22em] uppercase hidden sm:block"
-            style={{ fontFamily: MONO, color: 'rgba(255,255,255,0.4)' }}
-          >
-            Growth Sales.ai
-          </span>
+        <Link href="/workshop-3" className="opacity-60 hover:opacity-100 transition-opacity">
+          <GrowthLogo size="sm" />
         </Link>
 
         <div className="flex items-center gap-6">
