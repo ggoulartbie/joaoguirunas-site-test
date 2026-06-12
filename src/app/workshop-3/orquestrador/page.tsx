@@ -38,19 +38,18 @@ const BLOCKS = [
 export default function OrquestradorPage() {
   return (
     <Workshop3DeckLayout slug="orquestrador">
-      {/* Background — editorial-ai-workflow-woman P-B com overlay */}
+      {/* Background — cinematic-02.mp4 com foto como poster fallback */}
       <div aria-hidden="true" style={{ position: 'absolute', inset: 0, zIndex: 0 }}>
-        <img
-          src="/photos/editorial/editorial-ai-workflow-woman.png"
-          alt=""
-          style={{
-            width: '100%',
-            height: '100%',
-            objectFit: 'cover',
-            objectPosition: 'center 20%',
-            display: 'block',
-          }}
-        />
+        <video
+          className="absolute inset-0 w-full h-full object-cover"
+          autoPlay
+          muted
+          loop
+          playsInline
+          poster="/photos/editorial/editorial-ai-workflow-woman.png"
+        >
+          <source src="/video/joao/cinematic-02.mp4" type="video/mp4" />
+        </video>
         <div
           style={{
             position: 'absolute',
