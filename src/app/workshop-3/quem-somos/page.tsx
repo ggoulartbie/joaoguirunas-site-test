@@ -1,193 +1,375 @@
-import type { Metadata } from 'next';
+'use client';
+
 import Image from 'next/image';
+import { motion } from 'framer-motion';
 import { Workshop3DeckLayout } from '../_components/Workshop3DeckLayout';
 import { GrowthLogo } from '../_components/GrowthLogo';
 
-export const metadata: Metadata = {
-  title: '01 — Quem Somos | Workshop 3',
-  robots: { index: false, follow: false },
-};
+const MONO  = "'Geist Mono', 'JetBrains Mono', ui-monospace, monospace";
+const SERIF = "var(--font-display-serif), 'Fraunces', Georgia, serif";
+const EMBER = '#FF3A0E';
+const BONE  = '#f1f1f3';
+const BONEDIM  = '#c5c5ca';
+const BONEMUTE = 'rgba(132,132,140,0.85)';
+const CINEMA   = [0.22, 0.61, 0.36, 1] as const;
 
-const MONO    = "'Geist Mono', 'Roboto Mono', monospace";
-const SERIF   = "var(--font-display-serif), 'Fraunces', serif";
-const EMBER   = '#FF3A0E';
-const BONE    = '#f1f1f3';
-const BONEDIM = '#c5c5ca';
-const BONEMUTE = 'rgba(132,132,140,0.9)';
-
-// Claudia esquerda, João direita — conforme João
-const FOUNDERS = [
-  {
-    name: 'Claudia Guirunas',
-    role: 'Co-CEO · Co-Founder',
-    handle: '@claudia.guirunas',
-    photoSrc: '/photos/founders/claudia-official.png',
-    photoAlt: 'Claudia Guirunas — Co-CEO & Co-Founder da Growth Sales',
-    bioLead: 'Transforma dados, comportamento e experiência em sistemas inteligentes que geram clareza, fluidez e resultados reais.',
-    bioTrail: 'Sua trajetória une estratégia corporativa e gestão ao estudo do comportamento humano. Atua na interseção entre experiência do cliente, cultura organizacional e IA aplicada a processos — tornando operações mais leves e experiências mais consistentes.',
-  },
-  {
-    name: 'João Guirunas',
-    role: 'CEO · Co-Founder',
-    handle: '@joaoguirunas',
-    photoSrc: '/photos/founders/joao-official.png',
-    photoAlt: 'João Guirunas — CEO & Co-Founder da Growth Sales',
-    bioLead: 'Lidera a frente de estratégia e inovação na Growth Sales, transformando inteligência artificial em eficiência real e evolução dos negócios.',
-    bioTrail: 'Sua trajetória une experiência em crescimento e liderança a uma formação sólida em negócio e tecnologia. É publicitário pela FACHA, Web Developer pelo INFNET e possui MBAs em Gestão Empresarial, Inteligência Competitiva, Data Science & Big Data, Inteligência Artificial e Neurociência.',
-  },
-] as const;
-
-const SLIDE_TAGLINE = '18 meses. 2 produtos no mercado.';
+const ease = CINEMA;
 
 export default function QuemSomosPage() {
   return (
     <Workshop3DeckLayout slug="quem-somos">
-      {/* BG — vídeo cinemático fullbleed */}
-      <div aria-hidden="true" style={{ position: 'absolute', inset: 0, zIndex: 0 }}>
-        <video
-          className="absolute inset-0 w-full h-full object-cover"
-          autoPlay
-          muted
-          loop
-          playsInline
-          poster="/photos/editorial/hero-editorial-writing.png"
+      {/* ── BGs split 50/50 ── */}
+      <div aria-hidden="true" style={{ position: 'absolute', inset: 0, zIndex: 0, display: 'flex' }}>
+        {/* Claudia — esquerda */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.9, ease }}
+          style={{ position: 'relative', flex: 1 }}
         >
-          <source src="/video/joao/cinematic-01.mp4" type="video/mp4" />
-        </video>
-        <div style={{
-          position: 'absolute', inset: 0,
-          background: 'linear-gradient(to bottom, rgba(5,5,7,0.52) 0%, rgba(5,5,7,0.68) 100%)',
-        }} />
+          <Image
+            src="/photos/claudia/claudia-bg-dashboards.png"
+            alt=""
+            fill
+            style={{ objectFit: 'cover', objectPosition: 'center top' }}
+            priority
+          />
+          <div style={{
+            position: 'absolute', inset: 0,
+            background: 'linear-gradient(to bottom, rgba(5,5,7,0.55) 0%, rgba(5,5,7,0.72) 100%)',
+          }} />
+        </motion.div>
+
+        {/* Hairline divisória */}
+        <div style={{ width: 1, background: `rgba(255,58,14,0.25)`, flexShrink: 0, zIndex: 2 }} />
+
+        {/* João — direita */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.9, ease }}
+          style={{ position: 'relative', flex: 1 }}
+        >
+          <Image
+            src="/photos/joao/joao-rooftop-night.png"
+            alt=""
+            fill
+            style={{ objectFit: 'cover', objectPosition: 'center top' }}
+            priority
+          />
+          <div style={{
+            position: 'absolute', inset: 0,
+            background: 'linear-gradient(to bottom, rgba(5,5,7,0.50) 0%, rgba(5,5,7,0.70) 100%)',
+          }} />
+        </motion.div>
       </div>
 
-      <div style={{ position: 'relative', zIndex: 1, display: 'flex', flexDirection: 'column', gap: 0 }}>
-        {/* Kicker */}
-        <span
-          className="block font-mono text-[10px] tracking-[0.22em] uppercase mb-6"
-          style={{ fontFamily: MONO, color: EMBER }}
-        >
-          Growth Sales.ai · Apresentação
-        </span>
+      {/* ── Conteúdo principal ── */}
+      <div style={{
+        position: 'relative', zIndex: 1,
+        display: 'flex', flexDirection: 'column',
+        height: '100%', gap: 0,
+      }}>
 
-        {/* Logo hero lockup horizontal */}
-        <GrowthLogo size="hero" />
+        {/* ── Hero header ── */}
+        <div style={{ textAlign: 'center', marginBottom: 'clamp(16px, 2.5vh, 28px)' }}>
+          {/* Kicker */}
+          <motion.span
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.15, duration: 0.5, ease }}
+            style={{
+              display: 'block', marginBottom: 10,
+              fontFamily: MONO, fontSize: 10,
+              letterSpacing: '0.22em', textTransform: 'uppercase',
+              color: BONEMUTE,
+            }}
+          >
+            Growth Sales.ai · Workshop 3 · Jun 2026
+          </motion.span>
 
-        {/* Hairline separador logo/cards */}
-        <div style={{ height: 1, background: 'rgba(255,255,255,0.07)', margin: '28px 0 24px' }} />
+          {/* Logo */}
+          <motion.div
+            initial={{ opacity: 0, y: 18, scale: 0.96 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            transition={{ delay: 0.2, duration: 0.65, ease }}
+            style={{ display: 'flex', justifyContent: 'center' }}
+          >
+            <GrowthLogo size="hero" />
+          </motion.div>
 
-        {/* Founders grid — 2 colunas */}
-        <div
-          className="grid gap-8"
-          style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))' }}
-        >
-          {FOUNDERS.map((f) => (
-            <div key={f.name} style={{ display: 'flex', flexDirection: 'column', gap: 0 }}>
+          {/* Tagline produtos */}
+          <motion.p
+            initial={{ opacity: 0, y: 14 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.38, duration: 0.5, ease }}
+            style={{
+              fontFamily: SERIF, fontStyle: 'italic',
+              fontWeight: 300, fontSize: 'clamp(13px, 1.6vw, 18px)',
+              color: BONEDIM, letterSpacing: '-0.01em',
+              marginTop: 10, marginBottom: 14,
+            }}
+          >
+            Os dois produtos da empresa
+          </motion.p>
 
-              {/* Foto — proporção 3:4 com foto oficial */}
-              <div
-                style={{
-                  position: 'relative',
-                  aspectRatio: '3/4',
-                  maxHeight: 220,
-                  border: '1px solid rgba(255,255,255,0.08)',
-                  overflow: 'hidden',
-                }}
-              >
-                {/* Corner accents ember */}
-                <span style={{
-                  position: 'absolute', top: 12, left: 12, width: 14, height: 14,
-                  borderTop: `1.5px solid ${EMBER}`, borderLeft: `1.5px solid ${EMBER}`,
-                  opacity: 0.5, zIndex: 1,
-                }} />
-                <span style={{
-                  position: 'absolute', bottom: 12, right: 12, width: 14, height: 14,
-                  borderBottom: `1.5px solid ${EMBER}`, borderRight: `1.5px solid ${EMBER}`,
-                  opacity: 0.5, zIndex: 1,
-                }} />
-
-                <Image
-                  src={f.photoSrc}
-                  alt={f.photoAlt}
-                  fill
-                  style={{ objectFit: 'cover', objectPosition: 'center top' }}
-                />
-              </div>
-
-              {/* Identity block */}
-              <div style={{
-                paddingTop: 14,
-                paddingBottom: 16,
-                paddingLeft: 14,
-                paddingRight: 14,
-                display: 'flex', flexDirection: 'column', gap: 4,
-                background: 'rgba(5,5,7,0.72)',
-                border: '1px solid rgba(255,255,255,0.07)',
-                borderTop: 'none',
+          {/* Product chips */}
+          <motion.div
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.44, duration: 0.5, ease }}
+            style={{
+              display: 'inline-flex', gap: 0,
+              border: '1px solid rgba(255,255,255,0.13)',
+            }}
+          >
+            {/* Rev OS */}
+            <div style={{
+              padding: 'clamp(10px,1.4vh,16px) clamp(16px,2.2vw,28px)',
+              borderRight: '1px solid rgba(255,255,255,0.13)',
+              display: 'flex', flexDirection: 'column', gap: 3, minWidth: 140,
+            }}>
+              <span style={{
+                fontFamily: MONO, fontSize: 9, letterSpacing: '0.2em',
+                textTransform: 'uppercase', color: EMBER,
               }}>
-                {/* Cargo */}
-                <span style={{
-                  fontFamily: MONO, fontSize: 10,
-                  letterSpacing: '0.18em', textTransform: 'uppercase' as const,
-                  color: EMBER,
-                }}>
-                  {f.role}
-                </span>
-
-                {/* Handle Instagram */}
-                <span style={{
-                  fontFamily: MONO, fontSize: 11,
-                  letterSpacing: '0.18em', textTransform: 'uppercase' as const,
-                  color: EMBER,
-                }}>
-                  {f.handle}
-                </span>
-
-                {/* Nome */}
-                <span style={{
-                  fontFamily: SERIF, fontWeight: 400,
-                  fontSize: 'clamp(22px, 2.8vw, 32px)',
-                  letterSpacing: '-0.02em', lineHeight: 1.05,
-                  color: BONE,
-                }}>
-                  {f.name}
-                </span>
-
-                {/* Hairline */}
-                <div style={{ height: 1, background: 'rgba(255,255,255,0.07)', margin: '8px 0 4px' }} />
-
-                {/* Bio — função (destaque) */}
-                <p style={{
-                  fontFamily: "'Geist', system-ui, sans-serif",
-                  fontWeight: 300, fontSize: 14,
-                  lineHeight: 1.65, color: BONEDIM,
-                }}>
-                  {f.bioLead}
-                </p>
-
-                {/* Bio — trajetória/formação (discreto) */}
-                <p style={{
-                  fontFamily: "'Geist', system-ui, sans-serif",
-                  fontWeight: 300, fontSize: 12,
-                  lineHeight: 1.6, color: BONEMUTE,
-                  marginTop: 6,
-                }}>
-                  {f.bioTrail}
-                </p>
-              </div>
+                Acelerador
+              </span>
+              <span style={{
+                fontFamily: SERIF, fontStyle: 'italic',
+                fontWeight: 300, fontSize: 'clamp(18px, 2vw, 24px)',
+                color: BONE, lineHeight: 1, letterSpacing: '-0.01em',
+              }}>
+                Rev OS<sup style={{ fontSize: '0.4em', verticalAlign: 'super', color: BONEMUTE }}>™</sup>
+              </span>
+              <span style={{
+                fontFamily: MONO, fontSize: 9, letterSpacing: '0.12em',
+                textTransform: 'uppercase', color: BONEMUTE,
+              }}>
+                Service as a System
+              </span>
             </div>
-          ))}
+
+            {/* Build OS */}
+            <div style={{
+              padding: 'clamp(10px,1.4vh,16px) clamp(16px,2.2vw,28px)',
+              display: 'flex', flexDirection: 'column', gap: 3, minWidth: 140,
+            }}>
+              <span style={{
+                fontFamily: MONO, fontSize: 9, letterSpacing: '0.2em',
+                textTransform: 'uppercase', color: BONEMUTE,
+              }}>
+                Open Source
+              </span>
+              <span style={{
+                fontFamily: SERIF, fontStyle: 'italic',
+                fontWeight: 300, fontSize: 'clamp(18px, 2vw, 24px)',
+                color: BONE, lineHeight: 1, letterSpacing: '-0.01em',
+              }}>
+                Build OS<sup style={{ fontSize: '0.4em', verticalAlign: 'super', color: BONEMUTE }}>™</sup>
+              </span>
+              <span style={{
+                fontFamily: MONO, fontSize: 9, letterSpacing: '0.12em',
+                textTransform: 'uppercase', color: BONEMUTE,
+              }}>
+                System as a Service
+              </span>
+            </div>
+          </motion.div>
         </div>
 
-        {/* Tagline rodapé */}
-        <div style={{ marginTop: 20 }}>
-          <div style={{ height: 1, background: 'rgba(255,255,255,0.07)', marginBottom: 14 }} />
-          <p style={{
-            fontFamily: SERIF, fontStyle: 'italic',
-            fontWeight: 300, fontSize: 18,
-            color: 'rgba(241,241,243,0.5)', letterSpacing: '-0.01em',
-          }}>
-            {SLIDE_TAGLINE}
-          </p>
+        {/* Hairline */}
+        <div style={{ height: 1, background: 'rgba(255,255,255,0.07)', marginBottom: 'clamp(14px,2vh,22px)' }} />
+
+        {/* ── Founders boxes (split) ── */}
+        <div style={{
+          display: 'grid',
+          gridTemplateColumns: '1fr 1fr',
+          gap: 'clamp(16px, 2.5vw, 32px)',
+          flex: 1,
+          minHeight: 0,
+        }}>
+
+          {/* ── Box Claudia ── */}
+          <motion.div
+            initial={{ opacity: 0, x: -40 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ delay: 0.58, duration: 0.72, ease }}
+            style={{
+              display: 'flex', gap: 'clamp(12px,1.6vw,20px)',
+              background: 'rgba(5,5,7,0.78)',
+              border: '1px solid rgba(255,255,255,0.09)',
+              padding: 'clamp(14px,1.8vh,22px) clamp(14px,1.6vw,20px)',
+            }}
+          >
+            {/* Foto perfil */}
+            <div style={{
+              position: 'relative',
+              width: 'clamp(80px,8vw,110px)',
+              aspectRatio: '3/4',
+              flexShrink: 0,
+              border: '1px solid rgba(255,255,255,0.08)',
+              overflow: 'hidden',
+            }}>
+              <Image
+                src="/photos/founders/claudia-official.png"
+                alt="Claudia Guirunas"
+                fill
+                style={{ objectFit: 'cover', objectPosition: 'center top' }}
+              />
+            </div>
+
+            {/* Identity + formação */}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 0, flex: 1, minWidth: 0 }}>
+              {/* Cargo */}
+              <span style={{
+                fontFamily: MONO, fontSize: 9,
+                letterSpacing: '0.2em', textTransform: 'uppercase',
+                color: EMBER, marginBottom: 3,
+              }}>
+                CEO · Co-Founder
+              </span>
+
+              {/* Nome */}
+              <span style={{
+                fontFamily: SERIF, fontWeight: 400,
+                fontSize: 'clamp(18px, 2.2vw, 26px)',
+                letterSpacing: '-0.02em', lineHeight: 1.05,
+                color: BONE, marginBottom: 2,
+              }}>
+                Claudia Guirunas
+              </span>
+
+              {/* Handle */}
+              <motion.span
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 1.05, duration: 0.5, ease }}
+                style={{
+                  fontFamily: MONO, fontSize: 9,
+                  letterSpacing: '0.14em', color: BONEMUTE,
+                  marginBottom: 10,
+                }}
+              >
+                @claudia.guirunas
+              </motion.span>
+
+              {/* Hairline */}
+              <div style={{ height: 1, background: 'rgba(255,255,255,0.07)', marginBottom: 9 }} />
+
+              {/* Formação */}
+              <motion.p
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 1.1, duration: 0.5, ease }}
+                style={{
+                  fontFamily: "'Geist', system-ui, sans-serif",
+                  fontWeight: 300, fontSize: 'clamp(11px, 1.1vw, 13px)',
+                  lineHeight: 1.55, color: BONEDIM,
+                }}
+              >
+                Trajetória que une estratégia corporativa e gestão ao estudo do comportamento humano. Atua na interseção entre experiência do cliente, cultura organizacional e IA aplicada a processos — tornando operações mais leves e experiências mais consistentes.
+              </motion.p>
+            </div>
+          </motion.div>
+
+          {/* ── Box João ── */}
+          <motion.div
+            initial={{ opacity: 0, x: 40 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ delay: 0.78, duration: 0.72, ease }}
+            style={{
+              display: 'flex', gap: 'clamp(12px,1.6vw,20px)',
+              background: 'rgba(5,5,7,0.78)',
+              border: '1px solid rgba(255,255,255,0.09)',
+              padding: 'clamp(14px,1.8vh,22px) clamp(14px,1.6vw,20px)',
+            }}
+          >
+            {/* Foto perfil */}
+            <div style={{
+              position: 'relative',
+              width: 'clamp(80px,8vw,110px)',
+              aspectRatio: '3/4',
+              flexShrink: 0,
+              border: '1px solid rgba(255,255,255,0.08)',
+              overflow: 'hidden',
+            }}>
+              <Image
+                src="/photos/founders/joao-official.png"
+                alt="João Guirunas"
+                fill
+                style={{ objectFit: 'cover', objectPosition: 'center top' }}
+              />
+            </div>
+
+            {/* Identity + formação */}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 0, flex: 1, minWidth: 0 }}>
+              {/* Cargo */}
+              <span style={{
+                fontFamily: MONO, fontSize: 9,
+                letterSpacing: '0.2em', textTransform: 'uppercase',
+                color: EMBER, marginBottom: 3,
+              }}>
+                CSO · Co-Founder
+              </span>
+
+              {/* Nome */}
+              <span style={{
+                fontFamily: SERIF, fontWeight: 400,
+                fontSize: 'clamp(18px, 2.2vw, 26px)',
+                letterSpacing: '-0.02em', lineHeight: 1.05,
+                color: BONE, marginBottom: 2,
+              }}>
+                João Guirunas
+              </span>
+
+              {/* Handle */}
+              <motion.span
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 1.05, duration: 0.5, ease }}
+                style={{
+                  fontFamily: MONO, fontSize: 9,
+                  letterSpacing: '0.14em', color: BONEMUTE,
+                  marginBottom: 10,
+                }}
+              >
+                @joaoguirunas
+              </motion.span>
+
+              {/* Hairline */}
+              <div style={{ height: 1, background: 'rgba(255,255,255,0.07)', marginBottom: 9 }} />
+
+              {/* Formação */}
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 1.1, duration: 0.5, ease }}
+                style={{ display: 'flex', flexDirection: 'column', gap: 4 }}
+              >
+                {[
+                  'Publicitário · FACHA',
+                  'Web Developer · INFNET',
+                  'MBA em Gestão Empresarial',
+                  'MBA em Inteligência Competitiva',
+                  'MBA em Data Science & Big Data',
+                  'MBA em Inteligência Artificial',
+                  'MBA em Neurociência',
+                ].map((item) => (
+                  <div key={item} style={{ display: 'flex', alignItems: 'baseline', gap: 7 }}>
+                    <span style={{ width: 4, height: 4, borderRadius: '50%', background: EMBER, opacity: 0.55, flexShrink: 0, marginTop: 2 }} />
+                    <span style={{
+                      fontFamily: "'Geist', system-ui, sans-serif",
+                      fontWeight: 300, fontSize: 'clamp(10px, 1vw, 12px)',
+                      lineHeight: 1.5, color: BONEDIM,
+                    }}>
+                      {item}
+                    </span>
+                  </div>
+                ))}
+              </motion.div>
+            </div>
+          </motion.div>
         </div>
       </div>
     </Workshop3DeckLayout>
