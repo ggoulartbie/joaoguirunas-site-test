@@ -18,51 +18,31 @@ const ease = CINEMA;
 export default function QuemSomosPage() {
   return (
     <Workshop3DeckLayout slug="quem-somos">
-      {/* ── BGs split 50/50 ── */}
-      <div aria-hidden="true" style={{ position: 'absolute', inset: 0, zIndex: 0, display: 'flex' }}>
-        {/* Claudia — esquerda */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.9, ease }}
-          style={{ position: 'relative', flex: 1 }}
+      {/* ── BG vídeo cinematográfico fullbleed ── */}
+      <motion.div
+        aria-hidden="true"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.9, ease }}
+        style={{ position: 'absolute', inset: 0, zIndex: 0 }}
+      >
+        <video
+          className="absolute inset-0 w-full h-full object-cover"
+          autoPlay muted loop playsInline
+          poster="/photos/editorial/hero-editorial-writing.png"
         >
-          <Image
-            src="/photos/claudia/claudia-bg-dashboards.png"
-            alt=""
-            fill
-            style={{ objectFit: 'cover', objectPosition: 'center top' }}
-            priority
-          />
-          <div style={{
-            position: 'absolute', inset: 0,
-            background: 'linear-gradient(to bottom, rgba(5,5,7,0.55) 0%, rgba(5,5,7,0.72) 100%)',
-          }} />
-        </motion.div>
-
-        {/* Hairline divisória */}
-        <div style={{ width: 1, background: `rgba(255,58,14,0.25)`, flexShrink: 0, zIndex: 2 }} />
-
-        {/* João — direita */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.9, ease }}
-          style={{ position: 'relative', flex: 1 }}
-        >
-          <Image
-            src="/photos/joao/joao-rooftop-night.png"
-            alt=""
-            fill
-            style={{ objectFit: 'cover', objectPosition: 'center top' }}
-            priority
-          />
-          <div style={{
-            position: 'absolute', inset: 0,
-            background: 'linear-gradient(to bottom, rgba(5,5,7,0.50) 0%, rgba(5,5,7,0.70) 100%)',
-          }} />
-        </motion.div>
-      </div>
+          <source src="/video/joao/cinematic-01.mp4" type="video/mp4" />
+        </video>
+        <div style={{
+          position: 'absolute', inset: 0,
+          background: 'linear-gradient(to bottom, rgba(5,5,7,0.55) 0%, rgba(5,5,7,0.72) 100%)',
+        }} />
+        {/* Dim radial ember nos cantos */}
+        <div style={{
+          position: 'absolute', inset: 0,
+          background: 'radial-gradient(ellipse at center, transparent 40%, rgba(5,5,7,0.45) 100%)',
+        }} />
+      </motion.div>
 
       {/* ── Conteúdo principal ── */}
       <div style={{
