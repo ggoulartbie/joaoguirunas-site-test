@@ -144,12 +144,12 @@ export function GrowthLineChart() {
       style={{ display: 'block', overflow: 'visible' }}
       aria-hidden="true"
     >
-      {/* Legenda — topo direito, acima da grid */}
-      <g transform={`translate(${X_RANGE[1]}, ${LEGEND_Y})`}>
-        <line x1={-140} y1={0} x2={-116} y2={0} stroke="#FF5A1F" strokeWidth={2.5} />
-        <text x={-112} y={4} fill="rgba(241,241,243,0.4)" fontSize={9} fontFamily={MONO} letterSpacing="0.1em">REAL</text>
-        <line x1={-76} y1={0} x2={-52} y2={0} stroke="#FF5A1F" strokeWidth={2} strokeOpacity={0.55} strokeDasharray="5 3" />
-        <text x={-48} y={4} fill="rgba(241,241,243,0.4)" fontSize={9} fontFamily={MONO} letterSpacing="0.1em">PROJEÇÃO</text>
+      {/* Legenda — topo esquerdo, longe do marco 540k (canto direito) */}
+      <g transform={`translate(${X_RANGE[0]}, ${LEGEND_Y})`}>
+        <line x1={0} y1={0} x2={24} y2={0} stroke="#FF5A1F" strokeWidth={2.5} />
+        <text x={28} y={4} fill="rgba(241,241,243,0.4)" fontSize={9} fontFamily={MONO} letterSpacing="0.1em">REAL</text>
+        <line x1={64} y1={0} x2={88} y2={0} stroke="#FF5A1F" strokeWidth={2} strokeOpacity={0.55} strokeDasharray="5 3" />
+        <text x={92} y={4} fill="rgba(241,241,243,0.4)" fontSize={9} fontFamily={MONO} letterSpacing="0.1em">PROJEÇÃO</text>
       </g>
 
       {/* Y grid + labels */}
