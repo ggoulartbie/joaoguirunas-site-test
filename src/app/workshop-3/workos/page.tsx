@@ -63,7 +63,7 @@ export default function WorkOSPage() {
             display: 'block',
           }}
         >
-          <source src="/video/joao/cinematic-02.mp4" type="video/mp4" />
+          <source src="/video/joao/cinematic-01.mp4" type="video/mp4" />
         </video>
         {/* gradiente direita → escuro */}
         <div style={{
