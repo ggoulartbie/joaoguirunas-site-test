@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import { Workshop3DeckLayout } from '../_components/Workshop3DeckLayout';
 
 export const metadata: Metadata = {
-  title: '04 — Build OS | Workshop 3',
+  title: '04 — WorkOS | Workshop 3',
   robots: { index: false, follow: false },
 };
 
@@ -10,7 +10,6 @@ const MONO    = "'JetBrains Mono', 'Roboto Mono', ui-monospace, monospace";
 const DISPLAY = "'Fraunces', 'Instrument Serif', Georgia, serif";
 const EMBER   = '#FF3A0E';
 const EMBER_GLOW = '#FF5A1F';
-const VOID    = '#050507';
 const INK     = '#0e0e11';
 const BONE    = '#f1f1f3';
 const BONE_DIM = '#c5c5ca';
@@ -22,23 +21,20 @@ const BLOCKS = [
   {
     label: 'Dor',
     accent: BONE_MUTE,
-    borderColor: HAIRLINE_STRONG,
-    text: 'A estratégia raramente é o gargalo. A construção é.',
-    caption: '70% das transformações falham na execução — raramente na decisão.',
+    text: 'Gestão de projetos virou pesadelo de planilha. Ninguém sabe o que está acontecendo. O founder é gargalo de tudo.',
+    caption: 'PMO custa caro, escala mal e depende de uma pessoa acordada às 23h.',
   },
   {
     label: 'Solução',
     accent: EMBER_GLOW,
-    borderColor: 'rgba(255,90,31,0.45)',
-    text: 'Decisão → arquitetura → código → operação. Build OS encurta esse trajeto.',
-    caption: 'Time sênior + IA como co-desenvolvedor. No ar em semanas, não meses.',
+    text: 'Time de agentes IA operando como PMO. O sistema lê, prioriza, distribui e reporta — sem depender de uma pessoa no centro.',
+    caption: 'Produto interno da Growth Sales. Operado por agentes, não por headcount.',
   },
   {
     label: 'Resultado',
     accent: BONE,
-    borderColor: HAIRLINE_STRONG,
-    text: 'O sistema no ar — em produção, e seu. Sem caixa-preta. Sem refém de fornecedor.',
-    caption: 'Código, arquitetura e documentação entregues. Licença MIT.',
+    text: 'Operação que roda sem o dono no meio. Visibilidade real. Decisão sobre dado, não sobre suposição.',
+    caption: 'Roda dentro de casa e em clientes. Sem código de terceiro. Sem lock-in.',
   },
 ];
 
@@ -87,7 +83,6 @@ export default function WorkOSPage() {
 
           {/* Eyebrow row */}
           <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
-            {/* dot pulsante */}
             <span style={{
               width: '8px', height: '8px', borderRadius: '50%',
               background: EMBER, boxShadow: `0 0 10px ${EMBER}`,
@@ -101,14 +96,13 @@ export default function WorkOSPage() {
               textTransform: 'uppercase',
               color: BONE_MUTE,
             }}>
-              Slide 04 · Produto 01
+              Slide 04 · Produto interno
             </span>
             <span style={{
               width: '40px', height: '1px',
               background: 'rgba(255,58,14,0.5)',
               display: 'inline-block',
             }} />
-            {/* Tag System as a Service */}
             <span style={{
               fontFamily: MONO,
               fontSize: '9px',
@@ -127,7 +121,7 @@ export default function WorkOSPage() {
                 background: EMBER, boxShadow: `0 0 6px ${EMBER}`,
                 display: 'inline-block', flexShrink: 0,
               }} />
-              System as a Service
+              Growth Sales A.I.
             </span>
           </div>
 
@@ -141,9 +135,8 @@ export default function WorkOSPage() {
               lineHeight: 0.92,
               color: BONE,
             }}>
-              Build OS
+              WorkOS
             </h1>
-            {/* Tagline oficial do site */}
             <p style={{
               fontFamily: DISPLAY,
               fontStyle: 'italic',
@@ -154,8 +147,8 @@ export default function WorkOSPage() {
               lineHeight: 1.3,
               maxWidth: '520px',
             }}>
-              Construção não é encomenda. É{' '}
-              <em style={{ color: EMBER, fontStyle: 'italic' }}>arquitetura.</em>
+              Produto interno desenvolvido pela{' '}
+              <em style={{ color: EMBER, fontStyle: 'italic' }}>Growth Sales.</em>
             </p>
           </div>
         </header>
@@ -184,7 +177,6 @@ export default function WorkOSPage() {
                 borderTop: i === 1 ? `2px solid ${EMBER}` : `2px solid transparent`,
               }}
             >
-              {/* Label */}
               <span style={{
                 fontFamily: MONO,
                 fontSize: '10px',
@@ -203,7 +195,6 @@ export default function WorkOSPage() {
                 {block.label}
               </span>
 
-              {/* Texto principal */}
               <p style={{
                 fontFamily: DISPLAY,
                 fontWeight: i === 1 ? 400 : 300,
@@ -212,16 +203,9 @@ export default function WorkOSPage() {
                 color: i === 1 ? BONE : BONE_DIM,
                 letterSpacing: '-0.01em',
               }}>
-                {i === 1 ? (
-                  <>
-                    Decisão → arquitetura → código → operação.{' '}
-                    <span style={{ color: EMBER, fontStyle: 'italic' }}>Build OS</span>{' '}
-                    encurta esse trajeto.
-                  </>
-                ) : block.text}
+                {block.text}
               </p>
 
-              {/* Caption */}
               <p style={{
                 fontFamily: MONO,
                 fontSize: '10px',
@@ -236,7 +220,7 @@ export default function WorkOSPage() {
           ))}
         </div>
 
-        {/* Footer — tagline master */}
+        {/* Footer */}
         <div style={{
           display: 'flex',
           alignItems: 'center',
@@ -252,8 +236,8 @@ export default function WorkOSPage() {
             color: BONE_MUTE,
             letterSpacing: '-0.005em',
           }}>
-            No ar em semanas — conduzido por time sênior, com a{' '}
-            <span style={{ color: EMBER_GLOW }}>IA como co-desenvolvedor.</span>
+            PMO operado por agentes —{' '}
+            <span style={{ color: EMBER_GLOW }}>construído e operado pela Growth Sales.</span>
           </p>
           <span style={{
             fontFamily: MONO,
@@ -264,7 +248,7 @@ export default function WorkOSPage() {
             whiteSpace: 'nowrap',
             opacity: 0.6,
           }}>
-            growthsales.ai · Build OS™
+            growthsales.ai · WorkOS
           </span>
         </div>
       </div>
