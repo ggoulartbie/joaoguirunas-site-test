@@ -38,8 +38,22 @@ const FOUNDERS = [
 export default function QuemSomosPage() {
   return (
     <Workshop3DeckLayout slug="quem-somos">
+      {/* ── BG editorial — foto protagonista ── */}
+      <div aria-hidden="true" style={{ position: 'absolute', inset: 0, zIndex: 0 }}>
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src="/photos/editorial/hero-editorial-writing.png"
+          alt=""
+          style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center 30%', display: 'block' }}
+        />
+        <div style={{
+          position: 'absolute', inset: 0,
+          background: 'linear-gradient(to bottom, rgba(5,5,7,0.52) 0%, rgba(5,5,7,0.68) 100%)',
+        }} />
+      </div>
+
       {/* ── Hero logo ── */}
-      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: 0 }}>
+      <div style={{ position: 'relative', zIndex: 1, display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: 0 }}>
         <span
           className="block font-mono text-[10px] tracking-[0.22em] uppercase mb-6"
           style={{ fontFamily: MONO, color: EMBER }}
@@ -61,7 +75,7 @@ export default function QuemSomosPage() {
       {/* ── Founders grid ── */}
       <div
         className="grid gap-8 mt-14"
-        style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))' }}
+        style={{ position: 'relative', zIndex: 1, gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))' }}
       >
         {FOUNDERS.map((f) => (
           <div key={f.handle} style={{ display: 'flex', flexDirection: 'column', gap: 0 }}>
@@ -143,7 +157,18 @@ export default function QuemSomosPage() {
             </div>
 
             {/* Identity block */}
-            <div style={{ paddingTop: 20, display: 'flex', flexDirection: 'column', gap: 6 }}>
+            <div style={{
+              paddingTop: 16,
+              paddingBottom: 20,
+              paddingLeft: 16,
+              paddingRight: 16,
+              display: 'flex',
+              flexDirection: 'column',
+              gap: 6,
+              background: 'rgba(5,5,7,0.72)',
+              border: '1px solid rgba(255,255,255,0.07)',
+              borderTop: 'none',
+            }}>
               {/* Role */}
               <span
                 style={{
