@@ -215,7 +215,7 @@ export default function QuemSomosPage() {
                 src="/photos/founders/claudia-official.png"
                 alt="Claudia Guirunas"
                 fill
-                style={{ objectFit: 'cover', objectPosition: 'center top' }}
+                style={{ objectFit: 'cover', objectPosition: 'center 25%' }}
               />
             </div>
 
@@ -265,10 +265,10 @@ export default function QuemSomosPage() {
                 style={{
                   fontFamily: "'Geist', system-ui, sans-serif",
                   fontWeight: 300, fontSize: 'clamp(11px, 1.1vw, 13px)',
-                  lineHeight: 1.55, color: BONEDIM,
+                  lineHeight: 1.6, color: BONEMUTE,
                 }}
               >
-                Trajetória que une estratégia corporativa e gestão ao estudo do comportamento humano. Atua na interseção entre experiência do cliente, cultura organizacional e IA aplicada a processos — tornando operações mais leves e experiências mais consistentes.
+                Estratégia corporativa · Gestão · Comportamento humano · Experiência do cliente · Cultura organizacional · IA aplicada a processos
               </motion.p>
             </div>
           </motion.div>
@@ -298,7 +298,7 @@ export default function QuemSomosPage() {
                 src="/photos/founders/joao-official.png"
                 alt="João Guirunas"
                 fill
-                style={{ objectFit: 'cover', objectPosition: 'center top' }}
+                style={{ objectFit: 'cover', objectPosition: 'center 30%' }}
               />
             </div>
 
@@ -341,33 +341,18 @@ export default function QuemSomosPage() {
               <div style={{ height: 1, background: 'rgba(255,255,255,0.07)', marginBottom: 9 }} />
 
               {/* Formação */}
-              <motion.div
+              <motion.p
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ delay: 1.1, duration: 0.5, ease }}
-                style={{ display: 'flex', flexDirection: 'column', gap: 4 }}
+                style={{
+                  fontFamily: "'Geist', system-ui, sans-serif",
+                  fontWeight: 300, fontSize: 'clamp(11px, 1.1vw, 13px)',
+                  lineHeight: 1.6, color: BONEMUTE,
+                }}
               >
-                {[
-                  'Publicitário · FACHA',
-                  'Web Developer · INFNET',
-                  'MBA em Gestão Empresarial',
-                  'MBA em Inteligência Competitiva',
-                  'MBA em Data Science & Big Data',
-                  'MBA em Inteligência Artificial',
-                  'MBA em Neurociência',
-                ].map((item) => (
-                  <div key={item} style={{ display: 'flex', alignItems: 'baseline', gap: 7 }}>
-                    <span style={{ width: 4, height: 4, borderRadius: '50%', background: EMBER, opacity: 0.55, flexShrink: 0, marginTop: 2 }} />
-                    <span style={{
-                      fontFamily: "'Geist', system-ui, sans-serif",
-                      fontWeight: 300, fontSize: 'clamp(10px, 1vw, 12px)',
-                      lineHeight: 1.5, color: BONEDIM,
-                    }}>
-                      {item}
-                    </span>
-                  </div>
-                ))}
-              </motion.div>
+                Publicitário FACHA · Web Developer INFNET · MBAs em Gestão Empresarial, Inteligência Competitiva, Data Science & Big Data, Inteligência Artificial e Neurociência
+              </motion.p>
             </div>
           </motion.div>
         </div>
