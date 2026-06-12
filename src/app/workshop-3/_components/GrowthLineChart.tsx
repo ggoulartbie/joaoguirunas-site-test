@@ -5,8 +5,8 @@ import { useEffect, useRef, useState } from 'react';
 const MONO = "'Geist Mono', 'Roboto Mono', monospace";
 const SERIF = "var(--font-display-serif), 'Fraunces', serif";
 
-const X_DOMAIN: [Date, Date] = [new Date('2025-01-01'), new Date('2027-12-01')];
-const Y_DOMAIN: [number, number] = [0, 900_000];
+const X_DOMAIN: [Date, Date] = [new Date('2025-04-01'), new Date('2026-12-01')];
+const Y_DOMAIN: [number, number] = [0, 600_000];
 const X_RANGE: [number, number]  = [60, 660];
 const Y_RANGE: [number, number]  = [280, 40];
 
@@ -19,41 +19,61 @@ function my(value: number) {
   return Y_RANGE[0] + t * (Y_RANGE[1] - Y_RANGE[0]);
 }
 
+// 15 meses reais: Abr/2025 → Jun/2026
 const PAST = [
-  { date: new Date('2025-01-01'), value: 0 },
-  { date: new Date('2025-06-01'), value: 20_000 },
-  { date: new Date('2025-10-01'), value: 55_000 },
-  { date: new Date('2026-02-01'), value: 90_000 },
-  { date: new Date('2026-06-01'), value: 150_000 },
+  { date: new Date('2025-04-01'), value: 0 },
+  { date: new Date('2025-05-01'), value: 0 },
+  { date: new Date('2025-06-01'), value: 0 },
+  { date: new Date('2025-07-01'), value: 0 },
+  { date: new Date('2025-08-01'), value: 10_000 },
+  { date: new Date('2025-09-01'), value: 20_000 },
+  { date: new Date('2025-10-01'), value: 25_000 },
+  { date: new Date('2025-11-01'), value: 30_000 },
+  { date: new Date('2025-12-01'), value: 40_000 },
+  { date: new Date('2026-01-01'), value: 50_000 },
+  { date: new Date('2026-02-01'), value: 70_000 },
+  { date: new Date('2026-03-01'), value: 80_000 },
+  { date: new Date('2026-04-01'), value: 100_000 },
+  { date: new Date('2026-05-01'), value: 140_000 },
+  { date: new Date('2026-06-01'), value: 180_000 },
 ];
 
+// 6 meses projeção: Jul/2026 → Dez/2026 (+60k/mês)
 const PROJ = [
-  { date: new Date('2026-06-01'), value: 150_000 },
-  { date: new Date('2026-12-01'), value: 500_000 },
-  { date: new Date('2027-06-01'), value: 720_000 },
-  { date: new Date('2027-12-01'), value: 900_000 },
+  { date: new Date('2026-06-01'), value: 180_000 },
+  { date: new Date('2026-07-01'), value: 240_000 },
+  { date: new Date('2026-08-01'), value: 300_000 },
+  { date: new Date('2026-09-01'), value: 360_000 },
+  { date: new Date('2026-10-01'), value: 420_000 },
+  { date: new Date('2026-11-01'), value: 480_000 },
+  { date: new Date('2026-12-01'), value: 540_000 },
 ];
 
 const MILESTONES = [
-  { date: new Date('2025-01-01'), value: 0,        label: 'R$ 0',    ctx: 'jan/2025 · início', anchor: 'start'  as const },
-  { date: new Date('2026-06-01'), value: 150_000,   label: 'R$ 150k', ctx: 'jun/2026 · hoje',   anchor: 'middle' as const },
-  { date: new Date('2026-12-01'), value: 500_000,   label: 'R$ 500k', ctx: 'dez/2026 · meta',   anchor: 'middle' as const },
+  { date: new Date('2025-04-01'), value: 0,       label: 'Início',  ctx: 'abr/2025 · 0',         anchor: 'start'  as const, opacity: 0.65 },
+  { date: new Date('2026-06-01'), value: 180_000,  label: '180k',   ctx: 'jun/2026 · hoje',       anchor: 'middle' as const, opacity: 1    },
+  { date: new Date('2026-12-01'), value: 540_000,  label: '540k',   ctx: 'dez/2026 · projeção',   anchor: 'end'    as const, opacity: 0.55 },
 ];
 
+// Ticks a cada 3 meses
 const X_LABELS = [
-  { date: new Date('2025-01-01'), label: 'jan/25' },
+  { date: new Date('2025-04-01'), label: 'abr/25' },
   { date: new Date('2025-07-01'), label: 'jul/25' },
+  { date: new Date('2025-10-01'), label: 'out/25' },
   { date: new Date('2026-01-01'), label: 'jan/26' },
-  { date: new Date('2026-06-01'), label: 'jun/26' },
+  { date: new Date('2026-04-01'), label: 'abr/26' },
+  { date: new Date('2026-07-01'), label: 'jul/26' },
+  { date: new Date('2026-10-01'), label: 'out/26' },
   { date: new Date('2026-12-01'), label: 'dez/26' },
-  { date: new Date('2027-12-01'), label: '2027' },
 ];
 
 const Y_LABELS = [
   { value: 0,        label: '0' },
-  { value: 150_000,  label: '150k' },
+  { value: 100_000,  label: '100k' },
+  { value: 200_000,  label: '200k' },
+  { value: 300_000,  label: '300k' },
+  { value: 400_000,  label: '400k' },
   { value: 500_000,  label: '500k' },
-  { value: 900_000,  label: '1M' },
 ];
 
 function toPath(pts: { date: Date; value: number }[]) {
@@ -88,8 +108,8 @@ export function GrowthLineChart() {
     const raf = requestAnimationFrame(() => {
       setReady(true);
       setTimeout(() => setMilestoneIn([true, false, false]), 200);
-      setTimeout(() => setMilestoneIn([true, true, false]), 800);
-      setTimeout(() => setMilestoneIn([true, true, true]), 1800);
+      setTimeout(() => setMilestoneIn([true, true, false]), 900);
+      setTimeout(() => setMilestoneIn([true, true, true]), 1900);
     });
 
     return () => cancelAnimationFrame(raf);
@@ -123,7 +143,7 @@ export function GrowthLineChart() {
         </g>
       ))}
 
-      {/* Divider jun/26 */}
+      {/* Divider jun/26 — separa real/projeção */}
       <line
         x1={dividerX} x2={dividerX}
         y1={Y_RANGE[1] - 10} y2={Y_RANGE[0]}
@@ -169,7 +189,7 @@ export function GrowthLineChart() {
         <g
           key={m.label}
           style={{
-            opacity: milestoneIn[i] ? 1 : 0,
+            opacity: milestoneIn[i] ? m.opacity : 0,
             transform: milestoneIn[i] ? 'scale(1)' : 'scale(0.7)',
             transformOrigin: `${mx(m.date).toFixed(1)}px ${my(m.value).toFixed(1)}px`,
             transition: 'opacity 0.4s ease, transform 0.4s cubic-bezier(0.22,1,0.36,1)',

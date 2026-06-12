@@ -1,87 +1,60 @@
 import type { Metadata } from 'next';
 import { Workshop3DeckLayout } from '../_components/Workshop3DeckLayout';
+import { GrowthLineChart } from '../_components/GrowthLineChart';
 
 export const metadata: Metadata = {
   title: '06 — Os números | Workshop 3',
   robots: { index: false, follow: false },
 };
 
-const MONO    = "'Geist Mono', 'Roboto Mono', monospace";
-const DISPLAY = "var(--font-display), 'Space Grotesk', sans-serif";
-const SERIF   = "var(--font-display-serif), 'Fraunces', serif";
-const EMBER   = '#FF3A0E';
-
-const NUMBERS = [
-  { value: '150k',   unit: '/mês',    label: 'hoje',              color: EMBER },
-  { value: '500k',   unit: '/mês',    label: 'projeção dez/2026', color: 'rgba(255,255,255,0.75)' },
-  { value: 'R$ 6M',  unit: '',        label: 'meta 2027',         color: 'rgba(255,255,255,0.5)' },
-];
+const MONO  = "'Geist Mono', 'Roboto Mono', monospace";
+const SERIF = "var(--font-display-serif), 'Fraunces', serif";
+const EMBER = '#FF3A0E';
 
 export default function NumerosPage() {
   return (
     <Workshop3DeckLayout slug="numeros">
-      <div className="flex flex-col gap-14">
+      <div
+        aria-hidden="true"
+        style={{
+          position: 'absolute', inset: 0, zIndex: 0,
+          background: 'radial-gradient(ellipse 30% 40% at 15% 50%, rgba(255,58,14,0.06), transparent)',
+        }}
+      />
+
+      <div className="slide-content flex flex-col gap-6" style={{ position: 'relative', zIndex: 1 }}>
         <header>
           <span
-            className="block font-mono text-[10px] tracking-[0.22em] uppercase mb-5"
+            className="block font-mono text-[10px] tracking-[0.22em] uppercase mb-4"
             style={{ fontFamily: MONO, color: EMBER }}
           >
-            Slide 06 · Tração
+            Tração · Abr/2025 — Dez/2026
           </span>
           <h1
-            className="text-5xl font-bold leading-none md:text-7xl"
-            style={{ fontFamily: DISPLAY }}
+            className="font-light italic leading-tight"
+            style={{ fontFamily: SERIF, fontSize: 'clamp(28px, 4vw, 48px)', letterSpacing: '-0.02em' }}
           >
-            Os números
+            0 → 180k/mês em 15 meses.{' '}
+            <span className="not-italic font-semibold" style={{ color: EMBER }}>Não foi sorte.</span>
           </h1>
+          <p
+            className="mt-1 font-light"
+            style={{ fontSize: 14, color: 'rgba(241,241,243,0.5)', letterSpacing: '0.02em', fontFamily: MONO }}
+          >
+            Real até Jun/26 · Projeção +60k/mês a partir de Jul/26
+          </p>
         </header>
 
-        <div className="grid gap-3 sm:grid-cols-3">
-          {NUMBERS.map((n) => (
-            <div
-              key={n.value}
-              className="flex flex-col gap-4 p-7"
-              style={{ border: '1px solid rgba(255,255,255,0.08)', background: 'rgba(255,255,255,0.02)' }}
-            >
-              <div className="flex items-baseline gap-1">
-                <span
-                  className="text-5xl font-bold leading-none md:text-6xl"
-                  style={{ fontFamily: DISPLAY, color: n.color }}
-                >
-                  {n.value}
-                </span>
-                {n.unit && (
-                  <span
-                    className="text-xl font-light"
-                    style={{ fontFamily: DISPLAY, color: 'rgba(255,255,255,0.4)' }}
-                  >
-                    {n.unit}
-                  </span>
-                )}
-              </div>
-              <span
-                className="font-mono text-[10px] tracking-[0.18em] uppercase"
-                style={{ fontFamily: MONO, color: 'rgba(255,255,255,0.35)' }}
-              >
-                {n.label}
-              </span>
-            </div>
-          ))}
+        <div style={{ width: '100%', height: 'clamp(220px, 32vw, 320px)' }}>
+          <GrowthLineChart />
         </div>
 
-        <div
-          className="p-7 max-w-2xl"
-          style={{
-            border: '1px solid rgba(255,58,14,0.25)',
-            background: 'rgba(255,58,14,0.04)',
-          }}
-        >
+        <div style={{ borderTop: '1px solid rgba(255,255,255,0.07)', paddingTop: '1rem' }}>
           <p
-            className="text-2xl font-light italic leading-snug"
-            style={{ fontFamily: SERIF, color: 'rgba(255,255,255,0.85)' }}
+            className="text-xl font-light italic"
+            style={{ fontFamily: SERIF, color: 'rgba(241,241,243,0.55)', letterSpacing: '-0.01em' }}
           >
-            0 → 150k em 18 meses.{' '}
-            <span style={{ color: EMBER }}>Não foi sorte — foi dor real.</span>
+            Não foi sorte — foi dor real.
           </p>
         </div>
       </div>
