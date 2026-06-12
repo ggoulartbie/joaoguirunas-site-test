@@ -24,12 +24,12 @@ export default function QuemSomosPage() {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.9, ease }}
-        style={{ position: 'absolute', inset: 0, zIndex: 0 }}
+        style={{ position: 'absolute', inset: 0, zIndex: 0, background: '#050507' }}
       >
         <video
           className="absolute inset-0 w-full h-full object-cover"
           autoPlay muted loop playsInline
-          poster="/photos/editorial/hero-editorial-writing.png"
+          preload="auto"
         >
           <source src="/video/joao/cinematic-01.mp4" type="video/mp4" />
         </video>
