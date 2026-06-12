@@ -38,7 +38,7 @@ const BLOCKS = [
 export default function OrquestradorPage() {
   return (
     <Workshop3DeckLayout slug="orquestrador">
-      {/* Background — cinematic-02.mp4 com foto como poster fallback */}
+      {/* Background — foco-03.mp4 com foto como poster fallback */}
       <div aria-hidden="true" style={{ position: 'absolute', inset: 0, zIndex: 0 }}>
         <video
           className="absolute inset-0 w-full h-full object-cover"
@@ -48,7 +48,7 @@ export default function OrquestradorPage() {
           playsInline
           poster="/photos/editorial/editorial-ai-workflow-woman.png"
         >
-          <source src="/video/joao/cinematic-02.mp4" type="video/mp4" />
+          <source src="/video/joao/foco-03.mp4" type="video/mp4" />
         </video>
         <div
           style={{
