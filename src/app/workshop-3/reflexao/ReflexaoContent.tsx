@@ -46,25 +46,24 @@ function FadeUp({
 export function ReflexaoContent() {
   return (
     <Workshop3DeckLayout slug="reflexao">
-      {/* Background — cityscape, overlay leve para slide emocional de fechamento */}
+      {/* Background — vídeo sutil, overlay leve para slide emocional de fechamento */}
       <div aria-hidden="true" style={{ position: 'absolute', inset: 0, zIndex: 0 }}>
-        <img
-          src="/photos/joao/joao-cityscape-reflection.png"
-          alt=""
-          style={{
-            width: '100%',
-            height: '100%',
-            objectFit: 'cover',
-            objectPosition: 'center center',
-            display: 'block',
-          }}
-        />
+        <video
+          className="absolute inset-0 w-full h-full object-cover"
+          autoPlay
+          muted
+          loop
+          playsInline
+          poster="/photos/joao/joao-cityscape-reflection.png"
+        >
+          <source src="/video/joao/movimento-05.mp4" type="video/mp4" />
+        </video>
         <div
           style={{
             position: 'absolute',
             inset: 0,
             background:
-              'linear-gradient(to bottom, rgba(5,5,7,0.62) 0%, rgba(5,5,7,0.42) 40%, rgba(5,5,7,0.78) 100%)',
+              'linear-gradient(to bottom, rgba(5,5,7,0.40) 0%, rgba(5,5,7,0.38) 40%, rgba(5,5,7,0.60) 100%)',
           }}
         />
         {/* Dot-grid opacity 0.4 — marca o encerramento conforme spec */}
