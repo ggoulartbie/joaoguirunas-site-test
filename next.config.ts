@@ -8,8 +8,6 @@ const nextConfig: NextConfig = {
   },
   async redirects() {
     return [
-      // www → root canonical
-      { source: '/:path*', has: [{ type: 'host', value: 'www.joaoguirunas.com' }], destination: 'https://joaoguirunas.com/:path*', permanent: true },
       // mentoria/modulos → mentoria/presencial
       { source: '/mentoria/modulos', destination: '/mentoria/presencial', permanent: true },
       { source: '/mentoria/modulos/:path*', destination: '/mentoria/presencial/:path*', permanent: true },

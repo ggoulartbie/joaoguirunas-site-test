@@ -5,6 +5,12 @@
       "has": [{ "type": "host", "value": "opensource.growthsales.ai" }],
       "destination": "https://joaoguirunas.com/$1",
       "permanent": true
+    },
+    {
+      "source": "/(.*)",
+      "has": [{ "type": "host", "value": "www.joaoguirunas.com" }],
+      "destination": "https://joaoguirunas.com/$1",
+      "permanent": true
     }
   ],
   "crons": []
