@@ -299,6 +299,12 @@ export default function GoogleStitchPage() {
         <RelatedPages
           pages={[
             {
+              href: '/setup/claude-code',
+              title: 'Setup Claude Code',
+              description: 'Guia completo de configuração do Claude Code — do básico ao expert. Pré-requisito para usar o MCP do Stitch.',
+              tag: 'Skills',
+            },
+            {
               href: '/skills/website-builder',
               title: 'Website Builder',
               description: 'Crie sites completos com Claude Code e componentes do 21st.dev. Outra abordagem para sites profissionais sem experiência prévia.',
@@ -309,13 +315,6 @@ export default function GoogleStitchPage() {
               title: 'Brandbook com Claude Design',
               description: 'Fluxo completo para criar identidade visual — brief, design system, KV e app React interativo em um dia.',
               tag: 'Aprendizado',
-            },
-            {
-              href: '/setup/claude-code',
-              title: 'Setup Claude Code',
-              description: 'Guia completo de configuração do Claude Code — do básico ao expert.',
-              tag: 'Skills',
-              isPrereq: true,
             },
           ]}
         />
