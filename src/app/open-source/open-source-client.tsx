@@ -112,12 +112,13 @@ const skills = [
   { title: '5 Ferramentas Grátis',        description: 'As ferramentas que todo usuário de Claude Code deveria usar. Superpower, Memory, N8N MCP, UI Pro e mais.',                                                  icon: 'setup',        href: '/learn/claude-code-skills',          categoryId: 'aprendizado', categoryLabel: 'Aprendizado',  author: '@joaoguirunas' },
   { title: 'Brandbook com Claude Design',  description: 'Tutorial completo com os prompts exatos — do brief ao app React interativo. Logo, direção visual, tipografia e motion num dia.',                   icon: 'layout',       href: '/learn/claude-design-brandbook',     categoryId: 'aprendizado', categoryLabel: 'Aprendizado',  author: '@joaoguirunas' },
   { title: 'Layouts Profissionais com IA',description: 'Crie interfaces com design de nível profissional usando IA. Prompts exatos, variações ilimitadas.',                                                         icon: 'layout',       href: '/learn/ai-layouts',                  categoryId: 'aprendizado', categoryLabel: 'Aprendizado',  author: '@joaoguirunas' },
+  { title: 'Claude Code + Google Stitch',  description: 'Design profissional → código de produção via MCP. Sem designer, sem agência. Guia completo com prompt exato.',                                                  icon: 'design',       href: '/learn/google-stitch',               categoryId: 'aprendizado', categoryLabel: 'Aprendizado',  author: '@joaoguirunas' },
   { title: 'Learn Your Way',              description: 'IA que aprende como você aprende. Mapas mentais, áudios, quizzes personalizados para qualquer conteúdo.',                                                   icon: 'brain',        href: '/learn/learn-your-way',              categoryId: 'aprendizado', categoryLabel: 'Aprendizado',  author: 'Google' },
   { title: 'Managed Agents',              description: 'Como a Anthropic desacoplou brain/hands em agentes. Session + Harness + Sandbox com 60% menos latência.',                                                   icon: 'agents',       href: '/learn/managed-agents',              categoryId: 'aprendizado', categoryLabel: 'Aprendizado',  author: 'Anthropic Engineering' },
 ];
 
 const stats = [
-  { value: '41',   label: 'Recursos' },
+  { value: '42',   label: 'Recursos' },
   { value: '100%', label: 'Open Source' },
   { value: '13',   label: 'Cursos Curados' },
   { value: '24/7', label: 'Agentes Ativos' },
