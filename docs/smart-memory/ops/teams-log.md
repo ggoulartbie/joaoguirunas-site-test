@@ -816,3 +816,26 @@ Registro de todos os Agent Teams formados neste projeto. Lead (team-os) atualiza
 **Status:** ativo
 **Início:** 2026-06-12T16:15:00-03:00
 **Stories:** ver `docs/smart-memory/stories/active/WK3-*.md` (em criação pelo sites-architect)
+
+---
+
+## 2026-06-19 — Team joao-guirunas-site-workshop-claude-design
+
+**Objetivo:** Criar workshop `/workshop-claude-design` — 10 slides sobre Claude Design, pitch comercial e design system. Identidade visual Claude (dark purple). Similar ao workshop-3.
+
+**Lead:** team-os (skill)
+
+**Composição:**
+- `sites-dev-wcd1` (sites-dev-alpha) — Wave 0: WCD-1.1 layout + slides.ts
+- `sites-dev-wcd12` (sites-dev-alpha) — Wave 1: WCD-1.2 index
+- `sites-dev-wcd21` (sites-dev-alpha) — Wave 1: WCD-2.1 slides abertura+interface
+- `sites-dev-wcd22` (sites-dev-alpha) — Wave 1: WCD-2.2 slides design-system+kvs
+- `sites-dev-wcd23` (sites-dev-alpha) — Wave 1: WCD-2.3 slides divisao+handoff
+- `sites-dev-wcd24` (sites-dev-alpha) — Wave 1: WCD-2.4 slides prompts+demo
+- `sites-qa` — Wave 2: WCD-3.1 QA Gate
+- `sites-devops` — Wave 3: WCD-4.1 push+PR (user-triggered)
+
+**Status:** ativo
+**Início:** 2026-06-19T00:00:00-03:00
+**Branch:** worktree-wcd-workshop-claude-design
+**Stories:** ver docs/smart-memory/stories/backlog/WCD-*.md
