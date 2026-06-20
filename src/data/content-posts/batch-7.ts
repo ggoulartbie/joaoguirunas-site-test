@@ -8,7 +8,7 @@ export const batch7: ContentPost[] = [
     formato: 'Reel',
     titulo: 'AI Cria Canal de YouTube Inteiro em Minutos',
     ferramenta: 'Vidrush AI',
-    link: 'PENDENTE: vidrush.ai — criar canal YouTube completo com AI',
+    link: 'https://vidrush.ai',
     roteiro: `Dá pra criar um canal de YouTube inteiro com AI.
 
 Existe uma ferramenta que transforma um prompt de texto num vídeo documentário completo de uma hora — sozinha, do início ao fim.

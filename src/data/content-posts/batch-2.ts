@@ -140,7 +140,7 @@ Site profissional já foi caro e demorado. Agora é um sábado à tarde.
     formato: 'Reel',
     titulo: 'Site Premium de Um Único Comando',
     ferramenta: 'Claude Code + UI/UX Pro Max skill + twentyfirst.dev + Framer Motion',
-    link: 'https://21st.dev (componentes) + https://remotion.dev ou Framer Motion via npm',
+    link: 'https://21st.dev',
     keyword_cta: 'WEB',
     pilar: 'Produção de Conteúdo com IA',
     duracao: '39s',

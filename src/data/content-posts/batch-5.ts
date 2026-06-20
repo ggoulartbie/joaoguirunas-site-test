@@ -8,7 +8,7 @@ export const batch5: ContentPost[] = [
     formato: 'Reel',
     titulo: '50 Modelos de AI numa Janela Só',
     ferramenta: 'HTML file com 50+ AI models (open source)',
-    link: "PENDENTE: buscar no GitHub 'html file 50 ai models local browser' ou 'all-in-one-ai.html'",
+    link: 'https://godmod3.ai',
     roteiro: `Um único arquivo HTML substitui toda a sua stack de AI.
 
 ChatGPT, Claude, Gemini, Grok — e mais de cinquenta modelos — tudo dentro de um arquivo só.
@@ -172,7 +172,7 @@ Isso não é promessa de marketing. É o que acontece quando você usa o Claude 
     formato: 'Reel',
     titulo: 'Para de Pagar por AI Video — Grátis e Ilimitado',
     ferramenta: 'LTX Video (open source) — mesma ferramenta do dia 18A',
-    link: 'PENDENTE: https://github.com/Lightricks/LTX-Video — confirmar URL antes de publicar',
+    link: 'https://github.com/Lightricks/LTX-Video',
     roteiro: `Para de pagar crédito de vídeo AI.
 
 Existe uma ferramenta open source que gera vídeos cinematográficos ilimitados. De graça. Para sempre.

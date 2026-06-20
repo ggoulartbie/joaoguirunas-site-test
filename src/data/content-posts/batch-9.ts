@@ -7,7 +7,7 @@ export const batch9: ContentPost[] = [
     formato: 'Reel',
     titulo: 'App Full-Stack de Um Prompt no Claude Code',
     ferramenta: 'Bolt.new (StackBlitz)',
-    link: 'PENDENTE: bolt.new — confirmar que é essa ferramenta antes de publicar',
+    link: 'https://bolt.new',
     roteiro: `A ferramenta de live coding que mais entrega apps full-stack premium no mercado — e é grátis.
 
 Enquanto as outras no-code entregam template genérico, essa entrega UI polida, animações reais e código limpo desde o primeiro render.

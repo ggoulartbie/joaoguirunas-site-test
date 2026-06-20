@@ -8,7 +8,7 @@ export const batch1: ContentPost[] = [
     formato: 'Reel',
     titulo: 'Vídeos Cinematográficos Grátis com AI',
     ferramenta: 'LTX Video (open source)',
-    link: 'PENDENTE: https://github.com/Lightricks/LTX-Video — provavelmente ltxstudio.io',
+    link: 'https://github.com/Lightricks/LTX-Video',
     roteiro: `Para de pagar por gerador de vídeo AI.
 
 Existe uma ferramenta open source, completamente gratuita e sem limite de uso.
@@ -46,83 +46,84 @@ Quem ainda está pagando por isso está desperdiçando dinheiro todo mês.
     slot: 'B',
     formato: 'Carrossel',
     titulo: 'O Maior Lançamento de AI Dessa Semana',
-    ferramenta: '— (news carousel, preencher na semana)',
-    link: 'PENDENTE: link do lançamento da semana de 18/06/2026',
+    ferramenta: 'Claude Agent SDK (Anthropic)',
+    link: 'https://platform.claude.com/docs/en/agent-sdk/overview',
     roteiro: `## Slide 1 — Capa
 
 Texto principal:
 O MAIOR LANÇAMENTO DE AI DESSA SEMANA
 
 Subtítulo:
-[NOTÍCIA DA SEMANA] — e o que isso muda para você
+A Anthropic lançou o SDK que muda como agentes AI são construídos
 
 ---
 
 ## Slide 2 — O que é
 
-Título: O que [EMPRESA] acabou de lançar
+Título: O que é o Claude Agent SDK
 
-[Descrição direta do produto ou feature em 3-4 linhas. O que é, como funciona em termos simples, para quem é.]
-
----
-
-## Slide 3 — O que muda
-
-Título: Por que isso importa agora
-
-[Impacto real do lançamento. O que era difícil antes que agora fica mais fácil. Qual barreira foi removida. 3-4 linhas.]
+O Claude Agent SDK é a forma oficial da Anthropic de construir agentes AI em Python e TypeScript. Ao contrário da API padrão — onde você envia um prompt e gerencia tudo na mão — o SDK já entrega execução de ferramentas, loop de uso de tools, sessões persistentes e suporte nativo a Model Context Protocol. Para devs: é a diferença entre montar um agente do zero e ter a infraestrutura pronta.
 
 ---
 
-## Slide 4 — Como usar
+## Slide 3 — Por que isso importa agora
 
-Título: Como você acessa hoje
-
-[Passo a passo simples de como testar ou usar o lançamento. Se tem versão gratuita, onde se cadastrar, o que precisa instalar. 3-4 linhas.]
+Antes do SDK, montar um agente funcional com Claude exigia: implementar o loop de tool_use manualmente; gerenciar estado de sessão por conta própria; integrar cada MCP server de forma customizada. Agora o SDK resolve tudo isso em menos de 10 linhas de código. E com 200+ MCP servers suportados nativamente, você conecta qualquer ferramenta sem configuração extra.
 
 ---
 
-## Slide 5 — Impacto para criadores
+## Slide 4 — Como você acessa hoje
 
-Título: Para quem cria conteúdo com AI
+Instalação em um comando:
+Python: pip install claude-agent-sdk
+TypeScript: npm install @anthropic-ai/claude-agent-sdk
 
-[Como esse lançamento específico afeta criadores de conteúdo, devs e empresários brasileiros. Exemplo prático de uso. 3-4 linhas.]
-
----
-
-## Slide 6 — Impacto para o mercado
-
-Título: O que isso significa para o mercado
-
-[Contexto maior: como esse lançamento se posiciona na corrida de AI, o que os concorrentes vão precisar fazer agora, tendência que isso confirma. 3-4 linhas.]
+Requer Python 3.10+ ou Node.js. Chave de API da Anthropic — a mesma que você já usa no Claude Code. Doc completa em platform.claude.com/docs/en/agent-sdk/overview
 
 ---
 
-## Slide 7 — O que fazer agora
+## Slide 5 — O que o SDK entrega por padrão
 
-Título: Sua ação imediata
+Sem instalar mais nada:
+— Edição de arquivos e execução de bash
+— Web search e web fetch integrados
+— Loop automático de tool-use com checkpoint humano opcional
+— Subagentes com contexto próprio
+— Sessões persistentes entre execuções
+— Suporte MCP com 200+ servidores em uma linha de config
 
-— [Ação 1: testar/experimentar o lançamento]
-— [Ação 2: avaliar se substitui alguma ferramenta atual]
-— [Ação 3: acompanhar desdobramentos]
+---
+
+## Slide 6 — O que isso significa para o ecossistema
+
+O MCP deixou de ser padrão de nicho e virou a camada base do Claude Agent SDK, LangGraph e OpenClaw simultaneamente. Uma tool construída para o SDK funciona em qualquer framework compatível com MCP — sem reescrever nada. Agentes interoperáveis.
+
+---
+
+## Slide 7 — Sua ação imediata
+
+— Instalar o SDK e rodar o exemplo básico da doc
+— Avaliar quais fluxos manuais podem virar subagentes
+— Explorar o catálogo de MCP servers
+
+O TypeScript V2 está em preview — se você usa TS, vale acompanhar.
 
 ---
 
 ## Slide 8 — CTA
 
-Texto:
-Comenta LAUNCH que eu te mando o link direto para testar agora.
+Comenta LAUNCH que eu te mando o link direto para a doc e o exemplo de código para começar agora.
 
-Salva esse post — a próxima semana traz mais.`,
-    legenda: `Comenta LAUNCH que eu te mando o link direto para testar agora.
+Salva esse post.`,
+    legenda: `Comenta LAUNCH que eu te mando o link direto para a doc e o exemplo de código para começar agora.
 
-Toda semana o mercado de AI lança algo que muda o que é possível fazer. Essa semana foi diferente — [EMPRESA] lançou [PRODUTO] e isso afeta diretamente quem trabalha com AI no Brasil.
+A Anthropic lançou o Claude Agent SDK — e ele muda como agentes AI são construídos do zero. No carrossel explico o que é, o que já vem incluído, como instalar e o que isso significa para o ecossistema de devs.
 
-No carrossel explico o que é, o que muda, como usar hoje e o que fazer a partir de agora. [Adicionar 2-3 linhas com o impacto real do lançamento específico.]
+Antes do SDK: loop de tool-use manual, estado de sessão na mão, cada MCP integrado de forma customizada. Agora: pip install ou npm install e você tem sessões persistentes, subagentes nativos, 200+ MCP servers e checkpoint humano prontos pra usar. 🛠️
 
-O mercado de AI não para. Quem acompanha de perto sai na frente de quem ainda vai descobrir isso em três meses.
+O MCP saiu de padrão de nicho para camada base de todos os frameworks principais ao mesmo tempo. Quem entender isso primeiro vai sair na frente na corrida de agentes.
 
-#ia #inteligenciaartificial #lançamentoai #claudecode #novidadesai #aitools #ferramentasIA #tecnologia #aiagents #criadordeconteudo #empresario #produtividade`,
+#claudecode #claudeagentsdk #ia #inteligenciaartificial #aiagents #mcp #ferramentasIA #aitools #novidadesai #lançamentoai #python #typescript`,
     keyword_cta: 'LAUNCH',
     pilar: 'Notícias e Tendências AI',
     duracao: '8 slides',
@@ -134,7 +135,7 @@ O mercado de AI não para. Quem acompanha de perto sai na frente de quem ainda v
     formato: 'Reel',
     titulo: 'Seus Sites com Claude Parecem Genéricos',
     ferramenta: 'Claude Code Skills: Emil Kowalski Design + Impeccable Design + TasteSkill',
-    link: 'https://github.com/emilkowalski/claude-skills (verificar) + skill marketplace Claude Code',
+    link: 'https://github.com/emilkowalski/skills',
     roteiro: `Se o seu site criado com Claude Code ainda parece genérico, o problema não é o Claude.
 É o setup.
 

@@ -8,7 +8,7 @@ export const batch3: ContentPost[] = [
     formato: 'Reel',
     titulo: 'Prompts de Sites 3D Animados no Claude',
     ferramenta: 'MotionSites.Ai',
-    link: 'PENDENTE: motionsites.ai — biblioteca de prompts para sites 3D animados',
+    link: 'https://motionsites.ai',
     roteiro: `Site 3D animado premium. Zero linha de código escrita por você.
 
 Existe um repositório de prompts prontos para hero sections de alto nível — SaaS, portfólio, agência, produto digital. Cada um com uma base sólida de layout e animação já incluída.
@@ -153,32 +153,30 @@ Você está pagando pela mesma AI e entregando resultado de primeira geração. 
     slot: 'A',
     formato: 'Reel',
     titulo: 'O Maior Lançamento de AI Dessa Semana',
-    ferramenta: '— (reel de notícia, preencher na semana)',
-    link: 'PENDENTE: produto/lançamento AI da semana de 22/06/2026',
-    roteiro: `[EMPRESA] acabou de lançar [PRODUTO/FEATURE] — e isso muda tudo para quem cria com AI.
+    ferramenta: 'Claude Fable 5 (Anthropic)',
+    link: 'https://www.anthropic.com/news/claude-fable-5-mythos-5',
+    roteiro: `O modelo de AI mais poderoso do mundo durou três dias no ar.
 
-Aqui está o que você precisa saber em 30 segundos.
+Em 9 de junho de 2026, a Anthropic lançou o Claude Fable 5 — o modelo mais capaz que eles já tornaram público, disponível para todos os planos pagos sem custo extra. Benchmarks de topo em engenharia de software, pesquisa científica, visão e execução autônoma de tarefas.
 
-Primeiro: o que é. [Descrever o lançamento em 1-2 frases diretas.]
+Na sexta-feira, o modelo tinha sumido. Segundo reportagens do setor, a retirada teria vindo de uma diretiva regulatória — o que, se confirmado, seria a primeira vez que uma medida do tipo foi usada para tirar do ar um modelo AI já disponível publicamente.
 
-Segundo: o que muda. [IMPACTO PRINCIPAL para criadores de conteúdo, devs e empresários brasileiros.]
+Não foi um bug. Segundo os relatos, não partiu da própria Anthropic.
 
-Terceiro: o que fazer agora. Se você usa Claude Code, isso te afeta diretamente porque [conexão com o ecossistema Claude/AI Agents].
+Pelo que foi divulgado, o acesso via créditos para planos pagos seguiria disponível por tempo limitado.
 
-É isso. Mais detalhes nos comentários.`,
-    legenda: `[EMPRESA] lançou [PRODUTO/FEATURE] e quem trabalha com AI precisa entender o que muda.
+Se confirmado, isso muda o que achávamos ser possível no desenvolvimento de AI: a competição deixa de ser só técnica e passa a ser também regulatória.
 
-Em 30 segundos no vídeo já dei o resumo. Aqui vai o contexto completo para quem quer ir mais fundo.
+Link na bio para o anúncio oficial da Anthropic.`,
+    legenda: `O modelo mais poderoso da Anthropic ficou poucos dias no ar — e o que veio depois levanta uma discussão nova.
 
-[O que é o lançamento — 2 parágrafos explicando com mais detalhe o produto ou feature.]
+Claude Fable 5 foi lançado em 9 de junho. Benchmarks de topo em código, pesquisa e execução autônoma, disponível para todos os planos pagos. Pouco depois, sumiu. Segundo reportagens do setor, a retirada teria origem regulatória — algo sem precedente para um modelo já no ar.
 
-[Por que importa agora — impacto para criadores de conteúdo, devs e empresários que usam AI no dia a dia.]
+O que fica: a corrida de AI parece ganhar uma dimensão regulatória, não só técnica.
 
-[Como se posicionar — o que fazer (ou não fazer) com essa novidade imediatamente.]
+Link na bio: anúncio oficial da Anthropic.
 
-O mercado de AI muda toda semana. Quem acompanha de perto sai na frente.
-
-#ia #inteligenciaartificial #lançamentoai #claudecode #novidadesai #aitools #ferramentasIA #tecnologia #aiagents #criadordeconteudo #empresario #produtividade`,
+#claudecode #claudefable5 #anthropic #ia #inteligenciaartificial #regulacaoai #aitools #novidadesai #lançamentoai #aiagents #tecnologia #futurodotrabalho`,
     keyword_cta: '(sem CTA)',
     pilar: 'Notícias e Tendências AI',
     duracao: '26s',

@@ -6,10 +6,11 @@ import { useState } from 'react';
 import { motion } from 'framer-motion';
 import {
   LayoutGrid, Users, Zap, Monitor, Plug, BookOpen,
-  Search, X, ArrowRight,
+  Search, X, ArrowRight, Play, Layers,
 } from 'lucide-react';
 import { GrowthWatermark } from '@/shared/components/ui/growth-watermark';
 import { SQUADS, TOTAL_AGENTES } from '@/data/agentes';
+import { contentPosts } from '@/data/content-posts';
 
 const CINEMA: [number, number, number, number] = [0.7, 0, 0.2, 1];
 const GLIDE: [number, number, number, number] = [0.25, 1, 0.3, 1];
@@ -519,6 +520,129 @@ export function OpenSourceClient() {
         </div>
       </section>
 
+      {/* ── 3. Conteúdo & Posts ── */}
+      {contentPosts.length > 0 && (
+        <section id="posts" className="bg-[#0e0e11] pb-20" style={{ borderTop: '1px solid rgba(255,255,255,0.07)' }}>
+          <div className="mx-auto max-w-6xl px-6 lg:px-8">
+            <div className="pt-14 pb-8">
+              <p
+                className="mb-2"
+                style={{ fontFamily: 'var(--font-mono)', fontSize: 11, letterSpacing: '0.16em', textTransform: 'uppercase', color: 'rgba(255,58,14,0.8)', fontWeight: 500 }}
+              >
+                Conteúdo & Posts
+              </p>
+              <h2
+                className="text-xl sm:text-2xl font-semibold text-white tracking-tight"
+                style={{ letterSpacing: '-0.02em' }}
+              >
+                Roteiros e legendas prontas
+              </h2>
+            </div>
+
+            <div
+              className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
+              style={{ border: '1px solid rgba(255,255,255,0.07)', gap: 1, background: 'rgba(255,255,255,0.07)' }}
+            >
+              {contentPosts.map((post) => (
+                <Link
+                  key={post.slug}
+                  href={`/open-source/${post.slug}/`}
+                  className="group flex flex-col p-5 bg-[#0e0e11] hover:bg-[#1f1f24] transition-colors duration-150"
+                  aria-label={`Ver post ${post.titulo}`}
+                >
+                  {/* Format badge + date */}
+                  <div className="flex items-center justify-between mb-3">
+                    {post.formato === 'Reel' ? (
+                      <span
+                        className="inline-flex items-center gap-1"
+                        style={{
+                          fontFamily: 'var(--font-mono)',
+                          fontSize: 9,
+                          textTransform: 'uppercase',
+                          letterSpacing: '0.12em',
+                          color: '#A78BFA',
+                          border: '1px solid rgba(167,139,250,0.3)',
+                          background: 'rgba(167,139,250,0.06)',
+                          padding: '3px 7px',
+                        }}
+                      >
+                        <Play className="h-2.5 w-2.5" fill="currentColor" aria-hidden="true" />
+                        Reel
+                      </span>
+                    ) : (
+                      <span
+                        className="inline-flex items-center gap-1"
+                        style={{
+                          fontFamily: 'var(--font-mono)',
+                          fontSize: 9,
+                          textTransform: 'uppercase',
+                          letterSpacing: '0.12em',
+                          color: '#0EA5E9',
+                          border: '1px solid rgba(14,165,233,0.3)',
+                          background: 'rgba(14,165,233,0.06)',
+                          padding: '3px 7px',
+                        }}
+                      >
+                        <Layers className="h-2.5 w-2.5" aria-hidden="true" />
+                        Carrossel
+                      </span>
+                    )}
+                    <span
+                      style={{
+                        fontFamily: 'var(--font-mono)',
+                        fontSize: '0.55rem',
+                        color: 'rgba(255,255,255,0.22)',
+                        letterSpacing: '0.06em',
+                      }}
+                    >
+                      {new Date(post.data + 'T12:00:00').toLocaleDateString('pt-BR', { day: 'numeric', month: 'short' })}
+                    </span>
+                  </div>
+
+                  {/* Title */}
+                  <h3
+                    className="text-sm font-semibold leading-snug mb-2 flex-1 transition-colors duration-150"
+                    style={{ color: 'rgba(255,255,255,0.82)' }}
+                  >
+                    {post.titulo}
+                  </h3>
+
+                  {/* Pilar + arrow */}
+                  <div
+                    className="flex items-center justify-between pt-3"
+                    style={{ borderTop: '1px solid rgba(255,255,255,0.05)' }}
+                  >
+                    <span
+                      style={{
+                        fontFamily: 'var(--font-mono)',
+                        fontSize: '0.58rem',
+                        color: 'rgba(255,255,255,0.2)',
+                        letterSpacing: '0.02em',
+                      }}
+                    >
+                      {post.pilar}
+                    </span>
+                    <span
+                      className="opacity-0 group-hover:opacity-100 transition-opacity duration-150 flex items-center gap-1"
+                      style={{
+                        fontFamily: 'var(--font-mono)',
+                        fontSize: '0.6rem',
+                        textTransform: 'uppercase',
+                        letterSpacing: '0.06em',
+                        color: '#FF3A0E',
+                      }}
+                      aria-hidden="true"
+                    >
+                      Ver
+                      <ArrowRight className="h-3 w-3" />
+                    </span>
+                  </div>
+                </Link>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
 
       {/* ── 3. CTA — Full-bleed ember (KV closing pattern) ── */}
       <section

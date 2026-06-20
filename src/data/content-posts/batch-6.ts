@@ -7,73 +7,66 @@ export const batch6: ContentPost[] = [
     slot: 'B',
     formato: 'Carrossel',
     titulo: 'A Ferramenta AI Que Mais Me Surpreendeu Essa Semana',
-    ferramenta: '— (news carousel, preencher na semana)',
-    link: 'PENDENTE: [PREENCHER: ferramenta AI mais surpreendente da semana de 25/06/2026]',
-    roteiro: `---
-formato: carrossel
-keyword_cta: IA25
-pilar: Notícias e Tendências AI
-data_publicacao: 2026-06-25 (Quinta)
-slides: 8
----
-
-# Roteiro — A Ferramenta AI Que Mais Me Surpreendeu Essa Semana
-
-<!-- INSTRUÇÃO DE PREENCHIMENTO: Substituir [FERRAMENTA], [O QUE FAZ] e demais placeholders com a ferramenta AI mais relevante ou surpreendente descoberta na semana de 25/06/2026 antes de publicar. -->
-
----
-
-## Slide 1 — Capa
+    ferramenta: 'MiniMax M3',
+    link: 'https://huggingface.co/MiniMaxAI/MiniMax-M3',
+    roteiro: `## Slide 1 — Capa
 
 **Texto principal:**
 A FERRAMENTA AI QUE MAIS ME
 SURPREENDEU ESSA SEMANA
 
 **Subtítulo:**
-[FERRAMENTA] — e por que você precisa conhecer agora
+MiniMax M3 — open-weight, 1 milhão de tokens de contexto.
 
 ---
 
 ## Slide 2 — O que é
 
-**Título:** O que é [FERRAMENTA]
+**Título:** O que é o MiniMax M3
 
-[Descrição direta da ferramenta em 3-4 linhas: o que faz, para quem é, como funciona no nível mais simples.]
+MiniMax M3 é o primeiro modelo open-weight da empresa com capacidades de agente de código de nível frontier. Lançado em 1° de junho de 2026, combina 1 milhão de tokens de contexto nativo, computer use (vê e opera interfaces de desktop) e performance de coding que, segundo a MiniMax, rivaliza com modelos fechados de topo.
 
-Gratuita / Paga / Freemium: [MODELO DE PREÇO]
-Onde acessar: [URL ou plataforma]
+Open-weight: os pesos podem ser baixados e rodados na sua própria infraestrutura.
 
 ---
 
 ## Slide 3 — O problema que resolve
 
-**Título:** O problema que ela resolve
+**Título:** O problema que ele resolve
 
-[Descrever o problema concreto que existia antes dessa ferramenta. O que você precisava fazer manualmente, o que custava caro, o que levava muito tempo.]
+Modelos de contexto longo fechados custam caro. Modelos open-weight bons em código costumavam ter contexto curto. E poucos tinham computer use nativo.
 
----
-
-## Slide 4 — Como funciona na prática
-
-**Título:** Na prática — como usar
-
-[Passo a passo simplificado de uso: 3-5 passos do zero ao resultado. Linguagem direta, sem jargão técnico desnecessário.]
+O M3 ataca as três restrições ao mesmo tempo.
 
 ---
 
-## Slide 5 — O que diferencia das outras
+## Slide 4 — Na prática — como usar
+
+**Título:** Na prática — como acessar
+
+Via API (minimax.io): cadastro, acesso via API compatível com padrão OpenAI, contexto de até 1M tokens.
+
+Via open weights: quando publicados no HuggingFace, download direto e execução em infra própria via Ollama ou vLLM. Confirme a disponibilidade dos pesos antes de usar.
+
+---
+
+## Slide 5 — Por que me surpreendeu
 
 **Título:** Por que essa e não outra
 
-[O diferencial real: o que essa ferramenta faz que as alternativas não fazem, ou faz melhor. Comparação direta se possível.]
+A maioria dos lançamentos de junho foi de modelos fechados e caros. O M3 apareceu sob o radar.
+
+Segundo a MiniMax, marca 59% no SWE-Bench Pro — ainda sem verificação independente. Vem com MIT license: uso comercial, modificação e redistribuição liberados. A arquitetura MiniMax Sparse Attention, de acordo com a empresa, entregaria ganho expressivo de velocidade em contexto longo.
 
 ---
 
-## Slide 6 — Integração com Claude Code
+## Slide 6 — Como usar com Claude Code
 
 **Título:** Como usar com Claude Code
 
-[Como essa ferramenta se conecta ou complementa o Claude Code. Se tem MCP, se tem integração direta, se pode ser usada em paralelo, qual é o fluxo.]
+Compatível com o padrão de API OpenAI, então qualquer cliente nesse formato consegue apontar pra ele. No Claude Code, dá pra usar o M3 como backend via MCP server custom ou proxy OpenAI-compatível, deixando o M3 processar contextos longos enquanto o Claude Code orquestra.
+
+Útil pra análise de codebases extensos.
 
 ---
 
@@ -81,36 +74,25 @@ Onde acessar: [URL ou plataforma]
 
 **Título:** O que ainda não funciona bem
 
-[Pontos fracos ou limitações reais da ferramenta. Ser honesto aumenta credibilidade. 2-3 pontos de atenção para quem for usar.]
+Os benchmarks divulgados são vendor-reported — aguardar reprodução independente antes de confiar nos números. O computer use está em fase inicial de produção. A disponibilidade dos open weights precisa ser confirmada. E rodar o modelo completo (~428B params) exige hardware significativo.
 
 ---
 
 ## Slide 8 — CTA
 
 **Texto:**
-Comenta IA25 que eu te mando o link direto e o setup que uso.
+Comenta IA25 que eu te mando o link direto para a API e o repositório no HuggingFace.
 
-Salva esse post — essas descobertas aparecem toda semana.`,
-    legenda: `---
-formato: carrossel
-keyword_cta: IA25
----
+Salva esse post.`,
+    legenda: `Comenta IA25 que eu te mando o link direto para a API e o repositório no HuggingFace.
 
-# Legenda — A Ferramenta AI Que Mais Me Surpreendeu Essa Semana
+A maioria dos lançamentos de junho foi de modelo fechado e caro. O MiniMax M3 apareceu sob o radar — open-weight, MIT license, 1 milhão de tokens de contexto e computer use nativo num único modelo.
 
-<!-- INSTRUÇÃO DE PREENCHIMENTO: Adaptar corpo da legenda com a ferramenta real da semana antes de publicar. -->
+Os benchmarks de coding divulgados pela MiniMax são fortes — ainda sem verificação independente — e a arquitetura nova promete bem mais velocidade em contexto longo. Pra quem quer rodar modelo capaz na própria infra sem pagar API cara, vale acompanhar. 🔍
 
-Comenta IA25 que eu te mando o link direto e o setup que uso.
+No carrossel: o que é, o problema que resolve, como acessar, integração com Claude Code e as limitações honestas — porque hype sem contexto não ajuda ninguém.
 
-Toda semana aparecem ferramentas AI que mudam o que é possível fazer. A maioria é hype. Mas às vezes aparece uma que resolve um problema real de um jeito que ninguém tinha resolvido ainda.
-
-Essa semana foi [FERRAMENTA]. [Descrever em 2-3 linhas o que faz, por que surpreendeu e qual problema resolve de verdade.] 🤖
-
-No carrossel tem: o que é, o problema que resolve, como funciona na prática, o que diferencia, como integra com Claude Code e as limitações reais — porque ser honesto sobre o que não funciona bem é mais útil do que só o pitch.
-
-Ferramentas boas merecem ser compartilhadas sem hype desnecessário.
-
-#ia #inteligenciaartificial #ferramentasIA #claudecode #aitools #novidadesai #produtividade #automacao #criadordeconteudo #empresario #tecnologia #aiweekly`,
+#ia #inteligenciaartificial #ferramentasIA #claudecode #aitools #novidadesai #opensource #minimax #minimaxm3 #aiagents #llm #aiweekly`,
     keyword_cta: 'IA25',
     pilar: 'Notícias e Tendências AI',
     duracao: '8 slides',
@@ -122,19 +104,8 @@ Ferramentas boas merecem ser compartilhadas sem hype desnecessário.
     formato: 'Reel',
     titulo: 'OpenMontage Transforma Claude em Estúdio de Vídeo',
     ferramenta: 'OpenMontage',
-    link: 'PENDENTE: [VERIFICAR: github.com/OpenMontage/OpenMontage ou buscar \'OpenMontage Claude Code video studio\']',
-    roteiro: `---
-post_de_inspiracao: @sebintel DZHjD9EP5z2 (ER: 1.84%)
-formato: reel
-keyword_cta: OPEN
-pilar: Produção de Conteúdo com IA
-data_publicacao: 2026-06-26 (Sexta)
-duracao_estimada: 39s
----
-
-# Roteiro — OpenMontage Transforma Claude em Estúdio de Vídeo
-
-Alguém transformou o Claude Code num estúdio de produção de vídeo completo.
+    link: 'https://github.com/calesthio/OpenMontage',
+    roteiro: `Alguém transformou o Claude Code num estúdio de produção de vídeo completo.
 E é completamente gratuito.
 
 Chama OpenMontage.
@@ -154,15 +125,7 @@ O resultado parece autêntico, não parece vídeo gerado por máquina.
 Explainers, trailers, anúncios, vídeos educacionais — tudo numa plataforma só, dentro do Claude Code.
 
 Comenta OPEN que eu te mando o repositório do OpenMontage agora.`,
-    legenda: `---
-post_de_inspiracao: @sebintel DZHjD9EP5z2 (ER: 1.84%)
-formato: reel
-keyword_cta: OPEN
----
-
-# Legenda — OpenMontage Transforma Claude em Estúdio de Vídeo
-
-Comenta OPEN que eu te mando o repositório do OpenMontage agora.
+    legenda: `Comenta OPEN que eu te mando o repositório do OpenMontage agora.
 
 Claude Code já escreve código, cria sites e automatiza fluxos. Agora ele também produz vídeo completo — do roteiro ao arquivo final. Chama OpenMontage e é grátis.
 
@@ -185,19 +148,7 @@ Estúdio de produção completo. Custo zero.
     titulo: 'Voiceover Automático PT-BR com Claude + ElevenLabs',
     ferramenta: 'Claude Code + ElevenLabs API',
     link: 'https://elevenlabs.io + https://claude.ai/code',
-    roteiro: `---
-formato: carrossel
-keyword_cta: VOZ
-pilar: Produção de Conteúdo com IA
-data_publicacao: 2026-06-26 (Sexta)
-slides: 9
----
-
-# Roteiro — Voiceover Automático PT-BR com Claude + ElevenLabs
-
----
-
-## Slide 1 — Capa
+    roteiro: `## Slide 1 — Capa
 
 **Texto principal:**
 VOICEOVER AUTOMÁTICO EM PT-BR
@@ -317,14 +268,7 @@ Do texto ao vídeo narrado: menos de 3 minutos.
 Comenta VOZ que eu te mando o setup completo do MCP com o Voice ID da voz que uso nos meus vídeos.
 
 Salva esse post para quando for gravar o próximo roteiro.`,
-    legenda: `---
-formato: carrossel
-keyword_cta: VOZ
----
-
-# Legenda — Voiceover Automático PT-BR com Claude + ElevenLabs
-
-Comenta VOZ que eu te mando o setup completo do MCP com o Voice ID da voz que uso nos meus vídeos.
+    legenda: `Comenta VOZ que eu te mando o setup completo do MCP com o Voice ID da voz que uso nos meus vídeos.
 
 Gravar narração leva tempo, precisa de setup e travaca a produção quando o roteiro muda. Com Claude Code + ElevenLabs MCP, você gera voiceover em PT-BR em segundos — sem gravar nada.
 

@@ -11,8 +11,6 @@ const nextConfig: NextConfig = {
       // mentoria/modulos → mentoria/presencial
       { source: '/mentoria/modulos', destination: '/mentoria/presencial', permanent: true },
       { source: '/mentoria/modulos/:path*', destination: '/mentoria/presencial/:path*', permanent: true },
-      // open-source sub-paths → /open-source (posts internos despublicados)
-      { source: '/open-source/:slug+', destination: '/open-source', permanent: true },
     ]
   },
   async rewrites() {
