@@ -146,8 +146,7 @@ Ela adiciona motion real, easing correto e animações que fazem a interface par
 Sem ela, o site fica parado. Com ela, parece produto de verdade.
 
 A segunda é Impeccable Design.
-Com um único comando, ela corrige automaticamente espaçamento, tipografia, layout e alinhamento em toda a interface.
-O que levaria horas de revisão manual, ela faz em segundos.
+Com seus comandos de design, ela propõe correções de espaçamento, tipografia, layout e alinhamento. Você revisa, aprova e aplica — transformando horas de revisão manual em minutos.
 
 A terceira é TasteSkill.
 Essa é a virada de jogo.
@@ -161,7 +160,7 @@ Comenta DESIGN que eu te mando o setup completo das três skills para instalar a
 
 Site genérico não é problema do Claude. É problema do setup. A maioria usa o Claude Code sem nenhuma skill de design — e aí o resultado parece template de 2019.
 
-Três skills resolvem isso de vez: Emil Kowalski Design (motion e animações reais), Impeccable Design (corrige espaçamento, tipografia e layout com um comando) e TasteSkill (alimenta o Claude com referências de design de qualidade, não lixo genérico). 🎨
+Três skills resolvem isso de vez: Emil Kowalski Design (motion e animações reais), Impeccable Design (propõe correções de espaçamento, tipografia e layout — você revisa e aplica) e TasteSkill (alimenta o Claude com referências de design de qualidade, não lixo genérico). 🎨
 
 Com essas três instaladas, você continua usando a mesma AI. Mas o que sai é completamente diferente. Interfaces que parecem produto de mercado, não projeto escolar.
 

@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import Image from 'next/image'
 import { ExternalLink, Play, Layers, ArrowLeft } from 'lucide-react'
 import { ContentPost } from '@/types/content-post'
 import { contentPosts } from '@/data/content-posts'
@@ -132,21 +133,39 @@ export function ContentPostPage({ post }: ContentPostPageProps) {
 
       {/* ── Seção 1: Hero ─────────────────────────────────────────────── */}
       <section
-        className="relative overflow-hidden"
-        style={{ background: '#050507' }}
+        className="relative overflow-hidden bg-[#050507] flex items-end min-h-[58vh] sm:min-h-[62vh] pt-24 sm:pt-32"
       >
-        {/* Subtle radial gradient */}
+        {/* Background image */}
+        <Image
+          src="/images/bg-open-source.png"
+          alt=""
+          fill
+          className="object-cover object-[center_20%]"
+          priority
+        />
+
+        {/* Gradients — text legibility */}
+        <div
+          className="absolute inset-0 bg-gradient-to-r from-[#050507]/95 via-[#050507]/70 to-[#050507]/20"
+          aria-hidden="true"
+        />
+        <div
+          className="absolute inset-0 bg-gradient-to-t from-[#050507] via-[#050507]/20 to-transparent"
+          aria-hidden="true"
+        />
+
+        {/* Subtle accent glow */}
         <div
           className="absolute inset-0 pointer-events-none"
           style={{
-            background: 'radial-gradient(ellipse at 20% 50%, rgba(255,58,14,0.05) 0%, transparent 55%)',
+            background: 'radial-gradient(ellipse at 18% 60%, rgba(255,58,14,0.08) 0%, transparent 55%)',
           }}
           aria-hidden="true"
         />
 
-        <div className="relative w-full mx-auto max-w-6xl px-5 sm:px-10 lg:px-[140px] py-10 sm:py-16 lg:py-20">
+        <div className="relative w-full mx-auto max-w-6xl px-5 sm:px-10 lg:px-[140px] py-10 sm:py-14 lg:py-16">
           {/* Breadcrumb */}
-          <nav aria-label="Breadcrumb" className="mb-7 sm:mb-10">
+          <nav aria-label="Breadcrumb" className="mb-7 sm:mb-9">
             <ol
               className="flex items-center gap-2 flex-wrap"
               style={{ ...MONO, color: 'rgba(255,255,255,0.35)' }}
@@ -174,7 +193,7 @@ export function ContentPostPage({ post }: ContentPostPageProps) {
           </nav>
 
           {/* Badge row */}
-          <div className="flex flex-wrap items-center gap-2 sm:gap-3 mb-6">
+          <div className="flex flex-wrap items-center gap-2 sm:gap-3 mb-5">
             {/* Format badge */}
             {post.formato === 'Reel' ? (
               <span
@@ -238,11 +257,19 @@ export function ContentPostPage({ post }: ContentPostPageProps) {
 
           {/* H1 */}
           <h1
-            className="font-[family-name:var(--font-display-serif)] font-[400] text-white leading-[0.92] tracking-[-0.03em] mb-5 max-w-2xl"
-            style={{ fontSize: 'clamp(28px, 5.5vw, 64px)' }}
+            className="font-[family-name:var(--font-display-serif)] font-[400] text-white leading-[0.95] tracking-[-0.03em] mb-5 max-w-3xl"
+            style={{ fontSize: 'clamp(30px, 6vw, 68px)' }}
           >
             {post.titulo}
           </h1>
+
+          {/* Subheadline — ferramenta */}
+          <p
+            className="text-sm sm:text-base leading-relaxed max-w-xl mb-7 sm:mb-8"
+            style={{ color: 'rgba(255,255,255,0.5)' }}
+          >
+            {post.ferramenta}
+          </p>
 
           {/* Action buttons */}
           <div className="flex flex-col sm:flex-row flex-wrap gap-3">
@@ -276,14 +303,14 @@ export function ContentPostPage({ post }: ContentPostPageProps) {
                 style={{
                   background: '#FF3A0E',
                   color: '#050507',
-                  padding: '12px 20px',
+                  padding: '12px 22px',
                   fontSize: 14,
                   fontWeight: 600,
                   letterSpacing: '-0.01em',
                 }}
               >
                 <ExternalLink className="h-4 w-4" aria-hidden="true" />
-                {post.ferramenta}
+                Acessar recurso
               </a>
             )}
 
@@ -319,35 +346,34 @@ export function ContentPostPage({ post }: ContentPostPageProps) {
 
       {/* ── Seção 4: CTA Engajamento ───────────────────────────────────── */}
       <section
-        className="py-12 sm:py-16"
+        className="py-14 sm:py-20"
         style={{
-          background: '#16161a',
-          borderTop: '1px solid rgba(255,255,255,0.16)',
+          background: '#0e0e11',
+          borderTop: '1px solid rgba(255,255,255,0.07)',
         }}
         aria-labelledby="cta-heading"
       >
         <div className="mx-auto max-w-6xl px-5 sm:px-10 lg:px-[140px]">
           <div
-            className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6 p-6 sm:p-8"
+            className="flex flex-col items-start gap-3 p-7 sm:p-9"
             style={{
               background: '#16161a',
-              border: '1px solid rgba(255,255,255,0.16)',
+              border: '1px solid rgba(255,255,255,0.1)',
             }}
           >
-            <div>
-              <p className="mb-2" style={EYEBROW}>
-                Engajamento
-              </p>
-              <p
-                id="cta-heading"
-                className="text-base sm:text-lg font-semibold text-white tracking-tight"
-                style={{ letterSpacing: '-0.02em' }}
-              >
-                Comenta{' '}
-                <span style={{ color: '#FF3A0E' }}>{post.keyword_cta}</span>
-                {' '}no post original
-              </p>
-            </div>
+            <p style={EYEBROW}>Engajamento</p>
+            <p
+              id="cta-heading"
+              className="text-lg sm:text-2xl font-semibold text-white"
+              style={{ letterSpacing: '-0.02em', lineHeight: 1.3 }}
+            >
+              Comenta{' '}
+              <span style={{ color: '#FF3A0E' }}>{post.keyword_cta}</span>
+              {' '}no post original
+            </p>
+            <p className="text-sm" style={{ color: 'rgba(255,255,255,0.4)' }}>
+              Receba o material completo direto no seu direct.
+            </p>
           </div>
         </div>
       </section>
