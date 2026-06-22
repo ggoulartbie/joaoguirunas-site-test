@@ -103,7 +103,7 @@ export function OpenSourceClient() {
       const meta = categoryMeta(p.categoryId);
       return {
         title: p.titulo,
-        description: p.longDescription?.[0] ?? p.legenda.replace(/#\w+/g, '').replace(/\s+/g, ' ').trim().slice(0, 120),
+        description: p.longDescription?.[0] ?? (p.legenda ?? '').replace(/#\w+/g, '').replace(/\s+/g, ' ').trim().slice(0, 120),
         icon: meta.icon,
         href: `/open-source/${p.slug}/`,
         categoryId: p.categoryId as string,

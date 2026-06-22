@@ -30,8 +30,8 @@ export interface ContentPost {
   titulo: string
   ferramenta: string
   link: string           // pode ser "PENDENTE:..." para links ainda a verificar
-  roteiro: string        // texto completo do roteiro
-  legenda: string        // texto completo da legenda Instagram
+  roteiro?: string       // (legado, opcional) roteiro de produção do post social
+  legenda?: string       // (legado, opcional) legenda Instagram do post social
   keyword_cta: string    // palavra-chave para o CTA (ex: "VÍDEO")
   pilar: string          // pilar de conteúdo
   duracao: string        // "35s" para Reel, "8 slides" para Carrossel

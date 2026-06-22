@@ -12,8 +12,9 @@ export async function generateStaticParams() {
 }
 
 // Limpa hashtags/espaços extras da legenda para usar como texto corrido.
+// legenda é legado/opcional — pode estar ausente em tutoriais migrados.
 function plainLegenda(post: ContentPost): string {
-  return post.legenda.replace(/#\w+/g, '').replace(/\s+/g, ' ').trim()
+  return (post.legenda ?? '').replace(/#\w+/g, '').replace(/\s+/g, ' ').trim()
 }
 
 function isPendente(link: string): boolean {
