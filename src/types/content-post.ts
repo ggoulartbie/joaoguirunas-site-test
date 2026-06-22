@@ -51,5 +51,6 @@ export interface ContentPost {
   authorUrl?: string                    // link do autor
   bgImage?: string                      // imagem de fundo do hero
   bgPosition?: string                   // object-position do bg do hero
+  sourceUrl?: string                    // link canônico da fonte (verificação do QA)
   body?: TutorialBlock[]                // corpo do tutorial (passos/código/etc)
 }
