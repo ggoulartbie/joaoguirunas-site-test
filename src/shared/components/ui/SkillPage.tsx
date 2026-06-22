@@ -298,7 +298,8 @@ export function SkillPage({
         </div>
       </section>
 
-      {/* ── Features ── */}
+      {/* ── Features ── (oculta quando não há features, ex.: posts não migrados) */}
+      {features.length > 0 && (
       <section
         className="py-14 sm:py-20 lg:py-24"
         style={{ background: '#0e0e11', borderTop: '1px solid rgba(255,255,255,0.07)' }}
@@ -344,6 +345,7 @@ export function SkillPage({
           </div>
         </div>
       </section>
+      )}
 
       {/* ── Extra Content ── */}
       {children}
