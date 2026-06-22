@@ -13,6 +13,15 @@ export interface TutorialFeature {
   icon: string           // SVG path interno (mesmo formato de SkillPage.features)
 }
 
+// ── Bloco do corpo do tutorial — estruturado (sem JSX), writer-friendly ──
+// Renderizado por <TutorialBody> como children do SkillPage.
+export type TutorialBlock =
+  | { type: 'heading'; text: string }
+  | { type: 'paragraph'; text: string }
+  | { type: 'steps'; items: string[] }
+  | { type: 'code'; language?: string; code: string }
+  | { type: 'callout'; text: string }
+
 export interface ContentPost {
   slug: string
   data: string           // "2026-06-18"
@@ -42,4 +51,5 @@ export interface ContentPost {
   authorUrl?: string                    // link do autor
   bgImage?: string                      // imagem de fundo do hero
   bgPosition?: string                   // object-position do bg do hero
+  body?: TutorialBlock[]                // corpo do tutorial (passos/código/etc)
 }
