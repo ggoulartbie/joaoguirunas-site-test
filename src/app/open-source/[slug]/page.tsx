@@ -3,6 +3,7 @@ import { getPostBySlug, contentPosts } from '@/data/content-posts'
 import { SkillPage } from '@/shared/components/ui/SkillPage'
 import { TutorialBody } from '@/shared/components/ui/TutorialBody'
 import { categoryMeta } from '@/data/open-source-categories'
+import { resolveSkillIcon } from '@/data/skill-icons'
 import type { ContentPost } from '@/types/content-post'
 import type { Metadata } from 'next'
 
@@ -39,7 +40,12 @@ function toSkillPageProps(post: ContentPost) {
     category: post.categoryLabel ?? meta.label,
     categoryColor: post.categoryColor ?? meta.color,
     longDescription,
-    features: post.features ?? [],
+    // Resolve nome de token → SVG path (writers usam 'plugin'/'setup'/etc;
+    // batch-1/5 usam path inline — resolveSkillIcon aceita os dois).
+    features: (post.features ?? []).map((f) => ({
+      ...f,
+      icon: resolveSkillIcon(f.icon),
+    })),
     primaryLink: post.primaryLink ?? link,
     primaryLabel: post.primaryLabel ?? post.ferramenta,
     isExternal: post.isExternal ?? true,
