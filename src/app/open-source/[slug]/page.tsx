@@ -2,6 +2,7 @@ import { notFound } from 'next/navigation'
 import { getPostBySlug, contentPosts } from '@/data/content-posts'
 import { SkillPage } from '@/shared/components/ui/SkillPage'
 import { TutorialBody } from '@/shared/components/ui/TutorialBody'
+import { categoryMeta } from '@/data/open-source-categories'
 import type { ContentPost } from '@/types/content-post'
 import type { Metadata } from 'next'
 
@@ -28,11 +29,15 @@ function toSkillPageProps(post: ContentPost) {
 
   const link = isPendente(post.link) ? undefined : post.link
 
+  // categoryId é a fonte da verdade; label/cor derivam do mapa central
+  // (writer só define categoryId). Overrides explícitos no post têm prioridade.
+  const meta = categoryMeta(post.categoryId)
+
   return {
     title: post.titulo,
     description: post.longDescription?.[0] ?? plainLegenda(post).slice(0, 180),
-    category: post.categoryLabel ?? post.categoryId ?? post.pilar,
-    categoryColor: post.categoryColor ?? post.categoryId ?? 'aprendizado',
+    category: post.categoryLabel ?? meta.label,
+    categoryColor: post.categoryColor ?? meta.color,
     longDescription,
     features: post.features ?? [],
     primaryLink: post.primaryLink ?? link,

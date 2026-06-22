@@ -11,6 +11,7 @@ import {
 import { GrowthWatermark } from '@/shared/components/ui/growth-watermark';
 import { SQUADS, TOTAL_AGENTES } from '@/data/agentes';
 import { contentPosts } from '@/data/content-posts';
+import { categoryMeta } from '@/data/open-source-categories';
 
 const CINEMA: [number, number, number, number] = [0.7, 0, 0.2, 1];
 const GLIDE: [number, number, number, number] = [0.25, 1, 0.3, 1];
@@ -32,23 +33,6 @@ const categories = [
   { id: 'integracoes', label: 'Integrações',  Icon: Plug       },
   { id: 'aprendizado', label: 'Aprendizado',  Icon: BookOpen   },
 ];
-
-// Rótulo e ícone padrão por categoria — fallback para cards de content-posts
-// que não trazem categoryLabel/icon próprios.
-const categoryLabelById: Record<string, string> = {
-  squads:      'Squads',
-  skills:      'Skills',
-  apps:        'Apps',
-  integracoes: 'Integrações',
-  aprendizado: 'Aprendizado',
-};
-const postCategoryIcon: Record<string, string> = {
-  squads:      'agents',
-  skills:      'setup',
-  apps:        'monitor',
-  integracoes: 'plugin',
-  aprendizado: 'book',
-};
 
 const skillIcons: Record<string, string> = {
   framework:    '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3.75 6A2.25 2.25 0 016 3.75h2.25A2.25 2.25 0 0110.5 6v2.25a2.25 2.25 0 01-2.25 2.25H6a2.25 2.25 0 01-2.25-2.25V6zM3.75 15.75A2.25 2.25 0 016 13.5h2.25a2.25 2.25 0 012.25 2.25V18a2.25 2.25 0 01-2.25 2.25H6A2.25 2.25 0 013.75 18v-2.25zM13.5 6a2.25 2.25 0 012.25-2.25H18A2.25 2.25 0 0120.25 6v2.25A2.25 2.25 0 0118 10.5h-2.25a2.25 2.25 0 01-2.25-2.25V6zM13.5 15.75a2.25 2.25 0 012.25-2.25H18a2.25 2.25 0 012.25 2.25V18A2.25 2.25 0 0118 20.25h-2.25A2.25 2.25 0 0113.5 18v-2.25z"/>',
@@ -152,15 +136,18 @@ export function OpenSourceClient() {
   // posts ainda não enriquecidos ficam de fora até serem categorizados.
   const postCards = contentPosts
     .filter((p) => !!p.categoryId)
-    .map((p) => ({
-      title: p.titulo,
-      description: p.longDescription?.[0] ?? p.legenda.replace(/#\w+/g, '').replace(/\s+/g, ' ').trim().slice(0, 120),
-      icon: postCategoryIcon[p.categoryId as string] ?? 'book',
-      href: `/open-source/${p.slug}/`,
-      categoryId: p.categoryId as string,
-      categoryLabel: p.categoryLabel ?? categoryLabelById[p.categoryId as string] ?? 'Aprendizado',
-      author: p.author ?? '@joaoguirunas',
-    }));
+    .map((p) => {
+      const meta = categoryMeta(p.categoryId);
+      return {
+        title: p.titulo,
+        description: p.longDescription?.[0] ?? p.legenda.replace(/#\w+/g, '').replace(/\s+/g, ' ').trim().slice(0, 120),
+        icon: meta.icon,
+        href: `/open-source/${p.slug}/`,
+        categoryId: p.categoryId as string,
+        categoryLabel: p.categoryLabel ?? meta.label,
+        author: p.author ?? '@joaoguirunas',
+      };
+    });
 
   const catalog = [...skills, ...postCards];
 
