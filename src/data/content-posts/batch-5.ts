@@ -121,5 +121,61 @@ export const batch5: ContentPost[] = [
     keyword_cta: 'GRÁTIS',
     pilar: 'Eliminar Custo Fixo com IA',
     duracao: '35s',
+    categoryId: 'apps',
+    primaryLink: 'https://github.com/Lightricks/LTX-Video',
+    primaryLabel: 'Repositório no GitHub',
+    isExternal: true,
+    author: '@joaoguirunas',
+    sourceUrl: 'https://github.com/Lightricks/LTX-Video',
+    longDescription: [
+      'A maioria das ferramentas de vídeo por IA cobra por crédito ou mensalidade — e cada render queima saldo. O LTX-Video, da Lightricks, vira essa lógica: é um modelo open source de geração de vídeo que roda no seu próprio computador. Sem crédito, sem assinatura, sem fila. Depois de baixar o modelo, você gera quantos vídeos quiser, ilimitado.',
+      'Este card foca no ângulo de custo: por que rodar localmente elimina o gasto fixo e quando isso compensa. É um complemento ao manual completo do LTX-Video aqui no portal — se você quer o passo a passo detalhado de instalação, capacidades e modelos, veja o tutorial "LTX-Video: O Manual da IA Open Source que Gera Vídeo no Seu Próprio Computador".',
+      'É para criadores que produzem vídeo em volume e querem zerar o custo por geração, e para quem prefere manter os dados na própria máquina. Exige uma GPU com VRAM adequada — o trade-off do gratuito-e-ilimitado é rodar no seu hardware.',
+    ],
+    features: [
+      {
+        title: 'Custo por vídeo: zero',
+        description: 'Rodando local, não há crédito nem mensalidade. Depois do download, cada render é gratuito e ilimitado.',
+        icon: 'ads',
+      },
+      {
+        title: 'Open source, roda local',
+        description: 'Modelo aberto da Lightricks que processa na sua máquina — sem enviar prompts ou saídas para um servidor pago.',
+        icon: 'github',
+      },
+      {
+        title: 'Text-to-video e image-to-video',
+        description: 'Gera vídeo a partir de texto ou anima uma imagem inicial — o mesmo motor do manual completo do LTX no portal.',
+        icon: 'video',
+      },
+      {
+        title: 'LTX-2 disponível',
+        description: 'A próxima geração, LTX-2, já está disponível em repositório próprio (github.com/Lightricks/LTX-2) — vale avaliar qual versão cabe no seu hardware.',
+        icon: 'image',
+      },
+      {
+        title: 'Demo sem instalar',
+        description: 'Quer testar antes de baixar? Há playground hospedado em app.ltx.studio para validar a qualidade sem montar o ambiente local.',
+        icon: 'browser',
+      },
+      {
+        title: 'Trade-off: seu hardware',
+        description: 'Gratuito e ilimitado significa rodar na sua GPU. Garanta VRAM suficiente — é o custo real que substitui a mensalidade.',
+        icon: 'monitor',
+      },
+    ],
+    body: [
+      { type: 'paragraph', text: 'A conta é simples: ferramenta paga de vídeo cobra por render; o LTX-Video roda local e custa zero por geração. Este guia mostra o caminho mais curto para parar de pagar — e remete ao manual completo para o detalhe técnico.' },
+      { type: 'heading', text: 'Por que sai de graça' },
+      { type: 'paragraph', text: 'O LTX-Video é open source e executa na sua máquina. Não existe servidor cobrando por uso: o gasto se desloca da mensalidade para o seu hardware (energia + GPU que você já tem). Para quem gera muito vídeo, o ponto de equilíbrio chega rápido.' },
+      { type: 'heading', text: 'O caminho mais rápido' },
+      { type: 'steps', items: [
+        'Teste primeiro no playground hospedado (app.ltx.studio) para validar a qualidade sem instalar nada.',
+        'Confirme sua GPU/VRAM — é o requisito que viabiliza rodar local de graça.',
+        'Clone o repositório oficial (github.com/Lightricks/LTX-Video) e siga o setup do manual completo no portal.',
+        'Avalie LTX-2 (repo próprio) se quiser a geração mais nova e seu hardware suportar.',
+      ] },
+      { type: 'callout', text: 'Este card é o ângulo "custo zero". Para instalação detalhada, escolha de modelos e capacidades, use o tutorial completo do LTX-Video aqui no portal — esta página o complementa, não o substitui.' },
+    ],
   },
 ]
