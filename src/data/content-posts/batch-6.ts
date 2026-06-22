@@ -9,90 +9,6 @@ export const batch6: ContentPost[] = [
     titulo: 'A Ferramenta AI Que Mais Me Surpreendeu Essa Semana',
     ferramenta: 'MiniMax M3',
     link: 'https://huggingface.co/MiniMaxAI/MiniMax-M3',
-    roteiro: `## Slide 1 — Capa
-
-**Texto principal:**
-A FERRAMENTA AI QUE MAIS ME
-SURPREENDEU ESSA SEMANA
-
-**Subtítulo:**
-MiniMax M3 — open-weight, 1 milhão de tokens de contexto.
-
----
-
-## Slide 2 — O que é
-
-**Título:** O que é o MiniMax M3
-
-MiniMax M3 é o primeiro modelo open-weight da empresa com capacidades de agente de código de nível frontier. Lançado em 1° de junho de 2026, combina 1 milhão de tokens de contexto nativo, computer use (vê e opera interfaces de desktop) e performance de coding que, segundo a MiniMax, rivaliza com modelos fechados de topo.
-
-Open-weight: os pesos podem ser baixados e rodados na sua própria infraestrutura.
-
----
-
-## Slide 3 — O problema que resolve
-
-**Título:** O problema que ele resolve
-
-Modelos de contexto longo fechados custam caro. Modelos open-weight bons em código costumavam ter contexto curto. E poucos tinham computer use nativo.
-
-O M3 ataca as três restrições ao mesmo tempo.
-
----
-
-## Slide 4 — Na prática — como usar
-
-**Título:** Na prática — como acessar
-
-Via API (minimax.io): cadastro, acesso via API compatível com padrão OpenAI, contexto de até 1M tokens.
-
-Via open weights: quando publicados no HuggingFace, download direto e execução em infra própria via Ollama ou vLLM. Confirme a disponibilidade dos pesos antes de usar.
-
----
-
-## Slide 5 — Por que me surpreendeu
-
-**Título:** Por que essa e não outra
-
-A maioria dos lançamentos de junho foi de modelos fechados e caros. O M3 apareceu sob o radar.
-
-Segundo a MiniMax, marca 59% no SWE-Bench Pro — ainda sem verificação independente. Vem com MIT license: uso comercial, modificação e redistribuição liberados. A arquitetura MiniMax Sparse Attention, de acordo com a empresa, entregaria ganho expressivo de velocidade em contexto longo.
-
----
-
-## Slide 6 — Como usar com Claude Code
-
-**Título:** Como usar com Claude Code
-
-Compatível com o padrão de API OpenAI, então qualquer cliente nesse formato consegue apontar pra ele. No Claude Code, dá pra usar o M3 como backend via MCP server custom ou proxy OpenAI-compatível, deixando o M3 processar contextos longos enquanto o Claude Code orquestra.
-
-Útil pra análise de codebases extensos.
-
----
-
-## Slide 7 — Limitações honestas
-
-**Título:** O que ainda não funciona bem
-
-Os benchmarks divulgados são vendor-reported — aguardar reprodução independente antes de confiar nos números. O computer use está em fase inicial de produção. A disponibilidade dos open weights precisa ser confirmada. E rodar o modelo completo (~428B params) exige hardware significativo.
-
----
-
-## Slide 8 — CTA
-
-**Texto:**
-Comenta IA25 que eu te mando o link direto para a API e o repositório no HuggingFace.
-
-Salva esse post.`,
-    legenda: `Comenta IA25 que eu te mando o link direto para a API e o repositório no HuggingFace.
-
-A maioria dos lançamentos de junho foi de modelo fechado e caro. O MiniMax M3 apareceu sob o radar — open-weight, MIT license, 1 milhão de tokens de contexto e computer use nativo num único modelo.
-
-Os benchmarks de coding divulgados pela MiniMax são fortes — ainda sem verificação independente — e a arquitetura nova promete bem mais velocidade em contexto longo. Pra quem quer rodar modelo capaz na própria infra sem pagar API cara, vale acompanhar. 🔍
-
-No carrossel: o que é, o problema que resolve, como acessar, integração com Claude Code e as limitações honestas — porque hype sem contexto não ajuda ninguém.
-
-#ia #inteligenciaartificial #ferramentasIA #claudecode #aitools #novidadesai #opensource #minimax #minimaxm3 #aiagents #llm #aiweekly`,
     keyword_cta: 'IA25',
     pilar: 'Notícias e Tendências AI',
     duracao: '8 slides',
@@ -105,40 +21,150 @@ No carrossel: o que é, o problema que resolve, como acessar, integração com C
     titulo: 'OpenMontage Transforma Claude em Estúdio de Vídeo',
     ferramenta: 'OpenMontage',
     link: 'https://github.com/calesthio/OpenMontage',
-    roteiro: `Alguém transformou o Claude Code num estúdio de produção de vídeo completo.
-E é completamente gratuito.
-
-Chama OpenMontage.
-
-Você descreve o vídeo que quer criar.
-O sistema assume o controle do pipeline inteiro de produção automaticamente.
-
-Ele escreve o roteiro.
-Gera os visuais.
-Adiciona o voiceover.
-Edita tudo junto.
-
-Mas o que diferencia do resto: antes de gerar qualquer coisa, ele busca informações reais da web.
-Dados atuais, contexto real — não conteúdo inventado pela AI.
-O resultado parece autêntico, não parece vídeo gerado por máquina.
-
-Explainers, trailers, anúncios, vídeos educacionais — tudo numa plataforma só, dentro do Claude Code.
-
-Comenta OPEN que eu te mando o repositório do OpenMontage agora.`,
-    legenda: `Comenta OPEN que eu te mando o repositório do OpenMontage agora.
-
-Claude Code já escreve código, cria sites e automatiza fluxos. Agora ele também produz vídeo completo — do roteiro ao arquivo final. Chama OpenMontage e é grátis.
-
-Você descreve o que quer. Ele escreve o roteiro, gera os visuais, adiciona voiceover e edita tudo sozinho. O diferencial que muda tudo: antes de gerar, ele pesquisa informações reais na web. O vídeo sai com contexto atual, não conteúdo alucinado. 🎬
-
-Explainers, trailers, anúncios, vídeos educacionais — tudo sem abrir Premiere, CapCut ou qualquer editor. Tudo dentro do Claude Code.
-
-Estúdio de produção completo. Custo zero.
-
-#claudecode #openmontage #videoai #producaodevideo #ia #inteligenciaartificial #ferramentasIA #aitools #automacao #criadordeconteudo #voiceover #videomarketing`,
     keyword_cta: 'OPEN',
     pilar: 'Produção de Conteúdo com IA',
     duracao: '39s',
+    categoryId: 'integracoes',
+    longDescription: [
+      'OpenMontage é um sistema open source de produção de vídeo agêntica — ele transforma o seu assistente de código (Claude Code, Cursor, Copilot, Windsurf ou Codex) num estúdio de vídeo completo. Você descreve em linguagem natural o vídeo que quer e o agente assume todo o pipeline: pesquisa o tema com busca na web, escreve e narra o roteiro, gera imagens ou busca footage real, encontra trilha royalty-free, queima as legendas com timing por palavra e renderiza o arquivo final.',
+      'O diferencial é que o OpenMontage não se limita a "animar algumas imagens e chamar de vídeo". Ele tem um caminho de footage real: o agente monta um corpus pesquisável a partir de arquivos abertos (Archive.org, NASA, Wikimedia Commons) e fontes gratuitas como Pexels e Unsplash, recupera clipes de movimento reais e os edita numa timeline. Antes de você ver qualquer coisa, o sistema roda uma auto-revisão multiponto — validação com ffprobe, amostragem de frames, análise de níveis de áudio e checagem das legendas.',
+      'Por ser pipeline-driven e gratuito, dá pra produzir explainers, trailers, anúncios e shorts animados sem abrir Premiere ou CapCut — tudo dentro do terminal. O projeto é licenciado sob AGPLv3 e funciona até com zero chaves de API, usando Piper TTS (narração offline gratuita) e Remotion para a composição.',
+    ],
+    features: [
+      {
+        title: 'Pipeline de vídeo completo',
+        description: 'Do roteiro ao MP4 final: pesquisa, narração, geração de visuais, trilha, legendas e renderização — tudo automatizado dentro do seu assistente de código.',
+        icon: 'video',
+      },
+      {
+        title: 'Footage real, não só stills',
+        description: 'Monta um corpus pesquisável de Archive.org, NASA e Wikimedia Commons e corta clipes de movimento reais numa timeline — não apenas animação de imagens estáticas.',
+        icon: 'image',
+      },
+      {
+        title: 'Pesquisa na web antes de gerar',
+        description: 'O agente usa busca ao vivo para coletar contexto real do tema antes de escrever o roteiro, evitando conteúdo alucinado.',
+        icon: 'browser',
+      },
+      {
+        title: 'Funciona com zero chaves de API',
+        description: 'Out of the box usa Piper TTS (narração offline grátis) + Remotion. Cada chave adicional (FAL, ElevenLabs, OpenAI…) desbloqueia mais ferramentas.',
+        icon: 'plugin',
+      },
+      {
+        title: 'Auto-revisão antes da entrega',
+        description: 'Validação com ffprobe, amostragem de frames, análise de áudio e checagem de legendas rodam antes de você ver o vídeo — cada decisão de provider é pontuada e auditável.',
+        icon: 'monitor',
+      },
+      {
+        title: 'Open source (AGPLv3)',
+        description: 'Código aberto e reproduzível: cada vídeo de exemplo no canal traz prompt, pipeline, ferramentas usadas e custo, para você replicar.',
+        icon: 'github',
+      },
+    ],
+    body: [
+      {
+        type: 'paragraph',
+        text: 'O OpenMontage roda dentro do seu assistente de código. A ideia é simples: você abre o projeto, descreve o vídeo em linguagem natural e o agente conduz o pipeline de produção. Abaixo, o passo a passo real para instalar e gerar o primeiro vídeo.',
+      },
+      {
+        type: 'heading',
+        text: 'Pré-requisitos',
+      },
+      {
+        type: 'steps',
+        items: [
+          'Python 3.10 ou superior instalado.',
+          'FFmpeg (macOS: brew install ffmpeg · Linux: sudo apt install ffmpeg).',
+          'Node.js 18 ou superior.',
+          'Um assistente de código: Claude Code, Cursor, Copilot, Windsurf ou Codex.',
+        ],
+      },
+      {
+        type: 'heading',
+        text: 'Passo 1 — Clonar e instalar',
+      },
+      {
+        type: 'paragraph',
+        text: 'Clone o repositório e rode o setup. O comando make setup prepara o ambiente Python, instala o composer Remotion e cria o arquivo .env.',
+      },
+      {
+        type: 'code',
+        language: 'bash',
+        code: `git clone https://github.com/calesthio/OpenMontage.git
+cd OpenMontage
+make setup`,
+      },
+      {
+        type: 'callout',
+        text: 'Sem make? Rode manualmente: pip install -r requirements.txt && cd remotion-composer && npm install && cd .. && pip install piper-tts && cp .env.example .env',
+      },
+      {
+        type: 'heading',
+        text: 'Passo 2 — (Opcional) Adicionar chaves de API',
+      },
+      {
+        type: 'paragraph',
+        text: 'O sistema já produz vídeos reais com zero chaves usando Piper TTS e footage de arquivos abertos. Cada chave que você adiciona ao .env desbloqueia mais providers — todas são opcionais.',
+      },
+      {
+        type: 'code',
+        language: 'bash',
+        code: `# .env — toda chave é opcional, adicione o que tiver
+FAL_KEY=sua-chave          # imagens FLUX + vídeo Veo/Kling/MiniMax
+PEXELS_API_KEY=sua-chave   # footage e imagens grátis
+ELEVENLABS_API_KEY=sua-chave  # TTS premium e efeitos sonoros
+OPENAI_API_KEY=sua-chave   # TTS da OpenAI + imagens DALL-E 3`,
+      },
+      {
+        type: 'heading',
+        text: 'Passo 3 — Descrever o vídeo',
+      },
+      {
+        type: 'paragraph',
+        text: 'Abra o projeto no seu assistente de código e diga, em linguagem natural, o que você quer. O agente cuida da pesquisa, do roteiro, dos visuais, da narração, da trilha e da renderização.',
+      },
+      {
+        type: 'code',
+        language: 'text',
+        code: `"Faça um explainer animado de 60 segundos sobre como redes neurais aprendem"`,
+      },
+      {
+        type: 'paragraph',
+        text: 'Para o caminho de footage real, peça explicitamente uma montagem documental e diga para usar apenas footage real:',
+      },
+      {
+        type: 'code',
+        language: 'text',
+        code: `"Faça uma montagem documental de 75 segundos sobre a vida na cidade na chuva. Use apenas footage real, sem narração, tom elegíaco, com música."`,
+      },
+      {
+        type: 'callout',
+        text: 'Antes de você ver o resultado, o OpenMontage roda uma auto-revisão: validação com ffprobe, amostragem de frames, análise de níveis de áudio e checagem das legendas. Cada decisão de provider é pontuada em 7 dimensões com log auditável.',
+      },
+      {
+        type: 'heading',
+        text: 'Tem GPU? Geração de vídeo local grátis',
+      },
+      {
+        type: 'paragraph',
+        text: 'Com uma GPU dá para desbloquear geração de vídeo local sem custo de API, rodando modelos abertos como Wan 2.1, HunyuanVideo ou LTX-2.',
+      },
+      {
+        type: 'code',
+        language: 'bash',
+        code: `make install-gpu
+
+# depois, no .env:
+VIDEO_GEN_LOCAL_ENABLED=true
+VIDEO_GEN_LOCAL_MODEL=wan2.1-1.3b`,
+      },
+    ],
+    primaryLink: 'https://github.com/calesthio/OpenMontage',
+    primaryLabel: 'Ver no GitHub',
+    isExternal: true,
+    author: '@joaoguirunas',
+    sourceUrl: 'https://github.com/calesthio/OpenMontage',
   },
   {
     slug: 'voiceover-automatico-pt-br-com-claude-elevenlabs',
@@ -148,139 +174,171 @@ Estúdio de produção completo. Custo zero.
     titulo: 'Voiceover Automático PT-BR com Claude + ElevenLabs',
     ferramenta: 'Claude Code + ElevenLabs API',
     link: 'https://elevenlabs.io + https://claude.ai/code',
-    roteiro: `## Slide 1 — Capa
-
-**Texto principal:**
-VOICEOVER AUTOMÁTICO EM PT-BR
-COM CLAUDE + ELEVENLABS
-
-**Subtítulo:**
-Do texto ao áudio em segundos — sem gravar nada
-
----
-
-## Slide 2 — Por que usar voiceover AI
-
-**Título:** O problema que isso resolve
-
-Gravar narração leva tempo. Precisa de microfone, ambiente silencioso, edição de áudio.
-
-Com Claude Code + ElevenLabs MCP, você:
-— Gera voiceover em PT-BR de alta qualidade sem gravar nada
-— Usa a mesma voz em todos os projetos (consistência de marca)
-— Regenera instantâneo se o texto mudar
-— Escala produção sem depender de estúdio ou locutor
-
----
-
-## Slide 3 — Passo 1: Configurar ElevenLabs
-
-**Título:** Passo 1 — Conta e API key
-
-1. Cria conta em elevenlabs.io (tem plano gratuito)
-2. Vai em Profile > API Keys
-3. Gera uma chave de API
-4. Copia e guarda — vai usar na configuração do MCP
-
-O plano gratuito oferece créditos suficientes para testar. Para produção contínua, o plano Starter (U$5/mês) é o suficiente para a maioria dos criadores.
-
----
-
-## Slide 4 — Passo 2: Escolher a voz PT-BR
-
-**Título:** Passo 2 — Voz que soa natural em português
-
-No painel do ElevenLabs:
-— Vai em Voice Library
-— Filtra por idioma: Português (Brasil)
-— Teste as vozes disponíveis com um texto seu
-— Clica em "Use" na voz escolhida e copia o Voice ID
-
-Dica: escolha uma voz com tom neutro-autoritativo para conteúdo educacional. Evite vozes que soam robóticas nos finais de frase.
-
----
-
-## Slide 5 — Passo 3: Instalar o MCP do ElevenLabs no Claude Code
-
-**Título:** Passo 3 — MCP conectado
-
-No arquivo \`~/.claude/settings.json\`, adicione:
-
-\`\`\`json
-"elevenlabs": {
-  "command": "npx",
-  "args": ["-y", "@elevenlabs/mcp"],
-  "env": {
-    "ELEVENLABS_API_KEY": "sua-chave-aqui"
-  }
-}
-\`\`\`
-
-Reinicie o Claude Code. O MCP aparece automaticamente como ferramenta disponível.
-
----
-
-## Slide 6 — Passo 4: Gerar áudio com Claude Code
-
-**Título:** Passo 4 — Pedindo o voiceover
-
-Dentro do Claude Code, você escreve:
-
-"Gera um voiceover com a voz [VOICE_ID] para este texto: [ROTEIRO]. Salva como audio_01.mp3 na pasta /assets/audio/"
-
-O Claude chama o ElevenLabs automaticamente via MCP e salva o arquivo no caminho que você indicou.
-
-Sem copiar e colar em interface web. Sem fazer manualmente.
-
----
-
-## Slide 7 — Passo 5: Integrar com vídeo
-
-**Título:** Passo 5 — Sincronizar com o vídeo
-
-Com o áudio gerado, você pode:
-
-— Usar no CapCut, Premiere ou qualquer editor: arrasta o .mp3 para a timeline
-— Usar com Remotion (motion design no Claude Code): o Claude sincroniza automaticamente
-— Usar com OpenMontage: o pipeline de vídeo já inclui voiceover automático
-
-O áudio fica na pasta do projeto — junto com o vídeo, não numa pasta genérica separada.
-
----
-
-## Slide 8 — Exemplo real de uso
-
-**Título:** Fluxo completo em 3 minutos
-
-1. Você escreve ou pede ao Claude o roteiro do vídeo
-2. Claude gera o roteiro e já chama o ElevenLabs via MCP
-3. Áudio .mp3 salvo na pasta do projeto
-4. Você arrasta para o editor ou usa via Remotion
-5. Vídeo com narração profissional pronto
-
-Do texto ao vídeo narrado: menos de 3 minutos.
-
----
-
-## Slide 9 — CTA
-
-**Texto:**
-Comenta VOZ que eu te mando o setup completo do MCP com o Voice ID da voz que uso nos meus vídeos.
-
-Salva esse post para quando for gravar o próximo roteiro.`,
-    legenda: `Comenta VOZ que eu te mando o setup completo do MCP com o Voice ID da voz que uso nos meus vídeos.
-
-Gravar narração leva tempo, precisa de setup e travaca a produção quando o roteiro muda. Com Claude Code + ElevenLabs MCP, você gera voiceover em PT-BR em segundos — sem gravar nada.
-
-O fluxo completo está no carrossel: criar conta no ElevenLabs, escolher voz PT-BR que soa natural, instalar o MCP no Claude Code, gerar o áudio direto do terminal e sincronizar com o vídeo. Do roteiro ao áudio: menos de 3 minutos. 🎙️
-
-A parte que muda tudo: o Claude chama o ElevenLabs automaticamente. Você não precisa entrar na interface web, copiar texto, esperar, baixar, renomear. Só fala no Claude Code e o arquivo aparece na pasta certa do projeto.
-
-Produção de vídeo que dependia de estúdio. Agora é um comando.
-
-#claudecode #elevenlabs #voiceover #audioia #ia #inteligenciaartificial #mcp #producaodevideo #criadordeconteudo #automacao #ferramentasIA #ptbr`,
     keyword_cta: 'VOZ',
     pilar: 'Produção de Conteúdo com IA',
     duracao: '9 slides',
+    categoryId: 'integracoes',
+    longDescription: [
+      'Voiceover automático em PT-BR é o fluxo de gerar a narração dos seus vídeos sem precisar gravar nada: o Claude Code escreve (ou recebe) o roteiro e chama a API da ElevenLabs via MCP para sintetizar o áudio numa voz natural em português brasileiro. O arquivo .mp3 aparece direto na pasta do projeto, pronto para entrar na timeline.',
+      'A ElevenLabs é uma plataforma de síntese de voz com qualidade de estúdio e suporte a português brasileiro. O MCP oficial (Model Context Protocol) expõe as ferramentas da ElevenLabs para o Claude Code — text-to-speech, biblioteca de vozes, efeitos sonoros — para que o agente gere o áudio sem você abrir a interface web, copiar texto, esperar e baixar manualmente.',
+      'O ganho é consistência e velocidade: a mesma voz em todos os projetos (identidade de marca), regeneração instantânea quando o roteiro muda e produção em escala sem depender de estúdio ou locutor. Para um criador, é a diferença entre travar a produção a cada ajuste de texto e narrar tudo com um comando no terminal.',
+    ],
+    features: [
+      {
+        title: 'Do texto ao áudio em segundos',
+        description: 'Você escreve o roteiro e o Claude chama a ElevenLabs via MCP. O .mp3 com narração em PT-BR é salvo na pasta do projeto, sem gravar nada.',
+        icon: 'message',
+      },
+      {
+        title: 'Voz consistente de marca',
+        description: 'Escolha um Voice ID PT-BR na Voice Library e use a mesma voz em todos os vídeos — identidade sonora coerente em toda a sua produção.',
+        icon: 'video',
+      },
+      {
+        title: 'Regeneração instantânea',
+        description: 'Mudou o roteiro? Refaça a narração em segundos. Sem reagendar gravação nem reabrir editor de áudio.',
+        icon: 'automation',
+      },
+      {
+        title: 'MCP oficial da ElevenLabs',
+        description: 'Conexão via Model Context Protocol mantida pela própria ElevenLabs, instalada com uvx — text-to-speech, vozes e efeitos sonoros disponíveis como ferramentas no Claude.',
+        icon: 'plugin',
+      },
+      {
+        title: 'Integra com seu pipeline de vídeo',
+        description: 'O áudio gerado entra no CapCut, Premiere, no Remotion (sincronia automática) ou direto no OpenMontage, que já inclui voiceover no pipeline.',
+        icon: 'remotion',
+      },
+      {
+        title: 'Plano gratuito para testar',
+        description: 'A ElevenLabs tem créditos gratuitos para começar; o plano Starter cobre produção contínua para a maioria dos criadores.',
+        icon: 'book',
+      },
+    ],
+    body: [
+      {
+        type: 'paragraph',
+        text: 'A ideia é conectar a API da ElevenLabs ao Claude Code via MCP oficial. Depois disso, gerar narração vira um comando: você pede o áudio e o arquivo aparece na pasta do projeto. Abaixo, o passo a passo real.',
+      },
+      {
+        type: 'heading',
+        text: 'Pré-requisitos',
+      },
+      {
+        type: 'steps',
+        items: [
+          'Conta na ElevenLabs (o plano gratuito já serve para testar).',
+          'uv instalado — o MCP oficial roda via uvx (curl -LsSf https://astral.sh/uv/install.sh | sh).',
+          'Claude Code instalado.',
+        ],
+      },
+      {
+        type: 'heading',
+        text: 'Passo 1 — Conta e API key',
+      },
+      {
+        type: 'steps',
+        items: [
+          'Crie a conta em elevenlabs.io.',
+          'Acesse seu perfil e abra a seção API Keys.',
+          'Gere uma chave de API.',
+          'Copie e guarde a chave — você vai usá-la na configuração do MCP.',
+        ],
+      },
+      {
+        type: 'heading',
+        text: 'Passo 2 — Escolher a voz PT-BR',
+      },
+      {
+        type: 'steps',
+        items: [
+          'No painel da ElevenLabs, abra a Voice Library.',
+          'Filtre por idioma: Português (Brasil).',
+          'Teste as vozes com um texto seu para sentir o tom.',
+          'Adicione a voz escolhida e copie o Voice ID — você vai passá-lo no prompt.',
+        ],
+      },
+      {
+        type: 'callout',
+        text: 'Dica: para conteúdo educacional, prefira uma voz de tom neutro-autoritativo e evite vozes que soam robóticas nos finais de frase.',
+      },
+      {
+        type: 'heading',
+        text: 'Passo 3 — Instalar o MCP oficial no Claude Code',
+      },
+      {
+        type: 'paragraph',
+        text: 'O MCP oficial da ElevenLabs roda via uvx. A forma mais rápida é registrá-lo com o comando do Claude Code, passando a chave como variável de ambiente:',
+      },
+      {
+        type: 'code',
+        language: 'bash',
+        code: `claude mcp add elevenlabs \\
+  --env ELEVENLABS_API_KEY=sua-chave-aqui \\
+  -- uvx elevenlabs-mcp`,
+      },
+      {
+        type: 'paragraph',
+        text: 'Se preferir editar a config do MCP manualmente, o bloco equivalente é:',
+      },
+      {
+        type: 'code',
+        language: 'json',
+        code: `{
+  "mcpServers": {
+    "elevenlabs": {
+      "command": "uvx",
+      "args": ["elevenlabs-mcp"],
+      "env": {
+        "ELEVENLABS_API_KEY": "sua-chave-aqui"
+      }
+    }
+  }
+}`,
+      },
+      {
+        type: 'callout',
+        text: 'Erro "spawn uvx ENOENT"? Rode which uvx para achar o caminho absoluto (ex.: /usr/local/bin/uvx) e use esse caminho no campo command.',
+      },
+      {
+        type: 'heading',
+        text: 'Passo 4 — Gerar o voiceover',
+      },
+      {
+        type: 'paragraph',
+        text: 'Reinicie o Claude Code para ele carregar o MCP. Depois é só pedir o áudio em linguagem natural, informando o Voice ID e onde salvar:',
+      },
+      {
+        type: 'code',
+        language: 'text',
+        code: `"Gera um voiceover com a voz [VOICE_ID] para este texto: [ROTEIRO].
+Salva como audio_01.mp3 na pasta assets/audio/ do projeto."`,
+      },
+      {
+        type: 'paragraph',
+        text: 'O Claude chama a ElevenLabs via MCP, sintetiza a narração e salva o arquivo no caminho indicado — sem você abrir a interface web.',
+      },
+      {
+        type: 'heading',
+        text: 'Passo 5 — Integrar com o vídeo',
+      },
+      {
+        type: 'steps',
+        items: [
+          'Editor tradicional: arraste o .mp3 para a timeline no CapCut, Premiere ou DaVinci.',
+          'Remotion (motion design no Claude Code): o Claude sincroniza o áudio com a composição.',
+          'OpenMontage: o pipeline de vídeo já inclui voiceover automático — o áudio entra direto.',
+        ],
+      },
+      {
+        type: 'callout',
+        text: 'Mantenha o áudio na pasta do projeto (ex.: assets/audio/), junto do vídeo, não numa pasta genérica separada — facilita versionar e regenerar quando o roteiro mudar.',
+      },
+    ],
+    primaryLink: 'https://github.com/elevenlabs/elevenlabs-mcp',
+    primaryLabel: 'Ver MCP no GitHub',
+    isExternal: true,
+    author: '@joaoguirunas',
+    sourceUrl: 'https://github.com/elevenlabs/elevenlabs-mcp',
   },
 ]

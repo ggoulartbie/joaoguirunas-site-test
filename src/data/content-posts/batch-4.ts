@@ -3,289 +3,163 @@ import { ContentPost } from '@/types/content-post'
 export const batch4: ContentPost[] = [
   {
     slug: 'como-instalar-mcps-no-claude-code-em-5-passos',
-    data: '2026-06-22',
+    data: '2026-06-23',
     slot: 'B',
     formato: 'Carrossel',
     titulo: 'Como Instalar MCPs no Claude Code em 5 Passos',
     ferramenta: 'Claude Code MCPs (Model Context Protocol)',
     link: 'https://modelcontextprotocol.io',
-    roteiro: `## Slide 1 — Capa
-
-**Texto principal:**
-COMO INSTALAR MCPs
-NO CLAUDE CODE
-
-**Subtítulo:**
-5 passos — do zero à ferramenta conectada
-
----
-
-## Slide 2 — O que é MCP
-
-**Título:** MCP — o que é e por que importa
-
-MCP significa Model Context Protocol.
-
-É o padrão que permite o Claude Code se conectar a ferramentas externas reais — Instagram, Notion, ElevenLabs, GitHub, bancos de dados.
-
-Sem MCP: Claude é uma janela de chat.
-Com MCP: Claude é um agente que age no mundo real.
-
-Cada MCP instalado adiciona uma capacidade nova. Você decide quais ferramentas o Claude pode usar.
-
----
-
-## Slide 3 — Passo 1: Encontrar o MCP certo
-
-**Título:** Passo 1 — Onde achar MCPs
-
-Três fontes principais:
-— **mcp.run** — repositório oficial com dezenas de MCPs prontos
-— **GitHub** — pesquise "awesome-mcp-servers" para listas da comunidade
-— **npm** — muitos MCPs são pacotes Node instaláveis diretamente
-
-Antes de instalar, verifique: tem documentação? Tem atualizações recentes? É mantido por quem?
-
----
-
-## Slide 4 — Passo 2: Abrir as configurações do Claude Code
-
-**Título:** Passo 2 — Arquivo de configuração
-
-O Claude Code lê os MCPs do arquivo:
-\`~/.claude/settings.json\`
-
-Se não existir ainda, crie com:
-\`touch ~/.claude/settings.json\`
-
-Abra no seu editor de texto preferido. É aqui que você vai adicionar cada MCP.
-
----
-
-## Slide 5 — Passo 3: Adicionar o MCP no JSON
-
-**Título:** Passo 3 — Configuração no JSON
-
-Estrutura básica:
-
-\`\`\`json
-{
-  "mcpServers": {
-    "nome-do-mcp": {
-      "command": "npx",
-      "args": ["-y", "pacote-do-mcp"],
-      "env": {
-        "API_KEY": "sua-chave-aqui"
-      }
-    }
-  }
-}
-\`\`\`
-
-Cada MCP tem sua própria documentação com os valores exatos para preencher aqui.
-
----
-
-## Slide 6 — Passo 4: Testar a conexão
-
-**Título:** Passo 4 — Verificar se está funcionando
-
-Reinicie o Claude Code depois de salvar o JSON.
-
-Rode \`/doctor\` para checar se o MCP foi reconhecido.
-
-Se estiver ativo, vai aparecer na lista de ferramentas disponíveis quando você iniciar uma nova sessão.
-
-Teste com um comando simples da ferramenta conectada.
-
----
-
-## Slide 7 — Exemplos de MCPs úteis
-
-**Título:** MCPs que vale instalar primeiro
-
-— **Apify** — scraping de Instagram, TikTok, web
-— **ElevenLabs** — geração de áudio e voiceover em PT-BR
-— **GitHub** — commit, PR e review direto no Claude
-— **Notion** — ler e escrever no seu workspace
-— **Puppeteer** — automação de browser (preencher formulários, fazer screenshots)
-— **filesystem** — Claude lê e edita arquivos do seu computador
-
----
-
-## Slide 8 — CTA
-
-**Texto:**
-Comenta MCP que eu te mando a lista completa com os 10 MCPs que uso todo dia — com configuração pronta.
-
-Salva esse post para instalar no próximo projeto.`,
-    legenda: `Comenta MCP que eu te mando a lista completa com os 10 MCPs que uso todo dia — com configuração pronta para colar.
-
-MCP é o que transforma o Claude Code de ferramenta de chat em agente que age no mundo real. Com MCP, o Claude conecta ao Instagram, Notion, GitHub, ElevenLabs, Apify — qualquer ferramenta que você usa no trabalho.
-
-Sem MCP, você usa 20% do que o Claude Code entrega. O passo a passo completo de instalação está no carrossel: do que é MCP, onde encontrar, como configurar o JSON, como testar e quais instalar primeiro. 🤖
-
-5 minutos de setup. Capacidades que transformam o que você consegue fazer com a ferramenta.
-
-Se você usa Claude Code sem MCPs, você ainda não viu o que a ferramenta realmente entrega.
-
-#claudecode #mcp #modelcontextprotocol #ia #inteligenciaartificial #ferramentasIA #automacao #aiagents #produtividade #developer #integracoes #nocodetips`,
     keyword_cta: 'MCP',
     pilar: 'Ferramentas e Produtividade',
     duracao: '8 slides',
+    categoryId: 'integracoes',
+    primaryLink: 'https://modelcontextprotocol.io',
+    primaryLabel: 'Documentação do MCP',
+    sourceUrl: 'https://docs.claude.com/en/docs/claude-code/mcp',
+    isExternal: true,
+    author: '@joaoguirunas',
+    longDescription: [
+      'O Model Context Protocol (MCP) é um padrão aberto que permite ao Claude Code se conectar a ferramentas e fontes de dados externas — GitHub, Notion, bancos de dados, navegadores e qualquer serviço com um servidor MCP. Sem MCP, o Claude trabalha apenas com o que está no seu projeto e no contexto da conversa. Com MCP, ele lê, escreve e age em sistemas reais.',
+      'Cada servidor MCP que você instala adiciona um conjunto de ferramentas que o Claude passa a poder chamar. Você controla exatamente quais servidores estão disponíveis e em qual escopo — só nesta máquina, compartilhado com o time pelo repositório, ou disponível em todos os seus projetos.',
+      'Este tutorial cobre o caminho oficial e atual: instalar via o comando `claude mcp add`, entender os escopos (local, project, user), configurar variáveis de ambiente para chaves de API e verificar a conexão com `/mcp`. Ao final você terá pelo menos um servidor conectado e saberá adicionar quantos precisar.',
+    ],
+    features: [
+      { title: 'Conexão com ferramentas reais', description: 'O Claude deixa de ser só chat e passa a ler e escrever em GitHub, Notion, bancos de dados e mais — diretamente do terminal.', icon: 'plugin' },
+      { title: 'Comando claude mcp add', description: 'Caminho oficial de instalação. Adiciona um servidor MCP por linha de comando, sem editar JSON na mão na maioria dos casos.', icon: 'setup' },
+      { title: 'Escopos local, project e user', description: 'Controle se o servidor vale só nesta máquina, é compartilhado com o time via repositório (.mcp.json) ou está disponível em todos os seus projetos.', icon: 'framework' },
+      { title: 'Variáveis de ambiente', description: 'Chaves de API e tokens passam por env vars, mantendo segredos fora do código versionado.', icon: 'database' },
+      { title: 'Verificação com /mcp', description: 'O comando /mcp dentro do Claude Code lista os servidores conectados e o status de cada um — confirme em segundos se funcionou.', icon: 'monitor' },
+      { title: 'Catálogo crescente', description: 'Centenas de servidores prontos na comunidade. Comece pelos essenciais e adicione novos conforme o fluxo de trabalho exigir.', icon: 'community' },
+    ],
+    body: [
+      { type: 'paragraph', text: 'MCP (Model Context Protocol) é o que transforma o Claude Code de assistente de código em agente que age em ferramentas externas. Em vez de você copiar e colar entre o Claude e o GitHub, o Notion ou o seu banco de dados, um servidor MCP dá ao Claude as funções para fazer isso direto. Estes são os 5 passos do zero à primeira ferramenta conectada.' },
+      { type: 'heading', text: 'Passo 1 — Escolher um servidor MCP' },
+      { type: 'paragraph', text: 'Antes de instalar, escolha de onde virá o servidor. As fontes mais confiáveis são a documentação oficial em modelcontextprotocol.io, as listas "awesome-mcp-servers" no GitHub e os pacotes publicados no npm. Antes de adicionar, verifique se o servidor tem documentação, manutenção recente e um autor reconhecido.' },
+      { type: 'callout', text: 'Comece pequeno: instale um único servidor (por exemplo, o de filesystem ou o do GitHub), confirme que funciona e só então adicione os próximos.' },
+      { type: 'heading', text: 'Passo 2 — Adicionar com claude mcp add' },
+      { type: 'paragraph', text: 'O caminho oficial e mais simples é o comando `claude mcp add`. Ele registra o servidor sem você precisar editar arquivos JSON na mão. A forma geral passa um nome, o comando que inicia o servidor e os argumentos:' },
+      { type: 'code', language: 'bash', code: '# Sintaxe geral\nclaude mcp add <nome> -- <comando> [args...]\n\n# Exemplo: servidor de filesystem (acesso a uma pasta)\nclaude mcp add filesystem -- npx -y @modelcontextprotocol/server-filesystem ~/projetos' },
+      { type: 'heading', text: 'Passo 3 — Escolher o escopo certo' },
+      { type: 'paragraph', text: 'Cada servidor é instalado em um escopo. Use a flag `-s` (ou `--scope`) para definir onde ele vale: `local` (só nesta máquina, padrão), `project` (compartilhado com o time via arquivo .mcp.json no repositório) ou `user` (disponível em todos os seus projetos). Servidores de projeto entram em um .mcp.json que você comita; servidores pessoais ficam na sua configuração de usuário.' },
+      { type: 'code', language: 'bash', code: '# Disponível em todos os seus projetos\nclaude mcp add github -s user -- npx -y @modelcontextprotocol/server-github\n\n# Compartilhado com o time (gera/atualiza .mcp.json no repo)\nclaude mcp add postgres -s project -- npx -y @modelcontextprotocol/server-postgres' },
+      { type: 'heading', text: 'Passo 4 — Configurar chaves com variáveis de ambiente' },
+      { type: 'paragraph', text: 'Servidores que falam com APIs (GitHub, Notion, ElevenLabs) precisam de uma chave. Passe-a por variável de ambiente com a flag `-e`, nunca escrevendo o segredo direto no comando que será versionado.' },
+      { type: 'code', language: 'bash', code: 'claude mcp add github -s user \\\n  -e GITHUB_PERSONAL_ACCESS_TOKEN=seu_token_aqui \\\n  -- npx -y @modelcontextprotocol/server-github' },
+      { type: 'callout', text: 'Para servidores de escopo project, prefira referenciar a variável (ex.: ${GITHUB_TOKEN}) e mantê-la fora do .mcp.json, para não comitar segredos.' },
+      { type: 'heading', text: 'Passo 5 — Verificar a conexão' },
+      { type: 'paragraph', text: 'Reinicie o Claude Code e, dentro de uma sessão, rode o comando `/mcp`. Ele lista todos os servidores configurados e o status de cada um (conectado, falhou, aguardando). Se o servidor que você adicionou aparecer como conectado, as ferramentas dele já estão disponíveis — peça ao Claude para usar uma delas para confirmar de ponta a ponta.' },
+      { type: 'code', language: 'bash', code: '# Dentro de uma sessão do Claude Code\n/mcp\n\n# Pela CLI, para listar o que está registrado\nclaude mcp list' },
+      { type: 'paragraph', text: 'Pronto. Com um servidor conectado e verificado, repita os passos 2 a 4 para cada ferramenta nova. A partir daqui, o Claude Code deixa de trabalhar isolado e passa a operar nas ferramentas que você usa todo dia.' },
+    ],
   },
   {
     slug: 'cria-sites-completos-so-descrevendo',
-    data: '2026-06-23',
+    data: '2026-06-24',
     slot: 'A',
     formato: 'Reel',
     titulo: 'Cria Sites Completos Só Descrevendo',
     ferramenta: 'Claude Code + skills de UI (setup completo)',
     link: 'https://claude.ai/code',
-    roteiro: `Chega de desperdiçar dinheiro com designer.
-
-Com o setup certo no Claude Code, você descreve o site e ele entrega: layout, animações, seções completas, tipografia, cores — tudo.
-
-A diferença entre um site amador e um site profissional saindo do Claude está em dois passos.
-
-Passo um: adicionar skills de UI de qualidade.
-Sem elas, o Claude gera o que aprendeu do dataset — que inclui muito site ruim. Com skills certas, ele passa a entender estrutura, espaçamento, hierarquia visual e padrões reais de UI.
-
-Passo dois: conectar ferramentas reais de design.
-Não construir em isolamento. O Claude precisa de contexto sobre animações, componentes modernos e padrões de interface que funcionam em produção.
-
-Com esses dois passos no lugar, o resultado muda completamente.
-Em vez de landing page genérica, você tem site que parece produção real — do tipo que cobra R$15.000.
-
-Comenta SETUP que eu te mando o guia de configuração dos dois passos agora.`,
-    legenda: `Comenta SETUP que eu te mando o guia completo dos dois passos para configurar agora.
-
-Designer custa caro. Template fica genérico. Com Claude Code no setup certo, você descreve o site e ele entrega layout, animação, seções e tipografia de verdade — sem gastar R$3.000 por mês com profissional.
-
-A diferença entre resultado amador e resultado profissional está em dois ajustes: skills de UI de qualidade (o Claude passa a entender design real) e conexão com ferramentas modernas de componentes (ele constrói com padrões de produção, não templates de 2019). 🏗️
-
-A maioria usa Claude Code sem essas duas configurações. E aí o resultado parece genérico — não porque a AI é ruim, mas porque o setup está incompleto.
-
-Dois passos. Setup feito uma vez. Sites que impressionam para sempre.
-
-#claudecode #webdesign #ia #inteligenciaartificial #site #desenvolvimentoweb #uiux #ferramentasIA #semdesigner #automacao #produtividade #claudeskills`,
     keyword_cta: 'SETUP',
     pilar: 'Produção de Conteúdo com IA',
     duracao: '41s',
+    categoryId: 'skills',
+    primaryLink: 'https://claude.ai/code',
+    primaryLabel: 'Abrir Claude Code',
+    sourceUrl: 'https://claude.ai/code',
+    isExternal: true,
+    author: '@joaoguirunas',
+    longDescription: [
+      'A diferença entre um site genérico e um site profissional saindo do Claude Code não está no prompt — está no setup. Por padrão, o Claude gera interfaces a partir de tudo que aprendeu, o que inclui muito site mediano. Com as skills e ferramentas de design certas instaladas, ele passa a aplicar estrutura, espaçamento, hierarquia e padrões de UI que funcionam em produção.',
+      'Este tutorial mostra como montar um setup de skills de UI no Claude Code para criar sites descrevendo o que você quer em português. São dois ajustes: instalar skills de design de qualidade e conectar uma fonte de componentes modernos. Feitos uma vez, valem para todos os projetos seguintes.',
+      'Não é "nocode mágico". É dar ao Claude o contexto de design que ele não tem por padrão, para que o output deixe de parecer template de 2019 e passe a parecer trabalho de produção.',
+    ],
+    features: [
+      { title: 'Descreva em português', description: 'Você escreve o que quer — público, tom, seções, sensação — e o Claude monta layout, animação e tipografia a partir disso.', icon: 'website' },
+      { title: 'Skills de UI de qualidade', description: 'Skills de design ensinam ao Claude espaçamento, hierarquia visual e padrões reais de interface, em vez do que ele pegou do dataset.', icon: 'design' },
+      { title: 'Componentes modernos', description: 'Conectar uma fonte de componentes (como o 21st.dev) dá ao Claude blocos de UI atuais para compor seções completas.', icon: 'layout' },
+      { title: 'Setup feito uma vez', description: 'As skills ficam instaladas no seu Claude Code. O ganho de qualidade se aplica a todos os projetos seguintes, sem reconfigurar.', icon: 'setup' },
+      { title: 'Iteração rápida', description: 'Peça variações, ajuste seção por seção e refine animações conversando — o ciclo de revisão acontece no próprio terminal.', icon: 'animejs' },
+      { title: 'Do briefing ao deploy', description: 'O mesmo fluxo leva da descrição inicial ao site no ar, com deploy em Vercel a partir do mesmo projeto.', icon: 'deploy' },
+    ],
+    body: [
+      { type: 'paragraph', text: 'O Claude Code já sabe escrever HTML, CSS e React. O que falta, por padrão, é gosto de design — e é exatamente isso que separa um resultado amador de um profissional. Este tutorial monta o setup que cobre essa lacuna, em dois ajustes, e mostra como descrever o site para tirar o máximo dele.' },
+      { type: 'heading', text: 'Por que o setup importa mais que o prompt' },
+      { type: 'paragraph', text: 'Sem skills de design, o Claude gera interfaces a partir da média de tudo que viu — e a internet tem muito site ruim. O prompt mais elaborado ainda esbarra nesse teto. Instalar skills de UI e conectar componentes modernos eleva o ponto de partida: o Claude passa a compor com padrões que funcionam em produção.' },
+      { type: 'heading', text: 'Passo 1 — Instalar skills de UI de qualidade' },
+      { type: 'paragraph', text: 'Skills são módulos que o Claude Code carrega para ganhar uma competência específica — neste caso, design de interface. Skills de UI de qualidade trazem regras de espaçamento, tipografia, hierarquia e motion, de modo que o Claude pare de improvisar e passe a seguir um sistema. Instale-as no diretório de skills do seu Claude Code (em `~/.claude/skills/`) e elas ficam disponíveis em qualquer projeto.' },
+      { type: 'callout', text: 'O efeito de uma skill de UI é o Claude tratar "faz uma seção de preços" como uma decisão de design — espaçamento, contraste, ritmo visual — e não só como markup.' },
+      { type: 'heading', text: 'Passo 2 — Conectar uma fonte de componentes modernos' },
+      { type: 'paragraph', text: 'O segundo ajuste é dar ao Claude acesso a componentes atuais. Marketplaces como o 21st.dev oferecem blocos de UI prontos (heros, navbars, seções de features, footers) que o Claude pode adaptar em vez de inventar do zero. Combinado com Framer Motion para animação, o resultado ganha movimento e acabamento de produção.' },
+      { type: 'heading', text: 'Passo 3 — Descrever o site em português' },
+      { type: 'paragraph', text: 'Com o setup no lugar, descreva o site em linguagem natural. Quanto mais contexto sobre objetivo, público e tom, melhor o output. Um pedido eficaz inclui o que o site é, para quem, que sensação deve passar e quais seções precisa.' },
+      { type: 'code', language: 'text', code: 'Cria a landing page de um estúdio de arquitetura premium.\nPúblico: clientes de alto padrão. Tom: minimalista, elegante, espaços amplos.\nSeções: hero com imagem em destaque, portfólio em grid, sobre, depoimentos e contato.\nUsa as skills de UI instaladas, componentes do 21st.dev e animações sutis com Framer Motion.' },
+      { type: 'heading', text: 'Passo 4 — Iterar seção por seção' },
+      { type: 'paragraph', text: 'Não aceite a primeira versão como final. Refine conversando: peça variações de uma seção, ajuste o ritmo das animações, troque a paleta. Como o Claude mantém o contexto do projeto, cada ajuste respeita o que já foi construído.' },
+      { type: 'steps', items: [
+        'Gere a estrutura completa do site com o prompt descritivo.',
+        'Revise seção por seção e peça ajustes pontuais ("deixa o hero mais respirado", "anima a entrada dos cards").',
+        'Peça 2 a 3 variações das seções-chave e escolha a melhor.',
+        'Valide responsividade pedindo a versão mobile de cada seção.',
+      ] },
+      { type: 'heading', text: 'Passo 5 — Publicar' },
+      { type: 'paragraph', text: 'Do mesmo projeto, peça ao Claude para preparar o deploy na Vercel. Com o repositório conectado, cada alteração vira um preview deployment, e a versão final sobe com domínio próprio.' },
+      { type: 'callout', text: 'O setup é o investimento; o prompt é o uso diário. Configurado uma vez, ele rende em todo projeto seguinte — e é por isso que dois usuários com o mesmo Claude Code chegam a resultados tão diferentes.' },
+    ],
   },
   {
     slug: '5-erros-que-estao-sabotando-seus-resultados-com-claude',
-    data: '2026-06-23',
+    data: '2026-06-24',
     slot: 'B',
     formato: 'Carrossel',
     titulo: '5 Erros que Estão Sabotando Seus Resultados com Claude',
     ferramenta: 'Claude Code (erros comuns)',
     link: 'https://claude.ai/code',
-    roteiro: `## Slide 1 — Capa
-
-**Texto principal:**
-5 ERROS QUE ESTÃO SABOTANDO
-SEUS RESULTADOS COM CLAUDE
-
-**Subtítulo:**
-A maioria comete todos os cinco
-
----
-
-## Slide 2 — Erro 1
-
-**Título:** Erro 1 — Pedir tudo em um único prompt
-
-**O que acontece:**
-Você descreve o projeto inteiro numa mensagem. O Claude tenta resolver tudo de uma vez e o resultado fica pela metade.
-
-**Por que acontece:**
-O Claude performa melhor com tarefas focadas. Quando o escopo é grande demais, ele toma decisões arbitrárias no que não foi especificado.
-
-**Como corrigir:**
-Quebre em etapas. Um prompt por entrega. "Cria só a estrutura de arquivos" antes de "escreve o código completo".
-
----
-
-## Slide 3 — Erro 2
-
-**Título:** Erro 2 — Não usar CLAUDE.md
-
-**O que acontece:**
-Você explica o contexto do projeto do zero em toda sessão nova. O Claude começa sem memória. Você perde tempo e consistência cai.
-
-**Por que acontece:**
-Sem CLAUDE.md, o Claude não tem contexto persistente. Cada sessão é uma conversa nova com um estranho.
-
-**Como corrigir:**
-Crie um CLAUDE.md com: stack técnica, convenções do projeto, tom de comunicação, o que nunca fazer. O Claude lê automaticamente ao iniciar.
-
----
-
-## Slide 4 — Erro 3
-
-**Título:** Erro 3 — Aceitar a primeira resposta
-
-**O que acontece:**
-O Claude entrega algo. Você usa sem questionar. O resultado é mediano.
-
-**Por que acontece:**
-A primeira resposta é a mais provável, não a melhor. O Claude precisa de iteração para refinar.
-
-**Como corrigir:**
-Peça alternativas: "Gera mais 3 versões diferentes desta solução." Compare. Escolha a melhor ou combine elementos das três.
-
----
-
-## Slide 5 — Erro 4
-
-**Título:** Erro 4 — Não usar MCPs
-
-**O que acontece:**
-Você usa o Claude só para gerar texto ou código. Copia manualmente para outras ferramentas. Perde horas em tarefas repetitivas.
-
-**Por que acontece:**
-Sem MCPs, o Claude não conecta ao mundo real. Ele trabalha em isolamento.
-
-**Como corrigir:**
-Instale os MCPs das ferramentas que você usa. Claude conectado ao Notion, GitHub, ElevenLabs muda completamente o que é possível automatizar.
-
----
-
-## Slide 6 — Erro 5
-
-**Título:** Erro 5 — Usar a versão errada do modelo
-
-**O que acontece:**
-Você usa o Claude Haiku ou Sonnet para tarefas complexas de arquitetura ou estratégia. A resposta parece superficial. Você acha que o Claude "não serve".
-
-**Por que acontece:**
-Modelos menores são rápidos e baratos — mas para raciocínio profundo, precisam do modelo certo.
-
-**Como corrigir:**
-Para tarefas simples e rápidas: Haiku. Para desenvolvimento e criação: Sonnet 4.6. Para decisões estratégicas e problemas complexos: ative Extended Thinking.
-
----
-
-## Slide 7 — CTA
-
-**Texto:**
-Salva esse post — você vai querer revisar esses erros antes do próximo projeto.
-
-Qual desses você estava cometendo? Comenta o número embaixo.`,
-    legenda: `Salva esse post — você vai querer revisar esses erros antes do próximo projeto.
-
-"O Claude não entrega o que eu quero." Na maioria dos casos, não é o Claude. É como você está usando.
-
-5 erros que a maioria comete: pedir tudo num único prompt (quebre em etapas), não usar CLAUDE.md (contexto persistente muda tudo), aceitar a primeira resposta sem iterar (a primeira é a mais provável, não a melhor), não ter MCPs instalados (Claude em isolamento entrega metade do que poderia) e usar o modelo errado para o tipo de tarefa. 🤖
-
-Cada um desses tem uma correção simples. Corrige os cinco e o Claude que você tem hoje vira uma ferramenta completamente diferente.
-
-Qual você estava cometendo? Comenta o número.
-
-#claudecode #ia #inteligenciaartificial #produtividade #ferramentasIA #claude #mcp #aitools #automacao #developer #empresario #dicasai`,
     keyword_cta: '(save post)',
     pilar: 'Ferramentas e Produtividade',
     duracao: '7 slides',
+    categoryId: 'aprendizado',
+    primaryLink: 'https://claude.ai/code',
+    primaryLabel: 'Abrir Claude Code',
+    sourceUrl: 'https://claude.ai/code',
+    isExternal: true,
+    author: '@joaoguirunas',
+    longDescription: [
+      '"O Claude não entrega o que eu quero." Na maioria das vezes, o problema não é o modelo — é o modo de uso. Cinco hábitos comuns derrubam a qualidade do que o Claude Code produz, e todos têm correção simples.',
+      'Este guia lista os cinco erros, explica por que cada um prejudica o resultado e mostra a correção prática. Corrigidos juntos, transformam o mesmo Claude Code que você já tem em uma ferramenta muito mais capaz.',
+      'É um material de revisão: vale passar os olhos antes de começar um projeto novo, para não repetir os hábitos que sabotam o resultado sem você perceber.',
+    ],
+    features: [
+      { title: 'Erro 1 — Pedir tudo num prompt só', description: 'Escopo grande demais força decisões arbitrárias. Correção: quebre em etapas, uma entrega por prompt.', icon: 'carousel' },
+      { title: 'Erro 2 — Não usar CLAUDE.md', description: 'Sem contexto persistente, cada sessão recomeça do zero. Correção: um CLAUDE.md com stack, convenções e regras.', icon: 'obsidian' },
+      { title: 'Erro 3 — Aceitar a 1ª resposta', description: 'A primeira saída é a mais provável, não a melhor. Correção: peça alternativas e itere antes de usar.', icon: 'animejs' },
+      { title: 'Erro 4 — Não instalar MCPs', description: 'Sem MCPs o Claude trabalha isolado e você copia tudo na mão. Correção: conecte as ferramentas que você usa.', icon: 'plugin' },
+      { title: 'Erro 5 — Modelo errado para a tarefa', description: 'Modelo pequeno em tarefa complexa parece superficial. Correção: escolha o modelo pelo peso da tarefa.', icon: 'brain' },
+      { title: 'Correções acumulam', description: 'Cada ajuste é simples, mas o ganho é composto: os cinco juntos mudam o teto de qualidade do seu output.', icon: 'setup' },
+    ],
+    body: [
+      { type: 'paragraph', text: 'Quase todo mundo que acha o Claude Code "mediano" está cometendo pelo menos um destes cinco erros. Nenhum deles é sobre limitação do modelo — são hábitos de uso. Abaixo, cada erro com o porquê e a correção direta.' },
+      { type: 'heading', text: 'Erro 1 — Pedir o projeto inteiro em um único prompt' },
+      { type: 'paragraph', text: 'Quando você descreve tudo numa mensagem só, o Claude tenta resolver de uma vez e acaba tomando decisões arbitrárias no que você não especificou. Ele performa melhor com tarefas focadas.' },
+      { type: 'callout', text: 'Correção: quebre em etapas, uma entrega por prompt. "Cria só a estrutura de arquivos" antes de "agora escreve o código de cada um".' },
+      { type: 'heading', text: 'Erro 2 — Não usar CLAUDE.md' },
+      { type: 'paragraph', text: 'Sem um CLAUDE.md, cada sessão nova começa sem memória do projeto. Você reexplica stack, convenções e tom toda vez, perde tempo e a consistência cai. O CLAUDE.md é lido automaticamente ao iniciar.' },
+      { type: 'code', language: 'markdown', code: '# CLAUDE.md\n\n## Stack\n- Next.js 15, TypeScript, Tailwind\n\n## Convenções\n- Componentes em PascalCase, hooks com prefixo use\n- Sempre rodar lint e typecheck antes de concluir\n\n## Nunca fazer\n- Não commitar segredos\n- Não instalar dependência sem necessidade clara' },
+      { type: 'paragraph', text: 'Você pode gerar o esqueleto desse arquivo com o comando `/init` dentro do projeto e depois refinar à mão.' },
+      { type: 'heading', text: 'Erro 3 — Aceitar a primeira resposta' },
+      { type: 'paragraph', text: 'A primeira saída do Claude é a mais provável, não necessariamente a melhor. Usar sem questionar trava o resultado no mediano.' },
+      { type: 'callout', text: 'Correção: peça alternativas — "gera mais 3 versões diferentes desta solução" — compare e escolha (ou combine) a melhor.' },
+      { type: 'heading', text: 'Erro 4 — Não instalar MCPs' },
+      { type: 'paragraph', text: 'Usar o Claude só para gerar texto e código, copiando manualmente para outras ferramentas, desperdiça boa parte do que ele pode fazer. Sem MCPs, ele trabalha isolado do resto do seu stack.' },
+      { type: 'callout', text: 'Correção: instale os MCPs das ferramentas que você usa (GitHub, Notion, banco de dados). Veja o passo a passo no tutorial de instalação de MCPs deste portal.' },
+      { type: 'heading', text: 'Erro 5 — Usar o modelo errado para a tarefa' },
+      { type: 'paragraph', text: 'Modelos menores são rápidos e baratos, mas usá-los em arquitetura ou estratégia complexa rende respostas superficiais — e a impressão errada de que "o Claude não serve". A escolha do modelo deve acompanhar o peso da tarefa.' },
+      { type: 'steps', items: [
+        'Tarefas simples e rápidas (formatação, edições pequenas): Claude Haiku.',
+        'Desenvolvimento e criação no dia a dia: Claude Sonnet.',
+        'Arquitetura, decisões estratégicas e problemas difíceis: Claude Opus, e ative o Extended Thinking quando precisar de raciocínio mais profundo.',
+      ] },
+      { type: 'paragraph', text: 'Nenhuma dessas correções é trabalhosa. O efeito é composto: aplique as cinco e o mesmo Claude Code passa a parecer uma ferramenta diferente. Vale revisar esta lista antes de cada projeto novo.' },
+    ],
   },
 ]
