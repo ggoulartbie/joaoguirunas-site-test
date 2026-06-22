@@ -3,149 +3,224 @@ import { ContentPost } from '@/types/content-post'
 export const batch3: ContentPost[] = [
   {
     slug: 'prompts-de-sites-3d-animados-no-claude',
-    data: '2026-06-21',
+    data: '2026-06-23',
     slot: 'A',
     formato: 'Reel',
     titulo: 'Prompts de Sites 3D Animados no Claude',
     ferramenta: 'MotionSites.Ai',
     link: 'https://motionsites.ai',
-    roteiro: `Site 3D animado premium. Zero linha de código escrita por você.
-
-Existe um repositório de prompts prontos para hero sections de alto nível — SaaS, portfólio, agência, produto digital. Cada um com uma base sólida de layout e animação já incluída.
-
-O processo é direto:
-Você entra no repositório, escolhe o estilo que combina com o seu projeto, copia o prompt.
-Vai pro Claude Code, cola o prompt, e descreve o site que você quer criar.
-
-O Claude constrói tudo: UI clean, layout polido, animações de scroll que funcionam, seções completas.
-
-E quando o site estiver pronto, você deploia no Vercel em segundos.
-Do zero ao site no ar — sem escrever HTML, sem CSS manual, sem JavaScript na mão.
-
-Comenta SITE que eu te mando o link do repositório de prompts agora.`,
-    legenda: `Comenta SITE que eu te mando o link do repositório de prompts agora.
-
-Não precisa de designer. Não precisa de dev. Não precisa escrever uma linha de código. Existe um repositório de prompts prontos para hero sections 3D animadas — SaaS, portfólio, agência — e o Claude Code constrói tudo a partir deles.
-
-O processo leva menos de 5 minutos: escolhe o prompt, cola no Claude Code, descreve o site, aperta enter. O que sai: UI clean, animações de scroll funcionando, layout polido em todas as seções. 🖥️
-
-Deploy no Vercel em seguida. Site no ar com domínio próprio. Sem passar por agência, sem esperar semanas de desenvolvimento.
-
-Isso é o que acontece quando você combina prompts de qualidade com a AI certa.
-
-#claudecode #site3d #webdesign #ia #inteligenciaartificial #desenvolvimentoweb #animacao #uiux #semcodigo #ferramentasIA #vercel #produtividade`,
     keyword_cta: 'SITE',
     pilar: 'Produção de Conteúdo com IA',
     duracao: '41s',
+
+    // ── Tutorial ──
+    categoryId: 'apps',
+    author: '@joaoguirunas',
+    primaryLink: 'https://motionsites.ai',
+    primaryLabel: 'Abrir MotionSites.Ai',
+    isExternal: true,
+    sourceUrl: 'https://motionsites.ai',
+    longDescription: [
+      'MotionSites.Ai é uma biblioteca premium de prompts de design para IA — hero sections, fundos animados, gradientes e templates de página prontos para colar direto no seu assistente de código. Em vez de descrever uma landing page do zero, você parte de um bloco já desenhado e só ajusta o conteúdo ao seu projeto.',
+      'Cada item da biblioteca traz uma base sólida de layout, hierarquia tipográfica e animação. A ideia é eliminar o ponto onde a maioria dos sites gerados por IA falha: o resultado genérico. Você escolhe um estilo que combina com SaaS, portfólio ou agência, copia o prompt e o Claude Code constrói as seções completas a partir dele.',
+      'Não é uma biblioteca de código aberto nem um pacote npm — é um catálogo curado de prompts e templates. O fluxo é copiar, colar no Claude Code, descrever o site e deixar a IA montar a página, pronta para deploy.',
+    ],
+    features: [
+      {
+        title: 'Hero sections prontas',
+        description: 'Blocos de abertura de alto padrão para SaaS, portfólio, agência e produto digital — com layout e animação já incluídos.',
+        icon: 'layout',
+      },
+      {
+        title: 'Fundos animados e gradientes',
+        description: 'Backgrounds com movimento e sistemas de cor coerentes que dão profundidade sem você escrever CSS manual.',
+        icon: 'design',
+      },
+      {
+        title: 'Prompts copy-paste',
+        description: 'Cada template é um prompt pronto: você copia, cola no Claude Code e descreve o site por cima da base.',
+        icon: 'copywriting',
+      },
+      {
+        title: 'Animação de scroll',
+        description: 'As bases já carregam micro-interações e transições de seção que funcionam — a página deixa de parecer estática.',
+        icon: 'animejs',
+      },
+      {
+        title: 'Saída pronta para deploy',
+        description: 'O Claude entrega seções completas em código real, prontas para subir no Vercel em segundos.',
+        icon: 'deploy',
+      },
+      {
+        title: 'Sem dependência de dev ou designer',
+        description: 'O ponto difícil — o design premium — vem do template. Você foca no conteúdo e na descrição do projeto.',
+        icon: 'website',
+      },
+    ],
+    body: [
+      {
+        type: 'paragraph',
+        text: 'O objetivo é sair de um template premium do MotionSites.Ai para um site no ar, sem escrever HTML, CSS ou JavaScript na mão. O trabalho pesado de design já está no prompt; o seu papel é descrever o projeto e ajustar o conteúdo.',
+      },
+      {
+        type: 'heading',
+        text: '1. Escolha o template no MotionSites.Ai',
+      },
+      {
+        type: 'steps',
+        items: [
+          'Abra motionsites.ai e navegue pela biblioteca de hero sections, fundos animados e templates.',
+          'Filtre pelo tipo de projeto que você quer construir — SaaS, portfólio, agência ou produto.',
+          'Selecione o estilo que mais combina com a identidade do seu site e copie o prompt correspondente.',
+        ],
+      },
+      {
+        type: 'heading',
+        text: '2. Cole o prompt no Claude Code',
+      },
+      {
+        type: 'paragraph',
+        text: 'Com um projeto Next.js ou React já aberto no Claude Code, cole o prompt do template e descreva, em PT-BR, o que o site precisa: nome do produto, headline, seções e tom visual.',
+      },
+      {
+        type: 'code',
+        language: 'text',
+        code: `[cole aqui o prompt copiado do MotionSites.Ai]
+
+Use este estilo como base e construa a landing page de um
+SaaS de gestão financeira chamado "Fluxo". Headline focada
+em controle de caixa em tempo real. Inclua hero, seção de
+recursos, prova social e CTA final. Animações de scroll suaves.`,
+      },
+      {
+        type: 'heading',
+        text: '3. Revise e refine',
+      },
+      {
+        type: 'steps',
+        items: [
+          'Rode o projeto localmente e veja o resultado renderizado no navegador.',
+          'Peça ajustes pontuais ao Claude — espaçamento, copy, paleta — em linguagem natural.',
+          'Repita até o layout, a tipografia e as animações estarem do jeito que você quer.',
+        ],
+      },
+      {
+        type: 'heading',
+        text: '4. Faça o deploy no Vercel',
+      },
+      {
+        type: 'steps',
+        items: [
+          'Suba o repositório para o GitHub.',
+          'Importe o projeto no Vercel e conecte o repositório.',
+          'Confirme o build e publique — o site fica no ar com URL própria em segundos.',
+        ],
+      },
+      {
+        type: 'callout',
+        text: 'MotionSites.Ai é um produto premium: a biblioteca de prompts é paga. Verifique os planos atuais no site antes de assinar — o que é gratuito pode mudar com o tempo.',
+      },
+    ],
   },
   {
     slug: 'antes-e-depois-site-generico-para-premium',
-    data: '2026-06-21',
+    data: '2026-06-20',
     slot: 'B',
     formato: 'Carrossel',
     titulo: 'Antes e Depois — Site Genérico para Premium',
     ferramenta: 'Claude Code + skills de design (antes/depois)',
     link: 'https://claude.ai/code',
-    roteiro: `## Slide 1 — Capa
-
-Texto principal:
-ANTES → DEPOIS
-
-Subtítulo:
-Como o mesmo Claude Code entrega dois resultados completamente diferentes
-
----
-
-## Slide 2 — O Antes: site genérico
-
-Título: Site genérico — o que acontece sem setup
-
-Sem configuração adequada, o Claude Code entrega:
-— Layout de template sem personalidade
-— Animações inexistentes ou travadas
-— Tipografia padrão sem hierarquia visual
-— Cores sem sistema coerente
-— Componentes que parecem Bootstrap de 2016
-
-O problema não é o Claude. É o que você não instalou.
-
----
-
-## Slide 3 — Skill 1: Emil Kowalski Design
-
-Título: Mudança 1 — Motion que parece produto real
-
-O que muda com essa skill:
-— Animações suaves e com easing correto
-— Transições entre seções que fluem naturalmente
-— Micro-interações nos elementos interativos
-— A interface para de ser estática e começa a respirar
-
-Antes: usuário percebe que é AI.
-Depois: usuário percebe que é produto.
-
----
-
-## Slide 4 — Skill 2: Impeccable Design
-
-Título: Mudança 2 — Precisão visual automática
-
-O que muda com essa skill:
-— Espaçamento consistente em todo o layout
-— Tipografia com hierarquia e proporção corretas
-— Alinhamento perfeito entre elementos
-— Sistema de grid que faz sentido
-
-Um único comando corrige tudo isso. Automaticamente. Em toda interface.
-
----
-
-## Slide 5 — Skill 3: TasteSkill
-
-Título: Mudança 3 — Referências reais de mercado
-
-O que muda com essa skill:
-— O Claude deixa de gerar pelo que memorizou do dataset
-— Passa a gerar com base em produtos premium reais como referência
-— Interfaces que parecem Stripe, Linear, Vercel — não template genérico
-
-É a diferença entre um Claude que aprendeu design e um Claude que continua aprendendo design.
-
----
-
-## Slide 6 — O Depois: resultado
-
-Título: O que o mesmo Claude Code entrega com as 3 skills
-
-— UI que convence na primeira visualização
-— Animações que parecem handmade
-— Layout que ninguém diria ter sido gerado por AI
-— Deploy pronto em minutos
-
-Mesmo modelo. Setup diferente. Resultado completamente diferente.
-
----
-
-## Slide 7 — CTA
-
-Texto:
-Comenta ANTES que eu te mando o guia de instalação das três skills.
-
-Se você ainda está no setup padrão, você está desperdiçando metade do que o Claude Code pode entregar.`,
-    legenda: `Comenta ANTES que eu te mando o guia de instalação das três skills agora.
-
-Duas pessoas usam o mesmo Claude Code. Uma entrega site genérico. A outra entrega UI que parece produto de mercado. O que separa as duas não é habilidade — é setup.
-
-Três skills fazem toda a diferença: Emil Kowalski Design (motion e animações reais), Impeccable Design (espaçamento, tipografia e layout corrigidos em um comando) e TasteSkill (referências de design premium como base). Instaladas uma vez, mudam todos os projetos para sempre. 🎨
-
-O carrossel mostra o antes e depois real — o que sai sem essas skills e o que sai com elas. A diferença é visual e imediata.
-
-Você está pagando pela mesma AI e entregando resultado de primeira geração. Esse setup resolve isso.
-
-#claudecode #webdesign #antesedepois #ia #inteligenciaartificial #uiux #designai #ferramentasIA #claudeskills #desenvolvimentoweb #site #produtividade`,
     keyword_cta: 'ANTES',
     pilar: 'Produção de Conteúdo com IA',
     duracao: '7 slides',
+
+    // ── Tutorial (formato case/processo) ──
+    categoryId: 'aprendizado',
+    author: '@joaoguirunas',
+    primaryLink: 'https://claude.ai/code',
+    primaryLabel: 'Conhecer o Claude Code',
+    isExternal: true,
+    sourceUrl: 'https://claude.ai/code',
+    longDescription: [
+      'Este é um estudo de caso: o mesmo Claude Code, o mesmo modelo, produzindo dois resultados radicalmente diferentes. De um lado, o site genérico — layout de template, animações travadas, tipografia sem hierarquia. De outro, uma interface que passa por produto de mercado. A variável que separa os dois não é talento, é setup.',
+      'A diferença vem de três skills de design instaladas no Claude Code. Cada uma ataca um ponto específico onde a IA costuma escorregar: motion, precisão visual e referência de gosto. Juntas, elevam todo projeto gerado a partir delas, sem você precisar revisar pixel a pixel.',
+      'O objetivo desta página é mostrar o antes e o depois lado a lado e explicar o que cada skill muda — para você reproduzir o "depois" nos seus próprios projetos.',
+    ],
+    features: [
+      {
+        title: 'O antes: o que sai sem setup',
+        description: 'Layout de template, animações inexistentes, tipografia sem hierarquia e componentes que parecem Bootstrap antigo. O problema não é o Claude — é o que não foi instalado.',
+        icon: 'pixel',
+      },
+      {
+        title: 'Emil Kowalski Design — motion',
+        description: 'Animações com easing correto, transições que fluem e micro-interações. A interface para de ser estática e começa a parecer um produto real.',
+        icon: 'animejs',
+      },
+      {
+        title: 'Impeccable Design — precisão',
+        description: 'Espaçamento consistente, tipografia com hierarquia e grid coerente, corrigidos automaticamente em toda a interface.',
+        icon: 'design',
+      },
+      {
+        title: 'TasteSkill — referência',
+        description: 'O Claude passa a gerar com base em produtos premium reais como referência, em vez de só repetir o que memorizou — saída no nível de Stripe, Linear, Vercel.',
+        icon: 'brain',
+      },
+      {
+        title: 'O depois: o resultado',
+        description: 'UI que convence à primeira vista, animações que parecem handmade e layout que ninguém diria ter vindo de IA — pronto para deploy em minutos.',
+        icon: 'website',
+      },
+      {
+        title: 'Mesmo modelo, setup diferente',
+        description: 'A lição replicável: instaladas uma vez, as skills elevam todos os projetos seguintes. O ganho não é por projeto, é permanente.',
+        icon: 'setup',
+      },
+    ],
+    body: [
+      {
+        type: 'heading',
+        text: 'O antes — site genérico',
+      },
+      {
+        type: 'paragraph',
+        text: 'Sem configuração de design, o Claude Code entrega o resultado mais provável do dataset: layout de template sem personalidade, animações travadas ou ausentes, tipografia padrão sem hierarquia e cores sem sistema. O código funciona, mas o visual denuncia que foi gerado por IA.',
+      },
+      {
+        type: 'heading',
+        text: 'O que muda — três skills, três frentes',
+      },
+      {
+        type: 'paragraph',
+        text: 'Cada skill resolve um ponto fraco distinto. Emil Kowalski Design cuida do movimento: easing, transições entre seções e micro-interações. Impeccable Design cuida da precisão estática: espaçamento, hierarquia tipográfica e grid. TasteSkill cuida da referência: faz o Claude gerar tomando produtos premium reais como base de gosto, não só o que memorizou.',
+      },
+      {
+        type: 'callout',
+        text: 'A diferença entre um Claude que "aprendeu design" e um que "continua aprendendo design" está em ter uma referência de qualidade na hora de gerar — é o que a terceira skill entrega.',
+      },
+      {
+        type: 'heading',
+        text: 'Como reproduzir o depois',
+      },
+      {
+        type: 'steps',
+        items: [
+          'Instale as três skills de design no seu Claude Code (Emil Kowalski Design, Impeccable Design e TasteSkill).',
+          'Comece um novo projeto e descreva o site normalmente, em PT-BR — as skills atuam sobre a saída sem você precisar pedir.',
+          'Compare com um projeto antigo gerado sem o setup: a diferença em motion, espaçamento e identidade visual aparece de imediato.',
+          'Refine pontualmente em linguagem natural e faça o deploy.',
+        ],
+      },
+      {
+        type: 'heading',
+        text: 'A lição',
+      },
+      {
+        type: 'paragraph',
+        text: 'O mesmo modelo entrega "primeira geração" ou "produto de mercado" dependendo do setup. Configurar as skills uma vez muda todos os projetos seguintes — o investimento é único e o retorno é permanente.',
+      },
+    ],
   },
   {
     slug: 'o-maior-lancamento-de-ai-dessa-semana-jun-22',
@@ -155,28 +230,6 @@ Você está pagando pela mesma AI e entregando resultado de primeira geração. 
     titulo: 'O Maior Lançamento de AI Dessa Semana',
     ferramenta: 'Claude Fable 5 (Anthropic)',
     link: 'https://www.anthropic.com/news/claude-fable-5-mythos-5',
-    roteiro: `O modelo de AI mais poderoso do mundo durou três dias no ar.
-
-Em 9 de junho de 2026, a Anthropic lançou o Claude Fable 5 — o modelo mais capaz que eles já tornaram público, disponível para todos os planos pagos sem custo extra. Benchmarks de topo em engenharia de software, pesquisa científica, visão e execução autônoma de tarefas.
-
-Na sexta-feira, o modelo tinha sumido. Segundo reportagens do setor, a retirada teria vindo de uma diretiva regulatória — o que, se confirmado, seria a primeira vez que uma medida do tipo foi usada para tirar do ar um modelo AI já disponível publicamente.
-
-Não foi um bug. Segundo os relatos, não partiu da própria Anthropic.
-
-Pelo que foi divulgado, o acesso via créditos para planos pagos seguiria disponível por tempo limitado.
-
-Se confirmado, isso muda o que achávamos ser possível no desenvolvimento de AI: a competição deixa de ser só técnica e passa a ser também regulatória.
-
-Link na bio para o anúncio oficial da Anthropic.`,
-    legenda: `O modelo mais poderoso da Anthropic ficou poucos dias no ar — e o que veio depois levanta uma discussão nova.
-
-Claude Fable 5 foi lançado em 9 de junho. Benchmarks de topo em código, pesquisa e execução autônoma, disponível para todos os planos pagos. Pouco depois, sumiu. Segundo reportagens do setor, a retirada teria origem regulatória — algo sem precedente para um modelo já no ar.
-
-O que fica: a corrida de AI parece ganhar uma dimensão regulatória, não só técnica.
-
-Link na bio: anúncio oficial da Anthropic.
-
-#claudecode #claudefable5 #anthropic #ia #inteligenciaartificial #regulacaoai #aitools #novidadesai #lançamentoai #aiagents #tecnologia #futurodotrabalho`,
     keyword_cta: '(sem CTA)',
     pilar: 'Notícias e Tendências AI',
     duracao: '26s',

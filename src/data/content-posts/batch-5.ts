@@ -3,167 +3,112 @@ import { ContentPost } from '@/types/content-post'
 export const batch5: ContentPost[] = [
   {
     slug: '50-modelos-de-ai-numa-janela-so',
-    data: '2026-06-24',
+    data: '2026-06-25',
     slot: 'A',
     formato: 'Reel',
     titulo: '50 Modelos de AI numa Janela Só',
     ferramenta: 'HTML file com 50+ AI models (open source)',
     link: 'https://godmod3.ai',
-    roteiro: `Um único arquivo HTML substitui toda a sua stack de AI.
-
-ChatGPT, Claude, Gemini, Grok — e mais de cinquenta modelos — tudo dentro de um arquivo só.
-Sem instalação, sem servidor, sem mensalidade.
-
-Você abre no navegador e já está usando qualquer modelo instantaneamente.
-
-Por rodar localmente, seus dados ficam no seu dispositivo.
-Nada vai para servidor externo. Você mantém controle total.
-
-Mas o detalhe mais absurdo:
-Você digita um prompt uma vez.
-E múltiplos modelos de AI competem entre si para entregar a melhor resposta — ao mesmo tempo.
-
-Em vez de testar cada plataforma separada, você vê qual modelo performa melhor para cada tipo de tarefa, na mesma janela, em tempo real.
-
-Comenta AI que eu te mando o arquivo direto agora.`,
-    legenda: `Comenta AI que eu te mando o arquivo direto agora.
-
-Quantas janelas de AI você tem abertas ao mesmo tempo? ChatGPT, Claude, Gemini, Grok — cada uma com mensalidade própria, cada uma com interface diferente. Esse problema acabou.
-
-Um único arquivo HTML centraliza mais de 50 modelos de AI. Sem instalação, sem servidor, sem mensalidade adicional. Você abre no navegador e já está usando. Roda local — seus dados ficam no seu dispositivo. 🤖
-
-O recurso mais impressionante: um prompt, múltiplos modelos competindo para dar a melhor resposta ao mesmo tempo. Você para de adivinhar qual AI é melhor para cada tarefa e começa a ver na prática, lado a lado.
-
-Stack de AI simplificada. Custo reduzido. Resultado comparado em tempo real.
-
-#claudecode #chatgpt #gemini #ia #inteligenciaartificial #aitools #ferramentasIA #produtividade #llm #openai #claude #automacao`,
     keyword_cta: 'AI',
     pilar: 'Ferramentas e Produtividade',
     duracao: '35s',
+    categoryId: 'apps',
+    author: '@joaoguirunas',
+    primaryLink: 'https://godmod3.ai',
+    primaryLabel: 'Abrir o G0DM0DƎ',
+    isExternal: true,
+    sourceUrl: 'https://godmod3.ai',
+    longDescription: [
+      'O G0DM0DƎ é um único arquivo HTML que roda inteiramente no navegador e dá acesso a mais de 50 modelos de IA — ChatGPT, Claude, Gemini, Grok, Llama e muitos outros — sem instalação, sem servidor próprio e sem mensalidade da plataforma. Você abre o arquivo (ou o site godmod3.ai) e já tem uma interface de chat pronta.',
+      'Em vez de manter várias abas e assinaturas abertas, você concentra tudo em uma janela. As chamadas aos modelos passam por agregadores como OpenRouter e HuggingFace usando a SUA própria chave de API, então você paga apenas o consumo real de cada modelo — normalmente muito mais barato do que somar assinaturas individuais.',
+      'Por ser um arquivo estático que executa no cliente, a conversa e a configuração ficam no seu dispositivo: nada trafega por um backend intermediário da ferramenta. O recurso de destaque é o modo de comparação — você manda um prompt e vários modelos respondem lado a lado, ao mesmo tempo, para você ver qual performa melhor em cada tipo de tarefa.',
+    ],
+    features: [
+      { title: '50+ modelos numa janela', description: 'ChatGPT, Claude, Gemini, Grok, Llama e dezenas de outros acessíveis na mesma interface, sem trocar de aba ou de conta.', icon: '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3.75 6A2.25 2.25 0 016 3.75h2.25A2.25 2.25 0 0110.5 6v2.25a2.25 2.25 0 01-2.25 2.25H6a2.25 2.25 0 01-2.25-2.25V6zM3.75 15.75A2.25 2.25 0 016 13.5h2.25a2.25 2.25 0 012.25 2.25V18a2.25 2.25 0 01-2.25 2.25H6A2.25 2.25 0 013.75 18v-2.25zM13.5 6a2.25 2.25 0 012.25-2.25H18A2.25 2.25 0 0120.25 6v2.25A2.25 2.25 0 0118 10.5h-2.25a2.25 2.25 0 01-2.25-2.25V6zM13.5 15.75a2.25 2.25 0 012.25-2.25H18a2.25 2.25 0 012.25 2.25V18A2.25 2.25 0 0118 20.25h-2.25A2.25 2.25 0 0113.5 18v-2.25z"/>' },
+      { title: 'Zero instalação', description: 'Um arquivo HTML único. Abre no navegador e funciona — sem Node, sem servidor, sem build, sem dependências.', icon: '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 16.5V9.75m0 0l3 3m-3-3l-3 3M6.75 19.5a4.5 4.5 0 01-1.41-8.775 5.25 5.25 0 0110.233-2.33 3 3 0 013.758 3.848A3.752 3.752 0 0118 19.5H6.75z"/>' },
+      { title: 'Comparação lado a lado', description: 'Um prompt, várias respostas simultâneas. Veja na prática qual modelo é melhor para código, texto, raciocínio ou criatividade.', icon: '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 17.25v1.007a3 3 0 01-.879 2.122L7.5 21h9l-.621-.621A3 3 0 0115 18.257V17.25m6-12V15a2.25 2.25 0 01-2.25 2.25H5.25A2.25 2.25 0 013 15V5.25m18 0A2.25 2.25 0 0018.75 3H5.25A2.25 2.25 0 003 5.25m18 0V12a2.25 2.25 0 01-2.25 2.25H5.25A2.25 2.25 0 013 12V5.25"/>' },
+      { title: 'Dados no seu dispositivo', description: 'Roda 100% no cliente. As chamadas vão direto da sua máquina aos provedores; nada passa por um backend da ferramenta.', icon: '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z"/>' },
+      { title: 'Sua chave, seu custo', description: 'Conecta via OpenRouter e HuggingFace com a sua própria API key. Você paga só o consumo real, sem mensalidade da plataforma.', icon: '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15.75 5.25a3 3 0 013 3m3 0a6 6 0 01-7.029 5.912c-.563-.097-1.159.026-1.563.43L10.5 17.25H8.25v2.25H6v2.25H2.25v-2.818c0-.597.237-1.17.659-1.591l6.499-6.499c.404-.404.527-1 .43-1.563A6 6 0 1121.75 8.25z"/>' },
+      { title: 'Open source', description: 'Código aberto e auditável. Você pode baixar, ler e até adaptar o arquivo ao seu fluxo de trabalho.', icon: '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17.25 6.75L22.5 12l-5.25 5.25m-10.5 0L1.5 12l5.25-5.25m7.5-3l-4.5 16.5"/>' },
+    ],
+    body: [
+      { type: 'paragraph', text: 'O G0DM0DƎ resolve um problema simples: ter várias plataformas de IA abertas ao mesmo tempo, cada uma com login, interface e assinatura própria. Ele junta tudo num único arquivo HTML que você abre no navegador e usa na hora.' },
+      { type: 'heading', text: 'O que é, na prática' },
+      { type: 'paragraph', text: 'É uma página estática (um só arquivo .html) com uma interface de chat. Ela não tem servidor próprio: quando você envia um prompt, a requisição sai direto do seu navegador para agregadores de modelos — principalmente OpenRouter e HuggingFace —, que repassam para o modelo escolhido. Por isso roda local, é gratuito como software, e você paga apenas o uso de cada modelo via sua chave.' },
+      { type: 'heading', text: 'Como começar' },
+      { type: 'steps', items: [
+        'Abra https://godmod3.ai no navegador (ou baixe o arquivo HTML do repositório e abra-o localmente — funciona offline para a interface).',
+        'Crie uma conta gratuita na OpenRouter e gere uma API key em openrouter.ai/keys. Ela é a chave que destrava a maioria dos 50+ modelos.',
+        'Cole a sua API key no campo de configuração do G0DM0DƎ. A chave fica salva no seu navegador (localStorage), não em um servidor da ferramenta.',
+        'Selecione o modelo desejado no seletor (ex.: Claude, GPT, Gemini, Grok) e comece a conversar.',
+        'Para comparar, ative o modo de múltiplos modelos e mande o mesmo prompt: as respostas aparecem lado a lado.',
+      ] },
+      { type: 'callout', text: 'Sua API key é uma credencial sensível. Como ela fica no navegador, use o G0DM0DƎ em um dispositivo de confiança e defina limites de gasto na OpenRouter para evitar surpresas.' },
+      { type: 'heading', text: 'Quando usar a comparação lado a lado' },
+      { type: 'paragraph', text: 'O modo de comparação é o maior diferencial. Em vez de adivinhar qual IA é melhor, você testa empiricamente: mande o mesmo briefing de código, o mesmo texto para revisar ou o mesmo problema de raciocínio e observe as respostas simultâneas. Com o tempo você descobre o melhor modelo por tipo de tarefa — e economiza pagando só pelo que realmente entrega.' },
+      { type: 'callout', text: 'Como ele usa OpenRouter e HuggingFace, a lista exata de modelos disponíveis acompanha o catálogo desses provedores e pode mudar. Confira no seletor da própria ferramenta os modelos ativos no momento.' },
+    ],
   },
   {
     slug: 'de-ideia-a-app-funcional-em-30-minutos',
-    data: '2026-06-24',
+    data: '2026-06-25',
     slot: 'B',
     formato: 'Carrossel',
     titulo: 'De Ideia a App Funcional em 30 Minutos',
     ferramenta: 'Claude Code (processo criação de app)',
     link: 'https://claude.ai/code',
-    roteiro: `## Slide 1 — Capa
-
-DE IDEIA A APP FUNCIONAL
-EM 30 MINUTOS
-
-Com Claude Code — passo a passo real
-
----
-
-## Slide 2 — A ideia
-
-Tudo começa com uma frase
-
-Não precisa de documento de requisitos.
-Não precisa de wireframe.
-Não precisa de reunião de alinhamento.
-
-Precisa de uma frase que descreve o app:
-
-"Quero um app de gestão de tarefas com login, dashboard, categorias e notificações."
-
-Isso é suficiente para começar. O Claude faz as perguntas que faltam.
-
----
-
-## Slide 3 — Etapa 1: Estrutura e stack (minutos 0-5)
-
-Minutos 0-5 — Estrutura e stack
-
-Você abre o Claude Code no terminal e cola a ideia.
-
-O Claude propõe a stack ideal para o seu caso, cria a estrutura de pastas, configura o ambiente de desenvolvimento e instala as dependências.
-
-Em 5 minutos você tem: projeto criado, estrutura de arquivos definida, dependências instaladas.
-
-Você não escolheu nada manualmente. Ele decidiu com base na sua descrição.
-
----
-
-## Slide 4 — Etapa 2: Backend e banco de dados (minutos 5-15)
-
-Minutos 5-15 — Backend e dados
-
-O Claude constrói o backend:
-— Modelos de dados no banco
-— Rotas da API
-— Autenticação e sessão
-— Validações e tratamento de erro
-
-Você não escreve uma linha de SQL. Não configura servidor.
-Você lê, aprova ou ajusta o que não gostou.
-
----
-
-## Slide 5 — Etapa 3: Interface e UX (minutos 15-25)
-
-Minutos 15-25 — Interface
-
-Com o backend pronto, o Claude constrói o frontend:
-— Layout responsivo
-— Componentes de UI conectados à API
-— Estados de carregamento e erro
-— Dashboard com os dados reais
-
-Se você tiver uma referência de design (print de app que admira), joga antes. O resultado melhora radicalmente.
-
----
-
-## Slide 6 — Etapa 4: Ajustes por conversa (minutos 25-28)
-
-Minutos 25-28 — Refinar sem retrabalho
-
-Nessa etapa você testa o app e ajusta o que não ficou certo:
-
-"Muda a cor do botão de ação para verde"
-"Adiciona confirmação antes de deletar tarefa"
-"O dashboard precisa de um gráfico de progresso"
-
-Cada pedido atualiza instantâneo. Sem refazer tela inteira.
-
----
-
-## Slide 7 — Deploy e resultado (minuto 30)
-
-Minuto 30 — App no ar
-
-\`vercel deploy\` ou \`railway up\`.
-
-Em menos de 2 minutos o app está no ar com domínio próprio.
-
-Banco de dados configurado, autenticação funcionando, interface responsiva.
-
-30 minutos do zero ao app em produção.
-
----
-
-## Slide 8 — CTA
-
-Comenta IDEIA que eu te mando o prompt exato de abertura que uso para começar todo app novo com Claude Code.
-
-O prompt certo no começo economiza 20 minutos de retrabalho depois.`,
-    legenda: `Comenta IDEIA que eu te mando o prompt exato de abertura que uso para começar todo app novo com Claude Code.
-
-Uma frase. 30 minutos. App funcional no ar com banco de dados, autenticação e interface. Esse é o workflow real com Claude Code.
-
-O passo a passo completo está no carrossel: estrutura e stack (0-5 min), backend e banco (5-15 min), interface e UX (15-25 min), ajustes por conversa (25-28 min), deploy (minuto 30). Cada etapa com o que o Claude faz e o que você aprova. 🚀
-
-Não precisa saber programar para acompanhar. Não precisa escolher stack, configurar banco ou escrever SQL. O Claude decide, constrói e explica o que fez.
-
-Isso não é promessa de marketing. É o que acontece quando você usa o Claude Code do jeito certo.
-
-#claudecode #appbuilder #fullstack #ia #inteligenciaartificial #ferramentasIA #desenvolvimentoweb #startup #mvp #automacao #developer #produtividade`,
     keyword_cta: 'IDEIA',
     pilar: 'Produção de Conteúdo com IA',
     duracao: '8 slides',
+    categoryId: 'aprendizado',
+    author: '@joaoguirunas',
+    primaryLink: 'https://claude.ai/code',
+    primaryLabel: 'Conhecer o Claude Code',
+    isExternal: true,
+    sourceUrl: 'https://code.claude.com/docs/en/overview',
+    longDescription: [
+      'Este é um tutorial de processo: como sair de uma ideia em uma frase até um app funcional no ar, em cerca de 30 minutos, usando o Claude Code. Não é uma demo de marketing — é o fluxo real, com marcos de tempo, decisões e os pontos onde você aprova ou ajusta o que a IA propõe.',
+      'O Claude Code é a interface do Claude que roda no seu terminal e consegue ler, escrever e executar código no seu projeto. Em vez de você escolher stack, configurar banco e escrever boilerplate, você descreve o que quer e revisa o que ele constrói — mantendo o controle das decisões importantes.',
+      'O método funciona melhor para MVPs e protótipos funcionais (CRUD com login, dashboard, formulários). Apps muito complexos levam mais que 30 minutos, mas o mesmo processo escala: você só repete os ciclos de descrever → revisar → ajustar.',
+    ],
+    features: [
+      { title: 'Começa com uma frase', description: 'Sem documento de requisitos nem wireframe. Você descreve o app em linguagem natural e o Claude faz as perguntas que faltam.', icon: '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M7.5 8.25h9m-9 3H12m-9.75 1.51c0 1.6 1.123 2.994 2.707 3.227 1.129.166 2.27.293 3.423.379.35.026.67.21.865.501L12 21l2.755-4.133a1.14 1.14 0 01.865-.501 48.172 48.172 0 003.423-.379c1.584-.233 2.707-1.626 2.707-3.228V6.741c0-1.602-1.123-2.995-2.707-3.228A48.394 48.394 0 0012 3c-2.392 0-4.744.175-7.043.513C3.373 3.746 2.25 5.14 2.25 6.741v6.018z"/>' },
+      { title: 'Stack escolhida por você-aprova', description: 'Nos primeiros 5 minutos o Claude propõe a stack, cria a estrutura de pastas e instala dependências. Você revisa e aprova.', icon: '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M11.42 15.17L17.25 21A2.652 2.652 0 0021 17.25l-5.877-5.877M11.42 15.17l2.496-3.03c.317-.384.74-.626 1.208-.766M11.42 15.17l-4.655 5.653a2.548 2.548 0 11-3.586-3.586l6.837-5.63m5.108-.233c.55-.164 1.163-.188 1.743-.14a4.5 4.5 0 004.486-6.336l-3.276 3.277a3.004 3.004 0 01-2.25-2.25l3.276-3.276a4.5 4.5 0 00-6.336 4.486c.091 1.076-.071 2.264-.904 2.95l-.102.085m-1.745 1.437L5.909 7.5H4.5L2.25 3.75l1.5-1.5L7.5 4.5v1.409l4.26 4.26m-1.745 1.437l1.745-1.437m6.615 8.206L15.75 15.75M4.867 19.125h.008v.008h-.008v-.008z"/>' },
+      { title: 'Backend e banco sem SQL', description: 'O Claude monta modelos de dados, rotas de API, autenticação e validações. Você lê e aprova, sem escrever uma linha de SQL.', icon: '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M20.25 6.375c0 2.278-3.694 4.125-8.25 4.125S3.75 8.653 3.75 6.375m16.5 0c0-2.278-3.694-4.125-8.25-4.125S3.75 4.097 3.75 6.375m16.5 0v11.25c0 2.278-3.694 4.125-8.25 4.125s-8.25-1.847-8.25-4.125V6.375m16.5 0v3.75m-16.5-3.75v3.75m16.5 0v3.75C20.25 16.153 16.556 18 12 18s-8.25-1.847-8.25-4.125v-3.75m16.5 0c0 2.278-3.694 4.125-8.25 4.125s-8.25-1.847-8.25-4.125"/>' },
+      { title: 'Interface com referência visual', description: 'Frontend responsivo conectado à API. Se você jogar um print de um app que admira, o resultado de design melhora radicalmente.', icon: '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9.53 16.122a3 3 0 00-5.78 1.128 2.25 2.25 0 01-2.4 2.245 4.5 4.5 0 008.4-2.245c0-.399-.078-.78-.22-1.128zm0 0a15.998 15.998 0 003.388-1.62m-5.043-.025a15.994 15.994 0 011.622-3.395m3.42 3.42a15.995 15.995 0 004.764-4.648l3.876-5.814a1.151 1.151 0 00-1.597-1.597L14.146 6.32a15.996 15.996 0 00-4.649 4.763m3.42 3.42a6.776 6.776 0 00-3.42-3.42"/>' },
+      { title: 'Ajustes por conversa', description: '"Muda a cor do botão", "adiciona confirmação ao deletar". Cada pedido atualiza na hora, sem refazer a tela inteira.', icon: '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M20.25 8.511c.884.284 1.5 1.128 1.5 2.097v4.286c0 1.136-.847 2.1-1.98 2.193-.34.027-.68.052-1.02.072v3.091l-3-3c-1.354 0-2.694-.055-4.02-.163a2.115 2.115 0 01-.825-.242m9.345-8.334a2.126 2.126 0 00-.476-.095 48.64 48.64 0 00-8.048 0c-1.131.094-1.976 1.057-1.976 2.192v4.286c0 .837.46 1.58 1.155 1.951m9.345-8.334V6.637c0-1.621-1.152-3.026-2.76-3.235A48.455 48.455 0 0011.25 3c-2.115 0-4.198.137-6.24.402-1.608.209-2.76 1.614-2.76 3.235v6.226c0 1.621 1.152 3.026 2.76 3.235.577.075 1.157.14 1.74.194V21l4.155-4.155"/>' },
+      { title: 'Deploy em minutos', description: 'Um comando de deploy (Vercel, Railway) e o app sobe com domínio próprio, banco configurado e autenticação funcionando.', icon: '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 16.5V9.75m0 0l3 3m-3-3l-3 3M6.75 19.5a4.5 4.5 0 01-1.41-8.775 5.25 5.25 0 0110.233-2.33 3 3 0 013.758 3.848A3.752 3.752 0 0118 19.5H6.75z"/>' },
+    ],
+    body: [
+      { type: 'paragraph', text: 'O segredo dos 30 minutos não é digitar mais rápido — é deixar o Claude Code tomar as decisões mecânicas (stack, boilerplate, configuração) enquanto você decide só o que importa: o que o app faz e como ele se parece. Abaixo, o processo dividido em marcos de tempo.' },
+      { type: 'heading', text: 'Antes de começar' },
+      { type: 'paragraph', text: 'Você precisa do Claude Code instalado no terminal e de uma ideia clara em uma frase. Não precisa de documento de requisitos, wireframe nem reunião de alinhamento — o Claude pergunta o que faltar.' },
+      { type: 'code', language: 'bash', code: 'npm install -g @anthropic-ai/claude-code\ncd ~/projetos && mkdir meu-app && cd meu-app\nclaude' },
+      { type: 'heading', text: 'Minutos 0-5 — Estrutura e stack' },
+      { type: 'paragraph', text: 'Abra o Claude Code na pasta vazia e cole a ideia. Ele propõe a stack ideal, cria a estrutura de pastas, configura o ambiente e instala as dependências. Você aprova ou pede para trocar uma escolha.' },
+      { type: 'code', language: 'text', code: 'Quero um app de gestão de tarefas com login, dashboard, categorias e\nnotificações. Proponha a stack, crie a estrutura do projeto e instale\nas dependências. Antes de codar, me liste as decisões de stack.' },
+      { type: 'heading', text: 'Minutos 5-15 — Backend e banco de dados' },
+      { type: 'steps', items: [
+        'O Claude cria os modelos de dados (tabelas/entidades) com base nas suas funcionalidades.',
+        'Gera as rotas da API (CRUD) e a camada de validação.',
+        'Configura autenticação e gerenciamento de sessão.',
+        'Você revisa o esquema do banco e as rotas — aprova ou ajusta o que não gostou.',
+      ] },
+      { type: 'heading', text: 'Minutos 15-25 — Interface e UX' },
+      { type: 'paragraph', text: 'Com o backend pronto, o Claude constrói o frontend: layout responsivo, componentes conectados à API, estados de carregamento e erro, e o dashboard com dados reais. Aqui está o maior alavancador de qualidade: anexe um print de um app cuja estética você admira.' },
+      { type: 'callout', text: 'Referência visual é o atalho que mais muda o resultado. Sem ela, o design fica genérico; com um print de inspiração, o Claude replica o nível de acabamento que você quer.' },
+      { type: 'heading', text: 'Minutos 25-28 — Refinar por conversa' },
+      { type: 'paragraph', text: 'Teste o app rodando e peça ajustes em linguagem natural. Cada pedido atualiza só a parte relevante, sem retrabalho de tela inteira.' },
+      { type: 'steps', items: [
+        '"Muda a cor do botão de ação para verde."',
+        '"Adiciona uma confirmação antes de deletar tarefa."',
+        '"O dashboard precisa de um gráfico de progresso."',
+      ] },
+      { type: 'heading', text: 'Minuto 30 — Deploy' },
+      { type: 'paragraph', text: 'Peça o deploy ou rode o comando da plataforma escolhida. Em poucos minutos o app fica no ar com domínio próprio, banco configurado e autenticação funcionando.' },
+      { type: 'code', language: 'bash', code: '# Frontend / fullstack na Vercel\nnpx vercel deploy --prod\n\n# Ou backend + banco na Railway\nrailway up' },
+      { type: 'callout', text: '30 minutos é realista para um MVP funcional (CRUD com login e dashboard). Apps com regras de negócio complexas levam mais — mas o processo é o mesmo: descrever, revisar, ajustar. O prompt certo no começo é o que mais economiza tempo depois.' },
+    ],
   },
   {
     slug: 'para-de-pagar-por-ai-video-gratis-e-ilimitado',
@@ -173,33 +118,6 @@ Isso não é promessa de marketing. É o que acontece quando você usa o Claude 
     titulo: 'Para de Pagar por AI Video — Grátis e Ilimitado',
     ferramenta: 'LTX Video (open source) — mesma ferramenta do dia 18A',
     link: 'https://github.com/Lightricks/LTX-Video',
-    roteiro: `Para de pagar crédito de vídeo AI.
-
-Existe uma ferramenta open source que gera vídeos cinematográficos ilimitados. De graça. Para sempre.
-
-Você joga uma imagem ou digita um prompt.
-Ela gera o vídeo completo.
-
-Mas o diferencial não é só o vídeo — ela também gera efeitos sonoros e áudio emocional que combinam automaticamente com a cena. Você não adiciona nada na mão.
-
-E diferente de praticamente todas as ferramentas pagas do mercado, ela não tem limite de duração.
-Vídeo curto, vídeo longo — sem restrição.
-
-Controle total de movimentação de câmera, composição de cena, efeitos visuais e estilo cinematográfico.
-Tudo que você pagaria por numa plataforma premium, aqui é zero mensalidade.
-
-Comenta GRÁTIS que eu te mando o link para instalar agora.`,
-    legenda: `Comenta GRÁTIS que eu te mando o link para instalar agora.
-
-Crédito de vídeo AI acabando todo mês. Plano padrão com limite de exportações. Mensalidade subindo. Isso é o modelo de negócio das ferramentas de vídeo AI — e você não precisa aceitar.
-
-Uma ferramenta open source entrega geração de vídeo cinematográfica ilimitada, de graça. Você joga uma imagem ou prompt, ela gera vídeo completo com efeitos sonoros e áudio emocional automáticos. Sem limite de duração. Sem mensalidade. Roda local no seu computador. 🎬
-
-Controle de câmera, estilo visual, composição de cena — tudo disponível. O nível do que sai não fica atrás das ferramentas pagas. A diferença é que você não paga nada.
-
-Quem ainda está no plano pago está pagando por algo que pode ter de graça.
-
-#videoai #opensource #ferramentasIA #ia #inteligenciaartificial #videogratis #producaodevideo #claudecode #aitools #automacao #criadordeconteudo #economiadigital`,
     keyword_cta: 'GRÁTIS',
     pilar: 'Eliminar Custo Fixo com IA',
     duracao: '35s',

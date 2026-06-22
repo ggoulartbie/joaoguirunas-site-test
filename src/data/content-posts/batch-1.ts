@@ -3,42 +3,82 @@ import { ContentPost } from '@/types/content-post'
 export const batch1: ContentPost[] = [
   {
     slug: 'videos-cinematograficos-gratis-com-ai',
-    data: '2026-06-18',
+    data: '2026-06-21',
     slot: 'A',
     formato: 'Reel',
-    titulo: 'Vídeos Cinematográficos Grátis com AI',
-    ferramenta: 'LTX Video (open source)',
+    titulo: 'LTX-Video: O Manual da IA Open Source que Gera Vídeo no Seu Próprio Computador',
+    ferramenta: 'LTX-Video (open source)',
     link: 'https://github.com/Lightricks/LTX-Video',
-    roteiro: `Para de pagar por gerador de vídeo AI.
-
-Existe uma ferramenta open source, completamente gratuita e sem limite de uso.
-E quase ninguém no Brasil está falando sobre ela.
-
-Com ela, você transforma um prompt de texto ou uma única imagem em vídeos cinematográficos completos.
-Efeitos sonoros entram automático — sem você precisar adicionar nada.
-E ainda tem controle total de movimentação de câmera, estilos visuais e composição de cena.
-
-Mas aqui está o detalhe que muda tudo:
-Por ser open source, você pode rodar localmente no seu próprio computador.
-Sem crédito, sem mensalidade, sem limite de vídeos gerados.
-
-Você gera quantos quiser. Para sempre. De graça.
-
-Comenta VÍDEO que eu te mando o link direto para instalar e começar a usar hoje.`,
-    legenda: `Comenta VÍDEO que eu te mando o link direto para instalar essa ferramenta hoje.
-
-Você ainda está pagando mensalidade por gerador de vídeo AI? Esse custo acabou. Existe uma ferramenta open source que gera vídeos cinematográficos ilimitados — sem crédito, sem limite, sem mensalidade.
-
-O processo é simples: você joga um prompt de texto ou uma imagem. A ferramenta gera o vídeo completo com efeitos sonoros automáticos que combinam com a cena. Controle de câmera, estilo visual e composição de cena: tudo no seu controle. 🎬
-
-Por ser open source, roda local no seu computador. Seus dados ficam com você. E o número de vídeos que você pode gerar é ilimitado.
-
-Quem ainda está pagando por isso está desperdiçando dinheiro todo mês.
-
-#claudecode #videoai #opensource #ferramentasIA #inteligenciaartificial #ia #producaodevideo #videogratuito #aitools #automacao #criadordeconteudo #iapraempresario`,
     keyword_cta: 'VÍDEO',
-    pilar: 'Eliminar Custo Fixo com IA',
-    duracao: '35s',
+    pilar: 'AI Open Source',
+    duracao: '90s',
+    categoryId: 'apps',
+    primaryLink: 'https://github.com/Lightricks/LTX-Video',
+    primaryLabel: 'Ver no GitHub',
+    isExternal: true,
+    author: '@joaoguirunas',
+    sourceUrl: 'https://github.com/Lightricks/LTX-Video',
+    longDescription: [
+      'LTX-Video é um modelo open source de geração de vídeo por IA criado pela Lightricks, baseado em arquitetura DiT (Diffusion Transformer) e com os pesos abertos no Hugging Face. Roda localmente: sem crédito, sem mensalidade e sem limite de quantos vídeos você gera. A licença da linha 0.9.x é Apache-2.0 com OpenRail-M, o que libera inclusive uso comercial.',
+      'A ferramenta faz text-to-video (prompt de texto vira vídeo), image-to-video (anima uma imagem), animação por keyframes, extensão de vídeo e video-to-video. A versão atual, a 0.9.8, gera por padrão em 1216×704 a 30fps, podendo chegar a 50fps em 4K nativo e até 60 segundos nos modelos distilled. Importante: a 0.9.8 gera vídeo SEM áudio — áudio+vídeo sincronizado é o LTX-2, uma linha separada (pesos já liberados em Lightricks/LTX-2.3, mas sob a LTX-2 Community License, que não é Apache-2.0).',
+      'Para rodar local você precisa de uma GPU NVIDIA: 8GB de VRAM já dá para começar com um modelo quantizado, 24GB roda o 13B confortável, e há uma LoRA (do distilled 0.9.7) que cabe em 1GB. Não tem GPU? Dá para testar a ferramenta nos demos hospedados — LTX Studio, fal.ai ou Replicate — antes de montar o setup local.',
+    ],
+    features: [
+      {
+        title: 'Text-to-Video',
+        description: 'Descreva a cena em um prompt de texto e o modelo gera o vídeo completo, com controle de movimento de câmera, estilo e composição.',
+        icon: '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15.75 10.5l4.72-4.72a.75.75 0 011.28.53v11.38a.75.75 0 01-1.28.53l-4.72-4.72M4.5 18.75h9a2.25 2.25 0 002.25-2.25v-9a2.25 2.25 0 00-2.25-2.25h-9A2.25 2.25 0 002.25 7.5v9a2.25 2.25 0 002.25 2.25z"/>',
+      },
+      {
+        title: 'Image-to-Video',
+        description: 'Anime uma única imagem — foto de produto, conceito ou ilustração — transformando-a em um clipe em movimento.',
+        icon: '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.409a2.25 2.25 0 013.182 0l2.909 2.909M3.75 21h16.5a2.25 2.25 0 002.25-2.25V5.25a2.25 2.25 0 00-2.25-2.25H3.75A2.25 2.25 0 001.5 5.25v13.5A2.25 2.25 0 003.75 21zm2.25-10.5a2.25 2.25 0 114.5 0 2.25 2.25 0 01-4.5 0z"/>',
+      },
+      {
+        title: 'Keyframes e extensão',
+        description: 'Condicione a geração por múltiplos keyframes e estenda vídeos para frente ou para trás, mantendo a continuidade da cena.',
+        icon: '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M5.25 5.653c0-.856.917-1.398 1.667-.986l11.54 6.347a1.125 1.125 0 010 1.972l-11.54 6.347a1.125 1.125 0 01-1.667-.986V5.653z"/>',
+      },
+      {
+        title: 'Roda local e ilimitado',
+        description: 'Com os pesos abertos no Hugging Face, você gera quantos vídeos quiser na sua máquina — Apache-2.0 + OpenRail-M, sem crédito nem mensalidade.',
+        icon: '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M20.25 6.375c0 2.278-3.694 4.125-8.25 4.125S3.75 8.653 3.75 6.375m16.5 0c0-2.278-3.694-4.125-8.25-4.125S3.75 4.097 3.75 6.375m16.5 0v11.25c0 2.278-3.694 4.125-8.25 4.125s-8.25-1.847-8.25-4.125V6.375m16.5 0v3.75m-16.5-3.75v3.75m16.5 0v3.75C20.25 16.153 16.556 18 12 18s-8.25-1.847-8.25-4.125v-3.75m16.5 0c0 2.278-3.694 4.125-8.25 4.125s-8.25-1.847-8.25-4.125"/>',
+      },
+      {
+        title: 'Modelos por VRAM',
+        description: 'Escolha entre 2B/distilled (GPU pequena, rápido), 13B fp8 quantizado (equilíbrio) ou 13B dev (qualidade máxima) conforme a sua placa.',
+        icon: '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8.25 3v1.5M4.5 8.25H3m18 0h-1.5M4.5 12H3m18 0h-1.5m-15 3.75H3m18 0h-1.5M8.25 19.5V21M12 3v1.5m0 15V21m3.75-18v1.5m0 15V21m-9-1.5h10.5a2.25 2.25 0 002.25-2.25V6.75a2.25 2.25 0 00-2.25-2.25H6.75A2.25 2.25 0 004.5 6.75v10.5a2.25 2.25 0 002.25 2.25zm.75-12h9v9h-9v-9z"/>',
+      },
+      {
+        title: 'Três caminhos de uso',
+        description: 'ComfyUI (interface visual, para quem não é dev), Diffusers (integração em Python) ou inference.py direto na linha de comando.',
+        icon: '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3.75 6A2.25 2.25 0 016 3.75h2.25A2.25 2.25 0 0110.5 6v2.25a2.25 2.25 0 01-2.25 2.25H6a2.25 2.25 0 01-2.25-2.25V6zM3.75 15.75A2.25 2.25 0 016 13.5h2.25a2.25 2.25 0 012.25 2.25V18a2.25 2.25 0 01-2.25 2.25H6A2.25 2.25 0 013.75 18v-2.25zM13.5 6a2.25 2.25 0 012.25-2.25H18A2.25 2.25 0 0120.25 6v2.25A2.25 2.25 0 0118 10.5h-2.25a2.25 2.25 0 01-2.25-2.25V6zM13.5 15.75a2.25 2.25 0 012.25-2.25H18a2.25 2.25 0 012.25 2.25V18A2.25 2.25 0 0118 20.25h-2.25A2.25 2.25 0 0113.5 18v-2.25z"/>',
+      },
+    ],
+    body: [
+      { type: 'heading', text: 'Antes de começar: você precisa de GPU' },
+      { type: 'paragraph', text: 'O LTX-Video roda em GPU NVIDIA (CUDA). Com 8GB de VRAM dá para usar um modelo 2B ou quantizado; com 24GB você roda o 13B com folga; e existe uma LoRA do distilled 0.9.7 que cabe em 1GB. Se você não tem GPU, pule a instalação e use um demo hospedado (LTX Studio, fal.ai ou Replicate) para experimentar a ferramenta.' },
+      { type: 'callout', text: 'Atenção factual: a linha 0.9.x gera vídeo SEM áudio. Áudio+vídeo sincronizado é o LTX-2, uma linha separada com pesos já liberados (Lightricks/LTX-2.3), mas sob a LTX-2 Community License — não a Apache-2.0 desta página.' },
+      { type: 'heading', text: 'Passo 1 — Instalar' },
+      { type: 'paragraph', text: 'Pré-requisitos: Python 3.10.5 e PyTorch 2.1.2 ou superior. No terminal, clone o repositório, crie um ambiente virtual e instale as dependências de inferência:' },
+      { type: 'code', language: 'bash', code: 'git clone https://github.com/Lightricks/LTX-Video.git\ncd LTX-Video\npython -m venv env\nsource env/bin/activate\npython -m pip install -e .[inference]' },
+      { type: 'heading', text: 'Passo 2 — Escolher o modelo pela sua VRAM' },
+      { type: 'steps', items: [
+        'GPU pequena (cerca de 8GB): ltxv-2b-0.9.8-distilled — rápido e leve.',
+        'Equilíbrio qualidade/velocidade: ltxv-13b-0.9.8-distilled ou a variante fp8 quantizada.',
+        'Qualidade máxima (24GB ou mais): ltxv-13b-0.9.8-dev.',
+        'Os pesos são baixados do Hugging Face conforme o arquivo de config aponta.',
+      ] },
+      { type: 'heading', text: 'Passo 3 — Gerar o vídeo' },
+      { type: 'paragraph', text: 'Exemplo de image-to-video pela linha de comando. Para text-to-video, basta omitir a imagem de condicionamento e passar só o prompt. Ajuste height, width, num_frames e seed conforme o resultado desejado:' },
+      { type: 'code', language: 'bash', code: 'python inference.py \\\n  --prompt "SEU PROMPT" \\\n  --conditioning_media_paths imagem.png \\\n  --conditioning_start_frames 0 \\\n  --height 704 --width 1216 \\\n  --num_frames 121 --seed 42 \\\n  --pipeline_config configs/ltxv-13b-0.9.8-distilled.yaml' },
+      { type: 'heading', text: 'Os três caminhos de uso' },
+      { type: 'steps', items: [
+        'ComfyUI (recomendado para quem não é dev): interface visual de nós com workflows prontos por modelo — repositório ComfyUI-LTXVideo.',
+        'Diffusers (Hugging Face): suporte oficial na lib diffusers, ideal para integrar em código Python.',
+        'inference.py direto: linha de comando, controle total (o exemplo acima).',
+      ] },
+    ],
   },
   {
     slug: 'o-maior-lancamento-de-ai-dessa-semana',
@@ -48,127 +88,68 @@ Quem ainda está pagando por isso está desperdiçando dinheiro todo mês.
     titulo: 'O Maior Lançamento de AI Dessa Semana',
     ferramenta: 'Claude Agent SDK (Anthropic)',
     link: 'https://platform.claude.com/docs/en/agent-sdk/overview',
-    roteiro: `## Slide 1 — Capa
-
-Texto principal:
-O MAIOR LANÇAMENTO DE AI DESSA SEMANA
-
-Subtítulo:
-A Anthropic lançou o SDK que muda como agentes AI são construídos
-
----
-
-## Slide 2 — O que é
-
-Título: O que é o Claude Agent SDK
-
-O Claude Agent SDK é a forma oficial da Anthropic de construir agentes AI em Python e TypeScript. Ao contrário da API padrão — onde você envia um prompt e gerencia tudo na mão — o SDK já entrega execução de ferramentas, loop de uso de tools, sessões persistentes e suporte nativo a Model Context Protocol. Para devs: é a diferença entre montar um agente do zero e ter a infraestrutura pronta.
-
----
-
-## Slide 3 — Por que isso importa agora
-
-Antes do SDK, montar um agente funcional com Claude exigia: implementar o loop de tool_use manualmente; gerenciar estado de sessão por conta própria; integrar cada MCP server de forma customizada. Agora o SDK resolve tudo isso em menos de 10 linhas de código. E com 200+ MCP servers suportados nativamente, você conecta qualquer ferramenta sem configuração extra.
-
----
-
-## Slide 4 — Como você acessa hoje
-
-Instalação em um comando:
-Python: pip install claude-agent-sdk
-TypeScript: npm install @anthropic-ai/claude-agent-sdk
-
-Requer Python 3.10+ ou Node.js. Chave de API da Anthropic — a mesma que você já usa no Claude Code. Doc completa em platform.claude.com/docs/en/agent-sdk/overview
-
----
-
-## Slide 5 — O que o SDK entrega por padrão
-
-Sem instalar mais nada:
-— Edição de arquivos e execução de bash
-— Web search e web fetch integrados
-— Loop automático de tool-use com checkpoint humano opcional
-— Subagentes com contexto próprio
-— Sessões persistentes entre execuções
-— Suporte MCP com 200+ servidores em uma linha de config
-
----
-
-## Slide 6 — O que isso significa para o ecossistema
-
-O MCP deixou de ser padrão de nicho e virou a camada base do Claude Agent SDK, LangGraph e OpenClaw simultaneamente. Uma tool construída para o SDK funciona em qualquer framework compatível com MCP — sem reescrever nada. Agentes interoperáveis.
-
----
-
-## Slide 7 — Sua ação imediata
-
-— Instalar o SDK e rodar o exemplo básico da doc
-— Avaliar quais fluxos manuais podem virar subagentes
-— Explorar o catálogo de MCP servers
-
-O TypeScript V2 está em preview — se você usa TS, vale acompanhar.
-
----
-
-## Slide 8 — CTA
-
-Comenta LAUNCH que eu te mando o link direto para a doc e o exemplo de código para começar agora.
-
-Salva esse post.`,
-    legenda: `Comenta LAUNCH que eu te mando o link direto para a doc e o exemplo de código para começar agora.
-
-A Anthropic lançou o Claude Agent SDK — e ele muda como agentes AI são construídos do zero. No carrossel explico o que é, o que já vem incluído, como instalar e o que isso significa para o ecossistema de devs.
-
-Antes do SDK: loop de tool-use manual, estado de sessão na mão, cada MCP integrado de forma customizada. Agora: pip install ou npm install e você tem sessões persistentes, subagentes nativos, 200+ MCP servers e checkpoint humano prontos pra usar. 🛠️
-
-O MCP saiu de padrão de nicho para camada base de todos os frameworks principais ao mesmo tempo. Quem entender isso primeiro vai sair na frente na corrida de agentes.
-
-#claudecode #claudeagentsdk #ia #inteligenciaartificial #aiagents #mcp #ferramentasIA #aitools #novidadesai #lançamentoai #python #typescript`,
     keyword_cta: 'LAUNCH',
     pilar: 'Notícias e Tendências AI',
     duracao: '8 slides',
   },
   {
     slug: 'seus-sites-com-claude-parecem-genericos',
-    data: '2026-06-19',
+    data: '2026-06-20',
     slot: 'A',
     formato: 'Reel',
     titulo: 'Seus Sites com Claude Parecem Genéricos',
     ferramenta: 'Claude Code Skills: Emil Kowalski Design + Impeccable Design + TasteSkill',
     link: 'https://github.com/emilkowalski/skills',
-    roteiro: `Se o seu site criado com Claude Code ainda parece genérico, o problema não é o Claude.
-É o setup.
-
-Três skills mudam completamente o nível do que o Claude entrega em design.
-
-A primeira é Emil Kowalski Design.
-Ela adiciona motion real, easing correto e animações que fazem a interface parecer viva em vez de estática.
-Sem ela, o site fica parado. Com ela, parece produto de verdade.
-
-A segunda é Impeccable Design.
-Com seus comandos de design, ela propõe correções de espaçamento, tipografia, layout e alinhamento. Você revisa, aprova e aplica — transformando horas de revisão manual em minutos.
-
-A terceira é TasteSkill.
-Essa é a virada de jogo.
-Ela alimenta o Claude com referências reais de design de qualidade — os melhores produtos do mercado.
-Em vez de gerar um site AI genérico, o Claude começa a produzir interfaces que parecem modernas e polidas de verdade.
-
-Mesma AI. Setup diferente. Resultado completamente diferente.
-
-Comenta DESIGN que eu te mando o setup completo das três skills para instalar agora.`,
-    legenda: `Comenta DESIGN que eu te mando o setup completo das três skills para instalar agora.
-
-Site genérico não é problema do Claude. É problema do setup. A maioria usa o Claude Code sem nenhuma skill de design — e aí o resultado parece template de 2019.
-
-Três skills resolvem isso de vez: Emil Kowalski Design (motion e animações reais), Impeccable Design (propõe correções de espaçamento, tipografia e layout — você revisa e aplica) e TasteSkill (alimenta o Claude com referências de design de qualidade, não lixo genérico). 🎨
-
-Com essas três instaladas, você continua usando a mesma AI. Mas o que sai é completamente diferente. Interfaces que parecem produto de mercado, não projeto escolar.
-
-A diferença entre um dev que entrega produto e um que entrega template está aqui.
-
-#claudecode #designai #skills #uiux #desenvolvimentoweb #inteligenciaartificial #ia #ferramentasIA #webdesign #produtividade #framermotion #claudeskills`,
     keyword_cta: 'DESIGN',
     pilar: 'Produção de Conteúdo com IA',
     duracao: '44s',
+    categoryId: 'skills',
+    primaryLink: 'https://github.com/emilkowalski/skills',
+    primaryLabel: 'Ver no GitHub',
+    isExternal: true,
+    author: '@joaoguirunas',
+    sourceUrl: 'https://github.com/emilkowalski/skills',
+    longDescription: [
+      'Quando um site gerado pelo Claude Code parece genérico, na maioria das vezes o problema não é o modelo — é o setup. Sem skills de design, o Claude trabalha com o conhecimento padrão e o resultado tende ao template sem personalidade. A virada vem de três frentes de design que você adiciona ao Claude Code: motion real, refino visual disciplinado e referência de gosto.',
+      'A frente de motion é onde o repositório de skills do Emil Kowalski (emilkowalski/skills, "Skills for Design Engineers") entra de forma concreta e verificável: a skill emil-design-eng cobre animação e conselhos de design, e a review-animations revisa suas animações com critérios rígidos. O refino visual — espaçamento, tipografia, layout e alinhamento consistentes — e a referência de gosto (alimentar o Claude com exemplos de design de alto padrão) são capacidades que você obtém via skills de design e regras de revisão; os nomes exatos de skill para cada uma variam no ecossistema, então este tutorial as trata como frentes, não como repositórios fixos.',
+      'A mesma IA, com um setup diferente, produz um resultado diferente. Este tutorial mostra o que cada frente faz, como instalar a skill verificada do Emil Kowalski no Claude Code e como combinar motion, refino e gosto num fluxo único de design.',
+    ],
+    features: [
+      {
+        title: 'Motion real (skill do Emil Kowalski)',
+        description: 'A skill emil-design-eng adiciona animação com easing correto e transições que dão vida à interface; a review-animations checa o motion com critérios rígidos. Repo verificado: emilkowalski/skills.',
+        icon: '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09zM18.259 8.715L18 9.75l-.259-1.035a3.375 3.375 0 00-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 002.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 002.456 2.456L21.75 6l-1.035.259a3.375 3.375 0 00-2.456 2.456zM16.894 20.567L16.5 21.75l-.394-1.183a2.25 2.25 0 00-1.423-1.423L13.5 18.75l1.183-.394a2.25 2.25 0 001.423-1.423l.394-1.183.394 1.183a2.25 2.25 0 001.423 1.423l1.183.394-1.183.394a2.25 2.25 0 00-1.423 1.423z"/>',
+      },
+      {
+        title: 'Refino visual disciplinado',
+        description: 'Frente de design que corrige espaçamento, tipografia, layout e alinhamento de forma consistente — via skill de revisão de design e regras explícitas, no lugar de horas de ajuste manual.',
+        icon: '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9.53 16.122a3 3 0 00-5.78 1.128 2.25 2.25 0 01-2.4 2.245 4.5 4.5 0 008.4-2.245c0-.399-.078-.78-.22-1.128zm0 0a15.998 15.998 0 003.388-1.62m-5.043-.025a15.994 15.994 0 011.622-3.395m3.42 3.42a15.995 15.995 0 004.764-4.648l3.876-5.814a1.151 1.151 0 00-1.597-1.597L14.146 6.32a15.996 15.996 0 00-4.649 4.763m3.42 3.42a6.776 6.776 0 00-3.42-3.42"/>',
+      },
+      {
+        title: 'Referência de gosto',
+        description: 'Alimentar o Claude com exemplos de design de alto padrão ("design taste") desloca o output do genérico para interfaces polidas. É uma frente que você monta com referências e regras, não um repo único fixo.',
+        icon: '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 18v-5.25m0 0a6.01 6.01 0 001.5-.189m-1.5.189a6.01 6.01 0 01-1.5-.189m3.75 7.478a12.06 12.06 0 01-4.5 0m3.75 2.383a14.406 14.406 0 01-3 0M14.25 18v-.192c0-.983.658-1.823 1.508-2.316a7.5 7.5 0 10-7.517 0c.85.493 1.509 1.333 1.509 2.316V18"/>',
+      },
+      {
+        title: 'Mesma IA, setup diferente',
+        description: 'As três skills não trocam o modelo — mudam o contexto com que ele trabalha. O mesmo Claude Code passa a entregar UI de nível de produto.',
+        icon: '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M11.42 15.17L17.25 21A2.652 2.652 0 0021 17.25l-5.877-5.877M11.42 15.17l2.496-3.03c.317-.384.74-.626 1.208-.766M11.42 15.17l-4.655 5.653a2.548 2.548 0 11-3.586-3.586l6.837-5.63m5.108-.233c.55-.164 1.163-.188 1.743-.14a4.5 4.5 0 004.486-6.336l-3.276 3.277a3.004 3.004 0 01-2.25-2.25l3.276-3.276a4.5 4.5 0 00-6.336 4.486c.091 1.076-.071 2.264-.904 2.95l-.102.085m-1.745 1.437L5.909 7.5H4.5L2.25 3.75l1.5-1.5L7.5 4.5v1.409l4.26 4.26m-1.745 1.437l1.745-1.437m6.615 8.206L15.75 15.75M4.867 19.125h.008v.008h-.008v-.008z"/>',
+      },
+    ],
+    body: [
+      { type: 'heading', text: 'Por que o site parece genérico' },
+      { type: 'paragraph', text: 'Sem skills de design instaladas, o Claude Code gera interface com o conhecimento padrão: funcional, mas sem motion, com espaçamento irregular e sem uma referência clara de gosto. O resultado parece template. A correção não é trocar de modelo — é dar a ele o contexto de design certo via skills.' },
+      { type: 'heading', text: 'As três frentes do setup' },
+      { type: 'steps', items: [
+        'Motion — animação com easing e transições reais. Frente coberta de forma verificável pela skill emil-design-eng (animação + conselhos de design) do repo emilkowalski/skills.',
+        'Refino visual — espaçamento, tipografia, layout e alinhamento consistentes, via skill de revisão de design e regras explícitas.',
+        'Referência de gosto — alimentar o Claude com exemplos de design de alto padrão para o output sair do genérico.',
+      ] },
+      { type: 'heading', text: 'Instalar a skill verificada do Emil Kowalski' },
+      { type: 'paragraph', text: 'O repositório emilkowalski/skills ("Skills for Design Engineers") traz duas skills concretas: emil-design-eng (animação e design) e review-animations (revisão de animações com critérios rígidos). O install canônico é via CLI de skills:' },
+      { type: 'code', language: 'bash', code: 'npx skills@latest add emilkowalski/skill' },
+      { type: 'paragraph', text: 'Com a skill disponível, descreva o site em linguagem natural e peça ao Claude que aplique motion (emil-design-eng), depois revise as animações (review-animations) e, em seguida, faça o refino visual e aplique referências de gosto. O fluxo recomendado: gerar a estrutura, refinar o visual e só então polir o motion.' },
+      { type: 'callout', text: 'Verificação factual (2026-06-22): o repo emilkowalski/skills e suas skills (emil-design-eng, review-animations) são confirmados, com install via "npx skills@latest add emilkowalski/skill". Já "Impeccable Design" e "TasteSkill" — citados como nomes na origem deste conteúdo — não têm repositório canônico confirmado; por isso são tratados aqui como frentes de design (refino e gosto) que você monta com skills de revisão e referências, e não como pacotes instaláveis fixos. Confirme sempre a fonte oficial antes de instalar qualquer skill.' },
+    ],
   },
 ]

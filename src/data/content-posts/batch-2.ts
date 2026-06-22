@@ -3,7 +3,7 @@ import { ContentPost } from '@/types/content-post'
 export const batch2: ContentPost[] = [
   {
     slug: 'site-premium-em-5-min-com-claude-code',
-    data: '2026-06-19',
+    data: '2026-06-21',
     slot: 'B',
     formato: 'Carrossel',
     titulo: 'Site Premium em 5 Min com Claude Code',
@@ -12,130 +12,84 @@ export const batch2: ContentPost[] = [
     keyword_cta: 'SITE5MIN',
     pilar: 'Produção de Conteúdo com IA',
     duracao: '9 slides',
-    roteiro: `## Slide 1 — Capa
-
-**Texto principal:**
-SITE PREMIUM EM 5 MIN
-
-**Subtítulo:**
-Passo a passo com Claude Code — do zero ao deploy
-
----
-
-## Slide 2 — Passo 1: Instalar Claude Code no terminal
-
-**Título:** Passo 1 — Terminal aberto
-
-Você vai precisar de:
-— Node.js instalado (versão 18+)
-— Terminal (Mac, Linux ou WSL no Windows)
-
-Comando de instalação:
-\`npm install -g @anthropic-ai/claude-code\`
-
-Leva menos de 1 minuto. Feito uma vez, serve para todos os projetos.
-
----
-
-## Slide 3 — Passo 2: Adicionar a skill de UI
-
-**Título:** Passo 2 — A skill que muda o design
-
-Sem skill, o Claude gera design genérico.
-Com a skill UI/UX Pro Max, ele passa a entender:
-— Hierarquia visual moderna
-— Espaçamento e proporção corretos
-— Componentes de produto real
-
-Comando:
-\`/install-skill uiux-promax\`
-
----
-
-## Slide 4 — Passo 3: Puxar componente do 21st.dev
-
-**Título:** Passo 3 — Hero section pronta
-
-Acessa 21st.dev, escolhe um componente de hero section que combina com o seu projeto e copia o código.
-
-Cola no projeto dentro do Claude Code.
-Ele adapta automaticamente para o seu contexto — cores, textos, fontes.
-
----
-
-## Slide 5 — Passo 4: Conectar Framer Motion
-
-**Título:** Passo 4 — Animações reais
-
-Com Framer Motion conectado, cada seção do site ganha animações suaves automaticamente.
-
-O Claude gerencia as animações por conta própria — você não escreve nenhum código de animação manualmente.
-
-Comando:
-\`npm install framer-motion\`
-
----
-
-## Slide 6 — Passo 5: Descrever o site
-
-**Título:** Passo 5 — O prompt que constrói tudo
-
-Agora você descreve o que quer:
-
-"Cria um site para [tipo de negócio]. Tom: [profissional/criativo/minimalista]. Cores: [paleta]. Seções: hero, serviços, depoimentos, contato."
-
-O Claude constrói todos os componentes, conecta as animações e organiza o layout.
-
----
-
-## Slide 7 — Passo 6: Ajustes por conversa
-
-**Título:** Passo 6 — Iterar sem retrabalho
-
-Não gostou de algo? Só falar.
-
-"Aumenta o espaçamento do hero"
-"Muda a cor do botão para verde"
-"Adiciona uma seção de FAQ"
-
-Cada ajuste atualiza instantâneo. Sem refazer do zero.
-
----
-
-## Slide 8 — Passo 7: Deploy no Vercel
-
-**Título:** Passo 7 — Site no ar
-
-Quando estiver pronto:
-\`vercel deploy\`
-
-Em menos de 2 minutos o site está no ar com domínio próprio.
-
-Sem servidor para gerenciar. Sem configuração de hospedagem. O Vercel cuida de tudo.
-
----
-
-## Slide 9 — CTA
-
-**Texto:**
-Comenta SITE5MIN que eu te mando o repositório com o setup completo já configurado.
-
-Salva esse post para quando for criar o próximo site.`,
-    legenda: `Comenta SITE5MIN que eu te mando o repositório com o setup completo já configurado.
-
-Site que parece ter custado R$30.000. Feito em 5 minutos com Claude Code. Passo a passo completo no carrossel.
-
-O stack: Claude Code no terminal + skill UI/UX Pro Max + componentes do 21st.dev + Framer Motion para animações. Você descreve o site, ele constrói. Ajustes por conversa. Deploy no Vercel em 2 minutos. 🏗️
-
-Não precisa saber programar. Não precisa de designer. Não precisa de agência. Precisa de Claude Code configurado do jeito certo — e esse é o passo a passo exato.
-
-Site profissional já foi caro e demorado. Agora é um sábado à tarde.
-
-#claudecode #webdesign #site #desenvolvimentoweb #ia #inteligenciaartificial #framermotion #vercel #uiux #ferramentasIA #semdesigner #produtividade`,
+    categoryId: 'aprendizado',
+    primaryLink: 'https://claude.ai/code',
+    primaryLabel: 'Abrir Claude Code',
+    isExternal: true,
+    author: '@joaoguirunas',
+    sourceUrl: 'https://docs.anthropic.com/en/docs/claude-code/quickstart',
+    longDescription: [
+      'Este é o passo a passo cronometrado para sair do zero e colocar um site profissional no ar usando o Claude Code — a CLI da Anthropic que roda direto no seu terminal. Diferente de um construtor no-code, aqui você descreve o site em português e o Claude escreve o código real (React, componentes, animações), que fica seu e versionável no Git.',
+      'O fluxo combina quatro peças que se encaixam: o Claude Code para orquestrar tudo, uma skill de design para o output não sair genérico, componentes prontos do 21st.dev para acelerar as seções, e o Framer Motion para as animações. Cada etapa abaixo tem um marco de tempo realista para você acompanhar.',
+      'É para quem nunca programou e quer um site bom de verdade sem contratar designer nem agência, e também para o dev que quer encurtar o tempo entre ideia e deploy. Ao final, o site vai estar publicado na Vercel com domínio próprio.',
+    ],
+    features: [
+      {
+        title: 'Instalação em 1 minuto',
+        description: 'Um único comando npm instala o Claude Code global. Feito uma vez, serve para todos os projetos.',
+        icon: 'setup',
+      },
+      {
+        title: 'Skill de design',
+        description: 'Uma skill de UI ensina o Claude a aplicar hierarquia, espaçamento e proporção de produto real, em vez do visual genérico padrão.',
+        icon: 'design',
+      },
+      {
+        title: 'Componentes do 21st.dev',
+        description: 'Hero, pricing e features prontos para colar. O Claude adapta cores, textos e fontes ao seu contexto automaticamente.',
+        icon: 'website',
+      },
+      {
+        title: 'Animações com Framer Motion',
+        description: 'Cada seção ganha transições suaves sem você escrever código de animação manualmente.',
+        icon: 'animejs',
+      },
+      {
+        title: 'Iteração por conversa',
+        description: 'Ajustes em linguagem natural — "aumenta o espaçamento", "muda a cor do botão" — aplicados na hora, sem refazer do zero.',
+        icon: 'message',
+      },
+      {
+        title: 'Deploy na Vercel',
+        description: 'Publicação em menos de 2 minutos com domínio próprio. Sem servidor para gerenciar.',
+        icon: 'deploy',
+      },
+    ],
+    body: [
+      { type: 'paragraph', text: 'Site profissional já foi caro e demorado. Com o setup certo no Claude Code, o caminho da ideia ao site no ar cabe numa tarde — e na prática, em poucos minutos. Os tempos abaixo são realistas para quem segue os passos na ordem.' },
+      { type: 'heading', text: 'Antes de começar' },
+      { type: 'paragraph', text: 'Você vai precisar de Node.js 18 ou superior e um terminal (Mac, Linux ou WSL no Windows). Tenha também uma conta na Anthropic para autenticar o Claude Code e uma conta gratuita na Vercel para o deploy no final.' },
+      { type: 'heading', text: 'Passo 1 — Instalar o Claude Code (~1 min)' },
+      { type: 'paragraph', text: 'Instale a CLI globalmente e autentique na primeira execução.' },
+      { type: 'code', language: 'bash', code: 'npm install -g @anthropic-ai/claude-code\nclaude' },
+      { type: 'heading', text: 'Passo 2 — Adicionar a skill de design (~30s)' },
+      { type: 'paragraph', text: 'Sem uma skill de design, o Claude tende a gerar interfaces genéricas. Uma skill de UI/UX o ensina a aplicar hierarquia visual, espaçamento e componentes de produto real. Instale a skill que preferir pelo gerenciador de skills do seu setup e confirme que ela aparece ativa.' },
+      { type: 'callout', text: 'Skills são plugáveis: o passo de instalação varia conforme a coleção que você usa. O importante é ter uma skill de UI ativa antes de pedir o site.' },
+      { type: 'heading', text: 'Passo 3 — Puxar um componente do 21st.dev (~1 min)' },
+      { type: 'paragraph', text: 'Acesse o 21st.dev, escolha um componente de hero (ou pricing, features) que combine com o projeto e copie o código. Cole no projeto dentro do Claude Code e peça para ele adaptar ao seu contexto — cores, textos e fontes.' },
+      { type: 'heading', text: 'Passo 4 — Conectar o Framer Motion (~30s)' },
+      { type: 'paragraph', text: 'Instale a biblioteca de animação. O Claude passa a gerenciar as transições de cada seção sem você escrever código de animação na mão.' },
+      { type: 'code', language: 'bash', code: 'npm install framer-motion' },
+      { type: 'heading', text: 'Passo 5 — Descrever o site (~1 min para o Claude construir)' },
+      { type: 'paragraph', text: 'Agora descreva o que quer em linguagem natural. Seja específico no tom, na paleta e nas seções:' },
+      { type: 'code', language: 'text', code: 'Cria um site para [tipo de negócio].\nTom: [profissional | criativo | minimalista].\nCores: [paleta].\nSeções: hero, serviços, depoimentos, contato.' },
+      { type: 'paragraph', text: 'O Claude monta os componentes, conecta as animações e organiza o layout.' },
+      { type: 'heading', text: 'Passo 6 — Iterar por conversa' },
+      { type: 'steps', items: [
+        'Aumenta o espaçamento do hero.',
+        'Muda a cor do botão principal para verde.',
+        'Adiciona uma seção de FAQ com 4 perguntas.',
+      ] },
+      { type: 'paragraph', text: 'Cada ajuste é aplicado na hora, sem refazer o projeto do zero.' },
+      { type: 'heading', text: 'Passo 7 — Deploy na Vercel (~2 min)' },
+      { type: 'paragraph', text: 'Quando estiver pronto, publique. Na primeira vez a CLI da Vercel pede login e cria o projeto; depois é só confirmar.' },
+      { type: 'code', language: 'bash', code: 'npm install -g vercel\nvercel deploy --prod' },
+      { type: 'callout', text: 'A Vercel cuida da hospedagem, do HTTPS e do domínio. Sem servidor para gerenciar — o site fica no ar com uma URL pública na hora.' },
+    ],
   },
   {
     slug: 'site-premium-de-um-unico-comando',
-    data: '2026-06-20',
+    data: '2026-06-22',
     slot: 'A',
     formato: 'Reel',
     titulo: 'Site Premium de Um Único Comando',
@@ -144,38 +98,77 @@ Site profissional já foi caro e demorado. Agora é um sábado à tarde.
     keyword_cta: 'WEB',
     pilar: 'Produção de Conteúdo com IA',
     duracao: '39s',
-    roteiro: `Dá pra criar um site que parece ter custado R$50.000 com um único comando no terminal.
-
-O workflow completo roda dentro do Claude Code.
-
-Primeiro, você instala o Claude Code no terminal.
-Depois adiciona a skill UI/UX Pro Max — ela faz o Claude gerar layouts modernos e interfaces polidas de forma automática.
-Então você puxa um componente hero do 21st.dev e joga no projeto.
-E conecta o Framer Motion para que cada seção ganhe animações suaves automaticamente.
-
-Quatro passos. Mas aqui está o atalho:
-Os quatro estão empacotados num repositório único.
-
-Em vez de configurar tudo na mão, você cola um comando.
-O Claude lê o repositório e constrói o site inteiro pra você.
-Layout, componentes, animações, deploy — tudo.
-
-Comenta WEB que eu te mando o repositório com o comando completo para você colar agora.`,
-    legenda: `Comenta WEB que eu te mando o repositório com o comando completo para você colar agora.
-
-Um único comando no terminal. Um site que parece ter custado R$50.000. Tudo rodando dentro do Claude Code — sem designer, sem agência, sem mensalidade de ferramenta de no-code.
-
-O stack que faz isso funcionar: UI/UX Pro Max (skill de design moderno no Claude) + componentes do 21st.dev + Framer Motion para animações. Os quatro passos empacotados num repositório só. 🏗️
-
-Você não configura nada manualmente. Cola o comando, o Claude lê o repositório e constrói tudo: layout, seções, animações, deploy no Vercel. Em minutos o site está no ar.
-
-Isso não é no-code genérico. É Claude Code com o setup certo.
-
-#claudecode #webdesign #desenvolvimentoweb #ia #inteligenciaartificial #framermotion #uiux #site #ferramentasIA #semdesigner #automacao #produtividade`,
+    categoryId: 'skills',
+    primaryLink: 'https://21st.dev',
+    primaryLabel: 'Explorar 21st.dev',
+    isExternal: true,
+    author: '@joaoguirunas',
+    sourceUrl: 'https://21st.dev',
+    longDescription: [
+      'A ideia aqui é empacotar um stack inteiro de criação de sites em um único ponto de partida, para que um só comando no Claude Code gere um site de alto padrão. Em vez de configurar cada peça na mão a cada projeto, você reúne tudo num repositório-template e aponta o Claude para ele.',
+      'O stack tem quatro peças: o Claude Code como cérebro no terminal, uma skill de design (UI/UX Pro Max) que faz o output sair polido em vez de genérico, componentes prontos do 21st.dev para as seções, e o Framer Motion para as animações. A diferença em relação ao tutorial cronometrado é o ângulo: aqui o foco é montar o template uma vez e reaproveitar com um comando.',
+      'É para quem quer repetibilidade — agências, freelancers e quem cria vários sites — e prefere clonar um setup pronto a refazer a configuração toda vez. O resultado é um site que parece ter custado caro, gerado a partir de uma descrição curta.',
+    ],
+    features: [
+      {
+        title: 'Stack empacotado',
+        description: 'Skill de design, componentes e biblioteca de animação reunidos num único repositório-template, prontos para clonar.',
+        icon: 'framework',
+      },
+      {
+        title: 'UI/UX Pro Max',
+        description: 'A skill de design que faz o Claude gerar layouts modernos e interfaces polidas de forma automática.',
+        icon: 'design',
+      },
+      {
+        title: 'Componentes do 21st.dev',
+        description: 'Marketplace de componentes React de alta qualidade — hero, pricing, features — que o Claude adapta ao seu projeto.',
+        icon: 'website',
+      },
+      {
+        title: 'Framer Motion incluído',
+        description: 'Animações de seção já previstas no template, sem configuração manual a cada projeto novo.',
+        icon: 'animejs',
+      },
+      {
+        title: 'Um comando, site inteiro',
+        description: 'Você cola um comando, o Claude lê o repositório e constrói layout, seções, animações e prepara o deploy.',
+        icon: 'automation',
+      },
+      {
+        title: 'Reaproveitável',
+        description: 'Monte o template uma vez e gere quantos sites quiser — ideal para quem entrega vários projetos.',
+        icon: 'plugin',
+      },
+    ],
+    body: [
+      { type: 'paragraph', text: 'O tutorial passo a passo monta o site fazendo cada etapa na hora. Aqui a estratégia é diferente: você configura o stack uma única vez dentro de um repositório-template e, depois, gera sites novos com um comando só. Vale a pena quando você cria sites com frequência.' },
+      { type: 'heading', text: 'As quatro peças do stack' },
+      { type: 'steps', items: [
+        'Claude Code — a CLI que lê o repositório e escreve o código.',
+        'Skill UI/UX Pro Max — garante layout moderno e interface polida em vez de design genérico.',
+        '21st.dev — componentes React prontos para as seções (hero, pricing, features).',
+        'Framer Motion — animações suaves de seção, já previstas no template.',
+      ] },
+      { type: 'heading', text: 'Passo 1 — Preparar o ambiente' },
+      { type: 'paragraph', text: 'Instale o Claude Code uma vez. Ele será o ponto de entrada para ler o template e construir o site.' },
+      { type: 'code', language: 'bash', code: 'npm install -g @anthropic-ai/claude-code' },
+      { type: 'heading', text: 'Passo 2 — Montar o repositório-template' },
+      { type: 'paragraph', text: 'Crie um projeto base com a skill de design ativa, os componentes do 21st.dev que você mais usa e o Framer Motion já instalado. Documente no CLAUDE.md do repositório a stack e as convenções, para o Claude aplicar em toda geração.' },
+      { type: 'code', language: 'bash', code: 'npm install framer-motion\n# componentes copiados do 21st.dev para src/components\n# skill de UI ativa + CLAUDE.md com a stack documentada' },
+      { type: 'callout', text: 'O CLAUDE.md é o que transforma o template num "comando único": ele diz ao Claude qual stack usar, quais componentes existem e qual o padrão visual — sem você repetir nada.' },
+      { type: 'heading', text: 'Passo 3 — O comando único' },
+      { type: 'paragraph', text: 'Com o template clonado, aponte o Claude para ele e descreva o site numa frase. Ele lê o repositório e constrói tudo: layout, seções, animações.' },
+      { type: 'code', language: 'text', code: 'Lê este repositório como base e cria um site para [negócio],\ntom [estilo], paleta [cores], seções hero + serviços + contato.\nUsa os componentes e a skill de design já configurados.' },
+      { type: 'heading', text: 'Passo 4 — Deploy' },
+      { type: 'paragraph', text: 'Publique na Vercel quando estiver satisfeito. Como o template já vem pronto, o ciclo descrição→site no ar leva minutos.' },
+      { type: 'code', language: 'bash', code: 'vercel deploy --prod' },
+      { type: 'callout', text: 'Isto não é no-code genérico: o código gerado é React real, seu e versionável. A vantagem do template é a repetibilidade — clone, descreva, publique.' },
+    ],
   },
   {
     slug: '7-comandos-claude-code-que-todo-dev-precisa',
-    data: '2026-06-20',
+    data: '2026-06-22',
     slot: 'B',
     formato: 'Carrossel',
     titulo: '7 Comandos Claude Code Que Todo Dev Precisa',
@@ -184,127 +177,74 @@ Isso não é no-code genérico. É Claude Code com o setup certo.
     keyword_cta: '(save post)',
     pilar: 'Ferramentas e Produtividade',
     duracao: '8 slides',
-    roteiro: `## Slide 1 — Capa
-
-**Texto principal:**
-7 COMANDOS CLAUDE CODE
-QUE TODO DEV PRECISA SABER
-
-**Subtítulo:**
-Salva esse post — você vai usar todos eles
-
----
-
-## Slide 2 — Comando 1
-
-**Título:** /clear — Memória zerada
-
-**O que faz:**
-Limpa o contexto da conversa atual sem fechar o terminal.
-
-**Quando usar:**
-Quando você começa uma tarefa nova e não quer que o Claude misture contexto de outro projeto.
-
-**Exemplo:**
-Terminou o componente de login. Vai começar o dashboard.
-\`/clear\` e começa do zero, sem confusão.
-
----
-
-## Slide 3 — Comando 2
-
-**Título:** /compact — Comprime o contexto
-
-**O que faz:**
-Resume todo o histórico da conversa em um bloco compacto e continua de onde parou.
-
-**Quando usar:**
-Quando a janela de contexto está enchendo e você quer continuar sem perder o fio da conversa.
-
-**Exemplo:**
-Sessão longa de desenvolvimento. Em vez de /clear e perder tudo, usa \`/compact\` e o Claude resume o que já foi feito e segue.
-
----
-
-## Slide 4 — Comando 3
-
-**Título:** /init — Cria o CLAUDE.md
-
-**O que faz:**
-Inicializa o arquivo CLAUDE.md no projeto — o arquivo de contexto permanente que o Claude lê automaticamente em todas as sessões.
-
-**Quando usar:**
-No início de qualquer projeto novo.
-
-**Exemplo:**
-Projeto de e-commerce. Você roda \`/init\` e escreve no CLAUDE.md: stack, convenções de código, tom de comunicação, o que nunca fazer. O Claude aplica em toda sessão futura.
-
----
-
-## Slide 5 — Comando 4
-
-**Título:** /doctor — Diagnóstico do ambiente
-
-**O que faz:**
-Verifica se o ambiente Claude Code está configurado corretamente — dependências, permissões, MCPs ativos.
-
-**Quando usar:**
-Quando algo não está funcionando e você quer entender o problema antes de debugar na mão.
-
-**Exemplo:**
-MCP do Notion não conecta. Você roda \`/doctor\` e descobre que falta uma variável de ambiente.
-
----
-
-## Slide 6 — Comando 5
-
-**Título:** /cost — Quanto você está gastando
-
-**O que faz:**
-Exibe o custo de tokens da sessão atual em tempo real.
-
-**Quando usar:**
-Para monitorar consumo em projetos grandes ou antes de rodar uma tarefa cara.
-
-**Exemplo:**
-Vai pedir para o Claude refatorar 50 arquivos. Roda \`/cost\` antes e depois para entender o custo real da operação.
-
----
-
-## Slide 7 — Comando 6 e 7
-
-**Título:** /review e /think
-
-**Comando 6 — /review:**
-Pede uma revisão crítica do código atual. O Claude analisa, aponta problemas e sugere melhorias sem reescrever tudo.
-
-**Quando usar:**
-Antes de fazer commit. O Claude funciona como code reviewer automático.
-
-**Comando 7 — /think:**
-Ativa raciocínio estendido antes de responder. Modo mais lento, mais profundo.
-
-**Quando usar:**
-Para problemas de arquitetura, decisões de design técnico, bugs difíceis de reproduzir.
-
----
-
-## Slide 8 — CTA
-
-**Texto:**
-Salva esse post — esses comandos economizam horas toda semana.
-
-Qual você não conhecia? Comenta embaixo.`,
-    legenda: `Salva esse post — você vai precisar desses comandos antes do fim da semana.
-
-A maioria usa o Claude Code só pelo chat. Digita, lê, itera. Mas existe uma camada de comandos que muda completamente como você trabalha com a ferramenta.
-
-7 que todo dev precisa conhecer: /clear (zera contexto), /compact (comprime sem perder histórico), /init (cria o CLAUDE.md do projeto), /doctor (diagnostica o ambiente), /cost (monitora gasto de tokens), /review (code review automático) e /think (raciocínio profundo para problemas difíceis). 🤖
-
-Cada um desses resolve um problema real que você já enfrentou — sessão com contexto misturado, ambiente com bug misterioso, code review que você esquece de fazer antes do commit.
-
-Qual você não conhecia? Comenta embaixo.
-
-#claudecode #desenvolvimentoweb #dev #programacao #ia #inteligenciaartificial #ferramentasIA #produtividade #developer #codigo #aitools #automacao`,
+    categoryId: 'skills',
+    primaryLink: 'https://docs.anthropic.com/en/docs/claude-code/slash-commands',
+    primaryLabel: 'Doc oficial dos comandos',
+    isExternal: true,
+    author: '@joaoguirunas',
+    sourceUrl: 'https://docs.anthropic.com/en/docs/claude-code/slash-commands',
+    longDescription: [
+      'A maioria usa o Claude Code só pelo chat: digita, lê, itera. Mas existe uma camada de comandos de barra (slash commands) que muda como você trabalha — gerenciando contexto, custo e qualidade sem sair do terminal. Este guia cobre os comandos nativos essenciais, cada um com o que faz e quando usar.',
+      'Os comandos foram conferidos contra a documentação oficial do Claude Code. Eles resolvem problemas reais do dia a dia: contexto misturado entre tarefas, janela de contexto enchendo, ambiente com bug misterioso, gasto de tokens sem controle e code review esquecido antes do commit.',
+      'É para qualquer dev que já usa o Claude Code e quer extrair mais da ferramenta. Não precisa decorar tudo de uma vez — comece pelos que resolvem a sua dor mais frequente.',
+    ],
+    features: [
+      {
+        title: '/clear',
+        description: 'Zera o contexto da conversa atual sem fechar o terminal. Use ao trocar de tarefa para o Claude não misturar contextos.',
+        icon: 'setup',
+      },
+      {
+        title: '/compact',
+        description: 'Resume o histórico em um bloco compacto e continua de onde parou. Ideal quando a janela de contexto está enchendo.',
+        icon: 'carousel',
+      },
+      {
+        title: '/init',
+        description: 'Analisa o projeto e cria o CLAUDE.md — o arquivo de contexto permanente lido automaticamente em toda sessão.',
+        icon: 'book',
+      },
+      {
+        title: '/doctor',
+        description: 'Diagnostica a saúde da instalação do Claude Code: dependências, configuração e conexões. Rode quando algo não funciona.',
+        icon: 'crm',
+      },
+      {
+        title: '/cost',
+        description: 'Mostra o uso e o custo estimado de tokens da sessão atual. Útil para monitorar tarefas grandes.',
+        icon: 'ads',
+      },
+      {
+        title: '/review',
+        description: 'Pede uma revisão crítica do código. O Claude aponta problemas e sugere melhorias — code reviewer automático antes do commit.',
+        icon: 'github',
+      },
+    ],
+    body: [
+      { type: 'paragraph', text: 'Sete recursos que economizam horas por semana. Os seis primeiros são comandos de barra nativos do Claude Code; o sétimo é o modo de raciocínio estendido, ativado por palavras-chave no seu prompt. Todos foram conferidos contra a documentação oficial.' },
+      { type: 'heading', text: '1. /clear — memória zerada' },
+      { type: 'paragraph', text: 'Limpa o contexto da conversa atual sem fechar o terminal. Terminou o componente de login e vai começar o dashboard? Rode /clear e comece do zero, sem o Claude arrastar contexto antigo.' },
+      { type: 'code', language: 'text', code: '/clear' },
+      { type: 'heading', text: '2. /compact — comprime o contexto' },
+      { type: 'paragraph', text: 'Resume todo o histórico da conversa num bloco compacto e segue de onde parou. Em sessões longas, é a alternativa ao /clear quando você não quer perder o fio do que já foi feito.' },
+      { type: 'code', language: 'text', code: '/compact' },
+      { type: 'heading', text: '3. /init — cria o CLAUDE.md' },
+      { type: 'paragraph', text: 'Analisa o projeto e gera o CLAUDE.md, o arquivo de contexto permanente que o Claude lê automaticamente em todas as sessões. Escreva nele a stack, as convenções de código, o tom de comunicação e o que nunca fazer — e o Claude aplica em toda sessão futura.' },
+      { type: 'code', language: 'text', code: '/init' },
+      { type: 'heading', text: '4. /doctor — diagnóstico do ambiente' },
+      { type: 'paragraph', text: 'Verifica a saúde da instalação do Claude Code: dependências, configuração e conexões (incluindo MCPs). Quando algo não funciona, rode antes de debugar na mão — costuma apontar o problema direto.' },
+      { type: 'code', language: 'text', code: '/doctor' },
+      { type: 'heading', text: '5. /cost — quanto você está gastando' },
+      { type: 'paragraph', text: 'Mostra o uso e o custo estimado de tokens da sessão atual. Antes de pedir uma refatoração grande (digamos, 50 arquivos), dá pra ter ideia do tamanho da operação.' },
+      { type: 'code', language: 'text', code: '/cost' },
+      { type: 'callout', text: 'Em planos de assinatura, o /cost reflete uso de tokens da sessão; a cobrança real depende do seu plano. É um termômetro de consumo, não a fatura.' },
+      { type: 'heading', text: '6. /review — code review automático' },
+      { type: 'paragraph', text: 'Pede uma revisão crítica do código atual. O Claude analisa, aponta problemas e sugere melhorias sem reescrever tudo. Use antes de cada commit — vira um code reviewer sempre disponível.' },
+      { type: 'code', language: 'text', code: '/review' },
+      { type: 'heading', text: '7. Raciocínio estendido — pensar mais fundo' },
+      { type: 'paragraph', text: 'Para problemas difíceis (arquitetura, bugs que não reproduzem, decisões de design), o Claude Code tem um modo de raciocínio estendido. Ele não é um comando de barra: você o ativa escrevendo palavras-chave no próprio pedido, como "think", "think harder" ou "ultrathink" — quanto mais forte a palavra, maior o orçamento de raciocínio.' },
+      { type: 'code', language: 'text', code: 'Revisa a arquitetura deste módulo de pagamentos. think harder.' },
+      { type: 'callout', text: 'Diferença que confunde muita gente: /clear, /compact, /init, /doctor, /cost e /review são comandos de barra. O raciocínio estendido é acionado por palavra-chave no prompt, não por "/think".' },
+    ],
   },
 ]

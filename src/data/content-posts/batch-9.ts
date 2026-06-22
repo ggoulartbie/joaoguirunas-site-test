@@ -5,38 +5,124 @@ export const batch9: ContentPost[] = [
     data: '2026-06-30',
     slot: 'A',
     formato: 'Reel',
-    titulo: 'App Full-Stack de Um Prompt no Claude Code',
+    titulo: 'App Full-Stack de Um Prompt no Bolt.new',
     ferramenta: 'Bolt.new (StackBlitz)',
     link: 'https://bolt.new',
-    roteiro: `A ferramenta de live coding que mais entrega apps full-stack premium no mercado — e é grátis.
+    categoryId: 'apps',
+    longDescription: [
+      'Bolt.new é um ambiente de desenvolvimento "agentic" do StackBlitz que roda inteiramente no navegador. Você descreve o app que quer, opcionalmente anexa uma referência visual, e o agente de IA escreve o código, instala dependências, sobe um servidor de preview e mostra o resultado funcionando — tudo sem você configurar máquina, runtime ou servidor local.',
+      'A diferença para um gerador no-code tradicional é que o Bolt entrega um projeto real: arquivos, dependências e um stack moderno (geralmente React/Vite ou frameworks Node) que você pode editar, versionar e levar para produção. Não é um wireframe descartável — é código que continua sendo código.',
+      'Ele já vem com as conexões que um app full-stack precisa: banco de dados e autenticação via Supabase, importação de design pelo Figma e publicação com domínio próprio via Netlify. E suporta os modelos mais avançados, incluindo o Claude Sonnet 4.6 — o que melhora muito a qualidade de UI e a limpeza do código gerado.',
+    ],
+    features: [
+      {
+        title: 'Geração full-stack a partir de um prompt',
+        description: 'Descreve o app em linguagem natural e o agente gera frontend, lógica e estrutura de projeto completos, já rodando em preview.',
+        icon: 'automation',
+      },
+      {
+        title: 'Referência visual via Figma',
+        description: 'Importe um design do Figma como referência para o app sair com o layout e a identidade que você quer, em vez de um template genérico.',
+        icon: 'design',
+      },
+      {
+        title: 'Banco e autenticação com Supabase',
+        description: 'Conecte um projeto Supabase para ter PostgreSQL, login e storage configurados — sem escrever SQL nem montar backend do zero.',
+        icon: 'database',
+      },
+      {
+        title: 'Deploy com domínio próprio (Netlify)',
+        description: 'Quando o app estiver pronto, publique direto pelo Bolt via Netlify, com domínio customizado, sem sair do navegador.',
+        icon: 'deploy',
+      },
+      {
+        title: 'Suporte ao Claude Sonnet 4.6',
+        description: 'Use os modelos mais avançados da Anthropic dentro do Bolt para output mais polido, animações reais e código mais limpo.',
+        icon: 'agents',
+      },
+      {
+        title: 'Tudo no navegador, sem setup local',
+        description: 'O ambiente StackBlitz roda no browser: sem instalar Node, sem configurar servidor, sem ambiente de dev na sua máquina.',
+        icon: 'website',
+      },
+    ],
+    primaryLink: 'https://bolt.new',
+    primaryLabel: 'Abrir o Bolt.new',
+    isExternal: true,
+    sourceUrl: 'https://bolt.new',
+    author: '@joaoguirunas',
+    authorUrl: 'https://instagram.com/joaoguirunas',
+    body: [
+      {
+        type: 'heading',
+        text: 'Por que Bolt.new e não um gerador no-code',
+      },
+      {
+        type: 'paragraph',
+        text: 'A maioria das ferramentas "sem código" entrega um layout fechado que você não consegue evoluir. O Bolt entrega um projeto de verdade rodando no StackBlitz: arquivos, dependências e um stack moderno que você edita, conecta a serviços e leva para produção. Você ganha a velocidade do no-code sem abrir mão de continuar como dev.',
+      },
+      {
+        type: 'heading',
+        text: 'Passo a passo: do prompt ao app no ar',
+      },
+      {
+        type: 'steps',
+        items: [
+          'Abra https://bolt.new e faça login (a conta StackBlitz serve).',
+          'Escreva um prompt claro do que o app faz: público, telas principais, dados que precisa guardar e a ação central. Quanto mais específico o brief, menos retrabalho.',
+          'Opcional: importe uma referência visual do Figma para o app sair com o design que você quer, não com um template padrão.',
+          'Escolha o modelo Claude Sonnet 4.6 e mande gerar. O agente cria os arquivos, instala dependências e sobe o preview.',
+          'Itere por chat: peça ajustes de UI, novas telas ou regras de negócio. Cada pedido vira uma alteração de código real.',
+          'Conecte um projeto Supabase quando precisar de banco e login — o Bolt cuida da configuração de auth e PostgreSQL.',
+          'Publique com Netlify direto pelo Bolt para colocar o app no ar com domínio próprio.',
+        ],
+      },
+      {
+        type: 'heading',
+        text: 'Um prompt inicial que funciona',
+      },
+      {
+        type: 'paragraph',
+        text: 'Use uma estrutura que diga o quê, para quem e com quais dados. Exemplo de prompt de partida:',
+      },
+      {
+        type: 'code',
+        language: 'text',
+        code: `Crie um app de lista de tarefas com login.
 
-Enquanto as outras no-code entregam template genérico, essa entrega UI polida, animações reais e código limpo desde o primeiro render.
+Público: profissionais que organizam projetos pessoais.
+Telas: login, dashboard com tarefas agrupadas por projeto,
+tela de criar/editar tarefa.
+Dados a guardar: usuário, projetos, tarefas (título, status,
+prazo, projeto).
+Ação central: marcar tarefa como concluída e ver o progresso
+por projeto.
 
-O processo tem três passos.
-Você descreve o app que quer criar.
-Joga uma referência de design — pode ser um print de produto que você admira.
-Aperta gerar.
-
-Em minutos: app funcional com banco de dados, autenticação e hospedagem configurados.
-Sem precisar mexer em backend, sem configurar servidor, sem escrever uma linha de SQL.
-
-Funciona com os melhores modelos de AI, incluindo Claude Sonnet 4.6.
-E quando estiver pronto, o app vai ao ar com domínio próprio em instantes.
-
-Não é no-code. É Claude Code no melhor setup de build que existe agora.
-
-Comenta APP que eu te mando o link direto agora.`,
-    legenda: `Comenta APP que eu te mando o link direto agora.
-
-App full-stack com banco de dados, autenticação e hospedagem — criado a partir de um prompt e uma referência de design. Sem escrever backend. Sem configurar servidor. Sem tocar em SQL.
-
-A ferramenta mais bem ranqueada de live coding do mercado faz isso, de graça. Enquanto as outras no-code entregam template 2019, essa entrega UI polida, animações funcionando e código limpo. Você descreve, joga a referência visual, aperta gerar. 🚀
-
-Funciona com Claude Sonnet 4.6 — o modelo mais avançado da Anthropic. E o app vai ao ar com domínio próprio em instantes, sem precisar configurar nada de infraestrutura.
-
-Isso é o que acontece quando você combina o modelo certo com a ferramenta certa.
-
-#claudecode #appbuilder #fullstack #ia #inteligenciaartificial #ferramentasIA #desenvolvimentoweb #semcodigo #claudesonnet #aitools #automacao #startup`,
+Visual: limpo, minimalista, com micro-animações nas transições.
+Use Supabase para login e banco de dados.`,
+      },
+      {
+        type: 'callout',
+        text: 'Conecte o Supabase antes de pedir telas com login. Se você pedir autenticação sem ter o projeto Supabase ligado, o app vai gerar a UI mas não terá onde persistir os usuários.',
+      },
+      {
+        type: 'heading',
+        text: 'Boas práticas para um resultado premium',
+      },
+      {
+        type: 'steps',
+        items: [
+          'Anexe sempre uma referência visual (Figma ou print) — é o que separa um app genérico de um que parece produto.',
+          'Peça uma tela por vez nas iterações grandes: é mais fácil revisar e o agente erra menos.',
+          'Descreva o modelo de dados explicitamente (entidades e campos) para o Supabase nascer correto.',
+          'Antes de publicar, peça ao agente para revisar estados de loading, erro e tela vazia — onde apps gerados costumam falhar.',
+        ],
+      },
+      {
+        type: 'paragraph',
+        text: 'O segredo não é a ferramenta sozinha: é o brief bem feito mais o modelo certo (Claude Sonnet 4.6) mais uma referência visual. Com essa combinação, o Bolt sai de "protótipo bonito" para "app full-stack pronto para colocar no ar".',
+      },
+    ],
     keyword_cta: 'APP',
     pilar: 'Produção de Conteúdo com IA',
     duracao: '35s',
@@ -49,117 +135,135 @@ Isso é o que acontece quando você combina o modelo certo com a ferramenta cert
     titulo: 'As 5 Maiores Descobertas do Mês com Claude Code',
     ferramenta: '— (recap do mês)',
     link: 'PENDENTE: recap do mês — sem link específico',
-    roteiro: `## Slide 1 — Capa
+    categoryId: 'aprendizado',
+    longDescription: [
+      'Esta é uma retrospectiva editorial: as cinco descobertas que mais mudaram o que dá para produzir com Claude Code ao longo de um mês de testes intensivos de setups, ferramentas e workflows. Não é tutorial de uma ferramenta única — é um recap de aprendizados que você pode aplicar hoje, cada um com o "porquê" e o "como".',
+      'Os cinco eixos: skills mudam o nível do output mais do que o modelo escolhido; MCPs transformam o assistente em agente que age no mundo real; agentes em paralelo são outra categoria (não só velocidade); o brief é a parte mais subestimada do processo; e o CLAUDE.md é a memória persistente que quase ninguém usa.',
+      'Use esta página como índice: cada descoberta aponta para o tutorial correspondente neste portal, onde o tema é desenvolvido em profundidade. Leia o recap para o panorama, siga os links para a prática.',
+    ],
+    features: [
+      {
+        title: '1. Skills mudam o nível do output',
+        description: 'A qualidade depende mais das skills instaladas do que do modelo. Emil Kowalski Design, Impeccable Design e TasteSkill fazem mais pela UI do que trocar de modelo.',
+        icon: 'design',
+      },
+      {
+        title: '2. MCPs conectam o Claude ao mundo real',
+        description: 'Sem MCP, o Claude é uma janela de chat. Com MCPs (filesystem, ElevenLabs, Apify), ele age sozinho — produz áudio, pesquisa e gera imagem sem sair do terminal.',
+        icon: 'plugin',
+      },
+      {
+        title: '3. Agentes em paralelo são outra categoria',
+        description: 'Paralelo não é só rapidez: é especialização. Um agente pesquisador acha o que o copywriter não acharia. Produção de 4h passou a levar 1h, com mais qualidade.',
+        icon: 'agents',
+      },
+      {
+        title: '4. O brief é a parte mais subestimada',
+        description: 'Tempo gasto refinando o brief volta como menos iteração e menos retrabalho. O ganho vem da instrução específica, não de um modelo melhor.',
+        icon: 'copywriting',
+      },
+      {
+        title: '5. CLAUDE.md é memória que não se perde',
+        description: 'Um CLAUDE.md por projeto elimina o tempo reexplicando contexto. O Claude abre já sabendo objetivo, tom, stack e o que evitar.',
+        icon: 'obsidian',
+      },
+    ],
+    primaryLink: '/open-source',
+    primaryLabel: 'Ver todos os tutoriais',
+    isExternal: false,
+    author: '@joaoguirunas',
+    authorUrl: 'https://instagram.com/joaoguirunas',
+    body: [
+      {
+        type: 'paragraph',
+        text: 'Um mês inteiro testando setups, ferramentas e workflows de Claude Code rendeu cinco aprendizados que mudaram o que dá para produzir. Abaixo, cada descoberta com o que aprendi, o impacto real e como aplicar agora.',
+      },
+      {
+        type: 'heading',
+        text: '1. Skills são o diferencial que quase ninguém comenta',
+      },
+      {
+        type: 'paragraph',
+        text: 'A qualidade do que o Claude entrega depende mais das skills instaladas do que do modelo usado. Emil Kowalski Design (motion/easing), Impeccable Design (espaçamento e tipografia) e TasteSkill (referências de design) fizeram mais diferença na UI do que trocar de modelo. Sites e apps que pareciam genéricos passaram a parecer produto — sem mudar o processo, só o setup.',
+      },
+      {
+        type: 'callout',
+        text: 'Antes de reclamar do resultado, pergunte: "quais skills eu tenho instaladas?". O setup vem antes do prompt.',
+      },
+      {
+        type: 'heading',
+        text: '2. MCP transforma assistente em agente',
+      },
+      {
+        type: 'paragraph',
+        text: 'Sem MCPs, o Claude é uma janela de chat que depende de copiar e colar para trabalhar com outras ferramentas. Com MCPs, ele age no mundo real de forma autônoma: produção de áudio, pesquisa e geração de imagem passam a acontecer dentro do Claude Code, sem abrir outras plataformas.',
+      },
+      {
+        type: 'steps',
+        items: [
+          'Comece pelo filesystem — dá ao Claude acesso direto aos seus arquivos.',
+          'Adicione ElevenLabs para gerar voiceover dentro do fluxo.',
+          'Inclua um MCP de pesquisa (ex.: Apify) para trazer dados reais da web.',
+        ],
+      },
+      {
+        type: 'heading',
+        text: '3. Paralelo é outra categoria, não só velocidade',
+      },
+      {
+        type: 'paragraph',
+        text: 'Agentes em paralelo não são apenas mais rápidos: trazem especialização que não existe em fluxo sequencial. Um agente pesquisador encontra coisas que o copywriter não encontraria, porque o foco é diferente. Uma produção que levava 4 horas passou a levar 1 hora — e com qualidade melhor em cada parte.',
+      },
+      {
+        type: 'callout',
+        text: 'Para qualquer tarefa com mais de três entregas distintas, vale considerar paralelo. O custo de configurar se paga já na segunda rodada.',
+      },
+      {
+        type: 'heading',
+        text: '4. O Claude é tão bom quanto o brief que você dá',
+      },
+      {
+        type: 'paragraph',
+        text: 'Mais tempo refinando briefs significou menos tempo corrigindo outputs: menos iteração, menos retrabalho e mais consistência entre o pedido e a entrega. O tempo de produção caiu quando a instrução ficou mais específica — não quando o modelo melhorou.',
+      },
+      {
+        type: 'steps',
+        items: [
+          'Quem vai ler ou usar isso?',
+          'Qual ação eu quero que essa pessoa tome?',
+          'Qual formato específico eu preciso receber?',
+        ],
+      },
+      {
+        type: 'heading',
+        text: '5. CLAUDE.md é a memória que não se perde',
+      },
+      {
+        type: 'paragraph',
+        text: 'Um CLAUDE.md por projeto elimina o tempo perdido reexplicando contexto em cada sessão nova. O Claude abre já sabendo quem é o criador, qual o tom, o que evitar e qual o stack técnico. As sessões começam no ponto certo, sem dez minutos de contexto inicial toda vez.',
+      },
+      {
+        type: 'code',
+        language: 'markdown',
+        code: `# CLAUDE.md
 
-**Texto principal:**
-AS 5 MAIORES DESCOBERTAS
-DE JUNHO COM CLAUDE CODE
+## Objetivo do projeto
+O que estamos construindo e para quem.
 
-**Subtítulo:**
-Retrospectiva — o que aprendi e o que você pode aplicar agora
+## Tom e voz
+Como escrever (formal/informal, PT-BR, etc.).
 
----
+## Stack técnica
+Frameworks, libs e convenções do projeto.
 
-## Slide 2 — Descoberta 1: Skills mudam o nível do output
-
-**Título:** 1. Skills são o diferencial que ninguém fala
-
-O que aprendi:
-A qualidade do que o Claude entrega depende mais das skills instaladas do que do modelo usado. Emil Kowalski Design, Impeccable Design e TasteSkill fizeram mais diferença nos resultados de UI do que trocar de modelo.
-
-Impacto:
-Sites e apps que antes pareciam genéricos passaram a parecer produto de verdade — sem mudar nada no processo, só no setup.
-
-Como aplicar:
-Antes de reclamar do resultado, pergunte: "Quais skills eu tenho instaladas?" O setup vem antes do prompt.
-
----
-
-## Slide 3 — Descoberta 2: MCPs conectam o Claude ao mundo real
-
-**Título:** 2. MCP transforma assistente em agente
-
-O que aprendi:
-Sem MCPs, o Claude é uma janela de chat que precisa de copiar e colar para funcionar com outras ferramentas. Com MCPs (Apify, ElevenLabs, Higgsfield), o Claude age no mundo real autonomamente.
-
-Impacto:
-Produção de áudio, pesquisa de Instagram e geração de imagem passaram a acontecer dentro do Claude Code — sem abrir outras plataformas.
-
-Como aplicar:
-Instale pelo menos filesystem, ElevenLabs e Apify. São os três que mais impactam fluxo de produção de conteúdo.
-
----
-
-## Slide 4 — Descoberta 3: Agentes em paralelo multiplicam capacidade
-
-**Título:** 3. Paralelo é diferente de rápido — é outra categoria
-
-O que aprendi:
-Agentes em paralelo não é só velocidade. É capacidade de especialização que não existe em fluxo sequencial. Um agente pesquisador encontra coisas que o agente copywriter não encontraria — porque o foco é diferente.
-
-Impacto:
-Produção de conteúdo que levava 4 horas passou a ser feita em 1 hora — com qualidade melhor em cada parte.
-
-Como aplicar:
-Para qualquer tarefa com mais de 3 entregas diferentes, vale considerar paralelo. O overhead de configurar é recuperado na segunda rodada.
-
----
-
-## Slide 5 — Descoberta 4: O brief é a parte mais importante
-
-**Título:** 4. O Claude é tão bom quanto o brief que você dá
-
-O que aprendi:
-Passei mais tempo refinando briefs e menos tempo corrigindo outputs. O resultado: menos iteração, menos retrabalho, mais consistência entre o que eu pedi e o que chegou.
-
-Impacto:
-Tempo médio de produção por post caiu quando a instrução ficou mais específica — não quando o modelo melhorou.
-
-Como aplicar:
-Antes de colar o prompt, responda: quem vai ler isso, qual ação eu quero que tome, qual formato específico preciso. Essas três perguntas eliminam 80% do retrabalho.
-
----
-
-## Slide 6 — Descoberta 5: CLAUDE.md é o setup mais subestimado
-
-**Título:** 5. CLAUDE.md é memória que não se perde
-
-O que aprendi:
-Criar um CLAUDE.md por projeto elimina o tempo perdido reexplicando contexto em cada sessão nova. O Claude abre já sabendo quem é o criador, qual é o tom, o que evitar, o stack técnico.
-
-Impacto:
-Sessões de trabalho começam no ponto certo em vez de 10 minutos de contexto inicial toda vez.
-
-Como aplicar:
-Crie um CLAUDE.md para cada projeto que você usa com frequência. Coloque: objetivo do projeto, regras de tom, stack técnica, o que nunca fazer. Atualiza à medida que o projeto evolui.
-
----
-
-## Slide 7 — O que vem em julho + CTA
-
-**Título:** O que vem em julho
-
-Em julho, o foco vai ser:
-— Workflows completos de produção (do brief ao post publicado)
-— Automações com mais MCPs
-— Casos reais de empresários usando Claude Code no Brasil
-
-Se você não quer perder nada, segue o perfil agora.
-
-Salva esse post — é o resumo mais direto do que funcionou em junho.
-
-Qual descoberta foi mais útil para você? Comenta o número embaixo.`,
-    legenda: `Salva esse post — é o resumo mais direto do que funcionou em junho com Claude Code.
-
-Junho foi intenso. Testei setups, ferramentas, workflows e formas de usar o Claude Code que não havia explorado antes. O carrossel tem as 5 descobertas que mais mudaram o que eu consigo produzir.
-
-Em resumo: skills mudam o nível do output mais do que o modelo (instale Emil Kowalski, Impeccable Design e TasteSkill), MCPs são o que conecta o Claude ao mundo real (Apify, ElevenLabs, Higgsfield no topo da lista), agentes em paralelo são outra categoria — não só velocidade, o brief é a parte mais subestimada do processo, e CLAUDE.md é memória persistente que a maioria não usa. 🤖
-
-Em julho vêm workflows completos de produção, mais automações e casos reais de empresários usando Claude Code no Brasil.
-
-Se você não está acompanhando, está vendo de longe um mercado se reorganizar.
-
-#claudecode #ia #inteligenciaartificial #ferramentasIA #retrospectiva #junho2026 #produtividade #automacao #aiagents #mcp #claudeskills #criadordeconteudo`,
+## Nunca fazer
+Regras e anti-padrões que devem ser evitados.`,
+      },
+      {
+        type: 'paragraph',
+        text: 'Junte os cinco: skills definem o teto de qualidade, MCPs dão braços ao agente, o paralelo multiplica a capacidade, o brief reduz o retrabalho e o CLAUDE.md guarda o contexto. É menos sobre o modelo da vez e mais sobre o sistema em volta dele.',
+      },
+    ],
     keyword_cta: '(save post)',
     pilar: 'Retrospectiva / Comunidade',
     duracao: '7 slides',
