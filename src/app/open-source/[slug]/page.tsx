@@ -24,10 +24,17 @@ function isPendente(link: string): boolean {
 // Mapeia ContentPost → props do SkillPage, com fallbacks para posts ainda
 // não enriquecidos com campos de tutorial (migração em andamento).
 function toSkillPageProps(post: ContentPost) {
+  // Fallback p/ posts NÃO migrados (restaurados sem campos de tutorial):
+  // usa a legenda limpa se existir, senão uma frase genérica derivada do título.
+  // Evita "O que é" / descrição vazios quando legenda foi removida (#26 strip).
+  const legendaText = plainLegenda(post)
+  const fallbackText =
+    legendaText || `${post.titulo} — recurso open source da curadoria de João Guirunas.`
+
   const longDescription =
     post.longDescription && post.longDescription.length > 0
       ? post.longDescription
-      : [plainLegenda(post)]
+      : [fallbackText]
 
   const link = isPendente(post.link) ? undefined : post.link
 
@@ -37,7 +44,7 @@ function toSkillPageProps(post: ContentPost) {
 
   return {
     title: post.titulo,
-    description: post.longDescription?.[0] ?? plainLegenda(post).slice(0, 180),
+    description: post.longDescription?.[0] ?? fallbackText.slice(0, 180),
     category: post.categoryLabel ?? meta.label,
     categoryColor: post.categoryColor ?? meta.color,
     longDescription,
@@ -67,7 +74,11 @@ export async function generateMetadata({
   const post = getPostBySlug(slug)
   if (!post) return {}
 
-  const description = (post.longDescription?.[0] ?? plainLegenda(post)).slice(0, 155)
+  const description = (
+    post.longDescription?.[0] ||
+    plainLegenda(post) ||
+    `${post.titulo} — recurso open source da curadoria de João Guirunas.`
+  ).slice(0, 155)
 
   return {
     title: `${post.titulo} | João Guirunas`,
