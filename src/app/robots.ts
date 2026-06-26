@@ -6,6 +6,8 @@ export default function robots(): MetadataRoute.Robots {
     rules: {
       userAgent: '*',
       allow: '/',
+      // Página de onboarding privada — fora do índice (vinha do robots.txt estático).
+      disallow: '/mentoria/onboarding',
     },
     sitemap: `${siteConfig.url}/sitemap.xml`,
   };

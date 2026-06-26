@@ -15,9 +15,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { path: '/open-source',               priority: 0.8, freq: 'weekly' },
     { path: '/workshop-1',                priority: 0.8, freq: 'monthly' },
     { path: '/mentoria/apresentacao',     priority: 0.7, freq: 'monthly' },
+    { path: '/mentoria/presencial',       priority: 0.7, freq: 'monthly' },
     // Learn
     { path: '/learn/multi-agent',         priority: 0.7, freq: 'monthly' },
     { path: '/learn/claude-code-skills',  priority: 0.7, freq: 'monthly' },
+    { path: '/learn/claude-design-brandbook', priority: 0.7, freq: 'monthly' },
+    { path: '/learn/google-stitch',       priority: 0.7, freq: 'monthly' },
     { path: '/learn/google-ads-ai',       priority: 0.7, freq: 'monthly' },
     { path: '/learn/meta-ads-ai',         priority: 0.7, freq: 'monthly' },
     { path: '/learn/seo-claude-code',     priority: 0.7, freq: 'monthly' },
@@ -68,7 +71,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
   // Evita drift: cobre automaticamente todos os slugs de /open-source/[slug],
   // incluindo posts restaurados, sem precisar manter lista hardcoded.
   const openSourceEntries: MetadataRoute.Sitemap = contentPosts.map((post) => ({
-    url: `${base}/open-source/${post.slug}/`,
+    url: `${base}/open-source/${post.slug}`,
     lastModified: now,
     changeFrequency: 'monthly' as const,
     priority: 0.7,

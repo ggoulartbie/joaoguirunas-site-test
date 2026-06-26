@@ -1,5 +1,0 @@
-User-agent: *
-Allow: /
-Disallow: /mentoria/onboarding
-
-Sitemap: https://joaoguirunas.com/sitemap.xml

@@ -81,11 +81,13 @@ export async function generateMetadata({
   ).slice(0, 155)
 
   return {
-    title: `${post.titulo} | João Guirunas`,
+    // Sufixo "| João Guirunas" vem do template raiz (layout); não repetir aqui.
+    title: post.titulo,
     description,
-    alternates: { canonical: `/open-source/${post.slug}/` },
+    // Canonical SEM barra final — é a URL servida em 200 (a versão com barra dá 308).
+    alternates: { canonical: `/open-source/${post.slug}` },
     openGraph: {
-      title: `${post.titulo} | João Guirunas`,
+      title: post.titulo,
       description,
       images: [{ url: '/images/hero-ultrawide.png', width: 1200, height: 630 }],
     },

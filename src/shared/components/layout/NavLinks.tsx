@@ -1,7 +1,13 @@
 'use client';
 
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
+import type { MouseEvent } from 'react';
+
+// Deixa cmd/ctrl/shift/alt + clique e botão do meio abrirem nova aba normalmente.
+function isModifiedClick(e: MouseEvent): boolean {
+  return e.metaKey || e.ctrlKey || e.shiftKey || e.altKey || e.button === 1;
+}
 
 const NAV_INTERNAL = [
   { href: '/open-source', label: 'Open-source' },
@@ -15,6 +21,7 @@ const NAV_EXTERNAL = [
 
 export function NavLinks() {
   const pathname = usePathname();
+  const router = useRouter();
 
   return (
     <nav className="hidden md:flex items-center" aria-label="Navegação principal">
@@ -28,6 +35,14 @@ export function NavLinks() {
             style={{
               fontFamily: 'var(--font-mono)',
               color: isActive ? 'var(--color-accent)' : 'rgba(255,255,255,0.45)',
+            }}
+            // Navegação imperativa: o canvas Spline do hero de /mentoria chama
+            // preventDefault() nos cliques de uma faixa do header, então o <Link>
+            // não navega. O onClick dispara no bubble mesmo com defaultPrevented.
+            onClick={(e) => {
+              if (isModifiedClick(e)) return;
+              e.preventDefault();
+              router.push(href);
             }}
             onMouseEnter={(e) => {
               if (!isActive) e.currentTarget.style.color = 'rgba(255,255,255,0.8)';
@@ -52,6 +67,13 @@ export function NavLinks() {
           style={{
             fontFamily: 'var(--font-mono)',
             color: 'rgba(255,255,255,0.45)',
+          }}
+          // Mesmo motivo dos links internos: garante a abertura mesmo se o hero
+          // chamar preventDefault(). Preserva modificadores/botão do meio.
+          onClick={(e) => {
+            if (isModifiedClick(e)) return;
+            e.preventDefault();
+            window.open(href, '_blank', 'noopener,noreferrer');
           }}
           onMouseEnter={(e) => {
             e.currentTarget.style.color = 'rgba(255,255,255,0.8)';

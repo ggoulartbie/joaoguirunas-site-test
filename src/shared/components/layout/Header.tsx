@@ -3,10 +3,16 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { useState } from 'react';
+import type { MouseEvent } from 'react';
 import { X, Menu } from 'lucide-react';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { NavLinks } from './NavLinks';
 import { Logo } from '@/shared/components/ui/Logo';
+
+// Deixa cmd/ctrl/shift/alt + clique e botão do meio abrirem nova aba normalmente.
+function isModifiedClick(e: MouseEvent): boolean {
+  return e.metaKey || e.ctrlKey || e.shiftKey || e.altKey || e.button === 1;
+}
 
 const NAV_INTERNAL = [
   { href: '/open-source', label: 'Open-source' },
@@ -21,6 +27,7 @@ const NAV_EXTERNAL = [
 export function Header() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const pathname = usePathname();
+  const router = useRouter();
 
   return (
     <header
@@ -81,7 +88,16 @@ export function Header() {
                 <li key={href}>
                   <Link
                     href={href}
-                    onClick={() => setMobileOpen(false)}
+                    // Navegação imperativa: o canvas Spline do hero de /mentoria
+                    // chama preventDefault() em cliques de uma faixa do header, o
+                    // que impede o <Link> de navegar. O onClick roda no bubble
+                    // mesmo com defaultPrevented.
+                    onClick={(e) => {
+                      setMobileOpen(false);
+                      if (isModifiedClick(e)) return;
+                      e.preventDefault();
+                      router.push(href);
+                    }}
                     className="flex items-center w-full px-3 py-3 min-h-[44px] text-[11px] font-medium uppercase tracking-widest transition-colors duration-150"
                     style={{
                       fontFamily: 'var(--font-mono)',
@@ -100,7 +116,14 @@ export function Header() {
                   href={href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  onClick={() => setMobileOpen(false)}
+                  // Mesmo motivo dos internos: garante abertura mesmo se o hero
+                  // chamar preventDefault(). Preserva modificadores/botão do meio.
+                  onClick={(e) => {
+                    setMobileOpen(false);
+                    if (isModifiedClick(e)) return;
+                    e.preventDefault();
+                    window.open(href, '_blank', 'noopener,noreferrer');
+                  }}
                   className="flex items-center w-full px-3 py-3 min-h-[44px] text-[11px] font-medium uppercase tracking-widest transition-colors duration-150"
                   style={{
                     fontFamily: 'var(--font-mono)',
