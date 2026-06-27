@@ -10,6 +10,7 @@ export const metadata: Metadata = {
     default: 'Área do Aluno',
     template: '%s | Área do Aluno',
   },
+  robots: { index: false, follow: false },
 }
 
 export default async function StudentLayout({

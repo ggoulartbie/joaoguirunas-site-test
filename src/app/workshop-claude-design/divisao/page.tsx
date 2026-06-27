@@ -6,6 +6,7 @@ export const metadata: Metadata = {
   alternates: {
     canonical: '/workshop-claude-design/divisao',
   },
+  robots: { index: false, follow: false },
 };
 
 const SURFACE = '#161322';

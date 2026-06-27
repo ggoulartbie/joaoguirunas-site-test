@@ -8,7 +8,7 @@ import { FacilitatorNote } from '../_components/FacilitatorNote';
 import { ExternalLink, InternalLink } from '../_components/ExternalLink';
 
 export const metadata: Metadata = {
-  title: 'Fase 07 — Encerramento | Workshop 2',
+  title: 'Fase 10 — Encerramento',
   description: 'Showcase individual, próximos passos e como continuar aprendendo com o programa de mentoria.',
   alternates: { canonical: '/workshop-2/encerramento' },
 };

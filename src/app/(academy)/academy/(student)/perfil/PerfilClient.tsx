@@ -709,6 +709,7 @@ export function PerfilClient({
 
   return (
     <div className="mx-auto max-w-2xl">
+      <h1 className="sr-only">Perfil</h1>
       <ProfileHeader
         profile={serverProfile ?? null}
         email={serverEmail}

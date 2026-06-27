@@ -4,9 +4,9 @@ import type { Metadata } from 'next';
 import { SkillPage } from '@/shared/components/ui';
 
 export const metadata: Metadata = {
-  title: 'Supabase',
+  title: 'Supabase com Claude Code — Backend PostgreSQL',
   description:
-    'Backend open source com PostgreSQL, Auth, Storage e Realtime para aplicacoes modernas.',
+    'Backend open source com PostgreSQL, Auth, Storage e Realtime para aplicações modernas, provisionado e gerenciado direto do Claude Code via terminal.',
   openGraph: {
     images: ['/images/og-default.png'],
   },
@@ -19,53 +19,53 @@ const features = [
   {
     title: 'PostgreSQL',
     description:
-      'Database PostgreSQL completo com extensoes, triggers e stored procedures. Performance enterprise.',
+      'Database PostgreSQL completo com extensões, triggers e stored procedures. Performance enterprise.',
     icon: '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M20.25 6.375c0 2.278-3.694 4.125-8.25 4.125S3.75 8.653 3.75 6.375m16.5 0c0-2.278-3.694-4.125-8.25-4.125S3.75 4.097 3.75 6.375m16.5 0v11.25c0 2.278-3.694 4.125-8.25 4.125s-8.25-1.847-8.25-4.125V6.375m16.5 0v3.75m-16.5-3.75v3.75m16.5 0v3.75C20.25 16.153 16.556 18 12 18s-8.25-1.847-8.25-4.125v-3.75m16.5 0c0 2.278-3.694 4.125-8.25 4.125s-8.25-1.847-8.25-4.125"/>',
   },
   {
     title: 'Row Level Security',
     description:
-      'Politicas de seguranca a nivel de linha para controle granular de acesso.',
+      'Políticas de segurança a nível de linha para controle granular de acesso.',
     icon: '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z"/>',
   },
   {
     title: 'Auth',
     description:
-      'Autenticacao pronta com OAuth, magic links, email/password e SSO. 20+ providers sociais.',
+      'Autenticação pronta com OAuth, magic links, email/password e SSO. 20+ providers sociais.',
     icon: '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15.75 5.25a3 3 0 013 3m3 0a6 6 0 01-7.029 5.912c-.563-.097-1.159.026-1.563.43L10.5 17.25H8.25v2.25H6v2.25H2.25v-2.818c0-.597.237-1.17.659-1.591l6.499-6.499c.404-.404.527-1 .43-1.563A6 6 0 1121.75 8.25z"/>',
   },
   {
     title: 'Storage',
     description:
-      'Armazenamento de arquivos com CDN global. Upload e transformacao de imagens integrados.',
+      'Armazenamento de arquivos com CDN global. Upload e transformação de imagens integrados.',
     icon: '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M2.25 12.75V12A2.25 2.25 0 014.5 9.75h15A2.25 2.25 0 0121.75 12v.75m-8.69-6.44l-2.12-2.12a1.5 1.5 0 00-1.061-.44H4.5A2.25 2.25 0 002.25 6v12a2.25 2.25 0 002.25 2.25h15A2.25 2.25 0 0021.75 18V9a2.25 2.25 0 00-2.25-2.25h-5.379a1.5 1.5 0 01-1.06-.44z"/>',
   },
   {
     title: 'Realtime',
     description:
-      'Subscriptions em tempo real via WebSocket. Mudancas no banco instantaneamente no frontend.',
+      'Subscriptions em tempo real via WebSocket. Mudanças no banco instantaneamente no frontend.',
     icon: '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3.75 13.5l10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75z"/>',
   },
   {
     title: 'Edge Functions',
     description:
-      'Serverless functions com Deno runtime no edge. APIs customizadas com latencia minima.',
+      'Serverless functions com Deno runtime no edge. APIs customizadas com latência mínima.',
     icon: '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M6.75 7.5l3 2.25-3 2.25m4.5 0h3m-9 8.25h13.5A2.25 2.25 0 0021 18V6a2.25 2.25 0 00-2.25-2.25H5.25A2.25 2.25 0 003 6v12a2.25 2.25 0 002.25 2.25z"/>',
   },
 ];
 
 const longDescription = [
-  'Supabase e a alternativa open source ao Firebase, oferecendo um backend completo com PostgreSQL, autenticacao, storage e realtime. Na nossa stack, e o backbone de dados para dashboards, APIs e aplicacoes que requerem persistencia.',
-  'Row Level Security (RLS) permite controle granular de acesso: cada usuario ve apenas seus dados, sem logica extra no backend. Auth integrado suporta 20+ providers OAuth, magic links e SSO enterprise.',
-  'Com Edge Functions rodando em Deno, e possivel criar APIs serverless com latencia minima. Realtime via WebSocket entrega mudancas no banco instantaneamente ao frontend.',
+  'Supabase é a alternativa open source ao Firebase, oferecendo um backend completo com PostgreSQL, autenticação, storage e realtime. Na nossa stack, é o backbone de dados para dashboards, APIs e aplicações que requerem persistência.',
+  'Row Level Security (RLS) permite controle granular de acesso: cada usuário vê apenas seus dados, sem lógica extra no backend. Auth integrado suporta 20+ providers OAuth, magic links e SSO enterprise.',
+  'Com Edge Functions rodando em Deno, é possível criar APIs serverless com latência mínima. Realtime via WebSocket entrega mudanças no banco instantaneamente ao frontend.',
 ];
 
 export default function SupabasePage() {
   return (
     <SkillPage
       title="Supabase"
-      description="Backend open source com PostgreSQL, Auth, Storage e Realtime para aplicacoes modernas."
-      category="Integracoes"
+      description="Backend open source com PostgreSQL, Auth, Storage e Realtime para aplicações modernas."
+      category="Integrações"
       categoryColor="integracoes"
       longDescription={longDescription}
       features={features}

@@ -7,19 +7,19 @@ import { siteConfig } from '@/config/site';
 export const metadata: Metadata = {
   title: 'Apresentações com Claude + Gamma',
   description:
-    'Crie slides, e-books e infográficos diretamente no Claude. Gamma App integrado para layouts profissionais em um clique.',
+    'Crie slides, e-books e infográficos diretamente no Claude com o Gamma App integrado. Layouts profissionais em um clique, prontos para apresentar ou publicar.',
   alternates: { canonical: `${siteConfig.url}/skills/presentations` },
   openGraph: {
     title: 'Apresentações com Claude + Gamma | João Guirunas',
     description:
-      'Crie slides, e-books e infográficos diretamente no Claude. Gamma App integrado para layouts profissionais em um clique.',
+      'Crie slides, e-books e infográficos diretamente no Claude com o Gamma App integrado. Layouts profissionais em um clique, prontos para apresentar ou publicar.',
     url: `${siteConfig.url}/skills/presentations`,
     images: [{ url: `${siteConfig.url}/images/og-default.png`, width: 1200, height: 630 }],
   },
   twitter: {
     title: 'Apresentações com Claude + Gamma | João Guirunas',
     description:
-      'Crie slides, e-books e infográficos diretamente no Claude. Gamma App integrado para layouts profissionais em um clique.',
+      'Crie slides, e-books e infográficos diretamente no Claude com o Gamma App integrado. Layouts profissionais em um clique, prontos para apresentar ou publicar.',
   },
 };
 

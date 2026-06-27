@@ -5,21 +5,21 @@ import { SkillPage } from '@/shared/components/ui/SkillPage';
 import { siteConfig } from '@/config/site';
 
 export const metadata: Metadata = {
-  title: 'Remotion + Claude Code',
+  title: 'Remotion + Claude Code — Edição de Vídeo',
   description:
-    'Edite e crie vídeos com Claude Code. Cortes, legendas, split screen — tudo via prompt no terminal.',
+    'Edite e crie vídeos com Claude Code usando Remotion. Cortes, legendas e split screen gerados via prompt no terminal, com vídeo programático em React.',
   alternates: { canonical: `${siteConfig.url}/skills/remotion` },
   openGraph: {
-    title: 'Remotion + Claude Code | João Guirunas',
+    title: 'Remotion + Claude Code — Edição de Vídeo | João Guirunas',
     description:
-      'Edite e crie vídeos com Claude Code. Cortes, legendas, split screen — tudo via prompt no terminal.',
+      'Edite e crie vídeos com Claude Code usando Remotion. Cortes, legendas e split screen gerados via prompt no terminal, com vídeo programático em React.',
     url: `${siteConfig.url}/skills/remotion`,
     images: [{ url: `${siteConfig.url}/images/og-default.png`, width: 1200, height: 630 }],
   },
   twitter: {
-    title: 'Remotion + Claude Code | João Guirunas',
+    title: 'Remotion + Claude Code — Edição de Vídeo | João Guirunas',
     description:
-      'Edite e crie vídeos com Claude Code. Cortes, legendas, split screen — tudo via prompt no terminal.',
+      'Edite e crie vídeos com Claude Code usando Remotion. Cortes, legendas e split screen gerados via prompt no terminal, com vídeo programático em React.',
   },
 };
 

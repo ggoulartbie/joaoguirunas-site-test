@@ -5,21 +5,21 @@ import { SkillPage } from '@/shared/components/ui/SkillPage';
 import { siteConfig } from '@/config/site';
 
 export const metadata: Metadata = {
-  title: 'Design System Skill',
+  title: 'Design System Skill para Claude Code',
   description:
-    'Skill que mantém consistência visual em todo código gerado. Claude aprende seu design system e aplica automaticamente.',
+    'Skill que mantém consistência visual em todo código gerado pelo Claude Code. Ele aprende seu design system — cores, tipografia e componentes — e o aplica sozinho.',
   alternates: { canonical: `${siteConfig.url}/skills/design-system` },
   openGraph: {
-    title: 'Design System Skill | João Guirunas',
+    title: 'Design System Skill para Claude Code | João Guirunas',
     description:
-      'Skill que mantém consistência visual em todo código gerado. Claude aprende seu design system e aplica automaticamente.',
+      'Skill que mantém consistência visual em todo código gerado pelo Claude Code. Ele aprende seu design system — cores, tipografia e componentes — e o aplica sozinho.',
     url: `${siteConfig.url}/skills/design-system`,
     images: [{ url: `${siteConfig.url}/images/og-default.png`, width: 1200, height: 630 }],
   },
   twitter: {
-    title: 'Design System Skill | João Guirunas',
+    title: 'Design System Skill para Claude Code | João Guirunas',
     description:
-      'Skill que mantém consistência visual em todo código gerado. Claude aprende seu design system e aplica automaticamente.',
+      'Skill que mantém consistência visual em todo código gerado pelo Claude Code. Ele aprende seu design system — cores, tipografia e componentes — e o aplica sozinho.',
   },
 };
 

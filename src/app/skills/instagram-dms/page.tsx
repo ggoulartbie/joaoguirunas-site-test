@@ -7,19 +7,19 @@ import { siteConfig } from '@/config/site';
 export const metadata: Metadata = {
   title: 'Claude Respondendo DMs do Instagram',
   description:
-    'Configure o Claude como vendedor 24/7 no Instagram. Responde directs automaticamente com sua chave de API.',
+    'Configure o Claude como vendedor 24/7 no Instagram. Ele responde aos directs automaticamente usando sua chave de API, qualifica leads e agiliza o atendimento.',
   alternates: { canonical: `${siteConfig.url}/skills/instagram-dms` },
   openGraph: {
     title: 'Claude Respondendo DMs do Instagram | João Guirunas',
     description:
-      'Configure o Claude como vendedor 24/7 no Instagram. Responde directs automaticamente com sua chave de API.',
+      'Configure o Claude como vendedor 24/7 no Instagram. Ele responde aos directs automaticamente usando sua chave de API, qualifica leads e agiliza o atendimento.',
     url: `${siteConfig.url}/skills/instagram-dms`,
     images: [{ url: `${siteConfig.url}/images/og-default.png`, width: 1200, height: 630 }],
   },
   twitter: {
     title: 'Claude Respondendo DMs do Instagram | João Guirunas',
     description:
-      'Configure o Claude como vendedor 24/7 no Instagram. Responde directs automaticamente com sua chave de API.',
+      'Configure o Claude como vendedor 24/7 no Instagram. Ele responde aos directs automaticamente usando sua chave de API, qualifica leads e agiliza o atendimento.',
   },
 };
 

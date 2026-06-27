@@ -51,6 +51,9 @@ export default function QuemSomosPage() {
         height: '100%', gap: 0,
       }}>
 
+        <h1 className="sr-only">Quem somos — Growth Sales</h1>
+
+
         {/* ── Hero header ── */}
         <div style={{ textAlign: 'center', marginBottom: 'clamp(16px, 2.5vh, 28px)' }}>
           {/* Kicker */}

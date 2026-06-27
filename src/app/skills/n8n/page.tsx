@@ -5,21 +5,21 @@ import { SkillPage } from '@/shared/components/ui/SkillPage';
 import { siteConfig } from '@/config/site';
 
 export const metadata: Metadata = {
-  title: 'Claude Code vs N8N',
+  title: 'Claude Code vs n8n — Migre suas Automações',
   description:
-    'Migre suas automações do N8N para o Claude Code. Webhooks, APIs, lógica condicional — tudo no terminal.',
+    'Migre suas automações do n8n para o Claude Code. Webhooks, APIs e lógica condicional rodando direto no terminal, com mais controle e sem servidor de workflow.',
   alternates: { canonical: `${siteConfig.url}/skills/n8n` },
   openGraph: {
-    title: 'Claude Code vs N8N | João Guirunas',
+    title: 'Claude Code vs n8n — Migre suas Automações | João Guirunas',
     description:
-      'Migre suas automações do N8N para o Claude Code. Webhooks, APIs, lógica condicional — tudo no terminal.',
+      'Migre suas automações do n8n para o Claude Code. Webhooks, APIs e lógica condicional rodando direto no terminal, com mais controle e sem servidor de workflow.',
     url: `${siteConfig.url}/skills/n8n`,
     images: [{ url: `${siteConfig.url}/images/og-default.png`, width: 1200, height: 630 }],
   },
   twitter: {
-    title: 'Claude Code vs N8N | João Guirunas',
+    title: 'Claude Code vs n8n — Migre suas Automações | João Guirunas',
     description:
-      'Migre suas automações do N8N para o Claude Code. Webhooks, APIs, lógica condicional — tudo no terminal.',
+      'Migre suas automações do n8n para o Claude Code. Webhooks, APIs e lógica condicional rodando direto no terminal, com mais controle e sem servidor de workflow.',
   },
 };
 

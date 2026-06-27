@@ -5,21 +5,21 @@ import { SkillPage } from '@/shared/components/ui/SkillPage';
 import { siteConfig } from '@/config/site';
 
 export const metadata: Metadata = {
-  title: 'Learn Your Way — Google',
+  title: 'Learn Your Way: Estudo Personalizado com IA do Google',
   description:
-    'IA que aprende como você aprende. Mapas mentais, áudios, quizzes personalizados para qualquer conteúdo.',
+    'Ferramenta gratuita do Google que transforma PDFs e artigos em mapas mentais, áudios e quizzes personalizados — 11% mais retenção de conhecimento.',
   alternates: { canonical: `${siteConfig.url}/learn/learn-your-way` },
   openGraph: {
-    title: 'Learn Your Way — Google | João Guirunas',
+    title: 'Learn Your Way: Estudo Personalizado com IA do Google | João Guirunas',
     description:
-      'IA que aprende como você aprende. Mapas mentais, áudios, quizzes personalizados para qualquer conteúdo.',
+      'Ferramenta gratuita do Google que transforma PDFs e artigos em mapas mentais, áudios e quizzes personalizados — 11% mais retenção de conhecimento.',
     url: `${siteConfig.url}/learn/learn-your-way`,
     images: [{ url: `${siteConfig.url}/images/og-default.png`, width: 1200, height: 630 }],
   },
   twitter: {
-    title: 'Learn Your Way — Google | João Guirunas',
+    title: 'Learn Your Way: Estudo Personalizado com IA do Google | João Guirunas',
     description:
-      'IA que aprende como você aprende. Mapas mentais, áudios, quizzes personalizados para qualquer conteúdo.',
+      'Ferramenta gratuita do Google que transforma PDFs e artigos em mapas mentais, áudios e quizzes personalizados — 11% mais retenção de conhecimento.',
   },
 };
 

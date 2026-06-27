@@ -1,5 +1,11 @@
 import Link from 'next/link'
 import Image from 'next/image'
+import type { Metadata } from 'next'
+
+export const metadata: Metadata = {
+  title: 'Pagamento cancelado',
+  robots: { index: false, follow: false },
+}
 
 interface Props {
   searchParams: Promise<{ turma?: string }>

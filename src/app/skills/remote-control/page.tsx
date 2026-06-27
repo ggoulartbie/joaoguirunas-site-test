@@ -7,19 +7,19 @@ import { siteConfig } from '@/config/site';
 export const metadata: Metadata = {
   title: 'Claude Code Remote Control',
   description:
-    'Acesse seu Claude Code pelo celular. Um QR Code e seu setup local fica acessível de qualquer lugar.',
+    'Acesse seu Claude Code pelo celular. Escaneie um QR Code e seu setup local fica acessível de qualquer lugar, para acompanhar e comandar sessões à distância.',
   alternates: { canonical: `${siteConfig.url}/skills/remote-control` },
   openGraph: {
     title: 'Claude Code Remote Control | João Guirunas',
     description:
-      'Acesse seu Claude Code pelo celular. Um QR Code e seu setup local fica acessível de qualquer lugar.',
+      'Acesse seu Claude Code pelo celular. Escaneie um QR Code e seu setup local fica acessível de qualquer lugar, para acompanhar e comandar sessões à distância.',
     url: `${siteConfig.url}/skills/remote-control`,
     images: [{ url: `${siteConfig.url}/images/og-default.png`, width: 1200, height: 630 }],
   },
   twitter: {
     title: 'Claude Code Remote Control | João Guirunas',
     description:
-      'Acesse seu Claude Code pelo celular. Um QR Code e seu setup local fica acessível de qualquer lugar.',
+      'Acesse seu Claude Code pelo celular. Escaneie um QR Code e seu setup local fica acessível de qualquer lugar, para acompanhar e comandar sessões à distância.',
   },
 };
 

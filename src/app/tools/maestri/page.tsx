@@ -5,21 +5,21 @@ import { SkillPage } from '@/shared/components/ui/SkillPage';
 import { siteConfig } from '@/config/site';
 
 export const metadata: Metadata = {
-  title: 'Maestri',
+  title: 'Maestri: Comunicação entre Agentes Claude Code',
   description:
-    'Comunicação inter-agentes entre terminais. Conecte múltiplos Claude Code para colaboração em tempo real.',
+    'Conecte múltiplos terminais Claude Code para trabalho colaborativo: sticky notes compartilhadas, descoberta automática e workflows assíncronos entre agentes.',
   alternates: { canonical: `${siteConfig.url}/tools/maestri` },
   openGraph: {
-    title: 'Maestri | João Guirunas',
+    title: 'Maestri: Comunicação entre Agentes Claude Code | João Guirunas',
     description:
-      'Comunicação inter-agentes entre terminais. Conecte múltiplos Claude Code para colaboração em tempo real.',
+      'Conecte múltiplos terminais Claude Code para trabalho colaborativo: sticky notes compartilhadas, descoberta automática e workflows assíncronos entre agentes.',
     url: `${siteConfig.url}/tools/maestri`,
     images: [{ url: `${siteConfig.url}/images/og-default.png`, width: 1200, height: 630 }],
   },
   twitter: {
-    title: 'Maestri | João Guirunas',
+    title: 'Maestri: Comunicação entre Agentes Claude Code | João Guirunas',
     description:
-      'Comunicação inter-agentes entre terminais. Conecte múltiplos Claude Code para colaboração em tempo real.',
+      'Conecte múltiplos terminais Claude Code para trabalho colaborativo: sticky notes compartilhadas, descoberta automática e workflows assíncronos entre agentes.',
   },
 };
 

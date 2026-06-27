@@ -7,7 +7,7 @@ import { InlineCode } from '../_components/InlineCode';
 import { FacilitatorNote } from '../_components/FacilitatorNote';
 
 export const metadata: Metadata = {
-  title: 'Fase 03 — Arquiteto | Workshop 2',
+  title: 'Fase 03 — Arquiteto',
   description: 'O Arquiteto cria a smart-memory com wikilinks Obsidian e o design system completo — tokens, CSS vars e Tailwind config.',
   alternates: { canonical: '/workshop-2/arquiteto' },
 };

@@ -5,21 +5,21 @@ import { SkillPage } from '@/shared/components/ui/SkillPage';
 import { siteConfig } from '@/config/site';
 
 export const metadata: Metadata = {
-  title: 'Claude Cowork & Plugins',
+  title: 'Claude Cowork & Plugins — Módulos Prontos de IA',
   description:
-    'Módulos prontos que transformam o Claude em especialista da sua área. Open source, gratuitos, sem programação.',
+    'Módulos prontos que transformam o Claude em especialista da sua área, do marketing às vendas. Open source, gratuitos e sem precisar programar nada.',
   alternates: { canonical: `${siteConfig.url}/skills/cowork-plugins` },
   openGraph: {
-    title: 'Claude Cowork & Plugins | João Guirunas',
+    title: 'Claude Cowork & Plugins — Módulos Prontos de IA | João Guirunas',
     description:
-      'Módulos prontos que transformam o Claude em especialista da sua área. Open source, gratuitos, sem programação.',
+      'Módulos prontos que transformam o Claude em especialista da sua área, do marketing às vendas. Open source, gratuitos e sem precisar programar nada.',
     url: `${siteConfig.url}/skills/cowork-plugins`,
     images: [{ url: `${siteConfig.url}/images/og-default.png`, width: 1200, height: 630 }],
   },
   twitter: {
-    title: 'Claude Cowork & Plugins | João Guirunas',
+    title: 'Claude Cowork & Plugins — Módulos Prontos de IA | João Guirunas',
     description:
-      'Módulos prontos que transformam o Claude em especialista da sua área. Open source, gratuitos, sem programação.',
+      'Módulos prontos que transformam o Claude em especialista da sua área, do marketing às vendas. Open source, gratuitos e sem precisar programar nada.',
   },
 };
 

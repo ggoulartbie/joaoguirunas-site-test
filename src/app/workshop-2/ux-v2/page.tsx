@@ -7,7 +7,7 @@ import { InlineCode } from '../_components/InlineCode';
 import { FacilitatorNote } from '../_components/FacilitatorNote';
 
 export const metadata: Metadata = {
-  title: 'Fase 08 — UX Redesign | Workshop 2',
+  title: 'Fase 08 — UX Redesign',
   description: 'O Designer UX recebe o código do handoff e reconstrói a LP com os componentes do Claude Design — Versão 2.',
   alternates: { canonical: '/workshop-2/ux-v2' },
 };

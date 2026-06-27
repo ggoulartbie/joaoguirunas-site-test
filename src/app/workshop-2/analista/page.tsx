@@ -7,7 +7,7 @@ import { InlineCode } from '../_components/InlineCode';
 import { FacilitatorNote } from '../_components/FacilitatorNote';
 
 export const metadata: Metadata = {
-  title: 'Fase 02 — Analista | Workshop 2',
+  title: 'Fase 02 — Analista',
   description: 'O agente Analista conduz uma entrevista de marca pessoal e gera o brand-brief.md.',
   alternates: { canonical: '/workshop-2/analista' },
 };

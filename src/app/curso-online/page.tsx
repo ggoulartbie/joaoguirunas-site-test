@@ -19,7 +19,7 @@ export const metadata: Metadata = {
     'Acesso por 6 meses ao conteúdo em vídeo, materiais, fórum e certificado. Aprenda a criar e orquestrar agentes de IA com Claude Code no seu próprio ritmo.',
   alternates: { canonical: '/curso-online' },
   openGraph: {
-    title: 'Curso Online | Claude Agents Team — R$ 797 | João Guirunas',
+    title: 'Curso Online | Claude Agents Team — R$ 797',
     description:
       'Acesso por 6 meses ao conteúdo em vídeo, materiais, fórum e certificado. Aprenda a criar e orquestrar agentes de IA com Claude Code no seu próprio ritmo.',
     url: `${siteConfig.url}/curso-online`,
@@ -38,7 +38,7 @@ const jsonLd = {
   '@type': 'Course',
   name: 'Curso Online | Claude Agents Team',
   description:
-    'Aprenda a criar e orquestrar agentes de IA com Claude Code e o framework AIOX. Acesso completo ao conteúdo em vídeo, materiais, fórum e certificado.',
+    'Aprenda a criar e orquestrar agentes de IA com Claude Code e Claude Agent Teams. Acesso completo ao conteúdo em vídeo, materiais, fórum e certificado.',
   provider: {
     '@type': 'Person',
     name: 'João Guirunas',
@@ -74,7 +74,7 @@ const FACILITADORES = [
   {
     name: 'João Guirunas',
     role: 'Fundador GrowthSales.ai',
-    bio: 'Especialista em IA aplicada a vendas e marketing. Pioneiro em orquestração de agentes autônomos. Criador do framework AIOX.',
+    bio: 'Especialista em IA aplicada a vendas e marketing. Pioneiro em orquestração de agentes autônomos com Claude Code.',
     img: '/images/joao-guirunas-profile.jpg',
     linkedin: 'https://www.linkedin.com/in/joaoguirunas',
   },

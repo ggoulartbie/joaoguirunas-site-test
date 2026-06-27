@@ -6,6 +6,7 @@ export const metadata: Metadata = {
   alternates: {
     canonical: '/workshop-claude-design/handoff',
   },
+  robots: { index: false, follow: false },
 };
 
 const SURFACE = '#161322';

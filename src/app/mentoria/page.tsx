@@ -18,20 +18,20 @@ const KV_DISPLAY: React.CSSProperties = { fontFamily: 'var(--font-display-serif)
 const KV_MONO: React.CSSProperties = { fontFamily: 'var(--font-mono)', fontSize: '0.68rem', textTransform: 'uppercase', letterSpacing: '0.14em', fontWeight: 500 };
 
 export const metadata: Metadata = {
-  title: 'Mentoria Claude Code + AIOX — Agentes IA na Prática',
+  title: 'Mentoria Claude Code + Claude Agent Teams',
   description:
-    'Mentoria intensiva e prática em Florianópolis. Aprenda a criar e orquestrar agentes de IA com Claude Code e o framework AIOX. Turmas de até 12 pessoas.',
+    'Mentoria intensiva e prática em Florianópolis. Aprenda a criar e orquestrar agentes de IA com Claude Code e Claude Agent Teams. Turmas de até 12 pessoas.',
   openGraph: {
-    title: 'Mentoria Claude Code + AIOX — Agentes IA na Prática | João Guirunas',
+    title: 'Mentoria Claude Code + Claude Agent Teams',
     description:
-      'Mentoria intensiva e prática em Florianópolis. Aprenda a criar e orquestrar agentes de IA com Claude Code e o framework AIOX. Turmas de até 12 pessoas.',
+      'Mentoria intensiva e prática em Florianópolis. Aprenda a criar e orquestrar agentes de IA com Claude Code e Claude Agent Teams. Turmas de até 12 pessoas.',
     images: [{ url: '/images/mentoria-hero-v2.png', width: 1200, height: 630 }],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Mentoria Claude Code + AIOX — Agentes IA na Prática | João Guirunas',
+    title: 'Mentoria Claude Code + Claude Agent Teams',
     description:
-      'Mentoria intensiva e prática em Florianópolis. Aprenda a criar e orquestrar agentes de IA com Claude Code e o framework AIOX. Turmas de até 12 pessoas.',
+      'Mentoria intensiva e prática em Florianópolis. Aprenda a criar e orquestrar agentes de IA com Claude Code e Claude Agent Teams. Turmas de até 12 pessoas.',
   },
   alternates: {
     canonical: '/mentoria',
@@ -41,9 +41,9 @@ export const metadata: Metadata = {
 const courseJsonLd = {
   '@context': 'https://schema.org',
   '@type': 'Course',
-  name: 'Mentoria Claude Code + AIOX',
+  name: 'Mentoria Claude Code + Claude Agent Teams',
   description:
-    'Mentoria intensiva e prática para criar, configurar e orquestrar agentes de IA autônomos com Claude Code e o framework AIOX. Turmas de no máximo 12 pessoas.',
+    'Mentoria intensiva e prática para criar, configurar e orquestrar agentes de IA autônomos com Claude Code e Claude Agent Teams. Turmas de no máximo 12 pessoas.',
   provider: {
     '@type': 'Organization',
     name: 'GrowthSales.ai',
@@ -141,7 +141,7 @@ export default function MentoriaPage() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-12 sm:gap-16 lg:gap-20 max-w-5xl mx-auto">
             {[
               { name: 'Claudia Guirunas', role: 'CEO & Co-Fundadora · GrowthSales.ai', bio: 'Especialista em transformação digital e implementação de IA em processos de vendas. Focada em resultados mensuráveis e ROI.', img: '/images/claudia-guirunas.png', linkedin: 'https://www.linkedin.com/in/claudiaguirunas' },
-              { name: 'João Guirunas', role: 'CSO & Co-Fundador · GrowthSales.ai', bio: 'Especialista em IA aplicada a vendas e marketing. Pioneiro em orquestração de agentes autônomos. Criador do framework AIOX.', img: '/images/joao-guirunas-profile.jpg', linkedin: 'https://www.linkedin.com/in/joaoguirunas' },
+              { name: 'João Guirunas', role: 'CSO & Co-Fundador · GrowthSales.ai', bio: 'Especialista em IA aplicada a vendas e marketing. Pioneiro em orquestração de agentes autônomos com Claude Code.', img: '/images/joao-guirunas-profile.jpg', linkedin: 'https://www.linkedin.com/in/joaoguirunas' },
             ].map((f) => (
               <div key={f.name} className="flex flex-col items-center text-center group">
                 <div className="relative mb-8">

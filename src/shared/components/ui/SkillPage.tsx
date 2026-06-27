@@ -20,6 +20,12 @@ export interface SkillPageProps {
   primaryLabel?: string;
   isExternal?: boolean;
   showMentoria?: boolean;
+  /**
+   * Opt-in: renderiza os CTAs de conversão (Mentoria + Curso Online) no topo
+   * (ao lado do primaryLink) e um bloco de fechamento após o conteúdo.
+   * Default false — outras páginas que compartilham o SkillPage ficam intactas.
+   */
+  conversionCta?: boolean;
   author?: string;
   authorUrl?: string;
   bgImage?: string;
@@ -97,6 +103,7 @@ export function SkillPage({
   primaryLabel = 'Ver no GitHub',
   isExternal = false,
   showMentoria = false,
+  conversionCta = false,
   author,
   authorUrl,
   bgImage,
@@ -218,8 +225,9 @@ export function SkillPage({
           </p>
 
           {/* CTA buttons */}
-          {primaryLink && (
+          {(primaryLink || conversionCta) && (
             <div className="flex flex-col sm:flex-row flex-wrap gap-3">
+              {primaryLink && (
               <a
                 href={primaryLink}
                 target={isExternal ? '_blank' : undefined}
@@ -237,6 +245,41 @@ export function SkillPage({
                 {isExternal ? <ExternalLink className="h-4 w-4" /> : <GitHubIcon className="h-4 w-4" />}
                 {primaryLabel}
               </a>
+              )}
+              {/* CTAs de conversão — secundários ao primaryLink, lado a lado */}
+              {conversionCta && (
+                <>
+                  <Link
+                    href="/mentoria"
+                    className="inline-flex items-center justify-center gap-2 transition-all hover:brightness-110 min-h-[44px]"
+                    style={{
+                      border: '1px solid rgba(255,58,14,0.45)',
+                      color: 'rgba(255,58,14,0.9)',
+                      background: 'rgba(255,58,14,0.06)',
+                      padding: '12px 16px',
+                      fontSize: 14,
+                      fontWeight: 500,
+                      letterSpacing: '-0.01em',
+                    }}
+                  >
+                    Quero a Mentoria
+                  </Link>
+                  <Link
+                    href="/curso-online"
+                    className="inline-flex items-center justify-center gap-2 transition-all hover:bg-white/5 min-h-[44px]"
+                    style={{
+                      border: '1px solid rgba(255,255,255,0.16)',
+                      color: 'rgba(255,255,255,0.65)',
+                      padding: '12px 16px',
+                      fontSize: 14,
+                      fontWeight: 500,
+                      letterSpacing: '-0.01em',
+                    }}
+                  >
+                    Ver o Curso Online
+                  </Link>
+                </>
+              )}
               {showMentoria && (
                 <Link
                   href="/mentoria"
@@ -403,6 +446,64 @@ export function SkillPage({
                   {primaryLabel}
                   {!showMentoria && <ArrowRight className="h-4 w-4" />}
                 </a>
+              </div>
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* ── CTA de conversão — Mentoria + Curso Online (opt-in via conversionCta) ── */}
+      {conversionCta && (
+        <section
+          className="py-14 sm:py-20 lg:py-24"
+          style={{ background: '#0e0e11', borderTop: '1px solid rgba(255,255,255,0.07)' }}
+          aria-labelledby="conversion-cta-heading"
+        >
+          <div className="mx-auto max-w-6xl px-5 sm:px-10 lg:px-[140px]">
+            <div className="max-w-2xl">
+              <p className="mb-4" style={EYEBROW}>Vá além do tutorial</p>
+              <h2
+                id="conversion-cta-heading"
+                className="text-2xl sm:text-3xl lg:text-4xl font-semibold text-white mb-4 tracking-tight"
+                style={{ letterSpacing: '-0.02em' }}
+              >
+                Quer dominar isso na prática?
+              </h2>
+              <p className="text-base sm:text-lg leading-relaxed mb-8" style={{ color: 'rgba(255,255,255,0.6)' }}>
+                Aprofunde com acompanhamento direto na mentoria ou siga o passo a passo
+                completo, do zero ao avançado, no curso online.
+              </p>
+              <div className="flex flex-col sm:flex-row flex-wrap gap-3">
+                <Link
+                  href="/mentoria"
+                  className="inline-flex items-center justify-center gap-2 transition-all hover:brightness-110 active:scale-[0.98] min-h-[44px]"
+                  style={{
+                    background: '#FF3A0E',
+                    color: '#050507',
+                    padding: '12px 20px',
+                    fontSize: 14,
+                    fontWeight: 600,
+                    letterSpacing: '-0.01em',
+                  }}
+                >
+                  Quero a Mentoria
+                  <ArrowRight className="h-4 w-4" />
+                </Link>
+                <Link
+                  href="/curso-online"
+                  className="inline-flex items-center justify-center gap-2 transition-all hover:bg-white/5 min-h-[44px]"
+                  style={{
+                    border: '1px solid rgba(255,255,255,0.16)',
+                    color: 'rgba(255,255,255,0.65)',
+                    padding: '12px 20px',
+                    fontSize: 14,
+                    fontWeight: 500,
+                    letterSpacing: '-0.01em',
+                  }}
+                >
+                  Ver o Curso Online
+                  <ArrowRight className="h-4 w-4" />
+                </Link>
               </div>
             </div>
           </div>

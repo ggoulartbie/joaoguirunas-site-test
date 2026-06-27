@@ -5,21 +5,21 @@ import { SkillPage } from '@/shared/components/ui/SkillPage';
 import { siteConfig } from '@/config/site';
 
 export const metadata: Metadata = {
-  title: 'Claude Code + NotebookLM',
+  title: 'Claude Code + NotebookLM — RAG Gratuito',
   description:
-    'O maior hack de 2026. Combine Claude Code com NotebookLM como sistema RAG gratuito e potente.',
+    'O maior hack de 2026: combine Claude Code com o NotebookLM como sistema RAG gratuito e potente para consultar seus documentos e dar contexto às suas sessões.',
   alternates: { canonical: `${siteConfig.url}/skills/notebook-lm` },
   openGraph: {
-    title: 'Claude Code + NotebookLM | João Guirunas',
+    title: 'Claude Code + NotebookLM — RAG Gratuito | João Guirunas',
     description:
-      'O maior hack de 2026. Combine Claude Code com NotebookLM como sistema RAG gratuito e potente.',
+      'O maior hack de 2026: combine Claude Code com o NotebookLM como sistema RAG gratuito e potente para consultar seus documentos e dar contexto às suas sessões.',
     url: `${siteConfig.url}/skills/notebook-lm`,
     images: [{ url: `${siteConfig.url}/images/og-default.png`, width: 1200, height: 630 }],
   },
   twitter: {
-    title: 'Claude Code + NotebookLM | João Guirunas',
+    title: 'Claude Code + NotebookLM — RAG Gratuito | João Guirunas',
     description:
-      'O maior hack de 2026. Combine Claude Code com NotebookLM como sistema RAG gratuito e potente.',
+      'O maior hack de 2026: combine Claude Code com o NotebookLM como sistema RAG gratuito e potente para consultar seus documentos e dar contexto às suas sessões.',
   },
 };
 

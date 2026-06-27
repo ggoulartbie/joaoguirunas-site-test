@@ -5,21 +5,21 @@ import { SkillPage } from '@/shared/components/ui/SkillPage';
 import { siteConfig } from '@/config/site';
 
 export const metadata: Metadata = {
-  title: 'SEO com Claude Code',
+  title: 'SEO com Claude Code: Auditoria Automática',
   description:
-    'Agentes de SEO que auditam, planejam e implementam melhorias no seu site. Do relatório à execução automática.',
+    'Cinco agentes de SEO auditam seu site, priorizam melhorias e implementam direto no código — otimizado para Google e respostas de IA como ChatGPT e Perplexity.',
   alternates: { canonical: `${siteConfig.url}/learn/seo-claude-code` },
   openGraph: {
-    title: 'SEO com Claude Code | João Guirunas',
+    title: 'SEO com Claude Code: Auditoria Automática | João Guirunas',
     description:
-      'Agentes de SEO que auditam, planejam e implementam melhorias no seu site. Do relatório à execução automática.',
+      'Cinco agentes de SEO auditam seu site, priorizam melhorias e implementam direto no código — otimizado para Google e respostas de IA como ChatGPT e Perplexity.',
     url: `${siteConfig.url}/learn/seo-claude-code`,
     images: [{ url: `${siteConfig.url}/images/og-default.png`, width: 1200, height: 630 }],
   },
   twitter: {
-    title: 'SEO com Claude Code | João Guirunas',
+    title: 'SEO com Claude Code: Auditoria Automática | João Guirunas',
     description:
-      'Agentes de SEO que auditam, planejam e implementam melhorias no seu site. Do relatório à execução automática.',
+      'Cinco agentes de SEO auditam seu site, priorizam melhorias e implementam direto no código — otimizado para Google e respostas de IA como ChatGPT e Perplexity.',
   },
 };
 

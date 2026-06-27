@@ -5,21 +5,21 @@ import { SkillPage } from '@/shared/components/ui/SkillPage';
 import { siteConfig } from '@/config/site';
 
 export const metadata: Metadata = {
-  title: 'Xquads Squads',
+  title: 'Xquads — Squads de Agentes para Claude Code',
   description:
-    '12 squads especializadas com 96+ agentes prontos para uso. A maior coleção de squads AIOX da comunidade.',
+    '12 squads especializadas com 96+ agentes prontos para uso no Claude Code. A maior coleção open source de squads AIOX da comunidade.',
   alternates: { canonical: `${siteConfig.url}/squads/xquads` },
   openGraph: {
-    title: 'Xquads Squads | João Guirunas',
+    title: 'Xquads — Squads de Agentes para Claude Code',
     description:
-      '12 squads especializadas com 96+ agentes prontos para uso. A maior coleção de squads AIOX da comunidade.',
+      '12 squads especializadas com 96+ agentes prontos para uso no Claude Code. A maior coleção open source de squads AIOX da comunidade.',
     url: `${siteConfig.url}/squads/xquads`,
     images: [{ url: `${siteConfig.url}/images/og-default.png`, width: 1200, height: 630 }],
   },
   twitter: {
-    title: 'Xquads Squads | João Guirunas',
+    title: 'Xquads — Squads de Agentes para Claude Code',
     description:
-      '12 squads especializadas com 96+ agentes prontos para uso. A maior coleção de squads AIOX da comunidade.',
+      '12 squads especializadas com 96+ agentes prontos para uso no Claude Code. A maior coleção open source de squads AIOX da comunidade.',
   },
 };
 

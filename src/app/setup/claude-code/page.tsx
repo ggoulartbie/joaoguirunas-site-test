@@ -11,14 +11,14 @@ export const metadata: Metadata = {
     'Guia prático para configurar o Claude Code CLI: instalação, skills, agents e integrações. Do zero ao time de agentes em produção com exemplos reais.',
   alternates: { canonical: `${siteConfig.url}/setup/claude-code` },
   openGraph: {
-    title: 'Setup Claude Code — Guia Completo de Configuração CLI | João Guirunas',
+    title: 'Setup Claude Code — Guia Completo de Configuração CLI',
     description:
       'Guia prático para configurar o Claude Code CLI: instalação, skills, agents e integrações. Do zero ao time de agentes em produção com exemplos reais.',
     url: `${siteConfig.url}/setup/claude-code`,
     images: [{ url: `${siteConfig.url}/images/og-default.png`, width: 1200, height: 630 }],
   },
   twitter: {
-    title: 'Setup Claude Code — Guia Completo de Configuração CLI | João Guirunas',
+    title: 'Setup Claude Code — Guia Completo de Configuração CLI',
     description:
       'Guia prático para configurar o Claude Code CLI: instalação, skills, agents e integrações. Do zero ao time de agentes em produção com exemplos reais.',
   },

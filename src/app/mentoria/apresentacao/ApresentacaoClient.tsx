@@ -314,7 +314,7 @@ export function ApresentacaoClient() {
               <h1 style={{ textAlign: 'center' }}>
                 Mentoria Claude Code
                 <br />
-                <span style={{ color: 'var(--color-accent)' }}>+ AIOX</span>
+                <span style={{ color: 'var(--color-accent)' }}>+ Claude Agent Teams</span>
               </h1>
               <p style={{ fontSize: '0.85em', color: '#a1a1aa', textAlign: 'center', marginTop: '8px' }}>
                 Tenha uma equipe de agentes de IA trabalhando para você
@@ -346,7 +346,7 @@ export function ApresentacaoClient() {
             <div>
               <p><span className="check">&#10003;</span> Claude Code dominado do basico ao avancado</p>
               <p><span className="check">&#10003;</span> Skills e MCPs instalados e funcionando</p>
-              <p><span className="check">&#10003;</span> Framework AIOX configurado com seus agentes</p>
+              <p><span className="check">&#10003;</span> Claude Agent Teams configurado com seus agentes</p>
               <p><span className="check">&#10003;</span> Squad personalizada para sua area de atuacao</p>
             </div>
           </section>

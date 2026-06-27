@@ -7,7 +7,7 @@ import { InlineCode } from '../_components/InlineCode';
 import { FacilitatorNote } from '../_components/FacilitatorNote';
 
 export const metadata: Metadata = {
-  title: 'Fase 04 — Designer UX | Workshop 2',
+  title: 'Fase 04 — Designer UX',
   description: 'O Designer UX cria a Versão 1 da landing page — antes do Claude Design, só com brand identity e tokens.',
   alternates: { canonical: '/workshop-2/ux-v1' },
 };

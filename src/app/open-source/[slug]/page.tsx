@@ -62,6 +62,9 @@ function toSkillPageProps(post: ContentPost) {
     bgImage: post.bgImage ?? '/images/bg-open-source.png',
     bgPosition: post.bgPosition,
     canonicalPath: `/open-source/${post.slug}`,
+    // CTAs de conversão (Mentoria + Curso Online) — exclusivo das singles
+    // de open source; opt-in para não vazar nas demais páginas do SkillPage.
+    conversionCta: true,
   }
 }
 

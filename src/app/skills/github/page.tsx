@@ -4,9 +4,9 @@ import type { Metadata } from 'next';
 import { SkillPage } from '@/shared/components/ui';
 
 export const metadata: Metadata = {
-  title: 'GitHub',
+  title: 'Integração GitHub no Claude Code via gh CLI',
   description:
-    'Integracao completa com GitHub. Repositorios, PRs, Issues e Actions para workflow de desenvolvimento.',
+    'Integração completa com GitHub no Claude Code: repositórios, pull requests, issues e GitHub Actions gerenciados direto do terminal com a CLI gh.',
   openGraph: {
     images: ['/images/og-default.png'],
   },
@@ -17,55 +17,55 @@ export const metadata: Metadata = {
 
 const features = [
   {
-    title: 'Repositorios',
+    title: 'Repositórios',
     description:
-      'Gerenciamento completo de repositorios. Criacao, clonagem, branches e configuracao de settings diretamente do terminal.',
+      'Gerenciamento completo de repositórios. Criação, clonagem, branches e configuração de settings diretamente do terminal.',
     icon: '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M20.25 7.5l-.625 10.632a2.25 2.25 0 01-2.247 2.118H6.622a2.25 2.25 0 01-2.247-2.118L3.75 7.5M10 11.25h4M3.375 7.5h17.25c.621 0 1.125-.504 1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125H3.375c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125z"/>',
   },
   {
     title: 'Pull Requests',
     description:
-      'Criacao e revisao de PRs com templates, labels e assignees. Merge strategies e branch protection rules.',
+      'Criação e revisão de PRs com templates, labels e assignees. Merge strategies e branch protection rules.',
     icon: '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M7.5 21L3 16.5m0 0L7.5 12M3 16.5h13.5m0-13.5L21 7.5m0 0L16.5 12M21 7.5H7.5"/>',
   },
   {
     title: 'Issues',
     description:
-      'Tracking de bugs e features com labels, milestones e projetos. Integracao com stories AIOX para rastreabilidade.',
+      'Tracking de bugs e features com labels, milestones e projetos. Integração com stories AIOX para rastreabilidade.',
     icon: '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z"/>',
   },
   {
     title: 'Actions CI/CD',
     description:
-      'Workflows automatizados para build, test e deploy. Pipelines customizaveis com matrix builds e caching.',
+      'Workflows automatizados para build, test e deploy. Pipelines customizáveis com matrix builds e caching.',
     icon: '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182"/>',
   },
   {
     title: 'Code Review',
     description:
-      'Revisao de codigo com comentarios inline, suggestions e aprovacoes. Integracao com CodeRabbit para review automatico.',
+      'Revisão de código com comentários inline, suggestions e aprovações. Integração com CodeRabbit para review automático.',
     icon: '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17.25 6.75L22.5 12l-5.25 5.25m-10.5 0L1.5 12l5.25-5.25m7.5-3l-4.5 16.5"/>',
   },
   {
     title: 'Collaboration',
     description:
-      'Trabalho em equipe com teams, permissions e CODEOWNERS. Notificacoes, mentions e discussions integradas.',
+      'Trabalho em equipe com teams, permissions e CODEOWNERS. Notificações, mentions e discussions integradas.',
     icon: '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M18 18.72a9.094 9.094 0 003.741-.479 3 3 0 00-4.682-2.72m.94 3.198l.001.031c0 .225-.012.447-.037.666A11.944 11.944 0 0112 21c-2.17 0-4.207-.576-5.963-1.584A6.062 6.062 0 016 18.719m12 0a5.971 5.971 0 00-.941-3.197m0 0A5.995 5.995 0 0012 12.75a5.995 5.995 0 00-5.058 2.772m0 0a3 3 0 00-4.681 2.72 8.986 8.986 0 003.74.477m.94-3.197a5.971 5.971 0 00-.94 3.197M15 6.75a3 3 0 11-6 0 3 3 0 016 0zm6 3a2.25 2.25 0 11-4.5 0 2.25 2.25 0 014.5 0zm-13.5 0a2.25 2.25 0 11-4.5 0 2.25 2.25 0 014.5 0z"/>',
   },
 ];
 
 const longDescription = [
-  'GitHub e a integracao central do workflow de desenvolvimento AIOX. Repositorios, pull requests, issues e actions formam a espinha dorsal de todo o ciclo de desenvolvimento, desde a criacao de stories ate o deploy em producao.',
-  'Com GitHub CLI (gh) integrado ao Claude Code, operacoes como criacao de PRs, revisao de codigo e gerenciamento de issues acontecem diretamente do terminal. O agente @devops tem autoridade exclusiva para push e PR creation, garantindo governanca e qualidade.',
-  'GitHub Actions automatizam pipelines de CI/CD com builds, testes e deploys configuraveis. Combinado com CodeRabbit para code review automatizado e branch protection rules, cada mudanca passa por validacao rigorosa antes de chegar a producao.',
+  'GitHub é a integração central do workflow de desenvolvimento AIOX. Repositórios, pull requests, issues e actions formam a espinha dorsal de todo o ciclo de desenvolvimento, desde a criação de stories até o deploy em produção.',
+  'Com GitHub CLI (gh) integrado ao Claude Code, operações como criação de PRs, revisão de código e gerenciamento de issues acontecem diretamente do terminal. O agente @devops tem autoridade exclusiva para push e PR creation, garantindo governança e qualidade.',
+  'GitHub Actions automatizam pipelines de CI/CD com builds, testes e deploys configuráveis. Combinado com CodeRabbit para code review automatizado e branch protection rules, cada mudança passa por validação rigorosa antes de chegar à produção.',
 ];
 
 export default function GitHubPage() {
   return (
     <SkillPage
       title="GitHub"
-      description="Integracao completa com GitHub. Repositorios, PRs, Issues e Actions para workflow de desenvolvimento."
-      category="Integracoes"
+      description="Integração completa com GitHub. Repositórios, PRs, Issues e Actions para workflow de desenvolvimento."
+      category="Integrações"
       categoryColor="integracoes"
       longDescription={longDescription}
       features={features}
@@ -103,7 +103,7 @@ sudo apt install gh`}</code>
               </div>
               <div className="glass-card p-6">
                 <h3 className="text-lg font-semibold text-white mb-3">
-                  2. Autenticacao
+                  2. Autenticação
                 </h3>
                 <pre className="bg-[#050507] p-4 text-sm text-[#FF3A0E] overflow-x-auto">
                   <code>{`# Login interativo
@@ -115,7 +115,7 @@ gh auth status`}</code>
               </div>
               <div className="glass-card p-6">
                 <h3 className="text-lg font-semibold text-white mb-3">
-                  3. Repositorios
+                  3. Repositórios
                 </h3>
                 <pre className="bg-[#050507] p-4 text-sm text-[#FF3A0E] overflow-x-auto">
                   <code>{`# Criar novo repo

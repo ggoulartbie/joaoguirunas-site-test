@@ -14,7 +14,7 @@ export const metadata: Metadata = {
   description: `Conheça os ${TOTAL_AGENTES} agentes pré-configurados do Claude Agent Teams. ${SQUADS.length} squads completas com persona, autoridades e skills definidos. Drop-in pra qualquer projeto Claude Code.`,
   alternates: { canonical: `${siteConfig.url}/agentes` },
   openGraph: {
-    title: `${TOTAL_AGENTES} Agentes Claude Agent Teams | João Guirunas`,
+    title: `${TOTAL_AGENTES} Agentes Claude Agent Teams`,
     description: `${SQUADS.length} squads especializadas — ${SQUADS.map((s) => `${s.label} (${s.count})`).join(', ')}.`,
     url: `${siteConfig.url}/agentes`,
     images: [{ url: `${siteConfig.url}/images/hero-ultrawide.png`, width: 1200, height: 630 }],

@@ -5,21 +5,21 @@ import { SkillPage } from '@/shared/components/ui/SkillPage';
 import { siteConfig } from '@/config/site';
 
 export const metadata: Metadata = {
-  title: 'Claude Code + Obsidian',
+  title: 'Claude Code + Obsidian — Memória Permanente',
   description:
-    'Dê memória permanente ao Claude Code com Obsidian. Tudo que você faz numa sessão é salvo e lembrado.',
+    'Dê memória permanente ao Claude Code com o Obsidian. Tudo que você faz numa sessão é salvo em notas e lembrado nas próximas, sem repetir contexto toda vez.',
   alternates: { canonical: `${siteConfig.url}/skills/obsidian` },
   openGraph: {
-    title: 'Claude Code + Obsidian | João Guirunas',
+    title: 'Claude Code + Obsidian — Memória Permanente | João Guirunas',
     description:
-      'Dê memória permanente ao Claude Code com Obsidian. Tudo que você faz numa sessão é salvo e lembrado.',
+      'Dê memória permanente ao Claude Code com o Obsidian. Tudo que você faz numa sessão é salvo em notas e lembrado nas próximas, sem repetir contexto toda vez.',
     url: `${siteConfig.url}/skills/obsidian`,
     images: [{ url: `${siteConfig.url}/images/og-default.png`, width: 1200, height: 630 }],
   },
   twitter: {
-    title: 'Claude Code + Obsidian | João Guirunas',
+    title: 'Claude Code + Obsidian — Memória Permanente | João Guirunas',
     description:
-      'Dê memória permanente ao Claude Code com Obsidian. Tudo que você faz numa sessão é salvo e lembrado.',
+      'Dê memória permanente ao Claude Code com o Obsidian. Tudo que você faz numa sessão é salvo em notas e lembrado nas próximas, sem repetir contexto toda vez.',
   },
 };
 

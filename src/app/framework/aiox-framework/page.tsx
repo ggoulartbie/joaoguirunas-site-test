@@ -11,14 +11,14 @@ export const metadata: Metadata = {
     'Framework open source para orquestrar squads de agentes autônomos com Claude Code. Personas, coordenação inter-agentes e workflows produtivos para negócios.',
   alternates: { canonical: `${siteConfig.url}/framework/aiox-framework` },
   openGraph: {
-    title: 'AIOX Framework — Orquestração de Agentes Claude Code | João Guirunas',
+    title: 'AIOX Framework — Orquestração de Agentes Claude Code',
     description:
       'Framework open source para orquestrar squads de agentes autônomos com Claude Code. Personas, coordenação inter-agentes e workflows produtivos para negócios.',
     url: `${siteConfig.url}/framework/aiox-framework`,
     images: [{ url: `${siteConfig.url}/images/og-default.png`, width: 1200, height: 630 }],
   },
   twitter: {
-    title: 'AIOX Framework — Orquestração de Agentes Claude Code | João Guirunas',
+    title: 'AIOX Framework — Orquestração de Agentes Claude Code',
     description:
       'Framework open source para orquestrar squads de agentes autônomos com Claude Code. Personas, coordenação inter-agentes e workflows produtivos para negócios.',
   },

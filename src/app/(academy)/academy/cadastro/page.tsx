@@ -4,6 +4,7 @@ import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
   title: 'Cadastro',
+  robots: { index: false, follow: false },
 }
 
 export default function CadastroPage() {

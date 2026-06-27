@@ -6,21 +6,21 @@ import { RelatedPages } from '@/shared/components/ui/RelatedPages';
 import { siteConfig } from '@/config/site';
 
 export const metadata: Metadata = {
-  title: 'Time de Agentes com IA',
+  title: 'Time de Agentes de IA Trabalhando 24/7',
   description:
-    'Monte uma empresa de agentes de IA trabalhando 24/7. Do zero a uma operação completa delegada para IA.',
+    'Monte um time de agentes de IA trabalhando 24/7: arquitetura multi-agent, memória compartilhada e integração com WhatsApp e Telegram por menos de R$40/mês.',
   alternates: { canonical: `${siteConfig.url}/learn/multi-agent` },
   openGraph: {
-    title: 'Time de Agentes com IA | João Guirunas',
+    title: 'Time de Agentes de IA Trabalhando 24/7 | João Guirunas',
     description:
-      'Monte uma empresa de agentes de IA trabalhando 24/7. Do zero a uma operação completa delegada para IA.',
+      'Monte um time de agentes de IA trabalhando 24/7: arquitetura multi-agent, memória compartilhada e integração com WhatsApp e Telegram por menos de R$40/mês.',
     url: `${siteConfig.url}/learn/multi-agent`,
     images: [{ url: `${siteConfig.url}/images/og-default.png`, width: 1200, height: 630 }],
   },
   twitter: {
-    title: 'Time de Agentes com IA | João Guirunas',
+    title: 'Time de Agentes de IA Trabalhando 24/7 | João Guirunas',
     description:
-      'Monte uma empresa de agentes de IA trabalhando 24/7. Do zero a uma operação completa delegada para IA.',
+      'Monte um time de agentes de IA trabalhando 24/7: arquitetura multi-agent, memória compartilhada e integração com WhatsApp e Telegram por menos de R$40/mês.',
   },
 };
 

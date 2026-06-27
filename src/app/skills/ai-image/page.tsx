@@ -4,9 +4,9 @@ import type { Metadata } from 'next';
 import { SkillPage } from '@/shared/components/ui';
 
 export const metadata: Metadata = {
-  title: 'AI Image Generation',
+  title: 'Geração de Imagens com IA via Claude Code',
   description:
-    'Gere imagens com IA usando 50+ modelos. FLUX, Gemini, Grok, Seedream e mais via inference.sh CLI.',
+    'Gere imagens com IA usando 50+ modelos como FLUX, Gemini, Grok e Seedream direto do terminal com Claude Code e a CLI da inference.sh. Sem interface, só prompt.',
   openGraph: {
     images: ['/images/og-default.png'],
   },
@@ -25,39 +25,39 @@ const features = [
   {
     title: 'Image-to-Image',
     description:
-      'Transforme imagens existentes com style transfer, variacoes e edicoes guiadas por prompt.',
+      'Transforme imagens existentes com style transfer, variações e edições guiadas por prompt.',
     icon: '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M7.5 21L3 16.5m0 0L7.5 12M3 16.5h13.5m0-13.5L21 7.5m0 0L16.5 12M21 7.5H7.5"/>',
   },
   {
     title: 'Inpainting',
     description:
-      'Edite areas especificas de uma imagem. Remova objetos, adicione elementos ou altere fundos com precisao.',
+      'Edite áreas específicas de uma imagem. Remova objetos, adicione elementos ou altere fundos com precisão.',
     icon: '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9.53 16.122a3 3 0 00-5.78 1.128 2.25 2.25 0 01-2.4 2.245 4.5 4.5 0 008.4-2.245c0-.399-.078-.78-.22-1.128zm0 0a15.998 15.998 0 003.388-1.62m-5.043-.025a15.994 15.994 0 011.622-3.395m3.42 3.42a15.995 15.995 0 004.764-4.648l3.876-5.814a1.151 1.151 0 00-1.597-1.597L14.146 6.32a15.996 15.996 0 00-4.649 4.763m3.42 3.42a6.776 6.776 0 00-3.42-3.42"/>',
   },
   {
     title: 'LoRA Support',
     description:
-      'Use modelos LoRA customizados para estilos especificos. Aplique fine-tuning sem treinar do zero.',
+      'Use modelos LoRA customizados para estilos específicos. Aplique fine-tuning sem treinar do zero.',
     icon: '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M10.5 6h9.75M10.5 6a1.5 1.5 0 11-3 0m3 0a1.5 1.5 0 10-3 0M3.75 6H7.5m3 12h9.75m-9.75 0a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m-3.75 0H7.5m9-6h3.75m-3.75 0a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m-9.75 0h9.75"/>',
   },
   {
     title: 'Upscaling',
     description:
-      'Aumente a resolucao de imagens com IA. De baixa resolucao para alta qualidade preservando detalhes.',
+      'Aumente a resolução de imagens com IA. De baixa resolução para alta qualidade preservando detalhes.',
     icon: '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3.75 3.75v4.5m0-4.5h4.5m-4.5 0L9 9M3.75 20.25v-4.5m0 4.5h4.5m-4.5 0L9 15M20.25 3.75h-4.5m4.5 0v4.5m0-4.5L15 9m5.25 11.25h-4.5m4.5 0v-4.5m0 4.5L15 15"/>',
   },
   {
     title: 'Text Rendering',
     description:
-      'Gere imagens com texto legivel e estilizado. Ideal para thumbnails, banners e social media.',
+      'Gere imagens com texto legível e estilizado. Ideal para thumbnails, banners e social media.',
     icon: '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M7.5 8.25h9m-9 3H12m-9.75 1.51c0 1.6 1.123 2.994 2.707 3.227 1.087.16 2.185.283 3.293.369V21l4.076-4.076a1.526 1.526 0 011.037-.443 48.282 48.282 0 005.68-.494c1.584-.233 2.707-1.626 2.707-3.228V6.741c0-1.602-1.123-2.995-2.707-3.228A48.394 48.394 0 0012 3c-2.392 0-4.744.175-7.043.513C3.373 3.746 2.25 5.14 2.25 6.741v6.018z"/>',
   },
 ];
 
 const longDescription = [
-  'AI Image Generation e uma skill que conecta o Claude Code ao inference.sh, dando acesso a mais de 50 modelos de geracao de imagem via CLI. Crie imagens com FLUX Pro, Gemini Imagen 3, Grok Vision, Seedream 3.0, Recraft V3 e muitos outros sem sair do terminal.',
-  'A skill oferece modos avancados como inpainting para edicao cirurgica de imagens, image-to-image para transformacoes de estilo, e suporte a LoRA para aplicar fine-tuning customizado. Cada modelo tem suas especialidades - FLUX para fotorealismo, Seedream para arte conceitual, Recraft para ilustracoes vetoriais.',
-  'Para producao em escala, combine text rendering com upscaling para gerar assets de social media em alta resolucao. A integracao CLI permite automatizar pipelines de geracao, processando dezenas de variacoes em batch direto do terminal.',
+  'AI Image Generation é uma skill que conecta o Claude Code ao inference.sh, dando acesso a mais de 50 modelos de geração de imagem via CLI. Crie imagens com FLUX Pro, Gemini Imagen 3, Grok Vision, Seedream 3.0, Recraft V3 e muitos outros sem sair do terminal.',
+  'A skill oferece modos avançados como inpainting para edição cirúrgica de imagens, image-to-image para transformações de estilo, e suporte a LoRA para aplicar fine-tuning customizado. Cada modelo tem suas especialidades - FLUX para fotorealismo, Seedream para arte conceitual, Recraft para ilustrações vetoriais.',
+  'Para produção em escala, combine text rendering com upscaling para gerar assets de social media em alta resolução. A integração CLI permite automatizar pipelines de geração, processando dezenas de variações em batch direto do terminal.',
 ];
 
 export default function AiImagePage() {
@@ -89,7 +89,7 @@ export default function AiImagePage() {
                 fontWeight: 600,
               }}
             >
-              Instalacao
+              Instalação
             </p>
             <h2 className="text-2xl sm:text-3xl font-semibold tracking-tight text-white mb-8">Como instalar</h2>
             <div className="space-y-6">
@@ -118,7 +118,7 @@ export default function AiImagePage() {
                 </div>
               </div>
               <p className="text-white/60 text-sm">
-                Apos a instalacao, as skills ficam disponiveis como{' '}
+                Após a instalação, as skills ficam disponíveis como{' '}
                 <code className="text-white/70">/inference-sh:flux-image</code>,{' '}
                 <code className="text-white/70">/inference-sh:google-veo</code> e outros
                 no Claude Code.

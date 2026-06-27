@@ -8,7 +8,7 @@ import { FacilitatorNote } from '../_components/FacilitatorNote';
 import { ExternalLink } from '../_components/ExternalLink';
 
 export const metadata: Metadata = {
-  title: 'Fase 01 — Configuração | Workshop 2',
+  title: 'Fase 01 — Configuração',
   description: 'Criar a pasta, instalar AIOX, abrir o Claude Code, instalar o skill do Obsidian e abrir o vault.',
   alternates: { canonical: '/workshop-2/configuracao' },
 };

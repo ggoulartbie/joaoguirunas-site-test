@@ -7,7 +7,7 @@ import { InlineCode } from '../_components/InlineCode';
 import { FacilitatorNote } from '../_components/FacilitatorNote';
 
 export const metadata: Metadata = {
-  title: 'Fase 06 — Claude Design | Workshop 2',
+  title: 'Fase 06 — Claude Design',
   description: 'Abrir a pasta do projeto no Claude Design, criar o KV visual e refinar os componentes.',
   alternates: { canonical: '/workshop-2/handoff-design' },
 };

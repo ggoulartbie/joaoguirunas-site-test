@@ -5,21 +5,21 @@ import { SkillPage } from '@/shared/components/ui/SkillPage';
 import { siteConfig } from '@/config/site';
 
 export const metadata: Metadata = {
-  title: 'Google Ads com IA',
+  title: 'Google Ads com IA: Otimização de Campanhas com Agentes',
   description:
-    'Otimização de Google Ads com IA. Performance Max, Search e Display gerenciados por agentes.',
+    'Otimize campanhas de Google Ads com IA. Performance Max, Search, Display e Scripts gerenciados por agentes — keywords, bidding e relatórios automáticos.',
   alternates: { canonical: `${siteConfig.url}/learn/google-ads-ai` },
   openGraph: {
-    title: 'Google Ads com IA | João Guirunas',
+    title: 'Google Ads com IA: Otimização de Campanhas com Agentes | João Guirunas',
     description:
-      'Otimização de Google Ads com IA. Performance Max, Search e Display gerenciados por agentes.',
+      'Otimize campanhas de Google Ads com IA. Performance Max, Search, Display e Scripts gerenciados por agentes — keywords, bidding e relatórios automáticos.',
     url: `${siteConfig.url}/learn/google-ads-ai`,
     images: [{ url: `${siteConfig.url}/images/og-default.png`, width: 1200, height: 630 }],
   },
   twitter: {
-    title: 'Google Ads com IA | João Guirunas',
+    title: 'Google Ads com IA: Otimização de Campanhas com Agentes | João Guirunas',
     description:
-      'Otimização de Google Ads com IA. Performance Max, Search e Display gerenciados por agentes.',
+      'Otimize campanhas de Google Ads com IA. Performance Max, Search, Display e Scripts gerenciados por agentes — keywords, bidding e relatórios automáticos.',
   },
 };
 

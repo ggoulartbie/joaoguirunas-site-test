@@ -3,8 +3,14 @@ import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
 import { supabaseAdmin } from '@/lib/supabase/admin'
 import { createCheckoutSession } from '@/app/actions/checkout'
+import type { Metadata } from 'next'
 
 export const dynamic = 'force-dynamic'
+
+export const metadata: Metadata = {
+  title: 'Finalizar matrícula',
+  robots: { index: false, follow: false },
+}
 
 interface Props {
   params: Promise<{ cohortSlug: string }>

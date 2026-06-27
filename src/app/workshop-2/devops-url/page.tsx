@@ -7,7 +7,7 @@ import { InlineCode } from '../_components/InlineCode';
 import { FacilitatorNote } from '../_components/FacilitatorNote';
 
 export const metadata: Metadata = {
-  title: 'Fase 09 — Publicar URL | Workshop 2',
+  title: 'Fase 09 — Publicar URL',
   description: 'Publicar as duas versões em URLs públicas e comparar ao vivo — a diferença antes e depois do Claude Design.',
   alternates: { canonical: '/workshop-2/devops-url' },
 };

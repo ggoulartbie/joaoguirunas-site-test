@@ -467,7 +467,7 @@ const slides = [
       <div className="flex flex-col sm:flex-row items-center gap-3 sm:gap-4 mt-1">
         <div className="hidden sm:block" style={{ padding: "6px", background: "#fff" }}>
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="https://api.qrserver.com/v1/create-qr-code/?size=80x80&data=https://opensource.growthsales.ai/mentoria&color=08080C&bgcolor=ffffff" alt="QR" width={80} height={80} style={{ display: "block" }} />
+          <img src="https://api.qrserver.com/v1/create-qr-code/?size=80x80&data=https://opensource.growthsales.ai/mentoria&color=08080C&bgcolor=ffffff" alt="QR code para a página da mentoria Claude Code + AIOX" width={80} height={80} style={{ display: "block" }} />
         </div>
         <div className="text-center sm:text-left">
           <p className="font-mono text-[12px] sm:text-[13px] font-bold break-all" style={{ color: AC, fontFamily: MONO }}>opensource.growthsales.ai/mentoria</p>

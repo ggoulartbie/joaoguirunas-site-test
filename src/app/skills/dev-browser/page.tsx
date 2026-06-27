@@ -7,19 +7,19 @@ import { siteConfig } from '@/config/site';
 export const metadata: Metadata = {
   title: 'Dev Browser — Automação de Navegador',
   description:
-    'Controle o Chrome com Claude Code via código. Mais rápido, barato e preciso que Computer Use.',
+    'Controle o Chrome com Claude Code via código, não por cliques. Automação de navegador mais rápida, barata e precisa que o Computer Use, direto do terminal.',
   alternates: { canonical: `${siteConfig.url}/skills/dev-browser` },
   openGraph: {
     title: 'Dev Browser — Automação de Navegador | João Guirunas',
     description:
-      'Controle o Chrome com Claude Code via código. Mais rápido, barato e preciso que Computer Use.',
+      'Controle o Chrome com Claude Code via código, não por cliques. Automação de navegador mais rápida, barata e precisa que o Computer Use, direto do terminal.',
     url: `${siteConfig.url}/skills/dev-browser`,
     images: [{ url: `${siteConfig.url}/images/og-default.png`, width: 1200, height: 630 }],
   },
   twitter: {
     title: 'Dev Browser — Automação de Navegador | João Guirunas',
     description:
-      'Controle o Chrome com Claude Code via código. Mais rápido, barato e preciso que Computer Use.',
+      'Controle o Chrome com Claude Code via código, não por cliques. Automação de navegador mais rápida, barata e precisa que o Computer Use, direto do terminal.',
   },
 };
 

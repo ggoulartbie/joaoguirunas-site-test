@@ -5,6 +5,7 @@ import { BackButton } from './_components/BackButton'
 
 export const metadata: Metadata = {
   title: 'Acesso restrito',
+  robots: { index: false, follow: false },
 }
 
 export default function ForbiddenPage() {

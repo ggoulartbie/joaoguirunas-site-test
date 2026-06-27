@@ -5,7 +5,7 @@ import type { Metadata } from 'next';
 import { MODULOS_PRESENCIAIS } from './_components/ModuloLayout';
 
 export const metadata: Metadata = {
-  title: 'Dia Presencial — Mentoria Claude Code + AIOX',
+  title: 'Dia Presencial — Mentoria Claude Code + Claude Agent Teams',
   description:
     'Programa completo do dia presencial: O que é possível, Fundamentos Claude Code, Setup e Instalação, Centro de Treinamento de Agentes.',
   alternates: { canonical: '/mentoria/presencial' },

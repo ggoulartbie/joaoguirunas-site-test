@@ -84,11 +84,11 @@ const INSTALLMENT_VALUE = Math.ceil(AGENT_COST / INSTALLMENTS);
 const checklist = [
   '7 encontros (1 presencial + 5 online + 1 final)',
   'Desbloqueio mental com Claudia',
-  'Framework AIOX completo',
+  'Claude Agent Teams completo',
   'Squad personalizada para seu negócio',
   'Grupo exclusivo vitalício',
   'Gravações de todas as aulas',
-  'Atualizações futuras do AIOX',
+  'Atualizações futuras do Claude Agent Teams',
   'Certificado de conclusão',
 ];
 

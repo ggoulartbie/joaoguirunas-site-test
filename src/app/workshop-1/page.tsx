@@ -5,7 +5,8 @@ import { WorkshopClient } from './WorkshopClient';
 
 export const metadata: Metadata = {
   title: 'Workshop: Claude Code na Prática',
-  description: 'Claude Code, AIOX, Squad Creator e Obsidian — tudo em 1h',
+  description:
+    'Workshop prático de 1 hora: do setup ao squad completo de agentes de IA com Claude Code, AIOX, Squad Creator e Obsidian — do zero ao seu time operando.',
   alternates: { canonical: '/workshop-1' },
 };
 

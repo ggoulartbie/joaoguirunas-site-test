@@ -7,7 +7,7 @@ import { InlineCode } from '../_components/InlineCode';
 import { FacilitatorNote } from '../_components/FacilitatorNote';
 
 export const metadata: Metadata = {
-  title: 'Fase 05 — Ver local | Workshop 2',
+  title: 'Fase 05 — Ver local',
   description: 'Subir um servidor local e ver a Versão 1 no browser antes de ir para o Claude Design.',
   alternates: { canonical: '/workshop-2/devops-local' },
 };

@@ -6,7 +6,7 @@ import { RelatedPages } from '@/shared/components/ui/RelatedPages';
 import { siteConfig } from '@/config/site';
 
 export const metadata: Metadata = {
-  title: 'Site Profissional com Claude Code + Google Stitch | João Guirunas',
+  title: 'Site Profissional com Claude Code + Google Stitch',
   description:
     'Como usar o Google Stitch (gratuito) com Claude Code via MCP para criar sites profissionais sem contratar designer. Do brief ao código de produção em minutos.',
   alternates: { canonical: `${siteConfig.url}/learn/google-stitch` },

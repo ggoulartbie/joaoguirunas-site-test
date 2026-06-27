@@ -5,21 +5,21 @@ import { SkillPage } from '@/shared/components/ui/SkillPage';
 import { siteConfig } from '@/config/site';
 
 export const metadata: Metadata = {
-  title: 'Meta Ads com IA',
+  title: 'Meta Ads com IA: Automação de Facebook e Instagram',
   description:
-    'Automação de campanhas Meta com agentes. Otimize criativos, copy e targeting automaticamente.',
+    'Automatize campanhas de Meta Ads no Facebook e Instagram com agentes de IA: criativos, copy persuasivo, targeting e análise de performance.',
   alternates: { canonical: `${siteConfig.url}/learn/meta-ads-ai` },
   openGraph: {
-    title: 'Meta Ads com IA | João Guirunas',
+    title: 'Meta Ads com IA: Automação de Facebook e Instagram | João Guirunas',
     description:
-      'Automação de campanhas Meta com agentes. Otimize criativos, copy e targeting automaticamente.',
+      'Automatize campanhas de Meta Ads no Facebook e Instagram com agentes de IA: criativos, copy persuasivo, targeting e análise de performance.',
     url: `${siteConfig.url}/learn/meta-ads-ai`,
     images: [{ url: `${siteConfig.url}/images/og-default.png`, width: 1200, height: 630 }],
   },
   twitter: {
-    title: 'Meta Ads com IA | João Guirunas',
+    title: 'Meta Ads com IA: Automação de Facebook e Instagram | João Guirunas',
     description:
-      'Automação de campanhas Meta com agentes. Otimize criativos, copy e targeting automaticamente.',
+      'Automatize campanhas de Meta Ads no Facebook e Instagram com agentes de IA: criativos, copy persuasivo, targeting e análise de performance.',
   },
 };
 

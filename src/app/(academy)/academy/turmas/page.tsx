@@ -9,7 +9,7 @@ import { siteConfig } from '@/config/site'
 export const dynamic = 'force-dynamic'
 
 export const metadata: Metadata = {
-  title: 'Turmas · João Guirunas',
+  title: 'Turmas abertas — Academy de IA aplicada',
   description:
     'Turmas abertas do Academy de João Guirunas. Aprenda IA aplicada a negócios com vagas limitadas e conteúdo de quem opera no dia a dia.',
   alternates: { canonical: '/academy/turmas' },

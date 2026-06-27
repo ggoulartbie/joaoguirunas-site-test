@@ -6,6 +6,7 @@ export const metadata: Metadata = {
   alternates: {
     canonical: '/workshop-claude-design/design-system',
   },
+  robots: { index: false, follow: false },
 };
 
 const TEXT   = '#EDE9FF';

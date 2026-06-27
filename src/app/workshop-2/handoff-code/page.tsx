@@ -7,7 +7,7 @@ import { InlineCode } from '../_components/InlineCode';
 import { FacilitatorNote } from '../_components/FacilitatorNote';
 
 export const metadata: Metadata = {
-  title: 'Fase 07 — Handoff → Code | Workshop 2',
+  title: 'Fase 07 — Handoff → Code',
   description: 'Usar o botão Handoff to Claude Code do Claude Design para implementar os componentes automaticamente.',
   alternates: { canonical: '/workshop-2/handoff-code' },
 };
