@@ -11,6 +11,8 @@ const nextConfig: NextConfig = {
       // mentoria/modulos → mentoria/presencial
       { source: '/mentoria/modulos', destination: '/mentoria/presencial', permanent: true },
       { source: '/mentoria/modulos/:path*', destination: '/mentoria/presencial/:path*', permanent: true },
+      // slug rename: bolt.new post foi indexado com slug errado
+      { source: '/open-source/app-full-stack-de-um-prompt-no-claude-code', destination: '/open-source/app-full-stack-de-um-prompt-no-bolt-new', permanent: true },
     ]
   },
   async rewrites() {

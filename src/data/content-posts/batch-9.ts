@@ -1,7 +1,7 @@
 import { ContentPost } from '@/types/content-post'
 export const batch9: ContentPost[] = [
   {
-    slug: 'app-full-stack-de-um-prompt-no-claude-code',
+    slug: 'app-full-stack-de-um-prompt-no-bolt-new',
     data: '2026-06-30',
     slot: 'A',
     formato: 'Reel',

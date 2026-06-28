@@ -341,8 +341,8 @@ Site em Next.js + TypeScript. Conteúdo em PT-BR.
         text: 'Os recursos compõem: um CLAUDE.md bem escrito orienta as skills, que por sua vez guiam os subagentes, que usam MCPs para agir. Adote um de cada vez e veja o ganho acumular.',
       },
     ],
-    primaryLink: 'https://docs.claude.com/en/docs/claude-code/overview',
-    sourceUrl: 'https://docs.claude.com/en/docs/claude-code/overview',
+    primaryLink: 'https://code.claude.com/docs/en/overview',
+    sourceUrl: 'https://code.claude.com/docs/en/overview',
     author: '@joaoguirunas',
   },
 ]
