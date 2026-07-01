@@ -10,7 +10,7 @@ import { CursoOnlineDiferenciais } from './_components/CursoOnlineDiferenciais'
 import { CursoOnlineTimeline } from './_components/CursoOnlineTimeline'
 import { CursoPricingCalculator } from './_components/CursoPricingCalculator'
 import { CursoFaqAccordion } from './_components/CursoFaqAccordion'
-import { CursoOnlineForm } from './_components/CursoOnlineForm'
+import { SquadForm as CursoOnlineForm } from '../(squad-lps)/_components/SquadForm'
 import { SolarSystemBackground } from '@/app/agentes/_components/SolarSystemBackground'
 
 export const metadata: Metadata = {
