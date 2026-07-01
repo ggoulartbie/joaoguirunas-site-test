@@ -1,7 +1,7 @@
 'use client'
 
 import { motion } from 'framer-motion'
-import { AgentCard } from '@/app/agentes/_components/AgentCard'
+import { AgentCardCompact } from '@/app/agentes/_components/AgentCard'
 import type { Agente, Squad } from '@/data/agentes'
 
 const MONO: React.CSSProperties = {
@@ -50,24 +50,9 @@ export function SquadAgentes({ agentes, squad }: { agentes: Agente[]; squad: Squ
               viewport={{ once: true, margin: '-60px' }}
               transition={{ duration: 0.4, delay: i * 0.05 }}
             >
-              <AgentCard agente={agente} squad={squad} />
+              <AgentCardCompact agente={agente} squad={squad} />
             </motion.div>
           ))}
-        </div>
-        <div className="mt-10 sm:mt-12 text-center">
-          <a
-            href={`/agentes#squad-${squad.id}`}
-            className="inline-flex items-center gap-2 transition-all hover:text-white"
-            style={{
-              ...MONO, color: 'rgba(255,255,255,0.45)',
-              border: '1px solid rgba(255,255,255,0.12)', padding: '0.6rem 1.2rem',
-            }}
-          >
-            Ver perfis detalhados
-            <svg className="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-            </svg>
-          </a>
         </div>
       </div>
     </section>

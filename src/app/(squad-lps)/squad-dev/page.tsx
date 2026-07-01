@@ -12,6 +12,11 @@ import { SquadInstrutor } from '../_components/SquadInstrutor'
 import { SquadOferta } from '../_components/SquadOferta'
 import { SquadFaq } from '../_components/SquadFaq'
 import { SquadCtaFinal } from '../_components/SquadCtaFinal'
+import { AgentPlanetBackground } from '@/app/agentes/_components/AgentPlanetBackground'
+import { SquadAgentes } from '../_components/SquadAgentes'
+import { SquadFloatingCTA } from '../_components/SquadFloatingCTA'
+import { Depoimentos } from '@/shared/components/sections/Depoimentos'
+import { getAgentesBySquad, SQUADS } from '@/data/agentes'
 
 const config: SquadConfig = {
   headline: 'Construa sistemas com banco de dados real, login de usuário e API — sem contratar um desenvolvedor',
@@ -19,6 +24,9 @@ const config: SquadConfig = {
   ctaLabel: 'QUERO MINHA SQUAD DE DEV — R$397',
   price: 'R$397',
   priceInstallments: '5x R$86,90',
+  accent: '#A78BFA',
+  squadId: 'dev',
+  race: 'Arcturiana',
   problema:
     'Você tem uma ideia de produto digital mas trava quando precisa de banco de dados, autenticação ou API. Contratar um dev custa caro e cria dependência — e as ferramentas no-code não escalam.',
   virada:
@@ -75,6 +83,9 @@ const config: SquadConfig = {
   ],
 }
 
+const devSquad = SQUADS.find(s => s.id === 'dev')!
+const devAgentes = getAgentesBySquad('dev')
+
 const jsonLd = {
   '@context': 'https://schema.org',
   '@type': 'Course',
@@ -104,28 +115,48 @@ export default function SquadDevPage() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
-      <SquadHero
-        headline={config.headline}
-        sub={config.sub}
-        ctaLabel={config.ctaLabel}
-        price={config.price}
-        priceInstallments={config.priceInstallments}
-      />
-      <SquadSelos />
-      <SquadProblema problema={config.problema} />
-      <SquadVirada virada={config.virada} />
-      <SquadCurriculum curriculum={config.curriculum} />
-      <SquadBonus bonus={config.bonus} />
-      <SquadProva />
-      <SquadTransparencia />
-      <SquadInstrutor instrutor={config.instrutor} />
-      <SquadOferta
-        price={config.price}
-        priceInstallments={config.priceInstallments}
-        ctaLabel={config.ctaLabel}
-      />
-      <SquadFaq faq={config.faq} />
-      <SquadCtaFinal ctaLabel={config.ctaLabel} />
+      <AgentPlanetBackground squadId="dev" />
+      <div className="relative z-10 -mt-16">
+        <SquadHero
+          headline={config.headline}
+          sub={config.sub}
+          ctaLabel={config.ctaLabel}
+          price={config.price}
+          priceInstallments={config.priceInstallments}
+          accent="#A78BFA"
+          badgeLabel="SQUAD DEV · ARCTURIANA"
+          vslAccent="#A78BFA"
+        />
+        <SquadSelos />
+        <SquadProblema problema={config.problema} />
+        <SquadVirada virada={config.virada} />
+        <SquadCurriculum
+          accent="#A78BFA"
+          ctaLabel="Garantir minha vaga — R$397"
+          squadModule={{
+            num: 8,
+            title: 'Squad Dev',
+            count: 19,
+            description:
+              'Do site ao sistema. Sua primeira aplicação real — plataforma de cursos com login, área de membros e painel administrativo. Banco de dados, autenticação e deploy com Supabase.',
+            tags: ['Supabase', 'Auth', 'API', 'Deploy'],
+          }}
+        />
+        <SquadBonus bonus={config.bonus} />
+        <SquadAgentes agentes={devAgentes} squad={devSquad} />
+        <SquadProva />
+        <Depoimentos accent="#A78BFA" />
+        <SquadTransparencia />
+        <SquadInstrutor instrutor={config.instrutor} />
+        <SquadOferta
+          price={config.price}
+          priceInstallments={config.priceInstallments}
+          ctaLabel={config.ctaLabel}
+        />
+        <SquadFaq faq={config.faq} />
+        <SquadCtaFinal ctaLabel={config.ctaLabel} />
+      </div>
+      <SquadFloatingCTA ctaLabel="Garantir vaga" price="R$397" accent="#A78BFA" />
     </>
   )
 }

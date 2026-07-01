@@ -1,17 +1,22 @@
 import type { Metadata } from 'next';
 import type { SquadConfig } from '../_components/types';
+import { AgentPlanetBackground } from '@/app/agentes/_components/AgentPlanetBackground';
 import { SquadHero } from '../_components/SquadHero';
 import { SquadSelos } from '../_components/SquadSelos';
 import { SquadProblema } from '../_components/SquadProblema';
 import { SquadVirada } from '../_components/SquadVirada';
 import { SquadCurriculum } from '../_components/SquadCurriculum';
 import { SquadBonus } from '../_components/SquadBonus';
+import { SquadAgentes } from '../_components/SquadAgentes';
 import { SquadProva } from '../_components/SquadProva';
 import { SquadTransparencia } from '../_components/SquadTransparencia';
 import { SquadInstrutor } from '../_components/SquadInstrutor';
 import { SquadOferta } from '../_components/SquadOferta';
 import { SquadFaq } from '../_components/SquadFaq';
 import { SquadCtaFinal } from '../_components/SquadCtaFinal';
+import { SquadFloatingCTA } from '../_components/SquadFloatingCTA';
+import { Depoimentos } from '@/shared/components/sections/Depoimentos';
+import { getAgentesBySquad, SQUADS } from '@/data/agentes';
 
 export const metadata: Metadata = {
   title: 'Squad de Social Media — Conteúdo com IA no piloto automático | João Guirunas',
@@ -53,6 +58,9 @@ const jsonLd = {
 };
 
 const config: SquadConfig = {
+  accent: '#EC4899',
+  squadId: 'social' as const,
+  race: 'Xelvari',
   headline:
     'Monte uma squad de IA que cria e publica conteúdo para suas redes sozinha — imagens, vídeos com avatar, narração e postagem automática',
   sub:
@@ -128,6 +136,9 @@ const config: SquadConfig = {
   ],
 };
 
+const socialAgentes = getAgentesBySquad('social');
+const socialSquad = SQUADS.find((s) => s.id === 'social')!;
+
 export default function SquadSocialPage() {
   return (
     <>
@@ -135,28 +146,48 @@ export default function SquadSocialPage() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
-      <SquadHero
-        headline={config.headline}
-        sub={config.sub}
-        ctaLabel={config.ctaLabel}
-        price={config.price}
-        priceInstallments={config.priceInstallments}
-      />
-      <SquadSelos />
-      <SquadProblema problema={config.problema} />
-      <SquadVirada virada={config.virada} />
-      <SquadCurriculum curriculum={config.curriculum} />
-      <SquadBonus bonus={config.bonus} />
-      <SquadProva />
-      <SquadTransparencia />
-      <SquadInstrutor instrutor={config.instrutor} />
-      <SquadOferta
-        price={config.price}
-        priceInstallments={config.priceInstallments}
-        ctaLabel={config.ctaLabel}
-      />
-      <SquadFaq faq={config.faq} />
-      <SquadCtaFinal ctaLabel={config.ctaLabel} />
+      <AgentPlanetBackground squadId="social" />
+      <div className="relative z-10 -mt-16">
+        <SquadHero
+          headline={config.headline}
+          sub={config.sub}
+          ctaLabel={config.ctaLabel}
+          price={config.price}
+          priceInstallments={config.priceInstallments}
+          accent="#EC4899"
+          badgeLabel="SQUAD SOCIAL · XELVARI"
+          vslAccent="#EC4899"
+        />
+        <SquadSelos />
+        <SquadProblema problema={config.problema} />
+        <SquadVirada virada={config.virada} />
+        <SquadCurriculum
+          accent="#EC4899"
+          ctaLabel="Garantir minha vaga — R$297"
+          squadModule={{
+            num: 7,
+            title: 'Squad de Social Media',
+            count: 18,
+            description:
+              'O maior módulo do curso. Da descoberta de mercado ao dashboard ao vivo: Apify, ElevenLabs, HeyGen, Freepik e Metricool — sistema operacional completo de marketing de conteúdo.',
+            tags: ['Apify', 'ElevenLabs', 'HeyGen', 'Metricool'],
+          }}
+        />
+        <SquadBonus bonus={config.bonus} />
+        <SquadAgentes agentes={socialAgentes} squad={socialSquad} />
+        <SquadProva />
+        <Depoimentos accent="#EC4899" />
+        <SquadTransparencia />
+        <SquadInstrutor instrutor={config.instrutor} />
+        <SquadOferta
+          price={config.price}
+          priceInstallments={config.priceInstallments}
+          ctaLabel={config.ctaLabel}
+        />
+        <SquadFaq faq={config.faq} />
+        <SquadCtaFinal ctaLabel={config.ctaLabel} />
+      </div>
+      <SquadFloatingCTA ctaLabel="Garantir vaga" price="R$297" accent="#EC4899" />
     </>
   );
 }

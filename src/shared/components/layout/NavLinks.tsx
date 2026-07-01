@@ -1,8 +1,10 @@
 'use client';
 
+import { Fragment } from 'react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import type { MouseEvent } from 'react';
+import { CoursesDropdown } from '@/shared/components/ui/CoursesDropdown';
 
 // Deixa cmd/ctrl/shift/alt + clique e botão do meio abrirem nova aba normalmente.
 function isModifiedClick(e: MouseEvent): boolean {
@@ -11,7 +13,6 @@ function isModifiedClick(e: MouseEvent): boolean {
 
 const NAV_INTERNAL = [
   { href: '/open-source', label: 'Open-source' },
-  { href: '/curso-online', label: 'Curso Online' },
   { href: '/mentoria', label: 'Mentoria' },
 ];
 
@@ -25,35 +26,37 @@ export function NavLinks() {
 
   return (
     <nav className="hidden md:flex items-center" aria-label="Navegação principal">
-      {NAV_INTERNAL.map(({ href, label }) => {
+      {NAV_INTERNAL.map(({ href, label }, i) => {
         const isActive = pathname === href || pathname.startsWith(href + '/');
         return (
-          <Link
-            key={href}
-            href={href}
-            className="px-3 py-2 text-[11px] font-medium uppercase tracking-widest transition-colors duration-150"
-            style={{
-              fontFamily: 'var(--font-mono)',
-              color: isActive ? 'var(--color-accent)' : 'rgba(255,255,255,0.45)',
-            }}
-            // Navegação imperativa: o canvas Spline do hero de /mentoria chama
-            // preventDefault() nos cliques de uma faixa do header, então o <Link>
-            // não navega. O onClick dispara no bubble mesmo com defaultPrevented.
-            onClick={(e) => {
-              if (isModifiedClick(e)) return;
-              e.preventDefault();
-              router.push(href);
-            }}
-            onMouseEnter={(e) => {
-              if (!isActive) e.currentTarget.style.color = 'rgba(255,255,255,0.8)';
-            }}
-            onMouseLeave={(e) => {
-              if (!isActive) e.currentTarget.style.color = 'rgba(255,255,255,0.45)';
-            }}
-            aria-current={isActive ? 'page' : undefined}
-          >
-            {label}
-          </Link>
+          <Fragment key={href}>
+            {i === 1 && <CoursesDropdown />}
+            <Link
+              href={href}
+              className="px-3 py-2 text-[11px] font-medium uppercase tracking-widest transition-colors duration-150"
+              style={{
+                fontFamily: 'var(--font-mono)',
+                color: isActive ? 'var(--color-accent)' : 'rgba(255,255,255,0.45)',
+              }}
+              // Navegação imperativa: o canvas Spline do hero de /mentoria chama
+              // preventDefault() nos cliques de uma faixa do header, então o <Link>
+              // não navega. O onClick dispara no bubble mesmo com defaultPrevented.
+              onClick={(e) => {
+                if (isModifiedClick(e)) return;
+                e.preventDefault();
+                router.push(href);
+              }}
+              onMouseEnter={(e) => {
+                if (!isActive) e.currentTarget.style.color = 'rgba(255,255,255,0.8)';
+              }}
+              onMouseLeave={(e) => {
+                if (!isActive) e.currentTarget.style.color = 'rgba(255,255,255,0.45)';
+              }}
+              aria-current={isActive ? 'page' : undefined}
+            >
+              {label}
+            </Link>
+          </Fragment>
         );
       })}
 

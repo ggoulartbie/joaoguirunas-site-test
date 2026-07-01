@@ -17,5 +17,9 @@ const AgentPlanetScene = dynamic(
 );
 
 export function AgentPlanetBackground({ squadId }: { squadId: SquadId }) {
-  return <AgentPlanetScene squadId={squadId} />;
+  return (
+    <div aria-hidden="true">
+      <AgentPlanetScene squadId={squadId} />
+    </div>
+  );
 }

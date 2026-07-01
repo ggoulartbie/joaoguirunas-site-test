@@ -12,6 +12,7 @@ import { RevosForm } from './revos-form';
 import { PricingCalculator } from './pricing-calculator';
 import { SectionDots } from './section-dots';
 import { SolutionSection } from './solution-section';
+import { Depoimentos } from '@/shared/components/sections/Depoimentos';
 
 const INSCRICAO_ANCHOR = '#inscricao';
 const KV_DISPLAY: React.CSSProperties = { fontFamily: 'var(--font-display-serif)', fontWeight: 400, letterSpacing: '-0.03em' };
@@ -176,6 +177,7 @@ export default function MentoriaPage() {
       </section>
 
       {/* ===== INVESTIMENTO (Calculadora Interativa) ===== */}
+      <Depoimentos accent="#FF3A0E" />
       <PricingCalculator />
 
       {/* ===== INSCRICAO (LISTA DE ESPERA) ===== */}

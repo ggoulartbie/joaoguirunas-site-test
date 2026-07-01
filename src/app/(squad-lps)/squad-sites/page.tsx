@@ -1,17 +1,25 @@
 import type { Metadata } from 'next'
 import type { SquadConfig } from '../_components/types'
+import { AgentPlanetBackground } from '@/app/agentes/_components/AgentPlanetBackground'
 import { SquadHero } from '../_components/SquadHero'
 import { SquadSelos } from '../_components/SquadSelos'
 import { SquadProblema } from '../_components/SquadProblema'
 import { SquadVirada } from '../_components/SquadVirada'
 import { SquadCurriculum } from '../_components/SquadCurriculum'
 import { SquadBonus } from '../_components/SquadBonus'
+import { SquadAgentes } from '../_components/SquadAgentes'
 import { SquadProva } from '../_components/SquadProva'
 import { SquadTransparencia } from '../_components/SquadTransparencia'
 import { SquadInstrutor } from '../_components/SquadInstrutor'
 import { SquadOferta } from '../_components/SquadOferta'
 import { SquadFaq } from '../_components/SquadFaq'
 import { SquadCtaFinal } from '../_components/SquadCtaFinal'
+import { SquadFloatingCTA } from '../_components/SquadFloatingCTA'
+import { Depoimentos } from '@/shared/components/sections/Depoimentos'
+import { SitesPortfolio } from '../_components/SitesPortfolio'
+import { getAgentesBySquad, SQUADS } from '@/data/agentes'
+
+const sitesSquad = SQUADS.find(s => s.id === 'sites')!
 
 const config: SquadConfig = {
   headline: 'Crie sites profissionais com agentes de IA — e comece a cobrar de R$1.500 a R$3.000 por projeto, mesmo sem saber programar',
@@ -19,6 +27,9 @@ const config: SquadConfig = {
   ctaLabel: 'QUERO CRIAR MINHA SQUAD DE SITES — R$297',
   price: 'R$297',
   priceInstallments: '5x R$64,90',
+  accent: '#FF3A0E',
+  squadId: 'sites' as const,
+  race: 'Luminari',
   problema:
     'Você quer criar sites para clientes (ou para o seu negócio) mas não sabe programar — e contratar um dev custa caro e demora. As ferramentas no-code têm limite, e você acaba preso em templates que todo mundo usa.',
   virada:
@@ -105,28 +116,49 @@ export default function SquadSitesPage() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
-      <SquadHero
-        headline={config.headline}
-        sub={config.sub}
-        ctaLabel={config.ctaLabel}
-        price={config.price}
-        priceInstallments={config.priceInstallments}
-      />
-      <SquadSelos />
-      <SquadProblema problema={config.problema} />
-      <SquadVirada virada={config.virada} />
-      <SquadCurriculum curriculum={config.curriculum} />
-      <SquadBonus bonus={config.bonus} />
-      <SquadProva />
-      <SquadTransparencia />
-      <SquadInstrutor instrutor={config.instrutor} />
-      <SquadOferta
-        price={config.price}
-        priceInstallments={config.priceInstallments}
-        ctaLabel={config.ctaLabel}
-      />
-      <SquadFaq faq={config.faq} />
-      <SquadCtaFinal ctaLabel={config.ctaLabel} />
+      <AgentPlanetBackground squadId="sites" />
+      <div className="relative z-10 -mt-16">
+        <SquadHero
+          headline={config.headline}
+          sub={config.sub}
+          ctaLabel={config.ctaLabel}
+          price={config.price}
+          priceInstallments={config.priceInstallments}
+          accent="#FF3A0E"
+          badgeLabel="SQUAD SITES · LUMINARI"
+          vslAccent="#FF3A0E"
+        />
+        <SquadSelos />
+        <SquadProblema problema={config.problema} />
+        <SquadVirada virada={config.virada} />
+        <SquadCurriculum
+          accent="#FF3A0E"
+          ctaLabel="Garantir minha vaga — R$297"
+          squadModule={{
+            num: 6,
+            title: 'Squad de Sites',
+            count: 13,
+            description:
+              'Do zero ao site no ar. GitHub, Vercel, Next.js e a squad Luminari construindo. Em uma manhã você publica o que uma equipe humana entrega em semanas — operando tudo pelo terminal, via Claude Code.',
+            tags: ['GitHub', 'Vercel', 'Next.js', 'Deploy'],
+          }}
+        />
+        <SquadBonus bonus={config.bonus} />
+        <SquadAgentes agentes={getAgentesBySquad('sites')} squad={sitesSquad} />
+        <SquadProva />
+        <SitesPortfolio accent="#FF3A0E" />
+        <Depoimentos accent="#FF3A0E" />
+        <SquadTransparencia />
+        <SquadInstrutor instrutor={config.instrutor} />
+        <SquadOferta
+          price={config.price}
+          priceInstallments={config.priceInstallments}
+          ctaLabel={config.ctaLabel}
+        />
+        <SquadFaq faq={config.faq} />
+        <SquadCtaFinal ctaLabel={config.ctaLabel} />
+      </div>
+      <SquadFloatingCTA ctaLabel="Garantir vaga" price="R$297" accent="#FF3A0E" />
     </>
   )
 }

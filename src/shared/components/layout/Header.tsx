@@ -14,10 +14,13 @@ function isModifiedClick(e: MouseEvent): boolean {
   return e.metaKey || e.ctrlKey || e.shiftKey || e.altKey || e.button === 1;
 }
 
-const NAV_INTERNAL = [
-  { href: '/open-source', label: 'Open-source' },
-  { href: '/curso-online', label: 'Curso Online' },
-  { href: '/mentoria', label: 'Mentoria' },
+const MOBILE_LINKS: Array<{ href: string; label: string; dot: string | null }> = [
+  { href: '/open-source', label: 'Open-source', dot: null },
+  { href: '/curso-online', label: 'Todos os cursos', dot: null },
+  { href: '/squad-sites', label: 'Squad de Sites · R$297', dot: '#FF3A0E' },
+  { href: '/squad-social', label: 'Squad de Social · R$297', dot: '#EC4899' },
+  { href: '/squad-dev', label: 'Squad de Dev · R$397', dot: '#A78BFA' },
+  { href: '/mentoria', label: 'Mentoria', dot: null },
 ];
 
 const NAV_EXTERNAL = [
@@ -82,7 +85,7 @@ export function Header() {
           aria-label="Menu mobile"
         >
           <ul className="px-4 py-3 flex flex-col gap-1">
-            {NAV_INTERNAL.map(({ href, label }) => {
+            {MOBILE_LINKS.map(({ href, label, dot }) => {
               const isActive = pathname === href || pathname.startsWith(href + '/');
               return (
                 <li key={href}>
@@ -98,18 +101,25 @@ export function Header() {
                       e.preventDefault();
                       router.push(href);
                     }}
-                    className="flex items-center w-full px-3 py-3 min-h-[44px] text-[11px] font-medium uppercase tracking-widest transition-colors duration-150"
+                    className="flex items-center gap-2 w-full px-3 py-3 min-h-[44px] text-[11px] font-medium uppercase tracking-widest transition-colors duration-150"
                     style={{
                       fontFamily: 'var(--font-mono)',
                       color: isActive ? 'var(--color-accent)' : 'rgba(255,255,255,0.55)',
                     }}
                     aria-current={isActive ? 'page' : undefined}
                   >
+                    {dot && (
+                      <span
+                        className="w-2 h-2 rounded-full flex-shrink-0"
+                        style={{ background: dot }}
+                      />
+                    )}
                     {label}
                   </Link>
                 </li>
               );
             })}
+
             {NAV_EXTERNAL.map(({ href, label }) => (
               <li key={href}>
                 <a

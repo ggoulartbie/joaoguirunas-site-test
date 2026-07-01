@@ -1,7 +1,5 @@
 'use client';
 
-import React from 'react';
-
 const KV_DISPLAY: React.CSSProperties = {
   fontFamily: 'var(--font-display-serif)',
   fontWeight: 400,
@@ -15,6 +13,8 @@ const KV_MONO: React.CSSProperties = {
   textTransform: 'uppercase',
   fontWeight: 500,
 };
+
+import React from 'react';
 
 export function CursoOnlineHero() {
   return (
@@ -43,7 +43,7 @@ export function CursoOnlineHero() {
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#FF3A0E] opacity-75" />
                 <span className="relative inline-flex rounded-full h-2 w-2 bg-[#FF3A0E]" />
               </span>
-              <span className="text-[#FF3A0E]">Curso Online · Aulas Gravadas</span>
+              <span className="text-[#FF3A0E]">Claude Agent Teams · Escolha sua Squad</span>
             </span>
           </div>
 
@@ -51,43 +51,15 @@ export function CursoOnlineHero() {
             className="text-4xl sm:text-5xl lg:text-7xl text-white mb-6"
             style={{ ...KV_DISPLAY, lineHeight: 0.92 }}
           >
-            Agentes Claude que{' '}
+            Qual squad de agentes{' '}
             <span style={{ ...KV_DISPLAY, fontStyle: 'italic', fontWeight: 300, color: '#FF3A0E' }}>
-              trabalham por você
+              você vai montar primeiro?
             </span>
           </h1>
 
-          <p className="text-base sm:text-lg text-white/70 max-w-xl leading-relaxed mb-8">
-            Aprenda a criar, configurar e orquestrar uma squad completa de agentes de IA com Claude Code. No seu ritmo, sem horário fixo, com acesso imediato às aulas gravadas.
+          <p className="text-base sm:text-lg text-white/70 max-w-xl leading-relaxed">
+            Três módulos especializados. Cada squad é um time de IA pronto para trabalhar no seu negócio.
           </p>
-
-          <div className="flex flex-col sm:flex-row gap-4 items-start">
-            <a
-              href="#inscricao"
-              className="inline-flex items-center justify-center gap-2 px-8 py-4 text-sm font-semibold uppercase transition-all hover:brightness-110 active:scale-[0.98]"
-              style={{ background: '#FF3A0E', color: '#050507', fontFamily: 'var(--font-mono)', fontSize: '12px', letterSpacing: '0.16em' }}
-            >
-              Comprar — R$ 797
-            </a>
-          </div>
-
-          <div className="mt-10 flex flex-wrap gap-6">
-            {[
-              { value: '8', label: 'Módulos' },
-              { value: '6m', label: 'Acesso' },
-              { value: '100%', label: 'On-demand' },
-            ].map(({ value, label }) => (
-              <div key={label} className="flex items-baseline gap-2">
-                <span
-                  className="text-2xl sm:text-3xl"
-                  style={{ ...KV_DISPLAY, color: '#FF3A0E' }}
-                >
-                  {value}
-                </span>
-                <span style={{ ...KV_MONO, color: 'rgba(255,255,255,0.35)' }}>{label}</span>
-              </div>
-            ))}
-          </div>
         </div>
       </div>
     </section>
