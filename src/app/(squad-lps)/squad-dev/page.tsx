@@ -80,7 +80,7 @@ const jsonLd = {
   '@type': 'Course',
   name: 'Squad de Dev',
   description: config.sub,
-  provider: { '@type': 'Organization', name: 'GrowthSales.ai' },
+  provider: { '@type': 'Person', name: 'João Guirunas' },
   offers: { '@type': 'Offer', price: '397', priceCurrency: 'BRL' },
 }
 

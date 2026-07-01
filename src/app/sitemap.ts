@@ -61,6 +61,10 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { path: '/skills/supabase',           priority: 0.5, freq: 'monthly' },
     { path: '/skills/vercel',             priority: 0.5, freq: 'monthly' },
     { path: '/skills/github',             priority: 0.5, freq: 'monthly' },
+    // Squad LPs
+    { path: '/squad-sites',               priority: 0.8, freq: 'weekly' },
+    { path: '/squad-social',              priority: 0.8, freq: 'weekly' },
+    { path: '/squad-dev',                 priority: 0.8, freq: 'weekly' },
     // Framework / Monitor / Squads
     { path: '/framework/aiox-framework',  priority: 0.6, freq: 'monthly' },
     { path: '/squads/xquads',             priority: 0.5, freq: 'monthly' },
