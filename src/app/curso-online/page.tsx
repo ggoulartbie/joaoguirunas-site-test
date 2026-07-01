@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import React from 'react'
 import Image from 'next/image'
+import Link from 'next/link'
 
 import { siteConfig } from '@/config/site'
 import { SectionDots } from '@/app/mentoria/section-dots'
@@ -201,6 +202,94 @@ export default function CursoOnlinePage() {
 
       {/* ===== INVESTIMENTO ===== */}
       <CursoPricingCalculator />
+
+      {/* ===== MÓDULOS AVULSOS ===== */}
+      <section
+        className="py-16 sm:py-24"
+        style={{ borderTop: '1px solid rgba(255,255,255,0.07)' }}
+      >
+        <div className="mx-auto max-w-6xl px-5 sm:px-6 lg:px-[140px]">
+          <div className="text-center mb-12 sm:mb-16">
+            <SectionBadge label="Módulos Avulsos" />
+            <h2
+              className="text-3xl sm:text-4xl lg:text-5xl text-white mb-4"
+              style={{ ...KV_DISPLAY, lineHeight: 0.95 }}
+            >
+              Prefere começar{' '}
+              <span className="text-[#FF3A0E] italic" style={{ fontWeight: 300 }}>por um squad?</span>
+            </h2>
+            <p className="text-white/55 text-sm sm:text-base max-w-xl mx-auto">
+              Cada squad é um módulo completo e independente. Compre avulso e comece pelo que faz mais sentido para você agora.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6">
+            {[
+              {
+                title: 'Squad de Sites',
+                desc: 'Crie e publique sites profissionais com sua própria squad de IA — do zero ao primeiro cliente pagante.',
+                price: 'R$297',
+                priceInstallments: '5x R$64,90',
+                href: '/squad-sites',
+              },
+              {
+                title: 'Squad de Social Media',
+                desc: 'Monte uma squad que cria imagens, vídeos com avatar e publica conteúdo automaticamente nas redes.',
+                price: 'R$297',
+                priceInstallments: '5x R$64,90',
+                href: '/squad-social',
+              },
+              {
+                title: 'Squad de Dev',
+                desc: 'Construa sistemas com banco de dados real, login e API usando Supabase — sem contratar um dev.',
+                price: 'R$397',
+                priceInstallments: '5x R$86,90',
+                href: '/squad-dev',
+              },
+            ].map(({ title, desc, price, priceInstallments, href }) => (
+              <div
+                key={href}
+                className="flex flex-col p-6 sm:p-8 transition-all group hover:border-[#FF3A0E]/20"
+                style={{ border: '1px solid rgba(255,255,255,0.08)', background: 'rgba(255,255,255,0.02)' }}
+              >
+                <div
+                  className="w-8 h-[2px] mb-5 transition-all group-hover:w-12"
+                  style={{ background: '#FF3A0E' }}
+                  aria-hidden="true"
+                />
+                <h3
+                  className="text-xl sm:text-2xl text-white mb-3"
+                  style={{ ...KV_DISPLAY }}
+                >
+                  {title}
+                </h3>
+                <p className="text-white/55 text-sm leading-relaxed flex-1 mb-6">{desc}</p>
+                <div className="mb-5">
+                  <p
+                    className="text-2xl text-[#FF3A0E]"
+                    style={{ ...KV_DISPLAY }}
+                  >
+                    {price}
+                  </p>
+                  <p
+                    className="text-xs text-white/35 mt-1"
+                    style={{ fontFamily: 'var(--font-mono)', letterSpacing: '0.08em' }}
+                  >
+                    ou {priceInstallments} no cartão
+                  </p>
+                </div>
+                <Link
+                  href={href}
+                  className="inline-flex items-center justify-center px-6 py-3 text-xs font-semibold uppercase transition-all hover:brightness-110 active:scale-[0.98]"
+                  style={{ background: '#FF3A0E', color: '#050507', fontFamily: 'var(--font-mono)', letterSpacing: '0.16em' }}
+                >
+                  Conhecer o Squad
+                </Link>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
 
       {/* ===== INSCRIÇÃO / CTA ===== */}
       <section
