@@ -8,6 +8,8 @@ export interface FaqItem {
   resposta: string;
 }
 
+import type { SquadId } from '@/data/agentes';
+
 export interface SquadConfig {
   headline: string;
   sub: string;
@@ -24,4 +26,7 @@ export interface SquadConfig {
     bio: string;
     cargo: string;
   };
+  accent?: string;
+  squadId?: SquadId;
+  race?: string;
 }
