@@ -204,7 +204,7 @@ export function SquadHero({
                 >
                   <iframe
                     className="absolute inset-0 w-full h-full"
-                    src={`https://player.vimeo.com/video/${vslVideoId}?badge=0&autopause=0&player_id=0&app_id=58479`}
+                    src={`https://player.vimeo.com/video/${vslVideoId}?badge=0&autopause=0&player_id=0&app_id=58479&title=0&byline=0&portrait=0&dnt=1`}
                     allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media"
                     allowFullScreen
                     title="VSL Squad de Sites"
