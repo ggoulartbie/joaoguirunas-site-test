@@ -30,7 +30,7 @@ export function SquadVSLThumb({ videoId, accent, thumbnailUrl }: SquadVSLThumbPr
           <img src={thumbnailUrl} alt="" className="absolute inset-0 w-full h-full object-cover" aria-hidden="true" />
         )}
 
-        <div className="absolute inset-0" style={{ background: thumbnailUrl ? 'rgba(0,0,0,0.45)' : 'rgba(5,5,7,0.92)' }} />
+        <div className="absolute inset-0" style={{ background: thumbnailUrl ? 'rgba(0,0,0,0.28)' : 'rgba(5,5,7,0.92)' }} />
 
         <div className="absolute inset-0 flex items-center justify-center">
           <div
