@@ -30,14 +30,14 @@ export function SquadVSLThumb({ videoId, accent, thumbnailUrl }: SquadVSLThumbPr
           <img src={thumbnailUrl} alt="" className="absolute inset-0 w-full h-full object-cover" aria-hidden="true" />
         )}
 
-        <div className="absolute inset-0" style={{ background: thumbnailUrl ? 'rgba(0,0,0,0.28)' : 'rgba(5,5,7,0.92)' }} />
+        <div className="absolute inset-0" style={{ background: thumbnailUrl ? 'rgba(0,0,0,0.52)' : 'rgba(5,5,7,0.92)' }} />
 
-        <div className="absolute inset-0 flex items-center justify-center" style={{ paddingTop: '8%' }}>
+        <div className="absolute inset-0 flex items-center justify-center">
           <div
-            className="flex items-center justify-center w-10 h-10 sm:w-11 sm:h-11 rounded-full transition-transform group-hover:scale-105"
-            style={{ background: 'rgba(255,255,255,0.12)', border: '1.5px solid rgba(255,255,255,0.35)', backdropFilter: 'blur(8px)' }}
+            className="flex items-center justify-center w-20 h-20 sm:w-24 sm:h-24 rounded-full transition-transform group-hover:scale-105"
+            style={{ background: 'transparent', border: `2.5px solid ${accent}`, boxShadow: `0 0 32px ${accent}50` }}
           >
-            <svg className="w-4 h-4 translate-x-[1px]" fill="currentColor" viewBox="0 0 24 24" style={{ color: '#ffffff' }}>
+            <svg className="w-8 h-8 sm:w-10 sm:h-10 translate-x-[3px]" fill="currentColor" viewBox="0 0 24 24" style={{ color: accent }}>
               <path d="M8 5v14l11-7z" />
             </svg>
           </div>
