@@ -21,7 +21,7 @@ import { getAgentesBySquad, SQUADS } from '@/data/agentes'
 const sitesSquad = SQUADS.find(s => s.id === 'sites')!
 
 const config: SquadConfig = {
-  headline: 'Crie sites profissionais com agentes de IA — e comece a cobrar de R$1.500 a R$3.000 por projeto, mesmo sem saber programar',
+  headline: 'Crie sites profissionais com agentes de IA — e comece a cobrar de R$3.000 a R$10.000 por projeto, mesmo sem saber programar',
   sub: 'O passo a passo completo para montar sua própria squad de IA que cria, publica e entrega sites no ar — do zero ao primeiro cliente pagante',
   ctaLabel: 'QUERO CRIAR MINHA SQUAD DE SITES — R$297',
   price: 'R$297',
@@ -71,7 +71,7 @@ const config: SquadConfig = {
     {
       pergunta: 'Posso usar o que aprender para cobrar de clientes?',
       resposta:
-        'Sim. O curso foi desenhado para isso. Você vai aprender a montar uma operação que pode cobrar de R$1.500 a R$3.000 por projeto.',
+        'Sim. O curso foi desenhado para isso. Você vai aprender a montar uma operação que pode cobrar de R$3.000 a R$10.000 por projeto.',
     },
     {
       pergunta: 'Qual a diferença entre esta Squad e o Curso Online R$797?',
