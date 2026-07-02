@@ -34,10 +34,10 @@ export function SquadVSLThumb({ videoId, accent, thumbnailUrl }: SquadVSLThumbPr
 
         <div className="absolute inset-0 flex items-center justify-center">
           <div
-            className="flex items-center justify-center w-24 h-24 sm:w-28 sm:h-28 rounded-full transition-transform group-hover:scale-105"
+            className="flex items-center justify-center w-16 h-16 sm:w-24 sm:h-24 rounded-full transition-transform group-hover:scale-105"
             style={{ background: 'transparent', border: `3px solid ${accent}`, boxShadow: `0 0 40px ${accent}60` }}
           >
-            <svg className="w-10 h-10 sm:w-12 sm:h-12 translate-x-[3px]" fill="currentColor" viewBox="0 0 24 24" style={{ color: accent }}>
+            <svg className="w-7 h-7 sm:w-10 sm:h-10 translate-x-[3px]" fill="currentColor" viewBox="0 0 24 24" style={{ color: accent }}>
               <path d="M8 5v14l11-7z" />
             </svg>
           </div>

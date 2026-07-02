@@ -174,7 +174,7 @@ export function SquadHero({
             <div className="flex flex-col sm:flex-row gap-4 items-start">
               <a
                 href="#inscricao"
-                className="inline-flex items-center justify-center gap-2 px-8 py-4 font-semibold uppercase transition-all hover:brightness-110 active:scale-[0.98]"
+                className="inline-flex items-center justify-center gap-2 px-6 py-4 font-semibold uppercase transition-all hover:brightness-110 active:scale-[0.98] w-full sm:w-auto text-center"
                 style={{ background: accent, color: '#050507', fontFamily: 'var(--font-mono)', fontSize: '12px', letterSpacing: '0.16em' }}
               >
                 {ctaLabel}
