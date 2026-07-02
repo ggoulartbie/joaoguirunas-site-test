@@ -20,8 +20,8 @@ export function SquadVSLThumb({ videoId, accent, thumbnailUrl }: SquadVSLThumbPr
   return (
     <>
       <div
-        className="relative w-full overflow-hidden cursor-pointer group"
-        style={{ aspectRatio: '16/9', border: `1px solid ${accent}30` }}
+        className="relative w-full cursor-pointer group"
+        style={{ aspectRatio: '16/9', border: `2px solid ${accent}60`, borderRadius: '10px', overflow: 'hidden', boxShadow: `0 0 0 1px ${accent}20, 0 8px 40px rgba(0,0,0,0.5)` }}
         onClick={() => setOpen(true)}
         role="button"
         aria-label="Abrir vídeo"
@@ -30,14 +30,14 @@ export function SquadVSLThumb({ videoId, accent, thumbnailUrl }: SquadVSLThumbPr
           <img src={thumbnailUrl} alt="" className="absolute inset-0 w-full h-full object-cover" aria-hidden="true" />
         )}
 
-        <div className="absolute inset-0" style={{ background: thumbnailUrl ? 'rgba(0,0,0,0.52)' : 'rgba(5,5,7,0.92)' }} />
+        <div className="absolute inset-0" style={{ background: thumbnailUrl ? 'rgba(0,0,0,0.50)' : 'rgba(5,5,7,0.92)' }} />
 
         <div className="absolute inset-0 flex items-center justify-center">
           <div
-            className="flex items-center justify-center w-20 h-20 sm:w-24 sm:h-24 rounded-full transition-transform group-hover:scale-105"
-            style={{ background: 'transparent', border: `2.5px solid ${accent}`, boxShadow: `0 0 32px ${accent}50` }}
+            className="flex items-center justify-center w-24 h-24 sm:w-28 sm:h-28 rounded-full transition-transform group-hover:scale-105"
+            style={{ background: 'transparent', border: `3px solid ${accent}`, boxShadow: `0 0 40px ${accent}60` }}
           >
-            <svg className="w-8 h-8 sm:w-10 sm:h-10 translate-x-[3px]" fill="currentColor" viewBox="0 0 24 24" style={{ color: accent }}>
+            <svg className="w-10 h-10 sm:w-12 sm:h-12 translate-x-[3px]" fill="currentColor" viewBox="0 0 24 24" style={{ color: accent }}>
               <path d="M8 5v14l11-7z" />
             </svg>
           </div>
