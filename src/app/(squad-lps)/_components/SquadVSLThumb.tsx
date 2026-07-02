@@ -43,12 +43,13 @@ export function SquadVSLThumb({ videoId, accent, thumbnailUrl }: SquadVSLThumbPr
           </div>
         </div>
 
-        <div className="absolute bottom-3 left-0 right-0 flex items-center justify-center gap-2">
+        <div className="absolute bottom-4 left-0 right-0 flex items-center justify-center">
           <span style={{
-            fontFamily: 'var(--font-mono)', fontSize: '0.6rem', letterSpacing: '0.14em',
-            textTransform: 'uppercase', color: 'rgba(255,255,255,0.55)',
+            fontFamily: 'var(--font-mono)', fontSize: '0.72rem', letterSpacing: '0.16em',
+            textTransform: 'uppercase', color: accent, fontWeight: 600,
+            textShadow: `0 0 20px ${accent}80`,
           }}>
-            Assista antes de decidir · 9 min
+            ▶ Assista antes de decidir · 9 min
           </span>
         </div>
       </div>
