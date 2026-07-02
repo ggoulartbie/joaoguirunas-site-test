@@ -15,6 +15,7 @@ import { SquadOferta } from '../_components/SquadOferta'
 import { SquadFaq } from '../_components/SquadFaq'
 import { SquadCtaFinal } from '../_components/SquadCtaFinal'
 import { SquadFloatingCTA } from '../_components/SquadFloatingCTA'
+import { SquadVSL } from '../_components/SquadVSL'
 import { Depoimentos } from '@/shared/components/sections/Depoimentos'
 import { SitesPortfolio } from '../_components/SitesPortfolio'
 import { getAgentesBySquad, SQUADS } from '@/data/agentes'
@@ -118,6 +119,7 @@ export default function SquadSitesPage() {
       />
       <AgentPlanetBackground squadId="sites" />
       <div className="relative z-10 -mt-16">
+        <SquadVSL accent="#FF3A0E" />
         <SquadHero
           headline={config.headline}
           sub={config.sub}
