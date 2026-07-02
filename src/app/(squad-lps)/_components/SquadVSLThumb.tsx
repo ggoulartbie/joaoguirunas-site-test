@@ -32,12 +32,12 @@ export function SquadVSLThumb({ videoId, accent, thumbnailUrl }: SquadVSLThumbPr
 
         <div className="absolute inset-0" style={{ background: thumbnailUrl ? 'rgba(0,0,0,0.28)' : 'rgba(5,5,7,0.92)' }} />
 
-        <div className="absolute inset-0 flex items-center justify-center">
+        <div className="absolute inset-0 flex items-center justify-center" style={{ paddingTop: '8%' }}>
           <div
-            className="flex items-center justify-center w-14 h-14 sm:w-16 sm:h-16 rounded-full transition-transform group-hover:scale-110"
-            style={{ background: 'rgba(0,0,0,0.30)', border: `2px solid ${accent}90`, backdropFilter: 'blur(6px)', boxShadow: `0 0 20px ${accent}40` }}
+            className="flex items-center justify-center w-10 h-10 sm:w-11 sm:h-11 rounded-full transition-transform group-hover:scale-105"
+            style={{ background: 'rgba(255,255,255,0.12)', border: '1.5px solid rgba(255,255,255,0.35)', backdropFilter: 'blur(8px)' }}
           >
-            <svg className="w-5 h-5 sm:w-6 sm:h-6 translate-x-0.5" fill="currentColor" viewBox="0 0 24 24" style={{ color: '#ffffff' }}>
+            <svg className="w-4 h-4 translate-x-[1px]" fill="currentColor" viewBox="0 0 24 24" style={{ color: '#ffffff' }}>
               <path d="M8 5v14l11-7z" />
             </svg>
           </div>
