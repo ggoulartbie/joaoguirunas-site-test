@@ -109,7 +109,11 @@ export const metadata: Metadata = {
   },
 }
 
-export default function SquadSitesPage() {
+export default async function SquadSitesPage() {
+  const vimeoRes = await fetch('https://vimeo.com/api/oembed.json?url=https://vimeo.com/1206325946', { next: { revalidate: 86400 } })
+  const vimeoData = vimeoRes.ok ? await vimeoRes.json() : null
+  const vslThumbnailUrl: string | undefined = vimeoData?.thumbnail_url
+
   return (
     <>
       <script
@@ -128,6 +132,7 @@ export default function SquadSitesPage() {
           badgeLabel="SQUAD SITES · LUMINARI"
           vslAccent="#FF3A0E"
           vslVideoId="1206325946"
+          vslThumbnailUrl={vslThumbnailUrl}
         />
         <SquadSelos />
         <SquadProblema problema={config.problema} />

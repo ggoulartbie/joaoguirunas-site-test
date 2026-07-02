@@ -1,4 +1,5 @@
 import type { SquadConfig } from './types';
+import { SquadVSLThumb } from './SquadVSLThumb';
 
 const DEFAULT_ACCENT = '#FF3A0E';
 
@@ -108,6 +109,7 @@ interface SquadHeroProps {
   badgeLabel?: string;
   vslAccent?: string;
   vslVideoId?: string;
+  vslThumbnailUrl?: string;
 }
 
 export function SquadHero({
@@ -120,6 +122,7 @@ export function SquadHero({
   badgeLabel = 'Squad · Módulo Avulso',
   vslAccent,
   vslVideoId,
+  vslThumbnailUrl,
 }: SquadHeroProps) {
   return (
     <section
@@ -198,18 +201,11 @@ export function SquadHero({
           {vslAccent && (
             <div className="w-full">
               {vslVideoId ? (
-                <div
-                  className="relative w-full overflow-hidden"
-                  style={{ aspectRatio: '16/9', border: `1px solid ${vslAccent}30` }}
-                >
-                  <iframe
-                    className="absolute inset-0 w-full h-full"
-                    src={`https://player.vimeo.com/video/${vslVideoId}?badge=0&autopause=0&player_id=0&app_id=58479&title=0&byline=0&portrait=0&dnt=1`}
-                    allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media"
-                    allowFullScreen
-                    title="VSL Squad de Sites"
-                  />
-                </div>
+                <SquadVSLThumb
+                  videoId={vslVideoId}
+                  accent={vslAccent!}
+                  thumbnailUrl={vslThumbnailUrl}
+                />
               ) : (
                 <div
                   role="img"
@@ -247,9 +243,6 @@ export function SquadHero({
                   </div>
                 </div>
               )}
-              <p className="mt-2 text-center" style={{ fontFamily: 'var(--font-mono)', fontSize: '0.6rem', letterSpacing: '0.1em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.30)' }}>
-                Assista antes de decidir
-              </p>
             </div>
           )}
         </div>
