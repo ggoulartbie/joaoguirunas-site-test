@@ -8,7 +8,6 @@ import { SquadVirada } from '../_components/SquadVirada'
 import { SquadCurriculum } from '../_components/SquadCurriculum'
 import { SquadBonus } from '../_components/SquadBonus'
 import { SquadAgentes } from '../_components/SquadAgentes'
-import { SquadProva } from '../_components/SquadProva'
 import { SquadTransparencia } from '../_components/SquadTransparencia'
 import { SquadInstrutor } from '../_components/SquadInstrutor'
 import { SquadOferta } from '../_components/SquadOferta'
@@ -151,8 +150,7 @@ export default async function SquadSitesPage() {
         />
         <SquadBonus bonus={config.bonus} />
         <SquadAgentes agentes={getAgentesBySquad('sites')} squad={sitesSquad} />
-        <SquadProva />
-        <SitesPortfolio accent="#FF3A0E" />
+<SitesPortfolio accent="#FF3A0E" />
         <Depoimentos accent="#FF3A0E" />
         <SquadTransparencia />
         <SquadInstrutor instrutor={config.instrutor} />
