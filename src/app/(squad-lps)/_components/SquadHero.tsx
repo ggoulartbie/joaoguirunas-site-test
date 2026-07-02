@@ -107,6 +107,7 @@ interface SquadHeroProps {
   accent?: string;
   badgeLabel?: string;
   vslAccent?: string;
+  vslVideoId?: string;
 }
 
 export function SquadHero({
@@ -118,6 +119,7 @@ export function SquadHero({
   accent = DEFAULT_ACCENT,
   badgeLabel = 'Squad · Módulo Avulso',
   vslAccent,
+  vslVideoId,
 }: SquadHeroProps) {
   return (
     <section
@@ -195,41 +197,56 @@ export function SquadHero({
           {/* VSL column — only rendered when vslAccent is provided */}
           {vslAccent && (
             <div className="w-full">
-              <div
-                role="img"
-                aria-label="Vídeo de apresentação do squad — em breve"
-                className="relative w-full overflow-hidden"
-                style={{
-                  aspectRatio: '16/9',
-                  background: 'rgba(255,255,255,0.02)',
-                  border: `1px solid ${vslAccent}30`,
-                  backdropFilter: 'blur(4px)',
-                }}
-              >
-                <div className="absolute inset-0 flex items-center justify-center">
-                  <div
-                    className="flex items-center justify-center w-14 h-14 sm:w-16 sm:h-16 rounded-full transition-transform hover:scale-105"
-                    style={{ background: vslAccent, boxShadow: `0 0 28px ${vslAccent}50` }}
-                  >
-                    <svg className="w-5 h-5 sm:w-6 sm:h-6 translate-x-0.5" fill="currentColor" viewBox="0 0 24 24" style={{ color: '#050507' }}>
-                      <path d="M8 5v14l11-7z" />
-                    </svg>
+              {vslVideoId ? (
+                <div
+                  className="relative w-full overflow-hidden"
+                  style={{ aspectRatio: '16/9', border: `1px solid ${vslAccent}30` }}
+                >
+                  <iframe
+                    className="absolute inset-0 w-full h-full"
+                    src={`https://player.vimeo.com/video/${vslVideoId}?badge=0&autopause=0&player_id=0&app_id=58479`}
+                    allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media"
+                    allowFullScreen
+                    title="VSL Squad de Sites"
+                  />
+                </div>
+              ) : (
+                <div
+                  role="img"
+                  aria-label="Vídeo de apresentação do squad — em breve"
+                  className="relative w-full overflow-hidden"
+                  style={{
+                    aspectRatio: '16/9',
+                    background: 'rgba(255,255,255,0.02)',
+                    border: `1px solid ${vslAccent}30`,
+                    backdropFilter: 'blur(4px)',
+                  }}
+                >
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <div
+                      className="flex items-center justify-center w-14 h-14 sm:w-16 sm:h-16 rounded-full transition-transform hover:scale-105"
+                      style={{ background: vslAccent, boxShadow: `0 0 28px ${vslAccent}50` }}
+                    >
+                      <svg className="w-5 h-5 sm:w-6 sm:h-6 translate-x-0.5" fill="currentColor" viewBox="0 0 24 24" style={{ color: '#050507' }}>
+                        <path d="M8 5v14l11-7z" />
+                      </svg>
+                    </div>
+                  </div>
+                  <div className="absolute top-3 left-3">
+                    <span style={{
+                      fontFamily: 'var(--font-mono)', fontSize: '0.55rem', letterSpacing: '0.14em',
+                      background: 'rgba(0,0,0,0.6)', border: '1px solid rgba(255,255,255,0.10)',
+                      color: 'rgba(255,255,255,0.45)', textTransform: 'uppercase', padding: '0.2rem 0.45rem',
+                      display: 'inline-flex',
+                    }}>VSL · Em breve</span>
+                  </div>
+                  <div className="absolute bottom-3 right-3">
+                    <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.55rem', color: 'rgba(255,255,255,0.20)', letterSpacing: '0.1em' }}>
+                      0:00 — xx:xx
+                    </span>
                   </div>
                 </div>
-                <div className="absolute top-3 left-3">
-                  <span style={{
-                    fontFamily: 'var(--font-mono)', fontSize: '0.55rem', letterSpacing: '0.14em',
-                    background: 'rgba(0,0,0,0.6)', border: '1px solid rgba(255,255,255,0.10)',
-                    color: 'rgba(255,255,255,0.45)', textTransform: 'uppercase', padding: '0.2rem 0.45rem',
-                    display: 'inline-flex',
-                  }}>VSL · Em breve</span>
-                </div>
-                <div className="absolute bottom-3 right-3">
-                  <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.55rem', color: 'rgba(255,255,255,0.20)', letterSpacing: '0.1em' }}>
-                    0:00 — xx:xx
-                  </span>
-                </div>
-              </div>
+              )}
               <p className="mt-2 text-center" style={{ fontFamily: 'var(--font-mono)', fontSize: '0.6rem', letterSpacing: '0.1em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.30)' }}>
                 Assista antes de decidir
               </p>
