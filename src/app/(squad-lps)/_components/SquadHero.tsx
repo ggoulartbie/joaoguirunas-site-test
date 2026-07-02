@@ -105,6 +105,7 @@ interface SquadHeroProps {
   ctaLabel: SquadConfig['ctaLabel'];
   price: SquadConfig['price'];
   priceInstallments: SquadConfig['priceInstallments'];
+  checkoutUrl: string;
   accent?: string;
   badgeLabel?: string;
   vslAccent?: string;
@@ -118,6 +119,7 @@ export function SquadHero({
   ctaLabel,
   price,
   priceInstallments,
+  checkoutUrl,
   accent = DEFAULT_ACCENT,
   badgeLabel = 'Squad · Módulo Avulso',
   vslAccent,
@@ -173,7 +175,9 @@ export function SquadHero({
 
             <div className="flex flex-col sm:flex-row gap-4 items-start">
               <a
-                href="#inscricao"
+                href={checkoutUrl}
+                target="_blank"
+                rel="noopener noreferrer"
                 className="inline-flex items-center justify-center gap-2 px-6 py-4 font-semibold uppercase transition-all hover:brightness-110 active:scale-[0.98] w-full sm:w-auto text-center"
                 style={{ background: accent, color: '#050507', fontFamily: 'var(--font-mono)', fontSize: '12px', letterSpacing: '0.16em' }}
               >

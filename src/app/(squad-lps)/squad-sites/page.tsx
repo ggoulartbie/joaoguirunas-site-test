@@ -125,6 +125,7 @@ export default async function SquadSitesPage() {
           ctaLabel={config.ctaLabel}
           price={config.price}
           priceInstallments={config.priceInstallments}
+          checkoutUrl="https://pay.kiwify.com.br/RdGPf8R"
           accent="#FF3A0E"
           badgeLabel="SQUAD SITES · LUMINARI"
           vslAccent="#FF3A0E"
@@ -137,6 +138,7 @@ export default async function SquadSitesPage() {
         <SquadCurriculum
           accent="#FF3A0E"
           ctaLabel="Garantir minha vaga — R$297"
+          checkoutUrl="https://pay.kiwify.com.br/RdGPf8R"
           squadModule={{
             num: 6,
             title: 'Squad de Sites',
@@ -156,11 +158,12 @@ export default async function SquadSitesPage() {
           price={config.price}
           priceInstallments={config.priceInstallments}
           ctaLabel={config.ctaLabel}
+          checkoutUrl="https://pay.kiwify.com.br/RdGPf8R"
         />
         <SquadFaq faq={config.faq} />
-        <SquadCtaFinal ctaLabel={config.ctaLabel} />
+        <SquadCtaFinal ctaLabel={config.ctaLabel} checkoutUrl="https://pay.kiwify.com.br/RdGPf8R" />
       </div>
-      <SquadFloatingCTA ctaLabel="Garantir vaga" price="R$297" accent="#FF3A0E" />
+      <SquadFloatingCTA ctaLabel="Garantir vaga" price="R$297" accent="#FF3A0E" checkoutUrl="https://pay.kiwify.com.br/RdGPf8R" />
     </>
   )
 }

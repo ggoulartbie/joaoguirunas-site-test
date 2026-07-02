@@ -1,5 +1,4 @@
 import type { SquadConfig } from './types';
-import { SquadForm } from './SquadForm';
 
 const KV_DISPLAY: React.CSSProperties = {
   fontFamily: 'var(--font-display-serif)',
@@ -19,10 +18,10 @@ interface SquadOfertaProps {
   price: SquadConfig['price'];
   priceInstallments: SquadConfig['priceInstallments'];
   ctaLabel: SquadConfig['ctaLabel'];
-  formId?: string;
+  checkoutUrl: string;
 }
 
-export function SquadOferta({ price, priceInstallments, ctaLabel, formId }: SquadOfertaProps) {
+export function SquadOferta({ price, priceInstallments, ctaLabel, checkoutUrl }: SquadOfertaProps) {
   return (
     <section
       id="inscricao"
@@ -81,7 +80,18 @@ export function SquadOferta({ price, priceInstallments, ctaLabel, formId }: Squa
           </div>
         </div>
 
-        <SquadForm formId={formId} />
+        <a
+          href={checkoutUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="flex items-center justify-center gap-2 w-full px-8 py-4 font-semibold uppercase transition-all hover:brightness-110 active:scale-[0.98]"
+          style={{ background: '#FF3A0E', color: '#050507', fontFamily: 'var(--font-mono)', fontSize: '13px', letterSpacing: '0.16em' }}
+        >
+          Garantir minha vaga
+          <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+          </svg>
+        </a>
 
         <p className="mt-6 text-center text-xs sm:text-sm text-white/40">
           7 dias de garantia total &middot; Acesso por 6 meses &middot; Cancelamento simplificado

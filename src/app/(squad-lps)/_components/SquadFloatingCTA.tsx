@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 
-export function SquadFloatingCTA({ ctaLabel, price, accent }: { ctaLabel: string; price: string; accent: string }) {
+export function SquadFloatingCTA({ ctaLabel, price, accent, checkoutUrl }: { ctaLabel: string; price: string; accent: string; checkoutUrl: string }) {
   const [visible, setVisible] = useState(false)
 
   useEffect(() => {
@@ -29,8 +29,10 @@ export function SquadFloatingCTA({ ctaLabel, price, accent }: { ctaLabel: string
           className="fixed bottom-0 sm:bottom-6 sm:right-6 left-0 sm:left-auto right-0 sm:w-auto z-50"
         >
           <a
-            href="#inscricao"
-            aria-label="Ir para inscrição"
+            href={checkoutUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Garantir vaga — abre carrinho Kiwify"
             className="flex sm:inline-flex items-center justify-between sm:justify-center gap-3 px-6 py-4 sm:py-3 w-full sm:w-auto transition-all hover:brightness-110 active:scale-[0.98]"
             style={{
               background: accent, color: '#050507',

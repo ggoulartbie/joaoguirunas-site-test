@@ -154,6 +154,7 @@ export default function SquadSocialPage() {
           ctaLabel={config.ctaLabel}
           price={config.price}
           priceInstallments={config.priceInstallments}
+          checkoutUrl="https://pay.kiwify.com.br/B8q7vHm"
           accent="#EC4899"
           badgeLabel="SQUAD SOCIAL · XELVARI"
           vslAccent="#EC4899"
@@ -164,6 +165,7 @@ export default function SquadSocialPage() {
         <SquadCurriculum
           accent="#EC4899"
           ctaLabel="Garantir minha vaga — R$297"
+          checkoutUrl="https://pay.kiwify.com.br/B8q7vHm"
           squadModule={{
             num: 7,
             title: 'Squad de Social Media',
@@ -183,11 +185,12 @@ export default function SquadSocialPage() {
           price={config.price}
           priceInstallments={config.priceInstallments}
           ctaLabel={config.ctaLabel}
+          checkoutUrl="https://pay.kiwify.com.br/B8q7vHm"
         />
         <SquadFaq faq={config.faq} />
-        <SquadCtaFinal ctaLabel={config.ctaLabel} />
+        <SquadCtaFinal ctaLabel={config.ctaLabel} checkoutUrl="https://pay.kiwify.com.br/B8q7vHm" />
       </div>
-      <SquadFloatingCTA ctaLabel="Garantir vaga" price="R$297" accent="#EC4899" />
+      <SquadFloatingCTA ctaLabel="Garantir vaga" price="R$297" accent="#EC4899" checkoutUrl="https://pay.kiwify.com.br/B8q7vHm" />
     </>
   );
 }

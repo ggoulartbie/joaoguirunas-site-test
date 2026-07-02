@@ -123,6 +123,7 @@ export default function SquadDevPage() {
           ctaLabel={config.ctaLabel}
           price={config.price}
           priceInstallments={config.priceInstallments}
+          checkoutUrl="https://pay.kiwify.com.br/AY2hGbT"
           accent="#A78BFA"
           badgeLabel="SQUAD DEV · ARCTURIANA"
           vslAccent="#A78BFA"
@@ -133,6 +134,7 @@ export default function SquadDevPage() {
         <SquadCurriculum
           accent="#A78BFA"
           ctaLabel="Garantir minha vaga — R$397"
+          checkoutUrl="https://pay.kiwify.com.br/AY2hGbT"
           squadModule={{
             num: 8,
             title: 'Squad Dev',
@@ -152,11 +154,12 @@ export default function SquadDevPage() {
           price={config.price}
           priceInstallments={config.priceInstallments}
           ctaLabel={config.ctaLabel}
+          checkoutUrl="https://pay.kiwify.com.br/AY2hGbT"
         />
         <SquadFaq faq={config.faq} />
-        <SquadCtaFinal ctaLabel={config.ctaLabel} />
+        <SquadCtaFinal ctaLabel={config.ctaLabel} checkoutUrl="https://pay.kiwify.com.br/AY2hGbT" />
       </div>
-      <SquadFloatingCTA ctaLabel="Garantir vaga" price="R$397" accent="#A78BFA" />
+      <SquadFloatingCTA ctaLabel="Garantir vaga" price="R$397" accent="#A78BFA" checkoutUrl="https://pay.kiwify.com.br/AY2hGbT" />
     </>
   )
 }

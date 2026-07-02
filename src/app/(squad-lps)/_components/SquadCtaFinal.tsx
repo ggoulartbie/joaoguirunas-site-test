@@ -8,9 +8,10 @@ const KV_DISPLAY: React.CSSProperties = {
 
 interface SquadCtaFinalProps {
   ctaLabel: SquadConfig['ctaLabel'];
+  checkoutUrl: string;
 }
 
-export function SquadCtaFinal({ ctaLabel }: SquadCtaFinalProps) {
+export function SquadCtaFinal({ ctaLabel, checkoutUrl }: SquadCtaFinalProps) {
   return (
     <section
       className="py-12 sm:py-16"
@@ -30,7 +31,9 @@ export function SquadCtaFinal({ ctaLabel }: SquadCtaFinalProps) {
         </p>
         <div className="flex justify-center">
           <a
-            href="#inscricao"
+            href={checkoutUrl}
+            target="_blank"
+            rel="noopener noreferrer"
             className="inline-flex items-center justify-center gap-2 px-8 py-4 font-semibold uppercase transition-all hover:brightness-110 active:scale-[0.98]"
             style={{ background: '#FF3A0E', color: '#050507', fontFamily: 'var(--font-mono)', fontSize: '12px', letterSpacing: '0.16em' }}
           >

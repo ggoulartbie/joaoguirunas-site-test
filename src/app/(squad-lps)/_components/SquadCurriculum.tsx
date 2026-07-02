@@ -27,6 +27,7 @@ interface SquadModuleData {
 export interface SquadCurriculumProps {
   accent: string
   ctaLabel: string
+  checkoutUrl: string
   squadModule: SquadModuleData
 }
 
@@ -57,7 +58,7 @@ const STATIC_MODULES: SquadModuleData[] = [
   },
 ]
 
-export function SquadCurriculum({ accent, ctaLabel, squadModule }: SquadCurriculumProps) {
+export function SquadCurriculum({ accent, ctaLabel, checkoutUrl, squadModule }: SquadCurriculumProps) {
   const allModules = [...STATIC_MODULES, squadModule]
 
   return (
@@ -183,7 +184,9 @@ export function SquadCurriculum({ accent, ctaLabel, squadModule }: SquadCurricul
           transition={{ duration: 0.4, delay: 0.35 }}
         >
           <a
-            href="#inscricao"
+            href={checkoutUrl}
+            target="_blank"
+            rel="noopener noreferrer"
             className="inline-flex items-center justify-center gap-2 px-8 py-4 font-semibold transition-all hover:brightness-110 active:scale-[0.98]"
             style={{
               background: accent,
