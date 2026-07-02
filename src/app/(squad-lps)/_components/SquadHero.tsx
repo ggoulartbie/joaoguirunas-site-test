@@ -89,7 +89,7 @@ function HeadlineContent({
         style={{
           fontStyle: 'italic',
           fontWeight: 300,
-          color: 'rgba(255,255,255,0.45)',
+          color: 'rgba(255,255,255,0.88)',
           fontSize: compact ? '0.88em' : '0.82em',
         }}
       >
