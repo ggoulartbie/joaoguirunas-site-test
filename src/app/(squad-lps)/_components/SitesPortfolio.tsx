@@ -54,9 +54,9 @@ const STUDENT_SITES = [
     url: 'https://www.plugaigym.com.br/',
   },
   {
-    slug: 'erika',
-    name: 'Erika Crivellari',
-    url: 'https://erikacrivellari.com/',
+    slug: 'thementor',
+    name: 'The Mentor 360',
+    url: 'https://thementor360.com.br/',
   },
 ]
 
