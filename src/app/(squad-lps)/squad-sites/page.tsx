@@ -109,9 +109,7 @@ export const metadata: Metadata = {
 }
 
 export default async function SquadSitesPage() {
-  const vimeoRes = await fetch('https://vimeo.com/api/oembed.json?url=https://vimeo.com/1206325946&width=1920', { next: { revalidate: 86400 } })
-  const vimeoData = vimeoRes.ok ? await vimeoRes.json() : null
-  const vslThumbnailUrl: string | undefined = vimeoData?.thumbnail_url
+  const vslThumbnailUrl = '/vsl/squad-sites-thumb.jpg'
 
   return (
     <>
