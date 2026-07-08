@@ -3,6 +3,7 @@ import { ContentPost } from '@/types/content-post'
 export const batch10: ContentPost[] = [
   {
     slug: 'pdfs-em-dados-estruturados-com-claude-zero-codigo',
+    bgImage: '/images/bg-productivity.png',
     data: '2026-07-08',
     slot: 'A',
     formato: 'Reel',
@@ -123,6 +124,7 @@ Retorne um objeto JSON por nota fiscal.`,
 
   {
     slug: 'print-de-site-claude-reconstroi-para-voce',
+    bgImage: '/images/bg-claude-code.png',
     data: '2026-07-09',
     slot: 'A',
     formato: 'Reel',
@@ -223,6 +225,7 @@ Retorne um objeto JSON por nota fiscal.`,
 
   {
     slug: 'fotos-produto-estudio-sem-estudio-sem-fotografo',
+    bgImage: '/images/bg-image.png',
     data: '2026-07-10',
     slot: 'A',
     formato: 'Reel',
@@ -334,6 +337,7 @@ Escreve o prompt para o Higgsfield que vai:
 
   {
     slug: 'skill-que-faz-claude-virar-analista-de-dados',
+    bgImage: '/images/bg-monitor.png',
     data: '2026-07-11',
     slot: 'A',
     formato: 'Reel',
@@ -445,6 +449,7 @@ O que você identifica de relevante?`,
 
   {
     slug: 'claude-code-le-emails-e-prioriza-o-que-importa',
+    bgImage: '/images/bg-google.png',
     data: '2026-07-12',
     slot: 'A',
     formato: 'Reel',
@@ -562,6 +567,7 @@ O que você identifica de relevante?`,
 
   {
     slug: 'como-criar-sua-propria-skill-claude-code-do-zero',
+    bgImage: '/images/bg-skills.png',
     data: '2026-07-13',
     slot: 'A',
     formato: 'Reel',
