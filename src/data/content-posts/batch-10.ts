@@ -7,17 +7,17 @@ export const batch10: ContentPost[] = [
     data: '2026-07-08',
     slot: 'A',
     formato: 'Reel',
-    titulo: 'Como Transformar PDFs em Dados Estruturados com Claude',
+    titulo: 'Jogue um PDF de 200 Páginas no Claude e Tenha a Resposta em 3 Minutos',
     ferramenta: 'Claude Code + MCP Filesystem',
     link: 'https://claude.ai/code',
     categoryId: 'apps',
     keyword_cta: 'PDF',
-    pilar: 'Automação de Processos',
+    pilar: 'Educacional',
     duracao: '40s',
     longDescription: [
-      'Contratos, notas fiscais, laudos técnicos e relatórios de resultado vivem em PDF — e extrair dados deles manualmente é lento, propenso a erro e impossível de escalar. Um consultor cobra R$800/hora para fazer esse trabalho. O Claude extrai os mesmos dados de 100 documentos em 3 minutos, sem código, sem dev e sem copiar e colar.',
-      'O pipeline é direto: você define uma vez o que quer extrair — CNPJ, valor, data de vencimento, cláusula de rescisão — e o Claude lê cada documento, puxa exatamente esses campos e entrega tudo organizado. Com o MCP de Filesystem, você aponta uma pasta inteira e ele processa em lote: cada PDF vira uma linha da planilha final.',
-      'O que muda na prática: contabilidade processa 100 notas fiscais em menos de 5 minutos. Jurídico extrai cláusulas críticas de contratos sem ler página por página. Operações consolida relatórios de múltiplos fornecedores numa tabela única. Qualquer processo que depende de "ler documento e copiar para planilha" pode ser eliminado com esse fluxo.',
+      'Abri uma pasta com 100 contratos. Fiz uma pergunta. Recebi uma planilha. Um consultor pode cobrar R$800/hora para fazer isso — você configura uma vez e nunca mais paga. O Claude extrai os dados de 100 documentos em 3 minutos, sem código, sem dev, sem copiar e colar.',
+      'Você já tem os PDFs. Qualquer tipo serve: nota fiscal, contrato, relatório de resultado. Você fala uma vez o que quer encontrar — CNPJ, valor, data de vencimento, cláusula de rescisão. O Claude lê cada documento, extrai exatamente esses campos e devolve tudo numa planilha sem você abrir nenhum arquivo.',
+      '100 documentos em 3 minutos. Sem abrir arquivo por arquivo. Sem copiar e colar. Sem perder dado no processo. Contabilidade, jurídico e operações: qualquer setor que depende de "ler documento e copiar para planilha" pode eliminar esse trabalho inteiramente com esse fluxo.',
     ],
     features: [
       {
@@ -224,113 +224,116 @@ Retorne um objeto JSON por nota fiscal.`,
   },
 
   {
-    slug: 'fotos-produto-estudio-sem-estudio-sem-fotografo',
-    bgImage: '/images/bg-image.png',
+    slug: 'ia-roteiro-video-nao-performou',
+    bgImage: '/images/bg-designer.png',
     data: '2026-07-10',
     slot: 'A',
     formato: 'Reel',
-    titulo: 'Fotos de Produto de Estúdio — Sem Estúdio, Sem Fotógrafo',
-    ferramenta: 'Claude + Higgsfield / Magnific / Krea',
-    link: 'https://higgsfield.ai',
-    categoryId: 'apps',
-    keyword_cta: 'FOTO',
+    titulo: 'IA Gerou o Roteiro, Eu Gravei — Por Que o Vídeo Não Performou Nada',
+    ferramenta: 'Claude',
+    link: '/open-source/ia-roteiro-video-nao-performou',
+    categoryId: 'skills',
+    keyword_cta: 'ROTEIRO',
     pilar: 'Produção de Conteúdo com IA',
-    duracao: '40s',
+    duracao: '60s',
     longDescription: [
-      'Um ensaio de produto com fotógrafo profissional custa R$2.500 e uma semana de agenda. Para quem vende online, foto ruim é venda perdida — e foto boa era privilégio de quem tinha orçamento de agência. Agora você usa a foto que já tirou no celular. Hoje. Sem fotógrafo, sem estúdio, sem equipamento de iluminação.',
-      'Ferramentas de IA como Higgsfield, Magnific e Krea geram imagens de produto com qualidade comercial a partir de uma foto comum — qualquer fundo, qualquer luz, qualquer ângulo. O Claude entra como orchestrador: você descreve o resultado que quer, e ele escreve o prompt otimizado para a ferramenta certa, adaptado ao seu produto, ao seu público e à plataforma de destino.',
-      'O resultado prático: mesmo produto, cinco cenários diferentes em 10 minutos. Fundo branco clean para Mercado Livre, ambiente lifestyle para Instagram, close-up de detalhe para loja própria. Antes eram cinco sessões fotográficas. Agora são cinco prompts.',
+      'Eu usei IA pra gerar um roteiro, gravei, publiquei — e o vídeo não performou nada. A estrutura estava tecnicamente certa: hook nos primeiros segundos, CTA no final. O problema estava no que eu não passei pra IA antes de pedir o roteiro.',
+      'A IA não sabe como você para. Não sabe a pausa que você faz antes de dizer algo importante. Não sabe as referências que fazem sentido para quem te acompanha há meses. O roteiro ficou certo no papel — mas o seu sotaque de criador ficou de fora. As pessoas pararam de assistir nos primeiros 15 segundos.',
+      'A correção é simples: antes de pedir o roteiro, você mostra pra IA quem você é como criador. Três transcrições dos seus vídeos que mais performaram, o seu ritmo de fala, os ganchos que funcionam com a sua audiência. Quando a IA tem esse material, o roteiro que ela gera soa como você — não como um template.',
     ],
     features: [
       {
-        title: 'Foto de estúdio a partir do celular',
-        description: 'A IA remove o fundo, coloca o produto num cenário profissional e ajusta iluminação, sombra e reflexo — a partir de qualquer foto tirada com o celular.',
+        title: 'O briefing de criador antes do roteiro',
+        description: 'O erro: pedir roteiro sem contexto. A correção: alimentar a IA com transcrições de vídeos seus que performaram antes de pedir qualquer coisa.',
+        icon: 'copywriting',
+      },
+      {
+        title: 'Transcrições como material de referência',
+        description: 'Três vídeos seus que performaram bem ensinam à IA seu ritmo, suas pausas e as referências que ressoam com a sua audiência.',
+        icon: 'book',
+      },
+      {
+        title: 'Estrutura certa ≠ vídeo que performa',
+        description: 'Hook, desenvolvimento e CTA no lugar certo não bastam. O sotaque do criador — o jeito que é seu — é o que segura a retenção.',
         icon: 'design',
       },
       {
-        title: 'Higgsfield, Magnific e Krea',
-        description: 'Higgsfield para cenas elaboradas, Magnific para upscale e detalhamento, Krea para consistência de estilo. Cada ferramenta com seu ponto forte.',
-        icon: 'plugin',
-      },
-      {
-        title: 'Claude gera o briefing visual',
-        description: 'Descreva o resultado que quer em português. O Claude escreve o prompt otimizado para cada ferramenta — você não precisa aprender a promptar imagem.',
-        icon: 'automation',
-      },
-      {
-        title: 'Variações de cenário em minutos',
-        description: 'Fundo branco clean, ambiente lifestyle, flat lay, close-up de detalhe, versão sazonal — cinco cenários do mesmo produto sem cinco sessões fotográficas.',
+        title: 'Retenção: o dado que diz a verdade',
+        description: 'Queda abrupta nos primeiros 15 segundos revela que a audiência reconheceu o template — e pulou. Retenção acima de 60% é sinal de autenticidade.',
         icon: 'dashboard',
       },
       {
-        title: 'Adaptado por plataforma',
-        description: 'O Claude ajusta o prompt para Instagram, Mercado Livre ou loja própria — cada plataforma tem expectativas visuais diferentes, e o prompt reflete isso.',
-        icon: 'website',
+        title: 'Ritmo, pausa e sotaque de criador',
+        description: 'A IA aprende o seu estilo com exemplos reais: onde você hesita, onde você acelera, que tipo de gancho prende quem já te conhece.',
+        icon: 'agents',
       },
       {
-        title: 'Sem fotógrafo, sem estúdio, sem equipamento',
-        description: 'O produto precisa aparecer na foto — o resto é prompt. Fundo bagunçado, luz errada, ângulo torto: não importa. A IA reconstrói o cenário.',
-        icon: 'deploy',
+        title: 'Template de briefing para roteiro com IA',
+        description: 'O arquivo completo com os campos do briefing de criador — transcrições de referência, ritmo, audiência e restrições — pronto para usar.',
+        icon: 'framework',
       },
     ],
-    primaryLink: 'https://higgsfield.ai',
-    primaryLabel: 'Abrir o Higgsfield',
-    isExternal: true,
+    primaryLink: '/open-source/ia-roteiro-video-nao-performou',
+    isExternal: false,
     author: '@joaoguirunas',
     authorUrl: 'https://instagram.com/joaoguirunas',
     body: [
       {
         type: 'heading',
-        text: 'O problema das fotos de produto no Brasil',
+        text: 'O que aconteceu com o vídeo',
       },
       {
         type: 'paragraph',
-        text: 'Estúdio fotográfico, iluminação profissional, fotógrafo especializado e pós-produção. Tudo junto custa pelo menos R$2.500 e uma semana de logística — para uma única sessão. Para quem vende em múltiplas plataformas, foto de qualidade era custo recorrente. Agora é custo zero.',
+        text: 'A IA entregou um roteiro tecnicamente impecável. Estrutura correta, hook nos primeiros segundos, CTA no final. Eu segui à risca, gravei e publiquei. O vídeo ficou sem graça — robótico. As pessoas pararam de assistir nos primeiros 15 segundos. 18% de retenção com 312 views. O roteiro estava certo. O vídeo estava errado.',
       },
       {
         type: 'heading',
-        text: 'Qual ferramenta usar para cada caso',
+        text: 'Por que aconteceu',
+      },
+      {
+        type: 'paragraph',
+        text: 'O problema não estava no roteiro. Estava no que eu não passei pra IA antes de pedir o roteiro. A IA não sabe como você para. Ela não sabe a pausa que você faz antes de dizer algo importante. Ela não sabe que você costuma jogar uma pergunta pro espectador antes de responder. Ela não sabe as referências que fazem sentido pra quem te acompanha. O roteiro ficou certo no papel. Mas o seu sotaque de criador ficou de fora.',
+      },
+      {
+        type: 'heading',
+        text: 'A correção: briefing de criador antes do roteiro',
       },
       {
         type: 'steps',
         items: [
-          'Higgsfield — para cenas elaboradas com ambiente e contexto (produto numa mesa de café, num balcão de loja, num cenário ao ar livre).',
-          'Magnific — para upscale e detalhamento: aumenta a resolução da imagem gerada e adiciona textura e detalhe que parecem fotografia real.',
-          'Krea — para consistência de estilo: quando você quer variações que mantêm o mesmo tratamento visual em todos os ângulos do produto.',
+          'Selecione 3 vídeos seus que performaram acima da média — retenção ou engajamento acima do normal.',
+          'Transcreva os 3 (use qualquer transcritor automático — não precisa ser perfeito).',
+          'Cole as transcrições na conversa e peça ao Claude: "Analise meu estilo: ritmo, tipo de hook que uso, como encerro, referências recorrentes."',
+          'Adicione ao briefing: ritmo de fala, pausas intencionais, ganchos que funcionam com sua audiência, temas que você nunca aborda.',
+          'Só então peça o roteiro — agora com o briefing completo carregado no contexto.',
         ],
       },
       {
-        type: 'heading',
-        text: 'Como o Claude gera o prompt certo',
-      },
-      {
-        type: 'paragraph',
-        text: 'Você não precisa saber promptar ferramenta de imagem — essa é a parte técnica que o Claude faz por você. Descreva o resultado que quer em português simples:',
-      },
-      {
         type: 'code',
-        language: 'text',
-        code: `Tenho uma foto do meu produto (vela aromática, frasco de vidro âmbar)
-tirada em fundo branco simples. Quero uma foto de catálogo para
-Instagram com estética clean e premium.
+        language: 'markdown',
+        code: `# Briefing de Criador — Template
 
-Escreve o prompt para o Higgsfield que vai:
-- Colocar a vela num cenário de spa minimalista
-- Iluminação lateral suave, sombra difusa
-- Fundo neutro com textura sutil
-- Proporção quadrada (1:1)`,
+## Transcrições de referência
+[Cola aqui 3 transcrições de vídeos seus que performaram bem]
+
+## Meu estilo de criador
+- Ritmo: [ex: começo rápido, pauso antes do ponto principal]
+- Hook que funciona com minha audiência: [ex: pergunta retórica / dado surpreendente]
+- Referências recorrentes: [ex: ferramentas que uso, analogias comuns]
+- O que nunca funciona comigo: [ex: linguagem muito formal, jargão técnico]
+
+## Audiência
+- Quem me assiste: [perfil]
+- O que já sabe: [nível de conhecimento]
+- O que quer resolver: [dor principal]
+
+## Restrições do vídeo
+- Duração: [ex: 45-60s]
+- Tom: [ex: direto, sem introdução longa]`,
       },
       {
         type: 'callout',
-        text: 'Diga ao Claude a plataforma de destino (Instagram, Mercado Livre, site próprio) — o prompt muda conforme as expectativas visuais de cada canal.',
-      },
-      {
-        type: 'heading',
-        text: 'Criando variações para o mesmo produto',
-      },
-      {
-        type: 'paragraph',
-        text: 'Uma vez que você tem o primeiro resultado aprovado, pedir variações é rápido: mesmo produto, cenários diferentes. Em 10 minutos você tem fundo branco clean para Mercado Livre, ambiente lifestyle para Instagram, close-up de detalhe para página de produto e versão sazonal para campanhas — o que antes eram quatro sessões fotográficas.',
+        text: 'Salve o briefing de criador no CLAUDE.md do seu projeto de conteúdo. Toda vez que pedir um roteiro, o Claude vai carregar automaticamente quem você é — sem você colar de novo.',
       },
     ],
   },
@@ -341,17 +344,17 @@ Escreve o prompt para o Higgsfield que vai:
     data: '2026-07-11',
     slot: 'A',
     formato: 'Reel',
-    titulo: 'A Skill que Faz o Claude Virar um Analista de Dados',
+    titulo: 'Cole Sua Planilha de Vendas Bagunçada e Receba um Diagnóstico com 3 Recomendações',
     ferramenta: 'Claude Code + Skill de Análise',
     link: '/open-source',
     categoryId: 'skills',
-    keyword_cta: 'DADOS',
-    pilar: 'Automação de Processos',
+    keyword_cta: 'MARGEM',
+    pilar: 'Case / Resultado',
     duracao: '42s',
     longDescription: [
-      'Jogue um CSV no Claude sem contexto e ele descreve o óbvio: "sua planilha tem 3 colunas e 200 linhas." Com a skill de analista de dados instalada, ele age como um analista sênior: procura anomalias, cruza variáveis, identifica tendências e faz perguntas que você não pensou em fazer. Um analista de dados cobra R$3.500 para transformar sua planilha bagunçada em relatório visual. Você instala a skill uma vez — e qualquer planilha vira relatório.',
-      'A skill ensina o Claude uma estrutura de análise exploratória, um checklist de qualidade dos dados, um framework de storytelling com dados e gatilhos de alerta por tipo de métrica. Não é mágica: é instrução específica em formato markdown, instalada em segundos, que eleva permanentemente o nível de output do Claude para qualquer análise.',
-      'O resultado prático: você joga qualquer planilha — com colunas fora de ordem, linhas duplicadas, dados faltando — e recebe em 3 minutos um diagnóstico com anomalias identificadas, cruzamento de variáveis e 3 recomendações prontas para agir. Sem saber SQL. Sem configurar Power BI. Sem esperar o analista liberar o relatório.',
+      'Sua planilha tem colunas fora de ordem, nomes errados e linhas duplicadas. Não importa. Em 3 minutos você tem o diagnóstico. Analista pode cobrar R$3.500 pra fazer isso — você configura a skill do Claude uma vez e qualquer planilha bagunçada vira relatório com 3 recomendações.',
+      'Você joga a planilha como está e faz a pergunta que importa: "Onde estou perdendo margem?" O Claude não só limpa a bagunça. Procura o que está fora do padrão. Compara os números. Identifica anomalias. E entrega 3 recomendações que dá pra executar hoje — não um resumo descritivo do que está na planilha.',
+      'O resultado em 3 minutos: diagnóstico com anomalias identificadas, cruzamento de variáveis e recomendações prontas para agir. Sem saber SQL. Sem configurar Power BI. Sem esperar o analista liberar o relatório da semana.',
     ],
     features: [
       {
@@ -571,17 +574,17 @@ O que você identifica de relevante?`,
     data: '2026-07-13',
     slot: 'A',
     formato: 'Reel',
-    titulo: 'Como Criar Sua Própria Skill do Zero em 20 Minutos',
+    titulo: 'Ensine Uma Habilidade ao Claude Uma Vez — Ele Repete pra Sempre',
     ferramenta: 'Claude Code (skills)',
     link: 'https://claude.ai/code',
     categoryId: 'skills',
     keyword_cta: 'SKILL',
-    pilar: 'Claude Code',
-    duracao: '42s',
+    pilar: 'Ferramentas e Produtividade',
+    duracao: '40s',
     longDescription: [
-      'Skills prontas são ótimas. Mas a sua rotina tem especificidades que nenhuma skill genérica vai cobrir: o tom de voz do seu negócio, os critérios de qualidade do seu produto, o formato que os seus clientes esperam. Uma skill personalizada é um arquivo markdown que instrui o Claude sobre como se comportar em contextos específicos — e você cria do zero em 20 minutos.',
-      'A estrutura de uma skill é simples: cabeçalho de identidade, contexto de quando ativar, regras absolutas, comportamentos esperados e exemplos de entrada/saída. Sem formatação mágica, sem código — markdown simples que o Claude lê e aplica. Uma vez criada, a skill fica disponível em todas as sessões via /nome-da-skill.',
-      'A regra prática: se você repetiu a mesma instrução mais de 3 vezes em sessões diferentes, ela virou candidata a skill. Brief de cliente, revisão de copy no seu padrão, análise de métricas do seu negócio — qualquer instrução recorrente ganha consistência quando vira skill.',
+      'Você digita /proposta. O Claude entrega a proposta no seu formato, com o seu tom, sem nenhuma instrução adicional. Uma vez configurado — roda em qualquer projeto, sem explicar de novo. Você tem um jeito de fazer as coisas. O Claude aprende esse jeito uma vez e repete pra sempre.',
+      'Você ensina ao Claude os passos, as regras e as exceções do seu processo — proposta comercial, relatório semanal, padrão de resposta ao suporte. A partir daí, você fala o nome do processo em um comando e ele executa tudo no formato certo. Sem você explicar nada de novo. O padrão da sua empresa começa a se multiplicar.',
+      'A regra prática: se você repetiu a mesma instrução mais de 3 vezes em sessões diferentes, ela virou candidata a skill. Sem criar documentação. Sem explicar de novo pra cada ferramenta nova. Sem reescrever o padrão do zero cada vez. Você ensina uma vez — o Claude executa em qualquer projeto.',
     ],
     features: [
       {
