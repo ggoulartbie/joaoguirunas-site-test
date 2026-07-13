@@ -389,7 +389,7 @@ export const batch12: ContentPost[] = [
     data: '2026-07-21',
     slot: 'A',
     formato: 'Reel',
-    titulo: 'Responsivo com Tailwind',
+    titulo: 'Layout que Funciona em Qualquer Tela',
     ferramenta: 'Tailwind CSS + Claude Code',
     link: '/open-source/responsivo-com-tailwind',
     categoryId: 'skills',
