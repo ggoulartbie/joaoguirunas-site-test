@@ -28,7 +28,7 @@ export const batch12: ContentPost[] = [
     ],
     primaryLink: '/open-source/tipografia-certa-com-claude-code',
     isExternal: false,
-    bgImage: '/images/bg-framework.png',
+    bgImage: '/images/bg-designer.png',
     author: 'João Guirunas',
     authorUrl: 'https://instagram.com/joaoguirunas',
     body: [
@@ -129,6 +129,7 @@ Crie um toggle de dark/light mode que:
 
 Adicione o botão de toggle no header/navbar do projeto com um ícone de sol e lua.` },
       { type: 'heading', text: '3 passos para implementar' },
+      { type: 'paragraph', text: 'O processo é o mesmo em qualquer stack — React, Next.js ou HTML puro. Você não precisa reescrever nenhum componente: só define as variáveis, adiciona o toggle e ativa a detecção automática.' },
       { type: 'steps', items: [
         'Cole as CSS variables no arquivo de estilos global: adicione as variáveis de :root para light mode e o seletor [data-theme="dark"] para dark mode. Substitua todas as cores hardcoded por var(--bg), var(--text) etc.',
         'Adicione o toggle no header: em React, useState + useEffect para ler e gravar no localStorage. Em HTML puro, uma função JavaScript que alterna o atributo data-theme no elemento <html>.',
@@ -142,7 +143,7 @@ Adicione o botão de toggle no header/navbar do projeto com um ícone de sol e l
     data: '2026-07-14',
     slot: 'A',
     formato: 'Reel',
-    titulo: 'Framer Motion com Claude Code',
+    titulo: 'Seu App Parece Estático — Hover, Transição e Skeleton com Claude Code',
     ferramenta: 'Framer Motion + Claude Code',
     link: '/open-source/framer-motion-com-claude-code',
     categoryId: 'skills',
@@ -164,7 +165,7 @@ Adicione o botão de toggle no header/navbar do projeto com um ícone de sol e l
     ],
     primaryLink: '/open-source/framer-motion-com-claude-code',
     isExternal: false,
-    bgImage: '/images/bg-framework.png',
+    bgImage: '/images/bg-productivity.png',
     author: 'João Guirunas',
     authorUrl: 'https://instagram.com/joaoguirunas',
     body: [
@@ -248,6 +249,7 @@ Entrega os 3 componentes prontos para uso, com os imports corretos.` },
 
 Entrega a lista de substituições feitas e avisa se algum ícone não tem equivalente direto no Lucide.` },
       { type: 'heading', text: 'O resultado' },
+      { type: 'paragraph', text: 'Depois de rodar o prompt, o projeto tem uma biblioteca de ícones única, com props padronizadas em todos os componentes. Qualquer ícone novo que você adicionar já sabe qual padrão seguir.' },
       { type: 'steps', items: [
         'Todos os ícones do projeto com o mesmo estilo visual — stroke, tamanho e peso unificados.',
         'Bundle mais enxuto: tree-shaking do Lucide importa só os ícones que você usa.',
@@ -261,7 +263,7 @@ Entrega a lista de substituições feitas e avisa se algum ícone não tem equiv
     data: '2026-07-17',
     slot: 'A',
     formato: 'Reel',
-    titulo: 'Design System com Claude Code',
+    titulo: 'Seis Tons de Azul que Não Combinam — Design System com Claude Code',
     ferramenta: 'Claude Code',
     link: '/open-source/design-system-com-claude-code',
     categoryId: 'skills',
@@ -278,12 +280,12 @@ Entrega a lista de substituições feitas e avisa se algum ícone não tem equiv
       { title: 'Escala tipográfica documentada', description: 'Tamanhos, pesos e line-heights definidos como tokens — sem decisão arbitrária a cada novo texto.', icon: 'book' },
       { title: 'Grid de espaçamento em 8px', description: 'Sistema de espaçamento baseado em múltiplos de 8 — padding, margin e gap sempre alinhados.', icon: 'framework' },
       { title: 'Componentes Button e Card padronizados', description: 'Variantes (primary, secondary, ghost) e tamanhos (sm, md, lg) definidos uma vez, reutilizados em todo o projeto.', icon: 'plugin' },
-      { title: 'Interface antes vs depois', description: 'Do caos visual ao padrão visual consistente — o mesmo app com aparência completamente diferente.', icon: 'automation' },
+      { title: 'Dev novo entende em minutos', description: 'Tokens documentados como comentários no CSS — qualquer pessoa que entrar no projeto sabe qual variável usar, sem perguntar.', icon: 'agents' },
       { title: 'Prompt completo incluído', description: 'O prompt que o Claude usa para criar o design system do zero adaptado ao seu projeto.', icon: 'copywriting' },
     ],
     primaryLink: '/open-source/design-system-com-claude-code',
     isExternal: false,
-    bgImage: '/images/bg-framework.png',
+    bgImage: '/images/bg-skills.png',
     author: 'João Guirunas',
     authorUrl: 'https://instagram.com/joaoguirunas',
     body: [
