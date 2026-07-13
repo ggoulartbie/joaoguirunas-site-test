@@ -1,6 +1,6 @@
 import Image from 'next/image';
 import Link from 'next/link';
-import { ArrowLeft, ArrowRight, ExternalLink, Type, Terminal, Zap, LayoutGrid, Palette, Layers, CreditCard, Shield } from 'lucide-react';
+import { ArrowLeft, ArrowRight, ExternalLink, Type, Terminal, Zap, LayoutGrid, Palette, Layers, CreditCard, Shield, LineChart } from 'lucide-react';
 import { siteConfig } from '@/config/site';
 
 export interface SkillFeature {
@@ -102,6 +102,7 @@ function PrimaryIcon({ url, isExternal }: { url?: string; isExternal?: boolean }
   if (url.includes('ui.shadcn')) return <Layers className="h-4 w-4" />
   if (url.includes('stripe.com')) return <CreditCard className="h-4 w-4" />
   if (url.includes('supabase.com')) return <Shield className="h-4 w-4" />
+  if (url.includes('recharts.org')) return <LineChart className="h-4 w-4" />
   if (url.includes('tailwind') || url.includes('design')) return <Palette className="h-4 w-4" />
   return <ExternalLink className="h-4 w-4" />
 }
