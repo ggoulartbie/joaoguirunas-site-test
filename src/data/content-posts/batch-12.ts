@@ -385,13 +385,13 @@ export const batch12: ContentPost[] = [
   },
 
   {
-    slug: 'responsivo-com-tailwind',
+    slug: 'layout-que-funciona-em-qualquer-tela',
     data: '2026-07-21',
     slot: 'A',
     formato: 'Reel',
     titulo: 'Layout que Funciona em Qualquer Tela',
     ferramenta: 'Tailwind CSS + Claude Code',
-    link: '/open-source/responsivo-com-tailwind',
+    link: '/open-source/layout-que-funciona-em-qualquer-tela',
     categoryId: 'skills',
     keyword_cta: 'MOBILE',
     pilar: 'Ferramentas e Produtividade',
