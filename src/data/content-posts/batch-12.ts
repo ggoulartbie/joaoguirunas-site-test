@@ -6,7 +6,7 @@ export const batch12: ContentPost[] = [
     data: '2026-07-19',
     slot: 'A',
     formato: 'Reel',
-    titulo: 'Tipografia Certa com Claude Code',
+    titulo: 'Tipografia com Claude Code',
     ferramenta: 'Claude Code',
     link: '/open-source/tipografia-certa-com-claude-code',
     categoryId: 'skills',
@@ -90,7 +90,7 @@ Entrega tudo junto, sem explicações intermediárias — só o raciocínio fina
     data: '2026-07-13',
     slot: 'A',
     formato: 'Reel',
-    titulo: 'Dark Mode Completo com Claude Code',
+    titulo: 'Dark Mode com Claude Code',
     ferramenta: 'Claude Code',
     link: '/open-source/dark-mode-com-claude-code',
     categoryId: 'skills',
@@ -205,7 +205,7 @@ export function ThemeToggle() {
     data: '2026-07-14',
     slot: 'A',
     formato: 'Reel',
-    titulo: 'Animações com Framer Motion via Claude Code',
+    titulo: 'Framer Motion com Claude Code',
     ferramenta: 'Framer Motion + Claude Code',
     link: '/open-source/framer-motion-com-claude-code',
     categoryId: 'skills',
@@ -240,7 +240,7 @@ export function ThemeToggle() {
         'Transição de página com AnimatePresence: envolve o conteúdo com AnimatePresence e configura entrada com opacity 0→1 + y 16→0 e saída com opacity 1→0 em 0.3s. A navegação passa a ter continuidade.',
         'Skeleton loader animado: componente SkeletonCard com retângulos que pulsam usando animate opacity 0.5→1→0.5 em loop infinito — o usuário vê que algo está carregando, não uma tela em branco.',
       ]},
-      { type: 'heading', text: 'Componente 1 — MotionCard (hover effect)' },
+      { type: 'heading', text: 'Componente 1: MotionCard' },
       { type: 'code', language: 'tsx', code: `import { motion } from 'framer-motion'
 
 export function MotionCard({ children }: { children: React.ReactNode }) {
@@ -254,7 +254,7 @@ export function MotionCard({ children }: { children: React.ReactNode }) {
     </motion.div>
   )
 }` },
-      { type: 'heading', text: 'Componente 2 — PageTransition (AnimatePresence)' },
+      { type: 'heading', text: 'Componente 2: PageTransition' },
       { type: 'code', language: 'tsx', code: `import { AnimatePresence, motion } from 'framer-motion'
 import { usePathname } from 'next/navigation'
 
@@ -274,7 +274,7 @@ export function PageTransition({ children }: { children: React.ReactNode }) {
     </AnimatePresence>
   )
 }` },
-      { type: 'heading', text: 'Componente 3 — SkeletonCard (skeleton loader)' },
+      { type: 'heading', text: 'Componente 3: SkeletonCard' },
       { type: 'code', language: 'tsx', code: `import { motion } from 'framer-motion'
 
 export function SkeletonCard() {
@@ -322,7 +322,7 @@ Entrega os 3 componentes prontos para uso, com os imports corretos.` },
     data: '2026-07-15',
     slot: 'A',
     formato: 'Reel',
-    titulo: 'Ícones Consistentes com Lucide React',
+    titulo: 'Lucide React com Claude Code',
     ferramenta: 'Lucide React + Claude Code',
     link: '/open-source/lucide-react-com-claude-code',
     categoryId: 'skills',
@@ -395,7 +395,7 @@ Entrega a lista de substituições feitas e avisa se algum ícone não tem equiv
     data: '2026-07-17',
     slot: 'A',
     formato: 'Reel',
-    titulo: 'Design System Completo com Claude Code',
+    titulo: 'Design System com Claude Code',
     ferramenta: 'Claude Code',
     link: '/open-source/design-system-com-claude-code',
     categoryId: 'skills',
