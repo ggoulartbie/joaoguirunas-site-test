@@ -134,7 +134,6 @@ Adicione o botão de toggle no header/navbar do projeto com um ícone de sol e l
         'Adicione o toggle no header: em React, useState + useEffect para ler e gravar no localStorage. Em HTML puro, uma função JavaScript que alterna o atributo data-theme no elemento <html>.',
         'Ative a detecção automática do sistema: adicione a verificação de window.matchMedia("(prefers-color-scheme: dark)") na inicialização — se o usuário não tiver preferência salva, o app adota o tema do sistema.',
       ]},
-      { type: 'callout', text: 'O código completo gerado pelo Claude — CSS variables, toggle e detecção de sistema — é enviado via DM para quem comentar DARK no Reel.' },
     ],
   },
 ]
