@@ -79,4 +79,62 @@ Entrega tudo junto, sem explicações intermediárias — só o raciocínio fina
       { type: 'callout', text: 'Não precisa saber qual fonte usar. Só descrever o projeto. O Claude escolhe, justifica e entrega o código — você revisa e aplica.' },
     ],
   },
+
+  {
+    slug: 'dark-mode-com-claude-code',
+    data: '2026-07-13',
+    slot: 'A',
+    formato: 'Reel',
+    titulo: 'Dark Mode em 6 Minutos — Um Prompt Pro Claude Code',
+    ferramenta: 'Claude Code',
+    link: '/open-source/dark-mode-com-claude-code',
+    categoryId: 'skills',
+    keyword_cta: 'DARK',
+    pilar: 'Ferramentas e Produtividade',
+    duracao: '30s',
+    longDescription: [
+      'Dark mode não é uma feature de UI — é uma expectativa. Usuário abre seu projeto às 23h com brilho reduzido no celular e vê um fundo branco gritando. A implementação errada são 3 arquivos e 40 variáveis duplicadas. A certa é um sistema de CSS variables que funciona em qualquer projeto, em 6 minutos.',
+      'Um prompt pro Claude Code resolve. Ele cria o sistema de variáveis, o toggle com persistência em localStorage, a detecção automática de prefers-color-scheme e adiciona o botão no header — sem dependência externa, sem biblioteca.',
+      'Este guia entrega o prompt completo e o guia de 3 passos para implementar em qualquer projeto existente — React, Next.js ou HTML puro.',
+    ],
+    features: [
+      { title: 'Sistema de CSS variables', description: '--bg, --text, --surface, --border e --accent em light e dark — um lugar para mudar tudo.', icon: 'design' },
+      { title: 'Toggle com localStorage', description: 'Preferência do usuário persistida — quando ele volta, o tema está exatamente como deixou.', icon: 'setup' },
+      { title: 'Detecção de prefers-color-scheme', description: 'Primeira visita: o app adota o tema do sistema automaticamente. Zero configuração para o usuário.', icon: 'framework' },
+      { title: 'Transição suave em todos os elementos', description: 'transition: background 0.25s, color 0.25s aplicado globalmente — sem piscar na alternância.', icon: 'automation' },
+      { title: 'Sem dependência externa', description: 'CSS puro + JavaScript nativo. Funciona em React, Next.js, Vue ou HTML puro sem instalar nada.', icon: 'plugin' },
+      { title: 'Prompt pronto para usar', description: 'Cole no Claude Code, adicione o contexto do projeto, receba o sistema completo em 6 minutos.', icon: 'copywriting' },
+    ],
+    primaryLink: '/open-source/dark-mode-com-claude-code',
+    isExternal: false,
+    bgImage: '/images/bg-monitor-new.png',
+    author: 'João Guirunas',
+    authorUrl: 'https://instagram.com/joaoguirunas',
+    body: [
+      { type: 'heading', text: 'O sistema de CSS variables' },
+      { type: 'paragraph', text: 'A implementação correta de dark mode não duplica valores — ela cria um sistema de variáveis semânticas que mudam conforme o tema ativo. Cinco variáveis cobrem 90% dos projetos: --bg (fundo principal), --text (texto principal), --surface (cards e painéis), --border (bordas e divisores) e --accent (cor de destaque). Você define os valores em :root para light e em [data-theme="dark"] para dark. O resto do CSS usa var() — nada mais.' },
+      { type: 'heading', text: 'O prompt' },
+      { type: 'code', language: 'markdown', code: `Adicione dark mode completo neste projeto.
+
+Crie um sistema de CSS variables no arquivo global de estilos com as seguintes variáveis:
+--bg (fundo principal), --text (texto principal), --surface (cards e painéis),
+--border (bordas e divisores) e --accent (cor de destaque).
+
+Mapeie os valores de light mode e dark mode para cada variável.
+
+Crie um toggle de dark/light mode que:
+— persista a preferência no localStorage
+— detecte automaticamente prefers-color-scheme na primeira visita
+— aplique a transição com transition: background 0.25s, color 0.25s em todos os elementos
+
+Adicione o botão de toggle no header/navbar do projeto com um ícone de sol e lua.` },
+      { type: 'heading', text: '3 passos para implementar' },
+      { type: 'steps', items: [
+        'Cole as CSS variables no arquivo de estilos global: adicione as variáveis de :root para light mode e o seletor [data-theme="dark"] para dark mode. Substitua todas as cores hardcoded por var(--bg), var(--text) etc.',
+        'Adicione o toggle no header: em React, useState + useEffect para ler e gravar no localStorage. Em HTML puro, uma função JavaScript que alterna o atributo data-theme no elemento <html>.',
+        'Ative a detecção automática do sistema: adicione a verificação de window.matchMedia("(prefers-color-scheme: dark)") na inicialização — se o usuário não tiver preferência salva, o app adota o tema do sistema.',
+      ]},
+      { type: 'callout', text: 'O código completo gerado pelo Claude — CSS variables, toggle e detecção de sistema — é enviado via DM para quem comentar DARK no Reel.' },
+    ],
+  },
 ]
