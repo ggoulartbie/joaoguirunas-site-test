@@ -193,4 +193,137 @@ Entrega os 3 componentes prontos para uso, com os imports corretos.` },
       { type: 'callout', text: 'Mesmo app, experiência completamente diferente. Hover, transição e skeleton loader — os 3 padrões que separam uma interface funcional de uma interface que o usuário quer usar.' },
     ],
   },
+
+  {
+    slug: 'lucide-react-com-claude-code',
+    data: '2026-07-15',
+    slot: 'A',
+    formato: 'Reel',
+    titulo: 'Ícones Destruindo a Credibilidade — Lucide React em 5 Min com Claude Code',
+    ferramenta: 'Lucide React + Claude Code',
+    link: '/open-source/lucide-react-com-claude-code',
+    categoryId: 'skills',
+    keyword_cta: 'ICONE',
+    pilar: 'Ferramentas e Produtividade',
+    duracao: '32s',
+    longDescription: [
+      'Emoji misturado com SVG. Estilo diferente em cada componente. Tamanhos inconsistentes em cada tela. O usuário percebe o descuido antes de ler uma linha — e a credibilidade do projeto vai junto.',
+      'Com Claude Code, você instala o Lucide React e substitui todos os ícones do projeto de forma consistente em menos de 5 minutos. Mesmo tamanho, mesmo peso, mesmo estilo em cada componente — sem revisar arquivo por arquivo.',
+      'Este guia entrega o prompt que o Claude usa para varrer o projeto inteiro, identificar todos os ícones e substituir tudo pela biblioteca Lucide com consistência total.',
+    ],
+    features: [
+      { title: 'Substituição em todo o projeto', description: 'Claude varre todos os componentes e troca ícones inconsistentes pelo equivalente Lucide de uma vez.', icon: 'automation' },
+      { title: 'Mesmo tamanho, peso e estilo', description: 'Lucide React garante visual coeso em toda a interface — sem variação de stroke ou tamanho entre telas.', icon: 'design' },
+      { title: 'Zero SVG manual', description: 'Nenhum arquivo SVG para gerenciar. Import direto do pacote, tree-shaking automático, bundle enxuto.', icon: 'setup' },
+      { title: 'Props consistentes', description: 'size, strokeWidth e color padronizados com um valor padrão — qualquer dev novo segue o mesmo padrão.', icon: 'framework' },
+      { title: 'Instalação em um comando', description: 'Claude Code instala o lucide-react e configura os imports — você não abre a documentação.', icon: 'plugin' },
+      { title: 'Prompt completo incluído', description: 'O prompt exato para o Claude varrer o projeto e substituir todos os ícones com consistência.', icon: 'copywriting' },
+    ],
+    primaryLink: '/open-source/lucide-react-com-claude-code',
+    isExternal: false,
+    bgImage: '/images/bg-learn.png',
+    author: 'João Guirunas',
+    authorUrl: 'https://instagram.com/joaoguirunas',
+    body: [
+      { type: 'heading', text: 'Por que ícones inconsistentes destroem credibilidade' },
+      { type: 'paragraph', text: 'O usuário não consegue articular o problema — ele só sente que algo está errado. Emoji misturado com SVG, ícone de biblioteca diferente em cada tela, stroke de 1px aqui e 2px ali. O app parece montado por várias pessoas sem conversar. Lucide React resolve com uma biblioteca única: 1000+ ícones, mesmo estilo, props idênticas em todos.' },
+      { type: 'heading', text: 'O prompt' },
+      { type: 'code', language: 'markdown', code: `Instale o lucide-react e substitua todos os ícones inconsistentes neste projeto.
+
+1. Instale: npm install lucide-react
+
+2. Varra todos os componentes e identifique:
+   — emojis usados como ícones
+   — SVGs inline
+   — ícones de outras bibliotecas (heroicons, feather, react-icons, etc.)
+
+3. Para cada ícone encontrado, substitua pelo equivalente mais próximo do Lucide React.
+
+4. Padronize os props em todos os usos:
+   — size={20} como padrão
+   — strokeWidth={1.5}
+   — className para cor via Tailwind (ex: text-muted-foreground)
+
+5. Remova os imports e dependências antigas que não forem mais usadas.
+
+Entrega a lista de substituições feitas e avisa se algum ícone não tem equivalente direto no Lucide.` },
+      { type: 'heading', text: 'O resultado' },
+      { type: 'steps', items: [
+        'Todos os ícones do projeto com o mesmo estilo visual — stroke, tamanho e peso unificados.',
+        'Bundle mais enxuto: tree-shaking do Lucide importa só os ícones que você usa.',
+        'Um padrão claro para qualquer dev novo: import { IconName } from "lucide-react" com as mesmas props em todo lugar.',
+      ]},
+    ],
+  },
+
+  {
+    slug: 'design-system-com-claude-code',
+    data: '2026-07-17',
+    slot: 'A',
+    formato: 'Reel',
+    titulo: 'Design System em 10 Minutos com Claude Code',
+    ferramenta: 'Claude Code',
+    link: '/open-source/design-system-com-claude-code',
+    categoryId: 'skills',
+    keyword_cta: 'SYSTEM',
+    pilar: 'Ferramentas e Produtividade',
+    duracao: '32s',
+    longDescription: [
+      'Seis tons de azul diferentes. Três tamanhos de botão que não combinam. Espaçamento no olhômetro. Isso não é falta de talento — é falta de sistema. Sem tokens definidos, cada componente novo vira uma decisão arbitrária.',
+      'Com Claude Code, você cria um design system completo em 10 minutos: tokens de cor em CSS variables, escala tipográfica documentada, grid de espaçamento em 8px e componentes Button e Card padronizados. A interface fica coesa — e qualquer dev novo entende o padrão em minutos.',
+      'Este guia entrega o prompt que gera o design system do zero, com os tokens, a escala e os componentes base prontos para aplicar no seu projeto.',
+    ],
+    features: [
+      { title: 'Tokens de cor em CSS variables', description: 'Primária, secundária, neutros e feedback definidos em :root — uma mudança afeta toda a interface.', icon: 'design' },
+      { title: 'Escala tipográfica documentada', description: 'Tamanhos, pesos e line-heights definidos como tokens — sem decisão arbitrária a cada novo texto.', icon: 'book' },
+      { title: 'Grid de espaçamento em 8px', description: 'Sistema de espaçamento baseado em múltiplos de 8 — padding, margin e gap sempre alinhados.', icon: 'framework' },
+      { title: 'Componentes Button e Card padronizados', description: 'Variantes (primary, secondary, ghost) e tamanhos (sm, md, lg) definidos uma vez, reutilizados em todo o projeto.', icon: 'plugin' },
+      { title: 'Interface antes vs depois', description: 'Do caos visual ao padrão visual consistente — o mesmo app com aparência completamente diferente.', icon: 'automation' },
+      { title: 'Prompt completo incluído', description: 'O prompt que o Claude usa para criar o design system do zero adaptado ao seu projeto.', icon: 'copywriting' },
+    ],
+    primaryLink: '/open-source/design-system-com-claude-code',
+    isExternal: false,
+    bgImage: '/images/bg-framework.png',
+    author: 'João Guirunas',
+    authorUrl: 'https://instagram.com/joaoguirunas',
+    body: [
+      { type: 'heading', text: 'O problema sem sistema' },
+      { type: 'paragraph', text: 'Sem design system, cada componente novo é uma decisão nova. Qual azul usar? Qual tamanho de botão? Quanto de padding? O resultado é uma interface inconsistente que parece montada por várias pessoas sem conversar — porque é exatamente isso que acontece, mesmo quando é uma pessoa só, em momentos diferentes.' },
+      { type: 'heading', text: 'O que o Claude cria' },
+      { type: 'steps', items: [
+        'Tokens de cor: primária, secundária, neutros (50–900) e cores de feedback (success, warning, error) em CSS variables no :root.',
+        'Escala tipográfica: xs a 4xl com font-size, line-height e font-weight documentados como tokens — aplicados via Tailwind ou CSS custom properties.',
+        'Grid de espaçamento: múltiplos de 8px (8, 16, 24, 32, 48, 64) como tokens — padding, margin e gap sempre no grid.',
+        'Componentes base: Button com variantes primary/secondary/ghost e tamanhos sm/md/lg. Card com surface, border e shadow padronizados.',
+      ]},
+      { type: 'heading', text: 'O prompt' },
+      { type: 'code', language: 'markdown', code: `Crie um design system completo para este projeto.
+
+1. TOKENS DE COR — adicione no CSS global em :root:
+   — Primária: 5 tons (100 a 900)
+   — Secundária: 5 tons
+   — Neutros: 9 tons (50 a 900)
+   — Feedback: success, warning, error (bg + text + border)
+
+2. ESCALA TIPOGRÁFICA — tokens para:
+   — Tamanhos: xs (12px), sm (14px), base (16px), lg (18px), xl (20px), 2xl (24px), 3xl (30px), 4xl (36px)
+   — Pesos: 400 (regular), 500 (medium), 600 (semibold), 700 (bold)
+   — Line-heights: tight (1.25), normal (1.5), relaxed (1.75)
+
+3. ESPAÇAMENTO — grid de 8px:
+   — Tokens: 1 (8px), 2 (16px), 3 (24px), 4 (32px), 6 (48px), 8 (64px)
+
+4. COMPONENTE BUTTON — variantes:
+   — primary, secondary, ghost
+   — tamanhos: sm, md, lg
+   — estado: default, hover, disabled
+
+5. COMPONENTE CARD — com:
+   — surface (background com token), border e border-radius padronizados
+   — padding interno usando tokens de espaçamento
+
+Aplique os tokens nos componentes existentes do projeto e documente os padrões em comentários.` },
+      { type: 'callout', text: 'Com o design system no lugar, qualquer decisão visual tem uma resposta certa. Qual azul? O token primary-600. Quanto de padding? O token space-3. A consistência vira o padrão — não o esforço.' },
+    ],
+  },
 ]
