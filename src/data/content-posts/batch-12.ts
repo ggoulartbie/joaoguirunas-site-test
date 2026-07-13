@@ -136,4 +136,61 @@ Adicione o botão de toggle no header/navbar do projeto com um ícone de sol e l
       ]},
     ],
   },
+
+  {
+    slug: 'framer-motion-com-claude-code',
+    data: '2026-07-14',
+    slot: 'A',
+    formato: 'Reel',
+    titulo: 'Framer Motion em 15 Minutos com Claude Code',
+    ferramenta: 'Framer Motion + Claude Code',
+    link: '/open-source/framer-motion-com-claude-code',
+    categoryId: 'skills',
+    keyword_cta: 'ANIMA',
+    pilar: 'Ferramentas e Produtividade',
+    duracao: '32s',
+    longDescription: [
+      'Cada clique sem feedback. Cada página que aparece do nada. Cada lista que carrega de uma vez sem skeleton loader. O app parece estático e sem vida — e isso afasta o usuário antes de ele entender o que você construiu.',
+      'Com Claude Code, você instala o Framer Motion e configura hover effects nos cards, transições de entrada das páginas com AnimatePresence e skeleton loaders animados em menos de 15 minutos. Mesmo app, experiência completamente diferente.',
+      'Este guia entrega os 3 padrões de animação configurados pelo Claude — com o prompt e o código prontos para plugar no seu projeto React.',
+    ],
+    features: [
+      { title: 'Hover effects nos cards', description: 'Cards que respondem ao mouse com scale e shadow suave — feedback visual imediato sem escrever CSS complexo.', icon: 'design' },
+      { title: 'Transição de página com AnimatePresence', description: 'Páginas entram com fade + slide — o usuário sente que está navegando, não que a tela trocou de repente.', icon: 'framework' },
+      { title: 'Skeleton loader animado', description: 'Placeholder pulsante enquanto o conteúdo carrega — percepção de performance melhor sem mudar o backend.', icon: 'automation' },
+      { title: 'Instalação em um comando', description: 'Claude Code instala o Framer Motion e configura os imports — você não abre a documentação.', icon: 'setup' },
+      { title: 'Componentes prontos para reutilizar', description: 'Cada animação configurada como componente isolado — arrastar e soltar em qualquer parte do projeto.', icon: 'plugin' },
+      { title: 'Prompt completo incluído', description: 'Um prompt pro Claude Code que configura os 3 padrões de animação de uma vez, adaptado ao seu projeto.', icon: 'copywriting' },
+    ],
+    primaryLink: '/open-source/framer-motion-com-claude-code',
+    isExternal: false,
+    bgImage: '/images/bg-framework.png',
+    author: 'João Guirunas',
+    authorUrl: 'https://instagram.com/joaoguirunas',
+    body: [
+      { type: 'heading', text: 'Por que animação importa' },
+      { type: 'paragraph', text: 'Interface sem animação não é neutra — ela parece quebrada. O usuário clica num botão e não sabe se funcionou. Navega para outra página e a tela troca abruptamente. Espera o conteúdo carregar olhando para o branco. Cada um desses momentos cria atrito. Framer Motion resolve os três com menos de 50 linhas de código.' },
+      { type: 'heading', text: 'Os 3 padrões que o Claude configura' },
+      { type: 'steps', items: [
+        'Hover effects nos cards: scale(1.02) + box-shadow suave no hover com spring animation. O card responde ao mouse imediatamente — feedback sem CSS complexo.',
+        'Transição de página com AnimatePresence: envolve o conteúdo com AnimatePresence e configura entrada com opacity 0→1 + y 16→0 e saída com opacity 1→0 em 0.3s. A navegação passa a ter continuidade.',
+        'Skeleton loader animado: componente SkeletonCard com retângulos que pulsam usando animate opacity 0.5→1→0.5 em loop infinito — o usuário vê que algo está carregando, não uma tela em branco.',
+      ]},
+      { type: 'heading', text: 'O prompt' },
+      { type: 'code', language: 'markdown', code: `Adicione animações com Framer Motion neste projeto React.
+
+Instale o Framer Motion se ainda não estiver instalado.
+
+Configure os seguintes padrões:
+
+1. HOVER EFFECTS nos cards: scale(1.02) + box-shadow suave no hover, com spring animation (stiffness: 300, damping: 20).
+
+2. TRANSIÇÃO DE PÁGINA com AnimatePresence: envolva o conteúdo principal com AnimatePresence e configure entrada com opacity 0→1 + y 16→0, saída com opacity 1→0, duração 0.3s.
+
+3. SKELETON LOADER: crie um componente SkeletonCard com retângulos animados (pulse effect) usando animate={{ opacity: [0.5, 1, 0.5] }} com repeat: Infinity para usar enquanto o conteúdo carrega.
+
+Entrega os 3 componentes prontos para uso, com os imports corretos.` },
+      { type: 'callout', text: 'Mesmo app, experiência completamente diferente. Hover, transição e skeleton loader — os 3 padrões que separam uma interface funcional de uma interface que o usuário quer usar.' },
+    ],
+  },
 ]
