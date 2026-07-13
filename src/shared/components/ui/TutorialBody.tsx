@@ -102,7 +102,7 @@ function Block({ block }: { block: TutorialBlock }) {
       return (
         <div className="overflow-x-auto">
           <pre
-            className="font-mono text-sm whitespace-pre min-w-0 p-4"
+            className="font-mono text-sm whitespace-pre-wrap min-w-0 p-4"
             style={{
               background: '#16161a',
               border: '1px solid rgba(255,255,255,0.1)',
