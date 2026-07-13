@@ -1,6 +1,6 @@
 import Image from 'next/image';
 import Link from 'next/link';
-import { ArrowLeft, ArrowRight, ExternalLink, Type, Terminal, Zap, LayoutGrid, Palette } from 'lucide-react';
+import { ArrowLeft, ArrowRight, ExternalLink, Type, Terminal, Zap, LayoutGrid, Palette, Layers } from 'lucide-react';
 import { siteConfig } from '@/config/site';
 
 export interface SkillFeature {
@@ -99,6 +99,7 @@ function PrimaryIcon({ url, isExternal }: { url?: string; isExternal?: boolean }
   if (url.includes('framer.com')) return <Zap className="h-4 w-4" />
   if (url.includes('lucide.dev')) return <LayoutGrid className="h-4 w-4" />
   if (url.includes('claude.ai')) return <Terminal className="h-4 w-4" />
+  if (url.includes('ui.shadcn')) return <Layers className="h-4 w-4" />
   if (url.includes('tailwind') || url.includes('design')) return <Palette className="h-4 w-4" />
   return <ExternalLink className="h-4 w-4" />
 }
