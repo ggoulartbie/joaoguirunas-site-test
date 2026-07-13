@@ -6,7 +6,7 @@ export const batch12: ContentPost[] = [
     data: '2026-07-19',
     slot: 'A',
     formato: 'Reel',
-    titulo: 'Sua Tipografia com Um Prompt Pro Claude Code',
+    titulo: 'Fonte Genérica Denuncia Site de Template — O Claude Define a Stack em 8 Minutos',
     ferramenta: 'Claude Code',
     link: '/open-source/tipografia-certa-com-claude-code',
     categoryId: 'skills',
@@ -14,17 +14,17 @@ export const batch12: ContentPost[] = [
     pilar: 'Ferramentas e Produtividade',
     duracao: '30s',
     longDescription: [
-      'A tipografia do seu projeto está destruindo a percepção do trabalho — e você não percebe porque o problema nunca é óbvio. Fonte genérica, hierarquia plana, sem respiro entre tamanhos. Parece amador mesmo quando o código é bom.',
-      'Um prompt pro Claude Code resolve isso em 8 minutos. Você descreve o projeto: tom, público, tipo de produto. O Claude escolhe o stack de 3 fontes, justifica cada escolha e entrega o layout.tsx, o globals.css e exemplos de uso — tudo configurado para o seu contexto específico.',
-      'Este guia entrega o prompt completo com o campo personalizável em destaque, os 4 stacks mais usados por tipo de projeto e o exemplo real de output gerado para um SaaS financeiro em dark mode.',
+      'Um designer cobra R$600 para definir a tipografia de um projeto. Você resolve em 8 minutos com um prompt. Fonte genérica, hierarquia plana, sem respiro entre tamanhos — o trabalho parece amador mesmo quando o código é bom.',
+      'Um prompt pro Claude Code muda isso. Você descreve o projeto: tom, público, tipo de produto. O Claude escolhe o stack de 3 fontes, justifica cada escolha e entrega o layout.tsx, o globals.css e exemplos de uso — tudo configurado para o seu contexto específico.',
+      'Aqui está a configuração completa que prometi: o prompt com o campo personalizável em destaque, os 4 stacks mais usados por tipo de projeto e o exemplo real de output gerado para um SaaS financeiro em dark mode.',
     ],
     features: [
-      { title: 'Sistema de 3 camadas', description: 'Display (personalidade) + Body (legibilidade) + Mono (textura técnica) — a lógica que o Claude usa para decidir.', icon: 'framework' },
-      { title: '4 stacks por contexto', description: 'Editorial, SaaS, Vercel Ecosystem e Corporativo — o Claude escolhe o stack conforme a descrição do seu projeto.', icon: 'design' },
-      { title: 'Prompt pronto para usar', description: 'Cole no Claude Code, preencha o campo em laranja com o seu projeto e receba o stack escolhido com justificativa.', icon: 'copywriting' },
-      { title: 'Output: layout.tsx completo', description: 'Imports de next/font/google e variáveis CSS configuradas para o seu projeto específico.', icon: 'book' },
-      { title: 'Output: globals.css + Tailwind', description: 'Variáveis @theme para Tailwind v4 ou tailwind.config.ts para v3 — conforme o seu stack.', icon: 'setup' },
-      { title: 'Exemplos de uso incluídos', description: 'H1 com display, parágrafo com body e label técnico com mono — prontos para copiar e adaptar.', icon: 'automation' },
+      { title: 'Sistema de 3 camadas', description: 'Display + Body + Mono com critério técnico — você nunca mais escolhe fonte no olhômetro.', icon: 'framework' },
+      { title: '4 stacks por contexto', description: 'Editorial, SaaS, Vercel e Corporativo — o Claude escolhe qual encaixa com base no que você descreve.', icon: 'design' },
+      { title: 'Prompt pronto para usar', description: 'Cole, preencha o contexto do projeto e receba o stack com justificativa técnica completa.', icon: 'copywriting' },
+      { title: 'Output: layout.tsx completo', description: 'Imports configurados e variáveis CSS prontas — colar direto no projeto, sem reescrever nada.', icon: 'book' },
+      { title: 'Output: globals.css + Tailwind', description: 'Compatível com Tailwind v4 e v3 — funciona no seu stack sem ajuste manual.', icon: 'setup' },
+      { title: 'Exemplos de uso incluídos', description: 'H1, parágrafo e label técnico em código real — você vê o resultado antes de aplicar.', icon: 'automation' },
     ],
     primaryLink: '/open-source/tipografia-certa-com-claude-code',
     isExternal: false,
@@ -76,7 +76,11 @@ Entrega tudo junto, sem explicações intermediárias — só o raciocínio fina
         'globals.css pronto: variáveis @theme para Tailwind v4 — ou tailwind.config.ts para projetos em v3.',
         'Exemplos de uso: H1 com display, parágrafo com body e label técnico com mono em código real.',
       ]},
-      { type: 'callout', text: 'Não precisa saber qual fonte usar. Só descrever o projeto. O Claude escolhe, justifica e entrega o código — você revisa e aplica.' },
+      { type: 'heading', text: 'Em qual projeto usar cada stack' },
+      { type: 'paragraph', text: 'O stack Editorial (Fraunces + Inter Tight + JetBrains Mono) funciona para projetos com personalidade forte e audiência que valoriza refinamento — portfólios, agências, tools com posicionamento premium. O SaaS (Sora + Plus Jakarta Sans) funciona para produtos que precisam parecer ambiciosos e modernos sem intimidar. O Vercel Ecosystem (Space Grotesk + Geist + Geist Mono) é o mais seguro para projetos dev-facing — já conversa com o ecossistema visualmente.' },
+      { type: 'callout', text: 'O Claude não conhece a identidade visual completa do projeto na primeira execução. Descreva com detalhes — tom, público e tipo de produto fazem toda a diferença no stack escolhido. Quanto mais específico, menos ajuste manual depois.' },
+      { type: 'heading', text: 'Depois que o sistema está no lugar' },
+      { type: 'paragraph', text: 'Com o stack configurado, qualquer decisão tipográfica tem uma resposta certa. Qual fonte para o título? A display. Para o texto corrido? A body. Para metadados e badges? A mono. Você não decide mais fonte no olhômetro — e qualquer dev que entrar no projeto segue o mesmo sistema sem perguntar.' },
     ],
   },
 
@@ -85,7 +89,7 @@ Entrega tudo junto, sem explicações intermediárias — só o raciocínio fina
     data: '2026-07-13',
     slot: 'A',
     formato: 'Reel',
-    titulo: 'Dark Mode com Um Prompt Pro Claude Code',
+    titulo: 'Sem Dark Mode o App Denuncia que Não Foi Pensado — Resolva em 6 Minutos',
     ferramenta: 'Claude Code',
     link: '/open-source/dark-mode-com-claude-code',
     categoryId: 'skills',
@@ -93,16 +97,16 @@ Entrega tudo junto, sem explicações intermediárias — só o raciocínio fina
     pilar: 'Ferramentas e Produtividade',
     duracao: '30s',
     longDescription: [
-      'Dark mode não é uma feature de UI — é uma expectativa. Usuário abre seu projeto às 23h com brilho reduzido no celular e vê um fundo branco gritando. A implementação errada são 3 arquivos e 40 variáveis duplicadas. A certa é um sistema de CSS variables que funciona em qualquer projeto, em 6 minutos.',
-      'Um prompt pro Claude Code resolve. Ele cria o sistema de variáveis, o toggle com persistência em localStorage, a detecção automática de prefers-color-scheme e adiciona o botão no header — sem dependência externa, sem biblioteca.',
-      'Este guia entrega o prompt completo e o guia de 3 passos para implementar em qualquer projeto existente — React, Next.js ou HTML puro.',
+      'Um dev cobra R$800 para implementar dark mode — e provavelmente entrega só para um framework. Dark mode não é uma feature de UI, é uma expectativa: o usuário abre o projeto às 23h, brilho reduzido, e vê um fundo branco gritando. A implementação errada são 3 arquivos e 40 variáveis duplicadas.',
+      'Um prompt pro Claude Code resolve em 6 minutos. Ele cria o sistema de CSS variables, o toggle com persistência em localStorage, a detecção automática de prefers-color-scheme e adiciona o botão no header — sem dependência externa, sem biblioteca. Funciona em React, Next.js e HTML puro.',
+      'Aqui está a implementação completa que prometi: o prompt, o output esperado com CSS variables e o componente de toggle prontos para aplicar no seu projeto.',
     ],
     features: [
-      { title: 'Sistema de CSS variables', description: '--bg, --text, --surface, --border e --accent em light e dark — um lugar para mudar tudo.', icon: 'design' },
-      { title: 'Toggle com localStorage', description: 'Preferência do usuário persistida — quando ele volta, o tema está exatamente como deixou.', icon: 'setup' },
-      { title: 'Detecção de prefers-color-scheme', description: 'Primeira visita: o app adota o tema do sistema automaticamente. Zero configuração para o usuário.', icon: 'framework' },
-      { title: 'Transição suave em todos os elementos', description: 'transition: background 0.25s, color 0.25s aplicado globalmente — sem piscar na alternância.', icon: 'automation' },
-      { title: 'Sem dependência externa', description: 'CSS puro + JavaScript nativo. Funciona em React, Next.js, Vue ou HTML puro sem instalar nada.', icon: 'plugin' },
+      { title: 'Sistema de CSS variables', description: '--bg, --text, --surface, --border e --accent: uma mudança no :root atualiza toda a interface.', icon: 'design' },
+      { title: 'Toggle com localStorage', description: 'O usuário define o tema uma vez e encontra o mesmo na próxima visita — zero atrito.', icon: 'setup' },
+      { title: 'Detecção de prefers-color-scheme', description: 'Na primeira visita, o app já está no tema certo — sem o usuário ter que configurar nada.', icon: 'framework' },
+      { title: 'Transição suave em todos os elementos', description: 'Background e cor mudam sem piscar — alternância suave que não incomoda.', icon: 'automation' },
+      { title: 'Sem dependência externa', description: 'CSS puro + JavaScript nativo. Funciona em React, Next.js, Vue ou HTML puro sem instalar nada extra.', icon: 'plugin' },
       { title: 'Prompt pronto para usar', description: 'Cole no Claude Code, adicione o contexto do projeto, receba o sistema completo em 6 minutos.', icon: 'copywriting' },
     ],
     primaryLink: '/open-source/dark-mode-com-claude-code',
@@ -128,13 +132,69 @@ Crie um toggle de dark/light mode que:
 — aplique a transição com transition: background 0.25s, color 0.25s em todos os elementos
 
 Adicione o botão de toggle no header/navbar do projeto com um ícone de sol e lua.` },
+      { type: 'heading', text: 'Output esperado: CSS variables' },
+      { type: 'paragraph', text: 'O Claude entrega o arquivo de estilos globais com as variáveis semânticas para light e dark — prontas para colar no seu globals.css.' },
+      { type: 'code', language: 'css', code: `:root {
+  --bg: #ffffff;
+  --text: #0e0e11;
+  --surface: #f5f5f7;
+  --border: #e5e5ea;
+  --accent: #FF3A0E;
+  transition: background 0.25s, color 0.25s;
+}
+
+[data-theme="dark"] {
+  --bg: #050507;
+  --text: #f1f1f3;
+  --surface: #16161a;
+  --border: rgba(255, 255, 255, 0.08);
+  --accent: #FF3A0E;
+}
+
+*, *::before, *::after {
+  transition: background-color 0.25s, color 0.25s, border-color 0.25s;
+}` },
+      { type: 'heading', text: 'Output esperado: toggle component' },
+      { type: 'code', language: 'tsx', code: `'use client'
+import { useEffect, useState } from 'react'
+import { Sun, Moon } from 'lucide-react'
+
+export function ThemeToggle() {
+  const [theme, setTheme] = useState<'light' | 'dark'>('light')
+
+  useEffect(() => {
+    const saved = localStorage.getItem('theme')
+    const preferred = window.matchMedia('(prefers-color-scheme: dark)').matches
+      ? 'dark' : 'light'
+    const active = (saved as 'light' | 'dark') ?? preferred
+    setTheme(active)
+    document.documentElement.setAttribute('data-theme', active)
+  }, [])
+
+  function toggle() {
+    const next = theme === 'light' ? 'dark' : 'light'
+    setTheme(next)
+    localStorage.setItem('theme', next)
+    document.documentElement.setAttribute('data-theme', next)
+  }
+
+  return (
+    <button onClick={toggle} aria-label="Alternar tema">
+      {theme === 'light' ? <Moon size={20} /> : <Sun size={20} />}
+    </button>
+  )
+}` },
       { type: 'heading', text: '3 passos para implementar' },
       { type: 'paragraph', text: 'O processo é o mesmo em qualquer stack — React, Next.js ou HTML puro. Você não precisa reescrever nenhum componente: só define as variáveis, adiciona o toggle e ativa a detecção automática.' },
       { type: 'steps', items: [
         'Cole as CSS variables no arquivo de estilos global: adicione as variáveis de :root para light mode e o seletor [data-theme="dark"] para dark mode. Substitua todas as cores hardcoded por var(--bg), var(--text) etc.',
-        'Adicione o toggle no header: em React, useState + useEffect para ler e gravar no localStorage. Em HTML puro, uma função JavaScript que alterna o atributo data-theme no elemento <html>.',
-        'Ative a detecção automática do sistema: adicione a verificação de window.matchMedia("(prefers-color-scheme: dark)") na inicialização — se o usuário não tiver preferência salva, o app adota o tema do sistema.',
+        'Adicione o ThemeToggle no header: importe o componente e coloque no navbar. Em HTML puro, use a função JavaScript que alterna o atributo data-theme no elemento html.',
+        'Verifique se todos os componentes usam as variáveis: qualquer cor hardcoded (ex: background: #fff) quebra o dark mode. O Claude lista o que encontrar.',
       ]},
+      { type: 'heading', text: 'Erros comuns na implementação' },
+      { type: 'paragraph', text: 'Três problemas aparecem em 90% das implementações manuais: cores hardcoded em componentes individuais que não mudam com o tema, ausência de transição que faz a tela piscar na alternância, e falta de persistência que reseta o tema a cada visita.' },
+      { type: 'heading', text: 'Depois que o sistema está no lugar' },
+      { type: 'paragraph', text: 'Com as CSS variables no lugar, qualquer componente novo herda o dark mode automaticamente — sem código extra. Você usa var(--bg) e var(--text) e o tema funciona. Adicionar uma nova cor ao sistema é uma linha no :root.' },
     ],
   },
 
@@ -143,7 +203,7 @@ Adicione o botão de toggle no header/navbar do projeto com um ícone de sol e l
     data: '2026-07-14',
     slot: 'A',
     formato: 'Reel',
-    titulo: 'Seu App Parece Estático — Hover, Transição e Skeleton com Claude Code',
+    titulo: 'Sem Hover, Sem Transição, Sem Skeleton — Os 3 Padrões que Separam App de Produto',
     ferramenta: 'Framer Motion + Claude Code',
     link: '/open-source/framer-motion-com-claude-code',
     categoryId: 'skills',
@@ -151,17 +211,17 @@ Adicione o botão de toggle no header/navbar do projeto com um ícone de sol e l
     pilar: 'Ferramentas e Produtividade',
     duracao: '32s',
     longDescription: [
-      'Cada clique sem feedback. Cada página que aparece do nada. Cada lista que carrega de uma vez sem skeleton loader. O app parece estático e sem vida — e isso afasta o usuário antes de ele entender o que você construiu.',
-      'Com Claude Code, você instala o Framer Motion e configura hover effects nos cards, transições de entrada das páginas com AnimatePresence e skeleton loaders animados em menos de 15 minutos. Mesmo app, experiência completamente diferente.',
-      'Este guia entrega os 3 padrões de animação configurados pelo Claude — com o prompt e o código prontos para plugar no seu projeto React.',
+      'Um dev freelancer cobra R$1.200 por animações customizadas. Você cola o prompt e o Claude entrega os três padrões mais impactantes. Cada clique sem feedback. Cada página que aparece do nada. O app parece estático — e isso afasta o usuário antes de ele entender o que você construiu.',
+      'Com Claude Code, você instala o Framer Motion e configura hover effects nos cards, transições de entrada com AnimatePresence e skeleton loaders animados em menos de 15 minutos. Mesmo app, experiência completamente diferente.',
+      'Aqui estão os 3 componentes prontos que prometi — com o código React copiável para plugar direto no seu projeto, sem precisar rodar o Claude primeiro.',
     ],
     features: [
-      { title: 'Hover effects nos cards', description: 'Cards que respondem ao mouse com scale e shadow suave — feedback visual imediato sem escrever CSS complexo.', icon: 'design' },
-      { title: 'Transição de página com AnimatePresence', description: 'Páginas entram com fade + slide — o usuário sente que está navegando, não que a tela trocou de repente.', icon: 'framework' },
-      { title: 'Skeleton loader animado', description: 'Placeholder pulsante enquanto o conteúdo carrega — percepção de performance melhor sem mudar o backend.', icon: 'automation' },
-      { title: 'Instalação em um comando', description: 'Claude Code instala o Framer Motion e configura os imports — você não abre a documentação.', icon: 'setup' },
-      { title: 'Componentes prontos para reutilizar', description: 'Cada animação configurada como componente isolado — arrastar e soltar em qualquer parte do projeto.', icon: 'plugin' },
-      { title: 'Prompt completo incluído', description: 'Um prompt pro Claude Code que configura os 3 padrões de animação de uma vez, adaptado ao seu projeto.', icon: 'copywriting' },
+      { title: 'Hover effects nos cards', description: 'Cards que respondem ao mouse imediatamente — o usuário sente que a interface está viva.', icon: 'design' },
+      { title: 'Transição de página com AnimatePresence', description: 'O usuário sente que está navegando, não que a tela trocou de repente.', icon: 'framework' },
+      { title: 'Skeleton loader animado', description: 'O usuário vê que algo está carregando — percepção de performance melhor sem mudar o backend.', icon: 'automation' },
+      { title: 'Instalação em um comando', description: 'Claude instala o Framer Motion e configura os imports — você não abre a documentação.', icon: 'setup' },
+      { title: 'Componentes prontos para reutilizar', description: 'Arrastar e soltar em qualquer parte do projeto — sem reescrever a lógica de animação.', icon: 'plugin' },
+      { title: 'Prompt completo incluído', description: 'Um prompt configura os 3 padrões de uma vez — hover, transição e skeleton em menos de 15 minutos.', icon: 'copywriting' },
     ],
     primaryLink: '/open-source/framer-motion-com-claude-code',
     isExternal: false,
@@ -177,7 +237,64 @@ Adicione o botão de toggle no header/navbar do projeto com um ícone de sol e l
         'Transição de página com AnimatePresence: envolve o conteúdo com AnimatePresence e configura entrada com opacity 0→1 + y 16→0 e saída com opacity 1→0 em 0.3s. A navegação passa a ter continuidade.',
         'Skeleton loader animado: componente SkeletonCard com retângulos que pulsam usando animate opacity 0.5→1→0.5 em loop infinito — o usuário vê que algo está carregando, não uma tela em branco.',
       ]},
-      { type: 'heading', text: 'O prompt' },
+      { type: 'heading', text: 'Componente 1 — MotionCard (hover effect)' },
+      { type: 'code', language: 'tsx', code: `import { motion } from 'framer-motion'
+
+export function MotionCard({ children }: { children: React.ReactNode }) {
+  return (
+    <motion.div
+      whileHover={{ scale: 1.02, boxShadow: '0 8px 32px rgba(0,0,0,0.12)' }}
+      transition={{ type: 'spring', stiffness: 300, damping: 20 }}
+      style={{ borderRadius: 12, cursor: 'pointer' }}
+    >
+      {children}
+    </motion.div>
+  )
+}` },
+      { type: 'heading', text: 'Componente 2 — PageTransition (AnimatePresence)' },
+      { type: 'code', language: 'tsx', code: `import { AnimatePresence, motion } from 'framer-motion'
+import { usePathname } from 'next/navigation'
+
+export function PageTransition({ children }: { children: React.ReactNode }) {
+  const pathname = usePathname()
+  return (
+    <AnimatePresence mode="wait">
+      <motion.div
+        key={pathname}
+        initial={{ opacity: 0, y: 16 }}
+        animate={{ opacity: 1, y: 0 }}
+        exit={{ opacity: 0 }}
+        transition={{ duration: 0.3, ease: 'easeOut' }}
+      >
+        {children}
+      </motion.div>
+    </AnimatePresence>
+  )
+}` },
+      { type: 'heading', text: 'Componente 3 — SkeletonCard (skeleton loader)' },
+      { type: 'code', language: 'tsx', code: `import { motion } from 'framer-motion'
+
+export function SkeletonCard() {
+  return (
+    <div style={{ borderRadius: 12, padding: 20, background: '#16161a' }}>
+      {[80, 100, 60].map((width, i) => (
+        <motion.div
+          key={i}
+          animate={{ opacity: [0.5, 1, 0.5] }}
+          transition={{ duration: 1.5, repeat: Infinity, delay: i * 0.15 }}
+          style={{
+            height: i === 0 ? 20 : 14,
+            width: \`\${width}%\`,
+            borderRadius: 6,
+            background: 'rgba(255,255,255,0.08)',
+            marginBottom: i < 2 ? 12 : 0,
+          }}
+        />
+      ))}
+    </div>
+  )
+}` },
+      { type: 'heading', text: 'O prompt (para gerar adaptado ao seu projeto)' },
       { type: 'code', language: 'markdown', code: `Adicione animações com Framer Motion neste projeto React.
 
 Instale o Framer Motion se ainda não estiver instalado.
@@ -191,6 +308,8 @@ Configure os seguintes padrões:
 3. SKELETON LOADER: crie um componente SkeletonCard com retângulos animados (pulse effect) usando animate={{ opacity: [0.5, 1, 0.5] }} com repeat: Infinity para usar enquanto o conteúdo carrega.
 
 Entrega os 3 componentes prontos para uso, com os imports corretos.` },
+      { type: 'heading', text: 'Acessibilidade: prefers-reduced-motion' },
+      { type: 'paragraph', text: 'Usuários com sensibilidade a movimento configuram o sistema operacional para reduzir animações. O Framer Motion respeita essa preferência automaticamente via CSS media query. Adicione isso no globals.css para garantir que as animações sejam desabilitadas para quem precisa.' },
       { type: 'callout', text: 'Mesmo app, experiência completamente diferente. Hover, transição e skeleton loader — os 3 padrões que separam uma interface funcional de uma interface que o usuário quer usar.' },
     ],
   },
@@ -200,7 +319,7 @@ Entrega os 3 componentes prontos para uso, com os imports corretos.` },
     data: '2026-07-15',
     slot: 'A',
     formato: 'Reel',
-    titulo: 'Ícones Destruindo a Credibilidade — Lucide React com Claude Code',
+    titulo: 'Emoji Misturado com SVG e Ícones de 3 Tamanhos — O Claude Resolve em 5 Minutos',
     ferramenta: 'Lucide React + Claude Code',
     link: '/open-source/lucide-react-com-claude-code',
     categoryId: 'skills',
@@ -208,17 +327,17 @@ Entrega os 3 componentes prontos para uso, com os imports corretos.` },
     pilar: 'Ferramentas e Produtividade',
     duracao: '32s',
     longDescription: [
-      'Emoji misturado com SVG. Estilo diferente em cada componente. Tamanhos inconsistentes em cada tela. O usuário percebe o descuido antes de ler uma linha — e a credibilidade do projeto vai junto.',
+      'Um dev leva uma tarde para fazer isso na mão — e ainda esquece algum SVG solto no CSS. Emoji misturado com SVG. Estilo diferente em cada componente. Tamanhos inconsistentes em cada tela. O usuário percebe o descuido antes de ler uma linha.',
       'Com Claude Code, você instala o Lucide React e substitui todos os ícones do projeto de forma consistente em menos de 5 minutos. Mesmo tamanho, mesmo peso, mesmo estilo em cada componente — sem revisar arquivo por arquivo.',
-      'Este guia entrega o prompt que o Claude usa para varrer o projeto inteiro, identificar todos os ícones e substituir tudo pela biblioteca Lucide com consistência total.',
+      'Aqui está o prompt exato que prometi: o Claude varre o projeto inteiro, identifica todos os ícones inconsistentes e substitui tudo pela biblioteca Lucide com consistência total.',
     ],
     features: [
-      { title: 'Substituição em todo o projeto', description: 'Claude varre todos os componentes e troca ícones inconsistentes pelo equivalente Lucide de uma vez.', icon: 'automation' },
-      { title: 'Mesmo tamanho, peso e estilo', description: 'Lucide React garante visual coeso em toda a interface — sem variação de stroke ou tamanho entre telas.', icon: 'design' },
-      { title: 'Zero SVG manual', description: 'Nenhum arquivo SVG para gerenciar. Import direto do pacote, tree-shaking automático, bundle enxuto.', icon: 'setup' },
-      { title: 'Props consistentes', description: 'size, strokeWidth e color padronizados com um valor padrão — qualquer dev novo segue o mesmo padrão.', icon: 'framework' },
-      { title: 'Instalação em um comando', description: 'Claude Code instala o lucide-react e configura os imports — você não abre a documentação.', icon: 'plugin' },
-      { title: 'Prompt completo incluído', description: 'O prompt exato para o Claude varrer o projeto e substituir todos os ícones com consistência.', icon: 'copywriting' },
+      { title: 'Substituição em todo o projeto', description: 'Claude varre tudo de uma vez — você não revisa arquivo por arquivo.', icon: 'automation' },
+      { title: 'Mesmo tamanho, peso e estilo', description: 'A interface fica visualmente coesa — o usuário não percebe mais inconsistência.', icon: 'design' },
+      { title: 'Zero SVG manual', description: 'Nenhum arquivo SVG para gerenciar — bundle enxuto com tree-shaking automático.', icon: 'setup' },
+      { title: 'Props consistentes', description: 'Qualquer dev novo segue o mesmo padrão sem perguntar — um projeto que se documenta sozinho.', icon: 'framework' },
+      { title: 'Instalação em um comando', description: 'Claude instala o lucide-react e configura os imports — você não abre a documentação.', icon: 'plugin' },
+      { title: 'Prompt completo incluído', description: 'O prompt exato para varrer o projeto e substituir tudo com consistência em menos de 5 minutos.', icon: 'copywriting' },
     ],
     primaryLink: '/open-source/lucide-react-com-claude-code',
     isExternal: false,
@@ -255,6 +374,15 @@ Entrega a lista de substituições feitas e avisa se algum ícone não tem equiv
         'Bundle mais enxuto: tree-shaking do Lucide importa só os ícones que você usa.',
         'Um padrão claro para qualquer dev novo: import { IconName } from "lucide-react" com as mesmas props em todo lugar.',
       ]},
+      { type: 'heading', text: 'Quando manter SVGs customizados' },
+      { type: 'paragraph', text: 'Nem todo ícone tem equivalente no Lucide. Logos de marca, ilustrações customizadas e ícones com identidade visual específica do produto devem continuar como SVGs inline ou em arquivo separado. O Claude avisa quando não encontra equivalente — esses você decide manter ou adaptar.' },
+      { type: 'heading', text: 'Como verificar consistência pós-execução' },
+      { type: 'steps', items: [
+        'Busque no projeto por "emoji" e por extensões .svg para garantir que nenhum arquivo foi esquecido.',
+        'Verifique se todos os imports de react-icons, heroicons ou feather foram removidos do package.json.',
+        'Inspecione visualmente as telas principais: stroke, tamanho e cor devem ser iguais em todos os ícones.',
+      ]},
+      { type: 'callout', text: 'Ícones são o detalhe que o usuário não nomeia mas sente. Quando a biblioteca é única e as props são consistentes, o projeto parece profissional — mesmo antes de qualquer outra melhoria visual.' },
     ],
   },
 
@@ -263,7 +391,7 @@ Entrega a lista de substituições feitas e avisa se algum ícone não tem equiv
     data: '2026-07-17',
     slot: 'A',
     formato: 'Reel',
-    titulo: 'Seis Tons de Azul que Não Combinam — Design System com Claude Code',
+    titulo: 'Seis Tons de Azul que Não Combinam — Não É Falta de Talento, É Falta de Sistema',
     ferramenta: 'Claude Code',
     link: '/open-source/design-system-com-claude-code',
     categoryId: 'skills',
@@ -271,17 +399,17 @@ Entrega a lista de substituições feitas e avisa se algum ícone não tem equiv
     pilar: 'Ferramentas e Produtividade',
     duracao: '32s',
     longDescription: [
-      'Seis tons de azul diferentes. Três tamanhos de botão que não combinam. Espaçamento no olhômetro. Isso não é falta de talento — é falta de sistema. Sem tokens definidos, cada componente novo vira uma decisão arbitrária.',
+      'Uma agência cobra R$8.000 para entregar um design system em 3 semanas. O Claude entrega em uma sessão — e você ajusta em tempo real. Seis tons de azul diferentes, três tamanhos de botão que não combinam, espaçamento no olhômetro. Isso não é falta de talento — é falta de sistema.',
       'Com Claude Code, você cria um design system completo em 10 minutos: tokens de cor em CSS variables, escala tipográfica documentada, grid de espaçamento em 8px e componentes Button e Card padronizados. A interface fica coesa — e qualquer dev novo entende o padrão em minutos.',
-      'Este guia entrega o prompt que gera o design system do zero, com os tokens, a escala e os componentes base prontos para aplicar no seu projeto.',
+      'Aqui está o design system completo que prometi: o prompt que gera os tokens, a escala e os componentes base — prontos para aplicar no seu projeto.',
     ],
     features: [
-      { title: 'Tokens de cor em CSS variables', description: 'Primária, secundária, neutros e feedback definidos em :root — uma mudança afeta toda a interface.', icon: 'design' },
-      { title: 'Escala tipográfica documentada', description: 'Tamanhos, pesos e line-heights definidos como tokens — sem decisão arbitrária a cada novo texto.', icon: 'book' },
-      { title: 'Grid de espaçamento em 8px', description: 'Sistema de espaçamento baseado em múltiplos de 8 — padding, margin e gap sempre alinhados.', icon: 'framework' },
-      { title: 'Componentes Button e Card padronizados', description: 'Variantes (primary, secondary, ghost) e tamanhos (sm, md, lg) definidos uma vez, reutilizados em todo o projeto.', icon: 'plugin' },
-      { title: 'Dev novo entende em minutos', description: 'Tokens documentados como comentários no CSS — qualquer pessoa que entrar no projeto sabe qual variável usar, sem perguntar.', icon: 'agents' },
-      { title: 'Prompt completo incluído', description: 'O prompt que o Claude usa para criar o design system do zero adaptado ao seu projeto.', icon: 'copywriting' },
+      { title: 'Tokens de cor em CSS variables', description: 'Uma mudança no token primary afeta toda a interface — sem caçar cor por cor em arquivo por arquivo.', icon: 'design' },
+      { title: 'Escala tipográfica documentada', description: 'Sem decisão arbitrária a cada novo texto — o token diz qual tamanho usar.', icon: 'book' },
+      { title: 'Grid de espaçamento em 8px', description: 'Padding, margin e gap sempre alinhados — a interface fica ordenada sem esforço.', icon: 'framework' },
+      { title: 'Componentes Button e Card padronizados', description: 'Variantes e tamanhos definidos uma vez — qualquer componente novo herda o padrão.', icon: 'plugin' },
+      { title: 'Dev novo entende em minutos', description: 'Qualquer pessoa que entrar no projeto sabe qual variável usar — sem precisar perguntar para ninguém.', icon: 'agents' },
+      { title: 'Prompt completo incluído', description: 'Gera o design system inteiro de uma vez — tokens, escala, espaçamento e componentes base.', icon: 'copywriting' },
     ],
     primaryLink: '/open-source/design-system-com-claude-code',
     isExternal: false,
@@ -325,7 +453,11 @@ Entrega a lista de substituições feitas e avisa se algum ícone não tem equiv
    — padding interno usando tokens de espaçamento
 
 Aplique os tokens nos componentes existentes do projeto e documente os padrões em comentários.` },
-      { type: 'callout', text: 'Com o design system no lugar, qualquer decisão visual tem uma resposta certa. Qual azul? O token primary-600. Quanto de padding? O token space-3. A consistência vira o padrão — não o esforço.' },
+      { type: 'heading', text: 'Como evoluir o design system depois' },
+      { type: 'paragraph', text: 'O design system não é estático. Quando surgir uma cor nova, você adiciona o token no :root — não nas instâncias individuais. Quando precisar de um novo componente, ele herda os tokens de cor, tipografia e espaçamento já definidos. A consistência é automática, não um esforço a cada decisão.' },
+      { type: 'heading', text: 'O que muda no fluxo de trabalho' },
+      { type: 'paragraph', text: 'Com o design system no lugar, cada componente novo herda o padrão automaticamente. Qual azul? O token primary-600. Quanto de padding? O token space-3. Qualquer dev que entrar no projeto em qualquer momento encontra as mesmas respostas. A consistência vira o padrão — não o esforço.' },
+      { type: 'callout', text: 'Design system não é documentação — é decisão. Cada token é uma decisão tomada uma vez e reutilizada em todo o projeto. Você para de decidir cor, tipografia e espaçamento no olhômetro e começa a executar.' },
     ],
   },
 ]
