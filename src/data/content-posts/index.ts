@@ -10,6 +10,7 @@ import { batch8 } from './batch-8'
 import { batch9 } from './batch-9'
 import { batch10 } from './batch-10'
 import { batch11 } from './batch-11'
+import { batch12 } from './batch-12'
 
 export const contentPosts: ContentPost[] = [
   ...batch1,
@@ -23,6 +24,7 @@ export const contentPosts: ContentPost[] = [
   ...batch9,
   ...batch10,
   ...batch11,
+  ...batch12,
 ]
 
 export function getPostBySlug(slug: string): ContentPost | undefined {
