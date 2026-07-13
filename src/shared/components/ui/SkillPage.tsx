@@ -1,6 +1,6 @@
 import Image from 'next/image';
 import Link from 'next/link';
-import { ArrowLeft, ArrowRight, ExternalLink } from 'lucide-react';
+import { ArrowLeft, ArrowRight, ExternalLink, Type, Terminal, Zap, LayoutGrid, Palette } from 'lucide-react';
 import { siteConfig } from '@/config/site';
 
 export interface SkillFeature {
@@ -92,6 +92,16 @@ const EYEBROW: React.CSSProperties = {
   fontWeight: 500,
   color: 'rgba(255,58,14,0.8)',
 };
+
+function PrimaryIcon({ url, isExternal }: { url?: string; isExternal?: boolean }) {
+  if (!isExternal || !url) return <GitHubIcon className="h-4 w-4" />
+  if (url.includes('fonts.google')) return <Type className="h-4 w-4" />
+  if (url.includes('framer.com')) return <Zap className="h-4 w-4" />
+  if (url.includes('lucide.dev')) return <LayoutGrid className="h-4 w-4" />
+  if (url.includes('claude.ai')) return <Terminal className="h-4 w-4" />
+  if (url.includes('tailwind') || url.includes('design')) return <Palette className="h-4 w-4" />
+  return <ExternalLink className="h-4 w-4" />
+}
 
 export function SkillPage({
   title,
@@ -242,7 +252,7 @@ export function SkillPage({
                   letterSpacing: '-0.01em',
                 }}
               >
-                {isExternal ? <ExternalLink className="h-4 w-4" /> : <GitHubIcon className="h-4 w-4" />}
+                <PrimaryIcon url={primaryLink} isExternal={isExternal} />
                 {primaryLabel}
               </a>
               )}
