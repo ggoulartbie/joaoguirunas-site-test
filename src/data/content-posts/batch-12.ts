@@ -444,13 +444,13 @@ export const batch12: ContentPost[] = [
   },
 
   {
-    slug: 'auth-com-supabase',
+    slug: 'login-social-com-supabase',
     data: '2026-07-23',
     slot: 'A',
     formato: 'Reel',
-    titulo: 'Auth com Supabase',
+    titulo: 'Login Social com Supabase',
     ferramenta: 'Supabase + Claude Code',
-    link: '/open-source/auth-com-supabase',
+    link: '/open-source/login-social-com-supabase',
     categoryId: 'skills',
     keyword_cta: 'AUTH',
     pilar: 'Ferramentas e Produtividade',
